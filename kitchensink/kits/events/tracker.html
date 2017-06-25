@@ -8,15 +8,14 @@
         <script src="../../../dist/sgn.js"></script>
         <script>
             var eventTracker = new SGN.EventsKit.Tracker({
-                baseUrl: 'https://events.service.shopgun.com',
                 trackId: 'anonymous'
             });
 
             eventTracker
                 .setApplication({
-                    name: 'ShopGun Browser SDK',
+                    name: 'ShopGun JavaScript SDK',
                     version: '1.0.0',
-                    build: 'shopgun-browser-sdk-beta'
+                    build: 'shopgun-js-sdk'
                 })
                 .setView(['example'])
                 .setLocation({

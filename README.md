@@ -1,4 +1,4 @@
-# ShopGun Browser SDK
+# ShopGun JavaScript SDK
 
 This SDK works both client-side in your browser but also server-side in a node.js environment.
 

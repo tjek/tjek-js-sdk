@@ -1,7 +1,7 @@
 {
-  "name": "shopgun-browser-sdk",
+  "name": "shopgun-js-sdk",
   "version": "4.0.0",
-  "description": "ShopGun Browser SDK.",
+  "description": "ShopGun SDK for JavaScript.",
   "main": "index.js",
   "watch": {
     "build": {
@@ -22,14 +22,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shopgun/shopgun-browser-sdk.git"
+    "url": "git+https://github.com/shopgun/shopgun-js-sdk.git"
   },
   "author": "Morten Bo Rønsholdt <mr@shopgun.com> (https://shopgun.com/)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shopgun/shopgun-browser-sdk/issues"
+    "url": "https://github.com/shopgun/shopgun-js-sdk/issues"
   },
-  "homepage": "https://github.com/shopgun/shopgun-browser-sdk#readme",
+  "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "devDependencies": {
     "browserify": "^14.4.0",
     "browserify-derequire": "^0.9.4",
