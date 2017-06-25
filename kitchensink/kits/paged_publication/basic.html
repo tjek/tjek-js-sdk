@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>PagedPublicationKit: Basic</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="../../../dist/sgn.css">
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular', 'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande', arial, sans-serif;
+            }
+
+            .sgn__pp {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            .container {
+                max-width: 300px;
+                margin: 20px auto;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- The main element of the paged publication -->
+        <div class="sgn__pp">
+            <!-- The required horizontal page scroller -->
+            <div class="verso">
+                <div class="verso__scroller">
+                    <!-- You can add all the custom page spreads you want --> 
+                    <div id="intro" class="verso__page-spread sgn-pp__page-spread--dark" data-page-ids="intro" data-width="40">
+                        <div class="verso__page">
+                            <div class="container">
+                                <h1>This Is the Beginning</h1>
+                                <p>You can add any HTML you want.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The required placeholder element for the actual pages -->
+                    <div class="sgn-pp__pages"></div>
+
+                    <!-- Here's another custom page spread --> 
+                    <div id="outro" class="verso__page-spread sgn-pp__page-spread--dark" data-page-ids="outro" data-width="80">
+                        <div class="verso__page">
+                            <div class="container">
+                                <h1>This Is the End</h1>
+                                <p>You can add any HTML you want.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The optional progress bar -->
+            <div class="sgn-pp__progress">
+                <div class="sgn-pp-progress__bar"></div>
+            </div>
+
+            <!-- The optional progress label -->
+            <div class="sgn-pp__progress-label"></div>
+
+            <!-- The optional navigation buttons for going backwards and forwards -->
+            <a class="sgn-pp__control" href="#" role="button" data-direction="prev">&lsaquo;</a>
+            <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
+        </div>
+
+        <script src="../../../dist/sgn.js"></script>
+        <script>
+            var id = 'fc24Lt0';
+            var hotspots = [];
+            var fetchDetails = function (callback) {
+                SGN.CoreKit.request({
+                    url: '/v2/catalogs/' + id
+                }, callback);
+            };
+            var fetchPages = function (callback) {
+                SGN.CoreKit.request({
+                    url: '/v2/catalogs/' + id + '/pages'
+                }, callback);
+            };
+            var fetchHotspots = function (callback) {
+                SGN.CoreKit.request({
+                    url: '/v2/catalogs/' + id + '/hotspots'
+                }, callback);
+            };
+
+            SGN.config.set({
+                appKey: '00j486xcipwzk2rmcbzfalpk4sgx9v3i'
+            });
+
+            fetchHotspots(function (err, response) {
+                if (!err) hotspots = response;
+            });
+
+            SGN.util.parallel([fetchDetails, fetchPages], function (result) {
+                var details = result[0][1];
+                var pages = result[1][1];
+                var el = document.querySelector('.sgn__pp');
+                var eventTracker = new SGN.EventsKit.Tracker({ trackId: 'anonymous' });
+                var pagedPublication = new SGN.PagedPublicationKit.Viewer(el, {
+                    id: id,
+                    ownedBy: details.dealer_id,
+                    color: '#' + details.branding.pageflip.color,
+                    pages: pages.map(function (page, i) {
+                        var pageNumber = i + 1;
+
+                        return {
+                            id: 'page' + pageNumber,
+                            label: pageNumber + '',
+                            pageNumber: pageNumber,
+                            images: {
+                                medium: page.view,
+                                large: page.zoom
+                            }
+                        };
+                    }),
+                    keyboard: true,
+                    eventTracker: null //eventTracker
+                });
+
+                pagedPublication.bind('hotspotsRequested', function (e) {
+                    pagedPublication.trigger('hotspotsReceived', {
+                        pageSpreadId: e.pageSpreadId,
+                        hotspots: getHotspots(e.pages)
+                    });
+                });
+
+                pagedPublication.bind('beforeNavigation', function (e) {
+                    console.log('beforeNavigation', e);
+                });
+
+                pagedPublication.bind('clicked', function (e) {
+                    console.log('clicked', e);
+                });
+
+                pagedPublication.bind('hotspotSelected', function (e) {
+                    console.log('hotspotSelected', e);
+                });
+
+                pagedPublication.start();
+
+                // Prevent the document from scrolling vertically on touch devices.
+                document.addEventListener('touchstart', function (e) {
+                    if (e.target.tagName !== 'A') e.preventDefault();
+                });
+
+                function getHotspots (pages) {
+                    var matches = [];
+                    var pageNumbers = pages.map(function (page) { return page.pageNumber; });
+
+                    hotspots.forEach(function (item) {
+                        var match = false;
+
+                        pages.forEach(function (page) {
+                            if (item.locations[page.pageNumber]) match = true;
+                        });
+
+                        if (match) matches.push(item);
+                    });
+
+                    matches = matches.map(function (match) {
+                        var minX, minY, maxX, maxY = null;
+
+                        for (var pageNumber in match.locations) {
+                            if (pageNumbers.indexOf(+pageNumber) === -1) continue;
+
+                            var poly = match.locations[pageNumber];
+
+                            poly.forEach(function (coords) {
+                                var x = coords[0];
+                                var y = coords[1];
+
+                                if (pages[1] && pageNumbers[1] === +pageNumber) {
+                                    x += 1;
+                                }
+
+                                x /= pages.length;
+
+                                if (minX == null) {
+                                    minX = maxX = x;
+                                    minY = maxY = y;
+                                }
+
+                                if (x < minX) minX = x;
+                                if (x > maxX) maxX = x;
+                                if (y < minY) minY = y;
+                                if (y > maxY) maxY = y;
+                            });
+                        }
+
+                        var width = maxX - minX;
+                        var height = maxY - minY;
+                        var ratio = details.dimensions.height;
+
+                        return {
+                            type: match.type,
+                            title: match.heading,
+                            top: minY / ratio * 100,
+                            left: minX * 100,
+                            width: width * 100,
+                            height: height / ratio * 100
+                        };
+                    });
+
+                    return matches;
+                }
+            });
+        </script>
+    </body>
+</html>

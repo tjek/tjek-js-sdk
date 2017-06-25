@@ -1,0 +1,49 @@
+{
+  "name": "shopgun-browser-sdk",
+  "version": "4.0.0",
+  "description": "ShopGun Browser SDK.",
+  "main": "index.js",
+  "watch": {
+    "build": {
+      "patterns": [
+        "lib"
+      ],
+      "extensions": [
+        "coffee",
+        "styl"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/ -r lib/coffeescript/",
+    "build": "node build.js",
+    "server": "python -m SimpleHTTPServer 8001",
+    "watch": "npm-watch build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shopgun/shopgun-browser-sdk.git"
+  },
+  "author": "Morten Bo Rønsholdt <mr@shopgun.com> (https://shopgun.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shopgun/shopgun-browser-sdk/issues"
+  },
+  "homepage": "https://github.com/shopgun/shopgun-browser-sdk#readme",
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "browserify-derequire": "^0.9.4",
+    "coffeeify": "^2.1.0",
+    "coffeelint": "^1.16.0",
+    "nib": "^1.1.2",
+    "npm-watch": "^0.1.9",
+    "stylus": "^0.54.5"
+  },
+  "dependencies": {
+    "incito-browser": "git+ssh://git@github.com/shopgun/incito-browser.git#master",
+    "microevent": "^1.0.0",
+    "verso": "git+ssh://git@github.com/shopgun/verso-browser.git#2a2a9cea755b6234dac6a785a26e94db0e0f420f",
+    "request": "^2.81.0",
+    "sha256": "^0.2.0"
+  }
+}

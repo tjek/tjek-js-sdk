@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+		<title>CoreKit: Request</title>
+    </head>
+    <body>
+        <script src="../dist/sgn.js"></script>
+        <script>
+            SGN.config.update({
+                appKey: '00j486xcipwzk2rmcbzfalpk4sgx9v3i'
+            });
+
+            SGN.CoreKit.request({
+                url: '/v2/catalogs'
+            }, function (err, data) {
+                if (err) {
+                    console.log('Error', err);
+                } else {
+                    console.log(data);
+                }
+            });
+        </script>
+    </body>
+</html>
