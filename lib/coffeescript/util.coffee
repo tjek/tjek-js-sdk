@@ -150,36 +150,6 @@ util =
 
             return
 
-    parallel: (asyncCalls, sharedCallback) ->
-        counter = asyncCalls.length
-        allResults = []
-
-        makeCallback = (index) ->
-            ->
-                counter--
-                results = []
-
-                i = 0
-
-                while i < arguments.length
-                    results.push arguments[i]
-                    i++
-
-                allResults[index] = results
-
-                if counter is 0
-                    sharedCallback allResults
-
-                return
-
-        i = 0
-
-        while i < asyncCalls.length
-            asyncCalls[i] makeCallback(i)
-            i++
-
-        return
-
     loadImage: (src, callback) ->
         img = new Image()
 
@@ -201,5 +171,34 @@ util =
         dist = dist * 1.609344 * 1000
 
         dist
+
+    async:
+        parallel: (asyncCalls, sharedCallback) ->
+            counter = asyncCalls.length
+            allResults = []
+            k = 0
+
+            makeCallback = (index) ->
+                ->
+                    results = []
+                    i = 0
+
+                    counter--
+
+                    while i < arguments.length
+                        results.push arguments[i]
+                        i++
+
+                    allResults[index] = results
+
+                    sharedCallback allResults if counter is 0
+
+                    return
+
+            while k < asyncCalls.length
+                asyncCalls[k] makeCallback(k)
+                k++
+
+            return
 
 module.exports = util
