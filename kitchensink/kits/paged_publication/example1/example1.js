@@ -68,19 +68,39 @@ PagedPublication.prototype.render = function () {
         }.bind(this));
 
         if (clickedHotspots.length === 1) {
-            console.log('Hotspot clicked', clickedHotspots[0]);
+            this.showHotspot(clickedHotspots[0]);
         } else if (e.verso.overlayEls.length > 1) {
-            console.log('Hotspots clicked', clickedHotspots);
+            var hotspots = clickedHotspots
+                // Limit hotspots to the ones you want to support.
+                .filter(function (hotspot) {
+                    return hotspot.type === 'offer';
+                })
 
+                // Transform hotspots as you'd like.
+                .map(function (hotspot) {
+                    if (hotspot.type !== 'offer') return;
+
+                    return {
+                        id: hotspot.id,
+                        title: hotspot.offer.heading,
+                        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+                    };
+                });
             var hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker({
                 x: e.verso.x,
                 y: e.verso.y,
-                hotspots: clickedHotspots
+                hotspots: hotspots
             });
+
+            this.pagedPublication.el.appendChild(hotspotPicker.el);
         }
     }.bind(this));
 
     this.pagedPublication.start();
+};
+
+PagedPublication.prototype.showHotspot = function (hotspot) {
+    console.log('Hotspot selected', hotspot);
 };
 
 PagedPublication.prototype.transformPages = function (pages) {

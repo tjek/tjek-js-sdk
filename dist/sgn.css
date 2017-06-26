@@ -710,3 +710,12 @@
     filter: none;
   }
 }
+.sgn-pp__hotspot-picker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  z-index: 3;
+  background-color: #fff;
+  padding: 8px;
+}

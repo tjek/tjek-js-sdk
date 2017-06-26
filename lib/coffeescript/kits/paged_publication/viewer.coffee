@@ -7,8 +7,8 @@ EventTracking = require './event_tracking'
 LegacyEventTracking = require './legacy_event_tracking'
 
 class Viewer
-    constructor: (el, @options = {}) ->
-        @_core = new Core el,
+    constructor: (@el, @options = {}) ->
+        @_core = new Core @el,
             id: @options.id
             pages: @options.pages
             pageSpreadWidth: @options.pageSpreadWidth
@@ -17,7 +17,7 @@ class Viewer
             resizeDelay: @options.resizeDelay
             color: @options.color
         @_hotspots = new Hotspots()
-        @_controls = new Controls el, keyboard: @options.keyboard
+        @_controls = new Controls @el, keyboard: @options.keyboard
         @_eventTracking = new EventTracking()
         @_legacyEventTracking = new LegacyEventTracking()
         @viewSession = SGN.util.uuid()
