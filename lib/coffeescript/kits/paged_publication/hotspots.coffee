@@ -4,7 +4,7 @@ class PagedPublicationHotspots
     constructor: ->
         @currentPageSpreadId = null
         @pageSpreadsLoaded = {}
-        @hotspots = {}
+        @cache = {}
 
         @bind 'hotspotsReceived', @hotspotsReceived.bind(@)
         @bind 'afterNavigation', @afterNavigation.bind(@)
@@ -13,13 +13,13 @@ class PagedPublicationHotspots
 
         return
 
-    renderHotspots: (options) ->
+    renderHotspots: (data) ->
         frag = document.createDocumentFragment()
-        contentRect = options.versoPageSpread.getContentRect()
-        pageSpreadEl = options.pageSpread.getEl()
+        contentRect = data.versoPageSpread.getContentRect()
+        pageSpreadEl = data.pageSpread.getEl()
         hotspotEls = pageSpreadEl.querySelectorAll '.sgn-pp__hotspot'
 
-        options.hotspots.forEach (hotspot) =>
+        data.hotspots.forEach (hotspot) =>
             frag.appendChild @renderHotspot(hotspot, contentRect)
 
             return
@@ -40,6 +40,8 @@ class PagedPublicationHotspots
         left += Math.round contentRect.left
 
         el.className = 'sgn-pp__hotspot verso__overlay'
+        el.setAttribute 'data-id', hotspot.id if hotspot.id?
+        el.setAttribute 'data-type', hotspot.type if hotspot.type?
 
         el.style.top = "#{top}px"
         el.style.left = "#{left}px"
@@ -56,10 +58,20 @@ class PagedPublicationHotspots
         return
 
     hotspotsReceived: (e) ->
-        @hotspots[e.pageSpread.getId()] = e
+        pageSpreadId = e.pageSpread.getId()
+
+        @setCache pageSpreadId, e
         @renderHotspots e
 
         return
+
+    getCache: (pageSpreadId) ->
+        @cache[pageSpreadId]
+
+    setCache: (pageSpreadId, data) ->
+        @cache[pageSpreadId] = data
+
+        @
 
     afterNavigation: (e) ->
         if e.pageSpread?
@@ -77,9 +89,9 @@ class PagedPublicationHotspots
         return
 
     resized: ->
-        hotspots = @hotspots[@currentPageSpreadId]
+        data = @getCache @currentPageSpreadId
 
-        @renderHotspots hotspots if hotspots?
+        @renderHotspots data if data?
 
         return
 

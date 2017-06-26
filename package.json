@@ -40,7 +40,6 @@
     "stylus": "^0.54.5"
   },
   "dependencies": {
-    "incito-browser": "git+ssh://git@github.com/shopgun/incito-browser.git#master",
     "microevent": "^1.0.0",
     "verso": "git+ssh://git@github.com/shopgun/verso-browser.git#2a2a9cea755b6234dac6a785a26e94db0e0f420f",
     "request": "^2.81.0",
