@@ -1,88 +1,71 @@
-var id = 'be84g1C';
-var appKey = '00j486xcipwzk2rmcbzfalpk4sgx9v3i';
-var trackId = appKey;
-var el = document.querySelector('.sgn__pp');
-var eventTracker = new SGN.EventsKit.Tracker({ trackId: trackId });
-var pagedPublication;
-var details;
-var pages;
-var hotspots;
-var hotspotRequests = [];
-var fetch = {
-    details: function (callback) {
-        SGN.CoreKit.request({ url: '/v2/catalogs/' + id }, callback);
-    },
-    pages: function (callback) {
-        SGN.CoreKit.request({ url: '/v2/catalogs/' + id + '/pages' }, callback);
-    },
-    hotspots: function (callback) {
-        SGN.CoreKit.request({ url: '/v2/catalogs/' + id + '/hotspots' }, callback);
-    }
-};
+function PagedPublication (el, options) {
+    this.el = el;
+    this.options = options || {};
+    this.data = {
+        details: null,
+        pages: null,
+        hotspots: null
+    };
+    this.hotspots = {};
+    this.hotspotQueue = [];
+    this.eventTracker = new SGN.EventsKit.Tracker({
+        trackId: this.options.trackId
+    });
 
-// Configure the SDK.
-SGN.config.set({ appKey: appKey });
+    // Configure the SDK.
+    SGN.config.set({ appKey: this.options.appKey });
 
-// Fetch details and pages at the same time to speed things up.
-SGN.util.async.parallel([fetch.details, fetch.pages], function (result) {
-    details = result[0][1];
-    pages = result[1][1];
+    // Fetch details and pages at the same time to speed things up.
+    SGN.util.async.parallel([
+        this.fetch.bind(this),
+        this.fetchPages.bind(this)
+    ], function (result) {
+        this.data.details = result[0][1];
+        this.data.pages = result[1][1];
 
-    render();
-});
+        this.render();
+    }.bind(this));
 
-// Then, fetch hotspots since they are a progressive enhancements and not important on initial render.
-fetch.hotspots(function (err, response) {
-    if (err) return;
+    // Then, fetch hotspots since they are not important for the initial render.
+    this.fetchHotspots(function (err, response) {
+        if (err) return;
 
-    // Convert the hotspots to an object from an array for quick future lookup.
-    hotspots = {};
+        // Convert the hotspots to an object from an array for quick future lookup.
+        this.data.hotspots = {};
 
-    response.forEach(function (hotspot) { hotspots[hotspot.id] = hotspot; });
+        response.forEach(function (hotspot) {
+            this.data.hotspots[hotspot.id] = hotspot;
+        }.bind(this));
 
-    satisfyHotspotRequests();
-});
+        // Since the hotspots can load after initial render, the user might already have requested hotspots, which need to be resolved.
+        this.processHotspotQueue();
+    }.bind(this));
 
-// Prevent the document from scrolling vertically on touch devices.
-document.addEventListener('touchstart', function (e) {
-    if (e.target.tagName !== 'A') e.preventDefault();
-});
+    // Prevent the document from scrolling vertically on touch devices.
+    document.addEventListener('touchstart', function (e) {
+        if (e.target.tagName !== 'A') e.preventDefault();
+    });
+}
 
-function render () {
-    pagedPublication = new SGN.PagedPublicationKit.Viewer(el, {
-        id: id,
-        ownedBy: details.dealer_id,
-        color: '#' + details.branding.pageflip.color,
-        pages: pages.map(function (page, i) {
-            var pageNumber = i + 1;
-
-            return {
-                id: 'page' + pageNumber,
-                label: pageNumber + '',
-                pageNumber: pageNumber,
-                images: {
-                    medium: page.view,
-                    large: page.zoom
-                }
-            };
-        }),
+PagedPublication.prototype.render = function () {
+    this.pagedPublication = new SGN.PagedPublicationKit.Viewer(this.el, {
+        id: this.options.id,
+        ownedBy: this.data.details.dealer_id,
+        color: '#' + this.data.details.branding.pageflip.color,
         keyboard: true,
-        eventTracker: null //eventTracker
+        eventTracker: this.eventTracker,
+        pages: this.transformPages(this.data.pages)
     });
 
-    pagedPublication.bind('hotspotsRequested', function (e) {
-        hotspotRequests.push(e);
-        satisfyHotspotRequests();
-    });
+    this.pagedPublication.bind('hotspotsRequested', function (e) {
+        this.hotspotQueue.push(e);
+        this.processHotspotQueue();
+    }.bind(this));
 
-    pagedPublication.bind('beforeNavigation', function (e) {
-        console.log('beforeNavigation', e);
-    });
-
-    pagedPublication.bind('clicked', function (e) {
+    this.pagedPublication.bind('clicked', function (e) {
         var clickedHotspots = e.verso.overlayEls.map(function (overlayEl) {
-            return hotspots[overlayEl.getAttribute('data-id')];
-        });
+            return this.data.hotspots[overlayEl.getAttribute('data-id')];
+        }.bind(this));
 
         if (clickedHotspots.length === 1) {
             console.log('Hotspot clicked', clickedHotspots[0]);
@@ -95,83 +78,63 @@ function render () {
                 hotspots: clickedHotspots
             });
         }
+    }.bind(this));
+
+    this.pagedPublication.start();
+};
+
+PagedPublication.prototype.transformPages = function (pages) {
+    return pages.map(function (page, i) {
+        var pageNumber = i + 1;
+
+        return {
+            id: 'page' + pageNumber,
+            label: pageNumber + '',
+            pageNumber: pageNumber,
+            images: {
+                medium: page.view,
+                large: page.zoom
+            }
+        };
     });
+};
 
-    pagedPublication.start();
-}
+PagedPublication.prototype.processHotspotQueue = function () {
+    if (!this.pagedPublication || !this.data.hotspots) return;
 
-function satisfyHotspotRequests () {
-    if (!pagedPublication || !hotspots) return;
+    this.hotspotQueue = this.hotspotQueue.filter(function (hotspotRequest) {
+        var hotspots = {};
 
-    hotspotRequests = hotspotRequests.filter(function (hotspotRequest) {
-        pagedPublication.trigger('hotspotsReceived', {
-            pageSpreadId: hotspotRequest.pageSpreadId,
-            hotspots: getHotspots(hotspotRequest.pages)
+        for (var id in this.data.hotspots) {
+            var match = false;
+            var hotspot = this.data.hotspots[id];
+
+            hotspotRequest.pages.forEach(function (page) {
+                if (hotspot.locations[page.pageNumber]) match = true;
+            });
+
+            if (match) hotspots[id] = hotspot;
+        }
+
+        this.pagedPublication.trigger('hotspotsReceived', {
+            id: hotspotRequest.id,
+            pages: hotspotRequest.pages,
+            ratio: this.data.details.dimensions.height,
+            hotspots: hotspots
         });
 
         return false;
-    });
-}
+    }.bind(this));
+};
 
-function getHotspots (pages) {
-    var matches = [];
-    var pageNumbers = pages.map(function (page) { return page.pageNumber; });
+PagedPublication.prototype.fetch = function (callback) {
+    SGN.CoreKit.request({ url: '/v2/catalogs/' + this.options.id }, callback);
+};
 
-    for (var id in hotspots) {
-        var hotspot = hotspots[id];
-        var match = false;
+PagedPublication.prototype.fetchPages = function (callback) {
+    SGN.CoreKit.request({ url: '/v2/catalogs/' + this.options.id + '/pages' }, callback);
+};
 
-        pages.forEach(function (page) {
-            if (hotspot.locations[page.pageNumber]) match = true;
-        });
-
-        if (match) matches.push(hotspot);
-    }
-
-    matches = matches.map(function (match) {
-        var minX, minY, maxX, maxY = null;
-
-        for (var pageNumber in match.locations) {
-            if (pageNumbers.indexOf(+pageNumber) === -1) continue;
-
-            var poly = match.locations[pageNumber];
-
-            poly.forEach(function (coords) {
-                var x = coords[0];
-                var y = coords[1];
-
-                if (pages[1] && pageNumbers[1] === +pageNumber) {
-                    x += 1;
-                }
-
-                x /= pages.length;
-
-                if (minX == null) {
-                    minX = maxX = x;
-                    minY = maxY = y;
-                }
-
-                if (x < minX) minX = x;
-                if (x > maxX) maxX = x;
-                if (y < minY) minY = y;
-                if (y > maxY) maxY = y;
-            });
-        }
-
-        var width = maxX - minX;
-        var height = maxY - minY;
-        var ratio = details.dimensions.height;
-
-        return {
-            id: match.id,
-            type: match.type,
-            title: match.heading,
-            top: minY / ratio * 100,
-            left: minX * 100,
-            width: width * 100,
-            height: height / ratio * 100
-        };
-    });
-
-    return matches;
-}
+PagedPublication.prototype.fetchHotspots = function (callback) {
+    SGN.CoreKit.request({ url: '/v2/catalogs/' + this.options.id + '/hotspots' }, callback);
+};

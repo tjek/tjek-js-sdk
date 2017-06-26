@@ -19,22 +19,22 @@ class PagedPublicationHotspots
         pageSpreadEl = data.pageSpread.getEl()
         hotspotEls = pageSpreadEl.querySelectorAll '.sgn-pp__hotspot'
 
-        data.hotspots.forEach (hotspot) =>
-            frag.appendChild @renderHotspot(hotspot, contentRect)
+        for id, hotspot of data.hotspots
+            position = @getPosition data.pages, data.ratio, hotspot
 
-            return
+            frag.appendChild @renderHotspot(hotspot, position, contentRect)
 
         hotspotEl.parentNode.removeChild hotspotEl for hotspotEl in hotspotEls
         pageSpreadEl.appendChild frag
 
         @
 
-    renderHotspot: (hotspot, contentRect) ->
+    renderHotspot: (hotspot, position, contentRect) ->
         el = document.createElement 'div'
-        top = Math.round contentRect.height / 100 * hotspot.top
-        left = Math.round contentRect.width / 100 * hotspot.left
-        width = Math.round contentRect.width / 100 * hotspot.width
-        height = Math.round contentRect.height / 100 * hotspot.height
+        top = Math.round contentRect.height / 100 * position.top
+        left = Math.round contentRect.width / 100 * position.left
+        width = Math.round contentRect.width / 100 * position.width
+        height = Math.round contentRect.height / 100 * position.height
 
         top += Math.round contentRect.top
         left += Math.round contentRect.left
@@ -50,9 +50,46 @@ class PagedPublicationHotspots
 
         el
 
+    getPosition: (pages, ratio, hotspot) ->
+        minX = null
+        minY = null
+        maxX = null
+        maxY = null
+        pageNumbers = pages.map (page) -> page.pageNumber
+
+        for pageNumber of hotspot.locations
+            continue if pageNumbers.indexOf(+pageNumber) is -1
+
+            poly = hotspot.locations[pageNumber]
+
+            poly.forEach (coords) ->
+                x = coords[0]
+                y = coords[1]
+
+                x +=1 if pages[1] and pageNumbers[1] is +pageNumber
+                x /= pages.length
+
+                if not minX?
+                    minX = maxX = x
+                    minY = maxY = y
+
+                minX = x if x < minX
+                maxX = x if x > maxX
+                minY = y if y < minY
+                maxY = y if y > maxY
+
+
+        width = maxX - minX
+        height = maxY - minY
+
+        top: minY / ratio * 100
+        left: minX * 100
+        width: width * 100
+        height: height / ratio * 100
+
     requestHotspots: (pageSpreadId, pages) ->
         @trigger 'hotspotsRequested',
-            pageSpreadId: pageSpreadId
+            id: pageSpreadId
             pages: pages
 
         return
@@ -98,3 +135,5 @@ class PagedPublicationHotspots
 MicroEvent.mixin PagedPublicationHotspots
 
 module.exports = PagedPublicationHotspots
+
+

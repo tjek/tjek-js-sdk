@@ -214,9 +214,11 @@ class Viewer
 
         @bind 'hotspotsReceived', (e) =>
             @_hotspots.trigger 'hotspotsReceived',
-                pageSpread: @_core.pageSpreads.get e.pageSpreadId
+                pageSpread: @_core.pageSpreads.get e.id
                 versoPageSpread: @_core.getVerso().pageSpreads.find (pageSpread) ->
-                    pageSpread.getId() is e.pageSpreadId
+                    pageSpread.getId() is e.id
+                ratio: e.ratio
+                pages: e.pages
                 hotspots: e.hotspots
 
             return
