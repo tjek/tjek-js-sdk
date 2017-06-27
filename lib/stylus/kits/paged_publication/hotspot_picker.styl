@@ -1,6 +1,32 @@
 .sgn-pp__hotspot-picker
     absolute top left
-    width 100px
     z-index 3
-    background-color #fff
-    padding 8px
+
+    ul
+        list-style-type none
+        margin 0
+        padding 0
+
+    li
+        margin 0
+        padding 8px 0
+        border-bottom 1px solid #e6e6e6
+
+        &:first-child
+            padding-top 0
+
+        &:last-child
+            padding-bottom 0
+            border-bottom 0
+
+        a
+            text-decoration underline
+            color inherit
+
+        > p:first-child
+            font-size 16px
+            margin 0 0 2px
+
+        > p:last-child
+            font-size 12px
+            margin 0

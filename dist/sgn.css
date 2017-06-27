@@ -1,3 +1,20 @@
+.sgn__popover {
+  background-color: #fff;
+  color: #000;
+  border-radius: 12px;
+}
+.sgn-popover__header {
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.sgn-popover__content {
+  padding: 8px;
+}
 .verso {
   position: relative;
   outline: 0;
@@ -714,8 +731,34 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100px;
   z-index: 3;
-  background-color: #fff;
-  padding: 8px;
+}
+.sgn-pp__hotspot-picker ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.sgn-pp__hotspot-picker li {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #e6e6e6;
+}
+.sgn-pp__hotspot-picker li:first-child {
+  padding-top: 0;
+}
+.sgn-pp__hotspot-picker li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.sgn-pp__hotspot-picker li a {
+  text-decoration: underline;
+  color: inherit;
+}
+.sgn-pp__hotspot-picker li > p:first-child {
+  font-size: 16px;
+  margin: 0 0 2px;
+}
+.sgn-pp__hotspot-picker li > p:last-child {
+  font-size: 12px;
+  margin: 0;
 }

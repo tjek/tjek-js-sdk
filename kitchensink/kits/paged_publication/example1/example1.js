@@ -62,6 +62,13 @@ PagedPublication.prototype.render = function () {
         this.processHotspotQueue();
     }.bind(this));
 
+    this.pagedPublication.bind('beforeNavigation', function () {
+        if (this.hotspotPicker) {
+            this.hotspotPicker.destroy();
+            this.hotspotPicker = null;
+        }
+    }.bind(this));
+
     this.pagedPublication.bind('clicked', function (e) {
         var clickedHotspots = e.verso.overlayEls.map(function (overlayEl) {
             return this.data.hotspots[overlayEl.getAttribute('data-id')];
@@ -70,29 +77,33 @@ PagedPublication.prototype.render = function () {
         if (clickedHotspots.length === 1) {
             this.showHotspot(clickedHotspots[0]);
         } else if (e.verso.overlayEls.length > 1) {
-            var hotspots = clickedHotspots
-                // Limit hotspots to the ones you want to support.
-                .filter(function (hotspot) {
-                    return hotspot.type === 'offer';
-                })
-
-                // Transform hotspots as you'd like.
-                .map(function (hotspot) {
-                    if (hotspot.type !== 'offer') return;
-
-                    return {
-                        id: hotspot.id,
-                        title: hotspot.offer.heading,
-                        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
-                    };
-                });
-            var hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker({
+            this.hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker({
+                header: 'Which offer did you mean?',
                 x: e.verso.x,
                 y: e.verso.y,
-                hotspots: hotspots
+                hotspots: clickedHotspots
+                    // Limit hotspots to the ones you want to support.
+                    .filter(function (hotspot) {
+                        return hotspot.type === 'offer';
+                    })
+
+                    // Transform hotspots as you'd like.
+                    .map(function (hotspot) {
+                        if (hotspot.type !== 'offer') return;
+
+                        return {
+                            id: hotspot.id,
+                            title: hotspot.offer.heading,
+                            subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+                        };
+                    })
             });
 
-            this.pagedPublication.el.appendChild(hotspotPicker.el);
+            this.hotspotPicker.bind('selected', function (e) {
+                this.showHotspot(this.data.hotspots[e.id]);
+            }.bind(this));
+
+            this.pagedPublication.el.appendChild(this.hotspotPicker.el);
         }
     }.bind(this));
 
