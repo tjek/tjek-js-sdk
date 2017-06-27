@@ -1,4 +1,4 @@
-# ShopGun JavaScript SDK [![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=master)](https://travis-ci.org/shopgun/shopgun-js-sdk)
+# ShopGun JavaScript SDK [![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=develop)](https://travis-ci.org/shopgun/shopgun-js-sdk)
 
 This SDK works both client-side in your browser but also server-side in a node.js environment.
 
