@@ -2,6 +2,33 @@
 
 This SDK works both client-side in your browser but also server-side in a node.js environment.
 
+## Installing
+
+### In the Browser
+
+The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://d28hgqm5t08t7y.cloudfront.net/versions/1.0.0/sgn-sdk.css">
+<script src="https://d28hgqm5t08t7y.cloudfront.net/versions/1.0.0/sgn-sdk.js"></script>
+```
+
+### In Node.js
+
+We recommend you use npm to install the SDK. To install, simply type the following into a terminal window:
+
+```
+npm install shopgun-sdk
+```
+
+### Bower
+
+If you can't use npm you can make use of Bower to install the SDK by typing the following into a terminal window:
+
+```
+bower install shopgun-sdk
+```
+
 ## Configuration
 
 To configure the SDK you just do:
