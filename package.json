@@ -46,7 +46,6 @@
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
     "request": "^2.81.0",
-    "sha256": "^0.2.0",
-    "verso": "git+ssh://git@github.com/shopgun/verso-browser.git#2a2a9cea755b6234dac6a785a26e94db0e0f420f"
+    "sha256": "^0.2.0"
   }
 }
