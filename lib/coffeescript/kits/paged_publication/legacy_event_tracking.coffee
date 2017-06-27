@@ -44,7 +44,7 @@ class PagedPublicationLegacyEventTracking
         return
 
     getOrientation: ->
-        if window.innerWidth >= window.innerHeight then 'landscape' else 'portrait' 
+        if window.innerWidth >= window.innerHeight then 'landscape' else 'portrait'
 
     getDuration: ->
         Date.now() - @appearedAt
