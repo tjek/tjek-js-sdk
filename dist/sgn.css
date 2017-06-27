@@ -2,6 +2,7 @@
   background-color: #fff;
   color: #000;
   border-radius: 12px;
+  max-width: 220px;
 }
 .sgn-popover__header {
   padding: 10px 12px;
@@ -757,8 +758,16 @@
 .sgn-pp__hotspot-picker li > p:first-child {
   font-size: 16px;
   margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 .sgn-pp__hotspot-picker li > p:last-child {
   font-size: 12px;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }

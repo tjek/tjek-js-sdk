@@ -101,6 +101,8 @@ PagedPublication.prototype.render = function () {
 
             this.hotspotPicker.bind('selected', function (e) {
                 this.showHotspot(this.data.hotspots[e.id]);
+                this.hotspotPicker.destroy();
+                this.hotspotPicker = null;
             }.bind(this));
 
             this.pagedPublication.el.appendChild(this.hotspotPicker.el);

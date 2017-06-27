@@ -27,9 +27,7 @@ class PagedPublicationHotspotPicker
             if e.target.tagName is 'A'
                 id = e.target.getAttribute 'data-id'
 
-                if id?
-                    @trigger 'selected', id: id
-                    @destroy()
+                @trigger 'selected', id: id if id?
 
             return
 
