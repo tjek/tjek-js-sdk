@@ -48,7 +48,9 @@ Possible options are:
 
 ## PagedPublicationKit
 
-To try the PagedPublicationKit simply run `npm run dev` in a terminal window. This starts a simple HTTP server at `http://localhost:8001` meaning you can access the PagedPublicationKit at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
+PagedPublicationKit is a way to make a stellar reading experience for traditional PDF catalogs/flyers. It's rendered directly in the DOM, has full event tracking, and is very customizable.
+
+To try it outsimply run `npm run dev` in a terminal window. This starts a simple HTTP server at `http://localhost:8001` allowing you to try a demo at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
 
 ## GraphKit
 
