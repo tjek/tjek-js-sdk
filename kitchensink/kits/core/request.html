@@ -5,7 +5,7 @@
 		<title>CoreKit: Request</title>
     </head>
     <body>
-        <script src="../dist/sgn-sdk.js"></script>
+        <script src="../../../dist/sgn-sdk.js"></script>
         <script>
             SGN.config.set({
                 appKey: '00j486xcipwzk2rmcbzfalpk4sgx9v3i'
@@ -15,9 +15,11 @@
                 url: '/v2/catalogs'
             }, function (err, data) {
                 if (err) {
+                    document.body.textContent = 'Error';
+
                     console.log('Error', err);
                 } else {
-                    console.log(data);
+                    document.body.innerHTML = '<pre>' + JSON.stringify(data, null, 4) + '</pre>';
                 }
             });
         </script>
