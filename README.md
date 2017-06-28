@@ -9,7 +9,7 @@ This SDK works both client-side in your browser but also server-side in a node.j
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.0.min.css">
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.0.min.css" rel="stylesheet" type="text/css">
 <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.0.min.js"></script>
 ```
 
@@ -44,15 +44,15 @@ Possible options are:
 - `appKey`: The application key.
 - `appSecret`: The application secret (only needed in node.js).
 - `eventTracker`: The instance of an event tracker.
-- `locale`: The preferred language.
+- `locale`: The preferred language in `ll_CC` format (e.g. `da_DK`).
 
 ## PagedPublicationKit
 
-See `kitchensink/kits/paged_publication/basic.html` for how to interact with this kit.
+To try the PagedPublicationKit simply run `npm run dev` in a terminal window. This starts a simple HTTP server at `http://localhost:8001` meaning you can access the PagedPublicationKit at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
 
 ## GraphKit
 
-The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply instantiate `SGN.GraphRequest` like so:
+The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply run `SGN.GraphRequest.request` like so:
 
 ```javascript
 SGN.GraphKit.request({
