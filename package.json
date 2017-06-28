@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ShopGun SDK for JavaScript.",
   "main": "index.js",
   "watch": {
@@ -18,7 +18,7 @@
     "test": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/ -r lib/coffeescript/",
     "build": "node build.js",
     "build-production": "ENVIRONMENT=production node build.js",
-    "server": "python -m SimpleHTTPServer 8001",
+    "dev": "python -m SimpleHTTPServer 8001",
     "watch": "npm-watch build"
   },
   "repository": {
@@ -40,7 +40,8 @@
     "npm-watch": "^0.2.0",
     "stylus": "^0.54.5",
     "uglify-js": "^3.0.20",
-    "uglifycss": "0.0.27"
+    "uglifycss": "0.0.27",
+    "verso-browser": "^1.0.0"
   },
   "dependencies": {
     "microevent": "^1.0.0",
