@@ -50,7 +50,8 @@ Possible options are:
 
 See `kitchensink/kits/paged_publication/basic.html` for how to interact with this kit.
 
-![PagedPublicationKit](docs/paged-publication-kit.jpg)
+![PagedPublicationKitHotspot](docs/paged-publication-hotspot.jpg)
+![PagedPublicationKitOutro](docs/paged-publication-outro.jpg)
 
 ## GraphKit
 
