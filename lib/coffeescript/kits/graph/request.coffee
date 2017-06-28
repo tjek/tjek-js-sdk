@@ -43,6 +43,8 @@ module.exports = (options = {}, callback) ->
             value: authToken
             url: url
         ]
+    else if SGN.util.isBrowser()
+        options.useCookies = true
 
     SGN.request options, (err, data) ->
         if err?
