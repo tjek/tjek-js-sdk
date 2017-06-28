@@ -50,9 +50,6 @@ Possible options are:
 
 See `kitchensink/kits/paged_publication/basic.html` for how to interact with this kit.
 
-![PagedPublicationKitHotspot](docs/paged-publication-kit-hotspot.png)
-![PagedPublicationKitOutro](docs/paged-publication-kit-outro.png)
-
 ## GraphKit
 
 The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply instantiate `SGN.GraphRequest` like so:
