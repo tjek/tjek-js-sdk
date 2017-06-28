@@ -39,6 +39,42 @@ SGN.config.set({
 });
 ```
 
+Possible options are:
+
+- `appKey`: The application key.
+- `appSecret`: The application secret (only needed in node.js).
+- `eventTracker`: The instance of an event tracker.
+- `locale`: The preferred language.
+
+## PagedPublicationKit
+
+See `kitchensink/kits/paged_publication/basic.html` for how to interact with this kit.
+
+![PagedPublicationKit](docs/paged-publication-kit.jpg)
+
+## GraphKit
+
+The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply instantiate `SGN.GraphRequest` like so:
+
+```javascript
+SGN.GraphKit.request({
+    query: 'query PlanningSuggestions($locale: Locale!, $term: String!) {\
+      planningSuggestions(locale: $locale, term: $term) {\
+        phrases {\
+          name\
+        }\
+      }\
+    }',
+    operationName: 'PlanningSuggestions',
+    variables: {
+        locale: 'en_US',
+        term: 'c'
+    }
+}, function (err, response) {
+    console.log(err, response);
+});
+```
+
 ## CoreKit
 
 The CoreKit allows you to make requests against our [Core API](http://docs.api.etilbudsavis.dk). Here's an example query:
@@ -76,29 +112,6 @@ The supported options are:
 - `headers`: An object defining the request headers.
 - `geolocation`: An object defining the geolocation properties.
 
-## GraphKit
-
-The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply instantiate `SGN.GraphRequest` like so:
-
-```javascript
-SGN.GraphKit.request({
-    query: 'query PlanningSuggestions($locale: Locale!, $term: String!) {\
-      planningSuggestions(locale: $locale, term: $term) {\
-        phrases {\
-          name\
-        }\
-      }\
-    }',
-    operationName: 'PlanningSuggestions',
-    variables: {
-        locale: 'en_US',
-        term: 'c'
-    }
-}, function (err, response) {
-    console.log(err, response);
-});
-```
-
 ## EventsKit
 
 The EventsKit allows you to track user behavior to make it easier to measure how well your product and content are performing. You can both register official ShopGun events but also custom events. The EventsKit is only available client-side. First, you need to make a tracker:
@@ -120,7 +133,3 @@ To track custom events you simply prefix events with `x-`:
 ```javascript
 eventTracker.trackEvent('x-something-happened', { buttonX: true }, '1.0.0');
 ```
-
-## PagedPublicationKit
-
-See `kitchensink/kits/paged_publication/basic.html` for how to interact with this kit.

@@ -4,7 +4,6 @@ keys = [
     'appKey',
     'appSecret',
     'authToken',
-    'sessionToken',
     'eventTracker',
     'locale'
 ]
