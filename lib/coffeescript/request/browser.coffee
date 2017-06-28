@@ -9,7 +9,7 @@ module.exports = (options = {}, callback, progressCallback) ->
 
     http.open method.toUpperCase(), url
     http.timeout = options.timeout if options.timeout?
-    http.withCredentials = true if options.useCookies isnt false
+    http.withCredentials = true if options.useCookies is true
 
     if options.headers?
         for header, value of options.headers
