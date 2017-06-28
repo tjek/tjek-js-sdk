@@ -50,7 +50,7 @@ Possible options are:
 
 PagedPublicationKit is a way to make a stellar reading experience for traditional PDF catalogs/flyers. It's rendered directly in the DOM, has full event tracking, and is very customizable.
 
-To try it outsimply run `npm run dev` in a terminal window. This starts a simple HTTP server at `http://localhost:8001` allowing you to try a demo at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
+Run `npm run dev` in a terminal window to start a HTTP server so that you can try it out at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
 
 ## GraphKit
 
