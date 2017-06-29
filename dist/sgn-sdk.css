@@ -3,6 +3,8 @@
   color: #000;
   border-radius: 12px;
   max-width: 220px;
+  -webkit-box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
 }
 .sgn-popover__header {
   padding: 10px 12px;
@@ -424,6 +426,7 @@
 .sgn__pp {
   position: relative;
   color: #000;
+  overflow: hidden;
 }
 .sgn__pp:not([data-started]) .sgn-pp__progress-label,
 .sgn__pp:not([data-started]) .sgn-pp__progress,
@@ -732,42 +735,56 @@
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 3;
+  outline: 0;
+  overflow: auto;
 }
-.sgn-pp__hotspot-picker ul {
+.sgn-pp__hotspot-picker > .sgn__popover {
+  position: absolute;
+  z-index: 3;
+  outline: 0;
+}
+.sgn-pp__hotspot-picker > .sgn__popover ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-.sgn-pp__hotspot-picker li {
+.sgn-pp__hotspot-picker > .sgn__popover li {
   margin: 0;
   padding: 8px 0;
   border-bottom: 1px solid #e6e6e6;
+  cursor: pointer;
 }
-.sgn-pp__hotspot-picker li:first-child {
+.sgn-pp__hotspot-picker > .sgn__popover li:first-child {
   padding-top: 0;
 }
-.sgn-pp__hotspot-picker li:last-child {
+.sgn-pp__hotspot-picker > .sgn__popover li:last-child {
   padding-bottom: 0;
   border-bottom: 0;
 }
-.sgn-pp__hotspot-picker li a {
-  text-decoration: underline;
-  color: inherit;
-}
-.sgn-pp__hotspot-picker li > p:first-child {
-  font-size: 16px;
+.sgn-pp__hotspot-picker > .sgn__popover li > p:first-child {
+  font-size: 15px;
   margin: 0 0 2px;
   white-space: nowrap;
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
 }
-.sgn-pp__hotspot-picker li > p:last-child {
+.sgn-pp__hotspot-picker > .sgn__popover li > p:last-child {
   font-size: 12px;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
+}
+.sgn-pp-hotspot-picker__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
 }

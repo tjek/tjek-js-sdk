@@ -7,7 +7,7 @@
     <body>
         <script src="../../../dist/sgn-sdk.js"></script>
         <script>
-            SGN.config.update({
+            SGN.config.set({
                 appKey: 'anonymous'
             });
 
@@ -24,9 +24,11 @@
                 variables: null
             }, function (err, data) {
                 if (err) {
+                    document.body.textContent = 'Error';
+
                     console.log('Error', err);
                 } else {
-                    console.log(data);
+                    document.body.innerHTML = '<pre>' + JSON.stringify(data, null, 4) + '</pre>';
                 }
             });
         </script>

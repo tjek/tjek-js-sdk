@@ -19,12 +19,14 @@ class PagedPublicationHotspots
         pageSpreadEl = data.pageSpread.getEl()
         hotspotEls = pageSpreadEl.querySelectorAll '.sgn-pp__hotspot'
 
+        hotspotEl.parentNode.removeChild hotspotEl for hotspotEl in hotspotEls
+
         for id, hotspot of data.hotspots
             position = @getPosition data.pages, data.ratio, hotspot
+            el = @renderHotspot hotspot, position, contentRect
+            
+            frag.appendChild el
 
-            frag.appendChild @renderHotspot(hotspot, position, contentRect)
-
-        hotspotEl.parentNode.removeChild hotspotEl for hotspotEl in hotspotEls
         pageSpreadEl.appendChild frag
 
         @
@@ -60,9 +62,7 @@ class PagedPublicationHotspots
         for pageNumber of hotspot.locations
             continue if pageNumbers.indexOf(+pageNumber) is -1
 
-            poly = hotspot.locations[pageNumber]
-
-            poly.forEach (coords) ->
+            hotspot.locations[pageNumber].forEach (coords) ->
                 x = coords[0]
                 y = coords[1]
 
@@ -77,7 +77,6 @@ class PagedPublicationHotspots
                 maxX = x if x > maxX
                 minY = y if y < minY
                 maxY = y if y > maxY
-
 
         width = maxX - minX
         height = maxY - minY
@@ -111,11 +110,12 @@ class PagedPublicationHotspots
         @
 
     afterNavigation: (e) ->
-        if e.pageSpread?
-            id = e.pageSpread.getId()
+        return if not e.pageSpread?
 
-            @currentPageSpreadId = id
-            @requestHotspots id, e.pageSpread.getPages() if @pageSpreadsLoaded[id]
+        id = e.pageSpread.getId()
+
+        @currentPageSpreadId = id
+        @requestHotspots id, e.pageSpread.getPages() if @pageSpreadsLoaded[id]
 
         return
 
@@ -125,7 +125,7 @@ class PagedPublicationHotspots
 
         return
 
-    resized: ->
+    resized: (e) ->
         data = @getCache @currentPageSpreadId
 
         @renderHotspots data if data?

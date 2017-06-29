@@ -38,7 +38,7 @@ class PagedPublicationPageSpreads
             pageSpreads.push [lastPage] if lastPage?
 
         @collection = pageSpreads.map (pages, i) =>
-            id = i + ''
+            id = "#{pageMode}-#{i}"
             pageSpread = new PageSpread
                 width: width
                 maxZoomScale: maxZoomScale

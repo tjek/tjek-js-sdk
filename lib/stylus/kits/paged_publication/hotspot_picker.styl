@@ -1,34 +1,46 @@
 .sgn-pp__hotspot-picker
     absolute top left
+    right 0
+    bottom 0
     z-index 3
+    outline 0
+    overflow auto
 
-    ul
-        list-style-type none
-        margin 0
-        padding 0
+    > .sgn__popover
+        position absolute
+        z-index 3
+        outline 0
 
-    li
-        margin 0
-        padding 8px 0
-        border-bottom 1px solid #e6e6e6
-
-        &:first-child
-            padding-top 0
-
-        &:last-child
-            padding-bottom 0
-            border-bottom 0
-
-        a
-            text-decoration underline
-            color inherit
-
-        > p:first-child
-            font-size 16px
-            margin 0 0 2px
-            overflow ellipsis
-
-        > p:last-child
-            font-size 12px
+        ul
+            list-style-type none
             margin 0
-            overflow ellipsis
+            padding 0
+
+        li
+            margin 0
+            padding 8px 0
+            border-bottom 1px solid #e6e6e6
+            cursor pointer
+
+            &:first-child
+                padding-top 0
+
+            &:last-child
+                padding-bottom 0
+                border-bottom 0
+
+            > p:first-child
+                font-size 15px
+                margin 0 0 2px
+                overflow ellipsis
+
+            > p:last-child
+                font-size 12px
+                margin 0
+                overflow ellipsis
+
+.sgn-pp-hotspot-picker__background
+    absolute top left
+    right 0
+    bottom 0
+    cursor pointer

@@ -59,17 +59,17 @@ class PagedPublicationPageSpread
 
             SGN.util.loadImage image, (err, width, height) =>
                 if not err?
+                    isComplete = ++imageLoads is pageCount
+
                     pageEl.style.backgroundImage = "url(#{image})"
                     pageEl.dataset.width = width
                     pageEl.dataset.height = height
                     pageEl.innerHTML = '&nbsp;'
 
-                    el.dataset.zoomable = true
-
-                    imageLoads++
+                    el.dataset.zoomable = true if isComplete
 
                     @trigger 'pageLoaded', pageSpreadId: id, page: page
-                    @trigger 'pagesLoaded', pageSpreadId: id, pages: pages if imageLoads is pageCount
+                    @trigger 'pagesLoaded', pageSpreadId: id, pages: pages if isComplete
                 else
                     loaderEl.innerHTML = '<span>!</span>'
 
