@@ -6,10 +6,8 @@ module.exports = """
         <div class="sgn-popover__content">
             <ul>
                 {{#hotspots}}
-                    <li>
-                        <p>
-                            <a href="#" data-id="{{id}}">{{title}}</a>
-                        </p>
+                    <li data-id="{{id}}">
+                        <p>{{title}}</p>
                         <p>{{subtitle}}</p>
                     </li>
                 {{/hotspots}}

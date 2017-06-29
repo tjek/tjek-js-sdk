@@ -1,6 +1,6 @@
 SGN = require '../../sgn'
 
-module.exports = (options = {}, callback) ->
+module.exports = (options = {}, callback = ->) ->
     SGN.CoreKit.session.ensure (err) ->
         return callback err if err?
 

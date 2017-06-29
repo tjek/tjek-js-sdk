@@ -65,7 +65,6 @@ PagedPublication.prototype.render = function () {
     this.pagedPublication.bind('beforeNavigation', function () {
         if (this.hotspotPicker) {
             this.hotspotPicker.destroy();
-            this.hotspotPicker = null;
         }
     }.bind(this));
 
@@ -102,10 +101,15 @@ PagedPublication.prototype.render = function () {
             this.hotspotPicker.bind('selected', function (e) {
                 this.showHotspot(this.data.hotspots[e.id]);
                 this.hotspotPicker.destroy();
+            }.bind(this));
+
+            this.hotspotPicker.bind('destroyed', function () {
                 this.hotspotPicker = null;
+                this.pagedPublication.el.focus();
             }.bind(this));
 
             this.pagedPublication.el.appendChild(this.hotspotPicker.el);
+            this.hotspotPicker.el.focus();
         }
     }.bind(this));
 

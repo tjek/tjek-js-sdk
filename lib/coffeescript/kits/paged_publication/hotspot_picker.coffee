@@ -1,4 +1,5 @@
 MicroEvent = require 'microevent'
+Gator = require 'gator'
 Mustache = require 'mustache'
 template = require './templates/hotspot_picker'
 
@@ -14,6 +15,7 @@ class PagedPublicationHotspotPicker
         width = @options.width ? 100
         header = @options.header
         template = @options.template if @options.template?
+        trigger = @trigger.bind @
         view =
             header: header
             hotspots: @options.hotspots
@@ -21,13 +23,16 @@ class PagedPublicationHotspotPicker
         @el.className = 'sgn-pp__hotspot-picker'
         @el.style.top = "#{@options.y}px"
         @el.style.left = "#{@options.x}px"
+        @el.setAttribute 'tabindex', -1
         @el.innerHTML = Mustache.render template, view
 
-        @el.addEventListener 'click', (e) =>
-            if e.target.tagName is 'A'
-                id = e.target.getAttribute 'data-id'
+        @el.addEventListener 'keyup', (e) =>
+            @destroy() if e.keyCode is 27
 
-                @trigger 'selected', id: id if id?
+            return
+
+        Gator(@el).on 'click', '[data-id]', ->
+            trigger 'selected', id: @getAttribute('data-id')
 
             return
 
@@ -35,6 +40,8 @@ class PagedPublicationHotspotPicker
 
     destroy: ->
         @el.parentNode.removeChild @el
+
+        @trigger 'destroyed'
 
         return
 

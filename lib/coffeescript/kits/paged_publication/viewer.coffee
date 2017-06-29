@@ -207,7 +207,7 @@ class Viewer
 
             return
         @_core.bind 'resized', (e) =>
-            @_hotspots.trigger 'resized', e
+            @_hotspots.trigger 'resized'
             @trigger 'resized', e
 
             return

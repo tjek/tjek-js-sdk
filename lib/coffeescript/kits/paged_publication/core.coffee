@@ -85,11 +85,7 @@ class PagedPublicationCore
     createVerso: ->
         verso = new Verso @els.verso, pageId: @pageId
 
-        verso.pageSpreads.forEach (pageSpread) =>
-            if pageSpread.getType() is 'page'
-                pageSpread.getContentRect = => @getContentRect pageSpread
-
-            return
+        verso.pageSpreads.forEach @overridePageSpreadContentRect.bind(@)
 
         verso.bind 'beforeNavigation', @beforeNavigation.bind(@)
         verso.bind 'afterNavigation', @afterNavigation.bind(@)
@@ -292,9 +288,8 @@ class PagedPublicationCore
         if not pageMode?
             width = @els.root.offsetWidth
             height = @els.root.offsetHeight
-            ratio = height / width
 
-            pageMode = if ratio >= 0.75 then 'single' else 'double'
+            pageMode = if height >= width then 'single' else 'double'
 
         pageMode
 
@@ -327,11 +322,16 @@ class PagedPublicationCore
 
         pageSpreadEl.parentNode.removeChild pageSpreadEl for pageSpreadEl in pageSpreadEls
         @els.pages.parentNode.insertBefore @pageSpreads.getFrag(), @els.pages
-        
+
         verso.refresh()
         verso.navigateTo verso.getPageSpreadPositionFromPageId(pageIds[0]), duration: 0
+        verso.pageSpreads.forEach @overridePageSpreadContentRect.bind(@)
 
         @
+
+    overridePageSpreadContentRect: (pageSpread) ->
+        if pageSpread.getType() is 'page'
+            pageSpread.getContentRect = => @getContentRect pageSpread
 
     visibilityChange: ->
         pageSpread = @getVerso().getPageSpreadFromPosition @getVerso().getPosition()
@@ -342,9 +342,12 @@ class PagedPublicationCore
         return
 
     resize: ->
-        @switchPageMode @getPageMode() if not @getOption('pageMode')?
+        pageMode = @getPageMode()
 
-        @trigger 'resized'
+        if not @getOption('pageMode')? and pageMode isnt @pageMode
+            @switchPageMode pageMode
+        else
+            @trigger 'resized'
 
         return
 
