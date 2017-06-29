@@ -109,6 +109,7 @@ PagedPublication.prototype.render = function () {
             }.bind(this));
 
             this.pagedPublication.el.appendChild(this.hotspotPicker.el);
+            this.hotspotPicker.render();
             this.hotspotPicker.el.focus();
         }
     }.bind(this));

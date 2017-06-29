@@ -37,6 +37,8 @@ class Viewer
         @_controls.trigger 'destroyed'
         @_eventTracking.trigger 'destroyed'
 
+        @el.parentNode.removeChild @el
+
         @
 
     navigateTo: (position, options) ->
