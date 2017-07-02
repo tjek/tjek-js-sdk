@@ -15,7 +15,7 @@ class PagedPublicationCore
 
     constructor: (el, options = {}) ->
         @options = @makeOptions options, @defaults
-        @pageId = @getOption('pageId') ? @getSavedPageId()
+        @pageId = @getOption 'pageId'
         @els =
             root: el
             pages: el.querySelector '.sgn-pp__pages'
@@ -160,18 +160,6 @@ class PagedPublicationCore
     findPage: (pageId) ->
         @getOption('pages').find (page) -> page.id is pageId
 
-    getSavedPageId: ->
-        id = @getOption 'id'
-        
-        clientLocalStorage.get "paged-publication-progress-#{id}"
-
-    saveCurrentPageId: (pageId) ->
-        id = @getOption 'id'
-
-        clientLocalStorage.set "paged-publication-progress-#{id}", pageId
-
-        return
-
     pageLoaded: (e) ->
         @trigger 'pageLoaded', e
 
@@ -191,7 +179,6 @@ class PagedPublicationCore
         progressLabel = @formatProgressLabel pageSpread
 
         @renderPageSpreads()
-        @saveCurrentPageId versoPageSpread.getPageIds()[0]
         @resetIdleTimer()
         @startIdleTimer()
         @trigger 'beforeNavigation',
