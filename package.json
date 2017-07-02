@@ -19,7 +19,7 @@
     "build": "node build.js",
     "build-production": "ENVIRONMENT=production node build.js",
     "dev": "python -m SimpleHTTPServer 8001",
-    "watch": "npm-watch build"
+    "watch": "npm-watch build test"
   },
   "jest": {
     "moduleFileExtensions": [
