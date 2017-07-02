@@ -15,11 +15,23 @@
     }
   },
   "scripts": {
-    "test": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/ -r lib/coffeescript/",
+    "test": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/ -r lib/coffeescript/ && jest",
     "build": "node build.js",
     "build-production": "ENVIRONMENT=production node build.js",
     "dev": "python -m SimpleHTTPServer 8001",
     "watch": "npm-watch build"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "coffee",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(coffee)$": "<rootDir>/jest-preprocessor.js"
+    },
+    "testMatch": [
+      "**/__tests__/*.(coffee|js)"
+    ]
   },
   "repository": {
     "type": "git",
@@ -37,6 +49,7 @@
     "coffeeify": "^2.1.0",
     "coffeelint": "^1.16.0",
     "gator": "^1.2.4",
+    "jest": "^20.0.4",
     "nib": "^1.1.2",
     "npm-watch": "^0.2.0",
     "stylus": "^0.54.5",
