@@ -54,7 +54,7 @@ Run `npm run dev` in a terminal window to start a HTTP server so that you can tr
 
 ## GraphKit
 
-The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply run `SGN.GraphRequest.request` like so:
+The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply run `SGN.GraphKit.request` like so:
 
 ```javascript
 SGN.GraphKit.request({
