@@ -58,6 +58,7 @@
     "verso-browser": "^1.0.1"
   },
   "dependencies": {
+    "coffee-script": "^1.12.6",
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
     "request": "^2.81.0",
