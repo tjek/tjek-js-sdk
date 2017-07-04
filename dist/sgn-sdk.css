@@ -597,11 +597,6 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
   display: none;
-  -webkit-transition: opacity 0.1s ease;
-  -moz-transition: opacity 0.1s ease;
-  -o-transition: opacity 0.1s ease;
-  -ms-transition: opacity 0.1s ease;
-  transition: opacity 0.1s ease;
 }
 .sgn-pp__page-spread:hover .sgn-pp__hotspot {
   display: block;

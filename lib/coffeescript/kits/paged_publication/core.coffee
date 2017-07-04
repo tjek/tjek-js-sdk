@@ -52,7 +52,7 @@ class PagedPublicationCore
         window.addEventListener 'resize', @resizeListener, false
         window.addEventListener 'beforeunload', @unloadListener, false
 
-        @els.root.dataset.started = ''
+        @els.root.setAttribute 'data-started', ''
         @els.root.setAttribute 'tabindex', '-1'
         @els.root.focus()
 
@@ -252,7 +252,7 @@ class PagedPublicationCore
 
         pageSpread.zoomIn() if pageSpread?
 
-        @els.root.dataset.zoomedIn = true
+        @els.root.setAttribute 'data-zoomed-in', true
         @trigger 'zoomedIn', verso: e, pageSpread: pageSpread
 
         return
@@ -264,7 +264,7 @@ class PagedPublicationCore
 
         pageSpread.zoomOut() if pageSpread?
 
-        @els.root.dataset.zoomedIn = false
+        @els.root.setAttribute 'data-zoomed-in', false
         @trigger 'zoomedOut', verso: e, pageSpread: pageSpread
 
         return
@@ -283,13 +283,13 @@ class PagedPublicationCore
     resetIdleTimer: ->
         clearTimeout @idleTimeout
 
-        @els.root.dataset.idle = false
+        @els.root.setAttribute 'data-idle', false
 
         @
 
     startIdleTimer: ->
         @idleTimeout = setTimeout =>
-            @els.root.dataset.idle = true
+            @els.root.setAttribute 'data-idle', true
 
             return
         , @getOption('idleDelay')

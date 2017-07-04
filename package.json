@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ShopGun SDK for JavaScript.",
   "main": "index.js",
   "watch": {
@@ -19,7 +19,7 @@
     "build": "node build.js",
     "build-production": "ENVIRONMENT=production node build.js",
     "dev": "python -m SimpleHTTPServer 8001",
-    "watch": "npm-watch build test"
+    "watch": "npm-watch build"
   },
   "jest": {
     "moduleFileExtensions": [
