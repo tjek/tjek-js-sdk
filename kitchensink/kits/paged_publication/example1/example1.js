@@ -151,7 +151,13 @@ PagedPublication.prototype.processHotspotQueue = function () {
                 if (hotspot.locations[page.pageNumber]) match = true;
             });
 
-            if (match) hotspots[id] = hotspot;
+            if (match) {
+                hotspots[id] = {
+                    type: hotspot.type,
+                    id: hotspot.id,
+                    locations: hotspot.locations
+                };
+            }
         }
 
         this.pagedPublication.trigger('hotspotsReceived', {
