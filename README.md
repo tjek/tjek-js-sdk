@@ -9,8 +9,8 @@ This SDK works both client-side in your browser but also server-side in a node.j
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.4.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.4.min.js"></script>
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.5.min.css" rel="stylesheet" type="text/css">
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.0.5.min.js"></script>
 ```
 
 ### In Node.js
