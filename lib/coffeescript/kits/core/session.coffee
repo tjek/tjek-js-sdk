@@ -53,10 +53,12 @@ session =
         , (err, data) ->
             if err?
                 callback err
-            else
+            else if data.statusCode is 201
                 session.set JSON.parse(data.body)
 
                 callback err, session.get()
+            else
+                callback new Error('Could not create session')
 
             return
 
@@ -77,10 +79,12 @@ session =
         , (err, data) ->
             if err?
                 callback err
-            else
+            else if data.statusCode is 200
                 session.set JSON.parse(data.body)
 
                 callback err, session.get()
+            else
+                callback new Error('Could not update session')
 
             return
 
@@ -102,10 +106,12 @@ session =
         , (err, data) ->
             if err?
                 callback err
-            else
+            else if data.statusCode is 200
                 session.set JSON.parse(data.body)
 
                 callback err, session.get()
+            else
+                callback new Error('Could not renew session')
 
             return
 
