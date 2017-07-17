@@ -11,7 +11,6 @@ SGN.AssetsKit = require './kits/assets'
 SGN.EventsKit = require './kits/events'
 SGN.GraphKit = require './kits/graph'
 SGN.CoreKit = require './kits/core'
-#SGN.IncitoPublicationKit = require './kits/incito_publication'
 SGN.PagedPublicationKit = require './kits/paged_publication'
 
 # Expose storage backends.
