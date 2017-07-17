@@ -52,18 +52,19 @@ module.exports = (options = {}, callback) ->
                 code: 'GraphRequestError'
             )
         else
+            # Update auth token as it might have changed.
+            if SGN.util.isNode()
+                cookies = parseCookies data.headers?['set-cookie']
+                authCookie = cookies[authTokenCookieName]
+
+                if SGN.config.get('authToken') isnt authCookie
+                    SGN.config.set 'authToken', authCookie
+
             if data.statusCode is 200
-                # Update auth token as it might have changed.
-                if SGN.util.isNode()
-                    cookies = parseCookies data.headers?['set-cookie']
-
-                    if SGN.config.get('authToken') isnt cookies[authTokenCookieName]
-                        SGN.config.set 'authToken', cookies[authTokenCookieName]
-
                 callback null, JSON.parse(data.body)
             else
-                callback SGN.util.error(new Error('Request error'),
-                    code: 'RequestError'
+                callback SGN.util.error(new Error('Core API error'),
+                    code: 'GraphAPIError'
                     statusCode: data.statusCode
                 )
 

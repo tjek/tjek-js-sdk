@@ -36,14 +36,22 @@ module.exports = (options = {}, callback = ->) ->
             useCookies: false
         , (err, data) ->
             if err?
-                callback err
+                callback SGN.util.error(new Error('Core request error'),
+                    code: 'CoreRequestError'
+                )
             else
                 token = SGN.CoreKit.session.get 'token'
                 responseToken = data.headers['x-token']
 
                 SGN.CoreKit.session.set 'token', responseToken if token isnt responseToken
 
-                callback null, JSON.parse(data.body) if typeof callback is 'function'
+                if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
+                    callback null, JSON.parse(data.body)
+                else
+                    callback SGN.util.error(new Error('Core API error'),
+                        code: 'CoreAPIError'
+                        statusCode: data.statusCode
+                    )
 
             return
 

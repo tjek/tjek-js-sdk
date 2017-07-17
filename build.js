@@ -16,15 +16,17 @@ var browserifySettings = {
     plugin: [derequire],
     debug: true
 };
-var jsPath = path.join(__dirname, 'dist', 'sgn-sdk.js');
-var jsProdPath = path.join(__dirname, 'dist', 'sgn-sdk-' + pkg.version + '.min.js');
-var cssPath = path.join(__dirname, 'dist', 'sgn-sdk.css');
-var cssProdPath = path.join(__dirname, 'dist', 'sgn-sdk-' + pkg.version + '.min.css');
-var jsStream = fs.createWriteStream(jsPath);
+var paths = {
+    js: path.join(__dirname, 'dist', 'sgn-sdk.js'),
+    jsMin: path.join(__dirname, 'dist', 'sgn-sdk.min.js'),
+    css: path.join(__dirname, 'dist', 'sgn-sdk.css'),
+    cssMin: path.join(__dirname, 'dist', 'sgn-sdk.min.css')
+};
+var jsStream = fs.createWriteStream(paths.js);
 
 jsStream.on('finish', function () {
     if (isProduction) {
-        fs.writeFileSync(jsProdPath, UglifyJS.minify(fs.readFileSync(jsPath).toString()).code);
+        fs.writeFileSync(paths.jsMin, UglifyJS.minify(fs.readFileSync(paths.js).toString()).code);
     }
 });
 
@@ -41,10 +43,10 @@ stylus(fs.readFileSync(path.join(__dirname, 'lib', 'stylus', 'sgn.styl'), 'utf8'
     .include(nib.path)
     .render(function (err, css) {
         if (!err) {
-            fs.writeFileSync(cssPath, css);
+            fs.writeFileSync(paths.css, css);
 
             if (isProduction) {
-                fs.writeFileSync(cssProdPath, UglifyCSS.processFiles([cssPath]));
+                fs.writeFileSync(paths.cssMin, UglifyCSS.processFiles([paths.css]));
             }
         } else {
             console.log(err);
