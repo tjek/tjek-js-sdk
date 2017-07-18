@@ -5,7 +5,13 @@ module.exports = (options = {}, callback, progressCallback) ->
     method = options.method ? 'get'
     url = options.url
 
-    url += SGN.util.formatQueryParams options.qs if options.qs?
+    if options.qs?
+        queryParams = SGN.util.formatQueryParams options.qs
+
+        if url.indexOf('?') is -1
+            url += '?' + queryParams
+        else
+            url += '&' + queryParams
 
     http.open method.toUpperCase(), url
     http.timeout = options.timeout if options.timeout?

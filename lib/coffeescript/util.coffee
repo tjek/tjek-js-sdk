@@ -37,8 +37,8 @@ util =
 
         if string then string[1] else undefined
 
-    formatQueryParams: (queryParams) ->
-        '?' + Object
+    formatQueryParams: (queryParams = {}) ->
+        Object
             .keys queryParams
             .map (key) -> key + '=' + encodeURIComponent(queryParams[key])
             .join '&'
