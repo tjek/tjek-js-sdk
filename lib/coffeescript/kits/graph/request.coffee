@@ -63,7 +63,7 @@ module.exports = (options = {}, callback) ->
             if data.statusCode is 200
                 callback null, JSON.parse(data.body)
             else
-                callback SGN.util.error(new Error('Core API error'),
+                callback SGN.util.error(new Error('Graph API error'),
                     code: 'GraphAPIError'
                     statusCode: data.statusCode
                 )
