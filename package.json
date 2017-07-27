@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "ShopGun SDK for JavaScript.",
   "main": "index.js",
   "watch": {

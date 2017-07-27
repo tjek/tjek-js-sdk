@@ -10,9 +10,6 @@ session =
 
     callbackQueue: []
 
-    getUrl: ->
-        SGN.CoreKit.baseUrl + '/v2/sessions'
-
     get: (key) ->
         appKey = SGN.config.get 'appKey'
 
@@ -45,7 +42,7 @@ session =
     create: (callback) ->
         SGN.request
             method: 'post'
-            url: session.getUrl()
+            url: SGN.config.get('coreUrl') + '/v2/sessions'
             json: true
             qs:
                 api_key: SGN.config.get 'appKey'
@@ -74,7 +71,7 @@ session =
         headers['Accept'] = 'application/json'
 
         SGN.request
-            url: session.getUrl()
+            url: SGN.config.get('coreUrl') + '/v2/sessions'
             headers: headers
             json: true
         , (err, data) ->
@@ -102,7 +99,7 @@ session =
 
         SGN.request
             method: 'put'
-            url: session.getUrl()
+            url: SGN.config.get('coreUrl') + '/v2/sessions'
             headers: headers
             json: true
         , (err, data) ->
