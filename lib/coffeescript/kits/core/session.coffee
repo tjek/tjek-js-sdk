@@ -46,8 +46,7 @@ session =
         SGN.request
             method: 'post'
             url: session.getUrl()
-            headers:
-                'Accept': 'application/json'
+            json: true
             qs:
                 api_key: SGN.config.get 'appKey'
                 token_ttl: session.tokenTTL
@@ -55,7 +54,7 @@ session =
             if err?
                 callback err
             else if data.statusCode is 201
-                session.set JSON.parse(data.body)
+                session.set data.body
 
                 callback err, session.get()
             else
@@ -77,11 +76,12 @@ session =
         SGN.request
             url: session.getUrl()
             headers: headers
+            json: true
         , (err, data) ->
             if err?
                 callback err
             else if data.statusCode is 200
-                session.set JSON.parse(data.body)
+                session.set data.body
 
                 callback err, session.get()
             else
@@ -104,11 +104,12 @@ session =
             method: 'put'
             url: session.getUrl()
             headers: headers
+            json: true
         , (err, data) ->
             if err?
                 callback err
             else if data.statusCode is 200
-                session.set JSON.parse(data.body)
+                session.set data.body
 
                 callback err, session.get()
             else

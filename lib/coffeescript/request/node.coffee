@@ -7,6 +7,7 @@ module.exports = (options = {}, callback) ->
         url: options.url
         headers: options.headers
         timeout: options.timeout
+        json: options.json
         body: options.body
         formData: options.formData
         qs: options.qs

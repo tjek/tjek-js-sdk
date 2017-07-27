@@ -31,7 +31,9 @@ module.exports = (options = {}, callback = ->) ->
             url: SGN.config.get('coreUrl') + options.url
             qs: qs
             body: options.body
+            formData: options.formData
             headers: headers
+            json: true
             useCookies: false
         , (err, data) ->
             if err?
@@ -45,7 +47,7 @@ module.exports = (options = {}, callback = ->) ->
                 SGN.CoreKit.session.set 'token', responseToken if token isnt responseToken
 
                 if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
-                    callback null, JSON.parse(data.body)
+                    callback null, data.body
                 else
                     callback SGN.util.error(new Error('Core API error'),
                         code: 'CoreAPIError'

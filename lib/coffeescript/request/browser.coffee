@@ -4,6 +4,7 @@ module.exports = (options = {}, callback, progressCallback) ->
     http = new XMLHttpRequest()
     method = options.method ? 'get'
     url = options.url
+    headers = options.headers ? {}
 
     if options.qs?
         queryParams = SGN.util.formatQueryParams options.qs
@@ -17,9 +18,12 @@ module.exports = (options = {}, callback, progressCallback) ->
     http.timeout = options.timeout if options.timeout?
     http.withCredentials = true if options.useCookies is true
 
-    if options.headers?
-        for header, value of options.headers
-            http.setRequestHeader header, value
+    if options.json is true
+        headers['Content-Type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+
+    for header, value of options.headers
+        http.setRequestHeader header, value
 
     http.addEventListener 'load', ->
         headers = http.getAllResponseHeaders().split '\r\n'
@@ -30,11 +34,14 @@ module.exports = (options = {}, callback, progressCallback) ->
 
             acc
         , {}
+        body = http.responseText
+
+        body = JSON.parse body if options.json is true
 
         callback null,
             statusCode: http.status
             headers: headers
-            body: http.responseText
+            body: body
 
         return
     http.addEventListener 'error', ->
@@ -59,7 +66,10 @@ module.exports = (options = {}, callback, progressCallback) ->
 
         http.send formData
     else if options.body?
-        http.send options.body
+        if options.json is true
+            http.send JSON.stringify(options.body)
+        else
+            http.send options.body
     else
         http.send()
 

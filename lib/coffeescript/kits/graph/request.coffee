@@ -24,11 +24,10 @@ module.exports = (options = {}, callback) ->
     options =
         method: 'post'
         url: url
-        headers:
-            'Content-Type': 'application/json'
-            'Accept': 'application/json'
         timeout: timeout
-        body: JSON.stringify
+        json: true
+        headers: {}
+        body:
             query: options.query
             operationName: options.operationName
             variables: options.variables
@@ -61,7 +60,7 @@ module.exports = (options = {}, callback) ->
                     SGN.config.set 'authToken', authCookie
 
             if data.statusCode is 200
-                callback null, JSON.parse(data.body)
+                callback null, data.body
             else
                 callback SGN.util.error(new Error('Graph API error'),
                     code: 'GraphAPIError'
