@@ -20,7 +20,6 @@ try
 
 module.exports = class Tracker
     defaultOptions:
-        baseUrl: 'https://events.service.shopgun.com'
         trackId: null
         dispatchInterval: 3000
         dispatchLimit: 100
@@ -215,7 +214,7 @@ module.exports = class Tracker
 
     ship: (events = [], callback) ->
         http = new XMLHttpRequest()
-        url = @baseUrl + '/track'
+        url = SGN.config.get 'eventsTrackUrl'
         payload = events: events.map (event) ->
             event.sentAt = new Date().toISOString()
 

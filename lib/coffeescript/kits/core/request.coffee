@@ -28,7 +28,7 @@ module.exports = (options = {}, callback = ->) ->
 
         SGN.request
             method: options.method
-            url: SGN.CoreKit.baseUrl + options.url
+            url: SGN.config.get('coreUrl') + options.url
             qs: qs
             body: options.body
             headers: headers

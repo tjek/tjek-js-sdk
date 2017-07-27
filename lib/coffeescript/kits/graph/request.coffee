@@ -16,7 +16,7 @@ parseCookies = (cookies = []) ->
     parsedCookies
 
 module.exports = (options = {}, callback) ->
-    url = SGN.GraphKit.baseUrl
+    url = SGN.config.get 'graphUrl'
     timeout = 1000 * 12
     appKey = SGN.config.get 'appKey'
     authToken = SGN.config.get 'authToken'

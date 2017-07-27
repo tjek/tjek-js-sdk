@@ -5,7 +5,11 @@ keys = [
     'appSecret',
     'authToken',
     'eventTracker',
-    'locale'
+    'locale',
+    'coreUrl',
+    'graphUrl',
+    'eventsTrackUrl',
+    'assetsFileUploadUrl'
 ]
 
 module.exports =

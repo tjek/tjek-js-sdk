@@ -51,6 +51,16 @@ module.exports = (options = {}, callback, progressCallback) ->
 
         return
 
-    http.send options.body
+    if options.formData?
+        formData = new FormData()
+
+        for key, value of options.formData
+            formData.append key, value
+
+        http.send formData
+    else if options.body?
+        http.send options.body
+    else
+        http.send()
 
     return

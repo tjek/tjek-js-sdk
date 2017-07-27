@@ -8,6 +8,7 @@ module.exports = (options = {}, callback) ->
         headers: options.headers
         timeout: options.timeout
         body: options.body
+        formData: options.formData
         qs: options.qs
 
     if Array.isArray options.cookies

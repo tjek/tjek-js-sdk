@@ -3,16 +3,14 @@ SGN = require '../../sgn'
 module.exports = (options = {}, callback, progressCallback) ->
     throw new Error('File is not defined') if not options.file?
 
-    url = 'https://assets.service.shopgun.com/upload'
-    body = new FormData()
+    url = SGN.config.get 'assetsFileUploadUrl'
+    formData = file: options.file
     timeout = 1000 * 60 * 60
-
-    body.append 'file', options.file
 
     SGN.request
         method: 'post'
         url: url
-        body: body
+        formData: formData
         timeout: timeout
         headers:
             'Accept': 'application/json'
