@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "ShopGun SDK for JavaScript.",
   "main": "index.js",
   "watch": {
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "devDependencies": {
-    "aws-sdk": "^2.85.0",
+    "aws-sdk": "^2.91.0",
     "browserify": "^14.4.0",
     "browserify-derequire": "^0.9.4",
     "coffeeify": "^2.1.0",
@@ -54,7 +54,7 @@
     "nib": "^1.1.2",
     "npm-watch": "^0.2.0",
     "stylus": "^0.54.5",
-    "uglify-js": "^3.0.25",
+    "uglify-js": "^3.0.26",
     "uglifycss": "0.0.27",
     "verso-browser": "^1.0.1"
   },

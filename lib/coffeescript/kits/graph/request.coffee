@@ -16,7 +16,7 @@ parseCookies = (cookies = []) ->
     parsedCookies
 
 module.exports = (options = {}, callback) ->
-    url = 'https://graph.service.shopgun.com'
+    url = SGN.GraphKit.baseUrl
     timeout = 1000 * 12
     appKey = SGN.config.get 'appKey'
     authToken = SGN.config.get 'authToken'

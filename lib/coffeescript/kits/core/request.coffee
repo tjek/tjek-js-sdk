@@ -4,7 +4,6 @@ module.exports = (options = {}, callback = ->) ->
     SGN.CoreKit.session.ensure (err) ->
         return callback err if err?
 
-        baseUrl = 'https://api.etilbudsavis.dk'
         headers = options.headers ? {}
         token = SGN.CoreKit.session.get 'token'
         clientId = SGN.CoreKit.session.get 'client_id'
@@ -29,7 +28,7 @@ module.exports = (options = {}, callback = ->) ->
 
         SGN.request
             method: options.method
-            url: baseUrl + options.url
+            url: SGN.CoreKit.baseUrl + options.url
             qs: qs
             body: options.body
             headers: headers

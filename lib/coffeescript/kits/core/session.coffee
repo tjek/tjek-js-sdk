@@ -3,14 +3,15 @@ sha256 = require 'sha256'
 clientCookieStorage = require '../../storage/client_cookie'
 
 session =
-    url: 'https://api.etilbudsavis.dk/v2/sessions'
-
     tokenTTL: 1 * 60 * 60 * 24 * 60
 
     attrs: do ->
         clientCookieStorage.get('sessions') ? {}
 
     callbackQueue: []
+
+    getUrl: ->
+        SGN.CoreKit.baseUrl + '/v2/sessions'
 
     get: (key) ->
         appKey = SGN.config.get 'appKey'
@@ -44,7 +45,7 @@ session =
     create: (callback) ->
         SGN.request
             method: 'post'
-            url: session.url
+            url: session.getUrl()
             headers:
                 'Accept': 'application/json'
             qs:
@@ -74,7 +75,7 @@ session =
         headers['Accept'] = 'application/json'
 
         SGN.request
-            url: session.url
+            url: session.getUrl()
             headers: headers
         , (err, data) ->
             if err?
@@ -101,7 +102,7 @@ session =
 
         SGN.request
             method: 'put'
-            url: session.url
+            url: session.getUrl()
             headers: headers
         , (err, data) ->
             if err?
