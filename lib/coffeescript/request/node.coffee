@@ -10,6 +10,7 @@ module.exports = (options = {}, callback) ->
         json: options.json
         body: options.body
         formData: options.formData
+        forever: true
         qs: options.qs
 
     if Array.isArray options.cookies
