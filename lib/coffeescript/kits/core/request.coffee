@@ -5,8 +5,8 @@ module.exports = (options = {}, callback = ->) ->
         return callback err if err?
 
         headers = options.headers ? {}
-        token = SGN.CoreKit.session.get 'token'
-        clientId = SGN.CoreKit.session.get 'client_id'
+        token = SGN.CoreKit.session.getToken()
+        clientId = SGN.CoreKit.session.getClientId()
         appVersion = SGN.config.get 'appVersion'
         appSecret = SGN.config.get 'appSecret'
         locale = SGN.config.get 'locale'
@@ -41,10 +41,10 @@ module.exports = (options = {}, callback = ->) ->
                     code: 'CoreRequestError'
                 )
             else
-                token = SGN.CoreKit.session.get 'token'
+                token = SGN.CoreKit.session.getToken()
                 responseToken = data.headers['x-token']
 
-                SGN.CoreKit.session.set 'token', responseToken if token isnt responseToken
+                SGN.CoreKit.session.setToken responseToken if token isnt responseToken
 
                 if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
                     callback null, data.body

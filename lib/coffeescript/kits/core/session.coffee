@@ -5,37 +5,20 @@ clientCookieStorage = require '../../storage/client_cookie'
 session =
     tokenTTL: 1 * 60 * 60 * 24 * 60
 
-    attrs: do ->
-        clientCookieStorage.get('sessions') ? {}
-
     callbackQueue: []
 
-    get: (key) ->
-        appKey = SGN.config.get 'appKey'
+    getToken: ->
+        attrs = clientCookieStorage.get('session') ? {}
 
-        if key?
-            session.attrs[appKey]?[key]
-        else
-            session.attrs[appKey] ? {}
+        attrs.token
 
-    set: (key, value) ->
-        attrs = null
+    getClientId: ->
+        attrs = clientCookieStorage.get('session') ? {}
 
-        if typeof key is 'object'
-            attrs = key
-        else if typeof key is 'string' and value?
-            attrs = session.attrs
-            attrs[key] = value
-            
-        appKey = SGN.config.get 'appKey'
-        sessions = clientCookieStorage.get 'sessions'
+        attrs.client_id
 
-        sessions = {} if not sessions?
-        sessions[appKey] = attrs
-
-        clientCookieStorage.set 'sessions', sessions
-
-        session.attrs = sessions
+    save: (attrs = {}) ->
+        clientCookieStorage.set 'session', attrs
 
         return
 
@@ -51,9 +34,11 @@ session =
             if err?
                 callback err
             else if data.statusCode is 201
-                session.set data.body
+                session.save
+                    token: data.body.token
+                    client_id: data.body.client_id
 
-                callback err, session.get()
+                callback err, session.getToken()
             else
                 callback new Error('Could not create session')
 
@@ -63,12 +48,11 @@ session =
     
     update: (callback) ->
         headers = {}
-        token = session.get 'token'
+        token = session.getToken()
         appSecret = SGN.config.get 'appSecret'
 
         headers['X-Token'] = token
         headers['X-Signature'] = session.sign appSecret, token if appSecret?
-        headers['Accept'] = 'application/json'
 
         SGN.request
             url: SGN.config.get('coreUrl') + '/v2/sessions'
@@ -78,9 +62,11 @@ session =
             if err?
                 callback err
             else if data.statusCode is 200
-                session.set data.body
+                session.save
+                    token: data.body.token
+                    client_id: data.body.client_id
 
-                callback err, session.get()
+                callback err, session.getToken()
             else
                 callback new Error('Could not update session')
 
@@ -90,12 +76,11 @@ session =
 
     renew: (callback) ->
         headers = {}
-        token = session.get 'token'
+        token = session.getToken()
         appSecret = SGN.config.get 'appSecret'
 
         headers['X-Token'] = token
         headers['X-Signature'] = session.sign appSecret, token if appSecret?
-        headers['Accept'] = 'application/json'
 
         SGN.request
             method: 'put'
@@ -106,9 +91,11 @@ session =
             if err?
                 callback err
             else if data.statusCode is 200
-                session.set data.body
+                session.save
+                    token: data.body.token
+                    client_id: data.body.client_id
 
-                callback err, session.get()
+                callback err, session.getToken()
             else
                 callback new Error('Could not renew session')
 
@@ -129,17 +116,12 @@ session =
         session.callbackQueue.push callback
 
         if queueCount is 0
-            if not session.get('token')?
+            if not session.getToken()?
                 session.create complete
-            else if session.willExpireSoon(session.get('expires'))
-                session.renew complete
             else
                 complete()
 
         return
-
-    willExpireSoon: (expires) ->
-        Date.now() >= Date.parse(expires) - 1000 * 60 * 60 * 24
 
     sign: (appSecret, token) ->
         sha256 [appSecret, token].join('')
