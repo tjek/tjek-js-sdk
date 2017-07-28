@@ -44,7 +44,7 @@ module.exports = (options = {}, callback = ->) ->
                 token = SGN.config.get 'coreSessionToken'
                 responseToken = data.headers['x-token']
 
-                SGN.CoreKit.session.setToken responseToken if token isnt responseToken
+                SGN.CoreKit.session.saveToken responseToken if token isnt responseToken
 
                 if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
                     callback null, data.body
