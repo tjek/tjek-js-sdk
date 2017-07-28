@@ -6,6 +6,8 @@ keys = [
     'authToken',
     'eventTracker',
     'locale',
+    'coreSessionToken',
+    'coreSessionClientId',
     'coreUrl',
     'graphUrl',
     'eventsTrackUrl',

@@ -3,6 +3,12 @@ process = browser: true if typeof process is 'undefined'
 
 SGN = require './sgn'
 
+# Expose storage backends.
+SGN.storage =
+    local: require './storage/client_local'
+    cookie: require './storage/client_cookie'
+
+# Expose request handler.
 SGN.request = require './request/browser'
 
 # Expose the different kits.
@@ -13,10 +19,13 @@ SGN.GraphKit = require './kits/graph'
 SGN.CoreKit = require './kits/core'
 SGN.PagedPublicationKit = require './kits/paged_publication'
 
-# Expose storage backends.
-SGN.storage =
-    local: require './storage/client_local'
-    cookie: require './storage/client_cookie'
+# Set the core session from the cookie store if possible.
+session = SGN.storage.cookie.get 'session'
+
+if typeof session is 'object'
+    SGN.config.set
+        coreSessionToken: session.token
+        coreSessionClientId: session.client_id
 
 SGN.client = do ->
     id = SGN.storage.local.get 'client-id'

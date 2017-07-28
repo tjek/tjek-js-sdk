@@ -7,18 +7,14 @@ session =
 
     callbackQueue: []
 
-    getToken: ->
-        attrs = clientCookieStorage.get('session') ? {}
+    save: (token, clientId) ->
+        clientCookieStorage.set 'session',
+            token: token
+            clientId: clientId
 
-        attrs.token
-
-    getClientId: ->
-        attrs = clientCookieStorage.get('session') ? {}
-
-        attrs.client_id
-
-    save: (attrs = {}) ->
-        clientCookieStorage.set 'session', attrs
+        SGN.config.set
+            coreSessionToken: token
+            coreSessionClientId: clientId
 
         return
 
@@ -34,11 +30,9 @@ session =
             if err?
                 callback err
             else if data.statusCode is 201
-                session.save
-                    token: data.body.token
-                    client_id: data.body.client_id
+                session.save data.body.token, data.body.client_id
 
-                callback err, session.getToken()
+                callback err
             else
                 callback new Error('Could not create session')
 
@@ -48,7 +42,7 @@ session =
     
     update: (callback) ->
         headers = {}
-        token = session.getToken()
+        token = SGN.config.get 'coreSessionToken'
         appSecret = SGN.config.get 'appSecret'
 
         headers['X-Token'] = token
@@ -62,11 +56,9 @@ session =
             if err?
                 callback err
             else if data.statusCode is 200
-                session.save
-                    token: data.body.token
-                    client_id: data.body.client_id
+                session.save data.body.token, data.body.client_id
 
-                callback err, session.getToken()
+                callback err
             else
                 callback new Error('Could not update session')
 
@@ -76,7 +68,7 @@ session =
 
     renew: (callback) ->
         headers = {}
-        token = session.getToken()
+        token = SGN.config.get 'coreSessionToken'
         appSecret = SGN.config.get 'appSecret'
 
         headers['X-Token'] = token
@@ -91,11 +83,9 @@ session =
             if err?
                 callback err
             else if data.statusCode is 200
-                session.save
-                    token: data.body.token
-                    client_id: data.body.client_id
+                session.save data.body.token, data.body.client_id
 
-                callback err, session.getToken()
+                callback err
             else
                 callback new Error('Could not renew session')
 
@@ -116,7 +106,7 @@ session =
         session.callbackQueue.push callback
 
         if queueCount is 0
-            if not session.getToken()?
+            if not SGN.config.get('coreSessionToken')?
                 session.create complete
             else
                 complete()
