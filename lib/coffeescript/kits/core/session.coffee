@@ -42,7 +42,7 @@ session =
                 session.saveToken data.body.token
                 session.saveClientId data.body.client_id
 
-                callback err
+                callback err, data.body
             else
                 callback new Error('Could not create session')
 
@@ -69,7 +69,7 @@ session =
                 session.saveToken data.body.token
                 session.saveClientId data.body.client_id
 
-                callback err
+                callback err, data.body
             else
                 callback new Error('Could not update session')
 
@@ -97,7 +97,7 @@ session =
                 session.saveToken data.body.token
                 session.saveClientId data.body.client_id
 
-                callback err
+                callback err, data.body
             else
                 callback new Error('Could not renew session')
 
