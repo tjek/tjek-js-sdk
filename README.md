@@ -46,13 +46,17 @@ Possible options are:
 - `eventTracker`: The instance of an event tracker.
 - `locale`: The preferred language in `ll_CC` format (e.g. `da_DK`).
 
-## PagedPublicationKit
+## Kits
+
+A kit is a set of standalone functionality.
+
+### PagedPublicationKit
 
 PagedPublicationKit is a way to make a stellar reading experience for traditional PDF catalogs/flyers. It's rendered directly in the DOM, has full event tracking, and is very customizable.
 
 Run `npm run dev` in a terminal window to start a HTTP server so that you can try it out at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
 
-## GraphKit
+### GraphKit
 
 The GraphKit gives you access to the ShopGun Graph API, which is a GraphQL engine. To see which queries and mutations are possible, please go to our [GraphiQL](https://graph.service.shopgun.com) site. To make a request against the Graph API you simply run `SGN.GraphKit.request` like so:
 
@@ -75,7 +79,7 @@ SGN.GraphKit.request({
 });
 ```
 
-## CoreKit
+### CoreKit
 
 The CoreKit allows you to make requests against our [Core API](http://docs.api.etilbudsavis.dk). Here's an example query:
 
@@ -112,7 +116,7 @@ The supported options are:
 - `headers`: An object defining the request headers.
 - `geolocation`: An object defining the geolocation properties.
 
-## EventsKit
+### EventsKit
 
 The EventsKit allows you to track user behavior to make it easier to measure how well your product and content are performing. You can both register official ShopGun events but also custom events. The EventsKit is only available client-side. First, you need to make a tracker:
 
