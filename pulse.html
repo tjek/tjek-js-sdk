@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Pulse</title>
-        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-dev.js"></script>
+        <script src="https://s3-eu-west-1.amazonaws.com/sgn-js-sdk/sgn-sdk-dev.js"></script>
         <style>
             #map {
                 position: absolute;
@@ -19,8 +19,6 @@
 
         <script>
             function initialize () {
-                SGN.config.set({ eventsPulseUrl: 'wss://events.service.shopgun.com/pulse' });
-
                 var pulse = new SGN.EventsKit.Pulse();
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 8,
@@ -29,20 +27,21 @@
                 });
                 var overlays = [];
 
-                pulse.bind('message', function (e) {
+                pulse.bind('event', function (e) {
                     var coords = Geohash.decode(e.geohash);
                     var color = Please.make_color({
                         hue: 12,
                         saturation: 0.7,
                         value: 0.8
                     });
+                    var center = { lat: coords.lat, lng: coords.lon };
                     var overlay = new google.maps.Circle({
 						radius: 4000,
 						strokeWeight: 0,
 					    fillColor: color,
 						fillOpacity: 0.75,
                         animation: google.maps.Animation.DROP,
-                        center: { lat: coords.lat, lng: coords.lon },
+                        center: center,
                         map: map
                     });
 
@@ -54,6 +53,14 @@
                         oldOverlay.setMap(null);
                     }
                 });
+
+                setInterval(function () {
+                    var lastOverlay = overlays[overlays.length - 1];
+
+                    if (lastOverlay) {
+                        map.setCenter(lastOverlay.center);
+                    }
+                }, 10000);
             }
         </script>
         <script src="js/latlon-geohash.js"></script>
