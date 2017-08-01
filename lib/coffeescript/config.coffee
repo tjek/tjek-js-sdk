@@ -11,6 +11,7 @@ keys = [
     'coreUrl',
     'graphUrl',
     'eventsTrackUrl',
+    'eventsPulseUrl',
     'assetsFileUploadUrl'
 ]
 
