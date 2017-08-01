@@ -7,7 +7,7 @@ config.set
     coreUrl: 'https://api.etilbudsavis.dk'
     graphUrl: 'https://graph.service.shopgun.com'
     eventsTrackUrl: 'https://events.service.shopgun.com/track'
-    eventsPulseUrl: 'wss://events.service.shopgun.com/pulse'
+    eventsPulseUrl: 'wss://events.service-staging.shopgun.com/pulse'
     assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
 
 module.exports =
