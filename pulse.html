@@ -4,11 +4,61 @@
         <meta charset="utf-8">
         <title>Pulse</title>
         <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-dev.js"></script>
+        <style>
+            #map {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+        </style>
     </head>
     <body>
+        <div id="map"></div>
+
         <script>
-            var pulse = new SGN.EventsKit.Pulse();
+            function initialize () {
+                SGN.config.set({ eventsPulseUrl: 'wss://events.service.shopgun.com/pulse' });
+
+                var pulse = new SGN.EventsKit.Pulse();
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 8,
+                    disableDefaultUI: true,
+                    center: new google.maps.LatLng({ lat: 55.6760968, lng: 12.5683371 })
+                });
+                var overlays = [];
+
+                pulse.bind('message', function (e) {
+                    var coords = Geohash.decode(e.geohash);
+                    var color = Please.make_color({
+                        hue: 12,
+                        saturation: 0.7,
+                        value: 0.8
+                    });
+                    var overlay = new google.maps.Circle({
+						radius: 4000,
+						strokeWeight: 0,
+					    fillColor: color,
+						fillOpacity: 0.75,
+                        animation: google.maps.Animation.DROP,
+                        center: { lat: coords.lat, lng: coords.lon },
+                        map: map
+                    });
+
+                    overlays.push(overlay);
+
+                    while (overlays.length > 300) {
+                        var oldOverlay = overlays.shift();
+
+                        oldOverlay.setMap(null);
+                    }
+                });
+            }
         </script>
+        <script src="js/latlon-geohash.js"></script>
+        <script src="js/please.js"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9dvsFBrmZYghZQIrHzmNx9AgGTM0cuYE&callback=initialize"></script>
     </body>
 </html>
 
