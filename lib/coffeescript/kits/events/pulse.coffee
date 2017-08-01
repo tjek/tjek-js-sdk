@@ -30,7 +30,8 @@ class Pulse
         return
 
     onMessage: (e) ->
-        @trigger 'event', e.data
+        try
+            @trigger 'event', JSON.parse(e.data)
 
         return
 
