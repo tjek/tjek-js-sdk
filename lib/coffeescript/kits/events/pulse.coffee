@@ -43,7 +43,7 @@ class Pulse
                 @connection = @connect()
 
                 return
-            , 1000
+            , 2000
 
         return
 
