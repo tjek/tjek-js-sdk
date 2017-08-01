@@ -15,7 +15,7 @@ class Pulse
         @
 
     connect: ->
-        connection = new WebSocket SGN.config.get('eventsPulseUrl'), 'json'
+        connection = new WebSocket SGN.config.get('eventsPulseUrl')
 
         connection.onopen = @onOpen.bind @
         connection.onmessage = @onMessage.bind @
