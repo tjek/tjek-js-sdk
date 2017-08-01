@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "devDependencies": {
-    "aws-sdk": "^2.92.0",
+    "aws-sdk": "^2.93.0",
     "browserify": "^14.4.0",
     "browserify-derequire": "^0.9.4",
     "coffeeify": "^2.1.0",
@@ -54,7 +54,7 @@
     "nib": "^1.1.2",
     "npm-watch": "^0.2.0",
     "stylus": "^0.54.5",
-    "uglify-js": "^3.0.26",
+    "uglify-js": "^3.0.27",
     "uglifycss": "0.0.27",
     "verso-browser": "^1.0.1"
   },
