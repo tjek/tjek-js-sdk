@@ -4,14 +4,25 @@
         <meta charset="utf-8">
         <title>Pulse</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <script src="https://s3-eu-west-1.amazonaws.com/sgn-js-sdk/sgn-sdk-dev.js"></script>
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.8.min.js"></script>
         <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+
             #map {
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
+                z-index: 1;
             }
         </style>
     </head>
@@ -19,22 +30,40 @@
         <div id="map"></div>
 
         <script>
+            var colors = {};
+
+            function getColorForType (type) {
+                var color = colors[type];
+
+                if (!color) {
+                    color = colors[type] = Please.make_color({
+                        hue: 12,
+                        saturation: 0.7,
+                        value: 0.8
+                    });
+                }
+
+                return color;
+            }
+
             function initialize () {
+                var els = {
+                    map: document.getElementById('map')
+                };
                 var pulse = new SGN.EventsKit.Pulse();
-                var map = new google.maps.Map(document.getElementById('map'), {
+                var map = new google.maps.Map(els.map, {
                     zoom: 8,
+                    draggable: false,
+                    scrollwheel: false,
+                    disableDoubleClickZoom: true,
                     disableDefaultUI: true,
-                    center: new google.maps.LatLng({ lat: 55.6760968, lng: 12.5683371 })
+                    center: { lat: 55.6760968, lng: 12.5683371 }
                 });
                 var overlays = [];
 
                 pulse.bind('event', function (e) {
                     var coords = Geohash.decode(e.geohash);
-                    var color = Please.make_color({
-                        hue: 12,
-                        saturation: 0.7,
-                        value: 0.8
-                    });
+                    var color = getColorForType(e.type);
                     var center = { lat: coords.lat, lng: coords.lon };
                     var overlay = new google.maps.Circle({
 						radius: 4000,
