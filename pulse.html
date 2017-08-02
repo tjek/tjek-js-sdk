@@ -41,23 +41,22 @@
                     center: { lat: 57.0488195, lng: 9.921747 }
                 });
 
-                map.addListener('dragstart', function () {
-                    clearInterval(interval);
-                });
+                // map.addListener('dragstart', function () {
+                // });
+
+                var markers = [];
 
                 pulse.bind('event', function (e) {
                     var coords = Geohash.decode(e.geohash);
                     var center = { lat: coords.lat, lng: coords.lon };
-                    var overlay = new google.maps.Marker({
+                    var marker = new google.maps.Marker({
                         position: center,
                         map: map
                     });
-
-                    lastOverlay = overlay;
-
-                    setInterval(function () {
-                        overlay.setMap(null);
-                    }, 20000);
+                    markers.push(marker)
+                    while (markers.length > 1000) {
+                        markers.shift().setMap(null)
+                    }
                 });
             }
         </script>
