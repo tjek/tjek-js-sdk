@@ -10,7 +10,7 @@ When you've created the app please email CTO Morten Bo at mr@shopgun.com to get 
 
 ## Installing the SDK
 
-To install the SDK, please see our [GitHub repo](https://github.com/shopgun/shopgun-js-sdk). In the README.md it specifies how to install the SDK and define the `apiKey`.
+To install the SDK, please see our [README](https://github.com/shopgun/shopgun-js-sdk/blob/develop/README.md) where to specifies how to install and configure the SDK.
 
 ## Making API Requests
 
@@ -23,6 +23,7 @@ SGN.CoreKit.request({
     url: '/v2/catalogs',
     qs: {
         order_by: '-publication_date',
+        dealer_id: 'YOUR_ID',
         limit: 20
     }
 }, function (err, res) {
