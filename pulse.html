@@ -39,7 +39,24 @@
                 map = new google.maps.Map(els.map, {
                     zoom: 7,
                     disableDefaultUI: true,
-                    center: { lat: 57.0488195, lng: 9.921747 }
+                    center: { lat: 57.0488195, lng: 9.921747 },
+                    styles: [{
+                        elementType: 'labels.text',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }, {
+                        featureType: 'transit',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }, {
+                        featureType: 'road',
+                        elementType: 'labels',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }]
                 });
 
                 var markers = [];
@@ -57,7 +74,7 @@
                         map: map
                     });
                     markers.push(marker);
-                    while (markers.length > 2000) {
+                    while (markers.length > 1000) {
                         markers.shift().setMap(null);
                     }
                 });
