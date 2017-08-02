@@ -52,9 +52,11 @@ A kit is a set of standalone functionality.
 
 ### PagedPublicationKit
 
-PagedPublicationKit is a way to make a stellar reading experience for traditional PDF catalogs/flyers. It's rendered directly in the DOM, has full event tracking, and is very customizable.
+PagedPublicationKit is a way to make a stellar reading experience for traditional PDF publications. It's rendered directly in the DOM, has full event tracking, and is very customizable. We've implemented a demo of the kit:
 
-Run `npm run dev` in a terminal window to start a HTTP server so that you can try it out at `http://localhost:8001/kitchensink/kits/paged_publication/example1/`. From there you can view source and see how things work.
+https://shopgun.github.io/shopgun-js-sdk/paged-publication.html
+
+We recommend you checking out our [integration guide](/INTEGRATION.md) on how to get started using the kit.
 
 ### GraphKit
 
@@ -120,6 +122,8 @@ The supported options are:
 
 The EventsKit allows you to track user behavior to make it easier to measure how well your product and content are performing. You can both register official ShopGun events but also custom events. The EventsKit is only available client-side. First, you need to make a tracker:
 
+#### Tracker
+
 ```javascript
 var eventTracker = new SGN.EventsKit.Tracker({
     trackId: 'YOUR_TRACK_ID'
@@ -137,6 +141,12 @@ To track custom events you simply prefix events with `x-`:
 ```javascript
 eventTracker.trackEvent('x-something-happened', { buttonX: true }, '1.0.0');
 ```
+
+#### Pulse
+
+Pulse gives you the pulse on Shopgun streaming real-time activity via a WebSocket. It can be used in a wide variety of applications such as decorating your office with a screen showing where people interact with your publications. We've built a demo that visualizes the activity:
+
+https://shopgun.github.io/shopgun-js-sdk/pulse.html
 
 ## Changes
 
