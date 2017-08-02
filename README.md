@@ -52,7 +52,7 @@ A kit is a set of standalone functionality.
 
 ### PagedPublicationKit
 
-PagedPublicationKit is a way to make a stellar reading experience for traditional PDF publications. It's rendered directly in the DOM, has full event tracking, and is very customizable. We've implemented a demo of the kit:
+PagedPublicationKit is a way to make a stellar reading experience for traditional PDF publications. It's rendered directly in the DOM, has full event tracking, and is very customizable. We've built a demo of the kit showing it in action:
 
 https://shopgun.github.io/shopgun-js-sdk/paged-publication.html
 

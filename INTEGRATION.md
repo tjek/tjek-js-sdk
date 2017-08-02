@@ -39,11 +39,13 @@ As you can see it's rather easy to get the published publications. Each publicat
 
 ## Reading a Publication
 
-When the user clicks one of the presented publications you can provide a reading experience using the `PagedPublicationKit`. The kit doesn't provide any chrome UI (header, back button, thumbnail overview etc.). It provides a barebone solution with reading support, hotspots, back/forward buttons, page label, progress bar etc. It's up to you to make it your own experience. To see an example of how to use the kit head to the [kitchensink example](https://github.com/shopgun/shopgun-js-sdk/tree/develop/kitchensink/kits/paged_publication/example1).
+When the user clicks one of the presented publications you can provide a reading experience using the `PagedPublicationKit`. The kit doesn't provide any chrome UI (header, back button, thumbnail overview etc.). It provides a barebone solution with reading support, hotspots, back/forward buttons, page label, progress bar etc. It's up to you to make it your own experience. To see an example of the kit in action click the link below:
+
+https://shopgun.github.io/shopgun-js-sdk/paged-publication.html
 
 ## Event Tracking
 
-As you can see from the kitchensink example you can embed an event tracker allowing you to see how well the publication performs. The track identifier is the same value as your new API key.
+As you can see from the source of the demo you can embed an event tracker allowing you to see how well the publication performs. The track identifier is the same value as your new API key.
 
 ## Clicking Offers
 
