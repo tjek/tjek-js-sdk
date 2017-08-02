@@ -53,13 +53,21 @@
                 var pulse = new SGN.EventsKit.Pulse();
                 var map = new google.maps.Map(els.map, {
                     zoom: 8,
-                    draggable: false,
-                    scrollwheel: false,
-                    disableDoubleClickZoom: true,
                     disableDefaultUI: true,
                     center: { lat: 55.6760968, lng: 12.5683371 }
                 });
                 var overlays = [];
+                var interval = setInterval(function () {
+                    var lastOverlay = overlays[overlays.length - 1];
+
+                    if (lastOverlay) {
+                        map.setCenter(lastOverlay.center);
+                    }
+                }, 10000);
+
+                map.addListener('dragstart', function () {
+                    clearInterval(interval);
+                });
 
                 pulse.bind('event', function (e) {
                     var coords = Geohash.decode(e.geohash);
@@ -83,14 +91,6 @@
                         oldOverlay.setMap(null);
                     }
                 });
-
-                setInterval(function () {
-                    var lastOverlay = overlays[overlays.length - 1];
-
-                    if (lastOverlay) {
-                        map.setCenter(lastOverlay.center);
-                    }
-                }, 10000);
             }
         </script>
         <script src="js/latlon-geohash.js"></script>
