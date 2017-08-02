@@ -56,3 +56,10 @@ Be sure to include this meta tag in your head:
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 ```
+
+## Multiplatform
+
+To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
+
+* [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
+* [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
