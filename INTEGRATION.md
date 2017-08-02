@@ -6,7 +6,7 @@ The ShopGun JavaScript SDK allows you to make your PDF publications available on
 
 First, you need to [create a ShopGun app](https://business.shopgun.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
 
-When you've created the app please email CTO Morten Bo at mr@shopgun.com to get your app approved so that it doesn't get rate limited.
+When you've created the app please email us at hello@shopgun.com to get your app approved so that it doesn't get rate limited. Remember to include your API key.
 
 ## Installing the SDK
 
