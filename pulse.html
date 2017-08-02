@@ -35,27 +35,30 @@
                     map: document.getElementById('map')
                 };
                 var pulse = new SGN.EventsKit.Pulse();
-                var map = new google.maps.Map(els.map, {
-                    zoom: 6,
+
+                map = new google.maps.Map(els.map, {
+                    zoom: 7,
                     disableDefaultUI: true,
                     center: { lat: 57.0488195, lng: 9.921747 }
                 });
 
-                // map.addListener('dragstart', function () {
-                // });
-
                 var markers = [];
-
                 pulse.bind('event', function (e) {
                     var coords = Geohash.decode(e.geohash);
-                    var center = { lat: coords.lat, lng: coords.lon };
+                    var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
+
+                    // no point in remembering out of bounds
+                    if (!map.getBounds().contains(center)) {
+                        return;
+                    }
+
                     var marker = new google.maps.Marker({
                         position: center,
                         map: map
                     });
-                    markers.push(marker)
-                    while (markers.length > 1000) {
-                        markers.shift().setMap(null)
+                    markers.push(marker);
+                    while (markers.length > 2000) {
+                        markers.shift().setMap(null);
                     }
                 });
             }
