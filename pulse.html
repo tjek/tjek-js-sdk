@@ -38,12 +38,31 @@
                 var map = new google.maps.Map(els.map, {
                     zoom: 6,
                     disableDefaultUI: true,
-                    center: { lat: 57.0488195, lng: 9.921747 }
+                    center: { lat: 57.0488195, lng: 9.921747 },
+                    styles: [{
+                        elementType: 'labels.text',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }, {
+                        featureType: 'transit',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }, {
+                        featureType: 'administrative.locality',
+                        elementType: 'geometry.stroke',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }, {
+                        featureType: 'road',
+                        elementType: 'labels',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }]
                 });
-
-                // map.addListener('dragstart', function () {
-                // });
-
                 var markers = [];
 
                 pulse.bind('event', function (e) {
@@ -53,7 +72,9 @@
                         position: center,
                         map: map
                     });
+
                     markers.push(marker)
+
                     while (markers.length > 1000) {
                         markers.shift().setMap(null)
                     }
