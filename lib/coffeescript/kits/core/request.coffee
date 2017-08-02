@@ -4,6 +4,7 @@ module.exports = (options = {}, callback = ->) ->
     SGN.CoreKit.session.ensure (err) ->
         return callback err if err?
 
+        url = options.url ? ''
         headers = options.headers ? {}
         token = SGN.config.get 'coreSessionToken'
         clientId = SGN.config.get 'coreSessionClientId'
@@ -28,7 +29,7 @@ module.exports = (options = {}, callback = ->) ->
 
         SGN.request
             method: options.method
-            url: SGN.config.get('coreUrl') + options.url
+            url: SGN.config.get('coreUrl') + url
             qs: qs
             body: options.body
             formData: options.formData

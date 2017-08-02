@@ -7,22 +7,42 @@ var bucket = 'sgn-js-sdk';
 
 AWS.config.credentials = credentials;
 
-new AWS.S3().putObject({
-    Bucket: bucket,
-    Key: 'sgn-sdk-' + pkg.version + '.min.js',
-    Body: fs.readFileSync(path.join(__dirname, 'dist', 'sgn-sdk.min.js')).toString(),
-    ACL: 'public-read',
-    ContentType: 'application/javascript'
-}, function (err, data) {
-    console.log('js', err, data);
+function putObject (options) {
+    new AWS.S3().putObject({
+        Bucket: bucket,
+        Key: options.key,
+        Body: fs.readFileSync(options.bodyPath).toString(),
+        ACL: 'public-read',
+        ContentType: options.contentType
+    }, function (err, data) {
+        if (err) {
+            console.log('Could not upload ' + options.key);
+        } else {
+            console.log('Uploaded ' + options.key);
+        }
+    });
+}
+
+putObject({
+    key: 'sgn-sdk-' + pkg.version + '.min.js',
+    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.js'),
+    contentType: 'application/javascript'
 });
 
-new AWS.S3().putObject({
-    Bucket: bucket,
-    Key: 'sgn-sdk-' + pkg.version + '.min.css',
-    Body: fs.readFileSync(path.join(__dirname, 'dist', 'sgn-sdk.min.css')).toString(),
-    ACL: 'public-read',
-    ContentType: 'text/css'
-}, function (err, data) {
-    console.log('css', err, data);
+putObject({
+    key: 'sgn-sdk-' + pkg.version + '.min.css',
+    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css'),
+    contentType: 'text/css'
+});
+
+putObject({
+    key: 'sgn-sdk-dev.js',
+    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.js'),
+    contentType: 'application/javascript'
+});
+
+putObject({
+    key: 'sgn-sdk-dev.css',
+    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.css'),
+    contentType: 'text/css'
 });
