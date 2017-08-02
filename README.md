@@ -137,3 +137,13 @@ To track custom events you simply prefix events with `x-`:
 ```javascript
 eventTracker.trackEvent('x-something-happened', { buttonX: true }, '1.0.0');
 ```
+
+## Changes
+
+* *Version 1.1.8* - Pulse
+
+    - *Pulse:* Pulse is a small API that shows the activity on ShopGun in real-time using a WebSocket.
+
+    - *Documentation:* Added INTEGRATION.md that documents how to get the JS SDK up and running on your website.
+
+    - *CoreKit bug:* If no URL was provided to `SGN.CoreKit.request` it would use the url `https://api.etilbudsavis.dkundefined`. It will now use the URL `https://api.etilbudsavis.dk`.
