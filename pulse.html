@@ -30,40 +30,16 @@
         <div id="map"></div>
 
         <script>
-            var colors = {};
-
-            function getColorForType (type) {
-                var color = colors[type];
-
-                if (!color) {
-                    color = colors[type] = Please.make_color({
-                        hue: 12,
-                        saturation: 0.7,
-                        value: 0.8
-                    });
-                }
-
-                return color;
-            }
-
             function initialize () {
                 var els = {
                     map: document.getElementById('map')
                 };
                 var pulse = new SGN.EventsKit.Pulse();
                 var map = new google.maps.Map(els.map, {
-                    zoom: 8,
+                    zoom: 7,
                     disableDefaultUI: true,
-                    center: { lat: 55.6760968, lng: 12.5683371 }
+                    center: { lat: 57.0488195, lng: 9.921747 }
                 });
-                var overlays = [];
-                var interval = setInterval(function () {
-                    var lastOverlay = overlays[overlays.length - 1];
-
-                    if (lastOverlay) {
-                        map.setCenter(lastOverlay.center);
-                    }
-                }, 10000);
 
                 map.addListener('dragstart', function () {
                     clearInterval(interval);
@@ -71,29 +47,21 @@
 
                 pulse.bind('event', function (e) {
                     var coords = Geohash.decode(e.geohash);
-                    var color = getColorForType(e.type);
                     var center = { lat: coords.lat, lng: coords.lon };
-                    var overlay = new google.maps.Circle({
-						radius: 4000,
-						strokeWeight: 0,
-					    fillColor: color,
-						fillOpacity: 0.75,
-                        center: center,
+                    var overlay = new google.maps.Marker({
+                        position: center,
                         map: map
                     });
 
-                    overlays.push(overlay);
+                    lastOverlay = overlay;
 
-                    while (overlays.length > 500) {
-                        var oldOverlay = overlays.shift();
-
-                        oldOverlay.setMap(null);
-                    }
+                    setInterval(function () {
+                        overlay.setMap(null);
+                    }, 20000);
                 });
             }
         </script>
         <script src="js/latlon-geohash.js"></script>
-        <script src="js/please.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9dvsFBrmZYghZQIrHzmNx9AgGTM0cuYE&callback=initialize"></script>
     </body>
 </html>
