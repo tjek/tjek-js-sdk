@@ -113,6 +113,8 @@ PagedPublication.prototype.render = function () {
 };
 
 PagedPublication.prototype.showHotspot = function (hotspot) {
+    alert('You clicked a hotspot. You can decide what happens here.');
+
     console.log('Hotspot selected', hotspot);
 };
 
