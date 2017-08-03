@@ -40,11 +40,6 @@ function PagedPublication (el, options) {
         // Since the hotspots can load after initial render, the user might already have requested hotspots, which need to be resolved.
         this.processHotspotQueue();
     }.bind(this));
-
-    // Prevent the document from scrolling vertically on touch devices.
-    document.addEventListener('touchstart', function (e) {
-        if (e.target.tagName !== 'A') e.preventDefault();
-    });
 }
 
 PagedPublication.prototype.render = function () {

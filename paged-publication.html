@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta charset="utf-8">
 
-        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.8.min.css" rel="stylesheet" type="text/css">
+        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.9.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="css/spectre.min.css">
         <link rel="stylesheet" type="text/css" href="css/spectre-exp.min.css">
         <link rel="stylesheet" type="text/css" href="css/spectre-icons.min.css">
@@ -25,13 +25,45 @@
                 text-decoration: underline;
             }
 
-            #intro .verso__page {
-                color: #fff;
+            .section--air {
+                margin-bottom: 70px;
             }
 
-            #intro .container {
+            #outro .container {
                 padding-top: 100px;
-                padding-bottom: 100px;
+            }
+
+            #intro .timeline {
+                margin-top: 30px;
+                max-width: 600px;
+            }
+
+            #outro .video-responsive {
+                margin-bottom: 20px;
+            }
+
+            .btn.btn-primary,
+            .btn.btn-primary:hover {
+                background: #000;
+                border-color: #000;
+            }
+
+            @media (max-width: 600px) {
+                #outro .container {
+                    padding-top: 50px;
+                }
+
+                h1 {
+                    font-size: 3rem;
+                }
+
+                h2 {
+                    font-size: 2.5rem;
+                }
+
+                h4 {
+                    font-size: 2rem;
+                }
             }
         </style>
     </head>
@@ -42,15 +74,18 @@
             <div class="verso">
                 <div class="verso__scroller">
                     <!-- You can add custom page spreads before and after the actual pages. --> 
-                    <div id="intro" class="verso__page-spread sgn-pp__page-spread--dark" data-page-ids="intro" data-width="80">
-                        <div class="verso__page" style="overflow-y: auto;">
-                            <div class="container grid-960">
-                                <h1>Make your PDF alive with ShopGun.</h1>
-                                <p class="text-large" style="margin-bottom: 50px;"><a href="https://shopgun.com">ShopGun</a> has developed a new JavaScript SDK that allows you to integrate your PDF publication directly into your website, without any use of iframes. It's a total game changer. In fact, this page is powered by the new SDK to show its capabilities. Give it a try by using your arrow keys or swiping.<p>
+                    <div id="intro" class="verso__page-spread verso--scrollable sgn-pp__page-spread--dark" data-page-ids="intro" data-width="80">
+                        <div class="container grid-960">
+                            <h1>Make your PDF alive with ShopGun.</h1>
 
-                                <h2 style="margin-bottom: 40px;">Highlights. There are a lot of them.</h2>
+                            <section class="section--air">
+                                <p class="text-large"><a href="https://shopgun.com">ShopGun</a> has developed a new JavaScript SDK that allows you to integrate your PDF publication directly into your website, without any use of iframes. It's a total game changer. In fact, this page is powered by the new SDK to show its capabilities. Give it a try by using your arrow keys or swiping.<p>
+                            </section>
 
-                                <div style="margin-bottom: 50px; max-width: 600px;" class="timeline">
+                            <section class="section--air">
+                                <h2>Highlights. There are a lot of them.</h2>
+
+                                <div class="timeline">
                                      <div class="timeline-item">
                                         <div class="timeline-left">
                                             <span class="timeline-icon icon-lg">
@@ -147,16 +182,56 @@
                                         </div>
                                     </div>
                                 </div>
+                            </section>
 
-                                <h2 style="margin-bottom: 40px;">Getting started.</h2>
+                            <section class="section--air">
+                                <h2>Getting started.</h2>
 
                                 <p class="text-large">If you're interested in using our new SDK on your website and/or apps email us at <a href="mailto:business@shopgun.com">business@shopgun.com</a> and we'll get in touch. For more in-depth technical information check out our <a href="https://github.com/shopgun/shopgun-js-sdk">GitHub repo</a>.<p>
-                            </div>
+                            </section>
                         </div>
                     </div>
 
                     <!-- The required placeholder element for the actual pages -->
                     <div class="sgn-pp__pages"></div>
+
+                    <div id="outro" class="page verso__page-spread verso--scrollable sgn-pp__page-spread--dark" data-page-ids="outro" data-width="80">
+                        <div class="container grid-480">
+                            <section class="section--air">
+                                <h1>Don't miss anything.</h1>
+
+                                <p class="text-large">Sign up for our newsletter to get the latest publications and news from us.<p>
+
+                                <form>
+                                    <div class="form-group">
+                                        <label class="form-label" for="input-example-1">Name</label>
+                                        <input class="form-input" type="text" id="input-example-1">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="input-example-2">Email</label>
+                                        <input class="form-input" type="text" id="input-example-2">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary">Sign Up</button>
+                                    </div>
+                                </form>
+                            </section>
+
+                            <section class="section--air">
+                                <h2>Check out the new Surface Studio.</h2>
+
+                                <p class="text-large">Have you seen the latest Microsoft Surface Studio? It comes with a beautiful design and you can preorder it today.</p>
+
+                                <div class="video-responsive">
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/BzMLA8YIgG0" frameborder="0" allowfullscreen=""></iframe>
+                                </div>
+
+                                <button class="btn btn-primary">Preorder</button>
+                            </section>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -173,7 +248,7 @@
             <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
         </div>
 
-        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.8.min.js"></script>
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.9.min.js"></script>
         <script src="js/paged-publication.js"></script>
         <script>
             function getUrlVars() {
