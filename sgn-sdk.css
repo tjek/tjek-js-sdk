@@ -610,6 +610,13 @@
   -ms-filter: none;
   filter: none;
 }
+@media (pointer: coarse) {
+  .sgn-pp__hotspot {
+    opacity: 0 !important;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)" !important;
+    filter: alpha(opacity=0) !important;
+  }
+}
 .sgn-pp__page-spread--dark {
   background-color: rgba(0,0,0,0.35);
   color: #fff;
