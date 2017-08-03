@@ -93,9 +93,8 @@ class Viewer
                 geolocation: geolocation
                 method: 'post'
                 url: "/v2/catalogs/#{@options.id}/collect"
-                headers:
-                    'Content-Type': 'application/json'
-                body: JSON.stringify
+                json: true
+                body:
                     type: e.type
                     ms: e.ms
                     orientation: e.orientation
