@@ -68,8 +68,6 @@ PagedPublication.prototype.render = function () {
             return this.data.hotspots[overlayEl.getAttribute('data-id')];
         }.bind(this));
 
-        alert(clickedHotspots.length);
-
         if (clickedHotspots.length === 1) {
             this.showHotspot(clickedHotspots[0]);
         } else if (e.verso.overlayEls.length > 1) {
@@ -115,6 +113,8 @@ PagedPublication.prototype.render = function () {
 };
 
 PagedPublication.prototype.showHotspot = function (hotspot) {
+    alert('You clicked a hotspot. You can decide what happens here.');
+
     console.log('Hotspot selected', hotspot);
 };
 
