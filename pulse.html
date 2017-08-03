@@ -67,10 +67,10 @@
                         if (!map.getBounds().contains(center)) {
                             return;
                         }
-
                         var marker = new google.maps.Marker({
                             position: center,
-                            map: map
+                            map: map,
+                            icon: "img/ico.png"
                         });
                         markers.push(marker);
                         while (markers.length > 1000) {
