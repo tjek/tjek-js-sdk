@@ -389,6 +389,10 @@
   background-repeat: no-repeat;
   background-position: center center;
 }
+.verso--scrollable {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .verso-page--verso {
   background-position: right center;
   -webkit-transform: translateX(0);
