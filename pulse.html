@@ -32,8 +32,7 @@
         <script>
             function initialize () {
                 var markers = [];
-
-                map = new google.maps.Map(document.getElementById('map'), {
+                var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 7,
                     disableDefaultUI: true,
                     center: { lat: 57.0488195, lng: 9.921747 },
@@ -58,8 +57,13 @@
 
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
+                    var geohashes = {};
 
                     pulse.bind('event', function (e) {
+                        if (geohashes[e.geohash]) {
+                            return;
+                        }
+
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
 
@@ -67,14 +71,22 @@
                         if (!map.getBounds().contains(center)) {
                             return;
                         }
+
                         var marker = new google.maps.Marker({
                             position: center,
-                            map: map,
-                            icon: "img/marker.png"
+                            geohash: e.geohash,
+                            icon: 'img/marker.png',
+                            map: map
                         });
+
                         markers.push(marker);
+
                         while (markers.length > 1000) {
-                            markers.shift().setMap(null);
+                            var oldMarker = markers.shift();
+
+                            oldMarker.setMap(null);
+
+                            delete geohashes[oldMarker.geohash];
                         }
                     });
                 });
