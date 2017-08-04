@@ -21,10 +21,10 @@
 .verso {
   position: relative;
   outline: 0;
-  overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .verso[data-pinching="true"] .verso__page-spread:not([data-active="true"]) {
   visibility: hidden;
@@ -64,11 +64,6 @@
   -moz-perspective: 1000;
   -ms-perspective: 1000;
   perspective: 1000;
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -o-transform-style: preserve-3d;
@@ -431,6 +426,7 @@
   position: relative;
   color: #000;
   overflow: hidden;
+  outline: 0;
 }
 .sgn__pp:not([data-started]) .sgn-pp__progress-label,
 .sgn__pp:not([data-started]) .sgn-pp__progress,
@@ -454,6 +450,13 @@
 }
 .sgn__pp[data-color-brightness="dark"] {
   color: #fff;
+}
+.sgn__pp[data-layout-absolute="true"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 .sgn__pp[data-idle="true"] .sgn-pp__progress-label:not(.sgn-pp--hidden),
 .sgn__pp[data-idle="true"] .sgn-pp__progress:not(.sgn-pp--hidden) {
