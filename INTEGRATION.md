@@ -8,7 +8,7 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 
 When you've created the app please email us at hello@shopgun.com to get your app approved so that it doesn't get rate limited. Remember to include your API key.
 
-> We recommend you creating 2 apps: 1 for production, which needs approval, and another for development. This ensures environments are mixed. 
+> We recommend you creating 2 apps: 1 for production, which needs approval, and another for development. This ensures environments aren't mixed. 
 
 ## Installing the SDK
 
