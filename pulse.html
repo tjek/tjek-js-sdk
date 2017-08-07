@@ -66,20 +66,28 @@
 
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
+                        var options = {
+                            position: center,
+                            geohash: e.geohash,
+                            icon: 'img/marker.png',
+                            map: map
+                        };
 
                         // no point in remembering out of bounds
                         if (!map.getBounds().contains(center)) {
                             return;
                         }
 
-                        var marker = new google.maps.Marker({
-                            position: center,
-                            geohash: e.geohash,
-                            icon: 'img/marker.png',
-                            map: map
-                        });
+                        if (e.type === 'searched' && e.attributes && e.attributes.query) {
+                            options.animation = google.maps.Animation.DROP;
+                            options.label = {
+                                text: e.attributes.query,
+                                fontSize: '16px',
+                                color: '#000'
+                            };
+                        }
 
-                        markers.push(marker);
+                        markers.push(new google.maps.Marker(options));
 
                         while (markers.length > 2000) {
                             var oldMarker = markers.shift();
