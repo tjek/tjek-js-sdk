@@ -58,35 +58,61 @@
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
                     var geohashes = {};
+                    var searchGeohashes = {};
 
                     pulse.bind('event', function (e) {
-                        if (geohashes[e.geohash]) {
-                            return;
-                        }
-
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
-
-                        // no point in remembering out of bounds
-                        if (!map.getBounds().contains(center)) {
-                            return;
-                        }
-
-                        var marker = new google.maps.Marker({
+                        var options = {
                             position: center,
                             geohash: e.geohash,
                             icon: 'img/marker.png',
                             map: map
-                        });
+                        };
 
-                        markers.push(marker);
+                        if (!map.getBounds().contains(center)) {
+                            return;
+                        }
 
-                        while (markers.length > 2000) {
-                            var oldMarker = markers.shift();
+                        if (e.type === 'searched' && e.attributes && e.attributes.query) {
+                            var query = e.attributes.query.toLowerCase().trim();
 
-                            oldMarker.setMap(null);
+                            if (searchGeohashes[e.geohash]) {
+                                return;
+                            }
 
-                            delete geohashes[oldMarker.geohash];
+                            searchGeohashes[e.geohash] = true;
+
+                            options.animation = google.maps.Animation.DROP;
+                            options.label = {
+                                text: query,
+                                fontSize: '22px',
+                                color: '#000'
+                            };
+
+                            var marker = new google.maps.Marker(options);
+
+                            setTimeout(function () {
+                                delete searchGeohashes[marker.geohash];
+
+                                marker.setMap(null);
+                            }, 2000);
+                        } else {
+                            if (geohashes[e.geohash]) {
+                                return;
+                            }
+
+                            geohashes[e.geohash] = true;
+
+                            markers.push(new google.maps.Marker(options));
+
+                            while (markers.length > 2000) {
+                                var oldMarker = markers.shift();
+
+                                oldMarker.setMap(null);
+
+                                delete geohashes[oldMarker.geohash];
+                            }
                         }
                     });
                 });
