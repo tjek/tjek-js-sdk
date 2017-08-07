@@ -1,6 +1,6 @@
 MicroEvent = require 'microevent'
-PageSpreads = require './page_spreads'
-clientLocalStorage = require '../../storage/client_local'
+PageSpreads = require './page-spreads'
+clientLocalStorage = require '../../storage/client-local'
 SGN = require '../../sgn'
 
 class PagedPublicationCore

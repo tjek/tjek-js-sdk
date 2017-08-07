@@ -1,2 +1,2 @@
 module.exports =
-    fileUpload: require './file_upload'
+    fileUpload: require './file-upload'

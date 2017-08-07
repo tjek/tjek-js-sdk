@@ -1,5 +1,5 @@
 MicroEvent = require 'microevent'
-PageSpread = require './page_spread'
+PageSpread = require './page-spread'
 SGN = require '../../sgn'
 
 class PagedPublicationPageSpreads

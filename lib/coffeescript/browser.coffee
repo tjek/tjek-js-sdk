@@ -5,8 +5,8 @@ SGN = require './sgn'
 
 # Expose storage backends.
 SGN.storage =
-    local: require './storage/client_local'
-    cookie: require './storage/client_cookie'
+    local: require './storage/client-local'
+    cookie: require './storage/client-cookie'
 
 # Expose request handler.
 SGN.request = require './request/browser'
@@ -17,7 +17,7 @@ SGN.AssetsKit = require './kits/assets'
 SGN.EventsKit = require './kits/events'
 SGN.GraphKit = require './kits/graph'
 SGN.CoreKit = require './kits/core'
-SGN.PagedPublicationKit = require './kits/paged_publication'
+SGN.PagedPublicationKit = require './kits/paged-publication'
 
 # Set the core session from the cookie store if possible.
 session = SGN.storage.cookie.get 'session'

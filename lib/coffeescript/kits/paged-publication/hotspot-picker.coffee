@@ -1,8 +1,8 @@
 MicroEvent = require 'microevent'
 Gator = require 'gator'
 Mustache = require 'mustache'
-template = require './templates/hotspot_picker'
-keyCodes = require '../../key_codes'
+template = require './templates/hotspot-picker'
+keyCodes = require '../../key-codes'
 
 class PagedPublicationHotspotPicker
     constructor: (@options = {}) ->

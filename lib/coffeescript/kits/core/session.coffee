@@ -1,6 +1,6 @@
 SGN = require '../../sgn'
 sha256 = require 'sha256'
-clientCookieStorage = require '../../storage/client_cookie'
+clientCookieStorage = require '../../storage/client-cookie'
 callbackQueue = []
 
 session =

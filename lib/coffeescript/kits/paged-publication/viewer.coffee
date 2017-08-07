@@ -3,8 +3,8 @@ SGN = require '../../core'
 Core = require './core'
 Hotspots = require './hotspots'
 Controls = require './controls'
-EventTracking = require './event_tracking'
-LegacyEventTracking = require './legacy_event_tracking'
+EventTracking = require './event-tracking'
+LegacyEventTracking = require './legacy-event-tracking'
 
 class Viewer
     constructor: (@el, @options = {}) ->

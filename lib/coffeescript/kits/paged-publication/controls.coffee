@@ -1,6 +1,6 @@
 MicroEvent = require 'microevent'
 SGN = require '../../sgn'
-keyCodes = require '../../key_codes'
+keyCodes = require '../../key-codes'
 
 class PagedPublicationControls
     constructor: (el, @options = {}) ->

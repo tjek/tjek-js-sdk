@@ -1,5 +1,5 @@
 SGN = require '../../sgn'
-clientLocalStorage = require '../../storage/client_local'
+clientLocalStorage = require '../../storage/client-local'
 getPool = ->
     data = clientLocalStorage.get 'event-tracker-pool'
     data = [] if Array.isArray(data) is false
