@@ -12,7 +12,7 @@ class PagedPublicationMain
 
         return
 
-    renderViewer: ->
+    render: ->
         @viewer = new SGN.PagedPublicationKit.Viewer @el,
             id: @options.id
             ownedBy: @data.details.dealer_id
@@ -133,7 +133,7 @@ class PagedPublicationMain
 
         return
 
-    fetchAll: (callback) ->
+    load: (callback) ->
         SGN.util.async.parallel [
             @fetch.bind(@),
             @fetchPages.bind(@)

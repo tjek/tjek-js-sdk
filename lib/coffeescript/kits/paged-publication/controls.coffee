@@ -36,7 +36,7 @@ class PagedPublicationControls
 
         if @els.progress? and @els.progressBar?
             @els.progressBar.style.width = "#{e.progress}%"
-            
+
             if showProgress is true
                 @els.progress.classList.remove visibilityClassName
             else

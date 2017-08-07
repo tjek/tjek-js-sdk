@@ -57,7 +57,7 @@
     "stylus": "^0.54.5",
     "uglify-js": "^3.0.27",
     "uglifycss": "0.0.27",
-    "verso-browser": "^1.0.5"
+    "verso-browser": "^1.0.6"
   },
   "dependencies": {
     "coffee-script": "^1.12.7",

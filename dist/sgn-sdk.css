@@ -69,6 +69,11 @@
   -o-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
   transform-style: preserve-3d;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .verso__page-spread[data-width="1"] {
   width: 1%;
@@ -457,6 +462,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
 }
 .sgn__pp[data-idle="true"] .sgn-pp__progress-label:not(.sgn-pp--hidden),
 .sgn__pp[data-idle="true"] .sgn-pp__progress:not(.sgn-pp--hidden) {
