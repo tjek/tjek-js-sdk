@@ -58,12 +58,9 @@
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
                     var geohashes = {};
+                    var searchGeohashes = {};
 
                     pulse.bind('event', function (e) {
-                        if (geohashes[e.geohash]) {
-                            return;
-                        }
-
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
                         var options = {
@@ -73,28 +70,49 @@
                             map: map
                         };
 
-                        // no point in remembering out of bounds
                         if (!map.getBounds().contains(center)) {
                             return;
                         }
 
                         if (e.type === 'searched' && e.attributes && e.attributes.query) {
+                            var query = e.attributes.query.toLowerCase().trim();
+
+                            if (searchGeohashes[e.geohash]) {
+                                return;
+                            }
+
+                            searchGeohashes[e.geohash] = true;
+
                             options.animation = google.maps.Animation.DROP;
                             options.label = {
-                                text: e.attributes.query,
-                                fontSize: '16px',
+                                text: query,
+                                fontSize: '22px',
                                 color: '#000'
                             };
-                        }
 
-                        markers.push(new google.maps.Marker(options));
+                            var marker = new google.maps.Marker(options);
 
-                        while (markers.length > 2000) {
-                            var oldMarker = markers.shift();
+                            setTimeout(function () {
+                                delete searchGeohashes[marker.geohash];
 
-                            oldMarker.setMap(null);
+                                marker.setMap(null);
+                            }, 2000);
+                        } else {
+                            if (geohashes[e.geohash]) {
+                                return;
+                            }
 
-                            delete geohashes[oldMarker.geohash];
+                            geohashes[e.geohash] = true;
+
+                            markers.push(new google.maps.Marker(options));
+
+                            while (markers.length > 2000) {
+                                var oldMarker = markers.shift();
+
+                                oldMarker.setMap(null);
+
+                                delete geohashes[oldMarker.geohash];
+                            }
                         }
                     });
                 });
