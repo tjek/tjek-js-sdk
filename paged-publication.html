@@ -3,7 +3,7 @@
     <head>
         <title>Paged Publication</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta charset="utf-8">
 
         <link href="sgn-sdk.css" rel="stylesheet" type="text/css">
@@ -252,17 +252,19 @@
                 eventTracker: eventTracker
             });
 
-            pagedPublication.bind('hotspotSelected', function (hotspot) {
-                console.log('Hotspot selected', hotspot);
-            });
-
-            pagedPublication.fetchAll(function (err) {
+            pagedPublication.load(function (err) {
                 if (err) {
-                    console.log('Could not fetch. Present user with an error.');
-                } else {
-                    pagedPublication.renderViewer();
-                    pagedPublication.viewer.start();
+                    console.log('Could not load. Present user with an error.');
+
+                    return;
                 }
+
+                pagedPublication.bind('hotspotSelected', function (hotspot) {
+                    console.log('Hotspot selected. Add it to your shopping list, present the offer or something else.', hotspot);
+                });
+
+                pagedPublication.render();
+                pagedPublication.viewer.start();
             });
         </script>
     </body>
