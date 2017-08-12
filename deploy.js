@@ -34,15 +34,3 @@ putObject({
     bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css'),
     contentType: 'text/css'
 });
-
-putObject({
-    key: 'sgn-sdk-dev.js',
-    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.js'),
-    contentType: 'application/javascript'
-});
-
-putObject({
-    key: 'sgn-sdk-dev.css',
-    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.css'),
-    contentType: 'text/css'
-});

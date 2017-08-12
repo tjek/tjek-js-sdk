@@ -180,6 +180,8 @@ class PagedPublicationCore
         progress = (position + 1) / pageSpreadCount * 100
         progressLabel = @formatProgressLabel pageSpread
 
+        @els.root.setAttribute 'data-navigating', true
+
         @renderPageSpreads()
         @resetIdleTimer()
         @startIdleTimer()
@@ -196,6 +198,8 @@ class PagedPublicationCore
         position = e.newPosition
         versoPageSpread = @getVerso().getPageSpreadFromPosition position
         pageSpread = @pageSpreads.get versoPageSpread.getId()
+
+        @els.root.setAttribute 'data-navigating', false
 
         @trigger 'afterNavigation',
             verso: e

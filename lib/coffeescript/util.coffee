@@ -43,6 +43,9 @@ util =
             .map (key) -> key + '=' + encodeURIComponent(queryParams[key])
             .join '&'
 
+    getRandomNumberBetween: (from, to) ->
+        Math.floor(Math.random() * to) + from
+
     getOS: ->
         name = null
         ua = window.navigator.userAgent

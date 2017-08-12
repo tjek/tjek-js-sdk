@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "description": "ShopGun SDK for JavaScript.",
   "main": "index.js",
   "watch": {
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "devDependencies": {
-    "aws-sdk": "^2.94.0",
+    "aws-sdk": "^2.96.0",
     "browserify": "^14.4.0",
     "browserify-derequire": "^0.9.4",
     "coffeeify": "^2.1.0",
