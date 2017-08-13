@@ -1,32 +1,27 @@
 Mustache = require 'mustache'
-Main = require './main'
-Tracker = require '../events/tracker'
+SGN = require '../../core'
 template = require './templates/widget'
 
 module.exports = class PagedPublicationWidget
     constructor: (@el) ->
-        trackId = @el.getAttribute 'data-track-id'
         publicationId = @el.getAttribute 'data-id'
+        hotspots = @el.getAttribute 'data-hotspots'
         progressBar = @el.getAttribute 'data-progress-bar'
         progressLabel = @el.getAttribute 'data-progress-label'
         controls = @el.getAttribute 'data-controls'
-        eventTracker = new Tracker trackId: trackId
 
         @el.innerHTML = Mustache.render template,
             showProgressBar: progressBar is 'true'
             showProgressLabel: progressLabel is 'true'
             showControls: controls is 'true'
 
-        pagedPublication = new Main @el.querySelector('.sgn__pp'),
+        SGN.PagedPublicationKit.initialize
+            el: @el.querySelector '.sgn__pp'
             id: publicationId
-            eventTracker: eventTracker
-
-        pagedPublication.load (err) ->
-            if err?
-                return
-
-            pagedPublication.render()
-            pagedPublication.viewer.start()
+            eventTracker: SGN.config.get 'eventTracker'
+            showHotspots: hotspots is 'true'
+        , (err, viewer) ->
+            viewer.start() if not err?
 
             return
 

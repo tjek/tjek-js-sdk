@@ -1,26 +1,41 @@
-attrs = {}
-keys = [
-    'appVersion',
-    'appKey',
-    'appSecret',
-    'authToken',
-    'eventTracker',
-    'locale',
-    'coreSessionToken',
-    'coreSessionClientId',
-    'coreUrl',
-    'graphUrl',
-    'eventsTrackUrl',
-    'eventsPulseUrl',
-    'assetsFileUploadUrl'
-]
+MicroEvent = require 'microevent'
+Config = class Config
+    keys: [
+        'appVersion',
+        'appKey',
+        'appSecret',
+        'authToken',
+        'eventTracker',
+        'locale',
+        'coreSessionToken',
+        'coreSessionClientId',
+        'coreUrl',
+        'graphUrl',
+        'eventsTrackUrl',
+        'eventsPulseUrl',
+        'assetsFileUploadUrl'
+    ]
 
-module.exports =
+    constructor: ->
+        @attrs = {}
+
+        return
+
     set: (config = {}) ->
+        changedAttributes = {}
+
         for key, value of config
-            attrs[key] = value if key in keys
+            if key in @keys
+                @attrs[key] = value
+                changedAttributes[key] = value
+
+        @trigger 'change', changedAttributes
 
         return
 
     get: (option) ->
-        attrs[option]
+        @attrs[option]
+
+MicroEvent.mixin Config
+
+module.exports = Config

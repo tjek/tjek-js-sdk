@@ -10,7 +10,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.14.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.14.min.js"></script>
+<script id="sgn-sdk" src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.14.min.js"></script>
 ```
 
 ### In Node.js
@@ -149,6 +149,12 @@ Pulse gives you the pulse on Shopgun streaming real-time activity via a WebSocke
 https://shopgun.github.io/shopgun-js-sdk/pulse.html
 
 ## Changes
+
+* *Version 1.1.14* - Paged Publication Widget
+
+    - *Widget:* Without any JavaScript it's possible to embed a paged publication.
+
+    - *Breaking change:* PagedPublicationKit.Main has been replaced by PagedPublicationKit.initialize
 
 * *Version 1.1.8* - Pulse
 

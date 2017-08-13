@@ -3,6 +3,6 @@ module.exports =
 
     HotspotPicker: require './hotspot-picker'
 
-    Main: require './main'
-
     Widget: require './widget'
+
+    initialize: require './initialize'

@@ -1,5 +1,7 @@
-config = require './config'
+Config = require './config'
+i18n = require './i18n'
 util = require './util'
+config = new Config()
 
 # Set default values.
 config.set
@@ -12,5 +14,7 @@ config.set
 
 module.exports =
     config: config
+
+    i18n: i18n
 
     util: util

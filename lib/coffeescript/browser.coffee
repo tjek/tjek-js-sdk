@@ -39,10 +39,9 @@ SGN.client = do ->
     firstOpen: firstOpen
     id: id
 
-# Optional start function to invoke session tracking.
-SGN.startSession = ->
-    # Emit session events if a tracker is available.
-    eventTracker = SGN.config.get 'eventTracker'
+# Listen for changes in the config.
+SGN.config.bind 'change', (changedAttributes) ->
+    eventTracker = changedAttributes.eventTracker
 
     if eventTracker?
         eventTracker.trackEvent 'first-client-session-opened', {}, '1.0.0' if SGN.client.firstOpen is true
@@ -50,21 +49,21 @@ SGN.startSession = ->
 
     return
 
-# When the page has loaded, look for widgets.
-window.addEventListener 'load', ->
-    sdkEl = document.getElementById 'sgn-sdk'
-    pagedPublicationWidgetEls = document.querySelectorAll '.shopgun-paged-publication'
+# Autoconfigure the SDK.
+scriptEl = document.getElementById 'sgn-sdk'
 
-    # Autoconfigure SDK.
-    if sdkEl?
-        appKey = sdkEl.getAttribute 'data-app-key'
+if scriptEl?
+    appKey = scriptEl.getAttribute 'data-app-key'
+    trackId = scriptEl.getAttribute 'data-track-id'
+    config = {}
 
-        SGN.config.set appKey: appKey if appKey?
+    config.appKey = appKey if appKey?
+    config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
 
-    for pagedPublicationWidgetEl in pagedPublicationWidgetEls
-        new SGN.PagedPublicationKit.Widget pagedPublicationWidgetEl
+    SGN.config.set config
 
-    return
-
+    # Look for paged publication widgets.
+    for el in document.querySelectorAll('.shopgun-paged-publication')
+        new SGN.PagedPublicationKit.Widget el
 
 module.exports = SGN
