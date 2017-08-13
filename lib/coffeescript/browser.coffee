@@ -50,4 +50,21 @@ SGN.startSession = ->
 
     return
 
+# When the page has loaded, look for widgets.
+window.addEventListener 'load', ->
+    sdkEl = document.getElementById 'sgn-sdk'
+    pagedPublicationWidgetEls = document.querySelectorAll '.shopgun-paged-publication'
+
+    # Autoconfigure SDK.
+    if sdkEl?
+        appKey = sdkEl.getAttribute 'data-app-key'
+
+        SGN.config.set appKey: appKey if appKey?
+
+    for pagedPublicationWidgetEl in pagedPublicationWidgetEls
+        new SGN.PagedPublicationKit.Widget pagedPublicationWidgetEl
+
+    return
+
+
 module.exports = SGN
