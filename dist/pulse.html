@@ -83,10 +83,6 @@
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
 
-                        if (!map.getBounds().contains(center)) {
-                            return;
-                        }
-
                         if (e.type === 'searched') {
                             var query = e.attributes.query.toLowerCase().trim();
                             var el = document.createElement('div');
@@ -105,7 +101,7 @@
                             }, 2000);
                         }
 
-                        if (!geohashes[e.geohash]) {
+                        if (!geohashes[e.geohash] && map.getBounds().contains(center)) {
                             var options = {
                                 position: center,
                                 geohash: e.geohash,
