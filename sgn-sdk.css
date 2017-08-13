@@ -464,6 +464,9 @@
   bottom: 0;
   z-index: 1;
 }
+.sgn__pp[data-navigating="true"] .verso--scrollable {
+  overflow: hidden;
+}
 .sgn__pp[data-idle="true"] .sgn-pp__progress-label:not(.sgn-pp--hidden),
 .sgn__pp[data-idle="true"] .sgn-pp__progress:not(.sgn-pp--hidden) {
   -webkit-animation: progressAnimation 2s 1 forwards;

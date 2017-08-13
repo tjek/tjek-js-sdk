@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Pulse</title>
+        <title>Pulse: Real-time activity on ShopGun</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <script src="sgn-sdk.js"></script>
         <style>
@@ -24,12 +24,32 @@
                 bottom: 0;
                 z-index: 1;
             }
+
+            .query {
+                position: absolute;
+                z-index: 2;
+                font-weight: bold;
+                letter-spacing: -1px;
+                text-shadow: 0 1px #000;
+                max-width: 10%;
+            }
         </style>
     </head>
     <body>
         <div id="map"></div>
 
         <script>
+            function getRandomColor () {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+      
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+      
+                return color;
+            }
+
             function initialize () {
                 var markers = [];
                 var map = new google.maps.Map(document.getElementById('map'), {
@@ -58,59 +78,52 @@
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
                     var geohashes = {};
-                    var searchGeohashes = {};
 
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
-                        var options = {
-                            position: center,
-                            geohash: e.geohash,
-                            icon: 'img/marker.png',
-                            map: map
-                        };
 
                         if (!map.getBounds().contains(center)) {
                             return;
                         }
 
-                        if (e.type === 'searched' && e.attributes && e.attributes.query) {
+                        if (e.type === 'searched') {
                             var query = e.attributes.query.toLowerCase().trim();
+                            var el = document.createElement('div');
+                            
+                            el.textContent = query;
+                            el.className = 'query';
+                            el.style.top = SGN.util.getRandomNumberBetween(10, 90) + '%';
+                            el.style.left = SGN.util.getRandomNumberBetween(10, 90) + '%';
+                            el.style.fontSize = SGN.util.getRandomNumberBetween(16, 30) + 'px';
+                            el.style.color = getRandomColor();
 
-                            if (searchGeohashes[e.geohash]) {
-                                return;
-                            }
-
-                            searchGeohashes[e.geohash] = true;
-
-                            options.animation = google.maps.Animation.DROP;
-                            options.label = {
-                                text: query,
-                                fontSize: '22px',
-                                color: '#000'
-                            };
-
-                            var marker = new google.maps.Marker(options);
+                            document.body.appendChild(el);
 
                             setTimeout(function () {
-                                delete searchGeohashes[marker.geohash];
-
-                                marker.setMap(null);
+                                el.parentNode.removeChild(el);
                             }, 2000);
-                        } else {
-                            if (geohashes[e.geohash]) {
-                                return;
-                            }
+                        }
+
+                        if (!geohashes[e.geohash]) {
+                            var options = {
+                                position: center,
+                                geohash: e.geohash,
+                                icon: {
+                                    path: google.maps.SymbolPath.CIRCLE,
+                                    scale: 3
+                                },
+                                map: map
+                            };
 
                             geohashes[e.geohash] = true;
 
                             markers.push(new google.maps.Marker(options));
 
-                            while (markers.length > 2000) {
+                            while (markers.length > 1000) {
                                 var oldMarker = markers.shift();
 
                                 oldMarker.setMap(null);
-
                                 delete geohashes[oldMarker.geohash];
                             }
                         }
