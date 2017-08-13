@@ -243,32 +243,20 @@
             <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
         </div>
 
-        <script src="sgn-sdk.js"></script>
+        <script src="sgn-sdk.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
         <script>
-            var appKey = '00j4o5wpwptl84fuubdig2s6ej5uyna8';
-            var trackId = '00j4o5wpwptl84fuubdig2s6ej5uyna8';
-            var eventTracker = new SGN.EventsKit.Tracker({ trackId: trackId });
-
-            SGN.config.set({ appKey: appKey });
-
-            var pagedPublication = new SGN.PagedPublicationKit.Main(document.querySelector('.sgn__pp'), {
+            SGN.PagedPublicationKit.initialize({
+                el: document.querySelector('.sgn__pp'),
                 id: SGN.util.getQueryParam('id') || '4c4euCC',
-                eventTracker: eventTracker
-            });
+                eventTracker: SGN.config.get('eventTracker')
+            }, function (err, viewer) {
+                if (!err) {
+                    viewer.bind('hotspotSelected', function (hotspot) {
+                        console.log('Hotspot selected. Add it to your shopping list, present the offer or something else.', hotspot);
+                    });
 
-            pagedPublication.load(function (err) {
-                if (err) {
-                    console.log('Could not load. Present user with an error.');
-
-                    return;
+                    viewer.start();
                 }
-
-                pagedPublication.bind('hotspotSelected', function (hotspot) {
-                    console.log('Hotspot selected. Add it to your shopping list, present the offer or something else.', hotspot);
-                });
-
-                pagedPublication.render();
-                pagedPublication.viewer.start();
             });
         </script>
     </body>
