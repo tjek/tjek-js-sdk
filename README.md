@@ -10,7 +10,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.14.min.css" rel="stylesheet" type="text/css">
-<script id="sgn-sdk" src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.14.min.js"></script>
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-1.1.14.min.js"></script>
 ```
 
 ### In Node.js
