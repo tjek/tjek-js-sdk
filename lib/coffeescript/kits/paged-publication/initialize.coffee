@@ -37,19 +37,19 @@ module.exports = (options = {}, callback) ->
             eventTracker: options.eventTracker
             pages: transformPages data.pages
 
-        viewer.bind 'hotspotsRequested', (e) =>
+        viewer.bind 'hotspotsRequested', (e) ->
             hotspotQueue.push e
             processHotspotQueue()
 
             return
 
-        viewer.bind 'beforeNavigation', =>
+        viewer.bind 'beforeNavigation', ->
             hotspotPicker.destroy() if hotspotPicker?
 
             return
 
-        viewer.bind 'clicked', (e) =>
-            clickedHotspots = e.verso.overlayEls.map (overlayEl) =>
+        viewer.bind 'clicked', (e) ->
+            clickedHotspots = e.verso.overlayEls.map (overlayEl) ->
                 data.hotspots[overlayEl.getAttribute('data-id')]
 
             if clickedHotspots.length is 1
@@ -68,13 +68,13 @@ module.exports = (options = {}, callback) ->
                     y: e.verso.y
                     hotspots: hotspots
 
-                hotspotPicker.bind 'selected', (e) =>
+                hotspotPicker.bind 'selected', (e) ->
                     viewer.trigger 'hotspotSelected', data.hotspots[e.id]
                     hotspotPicker.destroy()
 
                     return
 
-                hotspotPicker.bind 'destroyed', =>
+                hotspotPicker.bind 'destroyed', ->
                     hotspotPicker = null
                     viewer.el.focus()
 
@@ -101,7 +101,7 @@ module.exports = (options = {}, callback) ->
     processHotspotQueue = ->
         return if not viewer or not data.hotspots
 
-        hotspotQueue = hotspotQueue.filter (hotspotRequest) =>
+        hotspotQueue = hotspotQueue.filter (hotspotRequest) ->
             hotspots = {}
 
             for id, hotspot of data.hotspots
@@ -128,7 +128,7 @@ module.exports = (options = {}, callback) ->
 
         return
 
-    SGN.util.async.parallel [fetch, fetchPages], (result) =>
+    SGN.util.async.parallel [fetch, fetchPages], (result) ->
         details = result[0][1]
         pages = result[1][1]
 
@@ -143,7 +143,7 @@ module.exports = (options = {}, callback) ->
         return
 
     if options.showHotspots isnt false
-        fetchHotspots (err, response) =>
+        fetchHotspots (err, response) ->
             return if err?
 
             data.hotspots = {}
