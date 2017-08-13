@@ -41,9 +41,17 @@ As you can see it's rather easy to get the published publications. Each publicat
 
 ## Reading a Publication
 
-When the user clicks one of the presented publications you can provide a reading experience using the `PagedPublicationKit`. The kit doesn't provide any chrome UI (header, back button, thumbnail overview etc.). It provides a barebone solution with reading support, hotspots, back/forward buttons, page label, progress bar etc. It's up to you to make it your own experience. To see an example of the kit in action click the link below:
+### Custom
+
+When the user clicks one of the presented publications you can provide a reading experience using the `PagedPublicationKit`. The kit doesn't provide any chrome UI (header, back button, thumbnail overview etc.). It provides a barebone foundation with reading support, hotspots, back/forward buttons, page label, progress bar etc. It's up to you to make it your own experience. To see an example of the kit in action click the link below:
 
 https://shopgun.github.io/shopgun-js-sdk/paged-publication.html
+
+### Widget
+
+No experience coding and just wanna get started quickly? No problem, we've made a widget where you can copy/paste some HTML to your website and you're up and running. Keep in mind you still need to create an app. To see an example using a widget click the link below:
+
+https://shopgun.github.io/shopgun-js-sdk/paged-publication-widget.html
 
 ## Event Tracking
 
