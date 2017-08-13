@@ -269,14 +269,6 @@
 
                 pagedPublication.render();
                 pagedPublication.viewer.start();
-
-                setTimeout(function () {
-                    pagedPublication.viewer.navigateTo(1, { duration: 0 });
-
-                    setTimeout(function () {
-                        pagedPublication.viewer.navigateTo(0, { duration: 200 });
-                    }, 100);
-                }, 300);
             });
         </script>
     </body>
