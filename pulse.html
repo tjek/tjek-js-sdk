@@ -31,7 +31,11 @@
                 font-weight: bold;
                 letter-spacing: -1px;
                 text-shadow: 0 1px #000;
-                max-width: 10%;
+                width: 200px;
+                margin-left: -100px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         </style>
     </head>
@@ -86,11 +90,18 @@
                         if (e.type === 'searched') {
                             var query = e.attributes.query.toLowerCase().trim();
                             var el = document.createElement('div');
-                            
+                            var projection = map.getProjection();
+                            var topRight = projection.fromLatLngToPoint(map.getBounds().getNorthEast()); 
+                            var bottomLeft = projection.fromLatLngToPoint(map.getBounds().getSouthWest()); 
+                            var scale = Math.pow(2,map.getZoom());
+                            var point = projection.fromLatLngToPoint(center);
+                            var left = (point.x - bottomLeft.x) * scale;
+                            var top = (point.y - topRight.y) * scale;
+                                        
                             el.textContent = query;
                             el.className = 'query';
-                            el.style.top = SGN.util.getRandomNumberBetween(10, 90) + '%';
-                            el.style.left = SGN.util.getRandomNumberBetween(10, 90) + '%';
+                            el.style.top = top + 'px';
+                            el.style.left = left + 'px';
                             el.style.fontSize = SGN.util.getRandomNumberBetween(16, 30) + 'px';
                             el.style.color = getRandomColor();
 
