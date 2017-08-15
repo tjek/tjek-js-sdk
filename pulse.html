@@ -25,29 +25,25 @@
                 z-index: 1;
             }
 
-            .query {
+            #query {
                 position: absolute;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                text-align: center;
                 z-index: 3;
                 font-weight: bold;
+                font-size: 100px;
                 letter-spacing: -1px;
                 text-shadow: 0 1px #000;
-                width: 200px;
-                margin-left: -100px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-
-            .point {
-                position: absolute;
-                z-index: 2;
-                width: 15px;
-                height: 15px;
-                border-radius: 50%;
-            }
         </style>
     </head>
     <body>
+        <div id="query"></div>
         <div id="map"></div>
 
         <script>
@@ -64,10 +60,14 @@
 
             function initialize () {
                 var markers = [];
-                var map = new google.maps.Map(document.getElementById('map'), {
+                var els = {
+                    map: document.getElementById('map'),
+                    query: document.getElementById('query')
+                };
+                var map = new google.maps.Map(els.map, {
                     zoom: 7,
                     disableDefaultUI: true,
-                    center: { lat: 57.0488195, lng: 9.921747 },
+                    center: { lat: 58.5, lng: 11 },
                     styles: [{
                         elementType: 'labels.text',
                         stylers: [{
@@ -89,59 +89,34 @@
 
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
-                    var points = [];
+                    var overlays = [];
 
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
-                        var projection = map.getProjection();
-                        var topRight = projection.fromLatLngToPoint(map.getBounds().getNorthEast()); 
-                        var bottomLeft = projection.fromLatLngToPoint(map.getBounds().getSouthWest()); 
-                        var scale = Math.pow(2,map.getZoom());
-                        var point = projection.fromLatLngToPoint(center);
-                        var left = (point.x - bottomLeft.x) * scale;
-                        var top = (point.y - topRight.y) * scale;
 
                         if (map.getBounds().contains(center)) {
-                            var options = {
-                                position: center,
-                                geohash: e.geohash,
-                                icon: {
-                                    path: google.maps.SymbolPath.CIRCLE,
-                                    scale: 3
-                                },
+                            var overlay = new google.maps.Circle({
+                                center: center,
+                                fillColor: getRandomColor(),
+                                fillOpacity: 1,
+                                strokeWeight: 0,
+                                radius: 5000,
                                 map: map
-                            };
-                            var el = document.createElement('div');
+                            });
 
-                            el.style.top = top + 'px';
-                            el.style.left = left + 'px';
+                            overlays.push(overlay);
+
+                            while (overlays.length > 1000) {
+                                overlays.shift().setMap(null);
+                            }
 
                             if (e.type === 'searched') {
                                 var query = e.attributes.query.toLowerCase().trim();
-                                           
-                                el.textContent = query;
-                                el.className = 'query';
-                                el.style.fontSize = SGN.util.getRandomNumberBetween(16, 30) + 'px';
-                                el.style.color = getRandomColor();
 
-                                setTimeout(function () {
-                                    el.parentNode.removeChild(el);
-                                }, 2000);
-                            } else {
-                                el.className = 'point';
-                                el.style.backgroundColor = getRandomColor();
-
-                                points.push(el);
-
-                                while (points.length > 1000) {
-                                    var point = points.shift();
-                                    
-                                    point.parentNode.removeChild(point);
-                                }
+                                els.query.textContent = query;
+                                els.query.style.color = getRandomColor();
                             }
-
-                            document.body.appendChild(el);
                         }
                     });
                 });
