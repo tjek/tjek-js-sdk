@@ -27,7 +27,7 @@
 
             .query {
                 position: absolute;
-                z-index: 2;
+                z-index: 3;
                 font-weight: bold;
                 letter-spacing: -1px;
                 text-shadow: 0 1px #000;
@@ -36,6 +36,14 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+
+            .point {
+                position: absolute;
+                z-index: 2;
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
             }
         </style>
     </head>
@@ -81,38 +89,20 @@
 
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
-                    var geohashes = {};
+                    var points = [];
 
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
+                        var projection = map.getProjection();
+                        var topRight = projection.fromLatLngToPoint(map.getBounds().getNorthEast()); 
+                        var bottomLeft = projection.fromLatLngToPoint(map.getBounds().getSouthWest()); 
+                        var scale = Math.pow(2,map.getZoom());
+                        var point = projection.fromLatLngToPoint(center);
+                        var left = (point.x - bottomLeft.x) * scale;
+                        var top = (point.y - topRight.y) * scale;
 
-                        if (e.type === 'searched') {
-                            var query = e.attributes.query.toLowerCase().trim();
-                            var el = document.createElement('div');
-                            var projection = map.getProjection();
-                            var topRight = projection.fromLatLngToPoint(map.getBounds().getNorthEast()); 
-                            var bottomLeft = projection.fromLatLngToPoint(map.getBounds().getSouthWest()); 
-                            var scale = Math.pow(2,map.getZoom());
-                            var point = projection.fromLatLngToPoint(center);
-                            var left = (point.x - bottomLeft.x) * scale;
-                            var top = (point.y - topRight.y) * scale;
-                                        
-                            el.textContent = query;
-                            el.className = 'query';
-                            el.style.top = top + 'px';
-                            el.style.left = left + 'px';
-                            el.style.fontSize = SGN.util.getRandomNumberBetween(16, 30) + 'px';
-                            el.style.color = getRandomColor();
-
-                            document.body.appendChild(el);
-
-                            setTimeout(function () {
-                                el.parentNode.removeChild(el);
-                            }, 2000);
-                        }
-
-                        if (!geohashes[e.geohash] && map.getBounds().contains(center)) {
+                        if (map.getBounds().contains(center)) {
                             var options = {
                                 position: center,
                                 geohash: e.geohash,
@@ -122,17 +112,36 @@
                                 },
                                 map: map
                             };
+                            var el = document.createElement('div');
 
-                            geohashes[e.geohash] = true;
+                            el.style.top = top + 'px';
+                            el.style.left = left + 'px';
 
-                            markers.push(new google.maps.Marker(options));
+                            if (e.type === 'searched') {
+                                var query = e.attributes.query.toLowerCase().trim();
+                                           
+                                el.textContent = query;
+                                el.className = 'query';
+                                el.style.fontSize = SGN.util.getRandomNumberBetween(16, 30) + 'px';
+                                el.style.color = getRandomColor();
 
-                            while (markers.length > 1000) {
-                                var oldMarker = markers.shift();
+                                setTimeout(function () {
+                                    el.parentNode.removeChild(el);
+                                }, 2000);
+                            } else {
+                                el.className = 'point';
+                                el.style.backgroundColor = getRandomColor();
 
-                                oldMarker.setMap(null);
-                                delete geohashes[oldMarker.geohash];
+                                points.push(el);
+
+                                while (points.length > 1000) {
+                                    var point = points.shift();
+                                    
+                                    point.parentNode.removeChild(point);
+                                }
                             }
+
+                            document.body.appendChild(el);
                         }
                     });
                 });
