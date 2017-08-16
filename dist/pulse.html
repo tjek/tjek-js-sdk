@@ -59,7 +59,6 @@
             }
 
             function initialize () {
-                var markers = [];
                 var els = {
                     map: document.getElementById('map'),
                     query: document.getElementById('query')
@@ -91,6 +90,20 @@
                     var pulse = new SGN.EventsKit.Pulse();
                     var overlays = [];
 
+                    setInterval(function () {
+                        var now = Date.now();
+
+                        overlays = overlays.filter(function (overlay) {
+                            if (now - overlay.createdAt >= 1000 * 10) {
+                                overlay.setMap(null);
+
+                                return false;
+                            }
+
+                            return true;
+                        });
+                    }, 500);
+
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
@@ -102,19 +115,14 @@
                                 fillOpacity: 1,
                                 strokeWeight: 0,
                                 radius: 5000,
-                                map: map
+                                map: map,
+                                createdAt: Date.now()
                             });
 
                             overlays.push(overlay);
 
-                            while (overlays.length > 1000) {
-                                overlays.shift().setMap(null);
-                            }
-
                             if (e.type === 'searched') {
-                                var query = e.attributes.query.toLowerCase().trim();
-
-                                els.query.textContent = query;
+                                els.query.textContent = e.attributes.query.toLowerCase().trim();
                                 els.query.style.color = getRandomColor();
                             }
                         }
