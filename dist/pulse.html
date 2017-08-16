@@ -90,20 +90,6 @@
                     var pulse = new SGN.EventsKit.Pulse();
                     var overlays = [];
 
-                    setInterval(function () {
-                        var now = Date.now();
-
-                        overlays = overlays.filter(function (overlay) {
-                            if (now - overlay.createdAt >= 1000 * 10) {
-                                overlay.setMap(null);
-
-                                return false;
-                            }
-
-                            return true;
-                        });
-                    }, 500);
-
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
                         var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
@@ -121,6 +107,10 @@
 
                             overlays.push(overlay);
 
+                            while (overlays.length > 500) {
+                                overlays.shift().setMap(null);
+                            }
+
                             if (e.type === 'searched') {
                                 els.query.textContent = e.attributes.query.toLowerCase().trim();
                                 els.query.style.color = getRandomColor();
@@ -131,7 +121,7 @@
             }
         </script>
         <script src="js/latlon-geohash.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9dvsFBrmZYghZQIrHzmNx9AgGTM0cuYE&callback=initialize"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9dvsFBrmZYghZQIrHzmNx9AgGTM0cuYE&callback=initialize"></script>
     </body>
 </html>
 
