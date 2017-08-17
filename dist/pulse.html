@@ -101,14 +101,19 @@
                                 fillOpacity: 1,
                                 strokeWeight: 0,
                                 radius: 5000,
-                                map: map,
-                                createdAt: Date.now()
+                                map: map
                             });
 
                             overlays.push(overlay);
 
-                            while (overlays.length > 1000) {
-                                overlays.shift().setMap(null);
+                            while (overlays.length > 100) {
+                                var overlay = overlays.shift();
+                                
+                                google.maps.event.clearListeners(overlay, 'click_handler_name');
+                                google.maps.event.clearListeners(overlay, 'drag_handler_name');
+                                
+                                overlay.setRadius(0);
+                                overlay.setMap(null);
                             }
 
                             if (e.type === 'searched') {
