@@ -1,5 +1,5 @@
 MicroEvent = require 'microevent'
-SGN = require '../../core'
+SGN = require '../../sgn'
 Core = require './core'
 Hotspots = require './hotspots'
 Controls = require './controls'
@@ -216,7 +216,7 @@ class Viewer
         @bind 'hotspotsReceived', (e) =>
             @_hotspots.trigger 'hotspotsReceived',
                 pageSpread: @_core.pageSpreads.get e.id
-                versoPageSpread: @_core.getVerso().pageSpreads.find (pageSpread) ->
+                versoPageSpread: SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
                     pageSpread.getId() is e.id
                 ratio: e.ratio
                 pages: e.pages

@@ -160,7 +160,7 @@ class PagedPublicationCore
         @
 
     findPage: (pageId) ->
-        @getOption('pages').find (page) -> page.id is pageId
+        SGN.util.find @getOption('pages'), (page) -> page.id is pageId
 
     pageLoaded: (e) ->
         @trigger 'pageLoaded', e
