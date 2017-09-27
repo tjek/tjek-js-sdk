@@ -44,26 +44,26 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "devDependencies": {
-    "aws-sdk": "^2.100.0",
+    "aws-sdk": "^2.123.0",
     "browserify": "^14.4.0",
     "browserify-derequire": "^0.9.4",
     "coffeeify": "^2.1.0",
     "coffeelint": "^1.16.0",
     "gator": "^1.2.4",
     "gh-pages": "^1.0.0",
-    "jest": "^20.0.4",
+    "jest": "^21.2.0",
     "nib": "^1.1.2",
     "npm-watch": "^0.2.0",
     "stylus": "^0.54.5",
-    "uglify-js": "^3.0.27",
+    "uglify-js": "^3.1.2",
     "uglifycss": "0.0.27",
     "verso-browser": "^1.0.6"
   },
   "dependencies": {
-    "coffee-script": "^1.12.7",
+    "coffeescript": "^2.0.1",
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
-    "request": "^2.81.0",
+    "request": "^2.83.0",
     "sha256": "^0.2.0"
   }
 }
