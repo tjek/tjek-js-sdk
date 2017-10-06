@@ -85,7 +85,7 @@ module.exports = (options = {}, callback) ->
 
             return
 
-        callback null, viewer
+        callback null, viewer, data
 
         return
     transformPages = (pages) ->
