@@ -154,6 +154,7 @@ class Viewer
             return
         @_core.bind 'afterNavigation', (e) =>
             @_eventTracking.trigger 'afterNavigation', e
+            @_hotspots.trigger 'afterNavigation', e
             @trigger 'afterNavigation', e
 
             return
@@ -195,11 +196,6 @@ class Viewer
         @_core.bind 'pageLoaded', (e) =>
             @_eventTracking.trigger 'pageLoaded', e
             @trigger 'pageLoaded', e
-
-            return
-        @_core.bind 'afterNavigation', (e) =>
-            @_hotspots.trigger 'afterNavigation', e
-            @trigger 'afterNavigation', e
 
             return
         @_core.bind 'pagesLoaded', (e) =>
