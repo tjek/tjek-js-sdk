@@ -122,9 +122,7 @@ class PagedPublicationCore
         actualWidth = actualHeight / imageRatio
         actualWidth = Math.min pageWidth, actualWidth
         actualHeight = actualWidth * imageRatio
-        clientRect =
-            top: pageEl.offsetTop
-            left: pageEl.offsetLeft
+        clientRect = pageEl.getBoundingClientRect()
 
         rect.width = actualWidth
         rect.height = actualHeight
