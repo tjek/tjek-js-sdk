@@ -1812,7 +1812,7 @@ var request$3 = function(options, callback) {
           callback(SGN$9.util.error(new Error('Core API error'), {
             code: 'CoreAPIError',
             statusCode: data.statusCode
-          }));
+          }), data.body);
         }
       }
     });
@@ -7001,6 +7001,7 @@ Viewer = (function() {
       pages: this.options.pages,
       pageSpreadWidth: this.options.pageSpreadWidth,
       pageSpreadMaxZoomScale: this.options.pageSpreadMaxZoomScale,
+      pageId: this.options.pageId,
       idleDelay: this.options.idleDelay,
       resizeDelay: this.options.resizeDelay,
       color: this.options.color
@@ -7790,6 +7791,7 @@ var initialize = function(options, callback) {
       ownedBy: data.details.dealer_id,
       color: '#' + data.details.branding.pageflip.color,
       keyboard: true,
+      pageId: options.pageId,
       eventTracker: options.eventTracker,
       pages: transformPages(data.pages)
     });

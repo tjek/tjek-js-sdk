@@ -34,6 +34,7 @@ module.exports = (options = {}, callback) ->
             ownedBy: data.details.dealer_id
             color: '#' + data.details.branding.pageflip.color
             keyboard: true
+            pageId: options.pageId
             eventTracker: options.eventTracker
             pages: transformPages data.pages
 
