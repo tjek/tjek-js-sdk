@@ -53,7 +53,7 @@ module.exports = (options = {}, callback = ->) ->
                     callback SGN.util.error(new Error('Core API error'),
                         code: 'CoreAPIError'
                         statusCode: data.statusCode
-                    )
+                    ), data.body
 
             return
 
