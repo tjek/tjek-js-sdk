@@ -22,7 +22,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "serve": "python -m SimpleHTTPServer 8001",
-    "watch": "npm-watch build"
+    "watch": "npm-watch build",
+    "prepublishOnly": "npm run build"
   },
   "jest": {
     "moduleFileExtensions": [
