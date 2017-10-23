@@ -177,7 +177,7 @@ class PagedPublicationCore
         pageSpread = @pageSpreads.get versoPageSpread.getId()
         pageSpreadCount = theVerso.getPageSpreadCount()
         newSpreadEl = theVerso.pageSpreadEls[e.newPosition]
-        progress = (position + 1) / pageSpreadCount * 100
+        progress = position / (pageSpreadCount - 1) * 100
         progressLabel = @formatProgressLabel pageSpread
 
         @els.root.setAttribute 'data-navigating', true
