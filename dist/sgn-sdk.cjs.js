@@ -550,7 +550,7 @@ var request$5 = function(options, callback) {
           callback(SGN$4.util.error(new Error('Core API error'), {
             code: 'CoreAPIError',
             statusCode: data.statusCode
-          }));
+          }), data.body);
         }
       }
     });

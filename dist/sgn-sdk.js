@@ -1812,7 +1812,7 @@ var request$3 = function(options, callback) {
           callback(SGN$9.util.error(new Error('Core API error'), {
             code: 'CoreAPIError',
             statusCode: data.statusCode
-          }));
+          }), data.body);
         }
       }
     });
