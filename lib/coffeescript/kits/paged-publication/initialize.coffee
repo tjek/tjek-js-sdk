@@ -11,21 +11,30 @@ module.exports = (options = {}, callback) ->
     hotspotQueue = []
     hotspotPicker = null
     fetch = (callback) ->
-        SGN.CoreKit.request
-            url: "/v2/catalogs/#{options.id}"
-        , callback
+        if options.data.details
+            callback null, options.data.details
+        else
+            SGN.CoreKit.request
+                url: "/v2/catalogs/#{options.id}"
+            , callback
 
         return
     fetchPages = (callback) ->
-        SGN.CoreKit.request
-            url: "/v2/catalogs/#{options.id}/pages"
-        , callback
+        if options.data.pages
+            callback null, options.data.pages
+        else
+            SGN.CoreKit.request
+                url: "/v2/catalogs/#{options.id}/pages"
+            , callback
 
         return
     fetchHotspots = (callback) ->
-        SGN.CoreKit.request
-            url: "/v2/catalogs/#{options.id}/hotspots"
-        , callback
+        if options.data.hotspots
+            callback null, options.data.hotspots
+        else
+            SGN.CoreKit.request
+                url: "/v2/catalogs/#{options.id}/hotspots"
+            , callback
 
         return
     render = ->
