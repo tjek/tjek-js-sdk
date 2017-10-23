@@ -101,7 +101,7 @@ module.exports = (options = {}, callback) ->
         if !options.data.pages
             viewer.trigger 'pagesFetched', data.pages
         if data.hotspots and !options.data.hotspots
-            viewer.trigger 'hotspotsFetched', data.hotspots
+            viewer.trigger 'hotspotsFetched', Object.keys(data.hotspots).map((key) -> data.hotspots[key])
 
         return
     transformPages = (pages) ->
@@ -152,25 +152,26 @@ module.exports = (options = {}, callback) ->
             data.details = details
             data.pages = pages
 
-            render()
+            if options.showHotspots isnt false
+                fetchHotspots (err, response) ->
+                    return if err?
+
+                    data.hotspots = {}
+
+                    response.forEach (hotspot) ->
+                        data.hotspots[hotspot.id] = hotspot
+
+                        return
+
+                    processHotspotQueue()
+
+                    render()
+            else
+                render()
         else
             callback new Error()
 
         return
 
-    if options.showHotspots isnt false
-        fetchHotspots (err, response) ->
-            return if err?
-
-            data.hotspots = {}
-
-            response.forEach (hotspot) ->
-                data.hotspots[hotspot.id] = hotspot
-
-                return
-
-            processHotspotQueue()
-
-            return
 
     return
