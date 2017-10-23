@@ -98,6 +98,8 @@ module.exports = (options = {}, callback) ->
         callback null, viewer, data
         viewer.trigger 'catalogFetched', data.details
         viewer.trigger 'pagesFetched', data.pages
+        if data.hotspots
+            viewer.trigger 'hotspotsFetched', data.hotspots
 
         return
     transformPages = (pages) ->
@@ -157,7 +159,6 @@ module.exports = (options = {}, callback) ->
     if options.showHotspots isnt false
         fetchHotspots (err, response) ->
             return if err?
-            viewer.trigger 'hotspotsFetched', response
 
             data.hotspots = {}
 
