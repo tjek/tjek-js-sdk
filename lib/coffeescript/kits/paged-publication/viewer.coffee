@@ -13,6 +13,7 @@ class Viewer
             pages: @options.pages
             pageSpreadWidth: @options.pageSpreadWidth
             pageSpreadMaxZoomScale: @options.pageSpreadMaxZoomScale
+            pageId: @options.pageId
             idleDelay: @options.idleDelay
             resizeDelay: @options.resizeDelay
             color: @options.color
