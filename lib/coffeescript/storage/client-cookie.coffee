@@ -1,13 +1,12 @@
 SGN = require '../sgn'
+prefixKey = 'sgn-'
 
 module.exports =
-    key: 'sgn-'
-
     get: (key) ->
         return if SGN.util.isNode()
 
         try
-            name = "#{@key}#{key}="
+            name = "#{prefixKey}#{key}="
             ca = document.cookie.split ';'
 
             for c in ca
@@ -31,7 +30,7 @@ module.exports =
 
             date.setTime date.getTime() + days * 24 * 60 * 60 * 1000
 
-            document.cookie = "#{@key}#{key}=#{str};expires=#{date.toUTCString()};path=/"
+            document.cookie = "#{prefixKey}#{key}=#{str};expires=#{date.toUTCString()};path=/"
         catch err
 
         return

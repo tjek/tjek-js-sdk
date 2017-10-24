@@ -1,4 +1,5 @@
 SGN = require '../sgn'
+prefixKey = 'sgn-'
 
 module.exports =
     key: 'sgn-'
@@ -7,8 +8,8 @@ module.exports =
         try
             storage = window.localStorage
 
-            storage["#{@key}test-storage"] = 'foobar'
-            delete storage["#{@key}test-storage"]
+            storage["#{prefixKey}test-storage"] = 'foobar'
+            delete storage["#{prefixKey}test-storage"]
 
             storage
         catch
@@ -16,10 +17,10 @@ module.exports =
 
     get: (key) ->
         try
-            JSON.parse @storage["#{@key}#{key}"]
+            JSON.parse @storage["#{prefixKey}#{key}"]
 
     set: (key, value) ->
         try
-            @storage["#{@key}#{key}"] = JSON.stringify value
+            @storage["#{prefixKey}#{key}"] = JSON.stringify value
 
         @
