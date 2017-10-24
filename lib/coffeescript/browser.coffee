@@ -1,6 +1,3 @@
-# Make sure we define we're in a browser environment.
-process = browser: true if typeof process is 'undefined'
-
 SGN = require './sgn'
 
 # Expose storage backends.

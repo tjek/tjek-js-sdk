@@ -1,3 +1,5 @@
+process = require 'process'
+
 util =
     isBrowser: ->
         typeof process isnt 'undefined' and process.browser
