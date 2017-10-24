@@ -19,6 +19,7 @@
   },
   "scripts": {
     "test": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/* __tests__/* && jest",
+    "test:ci": "jest --ci",
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "serve": "python -m SimpleHTTPServer 8001",
