@@ -97,7 +97,7 @@ module.exports = (options = {}, callback) ->
 
         callback null, viewer, data
         if !options.data.details
-            viewer.trigger 'catalogFetched', data.details
+            viewer.trigger 'pagedPublicationFetched', data.details
         if !options.data.pages
             viewer.trigger 'pagesFetched', data.pages
         if data.hotspots and !options.data.hotspots
