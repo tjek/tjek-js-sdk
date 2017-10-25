@@ -4,7 +4,9 @@ pairs =
 
 module.exports =
     t: (key, view) ->
-        Mustache.render pairs[key], view
+        template = pairs[key] ? ''
+
+        Mustache.render template, view
 
     update: (translations) ->
         for key, value of translations
