@@ -1,5 +1,5 @@
 Config = require './config'
-i18n = require './i18n'
+translations = require './translations'
 util = require './util'
 config = new Config()
 
@@ -15,6 +15,6 @@ config.set
 module.exports =
     config: config
 
-    i18n: i18n
+    translations: translations
 
     util: util

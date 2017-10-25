@@ -11,7 +11,7 @@ module.exports = (options = {}, callback) ->
     hotspotQueue = []
     hotspotPicker = null
     fetch = (callback) ->
-        if options.data.details
+        if options.data?.details
             callback null, options.data.details
         else
             SGN.CoreKit.request
@@ -20,7 +20,7 @@ module.exports = (options = {}, callback) ->
 
         return
     fetchPages = (callback) ->
-        if options.data.pages
+        if options.data?.pages
             callback null, options.data.pages
         else
             SGN.CoreKit.request
@@ -29,7 +29,7 @@ module.exports = (options = {}, callback) ->
 
         return
     fetchHotspots = (callback) ->
-        if options.data.hotspots
+        if options.data?.hotspots
             callback null, options.data.hotspots
         else
             SGN.CoreKit.request
@@ -96,11 +96,12 @@ module.exports = (options = {}, callback) ->
             return
 
         callback null, viewer, data
-        if !options.data.details
+        
+        if !options.data?.details
             viewer.trigger 'pagedPublicationFetched', data.details
-        if !options.data.pages
+        if !options.data?.pages
             viewer.trigger 'pagesFetched', data.pages
-        if data.hotspots and !options.data.hotspots
+        if data.hotspots and !options.data?.hotspots
             viewer.trigger 'hotspotsFetched', Object.keys(data.hotspots).map((key) -> data.hotspots[key])
 
         return
