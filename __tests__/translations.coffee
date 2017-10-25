@@ -1,15 +1,18 @@
 SGN = require '../lib/coffeescript/node'
 
-test 'can translate', ->
-    expect(typeof SGN.translations.t('some_key')).toEqual 'string'
+describe 'SGN.translations', ->
+    test 'can translate', ->
+        expect(typeof SGN.translations.t('some_key')).toEqual 'string'
 
-    return
+        return
 
-test 'can update translations', ->
-    expect(SGN.translations.t('non_existing_key')).toEqual ''
+    test 'can update translations', ->
+        expect(SGN.translations.t('non_existing_key')).toEqual ''
 
-    SGN.translations.update non_existing_key: 'test'
+        SGN.translations.update non_existing_key: 'test'
 
-    expect(SGN.translations.t('non_existing_key')).toEqual 'test'
+        expect(SGN.translations.t('non_existing_key')).toEqual 'test'
 
+        return
+    
     return
