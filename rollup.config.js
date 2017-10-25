@@ -2,7 +2,6 @@ import coffeescript from "rollup-plugin-coffee-script";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import uglify from "rollup-plugin-uglify";
-import serve from "rollup-plugin-serve";
 import filesize from "rollup-plugin-filesize";
 import path from "path";
 import nib from "nib";
@@ -81,7 +80,8 @@ export default [
       resolve({
         jsnext: true,
         main: true,
-        browser: true
+        browser: true,
+        preferBuiltins: false,
       }),
       commonjs({
         extensions: [".js", ".coffee"]
@@ -104,7 +104,8 @@ export default [
       resolve({
         jsnext: true,
         main: true,
-        browser: true
+        browser: true,
+        preferBuiltins: false,
       }),
       commonjs({
         extensions: [".js", ".coffee"]

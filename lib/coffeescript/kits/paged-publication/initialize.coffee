@@ -11,21 +11,30 @@ module.exports = (options = {}, callback) ->
     hotspotQueue = []
     hotspotPicker = null
     fetch = (callback) ->
-        SGN.CoreKit.request
-            url: "/v2/catalogs/#{options.id}"
-        , callback
+        if options.data.details
+            callback null, options.data.details
+        else
+            SGN.CoreKit.request
+                url: "/v2/catalogs/#{options.id}"
+            , callback
 
         return
     fetchPages = (callback) ->
-        SGN.CoreKit.request
-            url: "/v2/catalogs/#{options.id}/pages"
-        , callback
+        if options.data.pages
+            callback null, options.data.pages
+        else
+            SGN.CoreKit.request
+                url: "/v2/catalogs/#{options.id}/pages"
+            , callback
 
         return
     fetchHotspots = (callback) ->
-        SGN.CoreKit.request
-            url: "/v2/catalogs/#{options.id}/hotspots"
-        , callback
+        if options.data.hotspots
+            callback null, options.data.hotspots
+        else
+            SGN.CoreKit.request
+                url: "/v2/catalogs/#{options.id}/hotspots"
+            , callback
 
         return
     render = ->
@@ -87,6 +96,12 @@ module.exports = (options = {}, callback) ->
             return
 
         callback null, viewer, data
+        if !options.data.details
+            viewer.trigger 'pagedPublicationFetched', data.details
+        if !options.data.pages
+            viewer.trigger 'pagesFetched', data.pages
+        if data.hotspots and !options.data.hotspots
+            viewer.trigger 'hotspotsFetched', Object.keys(data.hotspots).map((key) -> data.hotspots[key])
 
         return
     transformPages = (pages) ->
@@ -137,25 +152,26 @@ module.exports = (options = {}, callback) ->
             data.details = details
             data.pages = pages
 
-            render()
+            if options.showHotspots isnt false
+                fetchHotspots (err, response) ->
+                    return if err?
+
+                    data.hotspots = {}
+
+                    response.forEach (hotspot) ->
+                        data.hotspots[hotspot.id] = hotspot
+
+                        return
+
+                    processHotspotQueue()
+
+                    render()
+            else
+                render()
         else
             callback new Error()
 
         return
 
-    if options.showHotspots isnt false
-        fetchHotspots (err, response) ->
-            return if err?
-
-            data.hotspots = {}
-
-            response.forEach (hotspot) ->
-                data.hotspots[hotspot.id] = hotspot
-
-                return
-
-            processHotspotQueue()
-
-            return
 
     return
