@@ -73,7 +73,7 @@ module.exports = (options = {}, callback) ->
                         subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
 
                 hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
-                    header: SGN.i18n.t 'paged_publication.hotspot_picker.header'
+                    header: SGN.translations.t 'paged_publication.hotspot_picker.header'
                     x: e.verso.x
                     y: e.verso.y
                     hotspots: hotspots
