@@ -172,10 +172,12 @@ class PagedPublicationCore
 
     beforeNavigation: (e) ->
         position = e.newPosition
-        versoPageSpread = @getVerso().getPageSpreadFromPosition position
+        theVerso = @getVerso()
+        versoPageSpread = theVerso.getPageSpreadFromPosition position
         pageSpread = @pageSpreads.get versoPageSpread.getId()
-        pageSpreadCount = @getVerso().getPageSpreadCount()
-        progress = (position + 1) / pageSpreadCount * 100
+        pageSpreadCount = theVerso.getPageSpreadCount()
+        newSpreadEl = theVerso.pageSpreadEls[e.newPosition]
+        progress = position / (pageSpreadCount - 1) * 100
         progressLabel = @formatProgressLabel pageSpread
 
         @els.root.setAttribute 'data-navigating', true
@@ -186,22 +188,30 @@ class PagedPublicationCore
         @trigger 'beforeNavigation',
             verso: e
             pageSpread: pageSpread
+            newSpreadEl: newSpreadEl
             progress: progress
             progressLabel: progressLabel
             pageSpreadCount: pageSpreadCount
+            newPositionIsEnd: e.newPosition + 1 == pageSpreadCount
 
         return
 
     afterNavigation: (e) ->
         position = e.newPosition
-        versoPageSpread = @getVerso().getPageSpreadFromPosition position
+        theVerso = @getVerso()
+        versoPageSpread = theVerso.getPageSpreadFromPosition position
         pageSpread = @pageSpreads.get versoPageSpread.getId()
+        pageSpreadCount = theVerso.getPageSpreadCount()
+        newSpreadEl = theVerso.pageSpreadEls[e.newPosition]
 
         @els.root.setAttribute 'data-navigating', false
 
         @trigger 'afterNavigation',
             verso: e
             pageSpread: pageSpread
+            pageSpreadCount: pageSpreadCount
+            newSpreadEl: newSpreadEl
+            newPositionIsEnd: e.newPosition + 1 == pageSpreadCount
 
         return
 
