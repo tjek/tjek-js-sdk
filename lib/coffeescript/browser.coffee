@@ -29,6 +29,7 @@ if typeof session is 'object'
 
 SGN.client = do ->
     id = SGN.storage.local.get 'client-id'
+    id = id?.data
     firstOpen = not id?
 
     if firstOpen
