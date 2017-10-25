@@ -1038,14 +1038,18 @@ var core = {
 
 var sgn = core;
 
+var prefixKey;
+
+prefixKey = 'sgn-';
+
 var clientLocal = {
   key: 'sgn-',
   storage: (function() {
     var storage;
     try {
       storage = window.localStorage;
-      storage[this.key + "test-storage"] = 'foobar';
-      delete storage[this.key + "test-storage"];
+      storage[prefixKey + "test-storage"] = 'foobar';
+      delete storage[prefixKey + "test-storage"];
       return storage;
     } catch (error) {
       return {};
@@ -1053,30 +1057,32 @@ var clientLocal = {
   })(),
   get: function(key) {
     try {
-      return JSON.parse(this.storage["" + this.key + key]);
+      return JSON.parse(this.storage["" + prefixKey + key]);
     } catch (error) {}
   },
   set: function(key, value) {
     try {
-      this.storage["" + this.key + key] = JSON.stringify(value);
+      this.storage["" + prefixKey + key] = JSON.stringify(value);
     } catch (error) {}
     return this;
   }
 };
 
 var SGN$3;
+var prefixKey$1;
 
 SGN$3 = sgn;
 
+prefixKey$1 = 'sgn-';
+
 var clientCookie = {
-  key: 'sgn-',
   get: function(key) {
     var c, ca, ct, err, i, len, name, value;
     if (SGN$3.util.isNode()) {
       return;
     }
     try {
-      name = "" + this.key + key + "=";
+      name = "" + prefixKey$1 + key + "=";
       ca = document.cookie.split(';');
       for (i = 0, len = ca.length; i < len; i++) {
         c = ca[i];
@@ -1101,7 +1107,7 @@ var clientCookie = {
       date = new Date();
       str = JSON.stringify(value);
       date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-      document.cookie = "" + this.key + key + "=" + str + ";expires=" + (date.toUTCString()) + ";path=/";
+      document.cookie = "" + prefixKey$1 + key + "=" + str + ";expires=" + (date.toUTCString()) + ";path=/";
     } catch (error) {
       
     }
@@ -6089,6 +6095,9 @@ PagedPublicationCore = (function() {
     pageEls = pageSpread.getPageEls();
     pageEl = pageEls[0];
     pageCount = pageEls.length;
+    if (!pageCount) {
+      return rect;
+    }
     scale = this.getVerso().transform.scale;
     pageWidth = pageEl.offsetWidth * pageCount * scale;
     pageHeight = pageEl.offsetHeight * scale;

@@ -114,6 +114,9 @@ class PagedPublicationCore
         pageEls = pageSpread.getPageEls()
         pageEl = pageEls[0]
         pageCount = pageEls.length
+
+        return rect if not pageCount
+        
         scale = @getVerso().transform.scale
         pageWidth = pageEl.offsetWidth * pageCount * scale
         pageHeight = pageEl.offsetHeight * scale

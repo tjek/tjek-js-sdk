@@ -558,18 +558,20 @@ var request$5 = function(options, callback) {
 };
 
 var SGN$6;
+var prefixKey;
 
 SGN$6 = sgn;
 
+prefixKey = 'sgn-';
+
 var clientCookie = {
-  key: 'sgn-',
   get: function(key) {
     var c, ca, ct, err, i, len, name, value;
     if (SGN$6.util.isNode()) {
       return;
     }
     try {
-      name = "" + this.key + key + "=";
+      name = "" + prefixKey + key + "=";
       ca = document.cookie.split(';');
       for (i = 0, len = ca.length; i < len; i++) {
         c = ca[i];
@@ -594,7 +596,7 @@ var clientCookie = {
       date = new Date();
       str = JSON.stringify(value);
       date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-      document.cookie = "" + this.key + key + "=" + str + ";expires=" + (date.toUTCString()) + ";path=/";
+      document.cookie = "" + prefixKey + key + "=" + str + ";expires=" + (date.toUTCString()) + ";path=/";
     } catch (error) {
       
     }
