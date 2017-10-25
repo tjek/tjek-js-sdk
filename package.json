@@ -2,7 +2,7 @@
   "name": "shopgun-sdk",
   "version": "1.1.18",
   "description": "ShopGun SDK for JavaScript.",
-  "main": "index.js",
+  "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
   "module": "dist/sgn-sdk.es.js",
   "jsnext:main": "dist/sgn-sdk.es.js",
