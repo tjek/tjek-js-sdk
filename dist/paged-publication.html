@@ -233,12 +233,12 @@
             <!-- The optional header -->
             <header class="sgn-pp__header sgn__navbar">
                 <section class="sgn-navbar__section">
-                    <a href="#" class="sgn__btn sgn-btn--fab">x</a>
+                    <a href="#" class="sgn__btn sgn-btn--fab">1</a>
                 </section>
 
                 <section class="sgn-navbar__section">
-                    <a href="#" class="sgn__btn sgn-btn--fab">Shopping list</a>
-                    <a href="#" class="sgn__btn sgn-btn--fab">More</a>
+                    <a href="#" class="sgn__btn sgn-btn--fab">2</a>
+                    <a href="#" class="sgn__btn sgn-btn--fab">3</a>
                 </section>
             </header>
 
@@ -263,8 +263,12 @@
                 eventTracker: SGN.config.get('eventTracker')
             }, function (err, viewer) {
                 if (!err) {
-                    viewer.bind('hotspotSelected', function (hotspot) {
-                        console.log('Hotspot selected. Add it to your shopping list, present the offer or something else.', hotspot);
+                    viewer.bind('hotspotClicked', function (hotspot) {
+                        console.log('Hotspot clicked.', hotspot);
+                    });
+
+                    viewer.bind('hotspotPressed', function (hotspot) {
+                        console.log('Hotspot pressed.', hotspot);
                     });
 
                     viewer.start();

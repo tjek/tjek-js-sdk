@@ -43,9 +43,19 @@ class Viewer
         @
 
     navigateTo: (position, options) ->
+        @navigateToIndex position, options
+
+        @
+
+    navigateToIndex: (position, options) ->
         @_core.getVerso().navigateTo position, options
 
         @
+    
+    navigateToPageId: (pageId, options) ->
+        position = @_core.getVerso().getPageSpreadPositionFromPageId pageId
+        
+        @_core.getVerso().navigateTo position, options
 
     first: (options) ->
         @_core.getVerso().first options
