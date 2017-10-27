@@ -59,40 +59,19 @@ module.exports = (options = {}, callback) ->
             return
 
         viewer.bind 'clicked', (e) ->
-            clickedHotspots = e.verso.overlayEls.map (overlayEl) ->
-                data.hotspots[overlayEl.getAttribute('data-id')]
+            getSelectedHotspot e, (hotspot) ->
+                viewer.trigger 'hotspotClicked', hotspot
 
-            if clickedHotspots.length is 1
-                viewer.trigger 'hotspotSelected', clickedHotspots[0]
-            else if clickedHotspots.length > 1
-                hotspots = clickedHotspots
-                    .filter (hotspot) -> hotspot.type is 'offer'
-                    .map (hotspot) ->
-                        id: hotspot.id
-                        title: hotspot.offer.heading
-                        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+                return
+            
+            return
+        
+        viewer.bind 'pressed', (e) ->
+            getSelectedHotspot e, (hotspot) ->
+                viewer.trigger 'hotspotPressed', hotspot
 
-                hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
-                    header: SGN.translations.t 'paged_publication.hotspot_picker.header'
-                    x: e.verso.x
-                    y: e.verso.y
-                    hotspots: hotspots
-
-                hotspotPicker.bind 'selected', (e) ->
-                    viewer.trigger 'hotspotSelected', data.hotspots[e.id]
-                    hotspotPicker.destroy()
-
-                    return
-
-                hotspotPicker.bind 'destroyed', ->
-                    hotspotPicker = null
-                    viewer.el.focus()
-
-                    return
-
-                viewer.el.appendChild hotspotPicker.el
-                hotspotPicker.render().el.focus()
-
+                return
+            
             return
 
         callback null, viewer, data
@@ -144,6 +123,40 @@ module.exports = (options = {}, callback) ->
             false
 
         return
+    getSelectedHotspot = (e, callback) ->
+        hotspots = e.verso.overlayEls.map (overlayEl) ->
+            data.hotspots[overlayEl.getAttribute('data-id')]
+
+        if hotspots.length is 1
+            callback hotspots[0]
+        else if hotspots.length > 1
+            hotspots = hotspots
+                .filter (hotspot) -> hotspot.type is 'offer'
+                .map (hotspot) ->
+                    id: hotspot.id
+                    title: hotspot.offer.heading
+                    subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+
+            hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
+                header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+                x: e.verso.x
+                y: e.verso.y
+                hotspots: hotspots
+
+            hotspotPicker.bind 'selected', (e) ->
+                callback data.hotspots[e.id]
+                hotspotPicker.destroy()
+
+                return
+
+            hotspotPicker.bind 'destroyed', ->
+                hotspotPicker = null
+                viewer.el.focus()
+
+                return
+
+            viewer.el.appendChild hotspotPicker.el
+            hotspotPicker.render().el.focus()
 
     SGN.util.async.parallel [fetch, fetchPages], (result) ->
         details = result[0][1]

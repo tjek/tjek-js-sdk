@@ -15,6 +15,7 @@ SGN.EventsKit = require './kits/events'
 SGN.GraphKit = require './kits/graph'
 SGN.CoreKit = require './kits/core'
 SGN.PagedPublicationKit = require './kits/paged-publication'
+SGN.ShoppingListKit = require './kits/shopping-list'
 
 # Set the core session from the cookie store if possible.
 session = SGN.storage.cookie.get 'session'
