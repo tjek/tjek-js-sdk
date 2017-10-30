@@ -11,5 +11,6 @@ notifications:
 
 script:
   - npm run build
+  - npm run test:lint
   - npm run test:ci
   - npm run test:size
