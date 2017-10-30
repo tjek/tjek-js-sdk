@@ -65,6 +65,14 @@ module.exports = (options = {}, callback) ->
                 return
             
             return
+
+        viewer.bind 'contextmenu', (e) ->
+            getSelectedHotspot e, (hotspot) ->
+                viewer.trigger 'hotspotRightClicked', hotspot
+
+                return
+            
+            return
         
         viewer.bind 'pressed', (e) ->
             getSelectedHotspot e, (hotspot) ->

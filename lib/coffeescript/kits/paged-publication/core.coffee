@@ -93,6 +93,7 @@ class PagedPublicationCore
         verso.bind 'clicked', @clicked.bind(@)
         verso.bind 'doubleClicked', @doubleClicked.bind(@)
         verso.bind 'pressed', @pressed.bind(@)
+        verso.bind 'contextmenu', @contextmenu.bind(@)
         verso.bind 'panStart', @panStart.bind(@)
         verso.bind 'panEnd', @panEnd.bind(@)
         verso.bind 'zoomedIn', @zoomedIn.bind(@)
@@ -247,6 +248,15 @@ class PagedPublicationCore
             page = @findPage pageId
 
             @trigger 'pressed', verso: e, page: page
+
+        return
+
+    contextmenu: (e) ->
+        if e.isInsideContent
+            pageId = e.pageEl.dataset.id
+            page = @findPage pageId
+
+            @trigger 'contextmenu', verso: e, page: page
 
         return
 
