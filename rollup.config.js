@@ -9,6 +9,7 @@ import stylus from "stylus";
 import cssnano from "cssnano";
 import fs from "fs";
 import { minify } from "uglify-es";
+import babel from "rollup-plugin-babel";
 
 var inputs = {
   // Long term we want to get rid of the separate entry points and
@@ -53,7 +54,8 @@ export default [
       coffeescript(),
       commonjs({
         extensions: [".js", ".coffee"]
-      })
+      }),
+      babel()
     ]
   },
   {
@@ -66,7 +68,8 @@ export default [
       coffeescript(),
       commonjs({
         extensions: [".js", ".coffee"]
-      })
+      }),
+      babel()
     ]
   },
   {
@@ -87,6 +90,7 @@ export default [
       commonjs({
         extensions: [".js", ".coffee"]
       }),
+      babel(),
       filesize(),
       {
         onwrite: () => stylusate(css => fs.writeFileSync(outputs.css, css))
@@ -111,6 +115,7 @@ export default [
       commonjs({
         extensions: [".js", ".coffee"]
       }),
+      babel(),
       uglify({}, minify),
       filesize(),
       {
