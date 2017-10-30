@@ -36,7 +36,8 @@
     }
   },
   "scripts": {
-    "test": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/* __tests__/* && jest",
+    "test": "npm run test:lint && npm run test:ci && npm run test:size",
+    "test:lint": "./node_modules/coffeelint/bin/coffeelint lib/coffeescript/* __tests__/*",
     "test:ci": "jest --ci",
     "test:size": "bundlesize",
     "build": "rollup -c",
