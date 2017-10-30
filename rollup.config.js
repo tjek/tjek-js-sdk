@@ -8,6 +8,7 @@ import nib from "nib";
 import stylus from "stylus";
 import cssnano from "cssnano";
 import fs from "fs";
+import { minify } from "uglify-es";
 
 var inputs = {
   // Long term we want to get rid of the separate entry points and
@@ -81,7 +82,7 @@ export default [
         jsnext: true,
         main: true,
         browser: true,
-        preferBuiltins: false,
+        preferBuiltins: false
       }),
       commonjs({
         extensions: [".js", ".coffee"]
@@ -105,12 +106,12 @@ export default [
         jsnext: true,
         main: true,
         browser: true,
-        preferBuiltins: false,
+        preferBuiltins: false
       }),
       commonjs({
         extensions: [".js", ".coffee"]
       }),
-      uglify(),
+      uglify({}, minify),
       filesize(),
       {
         onwrite: () =>
