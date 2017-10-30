@@ -7,7 +7,7 @@ class PagedPublicationCore
     defaults:
         pages: []
         pageSpreadWidth: 100
-        pageSpreadMaxZoomScale: 4
+        pageSpreadMaxZoomScale: 2.3
         idleDelay: 1000
         resizeDelay: 400
         color: '#ffffff'
