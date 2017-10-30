@@ -184,6 +184,10 @@ class Viewer
             @trigger 'doubleClicked', e
 
             return
+        @_core.bind 'contextmenu', (e) =>
+            @trigger 'contextmenu', e
+
+            return
         @_core.bind 'pressed', (e) =>
             @_eventTracking.trigger 'pressed', e
             @trigger 'pressed', e
