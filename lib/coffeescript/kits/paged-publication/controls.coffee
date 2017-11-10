@@ -90,12 +90,12 @@ class PagedPublicationControls
         return
 
     mouseMove: ->
-        @els.root.dataset.mouseMoving = true
+        @els.root.setAttribute 'data-mouse-moving', true
 
         clearTimeout @mouseMoveTimeout
 
         @mouseMoveTimeout = setTimeout =>
-            @els.root.dataset.mouseMoving = false
+            @els.root.setAttribute 'data-mouse-moving', false
 
             return
         , 4000

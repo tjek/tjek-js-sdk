@@ -76,7 +76,7 @@ class PagedPublicationCore
         @options[key]
 
     setColor: (color) ->
-        @els.root.dataset.colorBrightness = SGN.util.getColorBrightness color
+        @els.root.setAttribute 'data-color-brightness', SGN.util.getColorBrightness(color)
         @els.root.style.backgroundColor = color
 
         return
@@ -121,7 +121,7 @@ class PagedPublicationCore
         scale = @getVerso().transform.scale
         pageWidth = pageEl.offsetWidth * pageCount * scale
         pageHeight = pageEl.offsetHeight * scale
-        imageRatio = +pageEl.dataset.height / (+pageEl.dataset.width * pageCount)
+        imageRatio = +pageEl.getAttribute('data-height') / (+pageEl.getAttribute('data-width') * pageCount)
         actualHeight = pageHeight
         actualWidth = actualHeight / imageRatio
         actualWidth = Math.min pageWidth, actualWidth
@@ -226,7 +226,7 @@ class PagedPublicationCore
 
     clicked: (e) ->
         if e.isInsideContent
-            pageId = e.pageEl.dataset.id
+            pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
 
             @trigger 'clicked', verso: e, page: page
@@ -235,7 +235,7 @@ class PagedPublicationCore
 
     doubleClicked: (e) ->
         if e.isInsideContent
-            pageId = e.pageEl.dataset.id
+            pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
 
             @trigger 'doubleClicked', verso: e, page: page
@@ -244,7 +244,7 @@ class PagedPublicationCore
 
     pressed: (e) ->
         if e.isInsideContent
-            pageId = e.pageEl.dataset.id
+            pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
 
             @trigger 'pressed', verso: e, page: page
