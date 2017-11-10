@@ -46,7 +46,7 @@ class PagedPublicationPageSpread
             loaderEl = document.createElement 'div'
 
             pageEl.className = 'sgn-pp__page verso__page'
-            pageEl.dataset.id = page.id if page.id?
+            pageEl.setAttribute('data-id', page.id) if page.id?
 
             if pageCount is 2
                 pageEl.className += if i is 0 then ' verso-page--verso' else ' verso-page--recto'
@@ -62,11 +62,11 @@ class PagedPublicationPageSpread
                     isComplete = ++imageLoads is pageCount
 
                     pageEl.style.backgroundImage = "url(#{image})"
-                    pageEl.dataset.width = width
-                    pageEl.dataset.height = height
+                    pageEl.setAttribute 'data-width', width
+                    pageEl.setAttribute 'data-height', height
                     pageEl.innerHTML = '&nbsp;'
 
-                    el.dataset.zoomable = true if isComplete
+                    el.setAttribute('data-zoomable', true) if isComplete
 
                     @trigger 'pageLoaded', pageSpreadId: id, page: page
                     @trigger 'pagesLoaded', pageSpreadId: id, pages: pages if isComplete
@@ -92,13 +92,13 @@ class PagedPublicationPageSpread
         pages = @getPages()
 
         pageEls.forEach (pageEl) =>
-            id = pageEl.dataset.id
+            id = pageEl.getAttribute 'data-id'
             page = SGN.util.find pages, (page) -> page.id is id
             image = page.images.large
 
             SGN.util.loadImage image, (err) =>
-                if not err? and @el.dataset.active is 'true'
-                    pageEl.dataset.image = pageEl.style.backgroundImage
+                if not err? and @el.getAttribute('data-active') is 'true'
+                    pageEl.setAttribute 'data-image', pageEl.style.backgroundImage
                     pageEl.style.backgroundImage = "url(#{image})"
 
                 return
@@ -111,9 +111,9 @@ class PagedPublicationPageSpread
         pageEls = [].slice.call @el.querySelectorAll('.sgn-pp__page[data-image]')
 
         pageEls.forEach (pageEl) ->
-            pageEl.style.backgroundImage = pageEl.dataset.image
+            pageEl.style.backgroundImage = pageEl.getAttribute 'data-image'
             
-            delete pageEl.dataset.image
+            pageEl.removeAttribute 'data-image'
 
             return
 
