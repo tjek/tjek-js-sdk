@@ -28,6 +28,7 @@ class Viewer
         return
 
     start: ->
+        @_eventTracking.trackOpened()
         @_core.trigger 'started'
 
         @

@@ -253,7 +253,7 @@ class PagedPublicationCore
 
     contextmenu: (e) ->
         if e.isInsideContent
-            pageId = e.pageEl.dataset.id
+            pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
 
             @trigger 'contextmenu', verso: e, page: page

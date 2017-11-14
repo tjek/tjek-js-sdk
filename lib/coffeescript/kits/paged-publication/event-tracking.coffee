@@ -18,9 +18,6 @@ class PagedPublicationEventTracking
         @bind 'zoomedOut', @zoomedOut.bind(@)
         @bind 'destroyed', @destroy.bind(@)
 
-        @trackOpened()
-        @trackAppeared()
-
         return
 
     destroy: ->
@@ -36,16 +33,6 @@ class PagedPublicationEventTracking
 
     trackOpened: (properties) ->
         @trackEvent 'paged-publication-opened', properties
-
-        @
-
-    trackAppeared: (properties) ->
-        @trackEvent 'paged-publication-appeared', properties
-
-        @
-
-    trackDisappeared: (properties) ->
-        @trackEvent 'paged-publication-disappeared', properties
 
         @
 
@@ -90,14 +77,12 @@ class PagedPublicationEventTracking
         @
 
     appeared: (e) ->
-        @trackAppeared()
         @pageSpreadAppeared e.pageSpread
 
         return
 
     disappeared: ->
         @pageSpreadDisappeared()
-        @trackDisappeared()
 
         return
 
