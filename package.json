@@ -92,7 +92,7 @@
     "rollup-plugin-uglify": "^2.0.1",
     "stylus": "^0.54.5",
     "uglifycss": "0.0.27",
-    "verso-browser": "^1.0.7"
+    "verso-browser": "^1.0.8"
   },
   "dependencies": {
     "coffeescript": "^2.0.2",
