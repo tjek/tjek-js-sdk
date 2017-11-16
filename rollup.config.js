@@ -4,10 +4,6 @@ import resolve from "rollup-plugin-node-resolve";
 import uglify from "rollup-plugin-uglify";
 import filesize from "rollup-plugin-filesize";
 import path from "path";
-import nib from "nib";
-import stylus from "stylus";
-import cssnano from "cssnano";
-import fs from "fs";
 import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
 
@@ -16,7 +12,6 @@ var inputs = {
   // instead have one entry point that behaves properly according to environment.
   node: path.join(__dirname, "lib", "coffeescript", "node.coffee"),
   browser: path.join(__dirname, "lib", "coffeescript", "browser.coffee"),
-  stylus: path.join(__dirname, "lib", "stylus", "sgn.styl")
 };
 
 var outputs = {
@@ -26,22 +21,7 @@ var outputs = {
   // Inclusive bundles(external `require`s resolved), for browsers etc.
   jsBrowser: path.join(__dirname, "dist", "sgn-sdk.js"),
   jsBrowserMin: path.join(__dirname, "dist", "sgn-sdk.min.js"),
-  css: path.join(__dirname, "dist", "sgn-sdk.css"),
-  cssMin: path.join(__dirname, "dist", "sgn-sdk.min.css")
 };
-
-const stylusate = cb =>
-  stylus(fs.readFileSync(inputs.stylus, "utf8").toString())
-    .set("include css", true)
-    .include(path.join(__dirname, "lib", "stylus"))
-    .include(nib.path)
-    .render(function(err, css) {
-      if (!err) {
-        cb(css);
-      } else {
-        console.log(err);
-      }
-    });
 
 export default [
   {
@@ -92,9 +72,6 @@ export default [
       }),
       babel(),
       filesize(),
-      {
-        onwrite: () => stylusate(css => fs.writeFileSync(outputs.css, css))
-      }
     ]
   },
   {
@@ -118,13 +95,6 @@ export default [
       babel(),
       uglify({}, minify),
       filesize(),
-      {
-        onwrite: () =>
-          stylusate(async css => {
-            const smolcss = await cssnano.process(css);
-            fs.writeFileSync(outputs.cssMin, smolcss);
-          })
-      }
     ]
   }
 ];

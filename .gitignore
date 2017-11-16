@@ -2,8 +2,14 @@ node_modules/
 .DS_Store
 *.swp
 dist/sgn-sdk.cjs.js
+dist/sgn-sdk.cjs.js.map
 dist/sgn-sdk.css
+dist/sgn-sdk.css.map
 dist/sgn-sdk.es.js
+dist/sgn-sdk.es.js.map
 dist/sgn-sdk.js
+dist/sgn-sdk.js.map
 dist/sgn-sdk.min.css
+dist/sgn-sdk.min.css.map
 dist/sgn-sdk.min.js
+dist/sgn-sdk.min.js.map
