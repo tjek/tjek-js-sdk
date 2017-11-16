@@ -95,7 +95,6 @@
     "verso-browser": "^1.0.7"
   },
   "dependencies": {
-    "coffee-script": "^1.12.7",
     "coffeescript": "^2.0.2",
     "jest-cli": "^21.2.1",
     "microevent": "^1.0.0",
