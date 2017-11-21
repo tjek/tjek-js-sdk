@@ -310,13 +310,13 @@ class PagedPublicationCore
     resetIdleTimer: ->
         clearTimeout @idleTimeout
 
-        @els.root.setAttribute 'data-idle', false
+        #@els.root.setAttribute 'data-idle', false
 
         @
 
     startIdleTimer: ->
         @idleTimeout = setTimeout =>
-            @els.root.setAttribute 'data-idle', true
+            #@els.root.setAttribute 'data-idle', true
 
             return
         , @getOption('idleDelay')
