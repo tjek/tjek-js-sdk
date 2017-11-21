@@ -11,6 +11,9 @@ class PagedPublicationControls
             progressLabel: el.querySelector '.sgn-pp__progress-label'
             prevControl: el.querySelector '.sgn-pp__control[data-direction=prev]'
             nextControl: el.querySelector '.sgn-pp__control[data-direction=next]'
+        @mouse =
+            x: 0
+            y: 0
 
         @keyDownListener = SGN.util.throttle @keyDown, 150, @
         @mouseMoveListener = SGN.util.throttle @mouseMove, 50, @
@@ -19,6 +22,8 @@ class PagedPublicationControls
         @els.root.addEventListener 'mousemove', @mouseMoveListener, false
         @els.prevControl.addEventListener 'click', @prevClicked.bind(@), false if @els.prevControl?
         @els.nextControl.addEventListener 'click', @nextClicked.bind(@), false if @els.nextControl?
+
+        @mouseMove {}
 
         @bind 'beforeNavigation', @beforeNavigation.bind(@)
 
@@ -89,7 +94,12 @@ class PagedPublicationControls
 
         return
 
-    mouseMove: ->
+    mouseMove: (e) ->
+        return if e.clientX is @mouse.x and @mouse.y is e.clientY
+
+        @mouse.x = e.clientX
+        @mouse.y = e.clientY
+        
         @els.root.setAttribute 'data-mouse-moving', true
 
         clearTimeout @mouseMoveTimeout
