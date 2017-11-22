@@ -11,19 +11,12 @@ class PagedPublicationControls
             progressLabel: el.querySelector '.sgn-pp__progress-label'
             prevControl: el.querySelector '.sgn-pp__control[data-direction=prev]'
             nextControl: el.querySelector '.sgn-pp__control[data-direction=next]'
-        @mouse =
-            x: 0
-            y: 0
 
         @keyDownListener = SGN.util.throttle @keyDown, 150, @
-        @mouseMoveListener = SGN.util.throttle @mouseMove, 50, @
 
         @els.root.addEventListener 'keydown', @keyDownListener, false if @options.keyboard is true
-        @els.root.addEventListener 'mousemove', @mouseMoveListener, false
         @els.prevControl.addEventListener 'click', @prevClicked.bind(@), false if @els.prevControl?
         @els.nextControl.addEventListener 'click', @nextClicked.bind(@), false if @els.nextControl?
-
-        @mouseMove {}
 
         @bind 'beforeNavigation', @beforeNavigation.bind(@)
 
@@ -31,7 +24,6 @@ class PagedPublicationControls
 
     destroy: ->
         @els.root.removeEventListener 'keydown', @keyDownListener
-        @els.root.removeEventListener 'mousemove', @mouseMoveListener
 
         return
 
@@ -91,24 +83,6 @@ class PagedPublicationControls
             @trigger 'next', duration: 0
         else if keyCodes.NUMBER_ONE is keyCode
             @trigger 'first', duration: 0
-
-        return
-
-    mouseMove: (e) ->
-        return if e.clientX is @mouse.x and @mouse.y is e.clientY
-
-        @mouse.x = e.clientX
-        @mouse.y = e.clientY
-        
-        @els.root.setAttribute 'data-mouse-moving', true
-
-        clearTimeout @mouseMoveTimeout
-
-        @mouseMoveTimeout = setTimeout =>
-            @els.root.setAttribute 'data-mouse-moving', false
-
-            return
-        , 4000
 
         return
 
