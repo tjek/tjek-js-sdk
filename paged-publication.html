@@ -68,7 +68,8 @@
             <!-- The required horizontal page scroller -->
             <div class="verso">
                 <div class="verso__scroller">
-                    <!-- You can add custom page spreads before and after the actual pages. --> 
+                    <!-- You can add custom page spreads before and after the actual pages.  -->
+                    
                     <div id="intro" class="page verso__page-spread verso--scrollable sgn-pp__page-spread--dark" data-page-ids="intro" data-width="80">
                         <div class="container grid-960">
                             <h1>Make your PDF alive with ShopGun.</h1>
@@ -138,7 +139,7 @@
                                         <div class="timeline-content">
                                             <div class="tile">
                                                 <div class="tile-content">
-                                                    <h4 class="tile-title">Real-time analytics.</h4>
+                                                    <h4 class="tile-title">Insights.</h4>
                                                     <p>After the PDF is published we automatically start tracking key metrics, such as opens, pageviews, and offer clicks. In real-time. We can also provide custom reports, showing you activity grouped by zipcode and normalized by population - allowing you to see the true value of each region. You can even integrate your own analytics platform (such as Google Analytics) on top of our SDK.</p>
                                                 </div>
                                             </div>
@@ -230,6 +231,18 @@
                 </div>
             </div>
 
+            <!-- The optional header -->
+            <header class="sgn-pp__header sgn__navbar">
+                <section class="sgn-navbar__section">
+                    <a href="#" class="sgn__btn sgn-btn--fab">1</a>
+                </section>
+
+                <section class="sgn-navbar__section">
+                    <a href="#" class="sgn__btn sgn-btn--fab">2</a>
+                    <a href="#" class="sgn__btn sgn-btn--fab">3</a>
+                </section>
+            </header>
+
             <!-- The optional progress bar -->
             <div class="sgn-pp__progress">
                 <div class="sgn-pp-progress__bar"></div>
@@ -251,8 +264,12 @@
                 eventTracker: SGN.config.get('eventTracker')
             }, function (err, viewer) {
                 if (!err) {
-                    viewer.bind('hotspotSelected', function (hotspot) {
-                        console.log('Hotspot selected. Add it to your shopping list, present the offer or something else.', hotspot);
+                    viewer.bind('hotspotClicked', function (hotspot) {
+                        console.log('Hotspot clicked.', hotspot);
+                    });
+
+                    viewer.bind('hotspotPressed', function (hotspot) {
+                        console.log('Hotspot pressed.', hotspot);
                     });
 
                     viewer.start();
