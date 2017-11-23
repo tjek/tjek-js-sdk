@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Paged Publications</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta charset="utf-8">
+
+        <link href="sgn-sdk.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="css/spectre.min.css">
+        <link rel="stylesheet" type="text/css" href="css/spectre-exp.min.css">
+        <link rel="stylesheet" type="text/css" href="css/spectre-icons.min.css">
+        <style>
+            body {
+                padding: 50px;
+            }
+
+            .sgn__pp {
+                display: none;
+                background-color: #fff;
+            }
+
+            .sgn-pp--open {
+                overflow: hidden;
+            }
+
+            .sgn-pp--open .sgn__pp {
+                display: block;
+            }
+
+            .publication {
+                width: 177px;
+                display: block;
+                margin: 0 auto 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="publications">
+            <div class="loading"></div>
+        </div>
+
+        <div class="sgn__pp" data-layout-fixed="true">
+            <div class="verso">
+                <div class="verso__scroller">
+                    <div class="sgn-pp__pages"></div>
+                </div>
+            </div>
+
+            <header class="sgn-pp__header sgn__navbar">
+                <section class="sgn-navbar__section">
+                    <a href="#" class="sgn-pp--close sgn__btn sgn-btn--fab">x</a>
+                </section>
+
+                <section class="sgn-navbar__section"></section>
+            </header>
+
+            <div class="sgn-pp__progress">
+                <div class="sgn-pp-progress__bar"></div>
+            </div>
+
+            <div class="sgn-pp__progress-label"></div>
+
+            <a class="sgn-pp__control" href="#" role="button" data-direction="prev">&lsaquo;</a>
+            <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
+        </div>
+
+        <script src="sgn-sdk.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
+        <script>
+            var currentViewer;
+
+            // Fetch a list of publications.
+            function fetchPublications (id, callback) {
+                SGN.CoreKit.request({
+                    url: '/v2/catalogs',
+                    qs: {
+                        dealer_id: id,
+                        order_by: '-publication_date'
+                    }
+                }, callback);
+            }
+
+            function renderPublications (publications) {
+                var html = '';
+
+                publications.forEach(function (publication) {
+                    html += '<a href="#" class="publication" data-id="' + publication.id + '" onclick="openPublication(event);">';
+                    html += '<img src=' + publication.images.thumb + '/>';
+                    html += '</a>';
+                });
+
+                document.querySelector('.publications').innerHTML = html;
+            }
+
+            function openPublication (e) {
+                e.preventDefault();
+
+                document.querySelector('html').classList.add('sgn-pp--open');
+
+                SGN.PagedPublicationKit.initialize({
+                    el: document.querySelector('.sgn__pp'),
+                    id: e.target.parentNode.getAttribute('data-id'),
+                    eventTracker: SGN.config.get('eventTracker')
+                }, function (err, viewer) {
+                    if (!err) {
+                        viewer.bind('hotspotClicked', function (hotspot) {
+                            alert('Hotspot clicked');
+                        });
+
+                        viewer.bind('destroyed', function () {
+                            document.querySelector('html').classList.remove('sgn-pp--open');
+                        });
+
+                        viewer.start();
+                    }
+                });
+            }
+
+            fetchPublications(SGN.util.getQueryParam('id') || '93f13', function (err, publications) {
+                if (!err) renderPublications(publications);
+            });
+        </script>
+    </body>
+</html>

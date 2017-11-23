@@ -61,8 +61,4 @@ if scriptEl?
 
     SGN.config.set config
 
-    # Look for paged publication widgets.
-    for el in document.querySelectorAll('.shopgun-paged-publication')
-        new SGN.PagedPublicationKit.Widget el
-
 module.exports = SGN

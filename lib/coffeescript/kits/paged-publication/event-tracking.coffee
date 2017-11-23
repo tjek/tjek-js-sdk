@@ -22,7 +22,6 @@ class PagedPublicationEventTracking
 
     destroy: ->
         @pageSpreadDisappeared()
-        @trackDisappeared()
 
         return
 

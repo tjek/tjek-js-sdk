@@ -58,10 +58,24 @@ class PagedPublicationCore
         return
 
     destroy: ->
-        @getVerso().destroy()
+        verso = @getVerso()
+        pageSpreadEls = verso.el.querySelectorAll '.sgn-pp__page-spread'
+
+        @els.root.removeAttribute 'data-started'
+        @els.root.removeAttribute 'data-idle'
+        @els.root.removeAttribute 'data-navigating'
+        @els.root.removeAttribute 'data-color-brightness'
+        @els.root.removeAttribute 'data-zoomed-in'
+
+        @els.root.style.backgroundColor = '#ffffff'
+
+        pageSpreadEl.parentNode.removeChild pageSpreadEl for pageSpreadEl in pageSpreadEls
+
+        verso.destroy()
 
         document.removeEventListener 'visibilitychange', @visibilityChangeListener, false
         window.removeEventListener 'resize', @resizeListener, false
+        window.removeEventListener 'beforeunload', @unloadListener, false
 
         return
 

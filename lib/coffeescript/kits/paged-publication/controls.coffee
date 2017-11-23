@@ -11,12 +11,14 @@ class PagedPublicationControls
             progressLabel: el.querySelector '.sgn-pp__progress-label'
             prevControl: el.querySelector '.sgn-pp__control[data-direction=prev]'
             nextControl: el.querySelector '.sgn-pp__control[data-direction=next]'
+            close: el.querySelector '.sgn-pp--close'
 
         @keyDownListener = SGN.util.throttle @keyDown, 150, @
 
         @els.root.addEventListener 'keydown', @keyDownListener, false if @options.keyboard is true
         @els.prevControl.addEventListener 'click', @prevClicked.bind(@), false if @els.prevControl?
         @els.nextControl.addEventListener 'click', @nextClicked.bind(@), false if @els.nextControl?
+        @els.close.addEventListener 'click', @closeClicked.bind(@), false if @els.close?
 
         @bind 'beforeNavigation', @beforeNavigation.bind(@)
 
@@ -71,6 +73,13 @@ class PagedPublicationControls
         e.preventDefault()
 
         @trigger 'next'
+
+        return
+    
+    closeClicked: (e) ->
+        e.preventDefault()
+
+        @trigger 'close'
 
         return
 
