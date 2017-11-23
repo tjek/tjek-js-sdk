@@ -39,7 +39,7 @@ class Viewer
         @_controls.trigger 'destroyed'
         @_eventTracking.trigger 'destroyed'
 
-        @el.parentNode.removeChild @el
+        @trigger 'destroyed'
 
         @
 
@@ -140,8 +140,12 @@ class Viewer
             
             return
         @_controls.bind 'last', (e) =>
-            @last()
+            @last e
             
+            return
+        @_controls.bind 'close', (e) =>
+            @destroy e
+
             return
         @_hotspots.bind 'hotspotsRequested', (e) =>
             @trigger 'hotspotsRequested', e
