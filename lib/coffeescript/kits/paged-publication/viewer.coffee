@@ -4,7 +4,6 @@ Core = require './core'
 Hotspots = require './hotspots'
 Controls = require './controls'
 EventTracking = require './event-tracking'
-LegacyEventTracking = require './legacy-event-tracking'
 
 class Viewer
     constructor: (@el, @options = {}) ->
@@ -20,7 +19,6 @@ class Viewer
         @_hotspots = new Hotspots()
         @_controls = new Controls @el, keyboard: @options.keyboard
         @_eventTracking = new EventTracking()
-        @_legacyEventTracking = new LegacyEventTracking()
         @viewSession = SGN.util.uuid()
 
         @_setupEventListeners()
@@ -92,39 +90,10 @@ class Viewer
 
         return
 
-    _trackLegacyEvent: (e) ->
-        eventTracker = @options.eventTracker
-        geolocation = {}
-
-        if eventTracker?
-            geolocation.latitude = eventTracker.location.latitude
-            geolocation.longitude = eventTracker.location.longitude
-            geolocation.sensor = true if geolocation.latitude?
-
-            SGN.CoreKit.request
-                geolocation: geolocation
-                method: 'post'
-                url: "/v2/catalogs/#{@options.id}/collect"
-                json: true
-                body:
-                    type: e.type
-                    ms: e.ms
-                    orientation: e.orientation
-                    pages: e.pages.join ','
-                    view_session: @viewSession
-        
-        return
-
     _setupEventListeners: ->
         @_eventTracking.bind 'trackEvent', (e) =>
             @_trackEvent e
-            @_legacyEventTracking.trigger 'eventTracked', e
 
-            return
-
-        @_legacyEventTracking.bind 'trackEvent', (e) =>
-            @_trackLegacyEvent e
-                
             return
 
         @_controls.bind 'prev', (e) =>
