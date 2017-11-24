@@ -567,6 +567,14 @@
   bottom: 0;
   z-index: 1;
 }
+.sgn__pp[data-layout-fixed="true"] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
 .sgn__pp[data-navigating="true"] .verso--scrollable {
   overflow: hidden;
 }
@@ -582,9 +590,6 @@
 .sgn__pp[data-zoomed-in="true"] .sgn-pp__progress-label,
 .sgn__pp[data-zoomed-in="true"] .sgn-pp__control {
   display: none;
-}
-.sgn__pp[data-mouse-moving="false"] * {
-  cursor: none;
 }
 .sgn__pp [data-active="true"] .sgn-pp-page__loader {
   -webkit-animation: pageLoaderAnimation 2s infinite;
@@ -924,8 +929,5 @@
   right: 0;
   bottom: 0;
   cursor: pointer;
-}
-.shopgun-paged-publication {
-  height: 500px;
 }
 /*# sourceMappingURL=sgn-sdk.css.map */

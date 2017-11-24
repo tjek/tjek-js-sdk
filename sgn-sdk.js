@@ -79,118 +79,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
 
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
 
 
 
@@ -2195,8 +2084,6 @@ var request$3 = function request() {
 
 var convertHex = createCommonjsModule(function (module) {
   !function (globals) {
-    'use strict';
-
     var convertHex = {
       bytesToHex: function bytesToHex(bytes) {
         /*if (typeof bytes.byteLength != 'undefined') {
@@ -2244,8 +2131,6 @@ var convertHex = createCommonjsModule(function (module) {
 
 var convertString = createCommonjsModule(function (module) {
   !function (globals) {
-    'use strict';
-
     var convertString = {
       bytesToString: function bytesToString(bytes) {
         return bytes.map(function (x) {
@@ -2279,8 +2164,6 @@ var convertString = createCommonjsModule(function (module) {
 
 var sha256$1 = createCommonjsModule(function (module) {
   !function (globals) {
-    'use strict';
-
     var _imports = {};
 
     if ('object' !== 'undefined' && module.exports) {
@@ -3751,8 +3634,6 @@ var verso = createCommonjsModule(function (module, exports) {
                  * Copyright (c) 2016 Jorik Tangelder;
                  * Licensed under the MIT license */
                 (function (window, document, exportName, undefined) {
-                    'use strict';
-
                     var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
                     var TEST_ELEMENT = document.createElement('div');
 
@@ -6365,7 +6246,9 @@ var verso = createCommonjsModule(function (module, exports) {
                     freeGlobal.Hammer = Hammer;
 
                     if (typeof define === 'function' && define.amd) {
-                        
+                        define(function () {
+                            return Hammer;
+                        });
                     } else if (typeof module != 'undefined' && module.exports) {
                         module.exports = Hammer;
                     } else {
@@ -6485,16 +6368,31 @@ PagedPublicationCore = function () {
     }, {
       key: 'destroy',
       value: function destroy() {
-        this.getVerso().destroy();
+        var i, len, pageSpreadEl, pageSpreadEls, verso$$1;
+        verso$$1 = this.getVerso();
+        pageSpreadEls = verso$$1.el.querySelectorAll('.sgn-pp__page-spread');
+        this.els.root.removeAttribute('data-started');
+        this.els.root.removeAttribute('data-idle');
+        this.els.root.removeAttribute('data-navigating');
+        this.els.root.removeAttribute('data-color-brightness');
+        this.els.root.removeAttribute('data-zoomed-in');
+        this.els.root.style.backgroundColor = '#ffffff';
+        for (i = 0, len = pageSpreadEls.length; i < len; i++) {
+          pageSpreadEl = pageSpreadEls[i];
+          pageSpreadEl.parentNode.removeChild(pageSpreadEl);
+        }
+        verso$$1.destroy();
         document.removeEventListener('visibilitychange', this.visibilityChangeListener, false);
         window.removeEventListener('resize', this.resizeListener, false);
+        window.removeEventListener('beforeunload', this.unloadListener, false);
       }
     }, {
       key: 'makeOptions',
       value: function makeOptions(options, defaults$$1) {
-        var key, opts, ref;
+        var key, opts, ref, value;
         opts = {};
         for (key in options) {
+          value = options[key];
           opts[key] = (ref = options[key]) != null ? ref : defaults$$1[key];
         }
         return opts;
@@ -6790,13 +6688,17 @@ PagedPublicationCore = function () {
       key: 'resetIdleTimer',
       value: function resetIdleTimer() {
         clearTimeout(this.idleTimeout);
+        this.els.root.setAttribute('data-idle', false);
         return this;
       }
     }, {
       key: 'startIdleTimer',
       value: function startIdleTimer() {
-        //@els.root.setAttribute 'data-idle', true
-        this.idleTimeout = setTimeout(function () {}, this.getOption('idleDelay'));
+        var _this2 = this;
+
+        this.idleTimeout = setTimeout(function () {
+          _this2.els.root.setAttribute('data-idle', true);
+        }, this.getOption('idleDelay'));
         return this;
       }
     }, {
@@ -6826,11 +6728,11 @@ PagedPublicationCore = function () {
     }, {
       key: 'overridePageSpreadContentRect',
       value: function overridePageSpreadContentRect(pageSpread) {
-        var _this2 = this;
+        var _this3 = this;
 
         if (pageSpread.getType() === 'page') {
           return pageSpread.getContentRect = function () {
-            return _this2.getContentRect(pageSpread);
+            return _this3.getContentRect(pageSpread);
           };
         }
       }
@@ -7102,25 +7004,22 @@ PagedPublicationControls = function () {
       progressBar: el.querySelector('.sgn-pp-progress__bar'),
       progressLabel: el.querySelector('.sgn-pp__progress-label'),
       prevControl: el.querySelector('.sgn-pp__control[data-direction=prev]'),
-      nextControl: el.querySelector('.sgn-pp__control[data-direction=next]')
-    };
-    this.mouse = {
-      x: 0,
-      y: 0
+      nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
+      close: el.querySelector('.sgn-pp--close')
     };
     this.keyDownListener = SGN$15.util.throttle(this.keyDown, 150, this);
-    this.mouseMoveListener = SGN$15.util.throttle(this.mouseMove, 50, this);
     if (this.options.keyboard === true) {
       this.els.root.addEventListener('keydown', this.keyDownListener, false);
     }
-    this.els.root.addEventListener('mousemove', this.mouseMoveListener, false);
     if (this.els.prevControl != null) {
       this.els.prevControl.addEventListener('click', this.prevClicked.bind(this), false);
     }
     if (this.els.nextControl != null) {
       this.els.nextControl.addEventListener('click', this.nextClicked.bind(this), false);
     }
-    this.mouseMove({});
+    if (this.els.close != null) {
+      this.els.close.addEventListener('click', this.closeClicked.bind(this), false);
+    }
     this.bind('beforeNavigation', this.beforeNavigation.bind(this));
     return;
   }
@@ -7129,7 +7028,6 @@ PagedPublicationControls = function () {
     key: 'destroy',
     value: function destroy() {
       this.els.root.removeEventListener('keydown', this.keyDownListener);
-      this.els.root.removeEventListener('mousemove', this.mouseMoveListener);
     }
   }, {
     key: 'beforeNavigation',
@@ -7181,6 +7079,12 @@ PagedPublicationControls = function () {
       this.trigger('next');
     }
   }, {
+    key: 'closeClicked',
+    value: function closeClicked(e) {
+      e.preventDefault();
+      this.trigger('close');
+    }
+  }, {
     key: 'keyDown',
     value: function keyDown(e) {
       var keyCode;
@@ -7198,22 +7102,6 @@ PagedPublicationControls = function () {
           duration: 0
         });
       }
-    }
-  }, {
-    key: 'mouseMove',
-    value: function mouseMove(e) {
-      var _this = this;
-
-      if (e.clientX === this.mouse.x && this.mouse.y === e.clientY) {
-        return;
-      }
-      this.mouse.x = e.clientX;
-      this.mouse.y = e.clientY;
-      this.els.root.setAttribute('data-mouse-moving', true);
-      clearTimeout(this.mouseMoveTimeout);
-      this.mouseMoveTimeout = setTimeout(function () {
-        _this.els.root.setAttribute('data-mouse-moving', false);
-      }, 4000);
     }
   }]);
   return PagedPublicationControls;
@@ -7254,7 +7142,6 @@ PagedPublicationEventTracking = function () {
     key: 'destroy',
     value: function destroy() {
       this.pageSpreadDisappeared();
-      this.trackDisappeared();
     }
   }, {
     key: 'trackEvent',
@@ -7462,86 +7349,10 @@ MicroEvent$8.mixin(PagedPublicationEventTracking);
 
 var eventTracking = PagedPublicationEventTracking;
 
-var MicroEvent$9;
-var PagedPublicationLegacyEventTracking;
-
-MicroEvent$9 = microevent;
-
-PagedPublicationLegacyEventTracking = function () {
-  function PagedPublicationLegacyEventTracking() {
-    classCallCheck(this, PagedPublicationLegacyEventTracking);
-
-    this.bind('eventTracked', this.eventTracked.bind(this));
-    this.zoomedIn = false;
-    this.appearedAt = null;
-    return;
-  }
-
-  createClass(PagedPublicationLegacyEventTracking, [{
-    key: 'trackEvent',
-    value: function trackEvent(e) {
-      this.trigger('trackEvent', e);
-    }
-  }, {
-    key: 'eventTracked',
-    value: function eventTracked(e) {
-      if (e.type === 'paged-publication-page-spread-appeared') {
-        this.appearedAt = Date.now();
-      }
-      if (e.type === 'paged-publication-page-spread-disappeared') {
-        this.trigger('trackEvent', {
-          type: this.zoomedIn ? 'zoom' : 'view',
-          ms: Date.now() - this.appearedAt,
-          orientation: this.getOrientation(),
-          pages: e.properties.pagedPublicationPageSpread.pageNumbers
-        });
-      } else if (e.type === 'paged-publication-page-spread-zoomed-in') {
-        this.trigger('trackEvent', {
-          type: 'view',
-          ms: this.getDuration(),
-          orientation: this.getOrientation(),
-          pages: e.properties.pagedPublicationPageSpread.pageNumbers
-        });
-        this.zoomedIn = true;
-        this.appearedAt = Date.now();
-      } else if (e.type === 'paged-publication-page-spread-zoomed-out') {
-        this.trigger('trackEvent', {
-          type: 'zoom',
-          ms: this.getDuration(),
-          orientation: this.getOrientation(),
-          pages: e.properties.pagedPublicationPageSpread.pageNumbers
-        });
-        this.zoomedIn = false;
-        this.appearedAt = Date.now();
-      }
-    }
-  }, {
-    key: 'getOrientation',
-    value: function getOrientation() {
-      if (window.innerWidth >= window.innerHeight) {
-        return 'landscape';
-      } else {
-        return 'portrait';
-      }
-    }
-  }, {
-    key: 'getDuration',
-    value: function getDuration() {
-      return Date.now() - this.appearedAt;
-    }
-  }]);
-  return PagedPublicationLegacyEventTracking;
-}();
-
-MicroEvent$9.mixin(PagedPublicationLegacyEventTracking);
-
-var legacyEventTracking = PagedPublicationLegacyEventTracking;
-
 var Controls;
 var Core;
 var EventTracking;
 var Hotspots;
-var LegacyEventTracking;
 var MicroEvent$2;
 var SGN$11;
 var Viewer;
@@ -7557,8 +7368,6 @@ Hotspots = hotspots;
 Controls = controls;
 
 EventTracking = eventTracking;
-
-LegacyEventTracking = legacyEventTracking;
 
 Viewer = function () {
   function Viewer(el) {
@@ -7582,7 +7391,6 @@ Viewer = function () {
       keyboard: this.options.keyboard
     });
     this._eventTracking = new EventTracking();
-    this._legacyEventTracking = new LegacyEventTracking();
     this.viewSession = SGN$11.util.uuid();
     this._setupEventListeners();
     return;
@@ -7602,7 +7410,7 @@ Viewer = function () {
       this._hotspots.trigger('destroyed');
       this._controls.trigger('destroyed');
       this._eventTracking.trigger('destroyed');
-      this.el.parentNode.removeChild(this.el);
+      this.trigger('destroyed');
       return this;
     }
   }, {
@@ -7671,43 +7479,12 @@ Viewer = function () {
       }
     }
   }, {
-    key: '_trackLegacyEvent',
-    value: function _trackLegacyEvent(e) {
-      var eventTracker, geolocation;
-      eventTracker = this.options.eventTracker;
-      geolocation = {};
-      if (eventTracker != null) {
-        geolocation.latitude = eventTracker.location.latitude;
-        geolocation.longitude = eventTracker.location.longitude;
-        if (geolocation.latitude != null) {
-          geolocation.sensor = true;
-        }
-        SGN$11.CoreKit.request({
-          geolocation: geolocation,
-          method: 'post',
-          url: '/v2/catalogs/' + this.options.id + '/collect',
-          json: true,
-          body: {
-            type: e.type,
-            ms: e.ms,
-            orientation: e.orientation,
-            pages: e.pages.join(','),
-            view_session: this.viewSession
-          }
-        });
-      }
-    }
-  }, {
     key: '_setupEventListeners',
     value: function _setupEventListeners() {
       var _this = this;
 
       this._eventTracking.bind('trackEvent', function (e) {
         _this._trackEvent(e);
-        _this._legacyEventTracking.trigger('eventTracked', e);
-      });
-      this._legacyEventTracking.bind('trackEvent', function (e) {
-        _this._trackLegacyEvent(e);
       });
       this._controls.bind('prev', function (e) {
         _this.prev(e);
@@ -7719,7 +7496,10 @@ Viewer = function () {
         _this.first(e);
       });
       this._controls.bind('last', function (e) {
-        _this.last();
+        _this.last(e);
+      });
+      this._controls.bind('close', function (e) {
+        _this.destroy(e);
       });
       this._hotspots.bind('hotspotsRequested', function (e) {
         _this.trigger('hotspotsRequested', e);
@@ -8177,13 +7957,13 @@ var gator = createCommonjsModule(function (module) {
 var hotspotPicker$2 = "<div class=\"sgn-pp-hotspot-picker__background\" data-close></div>\n<div class=\"sgn__popover\" style=\"top: {{top}}px; left: {{left}}px;\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#hotspots}}\n                <li data-id=\"{{id}}\">\n                    <p>{{title}}</p>\n                    <p>{{subtitle}}</p>\n                </li>\n            {{/hotspots}}\n        </ul>\n    </div>\n</div>";
 
 var Gator;
-var MicroEvent$10;
+var MicroEvent$9;
 var Mustache$2;
 var PagedPublicationHotspotPicker;
 var keyCodes$3;
 var template$1;
 
-MicroEvent$10 = microevent;
+MicroEvent$9 = microevent;
 
 Gator = gator;
 
@@ -8267,54 +8047,13 @@ PagedPublicationHotspotPicker = function () {
   return PagedPublicationHotspotPicker;
 }();
 
-MicroEvent$10.mixin(PagedPublicationHotspotPicker);
+MicroEvent$9.mixin(PagedPublicationHotspotPicker);
 
 var hotspotPicker = PagedPublicationHotspotPicker;
 
-var widget$2 = "<div class=\"sgn__pp\" style=\"height: 100%;\">\n    <div class=\"verso\">\n        <div class=\"verso__scroller\">\n            <div class=\"sgn-pp__pages\"></div>\n        </div>\n    </div>\n\n    {{#showProgressBar}}\n        <div class=\"sgn-pp__progress\">\n            <div class=\"sgn-pp-progress__bar\"></div>\n        </div>\n    {{/showProgressBar}}\n\n    {{#showProgressLabel}}\n        <div class=\"sgn-pp__progress-label\"></div>\n    {{/showProgressLabel}}\n\n    {{#showControls}}\n        <a class=\"sgn-pp__control\" href=\"#\" role=\"button\" data-direction=\"prev\">&lsaquo;</a>\n        <a class=\"sgn-pp__control\" href=\"#\" role=\"button\" data-direction=\"next\">&rsaquo;</a>\n    {{/showControls}}\n</div>";
-
-var Mustache$3;
-var PagedPublicationWidget;
 var SGN$16;
-var template$2;
-
-Mustache$3 = mustache;
 
 SGN$16 = core;
-
-template$2 = widget$2;
-
-var widget = PagedPublicationWidget = function PagedPublicationWidget(el) {
-  classCallCheck(this, PagedPublicationWidget);
-
-  var controls, hotspots, progressBar, progressLabel, publicationId;
-  this.el = el;
-  publicationId = this.el.getAttribute('data-id');
-  hotspots = this.el.getAttribute('data-hotspots');
-  progressBar = this.el.getAttribute('data-progress-bar');
-  progressLabel = this.el.getAttribute('data-progress-label');
-  controls = this.el.getAttribute('data-controls');
-  this.el.innerHTML = Mustache$3.render(template$2, {
-    showProgressBar: progressBar === 'true',
-    showProgressLabel: progressLabel === 'true',
-    showControls: controls === 'true'
-  });
-  SGN$16.PagedPublicationKit.initialize({
-    el: this.el.querySelector('.sgn__pp'),
-    id: publicationId,
-    eventTracker: SGN$16.config.get('eventTracker'),
-    showHotspots: hotspots === 'true'
-  }, function (err, viewer) {
-    if (err == null) {
-      viewer.start();
-    }
-  });
-  return;
-};
-
-var SGN$17;
-
-SGN$17 = core;
 
 var initialize = function initialize() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -8335,7 +8074,7 @@ var initialize = function initialize() {
     if ((ref = options.data) != null ? ref.details : void 0) {
       callback(null, options.data.details);
     } else {
-      SGN$17.CoreKit.request({
+      SGN$16.CoreKit.request({
         url: '/v2/catalogs/' + options.id
       }, callback);
     }
@@ -8345,7 +8084,7 @@ var initialize = function initialize() {
     if ((ref = options.data) != null ? ref.pages : void 0) {
       callback(null, options.data.pages);
     } else {
-      SGN$17.CoreKit.request({
+      SGN$16.CoreKit.request({
         url: '/v2/catalogs/' + options.id + '/pages'
       }, callback);
     }
@@ -8355,14 +8094,14 @@ var initialize = function initialize() {
     if ((ref = options.data) != null ? ref.hotspots : void 0) {
       callback(null, options.data.hotspots);
     } else {
-      SGN$17.CoreKit.request({
+      SGN$16.CoreKit.request({
         url: '/v2/catalogs/' + options.id + '/hotspots'
       }, callback);
     }
   };
   render = function render() {
     var ref, ref1, ref2;
-    viewer = new SGN$17.PagedPublicationKit.Viewer(options.el, {
+    viewer = new SGN$16.PagedPublicationKit.Viewer(options.el, {
       id: options.id,
       ownedBy: data.details.dealer_id,
       color: '#' + data.details.branding.pageflip.color,
@@ -8472,8 +8211,8 @@ var initialize = function initialize() {
           subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
         };
       });
-      hotspotPicker = new SGN$17.PagedPublicationKit.HotspotPicker({
-        header: SGN$17.translations.t('paged_publication.hotspot_picker.header'),
+      hotspotPicker = new SGN$16.PagedPublicationKit.HotspotPicker({
+        header: SGN$16.translations.t('paged_publication.hotspot_picker.header'),
         x: e.verso.x,
         y: e.verso.y,
         hotspots: hotspots
@@ -8490,7 +8229,7 @@ var initialize = function initialize() {
       return hotspotPicker.render().el.focus();
     }
   };
-  SGN$17.util.async.parallel([fetch, fetchPages], function (result) {
+  SGN$16.util.async.parallel([fetch, fetchPages], function (result) {
     var details, pages;
     details = result[0][1];
     pages = result[1][1];
@@ -8521,7 +8260,6 @@ var initialize = function initialize() {
 var pagedPublication = {
   Viewer: viewer,
   HotspotPicker: hotspotPicker,
-  Widget: widget,
   initialize: initialize
 };
 
@@ -8530,10 +8268,6 @@ var shoppingList = {};
 var SGN$1;
 var appKey;
 var config;
-var el;
-var i;
-var len;
-var ref;
 var scriptEl;
 var session;
 var trackId;
@@ -8617,12 +8351,6 @@ if (scriptEl != null) {
     });
   }
   SGN$1.config.set(config);
-  ref = document.querySelectorAll('.shopgun-paged-publication');
-  // Look for paged publication widgets.
-  for (i = 0, len = ref.length; i < len; i++) {
-    el = ref[i];
-    new SGN$1.PagedPublicationKit.Widget(el);
-  }
 }
 
 var browser = SGN$1;
