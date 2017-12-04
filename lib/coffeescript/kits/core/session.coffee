@@ -7,6 +7,8 @@ session =
     ttl: 1 * 60 * 60 * 24 * 60
 
     saveToken: (token) ->
+        throw new Error('No token provided for saving') if not token
+
         SGN.config.set coreSessionToken: token
 
         session.saveCookie()
