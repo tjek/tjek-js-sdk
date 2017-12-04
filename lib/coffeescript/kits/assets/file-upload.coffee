@@ -13,6 +13,7 @@ module.exports = (options = {}, callback, progressCallback) ->
         formData: formData
         timeout: timeout
         headers:
+            'Content-Type': options.contentType
             'Accept': 'application/json'
     , (err, data) ->
         if err?
