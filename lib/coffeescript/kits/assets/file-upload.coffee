@@ -4,17 +4,17 @@ module.exports = (options = {}, callback, progressCallback) ->
     throw new Error('File is not defined') if not options.file?
 
     url = SGN.config.get 'assetsFileUploadUrl'
-    formData = file: options.file
+    formData = file: value: options.file
+    formData.file.options = contentType: options.contentType if options.contentType?
     timeout = 1000 * 60 * 60
 
     SGN.request
         method: 'post'
         url: url
+        headers:
+            'Accept': 'application/json'
         formData: formData
         timeout: timeout
-        headers:
-            'Content-Type': options.contentType
-            'Accept': 'application/json'
     , (err, data) ->
         if err?
             callback SGN.util.error(new Error('Request error'),
