@@ -317,7 +317,7 @@ class PagedPublicationCore
             width = @els.root.offsetWidth
             height = @els.root.offsetHeight
 
-            pageMode = if height >= width then 'single' else 'double'
+            pageMode = if height / width < 0.8 then 'double' else 'single'
 
         pageMode
 
