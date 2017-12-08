@@ -12,6 +12,7 @@ module.exports = (options = {}, callback, progressCallback) ->
         method: 'post'
         url: url
         headers:
+            'Content-Type': options.contentType
             'Accept': 'application/json'
         formData: formData
         timeout: timeout
