@@ -601,7 +601,7 @@ var request$5 = function request$$1() {
       } else {
         token = SGN$4.config.get('coreSessionToken');
         responseToken = data.headers['x-token'];
-        if (token !== responseToken) {
+        if (responseToken && token !== responseToken) {
           SGN$4.CoreKit.session.saveToken(responseToken);
         }
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
@@ -680,6 +680,9 @@ callbackQueue = [];
 session$1 = {
   ttl: 1 * 60 * 60 * 24 * 60,
   saveToken: function saveToken(token) {
+    if (!token) {
+      throw new Error('No token provided for saving');
+    }
     SGN$5.config.set({
       coreSessionToken: token
     });
@@ -806,6 +809,63 @@ var core$2 = {
   session: session
 };
 
+var SGN$7;
+
+SGN$7 = sgn;
+
+var fileUpload = function fileUpload() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var callback = arguments[1];
+  var progressCallback = arguments[2];
+
+  var formData, timeout, url;
+  if (options.file == null) {
+    throw new Error('File is not defined');
+  }
+  url = SGN$7.config.get('assetsFileUploadUrl');
+  formData = {
+    file: options.file
+  };
+  timeout = 1000 * 60 * 60;
+  SGN$7.request({
+    method: 'post',
+    url: url,
+    formData: formData,
+    timeout: timeout,
+    headers: {
+      'Content-Type': options.contentType,
+      'Accept': 'application/json'
+    }
+  }, function (err, data) {
+    if (err != null) {
+      callback(SGN$7.util.error(new Error('Request error'), {
+        code: 'RequestError'
+      }));
+    } else {
+      if (data.statusCode === 200) {
+        callback(null, JSON.parse(data.body));
+      } else {
+        callback(SGN$7.util.error(new Error('Request error'), {
+          code: 'RequestError',
+          statusCode: data.statusCode
+        }));
+      }
+    }
+  }, function (loaded, total) {
+    if (typeof progressCallback === 'function') {
+      progressCallback({
+        progress: loaded / total,
+        loaded: loaded,
+        total: total
+      });
+    }
+  });
+};
+
+var assets = {
+  fileUpload: fileUpload
+};
+
 var SGN;
 
 SGN = sgn;
@@ -816,6 +876,8 @@ SGN.request = node$2;
 SGN.GraphKit = graph;
 
 SGN.CoreKit = core$2;
+
+SGN.AssetKit = assets;
 
 var node = SGN;
 

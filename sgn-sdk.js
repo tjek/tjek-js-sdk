@@ -1458,6 +1458,7 @@ var fileUpload = function fileUpload() {
     formData: formData,
     timeout: timeout,
     headers: {
+      'Content-Type': options.contentType,
       'Accept': 'application/json'
     }
   }, function (err, data) {
@@ -2066,7 +2067,7 @@ var request$3 = function request() {
       } else {
         token = SGN$9.config.get('coreSessionToken');
         responseToken = data.headers['x-token'];
-        if (token !== responseToken) {
+        if (responseToken && token !== responseToken) {
           SGN$9.CoreKit.session.saveToken(responseToken);
         }
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
@@ -2333,6 +2334,9 @@ callbackQueue = [];
 session$2 = {
   ttl: 1 * 60 * 60 * 24 * 60,
   saveToken: function saveToken(token) {
+    if (!token) {
+      throw new Error('No token provided for saving');
+    }
     SGN$10.config.set({
       coreSessionToken: token
     });
@@ -3597,7 +3601,9 @@ var verso = createCommonjsModule(function (module, exports) {
                     }, {
                         key: 'onTouchEnd',
                         value: function onTouchEnd(e) {
-                            e.preventDefault();
+                            if (!this.getActivePageSpread().isScrollable()) {
+                                e.preventDefault();
+                            }
                         }
                     }, {
                         key: 'onResize',
@@ -6680,7 +6686,7 @@ PagedPublicationCore = function () {
         if (pageMode == null) {
           width = this.els.root.offsetWidth;
           height = this.els.root.offsetHeight;
-          pageMode = height >= width ? 'single' : 'double';
+          pageMode = height / width < 0.8 ? 'double' : 'single';
         }
         return pageMode;
       }
