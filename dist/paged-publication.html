@@ -262,7 +262,7 @@
                 el: document.querySelector('.sgn__pp'),
                 id: SGN.util.getQueryParam('id') || '4c4euCC',
                 eventTracker: SGN.config.get('eventTracker')
-            }, function (err, viewer) {
+            }, function (err, viewer, data) {
                 if (!err) {
                     viewer.bind('hotspotClicked', function (hotspot) {
                         console.log('Hotspot clicked.', hotspot);
