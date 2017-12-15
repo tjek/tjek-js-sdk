@@ -20,12 +20,13 @@ class PagedPublicationHotspots
         contentRect = data.versoPageSpread.getContentRect()
         pageSpreadEl = data.pageSpread.getEl()
         hotspotEls = pageSpreadEl.querySelectorAll '.sgn-pp__hotspot'
+        boundingRect = pageSpreadEl.getBoundingClientRect()
 
         hotspotEl.parentNode.removeChild hotspotEl for hotspotEl in hotspotEls
 
         for id, hotspot of data.hotspots
             position = @getPosition data.pages, data.ratio, hotspot
-            el = @renderHotspot hotspot, position, contentRect
+            el = @renderHotspot hotspot, position, contentRect, boundingRect
             
             frag.appendChild el
 
@@ -33,7 +34,7 @@ class PagedPublicationHotspots
 
         @
 
-    renderHotspot: (hotspot, position, contentRect) ->
+    renderHotspot: (hotspot, position, contentRect, boundingRect) ->
         el = document.createElement 'div'
         top = Math.round contentRect.height / 100 * position.top
         left = Math.round contentRect.width / 100 * position.left
@@ -42,6 +43,8 @@ class PagedPublicationHotspots
 
         top += Math.round contentRect.top
         left += Math.round contentRect.left
+        top -= boundingRect.y
+        left -= boundingRect.x
 
         el.className = 'sgn-pp__hotspot verso__overlay'
         el.setAttribute 'data-id', hotspot.id if hotspot.id?
