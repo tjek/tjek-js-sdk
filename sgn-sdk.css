@@ -930,4 +930,7 @@
   bottom: 0;
   cursor: pointer;
 }
+.sgn-popover__header {
+  line-height: 1;
+}
 /*# sourceMappingURL=sgn-sdk.css.map */

@@ -1451,16 +1451,26 @@ var fileUpload = function fileUpload() {
   formData = {
     file: options.file
   };
+  if (options.contentType != null) {
+    formData = {
+      file: {
+        value: options.file,
+        options: {
+          contentType: options.contentType
+        }
+      }
+    };
+  }
   timeout = 1000 * 60 * 60;
   SGN$5.request({
     method: 'post',
     url: url,
-    formData: formData,
-    timeout: timeout,
     headers: {
       'Content-Type': options.contentType,
       'Accept': 'application/json'
-    }
+    },
+    formData: formData,
+    timeout: timeout
   }, function (err, data) {
     if (err != null) {
       callback(SGN$5.util.error(new Error('Request error'), {
@@ -2001,12 +2011,14 @@ var graph = {
 };
 
 var SGN$9;
+var _request;
 
 SGN$9 = sgn;
 
-var request$3 = function request() {
+_request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+  var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
   SGN$9.CoreKit.session.ensure(function (err) {
     var appSecret, appVersion, clientId, geo, headers, locale, qs, ref, ref1, ref2, token, url;
@@ -2059,7 +2071,7 @@ var request$3 = function request() {
       json: true,
       useCookies: false
     }, function (err, data) {
-      var responseToken;
+      var ref3, responseToken;
       if (err != null) {
         callback(SGN$9.util.error(new Error('Core request error'), {
           code: 'CoreRequestError'
@@ -2073,15 +2085,24 @@ var request$3 = function request() {
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
           callback(null, data.body);
         } else {
-          callback(SGN$9.util.error(new Error('Core API error'), {
-            code: 'CoreAPIError',
-            statusCode: data.statusCode
-          }), data.body);
+          if (runs === 0 && data.body != null && ((ref3 = data.body.code) === 1101 || ref3 === 1107 || ref3 === 1108)) {
+            SGN$9.config.set({
+              coreSessionToken: void 0
+            });
+            _request(options, callback, ++runs);
+          } else {
+            callback(SGN$9.util.error(new Error('Core API error'), {
+              code: 'CoreAPIError',
+              statusCode: data.statusCode
+            }), data.body);
+          }
         }
       }
     });
   });
 };
+
+var request_1 = _request;
 
 var convertHex = createCommonjsModule(function (module) {
   !function (globals) {
@@ -2454,7 +2475,7 @@ var session_1 = session$2;
 var request$2;
 var session$1;
 
-request$2 = request$3;
+request$2 = request_1;
 
 session$1 = session_1;
 
@@ -6820,11 +6841,12 @@ PagedPublicationHotspots = function () {
   createClass(PagedPublicationHotspots, [{
     key: 'renderHotspots',
     value: function renderHotspots(data) {
-      var contentRect, el, frag, hotspot$$1, hotspotEl, hotspotEls, i, id, len, pageSpreadEl, position, ref;
+      var boundingRect, contentRect, el, frag, hotspot$$1, hotspotEl, hotspotEls, i, id, len, pageSpreadEl, position, ref;
       frag = document.createDocumentFragment();
       contentRect = data.versoPageSpread.getContentRect();
       pageSpreadEl = data.pageSpread.getEl();
       hotspotEls = pageSpreadEl.querySelectorAll('.sgn-pp__hotspot');
+      boundingRect = pageSpreadEl.getBoundingClientRect();
       for (i = 0, len = hotspotEls.length; i < len; i++) {
         hotspotEl = hotspotEls[i];
         hotspotEl.parentNode.removeChild(hotspotEl);
@@ -6833,7 +6855,7 @@ PagedPublicationHotspots = function () {
       for (id in ref) {
         hotspot$$1 = ref[id];
         position = this.getPosition(data.pages, data.ratio, hotspot$$1);
-        el = this.renderHotspot(hotspot$$1, position, contentRect);
+        el = this.renderHotspot(hotspot$$1, position, contentRect, boundingRect);
         frag.appendChild(el);
       }
       pageSpreadEl.appendChild(frag);
@@ -6841,7 +6863,7 @@ PagedPublicationHotspots = function () {
     }
   }, {
     key: 'renderHotspot',
-    value: function renderHotspot(hotspot$$1, position, contentRect) {
+    value: function renderHotspot(hotspot$$1, position, contentRect, boundingRect) {
       var el, height, left, ref, top, width;
       el = document.createElement('div');
       top = Math.round(contentRect.height / 100 * position.top);
@@ -6850,6 +6872,8 @@ PagedPublicationHotspots = function () {
       height = Math.round(contentRect.height / 100 * position.height);
       top += Math.round(contentRect.top);
       left += Math.round(contentRect.left);
+      top -= boundingRect.y;
+      left -= boundingRect.x;
       el.className = 'sgn-pp__hotspot verso__overlay';
       if (hotspot$$1.id != null) {
         el.setAttribute('data-id', hotspot$$1.id);
@@ -7960,7 +7984,7 @@ var gator = createCommonjsModule(function (module) {
     })();
 });
 
-var hotspotPicker$2 = "<div class=\"sgn-pp-hotspot-picker__background\" data-close></div>\n<div class=\"sgn__popover\" style=\"top: {{top}}px; left: {{left}}px;\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#hotspots}}\n                <li data-id=\"{{id}}\">\n                    <p>{{title}}</p>\n                    <p>{{subtitle}}</p>\n                </li>\n            {{/hotspots}}\n        </ul>\n    </div>\n</div>";
+var hotspotPicker$2 = "<div class=\"sgn-pp-hotspot-picker__background\" data-close></div>\n<div class=\"sgn__popover\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#hotspots}}\n                <li data-id=\"{{id}}\">\n                    <p>{{title}}</p>\n                    <p>{{subtitle}}</p>\n                </li>\n            {{/hotspots}}\n        </ul>\n    </div>\n</div>";
 
 var Gator;
 var MicroEvent$9;
@@ -7993,7 +8017,7 @@ PagedPublicationHotspotPicker = function () {
   createClass(PagedPublicationHotspotPicker, [{
     key: 'render',
     value: function render() {
-      var header, height, parentHeight, parentWidth, popoverEl, ref, trigger, view, width;
+      var boundingRect, header, height, parentHeight, parentWidth, popoverEl, ref, trigger, view, width;
       width = (ref = this.options.width) != null ? ref : 100;
       header = this.options.header;
       if (this.options.template != null) {
@@ -8014,11 +8038,18 @@ PagedPublicationHotspotPicker = function () {
       height = popoverEl.offsetHeight;
       parentWidth = this.el.parentNode.offsetWidth;
       parentHeight = this.el.parentNode.offsetHeight;
+      boundingRect = this.el.parentNode.getBoundingClientRect();
+      view.top -= boundingRect.y;
+      view.left -= boundingRect.x;
       if (view.top + height > parentHeight) {
         popoverEl.style.top = parentHeight - height + 'px';
+      } else {
+        popoverEl.style.top = view.top + 'px';
       }
       if (view.left + width > parentWidth) {
         popoverEl.style.left = parentWidth - width + 'px';
+      } else {
+        popoverEl.style.left = view.left + 'px';
       }
       this.el.addEventListener('keyup', this.keyUp.bind(this));
       Gator(this.el).on('click', '[data-id]', function () {

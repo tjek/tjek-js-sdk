@@ -539,12 +539,14 @@ var graph = {
 };
 
 var SGN$4;
+var _request;
 
 SGN$4 = sgn;
 
-var request$5 = function request$$1() {
+_request = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+  var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
   SGN$4.CoreKit.session.ensure(function (err) {
     var appSecret, appVersion, clientId, geo, headers, locale, qs, ref, ref1, ref2, token, url;
@@ -597,7 +599,7 @@ var request$5 = function request$$1() {
       json: true,
       useCookies: false
     }, function (err, data) {
-      var responseToken;
+      var ref3, responseToken;
       if (err != null) {
         callback(SGN$4.util.error(new Error('Core request error'), {
           code: 'CoreRequestError'
@@ -611,15 +613,24 @@ var request$5 = function request$$1() {
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
           callback(null, data.body);
         } else {
-          callback(SGN$4.util.error(new Error('Core API error'), {
-            code: 'CoreAPIError',
-            statusCode: data.statusCode
-          }), data.body);
+          if (runs === 0 && data.body != null && ((ref3 = data.body.code) === 1101 || ref3 === 1107 || ref3 === 1108)) {
+            SGN$4.config.set({
+              coreSessionToken: void 0
+            });
+            _request(options, callback, ++runs);
+          } else {
+            callback(SGN$4.util.error(new Error('Core API error'), {
+              code: 'CoreAPIError',
+              statusCode: data.statusCode
+            }), data.body);
+          }
         }
       }
     });
   });
 };
+
+var request_1 = _request;
 
 var SGN$6;
 var prefixKey;
@@ -804,7 +815,7 @@ var session_1 = session$1;
 var request$4;
 var session;
 
-request$4 = request$5;
+request$4 = request_1;
 
 session = session_1;
 
@@ -830,16 +841,26 @@ var fileUpload = function fileUpload() {
   formData = {
     file: options.file
   };
+  if (options.contentType != null) {
+    formData = {
+      file: {
+        value: options.file,
+        options: {
+          contentType: options.contentType
+        }
+      }
+    };
+  }
   timeout = 1000 * 60 * 60;
   SGN$7.request({
     method: 'post',
     url: url,
-    formData: formData,
-    timeout: timeout,
     headers: {
       'Content-Type': options.contentType,
       'Accept': 'application/json'
-    }
+    },
+    formData: formData,
+    timeout: timeout
   }, function (err, data) {
     if (err != null) {
       callback(SGN$7.util.error(new Error('Request error'), {
@@ -881,7 +902,7 @@ SGN.GraphKit = graph;
 
 SGN.CoreKit = core$2;
 
-SGN.AssetKit = assets;
+SGN.AssetsKit = assets;
 
 var node = SGN;
 
