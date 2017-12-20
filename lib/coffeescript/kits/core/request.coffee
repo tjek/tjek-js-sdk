@@ -1,6 +1,6 @@
 SGN = require '../../sgn'
 
-module.exports = (options = {}, callback = ->) ->
+request = (options = {}, callback = ->, runs = 0) ->
     SGN.CoreKit.session.ensure (err) ->
         return callback err if err?
 
@@ -50,11 +50,18 @@ module.exports = (options = {}, callback = ->) ->
                 if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
                     callback null, data.body
                 else
-                    callback SGN.util.error(new Error('Core API error'),
-                        code: 'CoreAPIError'
-                        statusCode: data.statusCode
-                    ), data.body
+                    if runs is 0 and data.body? and data.body.code in [1101, 1107, 1108]
+                        SGN.config.set coreSessionToken: undefined
+
+                        request options, callback, ++runs
+                    else
+                        callback SGN.util.error(new Error('Core API error'),
+                            code: 'CoreAPIError'
+                            statusCode: data.statusCode
+                        ), data.body
 
             return
 
     return
+
+module.exports = request
