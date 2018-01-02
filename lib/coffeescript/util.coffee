@@ -66,19 +66,36 @@ util =
             name = 'Android'
 
         name
+    
+    getDeviceCategory: ->
+        deviceCategory = 'desktop'
 
-    btoa: (str) ->
-        if util.isBrowser()
-            btoa str
-        else
-            buffer = null
-
-            if str instanceof Buffer
-                buffer = str
+        if navigator.platform is 'iPod' or navigator.platform is 'iPhone'
+            deviceCategory = 'mobile'
+        else if navigator.platform is 'iPad'
+            deviceCategory = 'tablet'
+        else if navigator.platform is 'Android'
+            if /tablet/gi.test(navigator.userAgent)
+                deviceCategory = 'tablet'
             else
-                buffer = new Buffer str.toString(), 'binary'
+                deviceCategory = 'mobile'
 
-            buffer.toString 'base64'
+        deviceCategory
+    
+    getPointer: ->
+        pointer = 'fine'
+
+        pointer = 'coarse' if matchMedia('(pointer:coarse)').matches
+
+        pointer
+    
+    getOrientation: (width, height) ->
+        if width is height
+            'quadratic'
+        else if width > height
+            'horizontal'
+        else
+            'vertical'
 
     getScreenDimensions: ->
         density = window.devicePixelRatio ? 1
@@ -121,6 +138,19 @@ util =
             ++x
 
         if sum <= 381 then 'dark' else 'light'
+
+    btoa: (str) ->
+        if util.isBrowser()
+            btoa str
+        else
+            buffer = null
+
+            if str instanceof Buffer
+                buffer = str
+            else
+                buffer = new Buffer str.toString(), 'binary'
+
+            buffer.toString 'base64'
 
     find: (arr, fn) ->
         for item in arr
