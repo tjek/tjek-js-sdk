@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Incito Publication</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta charset="utf-8">
+
+        <link href="sgn-sdk.css?t=2" rel="stylesheet" type="text/css">
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="sgn__incito">
+            <div class="incito"></div>
+        </div>
+
+        <script src="sgn-sdk.js?t=2" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
+        <script>
+            SGN.IncitoPublicationKit.initialize({
+                el: document.querySelector('.sgn__incito'),
+                id: SGN.util.getQueryParam('id'),
+                eventTracker: SGN.config.get('eventTracker')
+            }, function (err, viewer) {
+                if (!err) {
+                    viewer.start();
+                }
+            });
+        </script>
+    </body>
+</html>
