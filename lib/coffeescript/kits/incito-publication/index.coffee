@@ -1,4 +1,4 @@
 module.exports =
     Viewer: require './viewer'
 
-    initialize: require './initialize'
+    Bootstrapper: require './bootstrapper'

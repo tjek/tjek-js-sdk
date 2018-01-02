@@ -94,12 +94,16 @@
 
                 document.querySelector('html').classList.add('sgn-pp--open');
 
-                SGN.PagedPublicationKit.initialize({
+                var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
                     el: document.querySelector('.sgn__pp'),
                     id: e.target.parentNode.getAttribute('data-id'),
                     eventTracker: SGN.config.get('eventTracker')
-                }, function (err, viewer) {
+                });
+                
+                bootstrapper.fetch(function (err, data) {
                     if (!err) {
+                        var viewer = bootstrapper.createViewer(data);
+                        
                         viewer.bind('hotspotClicked', function (hotspot) {
                             alert('Hotspot clicked');
                         });
@@ -109,6 +113,8 @@
                         });
 
                         viewer.start();
+
+                        bootstrapper.fetchAndApplyHotspots(viewer);
                     }
                 });
             }
