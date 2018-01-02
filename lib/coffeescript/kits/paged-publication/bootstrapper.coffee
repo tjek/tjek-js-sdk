@@ -65,7 +65,7 @@ module.exports = class Bootstrapper
 
         return
     
-    fetchAndApplyHotspots: (viewer, callback) ->
+    fetchAndApplyHotspots: (viewer) ->
         @fetchHotspots (err, res) =>
             return if err
 
