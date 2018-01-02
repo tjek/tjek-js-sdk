@@ -20,8 +20,13 @@ class Viewer
         @_controls = new Controls @el, keyboard: @options.keyboard
         @_eventTracking = new EventTracking()
         @viewSession = SGN.util.uuid()
+        @hotspots = {}
+        @hotspotQueue = []
+        @hotspotPicker = null
 
         @_setupEventListeners()
+
+        return
 
         return
 
@@ -198,17 +203,123 @@ class Viewer
 
             return
 
-        @bind 'hotspotsReceived', (e) =>
+        @bind 'hotspotsRequested', @hotspotsRequested.bind(@)
+        @bind 'beforeNavigation', @beforeNavigation.bind(@)
+        @bind 'clicked', @clicked.bind(@)
+        @bind 'contextmenu', @contextmenu.bind(@)
+        @bind 'pressed', @pressed.bind(@)
+
+        return
+
+    getSelectedHotspot: (e, callback) ->
+        hotspots = e.verso.overlayEls.map (overlayEl) =>
+            @hotspots[overlayEl.getAttribute('data-id')]
+
+        if hotspots.length is 1
+            callback hotspots[0]
+        else if hotspots.length > 1
+            hotspots = hotspots
+                .filter (hotspot) -> hotspot.type is 'offer'
+                .map (hotspot) ->
+                    id: hotspot.id
+                    title: hotspot.offer.heading
+                    subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+
+            @hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
+                header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+                x: e.verso.x
+                y: e.verso.y
+                hotspots: hotspots
+
+            @hotspotPicker.bind 'selected', (e) =>
+                callback @hotspots[e.id]
+
+                @hotspotPicker.destroy()
+
+                return
+
+            @hotspotPicker.bind 'destroyed', =>
+                @hotspotPicker = null
+
+                @el.focus()
+
+                return
+
+            @el.appendChild @hotspotPicker.el
+            @hotspotPicker.render().el.focus()
+        
+        return
+
+    processHotspotQueue: ->
+        @hotspotQueue = @hotspotQueue.filter (hotspotRequest) =>
+            hotspots = {}
+
+            for id, hotspot of @hotspots
+                match = false
+
+                hotspotRequest.pages.forEach (page) ->
+                    match = true if hotspot.locations[page.pageNumber]?
+
+                    return
+
+                if match
+                    hotspots[id] =
+                        type: hotspot.type
+                        id: hotspot.id
+                        locations: hotspot.locations
+
             @_hotspots.trigger 'hotspotsReceived',
-                pageSpread: @_core.pageSpreads.get e.id
+                pageSpread: @_core.pageSpreads.get hotspotRequest.id
                 versoPageSpread: SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
-                    pageSpread.getId() is e.id
-                ratio: e.ratio
-                pages: e.pages
-                hotspots: e.hotspots
+                    pageSpread.getId() is hotspotRequest.id
+                ratio: @options.hotspotRatio
+                pages: hotspotRequest.pages
+                hotspots: hotspots
+
+            false
+
+        return
+
+    hotspotsRequested: (e) ->
+        @hotspotQueue.push e
+        @processHotspotQueue()
+
+        return
+    
+    applyHotspots: (hotspots = {}) ->
+        @hotspots = hotspots
+
+        @processHotspotQueue()
+
+        return
+    
+    beforeNavigation: ->
+        @hotspotPicker.destroy() if @hotspotPicker?
+
+        return
+    
+    clicked: (e) ->
+        @getSelectedHotspot e, (hotspot) =>
+            @trigger 'hotspotClicked', hotspot
 
             return
+            
+        return
+    
+    contextmenu: (e) ->
+        @getSelectedHotspot e, (hotspot) =>
+            @trigger 'hotspotContextmenu', hotspot
 
+            return
+        
+        return
+    
+    pressed: (e) ->
+        @getSelectedHotspot e, (hotspot) =>
+            @trigger 'hotspotPressed', hotspot
+
+            return
+            
         return
 
 MicroEvent.mixin Viewer

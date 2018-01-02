@@ -3,4 +3,4 @@ module.exports =
 
     HotspotPicker: require './hotspot-picker'
 
-    initialize: require './initialize'
+    Bootstrapper: require './bootstrapper'

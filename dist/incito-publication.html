@@ -17,13 +17,15 @@
 
         <script src="sgn-sdk.js?t=2" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
         <script>
-            SGN.IncitoPublicationKit.initialize({
+            var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
                 el: document.querySelector('.sgn__incito'),
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
-            }, function (err, viewer) {
+            });
+
+            bootstrapper.fetch(function (err, data) {
                 if (!err) {
-                    viewer.start();
+                    var viewer = bootstrapper.createViewer(data);
                 }
             });
         </script>
