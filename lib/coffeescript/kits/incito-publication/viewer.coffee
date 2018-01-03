@@ -1,3 +1,5 @@
+#Incito = require 'incito'
+
 class Viewer
     constructor: ->
         return
