@@ -61,3 +61,13 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 * [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
 * [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
+
+## Changelog
+
+### Version 2.0.0
+
+- PagedPublicationKit
+    - Refactored `SGN.PagedPublicationKit.initialize` to `SGN.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer
+    - Made hotspots into a function instead of having a setting called `showHotspots`
+- Introduced IncitoPublicationKit
+- Removed unused files
