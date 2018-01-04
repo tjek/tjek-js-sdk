@@ -20,7 +20,7 @@ class Viewer
         @_controls = new Controls @el, keyboard: @options.keyboard
         @_eventTracking = new EventTracking()
         @viewSession = SGN.util.uuid()
-        @hotspots = {}
+        @hotspots = null
         @hotspotQueue = []
         @hotspotPicker = null
 
@@ -212,6 +212,8 @@ class Viewer
         return
 
     getSelectedHotspot: (e, callback) ->
+        return if not @hotspots?
+        
         hotspots = e.verso.overlayEls.map (overlayEl) =>
             @hotspots[overlayEl.getAttribute('data-id')]
 
@@ -251,6 +253,8 @@ class Viewer
         return
 
     processHotspotQueue: ->
+        return if not @hotspots?
+
         @hotspotQueue = @hotspotQueue.filter (hotspotRequest) =>
             hotspots = {}
             versoPageSpread = SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
