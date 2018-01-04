@@ -6,7 +6,7 @@ module.exports = class Bootstrapper
         return
 
     createViewer: (data) ->
-        viewer = new SGN.PagedPublicationKit.Viewer @options.el,
+        new SGN.PagedPublicationKit.Viewer @options.el,
             id: @options.id
             ownedBy: data.details.dealer_id
             color: '#' + data.details.branding.pageflip.color
@@ -15,8 +15,6 @@ module.exports = class Bootstrapper
             pageId: @options.pageId
             eventTracker: @options.eventTracker
             pages: @transformPages data.pages
-
-        viewer
 
     transformPages: (pages) ->
         pages.map (page, i) ->
@@ -28,6 +26,15 @@ module.exports = class Bootstrapper
             images:
                 medium: page.view
                 large: page.zoom
+
+    applyHotspots: (viewer, hotspots) ->
+        obj = {}
+
+        hotspots.forEach (hotspot) -> obj[hotspot.id] = hotspot
+        
+        viewer.applyHotspots obj
+
+        return
     
     fetch: (callback) ->
         SGN.util.async.parallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) =>
@@ -64,18 +71,3 @@ module.exports = class Bootstrapper
         , callback
 
         return
-    
-    fetchAndApplyHotspots: (viewer) ->
-        @fetchHotspots (err, res) =>
-            return if err
-
-            hotspots = {}
-
-            res.forEach (hotspot) ->
-                hotspots[hotspot.id] = hotspot
-
-                return
-            
-            viewer.applyHotspots hotspots
-
-            return

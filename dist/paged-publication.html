@@ -278,7 +278,12 @@
 
                     viewer.start();
 
-                    bootstrapper.fetchAndApplyHotspots(viewer);
+                    // Fetch hotspots after rendering the viewer as they are not critical for initial render.
+                    bootstrapper.fetchHotspots(function (err2, hotspots) {
+                        if (!err2) {
+                            bootstrapper.applyHotspots(viewer, hotspots);
+                        }
+                    });
                 }
             });
         </script>

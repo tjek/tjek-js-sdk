@@ -8,7 +8,7 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 
 When you've created the app please email us at hello@shopgun.com to get your app approved so that it doesn't get rate limited. Remember to include your app key.
 
-> We recommend you creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed. 
+> We recommend creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed. 
 
 ## Setup
 
@@ -42,11 +42,20 @@ SGN.config.set({
 });
 ```
 
-## PDF Viewer
+We recommend using environment variables for the config to avoid having secrets in your code base:
 
-To provide your users with a PDF viewing experience you need to use our PagedPublicationKit. We've built an [example](/dist/paged-publications.html) that shows how it works where you can inspect the source code.
+```javascript
+SGN.config.set({
+    appKey: process.env.SHOPGUN_APP_KEY,
+    appSecret: process.env.SHOPGUN_APP_SECRET
+});
+```
 
-## Multiplatform
+## Paged Publications
+
+To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](/dist/paged-publications.html) that shows how it can work.
+
+## More Platforms
 
 To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
 
