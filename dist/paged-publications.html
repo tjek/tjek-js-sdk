@@ -101,21 +101,25 @@
                 });
                 
                 bootstrapper.fetch(function (err, data) {
-                    if (!err) {
-                        var viewer = bootstrapper.createViewer(data);
-                        
-                        viewer.bind('hotspotClicked', function (hotspot) {
-                            alert('Hotspot clicked');
-                        });
+                    if (err) return;
 
-                        viewer.bind('destroyed', function () {
-                            document.querySelector('html').classList.remove('sgn-pp--open');
-                        });
+                    var viewer = bootstrapper.createViewer(data);
+                    
+                    viewer.bind('hotspotClicked', function (hotspot) {
+                        alert('Hotspot clicked');
+                    });
 
-                        viewer.start();
+                    viewer.bind('destroyed', function () {
+                        document.querySelector('html').classList.remove('sgn-pp--open');
+                    });
 
-                        bootstrapper.fetchAndApplyHotspots(viewer);
-                    }
+                    viewer.start();
+
+                    bootstrapper.fetchHotspots(function (err2, hotspots) {
+                        if (!err2) {
+                            bootstrapper.applyHotspots(viewer, hotspots);
+                        }
+                    });
                 });
             }
 

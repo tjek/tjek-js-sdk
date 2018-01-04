@@ -253,25 +253,24 @@ class Viewer
     processHotspotQueue: ->
         @hotspotQueue = @hotspotQueue.filter (hotspotRequest) =>
             hotspots = {}
+            versoPageSpread = SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
+                pageSpread.getId() is hotspotRequest.id
 
             for id, hotspot of @hotspots
-                match = false
+                continue if hotspots[id]?
 
-                hotspotRequest.pages.forEach (page) ->
-                    match = true if hotspot.locations[page.pageNumber]?
-
-                    return
-
-                if match
-                    hotspots[id] =
-                        type: hotspot.type
-                        id: hotspot.id
-                        locations: hotspot.locations
+                for page in hotspotRequest.pages
+                    if hotspot.locations[page.pageNumber]?
+                        hotspots[id] =
+                            type: hotspot.type
+                            id: hotspot.id
+                            locations: hotspot.locations
+                        
+                        break
 
             @_hotspots.trigger 'hotspotsReceived',
                 pageSpread: @_core.pageSpreads.get hotspotRequest.id
-                versoPageSpread: SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
-                    pageSpread.getId() is hotspotRequest.id
+                versoPageSpread: versoPageSpread
                 ratio: @options.hotspotRatio
                 pages: hotspotRequest.pages
                 hotspots: hotspots
