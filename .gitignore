@@ -1,6 +1,7 @@
 node_modules/
 .DS_Store
 *.swp
+npm-debug.log
 dist/sgn-sdk.cjs.js
 dist/sgn-sdk.cjs.js.map
 dist/sgn-sdk.css

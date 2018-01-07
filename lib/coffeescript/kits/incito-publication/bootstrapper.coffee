@@ -1,9 +1,11 @@
 util = require '../../util'
 SGN = require '../../core'
+schema = require '../../../graphql/incito.graphql'
 
 module.exports = class Bootstrapper
     constructor: (@options = {}) ->
         @deviceCategory = @getDeviceCategory()
+        @pixelRatio = @getPixelRatio()
         @pointer = @getPointer()
         @orientation = @getOrientation()
         @width = @getWidth @options.el.offsetWidth
@@ -12,6 +14,9 @@ module.exports = class Bootstrapper
     
     getDeviceCategory: ->
         util.getDeviceCategory()
+    
+    getPixelRatio: ->
+        window.devicePixelRatio || 1
     
     getPointer: ->
         util.getPointer()
@@ -36,20 +41,12 @@ module.exports = class Bootstrapper
 
     fetch: (callback) ->
         SGN.GraphKit.request
-            query: """
-                query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $pointer: Pointer!, $width: Int!) {
-                    node(id: $ID) {
-                        ... on IncitoPublication {
-                            id
-                            incito(deviceCategory: $deviceCategory, pointer: $pointer, width: $width)
-                        }
-                    }
-                }
-            """
+            query: schema
             operationName: 'GetIncitoPublication'
             variables:
                 id: @options.id
                 deviceCategory: @deviceCategory
+                pixelRatio: @pixelRatio
                 pointer: @pointer
                 width: @width
         , callback

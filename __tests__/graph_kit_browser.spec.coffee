@@ -1,4 +1,4 @@
-SGN = require '../lib/coffeescript/browser'
+SGN = require '../dist/sgn-sdk.js'
 
 test 'Making a request', (done) ->
     SGN.GraphKit.request
