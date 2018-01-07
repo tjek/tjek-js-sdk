@@ -1,0 +1,8 @@
+query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $pixelRatio: Float!, $pointer: Pointer!, $width: Int!) {
+  node(id: $ID) {
+    ... on IncitoPublication {
+      id
+      incito(deviceCategory: $deviceCategory, pixelRatio: $pixelRatio, pointer: $pointer, width: $width)
+    }
+  }
+}

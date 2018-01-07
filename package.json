@@ -73,10 +73,10 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "devDependencies": {
-    "aws-sdk": "^2.176.0",
+    "aws-sdk": "^2.177.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
-    "browserify": "^14.5.0",
+    "browserify": "^15.0.0",
     "browserify-derequire": "^0.9.4",
     "bundlesize": "^0.15.3",
     "coffeeify": "^3.0.1",
@@ -95,9 +95,10 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-filesize": "^1.5.0",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^2.0.1",
     "stylus": "^0.54.5",
-    "uglify-es": "^3.3.4",
+    "uglify-es": "^3.3.5",
     "verso-browser": "^1.0.9"
   },
   "dependencies": {
