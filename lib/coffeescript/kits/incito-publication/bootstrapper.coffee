@@ -9,6 +9,7 @@ module.exports = class Bootstrapper
         @pointer = @getPointer()
         @orientation = @getOrientation()
         @width = @getWidth @options.el.offsetWidth
+        @versionsSupported = ['1.0.0'];
 
         return
     
@@ -49,6 +50,7 @@ module.exports = class Bootstrapper
                 pixelRatio: @pixelRatio
                 pointer: @pointer
                 width: @width
+                versionsSupported: @versionsSupported
         , callback
 
         return
