@@ -43,8 +43,8 @@ class PagedPublicationHotspots
 
         top += Math.round contentRect.top
         left += Math.round contentRect.left
-        top -= boundingRect.y
-        left -= boundingRect.x
+        top -= boundingRect.top
+        left -= boundingRect.left
 
         el.className = 'sgn-pp__hotspot verso__overlay'
         el.setAttribute 'data-id', hotspot.id if hotspot.id?
