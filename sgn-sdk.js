@@ -6872,8 +6872,8 @@ PagedPublicationHotspots = function () {
       height = Math.round(contentRect.height / 100 * position.height);
       top += Math.round(contentRect.top);
       left += Math.round(contentRect.left);
-      top -= boundingRect.y;
-      left -= boundingRect.x;
+      top -= boundingRect.top;
+      left -= boundingRect.left;
       el.className = 'sgn-pp__hotspot verso__overlay';
       if (hotspot$$1.id != null) {
         el.setAttribute('data-id', hotspot$$1.id);
@@ -8039,8 +8039,8 @@ PagedPublicationHotspotPicker = function () {
       parentWidth = this.el.parentNode.offsetWidth;
       parentHeight = this.el.parentNode.offsetHeight;
       boundingRect = this.el.parentNode.getBoundingClientRect();
-      view.top -= boundingRect.y;
-      view.left -= boundingRect.x;
+      view.top -= boundingRect.top;
+      view.left -= boundingRect.left;
       if (view.top + height > parentHeight) {
         popoverEl.style.top = parentHeight - height + 'px';
       } else {
