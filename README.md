@@ -71,3 +71,4 @@ To learn more about integrating the same experience on iOS and Android be sure t
     - Made hotspots into a function instead of having a setting called `showHotspots`
 - Introduced IncitoPublicationKit
 - Removed unused files
+- Fixed incorrect positioning of hotspots and hotspot picker in Internet Explorer
