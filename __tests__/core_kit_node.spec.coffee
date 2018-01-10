@@ -8,7 +8,7 @@ SGN.config.set
 
 test 'Making a request', (done) ->
     SGN.CoreKit.request
-        url: '/v2/countries'
+        url: '/v2/catalogs'
     , (err, data) ->
         expect(data).toBeDefined()
 
