@@ -1,8 +1,8 @@
-query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $pixelRatio: Float!, $pointer: Pointer!, $width: Int!, $versionsSupported: [String!]!) {
+query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!) {
   node(id: $ID) {
     ... on IncitoPublication {
       id
-      incito(deviceCategory: $deviceCategory, pixelRatio: $pixelRatio, pointer: $pointer, width: $width, versionsSupported: $versionsSupported)
+      incito(deviceCategory: $deviceCategory, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported)
     }
   }
 }

@@ -8,7 +8,7 @@ module.exports = class Bootstrapper
         @pixelRatio = @getPixelRatio()
         @pointer = @getPointer()
         @orientation = @getOrientation()
-        @width = @getWidth @options.el.offsetWidth
+        @maxWidth = @getMaxWidth()
         @versionsSupported = ['1.0.0']
 
         return
@@ -27,18 +27,9 @@ module.exports = class Bootstrapper
         orientation = 'horizontal' if orientation is 'quadratic'
 
         orientation
-
-    getWidth: (availWidth) ->
-        width = availWidth
-
-        if @deviceCategory is 'mobile'
-            width = Math.min width, 375
-        else if @deviceCategory is 'tablet'
-            width = Math.min width, 768
-        else
-            width = Math.min width, 1200
-        
-        width
+    
+    getMaxWidth: ->
+        @options.el.offsetWidth
 
     fetch: (callback) ->
         SGN.GraphKit.request
@@ -49,7 +40,7 @@ module.exports = class Bootstrapper
                 deviceCategory: @deviceCategory
                 pixelRatio: @pixelRatio
                 pointer: @pointer
-                width: @width
+                maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
         , callback
 
