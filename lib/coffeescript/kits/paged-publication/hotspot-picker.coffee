@@ -33,8 +33,8 @@ class PagedPublicationHotspotPicker
         parentHeight = @el.parentNode.offsetHeight
         boundingRect = @el.parentNode.getBoundingClientRect()
 
-        view.top -= boundingRect.y
-        view.left -= boundingRect.x
+        view.top -= boundingRect.top
+        view.left -= boundingRect.left
 
         if view.top + height > parentHeight
             popoverEl.style.top = parentHeight - height + 'px'
