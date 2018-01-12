@@ -26,6 +26,8 @@
             bootstrapper.fetch(function (err, data) {
                 if (!err) {
                     var viewer = bootstrapper.createViewer(data);
+
+                    viewer.start();
                 }
             });
         </script>
