@@ -48,6 +48,7 @@ module.exports = class Bootstrapper
     
     createViewer: (data) ->
         viewer = new SGN.IncitoPublicationKit.Viewer
+            el: @options.el
             id: @options.id
             incito: data.incito
             eventTracker: @options.eventTracker
