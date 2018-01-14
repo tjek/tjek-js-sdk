@@ -60,9 +60,10 @@ class PagedPublicationHotspotPicker
         @
 
     destroy: ->
-        @el.parentNode.removeChild @el
+        if @el.parentNode?
+            @el.parentNode.removeChild @el
 
-        @trigger 'destroyed'
+            @trigger 'destroyed'
 
         return
 
