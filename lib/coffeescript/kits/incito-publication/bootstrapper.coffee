@@ -37,9 +37,10 @@ module.exports = class Bootstrapper
             operationName: 'GetIncitoPublication'
             variables:
                 id: @options.id
-                deviceCategory: @deviceCategory
+                deviceCategory: 'DEVICE_CATEGORY_' + @deviceCategory.toUpperCase()
                 pixelRatio: @pixelRatio
-                pointer: @pointer
+                pointer: 'POINTER_' + @pointer.toUpperCase()
+                orientation: 'ORIENTATION_' + @orientation.toUpperCase()
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
         , callback
