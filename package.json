@@ -84,6 +84,7 @@
     "coffeescript": "^2.1.1",
     "gator": "^1.2.4",
     "gh-pages": "^1.1.0",
+    "incito-browser": "0.0.1",
     "jest": "^22.0.6",
     "jest-cli": "^22.0.6",
     "nib": "^1.1.2",
