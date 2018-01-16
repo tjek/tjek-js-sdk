@@ -98,7 +98,7 @@
     "rollup-plugin-uglify": "^2.0.1",
     "stylus": "^0.54.5",
     "uglify-es": "^3.1.10",
-    "verso-browser": "^1.0.10"
+    "verso-browser": "^1.0.11"
   },
   "dependencies": {
     "microevent": "^1.0.0",
