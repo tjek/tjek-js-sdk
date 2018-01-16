@@ -1,4 +1,4 @@
-Incito = require 'incito-browser'
+#Incito = require 'incito-browser'
 
 class Viewer
     constructor: (@options = {}) ->
