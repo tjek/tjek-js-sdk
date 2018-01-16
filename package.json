@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "1.1.28",
+  "version": "1.1.29",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -98,7 +98,7 @@
     "rollup-plugin-uglify": "^2.0.1",
     "stylus": "^0.54.5",
     "uglify-es": "^3.1.10",
-    "verso-browser": "^1.0.9"
+    "verso-browser": "^1.0.10"
   },
   "dependencies": {
     "microevent": "^1.0.0",
