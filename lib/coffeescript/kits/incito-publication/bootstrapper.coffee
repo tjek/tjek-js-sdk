@@ -48,15 +48,13 @@ module.exports = class Bootstrapper
         return
     
     createViewer: (data) ->
+        if not data.incito?
+            throw util.error new Error(), 'you need to supply valid Incito to create a viewer'
+
         viewer = new SGN.IncitoPublicationKit.Viewer
             el: @options.el.querySelector('.incito'),
             id: @options.id
             incito: data.incito
             eventTracker: @options.eventTracker
-        
-        viewer.bind 'progress', (e) ->
-            console.log 'progress', e
-
-            return
 
         viewer
