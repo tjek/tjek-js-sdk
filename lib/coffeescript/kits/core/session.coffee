@@ -120,8 +120,6 @@ session =
 
         callbackQueue.push callback
 
-        console.log SGN.config.get('coreSessionToken')
-
         if queueCount is 0
             if not SGN.config.get('coreSessionToken')?
                 session.create complete
