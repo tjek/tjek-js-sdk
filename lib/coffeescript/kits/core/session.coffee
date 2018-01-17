@@ -2,6 +2,7 @@ SGN = require '../../sgn'
 sha256 = require 'sha256'
 clientCookieStorage = require '../../storage/client-cookie'
 callbackQueue = []
+renewed = false
 
 session =
     ttl: 1 * 60 * 60 * 24 * 60
@@ -119,9 +120,14 @@ session =
 
         callbackQueue.push callback
 
+        console.log SGN.config.get('coreSessionToken')
+
         if queueCount is 0
             if not SGN.config.get('coreSessionToken')?
                 session.create complete
+            else if renewed is false
+                renewed = true
+                session.renew complete
             else
                 complete()
 
