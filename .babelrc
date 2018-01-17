@@ -4,12 +4,16 @@
       "env",
       {
         "targets": {
-          "browsers": ["last 2 versions"],
+          "browsers": [
+            "last 2 versions"
+          ],
           "node": 8
         },
         "modules": false
       }
     ]
   ],
-  "plugins": ["external-helpers"]
+  "plugins": [
+    "external-helpers"
+  ]
 }
