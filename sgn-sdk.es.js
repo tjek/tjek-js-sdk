@@ -44,13 +44,13 @@ var createClass = function () {
   };
 }();
 
-var Config$1;
+var Config;
 var MicroEvent;
 var indexOf = [].indexOf;
 
 MicroEvent = microevent;
 
-Config$1 = Config$1 = function () {
+Config = Config = function () {
   var Config = function () {
     function Config() {
       classCallCheck(this, Config);
@@ -91,9 +91,9 @@ Config$1 = Config$1 = function () {
   return Config;
 }();
 
-MicroEvent.mixin(Config$1);
+MicroEvent.mixin(Config);
 
-var config$1 = Config$1;
+var config = Config;
 
 var Mustache;
 var pairs;
@@ -104,7 +104,7 @@ pairs = {
   'paged_publication.hotspot_picker.header': 'Which offer did you mean?'
 };
 
-var translations$1 = {
+var translations = {
   t: function t(key, view) {
     var ref, template;
     template = (ref = pairs[key]) != null ? ref : '';
@@ -120,16 +120,16 @@ var translations$1 = {
 };
 
 var process$1;
-var util$1;
+var util;
 
 process$1 = process;
 
-util$1 = {
+util = {
   isBrowser: function isBrowser() {
     return typeof process$1 !== 'undefined' && process$1.browser;
   },
   isNode: function isNode() {
-    return !util$1.isBrowser();
+    return !util.isBrowser();
   },
   error: function error(err, options) {
     var key, value;
@@ -215,7 +215,7 @@ util$1 = {
     return btoa;
   }(function (str) {
     var buffer;
-    if (util$1.isBrowser()) {
+    if (util.isBrowser()) {
       return btoa(str);
     } else {
       buffer = null;
@@ -373,23 +373,23 @@ util$1 = {
   }
 };
 
-var util_1 = util$1;
+var util_1 = util;
 
-var Config;
-var config;
-var translations;
-var util;
+var Config$1;
+var config$2;
+var translations$2;
+var util$1;
 
-Config = config$1;
+Config$1 = config;
 
-translations = translations$1;
+translations$2 = translations;
 
-util = util_1;
+util$1 = util_1;
 
-config = new Config();
+config$2 = new Config$1();
 
 // Set default values.
-config.set({
+config$2.set({
   locale: 'en_US',
   coreUrl: 'https://api.etilbudsavis.dk',
   graphUrl: 'https://graph.service.shopgun.com',
@@ -399,9 +399,9 @@ config.set({
 });
 
 var core = {
-  config: config,
-  translations: translations,
-  util: util
+  config: config$2,
+  translations: translations$2,
+  util: util$1
 };
 
 var sgn = core;
@@ -410,7 +410,7 @@ var request$1;
 
 request$1 = request;
 
-var node$2 = function node() {
+var node = function node() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments[1];
 
@@ -446,10 +446,10 @@ var node$2 = function node() {
   });
 };
 
-var SGN$2;
+var SGN$1;
 var parseCookies;
 
-SGN$2 = sgn;
+SGN$1 = sgn;
 
 parseCookies = function parseCookies() {
   var cookies = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -472,10 +472,10 @@ var request$2 = function request$$1() {
   var callback = arguments[1];
 
   var appKey, authToken, authTokenCookieName, timeout, url;
-  url = SGN$2.config.get('graphUrl');
+  url = SGN$1.config.get('graphUrl');
   timeout = 1000 * 12;
-  appKey = SGN$2.config.get('appKey');
-  authToken = SGN$2.config.get('authToken');
+  appKey = SGN$1.config.get('appKey');
+  authToken = SGN$1.config.get('authToken');
   authTokenCookieName = 'shopgun-auth-token';
   options = {
     method: 'post',
@@ -491,37 +491,37 @@ var request$2 = function request$$1() {
   };
   if (appKey != null) {
     // Apply authorization header when app key is provided to avoid rate limiting.
-    options.headers.Authorization = 'Basic ' + SGN$2.util.btoa('app-key:' + appKey);
+    options.headers.Authorization = 'Basic ' + SGN$1.util.btoa('app-key:' + appKey);
   }
   // Set cookies manually in node.js.
-  if (SGN$2.util.isNode() && authToken != null) {
+  if (SGN$1.util.isNode() && authToken != null) {
     options.cookies = [{
       key: authTokenCookieName,
       value: authToken,
       url: url
     }];
-  } else if (SGN$2.util.isBrowser()) {
+  } else if (SGN$1.util.isBrowser()) {
     options.useCookies = true;
   }
-  SGN$2.request(options, function (err, data) {
+  SGN$1.request(options, function (err, data) {
     var authCookie, cookies, ref;
     if (err != null) {
-      callback(SGN$2.util.error(new Error('Graph request error'), {
+      callback(SGN$1.util.error(new Error('Graph request error'), {
         code: 'GraphRequestError'
       }));
     } else {
       // Update auth token as it might have changed.
-      if (SGN$2.util.isNode()) {
+      if (SGN$1.util.isNode()) {
         cookies = parseCookies((ref = data.headers) != null ? ref['set-cookie'] : void 0);
         authCookie = cookies[authTokenCookieName];
-        if (SGN$2.config.get('authToken') !== authCookie) {
-          SGN$2.config.set('authToken', authCookie);
+        if (SGN$1.config.get('authToken') !== authCookie) {
+          SGN$1.config.set('authToken', authCookie);
         }
       }
       if (data.statusCode === 200) {
         callback(null, data.body);
       } else {
-        callback(SGN$2.util.error(new Error('Graph API error'), {
+        callback(SGN$1.util.error(new Error('Graph API error'), {
           code: 'GraphAPIError',
           statusCode: data.statusCode
         }));
@@ -534,33 +534,33 @@ var graph = {
   request: request$2
 };
 
-var SGN$4;
+var SGN$2;
 var _request;
 
-SGN$4 = sgn;
+SGN$2 = sgn;
 
 _request = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
   var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
-  SGN$4.CoreKit.session.ensure(function (err) {
+  SGN$2.CoreKit.session.ensure(function (err) {
     var appSecret, appVersion, clientId, geo, headers, locale, qs, ref, ref1, ref2, token, url;
     if (err != null) {
       return callback(err);
     }
     url = (ref = options.url) != null ? ref : '';
     headers = (ref1 = options.headers) != null ? ref1 : {};
-    token = SGN$4.config.get('coreSessionToken');
-    clientId = SGN$4.config.get('coreSessionClientId');
-    appVersion = SGN$4.config.get('appVersion');
-    appSecret = SGN$4.config.get('appSecret');
-    locale = SGN$4.config.get('locale');
+    token = SGN$2.config.get('coreSessionToken');
+    clientId = SGN$2.config.get('coreSessionClientId');
+    appVersion = SGN$2.config.get('appVersion');
+    appSecret = SGN$2.config.get('appSecret');
+    locale = SGN$2.config.get('locale');
     qs = (ref2 = options.qs) != null ? ref2 : {};
     geo = options.geolocation;
     headers['X-Token'] = token;
     if (appSecret != null) {
-      headers['X-Signature'] = SGN$4.CoreKit.session.sign(appSecret, token);
+      headers['X-Signature'] = SGN$2.CoreKit.session.sign(appSecret, token);
     }
     if (locale != null) {
       qs.r_locale = locale;
@@ -585,9 +585,9 @@ _request = function request$$1() {
         qs.r_sensor = geo.sensor;
       }
     }
-    return SGN$4.request({
+    return SGN$2.request({
       method: options.method,
-      url: SGN$4.config.get('coreUrl') + url,
+      url: SGN$2.config.get('coreUrl') + url,
       qs: qs,
       body: options.body,
       formData: options.formData,
@@ -597,25 +597,25 @@ _request = function request$$1() {
     }, function (err, data) {
       var ref3, responseToken;
       if (err != null) {
-        callback(SGN$4.util.error(new Error('Core request error'), {
+        callback(SGN$2.util.error(new Error('Core request error'), {
           code: 'CoreRequestError'
         }));
       } else {
-        token = SGN$4.config.get('coreSessionToken');
+        token = SGN$2.config.get('coreSessionToken');
         responseToken = data.headers['x-token'];
         if (responseToken && token !== responseToken) {
-          SGN$4.CoreKit.session.saveToken(responseToken);
+          SGN$2.CoreKit.session.saveToken(responseToken);
         }
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
           callback(null, data.body);
         } else {
           if (runs === 0 && data.body != null && ((ref3 = data.body.code) === 1101 || ref3 === 1107 || ref3 === 1108)) {
-            SGN$4.config.set({
+            SGN$2.config.set({
               coreSessionToken: void 0
             });
             _request(options, callback, ++runs);
           } else {
-            callback(SGN$4.util.error(new Error('Core API error'), {
+            callback(SGN$2.util.error(new Error('Core API error'), {
               code: 'CoreAPIError',
               statusCode: data.statusCode
             }), data.body);
@@ -628,17 +628,17 @@ _request = function request$$1() {
 
 var request_1 = _request;
 
-var SGN$6;
+var SGN$3;
 var prefixKey;
 
-SGN$6 = sgn;
+SGN$3 = sgn;
 
 prefixKey = 'sgn-';
 
 var clientCookie = {
   get: function get(key) {
     var c, ca, ct, err, i, len, name, value;
-    if (SGN$6.util.isNode()) {
+    if (SGN$3.util.isNode()) {
       return;
     }
     try {
@@ -659,7 +659,7 @@ var clientCookie = {
   },
   set: function set(key, value) {
     var date, days, err, str;
-    if (SGN$6.util.isNode()) {
+    if (SGN$3.util.isNode()) {
       return;
     }
     try {
@@ -674,13 +674,14 @@ var clientCookie = {
   }
 };
 
-var SGN$5;
+var SGN$4;
 var callbackQueue;
 var clientCookieStorage;
-var session$1;
+var renewed;
+var session;
 var sha256$1;
 
-SGN$5 = sgn;
+SGN$4 = sgn;
 
 sha256$1 = sha256;
 
@@ -688,44 +689,46 @@ clientCookieStorage = clientCookie;
 
 callbackQueue = [];
 
-session$1 = {
+renewed = false;
+
+session = {
   ttl: 1 * 60 * 60 * 24 * 60,
   saveToken: function saveToken(token) {
     if (!token) {
       throw new Error('No token provided for saving');
     }
-    SGN$5.config.set({
+    SGN$4.config.set({
       coreSessionToken: token
     });
-    session$1.saveCookie();
+    session.saveCookie();
   },
   saveClientId: function saveClientId(clientId) {
-    SGN$5.config.set({
+    SGN$4.config.set({
       coreSessionClientId: clientId
     });
-    session$1.saveCookie();
+    session.saveCookie();
   },
   saveCookie: function saveCookie() {
     clientCookieStorage.set('session', {
-      token: SGN$5.config.get('coreSessionToken'),
-      client_id: SGN$5.config.get('coreSessionClientId')
+      token: SGN$4.config.get('coreSessionToken'),
+      client_id: SGN$4.config.get('coreSessionClientId')
     });
   },
   create: function create(callback) {
-    SGN$5.request({
+    SGN$4.request({
       method: 'post',
-      url: SGN$5.config.get('coreUrl') + '/v2/sessions',
+      url: SGN$4.config.get('coreUrl') + '/v2/sessions',
       json: true,
       qs: {
-        api_key: SGN$5.config.get('appKey'),
-        token_ttl: session$1.ttl
+        api_key: SGN$4.config.get('appKey'),
+        token_ttl: session.ttl
       }
     }, function (err, data) {
       if (err != null) {
         callback(err);
       } else if (data.statusCode === 201) {
-        session$1.saveToken(data.body.token);
-        session$1.saveClientId(data.body.client_id);
+        session.saveToken(data.body.token);
+        session.saveClientId(data.body.client_id);
         callback(err, data.body);
       } else {
         callback(new Error('Could not create session'));
@@ -735,22 +738,22 @@ session$1 = {
   update: function update(callback) {
     var appSecret, headers, token;
     headers = {};
-    token = SGN$5.config.get('coreSessionToken');
-    appSecret = SGN$5.config.get('appSecret');
+    token = SGN$4.config.get('coreSessionToken');
+    appSecret = SGN$4.config.get('appSecret');
     headers['X-Token'] = token;
     if (appSecret != null) {
-      headers['X-Signature'] = session$1.sign(appSecret, token);
+      headers['X-Signature'] = session.sign(appSecret, token);
     }
-    SGN$5.request({
-      url: SGN$5.config.get('coreUrl') + '/v2/sessions',
+    SGN$4.request({
+      url: SGN$4.config.get('coreUrl') + '/v2/sessions',
       headers: headers,
       json: true
     }, function (err, data) {
       if (err != null) {
         callback(err);
       } else if (data.statusCode === 200) {
-        session$1.saveToken(data.body.token);
-        session$1.saveClientId(data.body.client_id);
+        session.saveToken(data.body.token);
+        session.saveClientId(data.body.client_id);
         callback(err, data.body);
       } else {
         callback(new Error('Could not update session'));
@@ -760,23 +763,23 @@ session$1 = {
   renew: function renew(callback) {
     var appSecret, headers, token;
     headers = {};
-    token = SGN$5.config.get('coreSessionToken');
-    appSecret = SGN$5.config.get('appSecret');
+    token = SGN$4.config.get('coreSessionToken');
+    appSecret = SGN$4.config.get('appSecret');
     headers['X-Token'] = token;
     if (appSecret != null) {
-      headers['X-Signature'] = session$1.sign(appSecret, token);
+      headers['X-Signature'] = session.sign(appSecret, token);
     }
-    SGN$5.request({
+    SGN$4.request({
       method: 'put',
-      url: SGN$5.config.get('coreUrl') + '/v2/sessions',
+      url: SGN$4.config.get('coreUrl') + '/v2/sessions',
       headers: headers,
       json: true
     }, function (err, data) {
       if (err != null) {
         callback(err);
       } else if (data.statusCode === 200) {
-        session$1.saveToken(data.body.token);
-        session$1.saveClientId(data.body.client_id);
+        session.saveToken(data.body.token);
+        session.saveClientId(data.body.client_id);
         callback(err, data.body);
       } else {
         callback(new Error('Could not renew session'));
@@ -794,8 +797,11 @@ session$1 = {
     };
     callbackQueue.push(callback);
     if (queueCount === 0) {
-      if (SGN$5.config.get('coreSessionToken') == null) {
-        session$1.create(complete);
+      if (SGN$4.config.get('coreSessionToken') == null) {
+        session.create(complete);
+      } else if (renewed === false) {
+        renewed = true;
+        session.renew(complete);
       } else {
         complete();
       }
@@ -806,23 +812,23 @@ session$1 = {
   }
 };
 
-var session_1 = session$1;
+var session_1 = session;
 
 var request$4;
-var session;
+var session$1;
 
 request$4 = request_1;
 
-session = session_1;
+session$1 = session_1;
 
 var core$2 = {
   request: request$4,
-  session: session
+  session: session$1
 };
 
-var SGN$7;
+var SGN$6;
 
-SGN$7 = sgn;
+SGN$6 = sgn;
 
 var fileUpload = function fileUpload() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -833,7 +839,7 @@ var fileUpload = function fileUpload() {
   if (options.file == null) {
     throw new Error('File is not defined');
   }
-  url = SGN$7.config.get('assetsFileUploadUrl');
+  url = SGN$6.config.get('assetsFileUploadUrl');
   formData = {
     file: options.file
   };
@@ -848,7 +854,7 @@ var fileUpload = function fileUpload() {
     };
   }
   timeout = 1000 * 60 * 60;
-  SGN$7.request({
+  SGN$6.request({
     method: 'post',
     url: url,
     headers: {
@@ -859,14 +865,14 @@ var fileUpload = function fileUpload() {
     timeout: timeout
   }, function (err, data) {
     if (err != null) {
-      callback(SGN$7.util.error(new Error('Request error'), {
+      callback(SGN$6.util.error(new Error('Request error'), {
         code: 'RequestError'
       }));
     } else {
       if (data.statusCode === 200) {
         callback(null, JSON.parse(data.body));
       } else {
-        callback(SGN$7.util.error(new Error('Request error'), {
+        callback(SGN$6.util.error(new Error('Request error'), {
           code: 'RequestError',
           statusCode: data.statusCode
         }));
@@ -887,20 +893,20 @@ var assets = {
   fileUpload: fileUpload
 };
 
-var SGN;
+var SGN$7;
 
-SGN = sgn;
+SGN$7 = sgn;
 
-SGN.request = node$2;
+SGN$7.request = node;
 
 // Expose the different kits.
-SGN.GraphKit = graph;
+SGN$7.GraphKit = graph;
 
-SGN.CoreKit = core$2;
+SGN$7.CoreKit = core$2;
 
-SGN.AssetsKit = assets;
+SGN$7.AssetsKit = assets;
 
-var node = SGN;
+var node$2 = SGN$7;
 
-export default node;
+export default node$2;
 //# sourceMappingURL=sgn-sdk.es.js.map

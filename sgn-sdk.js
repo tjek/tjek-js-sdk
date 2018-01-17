@@ -109,13 +109,13 @@ var createClass = function () {
   };
 }();
 
-var Config$1;
+var Config;
 var MicroEvent;
 var indexOf = [].indexOf;
 
 MicroEvent = microevent;
 
-Config$1 = Config$1 = function () {
+Config = Config = function () {
   var Config = function () {
     function Config() {
       classCallCheck(this, Config);
@@ -156,9 +156,9 @@ Config$1 = Config$1 = function () {
   return Config;
 }();
 
-MicroEvent.mixin(Config$1);
+MicroEvent.mixin(Config);
 
-var config$2 = Config$1;
+var config = Config;
 
 var mustache = createCommonjsModule(function (module, exports) {
   /*!
@@ -779,7 +779,7 @@ pairs = {
   'paged_publication.hotspot_picker.header': 'Which offer did you mean?'
 };
 
-var translations$1 = {
+var translations = {
   t: function t(key, view) {
     var ref, template;
     template = (ref = pairs[key]) != null ? ref : '';
@@ -794,7 +794,7 @@ var translations$1 = {
   }
 };
 
-var browser$2 = createCommonjsModule(function (module) {
+var browser = createCommonjsModule(function (module) {
     // shim for using process in browser
     var process = module.exports = {};
 
@@ -983,16 +983,16 @@ var browser$2 = createCommonjsModule(function (module) {
 });
 
 var process;
-var util$1;
+var util;
 
-process = browser$2;
+process = browser;
 
-util$1 = {
+util = {
   isBrowser: function isBrowser() {
     return typeof process !== 'undefined' && process.browser;
   },
   isNode: function isNode() {
-    return !util$1.isBrowser();
+    return !util.isBrowser();
   },
   error: function error(err, options) {
     var key, value;
@@ -1078,7 +1078,7 @@ util$1 = {
     return btoa;
   }(function (str) {
     var buffer;
-    if (util$1.isBrowser()) {
+    if (util.isBrowser()) {
       return btoa(str);
     } else {
       buffer = null;
@@ -1236,23 +1236,23 @@ util$1 = {
   }
 };
 
-var util_1 = util$1;
+var util_1 = util;
 
-var Config;
-var config$1;
-var translations;
-var util;
+var Config$1;
+var config$2;
+var translations$2;
+var util$1;
 
-Config = config$2;
+Config$1 = config;
 
-translations = translations$1;
+translations$2 = translations;
 
-util = util_1;
+util$1 = util_1;
 
-config$1 = new Config();
+config$2 = new Config$1();
 
 // Set default values.
-config$1.set({
+config$2.set({
   locale: 'en_US',
   coreUrl: 'https://api.etilbudsavis.dk',
   graphUrl: 'https://graph.service.shopgun.com',
@@ -1262,9 +1262,9 @@ config$1.set({
 });
 
 var core = {
-  config: config$1,
-  translations: translations,
-  util: util
+  config: config$2,
+  translations: translations$2,
+  util: util$1
 };
 
 var sgn = core;
@@ -1299,17 +1299,17 @@ var clientLocal = {
   }
 };
 
-var SGN$3;
+var SGN$2;
 var prefixKey$1;
 
-SGN$3 = sgn;
+SGN$2 = sgn;
 
 prefixKey$1 = 'sgn-';
 
 var clientCookie = {
   get: function get(key) {
     var c, ca, ct, err, i, len, name, value;
-    if (SGN$3.util.isNode()) {
+    if (SGN$2.util.isNode()) {
       return;
     }
     try {
@@ -1330,7 +1330,7 @@ var clientCookie = {
   },
   set: function set(key, value) {
     var date, days, err, str;
-    if (SGN$3.util.isNode()) {
+    if (SGN$2.util.isNode()) {
       return;
     }
     try {
@@ -1345,11 +1345,11 @@ var clientCookie = {
   }
 };
 
-var SGN$4;
+var SGN$3;
 
-SGN$4 = sgn;
+SGN$3 = sgn;
 
-var browser$4 = function browser() {
+var browser$2 = function browser() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments[1];
   var progressCallback = arguments[2];
@@ -1360,7 +1360,7 @@ var browser$4 = function browser() {
   url = options.url;
   headers = (ref1 = options.headers) != null ? ref1 : {};
   if (options.qs != null) {
-    queryParams = SGN$4.util.formatQueryParams(options.qs);
+    queryParams = SGN$3.util.formatQueryParams(options.qs);
     if (url.indexOf('?') === -1) {
       url += '?' + queryParams;
     } else {
@@ -1434,9 +1434,9 @@ var browser$4 = function browser() {
 
 var auth = {};
 
-var SGN$5;
+var SGN$4;
 
-SGN$5 = sgn;
+SGN$4 = sgn;
 
 var fileUpload = function fileUpload() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -1447,7 +1447,7 @@ var fileUpload = function fileUpload() {
   if (options.file == null) {
     throw new Error('File is not defined');
   }
-  url = SGN$5.config.get('assetsFileUploadUrl');
+  url = SGN$4.config.get('assetsFileUploadUrl');
   formData = {
     file: options.file
   };
@@ -1462,7 +1462,7 @@ var fileUpload = function fileUpload() {
     };
   }
   timeout = 1000 * 60 * 60;
-  SGN$5.request({
+  SGN$4.request({
     method: 'post',
     url: url,
     headers: {
@@ -1473,14 +1473,14 @@ var fileUpload = function fileUpload() {
     timeout: timeout
   }, function (err, data) {
     if (err != null) {
-      callback(SGN$5.util.error(new Error('Request error'), {
+      callback(SGN$4.util.error(new Error('Request error'), {
         code: 'RequestError'
       }));
     } else {
       if (data.statusCode === 200) {
         callback(null, JSON.parse(data.body));
       } else {
-        callback(SGN$5.util.error(new Error('Request error'), {
+        callback(SGN$4.util.error(new Error('Request error'), {
           code: 'RequestError',
           statusCode: data.statusCode
         }));
@@ -1501,13 +1501,13 @@ var assets = {
   fileUpload: fileUpload
 };
 
-var SGN$6;
+var SGN$5;
 var Tracker;
 var clientLocalStorage;
 var getPool;
 var pool;
 
-SGN$6 = sgn;
+SGN$5 = sgn;
 
 clientLocalStorage = clientLocal;
 
@@ -1545,11 +1545,11 @@ var tracker = Tracker = function () {
       }
       this.dispatching = false;
       this.session = {
-        id: SGN$6.util.uuid()
+        id: SGN$5.util.uuid()
       };
       this.client = {
         trackId: this.trackId,
-        id: SGN$6.client.id
+        id: SGN$5.client.id
       };
       this.view = {
         path: [],
@@ -1571,13 +1571,13 @@ var tracker = Tracker = function () {
         var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '1.0.0';
 
         if (typeof type !== 'string') {
-          throw SGN$6.util.error(new Error('Event type is required'));
+          throw SGN$5.util.error(new Error('Event type is required'));
         }
         if (this.trackId == null) {
           return;
         }
         pool.push({
-          id: SGN$6.util.uuid(),
+          id: SGN$5.util.uuid(),
           type: type,
           version: version,
           recordedAt: new Date().toISOString(),
@@ -1658,14 +1658,14 @@ var tracker = Tracker = function () {
       key: 'getContext',
       value: function getContext() {
         var application, campaign, context, loc, os, ref, ref1, screenDimensions;
-        screenDimensions = SGN$6.util.getScreenDimensions();
-        os = SGN$6.util.getOS();
+        screenDimensions = SGN$5.util.getScreenDimensions();
+        os = SGN$5.util.getOS();
         context = {
           userAgent: window.navigator.userAgent,
           locale: navigator.language,
           timeZone: {
-            utcOffsetSeconds: SGN$6.util.getUtcOffsetSeconds(),
-            utcDstOffsetSeconds: SGN$6.util.getUtcDstOffsetSeconds()
+            utcOffsetSeconds: SGN$5.util.getUtcOffsetSeconds(),
+            utcDstOffsetSeconds: SGN$5.util.getUtcDstOffsetSeconds()
           },
           device: {
             screen: {
@@ -1685,11 +1685,11 @@ var tracker = Tracker = function () {
           build: this.application.build
         };
         campaign = {
-          source: SGN$6.util.getQueryParam('utm_source'),
-          medium: SGN$6.util.getQueryParam('utm_medium'),
-          name: SGN$6.util.getQueryParam('utm_campaign'),
-          term: SGN$6.util.getQueryParam('utm_term'),
-          content: SGN$6.util.getQueryParam('utm_content')
+          source: SGN$5.util.getQueryParam('utm_source'),
+          medium: SGN$5.util.getQueryParam('utm_medium'),
+          name: SGN$5.util.getQueryParam('utm_campaign'),
+          term: SGN$5.util.getQueryParam('utm_term'),
+          content: SGN$5.util.getQueryParam('utm_content')
         };
         loc = {
           determinedAt: this.location.determinedAt,
@@ -1806,7 +1806,7 @@ var tracker = Tracker = function () {
 
         var http, payload, url;
         http = new XMLHttpRequest();
-        url = SGN$6.config.get('eventsTrackUrl');
+        url = SGN$5.config.get('eventsTrackUrl');
         payload = {
           events: events.map(function (event) {
             event.sentAt = new Date().toISOString();
@@ -1822,14 +1822,14 @@ var tracker = Tracker = function () {
             try {
               callback(null, JSON.parse(http.responseText));
             } catch (error) {
-              callback(SGN$6.util.error(new Error('Could not parse JSON')));
+              callback(SGN$5.util.error(new Error('Could not parse JSON')));
             }
           } else {
-            callback(SGN$6.util.error(new Error('Server did not accept request')));
+            callback(SGN$5.util.error(new Error('Server did not accept request')));
           }
         };
         http.onerror = function () {
-          callback(SGN$6.util.error(new Error('Could not perform network request')));
+          callback(SGN$5.util.error(new Error('Could not perform network request')));
         };
         http.send(JSON.stringify(payload));
         return this;
@@ -1922,10 +1922,10 @@ var events = {
   Pulse: pulse
 };
 
-var SGN$7;
+var SGN$6;
 var parseCookies;
 
-SGN$7 = sgn;
+SGN$6 = sgn;
 
 parseCookies = function parseCookies() {
   var cookies = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -1948,10 +1948,10 @@ var request = function request() {
   var callback = arguments[1];
 
   var appKey, authToken, authTokenCookieName, timeout, url;
-  url = SGN$7.config.get('graphUrl');
+  url = SGN$6.config.get('graphUrl');
   timeout = 1000 * 12;
-  appKey = SGN$7.config.get('appKey');
-  authToken = SGN$7.config.get('authToken');
+  appKey = SGN$6.config.get('appKey');
+  authToken = SGN$6.config.get('authToken');
   authTokenCookieName = 'shopgun-auth-token';
   options = {
     method: 'post',
@@ -1967,37 +1967,37 @@ var request = function request() {
   };
   if (appKey != null) {
     // Apply authorization header when app key is provided to avoid rate limiting.
-    options.headers.Authorization = 'Basic ' + SGN$7.util.btoa('app-key:' + appKey);
+    options.headers.Authorization = 'Basic ' + SGN$6.util.btoa('app-key:' + appKey);
   }
   // Set cookies manually in node.js.
-  if (SGN$7.util.isNode() && authToken != null) {
+  if (SGN$6.util.isNode() && authToken != null) {
     options.cookies = [{
       key: authTokenCookieName,
       value: authToken,
       url: url
     }];
-  } else if (SGN$7.util.isBrowser()) {
+  } else if (SGN$6.util.isBrowser()) {
     options.useCookies = true;
   }
-  SGN$7.request(options, function (err, data) {
+  SGN$6.request(options, function (err, data) {
     var authCookie, cookies, ref;
     if (err != null) {
-      callback(SGN$7.util.error(new Error('Graph request error'), {
+      callback(SGN$6.util.error(new Error('Graph request error'), {
         code: 'GraphRequestError'
       }));
     } else {
       // Update auth token as it might have changed.
-      if (SGN$7.util.isNode()) {
+      if (SGN$6.util.isNode()) {
         cookies = parseCookies((ref = data.headers) != null ? ref['set-cookie'] : void 0);
         authCookie = cookies[authTokenCookieName];
-        if (SGN$7.config.get('authToken') !== authCookie) {
-          SGN$7.config.set('authToken', authCookie);
+        if (SGN$6.config.get('authToken') !== authCookie) {
+          SGN$6.config.set('authToken', authCookie);
         }
       }
       if (data.statusCode === 200) {
         callback(null, data.body);
       } else {
-        callback(SGN$7.util.error(new Error('Graph API error'), {
+        callback(SGN$6.util.error(new Error('Graph API error'), {
           code: 'GraphAPIError',
           statusCode: data.statusCode
         }));
@@ -2010,33 +2010,33 @@ var graph = {
   request: request
 };
 
-var SGN$9;
+var SGN$7;
 var _request;
 
-SGN$9 = sgn;
+SGN$7 = sgn;
 
 _request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
   var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
-  SGN$9.CoreKit.session.ensure(function (err) {
+  SGN$7.CoreKit.session.ensure(function (err) {
     var appSecret, appVersion, clientId, geo, headers, locale, qs, ref, ref1, ref2, token, url;
     if (err != null) {
       return callback(err);
     }
     url = (ref = options.url) != null ? ref : '';
     headers = (ref1 = options.headers) != null ? ref1 : {};
-    token = SGN$9.config.get('coreSessionToken');
-    clientId = SGN$9.config.get('coreSessionClientId');
-    appVersion = SGN$9.config.get('appVersion');
-    appSecret = SGN$9.config.get('appSecret');
-    locale = SGN$9.config.get('locale');
+    token = SGN$7.config.get('coreSessionToken');
+    clientId = SGN$7.config.get('coreSessionClientId');
+    appVersion = SGN$7.config.get('appVersion');
+    appSecret = SGN$7.config.get('appSecret');
+    locale = SGN$7.config.get('locale');
     qs = (ref2 = options.qs) != null ? ref2 : {};
     geo = options.geolocation;
     headers['X-Token'] = token;
     if (appSecret != null) {
-      headers['X-Signature'] = SGN$9.CoreKit.session.sign(appSecret, token);
+      headers['X-Signature'] = SGN$7.CoreKit.session.sign(appSecret, token);
     }
     if (locale != null) {
       qs.r_locale = locale;
@@ -2061,9 +2061,9 @@ _request = function request() {
         qs.r_sensor = geo.sensor;
       }
     }
-    return SGN$9.request({
+    return SGN$7.request({
       method: options.method,
-      url: SGN$9.config.get('coreUrl') + url,
+      url: SGN$7.config.get('coreUrl') + url,
       qs: qs,
       body: options.body,
       formData: options.formData,
@@ -2073,25 +2073,25 @@ _request = function request() {
     }, function (err, data) {
       var ref3, responseToken;
       if (err != null) {
-        callback(SGN$9.util.error(new Error('Core request error'), {
+        callback(SGN$7.util.error(new Error('Core request error'), {
           code: 'CoreRequestError'
         }));
       } else {
-        token = SGN$9.config.get('coreSessionToken');
+        token = SGN$7.config.get('coreSessionToken');
         responseToken = data.headers['x-token'];
         if (responseToken && token !== responseToken) {
-          SGN$9.CoreKit.session.saveToken(responseToken);
+          SGN$7.CoreKit.session.saveToken(responseToken);
         }
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
           callback(null, data.body);
         } else {
           if (runs === 0 && data.body != null && ((ref3 = data.body.code) === 1101 || ref3 === 1107 || ref3 === 1108)) {
-            SGN$9.config.set({
+            SGN$7.config.set({
               coreSessionToken: void 0
             });
             _request(options, callback, ++runs);
           } else {
-            callback(SGN$9.util.error(new Error('Core API error'), {
+            callback(SGN$7.util.error(new Error('Core API error'), {
               code: 'CoreAPIError',
               statusCode: data.statusCode
             }), data.body);
@@ -2184,7 +2184,7 @@ var convertString = createCommonjsModule(function (module) {
   }(commonjsGlobal);
 });
 
-var sha256$1 = createCommonjsModule(function (module) {
+var sha256 = createCommonjsModule(function (module) {
   !function (globals) {
     var _imports = {};
 
@@ -2338,58 +2338,61 @@ var sha256$1 = createCommonjsModule(function (module) {
   }(commonjsGlobal);
 });
 
-var SGN$10;
+var SGN$8;
 var callbackQueue;
 var clientCookieStorage;
-var session$2;
-var sha256;
+var renewed;
+var session;
+var sha256$2;
 
-SGN$10 = sgn;
+SGN$8 = sgn;
 
-sha256 = sha256$1;
+sha256$2 = sha256;
 
 clientCookieStorage = clientCookie;
 
 callbackQueue = [];
 
-session$2 = {
+renewed = false;
+
+session = {
   ttl: 1 * 60 * 60 * 24 * 60,
   saveToken: function saveToken(token) {
     if (!token) {
       throw new Error('No token provided for saving');
     }
-    SGN$10.config.set({
+    SGN$8.config.set({
       coreSessionToken: token
     });
-    session$2.saveCookie();
+    session.saveCookie();
   },
   saveClientId: function saveClientId(clientId) {
-    SGN$10.config.set({
+    SGN$8.config.set({
       coreSessionClientId: clientId
     });
-    session$2.saveCookie();
+    session.saveCookie();
   },
   saveCookie: function saveCookie() {
     clientCookieStorage.set('session', {
-      token: SGN$10.config.get('coreSessionToken'),
-      client_id: SGN$10.config.get('coreSessionClientId')
+      token: SGN$8.config.get('coreSessionToken'),
+      client_id: SGN$8.config.get('coreSessionClientId')
     });
   },
   create: function create(callback) {
-    SGN$10.request({
+    SGN$8.request({
       method: 'post',
-      url: SGN$10.config.get('coreUrl') + '/v2/sessions',
+      url: SGN$8.config.get('coreUrl') + '/v2/sessions',
       json: true,
       qs: {
-        api_key: SGN$10.config.get('appKey'),
-        token_ttl: session$2.ttl
+        api_key: SGN$8.config.get('appKey'),
+        token_ttl: session.ttl
       }
     }, function (err, data) {
       if (err != null) {
         callback(err);
       } else if (data.statusCode === 201) {
-        session$2.saveToken(data.body.token);
-        session$2.saveClientId(data.body.client_id);
+        session.saveToken(data.body.token);
+        session.saveClientId(data.body.client_id);
         callback(err, data.body);
       } else {
         callback(new Error('Could not create session'));
@@ -2399,22 +2402,22 @@ session$2 = {
   update: function update(callback) {
     var appSecret, headers, token;
     headers = {};
-    token = SGN$10.config.get('coreSessionToken');
-    appSecret = SGN$10.config.get('appSecret');
+    token = SGN$8.config.get('coreSessionToken');
+    appSecret = SGN$8.config.get('appSecret');
     headers['X-Token'] = token;
     if (appSecret != null) {
-      headers['X-Signature'] = session$2.sign(appSecret, token);
+      headers['X-Signature'] = session.sign(appSecret, token);
     }
-    SGN$10.request({
-      url: SGN$10.config.get('coreUrl') + '/v2/sessions',
+    SGN$8.request({
+      url: SGN$8.config.get('coreUrl') + '/v2/sessions',
       headers: headers,
       json: true
     }, function (err, data) {
       if (err != null) {
         callback(err);
       } else if (data.statusCode === 200) {
-        session$2.saveToken(data.body.token);
-        session$2.saveClientId(data.body.client_id);
+        session.saveToken(data.body.token);
+        session.saveClientId(data.body.client_id);
         callback(err, data.body);
       } else {
         callback(new Error('Could not update session'));
@@ -2424,23 +2427,23 @@ session$2 = {
   renew: function renew(callback) {
     var appSecret, headers, token;
     headers = {};
-    token = SGN$10.config.get('coreSessionToken');
-    appSecret = SGN$10.config.get('appSecret');
+    token = SGN$8.config.get('coreSessionToken');
+    appSecret = SGN$8.config.get('appSecret');
     headers['X-Token'] = token;
     if (appSecret != null) {
-      headers['X-Signature'] = session$2.sign(appSecret, token);
+      headers['X-Signature'] = session.sign(appSecret, token);
     }
-    SGN$10.request({
+    SGN$8.request({
       method: 'put',
-      url: SGN$10.config.get('coreUrl') + '/v2/sessions',
+      url: SGN$8.config.get('coreUrl') + '/v2/sessions',
       headers: headers,
       json: true
     }, function (err, data) {
       if (err != null) {
         callback(err);
       } else if (data.statusCode === 200) {
-        session$2.saveToken(data.body.token);
-        session$2.saveClientId(data.body.client_id);
+        session.saveToken(data.body.token);
+        session.saveClientId(data.body.client_id);
         callback(err, data.body);
       } else {
         callback(new Error('Could not renew session'));
@@ -2458,19 +2461,22 @@ session$2 = {
     };
     callbackQueue.push(callback);
     if (queueCount === 0) {
-      if (SGN$10.config.get('coreSessionToken') == null) {
-        session$2.create(complete);
+      if (SGN$8.config.get('coreSessionToken') == null) {
+        session.create(complete);
+      } else if (renewed === false) {
+        renewed = true;
+        session.renew(complete);
       } else {
         complete();
       }
     }
   },
   sign: function sign(appSecret, token) {
-    return sha256([appSecret, token].join(''));
+    return sha256$2([appSecret, token].join(''));
   }
 };
 
-var session_1 = session$2;
+var session_1 = session;
 
 var request$2;
 var session$1;
@@ -2484,13 +2490,13 @@ var core$2 = {
   session: session$1
 };
 
-var MicroEvent$5;
+var MicroEvent$2;
 var PagedPublicationPageSpread;
-var SGN$14;
+var SGN$10;
 
-MicroEvent$5 = microevent;
+MicroEvent$2 = microevent;
 
-SGN$14 = sgn;
+SGN$10 = sgn;
 
 PagedPublicationPageSpread = function () {
   function PagedPublicationPageSpread() {
@@ -2563,7 +2569,7 @@ PagedPublicationPageSpread = function () {
         el.appendChild(pageEl);
         loaderEl.className = 'sgn-pp-page__loader';
         loaderEl.innerHTML = '<span>' + page.label + '</span>';
-        SGN$14.util.loadImage(image, function (err, width, height) {
+        SGN$10.util.loadImage(image, function (err, width, height) {
           var isComplete;
           if (err == null) {
             isComplete = ++imageLoads === pageCount;
@@ -2610,11 +2616,11 @@ PagedPublicationPageSpread = function () {
       pageEls.forEach(function (pageEl) {
         var id, image, page;
         id = pageEl.getAttribute('data-id');
-        page = SGN$14.util.find(pages, function (page) {
+        page = SGN$10.util.find(pages, function (page) {
           return page.id === id;
         });
         image = page.images.large;
-        SGN$14.util.loadImage(image, function (err) {
+        SGN$10.util.loadImage(image, function (err) {
           if (err == null && _this2.el.getAttribute('data-active') === 'true') {
             pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
             pageEl.style.backgroundImage = 'url(' + image + ')';
@@ -2636,20 +2642,20 @@ PagedPublicationPageSpread = function () {
   return PagedPublicationPageSpread;
 }();
 
-MicroEvent$5.mixin(PagedPublicationPageSpread);
+MicroEvent$2.mixin(PagedPublicationPageSpread);
 
 var pageSpread = PagedPublicationPageSpread;
 
-var MicroEvent$4;
+var MicroEvent$3;
 var PageSpread;
 var PagedPublicationPageSpreads;
-var SGN$13;
+var SGN$11;
 
-MicroEvent$4 = microevent;
+MicroEvent$3 = microevent;
 
 PageSpread = pageSpread;
 
-SGN$13 = sgn;
+SGN$11 = sgn;
 
 PagedPublicationPageSpreads = function () {
   function PagedPublicationPageSpreads(options) {
@@ -2696,7 +2702,7 @@ PagedPublicationPageSpreads = function () {
       } else {
         firstPage = pages.shift();
         lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-        midstPageSpreads = SGN$13.util.chunk(pages, 2);
+        midstPageSpreads = SGN$11.util.chunk(pages, 2);
         if (firstPage != null) {
           pageSpreads.push([firstPage]);
         }
@@ -2734,7 +2740,7 @@ PagedPublicationPageSpreads = function () {
   return PagedPublicationPageSpreads;
 }();
 
-MicroEvent$4.mixin(PagedPublicationPageSpreads);
+MicroEvent$3.mixin(PagedPublicationPageSpreads);
 
 var pageSpreads = PagedPublicationPageSpreads;
 
@@ -2757,63 +2763,101 @@ var verso = createCommonjsModule(function (module, exports) {
                 s(r[o]);
             }return s;
         }({ 1: [function (_dereq_, module, exports) {
+                var _createClass = function () {
+                    function defineProperties(target, props) {
+                        for (var i = 0; i < props.length; i++) {
+                            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+                        }
+                    }return function (Constructor, protoProps, staticProps) {
+                        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+                    };
+                }();
+
+                function _classCallCheck(instance, Constructor) {
+                    if (!(instance instanceof Constructor)) {
+                        throw new TypeError("Cannot call a class as a function");
+                    }
+                }
+
                 var Animation;
 
                 module.exports = Animation = function () {
                     function Animation(el) {
+                        _classCallCheck(this, Animation);
+
                         this.el = el;
                         this.run = 0;
                         return;
                     }
 
-                    Animation.prototype.animate = function (options, callback) {
-                        var duration, easing, ref, ref1, ref2, ref3, ref4, run, scale, transform, transitionEnd, x, y;
-                        if (options == null) {
-                            options = {};
-                        }
-                        if (callback == null) {
-                            callback = function callback() {};
-                        }
-                        x = (ref = options.x) != null ? ref : 0;
-                        y = (ref1 = options.y) != null ? ref1 : 0;
-                        scale = (ref2 = options.scale) != null ? ref2 : 1;
-                        easing = (ref3 = options.easing) != null ? ref3 : 'ease-out';
-                        duration = (ref4 = options.duration) != null ? ref4 : 0;
-                        run = ++this.run;
-                        transform = "translate3d(" + x + ", " + y + ", 0px) scale3d(" + scale + ", " + scale + ", 1)";
-                        if (this.el.style.transform === transform) {
-                            callback();
-                        } else if (duration > 0) {
-                            transitionEnd = function (_this) {
-                                return function () {
+                    _createClass(Animation, [{
+                        key: 'animate',
+                        value: function animate() {
+                            var _this = this;
+
+                            var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+                            var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+                            var duration, easing, ref, ref1, ref2, ref3, ref4, run, scale, transform, _transitionEnd, x, y;
+                            x = (ref = options.x) != null ? ref : 0;
+                            y = (ref1 = options.y) != null ? ref1 : 0;
+                            scale = (ref2 = options.scale) != null ? ref2 : 1;
+                            easing = (ref3 = options.easing) != null ? ref3 : 'ease-out';
+                            duration = (ref4 = options.duration) != null ? ref4 : 0;
+                            run = ++this.run;
+                            transform = 'translate3d(' + x + ', ' + y + ', 0px) scale3d(' + scale + ', ' + scale + ', 1)';
+                            if (this.el.style.transform === transform) {
+                                callback();
+                            } else if (duration > 0) {
+                                _transitionEnd = function transitionEnd() {
                                     if (run !== _this.run) {
                                         return;
                                     }
-                                    _this.el.removeEventListener('transitionend', transitionEnd);
+                                    _this.el.removeEventListener('transitionend', _transitionEnd);
                                     _this.el.style.transition = 'none';
                                     callback();
                                 };
-                            }(this);
-                            this.el.addEventListener('transitionend', transitionEnd, false);
-                            this.el.style.transition = "transform " + easing + " " + duration + "ms";
-                            this.el.style.transform = transform;
-                        } else {
-                            this.el.style.transition = 'none';
-                            this.el.style.transform = transform;
-                            callback();
+                                this.el.addEventListener('transitionend', _transitionEnd, false);
+                                this.el.style.transition = 'transform ' + easing + ' ' + duration + 'ms';
+                                this.el.style.transform = transform;
+                            } else {
+                                this.el.style.transition = 'none';
+                                this.el.style.transform = transform;
+                                callback();
+                            }
+                            return this;
                         }
-                        return this;
-                    };
+                    }]);
 
                     return Animation;
                 }();
             }, {}], 2: [function (_dereq_, module, exports) {
+                var _createClass = function () {
+                    function defineProperties(target, props) {
+                        for (var i = 0; i < props.length; i++) {
+                            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+                        }
+                    }return function (Constructor, protoProps, staticProps) {
+                        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+                    };
+                }();
+
+                function _classCallCheck(instance, Constructor) {
+                    if (!(instance instanceof Constructor)) {
+                        throw new TypeError("Cannot call a class as a function");
+                    }
+                }
+
                 var PageSpread;
 
                 module.exports = PageSpread = function () {
-                    function PageSpread(el, options) {
+                    function PageSpread(el) {
+                        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+                        _classCallCheck(this, PageSpread);
+
                         this.el = el;
-                        this.options = options != null ? options : {};
+                        this.options = options;
                         this.visibility = 'gone';
                         this.positioned = false;
                         this.active = false;
@@ -2826,135 +2870,171 @@ var verso = createCommonjsModule(function (module, exports) {
                         return;
                     }
 
-                    PageSpread.prototype.isZoomable = function () {
-                        return this.getMaxZoomScale() > 1 && this.getEl().getAttribute('data-zoomable') !== 'false';
-                    };
-
-                    PageSpread.prototype.isScrollable = function () {
-                        return this.getEl().classList.contains('verso--scrollable');
-                    };
-
-                    PageSpread.prototype.getEl = function () {
-                        return this.el;
-                    };
-
-                    PageSpread.prototype.getOverlayEls = function () {
-                        return this.getEl().querySelectorAll('.verso__overlay');
-                    };
-
-                    PageSpread.prototype.getPageEls = function () {
-                        return this.getEl().querySelectorAll('.verso__page');
-                    };
-
-                    PageSpread.prototype.getRect = function () {
-                        return this.getEl().getBoundingClientRect();
-                    };
-
-                    PageSpread.prototype.getContentRect = function () {
-                        var boundingClientRect, i, len, offsetLeft, offsetLeftDelta, offsetTop, offsetTopDelta, pageEl, pageRect, rect, ref, ref1, ref2, ref3, ref4;
-                        rect = {
-                            top: null,
-                            left: null,
-                            right: null,
-                            bottom: null,
-                            width: null,
-                            height: null
-                        };
-                        ref = this.getPageEls();
-                        for (i = 0, len = ref.length; i < len; i++) {
-                            pageEl = ref[i];
-                            boundingClientRect = pageEl.getBoundingClientRect();
-                            offsetTop = pageEl.offsetTop;
-                            offsetLeft = pageEl.offsetLeft;
-                            offsetTopDelta = offsetTop - boundingClientRect.top;
-                            offsetLeftDelta = offsetLeft - boundingClientRect.left;
-                            pageRect = {
-                                top: boundingClientRect.top + offsetTopDelta,
-                                left: boundingClientRect.left + offsetLeftDelta,
-                                right: boundingClientRect.right + offsetLeftDelta,
-                                bottom: boundingClientRect.bottom + offsetTopDelta,
-                                width: boundingClientRect.width,
-                                height: boundingClientRect.height
+                    _createClass(PageSpread, [{
+                        key: 'isZoomable',
+                        value: function isZoomable() {
+                            return this.getMaxZoomScale() > 1 && this.getEl().getAttribute('data-zoomable') !== 'false';
+                        }
+                    }, {
+                        key: 'isScrollable',
+                        value: function isScrollable() {
+                            return this.getEl().classList.contains('verso--scrollable');
+                        }
+                    }, {
+                        key: 'getEl',
+                        value: function getEl() {
+                            return this.el;
+                        }
+                    }, {
+                        key: 'getOverlayEls',
+                        value: function getOverlayEls() {
+                            return this.getEl().querySelectorAll('.verso__overlay');
+                        }
+                    }, {
+                        key: 'getPageEls',
+                        value: function getPageEls() {
+                            return this.getEl().querySelectorAll('.verso__page');
+                        }
+                    }, {
+                        key: 'getRect',
+                        value: function getRect() {
+                            return this.getEl().getBoundingClientRect();
+                        }
+                    }, {
+                        key: 'getContentRect',
+                        value: function getContentRect() {
+                            var boundingClientRect, i, len, offsetLeft, offsetLeftDelta, offsetTop, offsetTopDelta, pageEl, pageRect, rect, ref, ref1, ref2, ref3, ref4;
+                            rect = {
+                                top: null,
+                                left: null,
+                                right: null,
+                                bottom: null,
+                                width: null,
+                                height: null
                             };
-                            if (pageRect.top < rect.top || rect.top == null) {
-                                rect.top = pageRect.top;
+                            ref = this.getPageEls();
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                pageEl = ref[i];
+                                boundingClientRect = pageEl.getBoundingClientRect();
+                                offsetTop = pageEl.offsetTop;
+                                offsetLeft = pageEl.offsetLeft;
+                                offsetTopDelta = offsetTop - boundingClientRect.top;
+                                offsetLeftDelta = offsetLeft - boundingClientRect.left;
+                                pageRect = {
+                                    top: boundingClientRect.top + offsetTopDelta,
+                                    left: boundingClientRect.left + offsetLeftDelta,
+                                    right: boundingClientRect.right + offsetLeftDelta,
+                                    bottom: boundingClientRect.bottom + offsetTopDelta,
+                                    width: boundingClientRect.width,
+                                    height: boundingClientRect.height
+                                };
+                                if (pageRect.top < rect.top || rect.top == null) {
+                                    rect.top = pageRect.top;
+                                }
+                                if (pageRect.left < rect.left || rect.left == null) {
+                                    rect.left = pageRect.left;
+                                }
+                                if (pageRect.right > rect.right || rect.right == null) {
+                                    rect.right = pageRect.right;
+                                }
+                                if (pageRect.bottom > rect.bottom || rect.bottom == null) {
+                                    rect.bottom = pageRect.bottom;
+                                }
                             }
-                            if (pageRect.left < rect.left || rect.left == null) {
-                                rect.left = pageRect.left;
-                            }
-                            if (pageRect.right > rect.right || rect.right == null) {
-                                rect.right = pageRect.right;
-                            }
-                            if (pageRect.bottom > rect.bottom || rect.bottom == null) {
-                                rect.bottom = pageRect.bottom;
-                            }
+                            rect.top = (ref1 = rect.top) != null ? ref1 : 0;
+                            rect.left = (ref2 = rect.left) != null ? ref2 : 0;
+                            rect.right = (ref3 = rect.right) != null ? ref3 : 0;
+                            rect.bottom = (ref4 = rect.bottom) != null ? ref4 : 0;
+                            rect.width = rect.right - rect.left;
+                            rect.height = rect.bottom - rect.top;
+                            return rect;
                         }
-                        rect.top = (ref1 = rect.top) != null ? ref1 : 0;
-                        rect.left = (ref2 = rect.left) != null ? ref2 : 0;
-                        rect.right = (ref3 = rect.right) != null ? ref3 : 0;
-                        rect.bottom = (ref4 = rect.bottom) != null ? ref4 : 0;
-                        rect.width = rect.right - rect.left;
-                        rect.height = rect.bottom - rect.top;
-                        return rect;
-                    };
-
-                    PageSpread.prototype.getId = function () {
-                        return this.id;
-                    };
-
-                    PageSpread.prototype.getType = function () {
-                        return this.type;
-                    };
-
-                    PageSpread.prototype.getPageIds = function () {
-                        return this.pageIds;
-                    };
-
-                    PageSpread.prototype.getWidth = function () {
-                        return this.width;
-                    };
-
-                    PageSpread.prototype.getLeft = function () {
-                        return this.left;
-                    };
-
-                    PageSpread.prototype.getMaxZoomScale = function () {
-                        return this.maxZoomScale;
-                    };
-
-                    PageSpread.prototype.getVisibility = function () {
-                        return this.visibility;
-                    };
-
-                    PageSpread.prototype.setVisibility = function (visibility) {
-                        if (this.visibility !== visibility) {
-                            this.getEl().style.display = visibility === 'visible' ? 'block' : 'none';
-                            this.visibility = visibility;
+                    }, {
+                        key: 'getId',
+                        value: function getId() {
+                            return this.id;
                         }
-                        return this;
-                    };
-
-                    PageSpread.prototype.position = function () {
-                        if (this.positioned === false) {
-                            this.getEl().style.left = this.getLeft() + "%";
-                            this.positioned = true;
+                    }, {
+                        key: 'getType',
+                        value: function getType() {
+                            return this.type;
                         }
-                        return this;
-                    };
-
-                    PageSpread.prototype.activate = function () {
-                        this.active = true;
-                        this.getEl().setAttribute('data-active', this.active);
-                    };
-
-                    PageSpread.prototype.deactivate = function () {
-                        this.active = false;
-                        this.getEl().setAttribute('data-active', this.active);
-                    };
+                    }, {
+                        key: 'getPageIds',
+                        value: function getPageIds() {
+                            return this.pageIds;
+                        }
+                    }, {
+                        key: 'getWidth',
+                        value: function getWidth() {
+                            return this.width;
+                        }
+                    }, {
+                        key: 'getLeft',
+                        value: function getLeft() {
+                            return this.left;
+                        }
+                    }, {
+                        key: 'getMaxZoomScale',
+                        value: function getMaxZoomScale() {
+                            return this.maxZoomScale;
+                        }
+                    }, {
+                        key: 'getVisibility',
+                        value: function getVisibility() {
+                            return this.visibility;
+                        }
+                    }, {
+                        key: 'setVisibility',
+                        value: function setVisibility(visibility) {
+                            if (this.visibility !== visibility) {
+                                this.getEl().style.display = visibility === 'visible' ? 'block' : 'none';
+                                this.visibility = visibility;
+                            }
+                            return this;
+                        }
+                    }, {
+                        key: 'position',
+                        value: function position() {
+                            if (this.positioned === false) {
+                                this.getEl().style.left = this.getLeft() + '%';
+                                this.positioned = true;
+                            }
+                            return this;
+                        }
+                    }, {
+                        key: 'activate',
+                        value: function activate() {
+                            this.active = true;
+                            this.getEl().setAttribute('data-active', this.active);
+                        }
+                    }, {
+                        key: 'deactivate',
+                        value: function deactivate() {
+                            this.active = false;
+                            this.getEl().setAttribute('data-active', this.active);
+                        }
+                    }]);
 
                     return PageSpread;
                 }();
             }, {}], 3: [function (_dereq_, module, exports) {
+                var _createClass = function () {
+                    function defineProperties(target, props) {
+                        for (var i = 0; i < props.length; i++) {
+                            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+                        }
+                    }return function (Constructor, protoProps, staticProps) {
+                        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+                    };
+                }();
+
+                function _classCallCheck(instance, Constructor) {
+                    if (!(instance instanceof Constructor)) {
+                        throw new TypeError("Cannot call a class as a function");
+                    }
+                }
+
                 var Animation, Hammer, MicroEvent, PageSpread, Verso;
 
                 Hammer = _dereq_('hammerjs');
@@ -2966,10 +3046,14 @@ var verso = createCommonjsModule(function (module, exports) {
                 Animation = _dereq_('./animation');
 
                 Verso = function () {
-                    function Verso(el1, options1) {
+                    function Verso(el1) {
+                        var options1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+                        _classCallCheck(this, Verso);
+
                         var ref, ref1, ref2, ref3, ref4, ref5;
                         this.el = el1;
-                        this.options = options1 != null ? options1 : {};
+                        this.options = options1;
                         this.swipeVelocity = (ref = this.options.swipeVelocity) != null ? ref : 0.3;
                         this.swipeThreshold = (ref1 = this.options.swipeThreshold) != null ? ref1 : 10;
                         this.navigationDuration = (ref2 = this.options.navigationDuration) != null ? ref2 : 240;
@@ -3029,92 +3113,100 @@ var verso = createCommonjsModule(function (module, exports) {
                         return;
                     }
 
-                    Verso.prototype.start = function () {
-                        var pageId, ref;
-                        pageId = (ref = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? ref : 0;
-                        this.hammer.set({
-                            enable: true
-                        });
-                        this.navigateTo(pageId, {
-                            duration: 0
-                        });
-                        this.resizeListener = this.onResize.bind(this);
-                        this.touchStartListener = this.onTouchStart.bind(this);
-                        this.touchEndListener = this.onTouchEnd.bind(this);
-                        this.el.addEventListener('touchstart', this.touchStartListener, false);
-                        this.el.addEventListener('touchend', this.touchEndListener, false);
-                        window.addEventListener('resize', this.resizeListener, false);
-                        return this;
-                    };
-
-                    Verso.prototype.destroy = function () {
-                        this.hammer.destroy();
-                        this.el.removeEventListener('touchstart', this.touchStartListener);
-                        this.el.removeEventListener('touchend', this.touchEndListener);
-                        window.removeEventListener('resize', this.resizeListener);
-                        return this;
-                    };
-
-                    Verso.prototype.first = function (options) {
-                        return this.navigateTo(0, options);
-                    };
-
-                    Verso.prototype.prev = function (options) {
-                        return this.navigateTo(this.getPosition() - 1, options);
-                    };
-
-                    Verso.prototype.next = function (options) {
-                        return this.navigateTo(this.getPosition() + 1, options);
-                    };
-
-                    Verso.prototype.last = function (options) {
-                        return this.navigateTo(this.getPageSpreadCount() - 1, options);
-                    };
-
-                    Verso.prototype.navigateTo = function (position, options) {
-                        var activePageSpread, carousel, currentPageSpread, currentPosition, duration, ref, ref1, touchAction, velocity;
-                        if (options == null) {
-                            options = {};
-                        }
-                        if (position < 0 || position > this.getPageSpreadCount() - 1) {
-                            return;
-                        }
-                        currentPosition = this.getPosition();
-                        currentPageSpread = this.getPageSpreadFromPosition(currentPosition);
-                        activePageSpread = this.getPageSpreadFromPosition(position);
-                        carousel = this.getCarouselFromPageSpread(activePageSpread);
-                        velocity = (ref = options.velocity) != null ? ref : 1;
-                        duration = (ref1 = options.duration) != null ? ref1 : this.navigationDuration;
-                        duration = duration / Math.abs(velocity);
-                        touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
-                        if (currentPageSpread != null) {
-                            currentPageSpread.deactivate();
-                        }
-                        activePageSpread.activate();
-                        carousel.visible.forEach(function (pageSpread) {
-                            return pageSpread.position().setVisibility('visible');
-                        });
-                        this.hammer.set({
-                            touchAction: touchAction
-                        });
-                        this.transform.left = this.getLeftTransformFromPageSpread(position, activePageSpread);
-                        this.setPosition(position);
-                        if (this.transform.scale > 1) {
-                            this.transform.top = 0;
-                            this.transform.scale = 1;
-                            this.trigger('zoomedOut', {
-                                position: currentPosition
+                    _createClass(Verso, [{
+                        key: 'start',
+                        value: function start() {
+                            var pageId, ref;
+                            pageId = (ref = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? ref : 0;
+                            this.hammer.set({
+                                enable: true
                             });
+                            this.navigateTo(pageId, {
+                                duration: 0
+                            });
+                            this.resizeListener = this.onResize.bind(this);
+                            this.touchStartListener = this.onTouchStart.bind(this);
+                            this.touchEndListener = this.onTouchEnd.bind(this);
+                            this.el.addEventListener('touchstart', this.touchStartListener, false);
+                            this.el.addEventListener('touchend', this.touchEndListener, false);
+                            window.addEventListener('resize', this.resizeListener, false);
+                            return this;
                         }
-                        this.trigger('beforeNavigation', {
-                            currentPosition: currentPosition,
-                            newPosition: position
-                        });
-                        this.animation.animate({
-                            x: this.transform.left + "%",
-                            duration: duration
-                        }, function (_this) {
-                            return function () {
+                    }, {
+                        key: 'destroy',
+                        value: function destroy() {
+                            this.hammer.destroy();
+                            this.el.removeEventListener('touchstart', this.touchStartListener);
+                            this.el.removeEventListener('touchend', this.touchEndListener);
+                            window.removeEventListener('resize', this.resizeListener);
+                            return this;
+                        }
+                    }, {
+                        key: 'first',
+                        value: function first(options) {
+                            return this.navigateTo(0, options);
+                        }
+                    }, {
+                        key: 'prev',
+                        value: function prev(options) {
+                            return this.navigateTo(this.getPosition() - 1, options);
+                        }
+                    }, {
+                        key: 'next',
+                        value: function next(options) {
+                            return this.navigateTo(this.getPosition() + 1, options);
+                        }
+                    }, {
+                        key: 'last',
+                        value: function last(options) {
+                            return this.navigateTo(this.getPageSpreadCount() - 1, options);
+                        }
+                    }, {
+                        key: 'navigateTo',
+                        value: function navigateTo(position) {
+                            var _this = this;
+
+                            var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+                            var activePageSpread, carousel, currentPageSpread, currentPosition, duration, ref, ref1, touchAction, velocity;
+                            if (position < 0 || position > this.getPageSpreadCount() - 1) {
+                                return;
+                            }
+                            currentPosition = this.getPosition();
+                            currentPageSpread = this.getPageSpreadFromPosition(currentPosition);
+                            activePageSpread = this.getPageSpreadFromPosition(position);
+                            carousel = this.getCarouselFromPageSpread(activePageSpread);
+                            velocity = (ref = options.velocity) != null ? ref : 1;
+                            duration = (ref1 = options.duration) != null ? ref1 : this.navigationDuration;
+                            duration = duration / Math.abs(velocity);
+                            touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
+                            if (currentPageSpread != null) {
+                                currentPageSpread.deactivate();
+                            }
+                            activePageSpread.activate();
+                            carousel.visible.forEach(function (pageSpread) {
+                                return pageSpread.position().setVisibility('visible');
+                            });
+                            this.hammer.set({
+                                touchAction: touchAction
+                            });
+                            this.transform.left = this.getLeftTransformFromPageSpread(position, activePageSpread);
+                            this.setPosition(position);
+                            if (this.transform.scale > 1) {
+                                this.transform.top = 0;
+                                this.transform.scale = 1;
+                                this.trigger('zoomedOut', {
+                                    position: currentPosition
+                                });
+                            }
+                            this.trigger('beforeNavigation', {
+                                currentPosition: currentPosition,
+                                newPosition: position
+                            });
+                            this.animation.animate({
+                                x: this.transform.left + '%',
+                                duration: duration
+                            }, function () {
                                 carousel = _this.getCarouselFromPageSpread(_this.getActivePageSpread());
                                 carousel.gone.forEach(function (pageSpread) {
                                     return pageSpread.setVisibility('gone');
@@ -3123,472 +3215,508 @@ var verso = createCommonjsModule(function (module, exports) {
                                     newPosition: _this.getPosition(),
                                     previousPosition: currentPosition
                                 });
+                            });
+                        }
+                    }, {
+                        key: 'getPosition',
+                        value: function getPosition() {
+                            return this.position;
+                        }
+                    }, {
+                        key: 'setPosition',
+                        value: function setPosition(position) {
+                            this.position = position;
+                            return this;
+                        }
+                    }, {
+                        key: 'getLeftTransformFromPageSpread',
+                        value: function getLeftTransformFromPageSpread(position, pageSpread) {
+                            var left;
+                            left = 0;
+                            if (position === this.getPageSpreadCount() - 1) {
+                                left = 100 - pageSpread.getWidth() - pageSpread.getLeft();
+                            } else if (position > 0) {
+                                left = (100 - pageSpread.getWidth()) / 2 - pageSpread.getLeft();
+                            }
+                            return left;
+                        }
+                    }, {
+                        key: 'getCarouselFromPageSpread',
+                        value: function getCarouselFromPageSpread(pageSpreadSubject) {
+                            var carousel;
+                            carousel = {
+                                visible: [],
+                                gone: []
                             };
-                        }(this));
-                    };
-
-                    Verso.prototype.getPosition = function () {
-                        return this.position;
-                    };
-
-                    Verso.prototype.setPosition = function (position) {
-                        this.position = position;
-                        return this;
-                    };
-
-                    Verso.prototype.getLeftTransformFromPageSpread = function (position, pageSpread) {
-                        var left;
-                        left = 0;
-                        if (position === this.getPageSpreadCount() - 1) {
-                            left = 100 - pageSpread.getWidth() - pageSpread.getLeft();
-                        } else if (position > 0) {
-                            left = (100 - pageSpread.getWidth()) / 2 - pageSpread.getLeft();
-                        }
-                        return left;
-                    };
-
-                    Verso.prototype.getCarouselFromPageSpread = function (pageSpreadSubject) {
-                        var carousel;
-                        carousel = {
-                            visible: [],
-                            gone: []
-                        };
-                        this.pageSpreads.forEach(function (pageSpread) {
-                            var visible;
-                            visible = false;
-                            if (pageSpread.getLeft() <= pageSpreadSubject.getLeft()) {
-                                if (pageSpread.getLeft() + pageSpread.getWidth() > pageSpreadSubject.getLeft() - 100) {
-                                    visible = true;
-                                }
-                            } else {
-                                if (pageSpread.getLeft() - pageSpread.getWidth() < pageSpreadSubject.getLeft() + 100) {
-                                    visible = true;
-                                }
-                            }
-                            if (visible === true) {
-                                carousel.visible.push(pageSpread);
-                            } else {
-                                carousel.gone.push(pageSpread);
-                            }
-                        });
-                        return carousel;
-                    };
-
-                    Verso.prototype.traversePageSpreads = function (els) {
-                        var el, id, j, left, len, maxZoomScale, pageIds, pageSpread, pageSpreads, type, width;
-                        pageSpreads = [];
-                        left = 0;
-                        for (j = 0, len = els.length; j < len; j++) {
-                            el = els[j];
-                            id = el.getAttribute('data-id');
-                            type = el.getAttribute('data-type');
-                            pageIds = el.getAttribute('data-page-ids');
-                            pageIds = pageIds != null ? pageIds.split(',').map(function (i) {
-                                return i;
-                            }) : [];
-                            maxZoomScale = el.getAttribute('data-max-zoom-scale');
-                            maxZoomScale = maxZoomScale != null ? +maxZoomScale : 1;
-                            width = el.getAttribute('data-width');
-                            width = width != null ? +width : 100;
-                            pageSpread = new PageSpread(el, {
-                                id: id,
-                                type: type,
-                                pageIds: pageIds,
-                                maxZoomScale: maxZoomScale,
-                                width: width,
-                                left: left
-                            });
-                            left += width;
-                            pageSpreads.push(pageSpread);
-                        }
-                        return pageSpreads;
-                    };
-
-                    Verso.prototype.buildPageIds = function (pageSpreads) {
-                        var pageIds;
-                        pageIds = {};
-                        pageSpreads.forEach(function (pageSpread, i) {
-                            pageSpread.options.pageIds.forEach(function (pageId) {
-                                pageIds[pageId] = pageSpread;
-                            });
-                        });
-                        return pageIds;
-                    };
-
-                    Verso.prototype.isCoordinateInsideElement = function (x, y, el) {
-                        var rect;
-                        rect = el.getBoundingClientRect();
-                        return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-                    };
-
-                    Verso.prototype.getCoordinateInfo = function (x, y, pageSpread) {
-                        var contentRect, info, j, k, len, len1, overlayEl, overlayEls, pageEl, pageEls;
-                        x -= this.el.offsetLeft;
-                        y -= this.el.offsetTop;
-                        info = {
-                            x: x,
-                            y: y,
-                            contentX: 0,
-                            contentY: 0,
-                            pageX: 0,
-                            pageY: 0,
-                            overlayEls: [],
-                            pageEl: null,
-                            isInsideContentX: false,
-                            isInsideContentY: false,
-                            isInsideContent: false
-                        };
-                        contentRect = pageSpread.getContentRect();
-                        overlayEls = pageSpread.getOverlayEls();
-                        pageEls = pageSpread.getPageEls();
-                        for (j = 0, len = overlayEls.length; j < len; j++) {
-                            overlayEl = overlayEls[j];
-                            if (this.isCoordinateInsideElement(x, y, overlayEl)) {
-                                info.overlayEls.push(overlayEl);
-                            }
-                        }
-                        for (k = 0, len1 = pageEls.length; k < len1; k++) {
-                            pageEl = pageEls[k];
-                            if (this.isCoordinateInsideElement(x, y, pageEl)) {
-                                info.pageEl = pageEl;
-                                break;
-                            }
-                        }
-                        info.contentX = (x - contentRect.left) / Math.max(1, contentRect.width);
-                        info.contentY = (y - contentRect.top) / Math.max(1, contentRect.height);
-                        if (info.pageEl != null) {
-                            info.isInsideContentX = info.contentX >= 0 && info.contentX <= 1;
-                            info.isInsideContentY = info.contentY >= 0 && info.contentY <= 1;
-                            info.isInsideContent = info.isInsideContentX && info.isInsideContentY;
-                        }
-                        return info;
-                    };
-
-                    Verso.prototype.getPageSpreadCount = function () {
-                        return this.pageSpreads.length;
-                    };
-
-                    Verso.prototype.getActivePageSpread = function () {
-                        return this.getPageSpreadFromPosition(this.getPosition());
-                    };
-
-                    Verso.prototype.getPageSpreadFromPosition = function (position) {
-                        return this.pageSpreads[position];
-                    };
-
-                    Verso.prototype.getPageSpreadPositionFromPageId = function (pageId) {
-                        var idx, j, len, pageSpread, ref;
-                        ref = this.pageSpreads;
-                        for (idx = j = 0, len = ref.length; j < len; idx = ++j) {
-                            pageSpread = ref[idx];
-                            if (pageSpread.options.pageIds.indexOf(pageId) > -1) {
-                                return idx;
-                            }
-                        }
-                    };
-
-                    Verso.prototype.getPageSpreadBounds = function (pageSpread) {
-                        var pageSpreadContentRect, pageSpreadRect;
-                        pageSpreadRect = pageSpread.getRect();
-                        pageSpreadContentRect = pageSpread.getContentRect();
-                        return {
-                            left: (pageSpreadContentRect.left - pageSpreadRect.left) / pageSpreadRect.width * 100,
-                            top: (pageSpreadContentRect.top - pageSpreadRect.top) / pageSpreadRect.height * 100,
-                            width: pageSpreadContentRect.width / pageSpreadRect.width * 100,
-                            height: pageSpreadContentRect.height / pageSpreadRect.height * 100,
-                            pageSpreadRect: pageSpreadRect,
-                            pageSpreadContentRect: pageSpreadContentRect
-                        };
-                    };
-
-                    Verso.prototype.clipCoordinate = function (coordinate, scale, size, offset) {
-                        if (size * scale < 100) {
-                            coordinate = offset * -scale + 50 - size * scale / 2;
-                        } else {
-                            coordinate = Math.min(coordinate, offset * -scale);
-                            coordinate = Math.max(coordinate, offset * -scale - size * scale + 100);
-                        }
-                        return coordinate;
-                    };
-
-                    Verso.prototype.zoomTo = function (options, callback) {
-                        var activePageSpread, carouselOffset, carouselScaledOffset, curScale, pageSpreadBounds, ref, ref1, scale, x, y;
-                        if (options == null) {
-                            options = {};
-                        }
-                        scale = options.scale;
-                        curScale = this.transform.scale;
-                        activePageSpread = this.getActivePageSpread();
-                        pageSpreadBounds = this.getPageSpreadBounds(activePageSpread);
-                        carouselOffset = activePageSpread.getLeft();
-                        carouselScaledOffset = carouselOffset * curScale;
-                        x = (ref = options.x) != null ? ref : 0;
-                        y = (ref1 = options.y) != null ? ref1 : 0;
-                        if (scale !== 1) {
-                            x -= pageSpreadBounds.pageSpreadRect.left;
-                            y -= pageSpreadBounds.pageSpreadRect.top;
-                            x = x / (pageSpreadBounds.pageSpreadRect.width / curScale) * 100;
-                            y = y / (pageSpreadBounds.pageSpreadRect.height / curScale) * 100;
-                            x = this.transform.left + carouselScaledOffset + x - x * scale / curScale;
-                            y = this.transform.top + y - y * scale / curScale;
-                            if (options.bounds !== false && scale > 1) {
-                                x = this.clipCoordinate(x, scale, pageSpreadBounds.width, pageSpreadBounds.left);
-                                y = this.clipCoordinate(y, scale, pageSpreadBounds.height, pageSpreadBounds.top);
-                            }
-                        } else {
-                            x = 0;
-                            y = 0;
-                        }
-                        x -= carouselOffset * scale;
-                        this.transform.left = x;
-                        this.transform.top = y;
-                        this.transform.scale = scale;
-                        this.animation.animate({
-                            x: x + "%",
-                            y: y + "%",
-                            scale: scale,
-                            easing: options.easing,
-                            duration: options.duration
-                        }, callback);
-                    };
-
-                    Verso.prototype.refresh = function () {
-                        this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
-                        this.pageSpreads = this.traversePageSpreads(this.pageSpreadEls);
-                        this.pageIds = this.buildPageIds(this.pageSpreads);
-                        return this;
-                    };
-
-                    Verso.prototype.getHammerInputClass = function () {
-                        var mobileRegex, supportTouch;
-                        mobileRegex = /mobile|tablet|ip(ad|hone|od)|android/i;
-                        supportTouch = 'ontouchstart' in window;
-                        if (supportTouch && mobileRegex.test(navigator.userAgent)) {
-                            return Hammer.TouchInput;
-                        } else {
-                            return null;
-                        }
-                    };
-
-                    /* Events */
-
-                    Verso.prototype.onPanStart = function (e) {
-                        var edgeThreshold, width, x;
-                        if (this.transform.scale > 1 || e.direction === Hammer.DIRECTION_LEFT || e.direction === Hammer.DIRECTION_RIGHT) {
-                            x = e.center.x;
-                            edgeThreshold = 30;
-                            width = this.scrollerEl.offsetWidth;
-                            if (x > edgeThreshold && x < width - edgeThreshold) {
-                                this.startTransform.left = this.transform.left;
-                                this.startTransform.top = this.transform.top;
-                                this.panning = true;
-                                this.trigger('panStart');
-                            }
-                        }
-                    };
-
-                    Verso.prototype.onPanMove = function (e) {
-                        var activePageSpread, carouselOffset, carouselScaledOffset, pageSpreadBounds, scale, x, y;
-                        if (this.pinching === true || this.panning === false) {
-                            return;
-                        }
-                        if (this.transform.scale > 1) {
-                            activePageSpread = this.getActivePageSpread();
-                            carouselOffset = activePageSpread.getLeft();
-                            carouselScaledOffset = carouselOffset * this.transform.scale;
-                            pageSpreadBounds = this.getPageSpreadBounds(activePageSpread);
-                            scale = this.transform.scale;
-                            x = this.startTransform.left + carouselScaledOffset + e.deltaX / this.scrollerEl.offsetWidth * 100;
-                            y = this.startTransform.top + e.deltaY / this.scrollerEl.offsetHeight * 100;
-                            x = this.clipCoordinate(x, scale, pageSpreadBounds.width, pageSpreadBounds.left);
-                            y = this.clipCoordinate(y, scale, pageSpreadBounds.height, pageSpreadBounds.top);
-                            x -= carouselScaledOffset;
-                            this.transform.left = x;
-                            this.transform.top = y;
-                            this.animation.animate({
-                                x: x + "%",
-                                y: y + "%",
-                                scale: scale,
-                                easing: 'linear'
-                            });
-                        } else {
-                            x = this.transform.left + e.deltaX / this.scrollerEl.offsetWidth * 100;
-                            this.animation.animate({
-                                x: x + "%",
-                                easing: 'linear'
-                            });
-                        }
-                    };
-
-                    Verso.prototype.onPanEnd = function (e) {
-                        var position, velocity;
-                        if (this.panning === false) {
-                            return;
-                        }
-                        this.panning = false;
-                        this.trigger('panEnd');
-                        if (this.transform.scale === 1 && this.pinching === false) {
-                            position = this.getPosition();
-                            velocity = e.overallVelocityX;
-                            if (Math.abs(velocity) >= this.swipeVelocity) {
-                                if (Math.abs(e.deltaX) >= this.swipeThreshold) {
-                                    if (e.offsetDirection === Hammer.DIRECTION_LEFT) {
-                                        this.next({
-                                            velocity: velocity,
-                                            duration: this.navigationPanDuration
-                                        });
-                                    } else if (e.offsetDirection === Hammer.DIRECTION_RIGHT) {
-                                        this.prev({
-                                            velocity: velocity,
-                                            duration: this.navigationPanDuration
-                                        });
+                            // Identify the page spreads that should be a part of the carousel.
+                            this.pageSpreads.forEach(function (pageSpread) {
+                                var visible;
+                                visible = false;
+                                if (pageSpread.getLeft() <= pageSpreadSubject.getLeft()) {
+                                    if (pageSpread.getLeft() + pageSpread.getWidth() > pageSpreadSubject.getLeft() - 100) {
+                                        visible = true;
+                                    }
+                                } else {
+                                    if (pageSpread.getLeft() - pageSpread.getWidth() < pageSpreadSubject.getLeft() + 100) {
+                                        visible = true;
                                     }
                                 }
-                            }
-                            if (position === this.getPosition()) {
-                                this.animation.animate({
-                                    x: this.transform.left + "%",
-                                    duration: this.navigationPanDuration
-                                });
-                                this.trigger('attemptedNavigation', {
-                                    position: this.getPosition()
-                                });
-                            }
-                        }
-                    };
-
-                    Verso.prototype.onPinchStart = function (e) {
-                        if (!this.getActivePageSpread().isZoomable()) {
-                            return;
-                        }
-                        this.pinching = true;
-                        this.el.setAttribute('data-pinching', true);
-                        this.startTransform.scale = this.transform.scale;
-                    };
-
-                    Verso.prototype.onPinchMove = function (e) {
-                        if (this.pinching === false) {
-                            return;
-                        }
-                        this.zoomTo({
-                            x: e.center.x,
-                            y: e.center.y,
-                            scale: this.startTransform.scale * e.scale,
-                            bounds: false,
-                            easing: 'linear'
-                        });
-                    };
-
-                    Verso.prototype.onPinchEnd = function (e) {
-                        var activePageSpread, maxZoomScale, position, scale;
-                        if (this.pinching === false) {
-                            return;
-                        }
-                        activePageSpread = this.getActivePageSpread();
-                        maxZoomScale = activePageSpread.getMaxZoomScale();
-                        scale = Math.max(1, Math.min(this.transform.scale, maxZoomScale));
-                        position = this.getPosition();
-                        if (this.startTransform.scale === 1 && scale > 1) {
-                            this.trigger('zoomedIn', {
-                                position: position
+                                if (visible === true) {
+                                    carousel.visible.push(pageSpread);
+                                } else {
+                                    carousel.gone.push(pageSpread);
+                                }
                             });
-                        } else if (this.startTransform.scale > 1 && scale === 1) {
-                            this.trigger('zoomedOut', {
-                                position: position
-                            });
+                            return carousel;
                         }
-                        this.zoomTo({
-                            x: e.center.x,
-                            y: e.center.y,
-                            scale: scale,
-                            duration: this.zoomDuration
-                        }, function (_this) {
-                            return function () {
-                                _this.pinching = false;
-                                _this.el.setAttribute('data-pinching', false);
+                    }, {
+                        key: 'traversePageSpreads',
+                        value: function traversePageSpreads(els) {
+                            var el, id, j, left, len, maxZoomScale, pageIds, pageSpread, pageSpreads, type, width;
+                            pageSpreads = [];
+                            left = 0;
+                            for (j = 0, len = els.length; j < len; j++) {
+                                el = els[j];
+                                id = el.getAttribute('data-id');
+                                type = el.getAttribute('data-type');
+                                pageIds = el.getAttribute('data-page-ids');
+                                pageIds = pageIds != null ? pageIds.split(',').map(function (i) {
+                                    return i;
+                                }) : [];
+                                maxZoomScale = el.getAttribute('data-max-zoom-scale');
+                                maxZoomScale = maxZoomScale != null ? +maxZoomScale : 1;
+                                width = el.getAttribute('data-width');
+                                width = width != null ? +width : 100;
+                                pageSpread = new PageSpread(el, {
+                                    id: id,
+                                    type: type,
+                                    pageIds: pageIds,
+                                    maxZoomScale: maxZoomScale,
+                                    width: width,
+                                    left: left
+                                });
+                                left += width;
+                                pageSpreads.push(pageSpread);
+                            }
+                            return pageSpreads;
+                        }
+                    }, {
+                        key: 'buildPageIds',
+                        value: function buildPageIds(pageSpreads) {
+                            var pageIds;
+                            pageIds = {};
+                            pageSpreads.forEach(function (pageSpread, i) {
+                                pageSpread.options.pageIds.forEach(function (pageId) {
+                                    pageIds[pageId] = pageSpread;
+                                });
+                            });
+                            return pageIds;
+                        }
+                    }, {
+                        key: 'isCoordinateInsideElement',
+                        value: function isCoordinateInsideElement(x, y, el) {
+                            var rect;
+                            rect = el.getBoundingClientRect();
+                            return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+                        }
+                    }, {
+                        key: 'getCoordinateInfo',
+                        value: function getCoordinateInfo(x, y, pageSpread) {
+                            var contentRect, info, j, k, len, len1, overlayEl, overlayEls, pageEl, pageEls;
+                            x -= this.el.offsetLeft;
+                            y -= this.el.offsetTop;
+                            info = {
+                                x: x,
+                                y: y,
+                                contentX: 0,
+                                contentY: 0,
+                                pageX: 0,
+                                pageY: 0,
+                                overlayEls: [],
+                                pageEl: null,
+                                isInsideContentX: false,
+                                isInsideContentY: false,
+                                isInsideContent: false
                             };
-                        }(this));
-                    };
+                            contentRect = pageSpread.getContentRect();
+                            overlayEls = pageSpread.getOverlayEls();
+                            pageEls = pageSpread.getPageEls();
+                            for (j = 0, len = overlayEls.length; j < len; j++) {
+                                overlayEl = overlayEls[j];
+                                if (this.isCoordinateInsideElement(x, y, overlayEl)) {
+                                    info.overlayEls.push(overlayEl);
+                                }
+                            }
+                            for (k = 0, len1 = pageEls.length; k < len1; k++) {
+                                pageEl = pageEls[k];
+                                if (this.isCoordinateInsideElement(x, y, pageEl)) {
+                                    info.pageEl = pageEl;
+                                    break;
+                                }
+                            }
+                            info.contentX = (x - contentRect.left) / Math.max(1, contentRect.width);
+                            info.contentY = (y - contentRect.top) / Math.max(1, contentRect.height);
+                            if (info.pageEl != null) {
+                                info.isInsideContentX = info.contentX >= 0 && info.contentX <= 1;
+                                info.isInsideContentY = info.contentY >= 0 && info.contentY <= 1;
+                                info.isInsideContent = info.isInsideContentX && info.isInsideContentY;
+                            }
+                            return info;
+                        }
+                    }, {
+                        key: 'getPageSpreadCount',
+                        value: function getPageSpreadCount() {
+                            return this.pageSpreads.length;
+                        }
+                    }, {
+                        key: 'getActivePageSpread',
+                        value: function getActivePageSpread() {
+                            return this.getPageSpreadFromPosition(this.getPosition());
+                        }
+                    }, {
+                        key: 'getPageSpreadFromPosition',
+                        value: function getPageSpreadFromPosition(position) {
+                            return this.pageSpreads[position];
+                        }
+                    }, {
+                        key: 'getPageSpreadPositionFromPageId',
+                        value: function getPageSpreadPositionFromPageId(pageId) {
+                            var idx, j, len, pageSpread, ref;
+                            ref = this.pageSpreads;
+                            for (idx = j = 0, len = ref.length; j < len; idx = ++j) {
+                                pageSpread = ref[idx];
+                                if (pageSpread.options.pageIds.indexOf(pageId) > -1) {
+                                    return idx;
+                                }
+                            }
+                        }
+                    }, {
+                        key: 'getPageSpreadBounds',
+                        value: function getPageSpreadBounds(pageSpread) {
+                            var pageSpreadContentRect, pageSpreadRect;
+                            pageSpreadRect = pageSpread.getRect();
+                            pageSpreadContentRect = pageSpread.getContentRect();
+                            return {
+                                left: (pageSpreadContentRect.left - pageSpreadRect.left) / pageSpreadRect.width * 100,
+                                top: (pageSpreadContentRect.top - pageSpreadRect.top) / pageSpreadRect.height * 100,
+                                width: pageSpreadContentRect.width / pageSpreadRect.width * 100,
+                                height: pageSpreadContentRect.height / pageSpreadRect.height * 100,
+                                pageSpreadRect: pageSpreadRect,
+                                pageSpreadContentRect: pageSpreadContentRect
+                            };
+                        }
+                    }, {
+                        key: 'clipCoordinate',
+                        value: function clipCoordinate(coordinate, scale, size, offset) {
+                            if (size * scale < 100) {
+                                coordinate = offset * -scale + 50 - size * scale / 2;
+                            } else {
+                                coordinate = Math.min(coordinate, offset * -scale);
+                                coordinate = Math.max(coordinate, offset * -scale - size * scale + 100);
+                            }
+                            return coordinate;
+                        }
+                    }, {
+                        key: 'zoomTo',
+                        value: function zoomTo() {
+                            var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+                            var callback = arguments[1];
 
-                    Verso.prototype.onPress = function (e) {
-                        this.trigger('pressed', this.getCoordinateInfo(e.center.x, e.center.y, this.getActivePageSpread()));
-                    };
+                            var activePageSpread, carouselOffset, carouselScaledOffset, curScale, pageSpreadBounds, ref, ref1, scale, x, y;
+                            scale = options.scale;
+                            curScale = this.transform.scale;
+                            activePageSpread = this.getActivePageSpread();
+                            pageSpreadBounds = this.getPageSpreadBounds(activePageSpread);
+                            carouselOffset = activePageSpread.getLeft();
+                            carouselScaledOffset = carouselOffset * curScale;
+                            x = (ref = options.x) != null ? ref : 0;
+                            y = (ref1 = options.y) != null ? ref1 : 0;
+                            if (scale !== 1) {
+                                x -= pageSpreadBounds.pageSpreadRect.left;
+                                y -= pageSpreadBounds.pageSpreadRect.top;
+                                x = x / (pageSpreadBounds.pageSpreadRect.width / curScale) * 100;
+                                y = y / (pageSpreadBounds.pageSpreadRect.height / curScale) * 100;
+                                x = this.transform.left + carouselScaledOffset + x - x * scale / curScale;
+                                y = this.transform.top + y - y * scale / curScale;
+                                // Make sure the animation doesn't exceed the content bounds.
+                                if (options.bounds !== false && scale > 1) {
+                                    x = this.clipCoordinate(x, scale, pageSpreadBounds.width, pageSpreadBounds.left);
+                                    y = this.clipCoordinate(y, scale, pageSpreadBounds.height, pageSpreadBounds.top);
+                                }
+                            } else {
+                                x = 0;
+                                y = 0;
+                            }
+                            // Account for the page spreads left of the active one.
+                            x -= carouselOffset * scale;
+                            this.transform.left = x;
+                            this.transform.top = y;
+                            this.transform.scale = scale;
+                            this.animation.animate({
+                                x: x + '%',
+                                y: y + '%',
+                                scale: scale,
+                                easing: options.easing,
+                                duration: options.duration
+                            }, callback);
+                        }
+                    }, {
+                        key: 'refresh',
+                        value: function refresh() {
+                            this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
+                            this.pageSpreads = this.traversePageSpreads(this.pageSpreadEls);
+                            this.pageIds = this.buildPageIds(this.pageSpreads);
+                            return this;
+                        }
+                    }, {
+                        key: 'getHammerInputClass',
+                        value: function getHammerInputClass() {
+                            var mobileRegex, supportTouch;
+                            mobileRegex = /mobile|tablet|ip(ad|hone|od)|android/i;
+                            supportTouch = 'ontouchstart' in window;
+                            if (supportTouch && mobileRegex.test(navigator.userAgent)) {
+                                return Hammer.TouchInput;
+                            } else {
+                                return null;
+                            }
+                        }
 
-                    Verso.prototype.onContextmenu = function (e) {
-                        e.preventDefault();
-                        this.trigger('contextmenu', this.getCoordinateInfo(e.clientX, e.clientY, this.getActivePageSpread()));
-                        return false;
-                    };
+                        //#############
+                        /* Events */
+                        //#############
 
-                    Verso.prototype.onSingletap = function (e) {
-                        var activePageSpread, coordinateInfo, maxZoomScale, position, scale, zoomEvent, zoomedIn;
-                        activePageSpread = this.getActivePageSpread();
-                        coordinateInfo = this.getCoordinateInfo(e.center.x, e.center.y, activePageSpread);
-                        clearTimeout(this.tap.timeout);
-                        if (this.tap.count === 1) {
-                            this.tap.count = 0;
-                            this.trigger('doubleClicked', coordinateInfo);
-                            if (activePageSpread.isZoomable()) {
-                                maxZoomScale = activePageSpread.getMaxZoomScale();
-                                zoomedIn = this.transform.scale > 1;
-                                scale = zoomedIn ? 1 : maxZoomScale;
-                                zoomEvent = zoomedIn ? 'zoomedOut' : 'zoomedIn';
-                                position = this.getPosition();
-                                this.zoomTo({
-                                    x: e.center.x,
-                                    y: e.center.y,
+                    }, {
+                        key: 'onPanStart',
+                        value: function onPanStart(e) {
+                            var edgeThreshold, width, x;
+                            // Only allow panning if zoomed in or doing a horizontal pan.
+                            // This ensures vertical scrolling works for scrollable page spreads.
+                            if (this.transform.scale > 1 || e.direction === Hammer.DIRECTION_LEFT || e.direction === Hammer.DIRECTION_RIGHT) {
+                                x = e.center.x;
+                                edgeThreshold = 30;
+                                width = this.scrollerEl.offsetWidth;
+                                // Prevent panning when edge-swiping on iOS.
+                                if (x > edgeThreshold && x < width - edgeThreshold) {
+                                    this.startTransform.left = this.transform.left;
+                                    this.startTransform.top = this.transform.top;
+                                    this.panning = true;
+                                    this.trigger('panStart');
+                                }
+                            }
+                        }
+                    }, {
+                        key: 'onPanMove',
+                        value: function onPanMove(e) {
+                            var activePageSpread, carouselOffset, carouselScaledOffset, pageSpreadBounds, scale, x, y;
+                            if (this.pinching === true || this.panning === false) {
+                                return;
+                            }
+                            if (this.transform.scale > 1) {
+                                activePageSpread = this.getActivePageSpread();
+                                carouselOffset = activePageSpread.getLeft();
+                                carouselScaledOffset = carouselOffset * this.transform.scale;
+                                pageSpreadBounds = this.getPageSpreadBounds(activePageSpread);
+                                scale = this.transform.scale;
+                                x = this.startTransform.left + carouselScaledOffset + e.deltaX / this.scrollerEl.offsetWidth * 100;
+                                y = this.startTransform.top + e.deltaY / this.scrollerEl.offsetHeight * 100;
+                                x = this.clipCoordinate(x, scale, pageSpreadBounds.width, pageSpreadBounds.left);
+                                y = this.clipCoordinate(y, scale, pageSpreadBounds.height, pageSpreadBounds.top);
+                                x -= carouselScaledOffset;
+                                this.transform.left = x;
+                                this.transform.top = y;
+                                this.animation.animate({
+                                    x: x + '%',
+                                    y: y + '%',
                                     scale: scale,
-                                    duration: this.zoomDuration
-                                }, function (_this) {
-                                    return function () {
-                                        _this.trigger(zoomEvent, {
+                                    easing: 'linear'
+                                });
+                            } else {
+                                x = this.transform.left + e.deltaX / this.scrollerEl.offsetWidth * 100;
+                                this.animation.animate({
+                                    x: x + '%',
+                                    easing: 'linear'
+                                });
+                            }
+                        }
+                    }, {
+                        key: 'onPanEnd',
+                        value: function onPanEnd(e) {
+                            var position, velocity;
+                            if (this.panning === false) {
+                                return;
+                            }
+                            this.panning = false;
+                            this.trigger('panEnd');
+                            if (this.transform.scale === 1 && this.pinching === false) {
+                                position = this.getPosition();
+                                velocity = e.overallVelocityX;
+                                if (Math.abs(velocity) >= this.swipeVelocity) {
+                                    if (Math.abs(e.deltaX) >= this.swipeThreshold) {
+                                        if (e.offsetDirection === Hammer.DIRECTION_LEFT) {
+                                            this.next({
+                                                velocity: velocity,
+                                                duration: this.navigationPanDuration
+                                            });
+                                        } else if (e.offsetDirection === Hammer.DIRECTION_RIGHT) {
+                                            this.prev({
+                                                velocity: velocity,
+                                                duration: this.navigationPanDuration
+                                            });
+                                        }
+                                    }
+                                }
+                                if (position === this.getPosition()) {
+                                    this.animation.animate({
+                                        x: this.transform.left + '%',
+                                        duration: this.navigationPanDuration
+                                    });
+                                    this.trigger('attemptedNavigation', {
+                                        position: this.getPosition()
+                                    });
+                                }
+                            }
+                        }
+                    }, {
+                        key: 'onPinchStart',
+                        value: function onPinchStart(e) {
+                            if (!this.getActivePageSpread().isZoomable()) {
+                                return;
+                            }
+                            this.pinching = true;
+                            this.el.setAttribute('data-pinching', true);
+                            this.startTransform.scale = this.transform.scale;
+                        }
+                    }, {
+                        key: 'onPinchMove',
+                        value: function onPinchMove(e) {
+                            if (this.pinching === false) {
+                                return;
+                            }
+                            this.zoomTo({
+                                x: e.center.x,
+                                y: e.center.y,
+                                scale: this.startTransform.scale * e.scale,
+                                bounds: false,
+                                easing: 'linear'
+                            });
+                        }
+                    }, {
+                        key: 'onPinchEnd',
+                        value: function onPinchEnd(e) {
+                            var _this2 = this;
+
+                            var activePageSpread, maxZoomScale, position, scale;
+                            if (this.pinching === false) {
+                                return;
+                            }
+                            activePageSpread = this.getActivePageSpread();
+                            maxZoomScale = activePageSpread.getMaxZoomScale();
+                            scale = Math.max(1, Math.min(this.transform.scale, maxZoomScale));
+                            position = this.getPosition();
+                            if (this.startTransform.scale === 1 && scale > 1) {
+                                this.trigger('zoomedIn', {
+                                    position: position
+                                });
+                            } else if (this.startTransform.scale > 1 && scale === 1) {
+                                this.trigger('zoomedOut', {
+                                    position: position
+                                });
+                            }
+                            this.zoomTo({
+                                x: e.center.x,
+                                y: e.center.y,
+                                scale: scale,
+                                duration: this.zoomDuration
+                            }, function () {
+                                _this2.pinching = false;
+                                _this2.el.setAttribute('data-pinching', false);
+                            });
+                        }
+                    }, {
+                        key: 'onPress',
+                        value: function onPress(e) {
+                            this.trigger('pressed', this.getCoordinateInfo(e.center.x, e.center.y, this.getActivePageSpread()));
+                        }
+                    }, {
+                        key: 'onContextmenu',
+                        value: function onContextmenu(e) {
+                            e.preventDefault();
+                            this.trigger('contextmenu', this.getCoordinateInfo(e.clientX, e.clientY, this.getActivePageSpread()));
+                            return false;
+                        }
+                    }, {
+                        key: 'onSingletap',
+                        value: function onSingletap(e) {
+                            var _this3 = this;
+
+                            var activePageSpread, coordinateInfo, maxZoomScale, position, scale, zoomEvent, zoomedIn;
+                            activePageSpread = this.getActivePageSpread();
+                            coordinateInfo = this.getCoordinateInfo(e.center.x, e.center.y, activePageSpread);
+                            clearTimeout(this.tap.timeout);
+                            if (this.tap.count === 1) {
+                                this.tap.count = 0;
+                                this.trigger('doubleClicked', coordinateInfo);
+                                if (activePageSpread.isZoomable()) {
+                                    maxZoomScale = activePageSpread.getMaxZoomScale();
+                                    zoomedIn = this.transform.scale > 1;
+                                    scale = zoomedIn ? 1 : maxZoomScale;
+                                    zoomEvent = zoomedIn ? 'zoomedOut' : 'zoomedIn';
+                                    position = this.getPosition();
+                                    this.zoomTo({
+                                        x: e.center.x,
+                                        y: e.center.y,
+                                        scale: scale,
+                                        duration: this.zoomDuration
+                                    }, function () {
+                                        _this3.trigger(zoomEvent, {
                                             position: position
                                         });
-                                    };
-                                }(this));
+                                    });
+                                }
+                            } else {
+                                this.tap.count++;
+                                this.tap.timeout = setTimeout(function () {
+                                    _this3.tap.count = 0;
+                                    _this3.trigger('clicked', coordinateInfo);
+                                }, this.tap.delay);
                             }
-                        } else {
-                            this.tap.count++;
-                            this.tap.timeout = setTimeout(function (_this) {
-                                return function () {
-                                    _this.tap.count = 0;
-                                    _this.trigger('clicked', coordinateInfo);
-                                };
-                            }(this), this.tap.delay);
                         }
-                    };
-
-                    Verso.prototype.onTouchStart = function (e) {
-                        if (!this.getActivePageSpread().isScrollable()) {
-                            e.preventDefault();
+                    }, {
+                        key: 'onTouchStart',
+                        value: function onTouchStart(e) {
+                            if (!this.getActivePageSpread().isScrollable()) {
+                                e.preventDefault();
+                            }
                         }
-                    };
-
-                    Verso.prototype.onTouchEnd = function (e) {
-                        if (!this.getActivePageSpread().isScrollable()) {
-                            e.preventDefault();
+                    }, {
+                        key: 'onTouchEnd',
+                        value: function onTouchEnd(e) {
+                            if (!this.getActivePageSpread().isScrollable()) {
+                                e.preventDefault();
+                            }
                         }
-                    };
-
-                    Verso.prototype.onResize = function () {
-                        var activePageSpread, position;
-                        if (this.transform.scale > 1) {
-                            position = this.getPosition();
-                            activePageSpread = this.getActivePageSpread();
-                            this.transform.left = this.getLeftTransformFromPageSpread(position, activePageSpread);
-                            this.transform.top = 0;
-                            this.transform.scale = 1;
-                            this.zoomTo({
-                                x: this.transform.left,
-                                y: this.transform.top,
-                                scale: this.transform.scale,
-                                duration: 0
-                            });
-                            this.trigger('zoomedOut', {
-                                position: position
-                            });
+                    }, {
+                        key: 'onResize',
+                        value: function onResize() {
+                            var activePageSpread, position;
+                            if (this.transform.scale > 1) {
+                                position = this.getPosition();
+                                activePageSpread = this.getActivePageSpread();
+                                this.transform.left = this.getLeftTransformFromPageSpread(position, activePageSpread);
+                                this.transform.top = 0;
+                                this.transform.scale = 1;
+                                this.zoomTo({
+                                    x: this.transform.left,
+                                    y: this.transform.top,
+                                    scale: this.transform.scale,
+                                    duration: 0
+                                });
+                                this.trigger('zoomedOut', {
+                                    position: position
+                                });
+                            }
                         }
-                    };
+                    }]);
 
                     return Verso;
                 }();
@@ -6279,12 +6407,12 @@ var verso = createCommonjsModule(function (module, exports) {
     });
 });
 
-var MicroEvent$3;
+var MicroEvent$4;
 var PageSpreads;
 var PagedPublicationCore;
 var SGN$12;
 
-MicroEvent$3 = microevent;
+MicroEvent$4 = microevent;
 
 PageSpreads = pageSpreads;
 
@@ -6749,18 +6877,18 @@ PagedPublicationCore = function () {
   return PagedPublicationCore;
 }();
 
-MicroEvent$3.mixin(PagedPublicationCore);
+MicroEvent$4.mixin(PagedPublicationCore);
 
 var core$4 = PagedPublicationCore;
 
 var hotspot = "";
 
-var MicroEvent$6;
+var MicroEvent$5;
 var Mustache$1;
 var PagedPublicationHotspots;
 var template;
 
-MicroEvent$6 = microevent;
+MicroEvent$5 = microevent;
 
 Mustache$1 = mustache;
 
@@ -6941,11 +7069,11 @@ PagedPublicationHotspots = function () {
   return PagedPublicationHotspots;
 }();
 
-MicroEvent$6.mixin(PagedPublicationHotspots);
+MicroEvent$5.mixin(PagedPublicationHotspots);
 
 var hotspots = PagedPublicationHotspots;
 
-var keyCodes$1 = {
+var keyCodes = {
   ESC: 27,
   ARROW_RIGHT: 39,
   ARROW_LEFT: 37,
@@ -6953,16 +7081,16 @@ var keyCodes$1 = {
   NUMBER_ONE: 49
 };
 
-var MicroEvent$7;
+var MicroEvent$6;
 var PagedPublicationControls;
-var SGN$15;
-var keyCodes;
+var SGN$13;
+var keyCodes$2;
 
-MicroEvent$7 = microevent;
+MicroEvent$6 = microevent;
 
-SGN$15 = sgn;
+SGN$13 = sgn;
 
-keyCodes = keyCodes$1;
+keyCodes$2 = keyCodes;
 
 PagedPublicationControls = function () {
   function PagedPublicationControls(el) {
@@ -6979,7 +7107,7 @@ PagedPublicationControls = function () {
       nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
       close: el.querySelector('.sgn-pp--close')
     };
-    this.keyDownListener = SGN$15.util.throttle(this.keyDown, 150, this);
+    this.keyDownListener = SGN$13.util.throttle(this.keyDown, 150, this);
     if (this.options.keyboard === true) {
       this.els.root.addEventListener('keydown', this.keyDownListener, false);
     }
@@ -7061,15 +7189,15 @@ PagedPublicationControls = function () {
     value: function keyDown(e) {
       var keyCode;
       keyCode = e.keyCode;
-      if (keyCodes.ARROW_LEFT === keyCode) {
+      if (keyCodes$2.ARROW_LEFT === keyCode) {
         this.trigger('prev', {
           duration: 0
         });
-      } else if (keyCodes.ARROW_RIGHT === keyCode || keyCodes.SPACE === keyCode) {
+      } else if (keyCodes$2.ARROW_RIGHT === keyCode || keyCodes$2.SPACE === keyCode) {
         this.trigger('next', {
           duration: 0
         });
-      } else if (keyCodes.NUMBER_ONE === keyCode) {
+      } else if (keyCodes$2.NUMBER_ONE === keyCode) {
         this.trigger('first', {
           duration: 0
         });
@@ -7079,14 +7207,14 @@ PagedPublicationControls = function () {
   return PagedPublicationControls;
 }();
 
-MicroEvent$7.mixin(PagedPublicationControls);
+MicroEvent$6.mixin(PagedPublicationControls);
 
 var controls = PagedPublicationControls;
 
-var MicroEvent$8;
+var MicroEvent$7;
 var PagedPublicationEventTracking;
 
-MicroEvent$8 = microevent;
+MicroEvent$7 = microevent;
 
 PagedPublicationEventTracking = function () {
   function PagedPublicationEventTracking() {
@@ -7317,7 +7445,7 @@ PagedPublicationEventTracking = function () {
   return PagedPublicationEventTracking;
 }();
 
-MicroEvent$8.mixin(PagedPublicationEventTracking);
+MicroEvent$7.mixin(PagedPublicationEventTracking);
 
 var eventTracking = PagedPublicationEventTracking;
 
@@ -7325,13 +7453,13 @@ var Controls;
 var Core;
 var EventTracking;
 var Hotspots;
-var MicroEvent$2;
-var SGN$11;
+var MicroEvent$8;
+var SGN$14;
 var Viewer;
 
-MicroEvent$2 = microevent;
+MicroEvent$8 = microevent;
 
-SGN$11 = sgn;
+SGN$14 = sgn;
 
 Core = core$4;
 
@@ -7363,7 +7491,7 @@ Viewer = function () {
       keyboard: this.options.keyboard
     });
     this._eventTracking = new EventTracking();
-    this.viewSession = SGN$11.util.uuid();
+    this.viewSession = SGN$14.util.uuid();
     this._setupEventListeners();
     return;
   }
@@ -7540,7 +7668,7 @@ Viewer = function () {
       this.bind('hotspotsReceived', function (e) {
         _this._hotspots.trigger('hotspotsReceived', {
           pageSpread: _this._core.pageSpreads.get(e.id),
-          versoPageSpread: SGN$11.util.find(_this._core.getVerso().pageSpreads, function (pageSpread) {
+          versoPageSpread: SGN$14.util.find(_this._core.getVerso().pageSpreads, function (pageSpread) {
             return pageSpread.getId() === e.id;
           }),
           ratio: e.ratio,
@@ -7553,7 +7681,7 @@ Viewer = function () {
   return Viewer;
 }();
 
-MicroEvent$2.mixin(Viewer);
+MicroEvent$8.mixin(Viewer);
 
 var viewer = Viewer;
 
@@ -7926,7 +8054,7 @@ var gator = createCommonjsModule(function (module) {
     })();
 });
 
-var hotspotPicker$2 = "<div class=\"sgn-pp-hotspot-picker__background\" data-close></div>\n<div class=\"sgn__popover\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#hotspots}}\n                <li data-id=\"{{id}}\">\n                    <p>{{title}}</p>\n                    <p>{{subtitle}}</p>\n                </li>\n            {{/hotspots}}\n        </ul>\n    </div>\n</div>";
+var hotspotPicker = "<div class=\"sgn-pp-hotspot-picker__background\" data-close></div>\n<div class=\"sgn__popover\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#hotspots}}\n                <li data-id=\"{{id}}\">\n                    <p>{{title}}</p>\n                    <p>{{subtitle}}</p>\n                </li>\n            {{/hotspots}}\n        </ul>\n    </div>\n</div>";
 
 var Gator;
 var MicroEvent$9;
@@ -7941,9 +8069,9 @@ Gator = gator;
 
 Mustache$2 = mustache;
 
-template$1 = hotspotPicker$2;
+template$1 = hotspotPicker;
 
-keyCodes$3 = keyCodes$1;
+keyCodes$3 = keyCodes;
 
 PagedPublicationHotspotPicker = function () {
   function PagedPublicationHotspotPicker() {
@@ -8028,11 +8156,11 @@ PagedPublicationHotspotPicker = function () {
 
 MicroEvent$9.mixin(PagedPublicationHotspotPicker);
 
-var hotspotPicker = PagedPublicationHotspotPicker;
+var hotspotPicker$2 = PagedPublicationHotspotPicker;
 
-var SGN$16;
+var SGN$15;
 
-SGN$16 = core;
+SGN$15 = core;
 
 var initialize = function initialize() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -8053,7 +8181,7 @@ var initialize = function initialize() {
     if ((ref = options.data) != null ? ref.details : void 0) {
       callback(null, options.data.details);
     } else {
-      SGN$16.CoreKit.request({
+      SGN$15.CoreKit.request({
         url: '/v2/catalogs/' + options.id
       }, callback);
     }
@@ -8063,7 +8191,7 @@ var initialize = function initialize() {
     if ((ref = options.data) != null ? ref.pages : void 0) {
       callback(null, options.data.pages);
     } else {
-      SGN$16.CoreKit.request({
+      SGN$15.CoreKit.request({
         url: '/v2/catalogs/' + options.id + '/pages'
       }, callback);
     }
@@ -8073,14 +8201,14 @@ var initialize = function initialize() {
     if ((ref = options.data) != null ? ref.hotspots : void 0) {
       callback(null, options.data.hotspots);
     } else {
-      SGN$16.CoreKit.request({
+      SGN$15.CoreKit.request({
         url: '/v2/catalogs/' + options.id + '/hotspots'
       }, callback);
     }
   };
   render = function render() {
     var ref, ref1, ref2;
-    viewer = new SGN$16.PagedPublicationKit.Viewer(options.el, {
+    viewer = new SGN$15.PagedPublicationKit.Viewer(options.el, {
       id: options.id,
       ownedBy: data.details.dealer_id,
       color: '#' + data.details.branding.pageflip.color,
@@ -8190,8 +8318,8 @@ var initialize = function initialize() {
           subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
         };
       });
-      hotspotPicker = new SGN$16.PagedPublicationKit.HotspotPicker({
-        header: SGN$16.translations.t('paged_publication.hotspot_picker.header'),
+      hotspotPicker = new SGN$15.PagedPublicationKit.HotspotPicker({
+        header: SGN$15.translations.t('paged_publication.hotspot_picker.header'),
         x: e.verso.x,
         y: e.verso.y,
         hotspots: hotspots
@@ -8208,7 +8336,7 @@ var initialize = function initialize() {
       return hotspotPicker.render().el.focus();
     }
   };
-  SGN$16.util.async.parallel([fetch, fetchPages], function (result) {
+  SGN$15.util.async.parallel([fetch, fetchPages], function (result) {
     var details, pages;
     details = result[0][1];
     pages = result[1][1];
@@ -8238,63 +8366,63 @@ var initialize = function initialize() {
 
 var pagedPublication = {
   Viewer: viewer,
-  HotspotPicker: hotspotPicker,
+  HotspotPicker: hotspotPicker$2,
   initialize: initialize
 };
 
 var shoppingList = {};
 
-var SGN$1;
+var SGN$16;
 var appKey;
-var config;
+var config$3;
 var scriptEl;
-var session;
+var session$2;
 var trackId;
 
-SGN$1 = sgn;
+SGN$16 = sgn;
 
 // Expose storage backends.
-SGN$1.storage = {
+SGN$16.storage = {
   local: clientLocal,
   cookie: clientCookie
 };
 
 // Expose request handler.
-SGN$1.request = browser$4;
+SGN$16.request = browser$2;
 
 // Expose the different kits.
-SGN$1.AuthKit = auth;
+SGN$16.AuthKit = auth;
 
-SGN$1.AssetsKit = assets;
+SGN$16.AssetsKit = assets;
 
-SGN$1.EventsKit = events;
+SGN$16.EventsKit = events;
 
-SGN$1.GraphKit = graph;
+SGN$16.GraphKit = graph;
 
-SGN$1.CoreKit = core$2;
+SGN$16.CoreKit = core$2;
 
-SGN$1.PagedPublicationKit = pagedPublication;
+SGN$16.PagedPublicationKit = pagedPublication;
 
-SGN$1.ShoppingListKit = shoppingList;
+SGN$16.ShoppingListKit = shoppingList;
 
 // Set the core session from the cookie store if possible.
-session = SGN$1.storage.cookie.get('session');
+session$2 = SGN$16.storage.cookie.get('session');
 
-if ((typeof session === 'undefined' ? 'undefined' : _typeof(session)) === 'object') {
-  SGN$1.config.set({
-    coreSessionToken: session.token,
-    coreSessionClientId: session.client_id
+if ((typeof session$2 === 'undefined' ? 'undefined' : _typeof(session$2)) === 'object') {
+  SGN$16.config.set({
+    coreSessionToken: session$2.token,
+    coreSessionClientId: session$2.client_id
   });
 }
 
-SGN$1.client = function () {
+SGN$16.client = function () {
   var firstOpen, id;
-  id = SGN$1.storage.local.get('client-id');
+  id = SGN$16.storage.local.get('client-id');
   id = id != null ? id.data : void 0;
   firstOpen = id == null;
   if (firstOpen) {
-    id = SGN$1.util.uuid();
-    SGN$1.storage.local.set('client-id', id);
+    id = SGN$16.util.uuid();
+    SGN$16.storage.local.set('client-id', id);
   }
   return {
     firstOpen: firstOpen,
@@ -8303,11 +8431,11 @@ SGN$1.client = function () {
 }();
 
 // Listen for changes in the config.
-SGN$1.config.bind('change', function (changedAttributes) {
+SGN$16.config.bind('change', function (changedAttributes) {
   var eventTracker;
   eventTracker = changedAttributes.eventTracker;
   if (eventTracker != null) {
-    if (SGN$1.client.firstOpen === true) {
+    if (SGN$16.client.firstOpen === true) {
       eventTracker.trackEvent('first-client-session-opened', {}, '1.0.0');
     }
     eventTracker.trackEvent('client-session-opened', {}, '1.0.0');
@@ -8320,21 +8448,21 @@ scriptEl = document.getElementById('sgn-sdk');
 if (scriptEl != null) {
   appKey = scriptEl.getAttribute('data-app-key');
   trackId = scriptEl.getAttribute('data-track-id');
-  config = {};
+  config$3 = {};
   if (appKey != null) {
-    config.appKey = appKey;
+    config$3.appKey = appKey;
   }
   if (trackId != null) {
-    config.eventTracker = new SGN$1.EventsKit.Tracker({
+    config$3.eventTracker = new SGN$16.EventsKit.Tracker({
       trackId: trackId
     });
   }
-  SGN$1.config.set(config);
+  SGN$16.config.set(config$3);
 }
 
-var browser = SGN$1;
+var browser$4 = SGN$16;
 
-return browser;
+return browser$4;
 
 })));
 //# sourceMappingURL=sgn-sdk.js.map
