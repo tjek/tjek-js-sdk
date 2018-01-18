@@ -2465,7 +2465,13 @@ session = {
         session.create(complete);
       } else if (renewed === false) {
         renewed = true;
-        session.renew(complete);
+        session.renew(function (err) {
+          if (err != null) {
+            session.create(complete);
+          } else {
+            complete();
+          }
+        });
       } else {
         complete();
       }
@@ -8410,7 +8416,7 @@ session$2 = SGN$16.storage.cookie.get('session');
 
 if ((typeof session$2 === 'undefined' ? 'undefined' : _typeof(session$2)) === 'object') {
   SGN$16.config.set({
-    coreSessionToken: session$2.token,
+    coreSessionToken: 'lol', //session.token
     coreSessionClientId: session$2.client_id
   });
 }

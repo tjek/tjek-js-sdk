@@ -801,7 +801,13 @@ session = {
         session.create(complete);
       } else if (renewed === false) {
         renewed = true;
-        session.renew(complete);
+        session.renew(function (err) {
+          if (err != null) {
+            session.create(complete);
+          } else {
+            complete();
+          }
+        });
       } else {
         complete();
       }
