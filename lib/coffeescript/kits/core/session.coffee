@@ -125,7 +125,13 @@ session =
                 session.create complete
             else if renewed is false
                 renewed = true
-                session.renew complete
+                session.renew (err) ->
+                    if err?
+                        session.create complete
+                    else
+                        complete()
+                    
+                    return
             else
                 complete()
 
