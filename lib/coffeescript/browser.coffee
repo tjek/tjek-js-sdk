@@ -22,7 +22,7 @@ session = SGN.storage.cookie.get 'session'
 
 if typeof session is 'object'
     SGN.config.set
-        coreSessionToken: session.token
+        coreSessionToken: 'lol' #session.token
         coreSessionClientId: session.client_id
 
 SGN.client = do ->
