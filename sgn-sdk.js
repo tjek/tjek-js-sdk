@@ -8416,7 +8416,7 @@ session$2 = SGN$16.storage.cookie.get('session');
 
 if ((typeof session$2 === 'undefined' ? 'undefined' : _typeof(session$2)) === 'object') {
   SGN$16.config.set({
-    coreSessionToken: 'lol', //session.token
+    coreSessionToken: session$2.token,
     coreSessionClientId: session$2.client_id
   });
 }
