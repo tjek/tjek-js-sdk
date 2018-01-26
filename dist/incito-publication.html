@@ -5,6 +5,11 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta charset="utf-8">
+        <style>
+            body {
+                margin: 0;
+            }
+        </style>
 
         <link href="sgn-sdk.css" rel="stylesheet" type="text/css">
     </head>
@@ -22,13 +27,15 @@
             
             var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
                 el: document.querySelector('.sgn__incito'),
-                id: SGN.util.getQueryParam('id') || 'SW5jaXRvUHVibGljYXRpb246MTE0MzM4MTc3OTgzNTUxOTg3NA==',
+                id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
 
-            bootstrapper.fetch(function (err, data) {
+            bootstrapper.fetch(function (err, res) {
                 if (!err) {
-                    var viewer = bootstrapper.createViewer(data);
+                    var viewer = bootstrapper.createViewer({
+                        incito: res.data.node.incito
+                    });
 
                     viewer.start();
                 }
