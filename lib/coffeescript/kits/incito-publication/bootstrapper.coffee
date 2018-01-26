@@ -23,7 +23,7 @@ module.exports = class Bootstrapper
         util.getPointer()
     
     getOrientation: ->
-        orientation = util.getOrientation window.offsetWidth, window.offsetHeight
+        orientation = util.getOrientation window.innerWidth, window.innerHeight
         orientation = 'horizontal' if orientation is 'quadratic'
 
         orientation
