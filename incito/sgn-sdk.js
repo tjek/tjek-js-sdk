@@ -8425,7 +8425,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AbsoluteLayout, FlexLayout, ImageView, Incito, LinearLayout, TextView, VideoEmbedView, View, lozad, vent;
+var AbsoluteLayout, FlexLayout, FragView, ImageView, Incito, LinearLayout, TextView, VideoEmbedView, View, lozad, vent;
 
 _dereq_('intersection-observer');
 
@@ -8434,6 +8434,8 @@ lozad = _dereq_('lozad');
 vent = _dereq_('./vent');
 
 View = _dereq_('./views/view');
+
+FragView = _dereq_('./views/frag');
 
 ImageView = _dereq_('./views/image');
 
@@ -8493,6 +8495,8 @@ Incito = function () {
         viewName = view.view_name;
         if (!viewName || viewName === 'View') {
           match = View;
+        } else if (viewName === 'FragView') {
+          match = FragView;
         } else if (viewName === 'ImageView') {
           match = ImageView;
         } else if (viewName === 'TextView') {
@@ -8579,7 +8583,7 @@ Incito = function () {
 
 module.exports = Incito;
 
-},{"./vent":3,"./views/absolute-layout":4,"./views/flex-layout":5,"./views/image":6,"./views/linear-layout":7,"./views/text":8,"./views/video-embed":9,"./views/view":10,"intersection-observer":11,"lozad":12}],2:[function(_dereq_,module,exports){
+},{"./vent":3,"./views/absolute-layout":4,"./views/flex-layout":5,"./views/frag":6,"./views/image":7,"./views/linear-layout":8,"./views/text":9,"./views/video-embed":10,"./views/view":11,"intersection-observer":12,"lozad":13}],2:[function(_dereq_,module,exports){
 var utils;
 
 utils = {
@@ -8616,7 +8620,7 @@ MicroEvent.mixin(Vent);
 
 module.exports = new Vent();
 
-},{"microevent":13}],4:[function(_dereq_,module,exports){
+},{"microevent":14}],4:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8656,7 +8660,7 @@ module.exports = AbsoluteLayout = function () {
   return AbsoluteLayout;
 }.call(undefined);
 
-},{"./view":10}],5:[function(_dereq_,module,exports){
+},{"./view":11}],5:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8708,7 +8712,30 @@ module.exports = FlexLayout = function () {
   return FlexLayout;
 }.call(undefined);
 
-},{"./view":10}],6:[function(_dereq_,module,exports){
+},{"./view":11}],6:[function(_dereq_,module,exports){
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FragView;
+
+module.exports = FragView = function () {
+  function FragView() {
+    _classCallCheck(this, FragView);
+  }
+
+  _createClass(FragView, [{
+    key: "render",
+    value: function render() {
+      this.el = document.createDocumentFragment();
+      return this;
+    }
+  }]);
+
+  return FragView;
+}();
+
+},{}],7:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8734,6 +8761,7 @@ module.exports = Image = function () {
     _createClass(Image, [{
       key: 'render',
       value: function render() {
+        this.el.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
         if (typeof this.attrs.src === 'string') {
           this.el.setAttribute('data-src', this.attrs.src);
         }
@@ -8756,7 +8784,7 @@ module.exports = Image = function () {
   return Image;
 }.call(undefined);
 
-},{"./view":10}],7:[function(_dereq_,module,exports){
+},{"./view":11}],8:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8796,7 +8824,7 @@ module.exports = LinearLayout = function () {
   return LinearLayout;
 }.call(undefined);
 
-},{"./view":10}],8:[function(_dereq_,module,exports){
+},{"./view":11}],9:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8944,7 +8972,7 @@ module.exports = TextView = function () {
   return TextView;
 }.call(undefined);
 
-},{"../utils":2,"./view":10}],9:[function(_dereq_,module,exports){
+},{"../utils":2,"./view":11}],10:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9004,7 +9032,7 @@ module.exports = FlexLayout = function () {
   return FlexLayout;
 }.call(undefined);
 
-},{"./view":10}],10:[function(_dereq_,module,exports){
+},{"./view":11}],11:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9064,6 +9092,7 @@ module.exports = View = function () {
         // Accessibility label.
         if (typeof this.attrs.accessibility_label === 'string') {
           this.el.setAttribute('aria-label', this.attrs.accessibility_label);
+          this.el.setAttribute('title', this.attrs.accessibility_label);
         }
         // Gravity.
         if (typeof this.attrs.gravity === 'string') {
@@ -9282,18 +9311,17 @@ module.exports = View = function () {
         if (transforms.length > 0) {
           this.el.style.transform = transforms.join(' ');
         }
+
+        // Transform origin.
+        if (Array.isArray(this.attrs.transform_origin) && this.attrs.transform_origin.length === 2) {
+          this.el.style.transformOrigin = [utils.formatUnit(this.attrs.transform_origin[0]), utils.formatUnit(this.attrs.transform_origin[1])].join(' ');
+        }
       }
     }, {
       key: 'getTransforms',
       value: function getTransforms() {
         var transforms, translateX, translateY;
         transforms = [];
-        if (this.attrs.transform_rotate != null) {
-          transforms.push('rotate(' + this.attrs.transform_rotate + 'deg)');
-        }
-        if (this.attrs.transform_scale != null) {
-          transforms.push('scale(' + this.attrs.transform_scale + ')');
-        }
         if (this.attrs.transform_translate_x != null) {
           translateX = utils.formatUnit(this.attrs.transform_translate_x);
           transforms.push('translateX(' + translateX + ')');
@@ -9301,6 +9329,12 @@ module.exports = View = function () {
         if (this.attrs.transform_translate_y != null) {
           translateY = utils.formatUnit(this.attrs.transform_translate_y);
           transforms.push('translateY(' + translateY + ')');
+        }
+        if (this.attrs.transform_rotate != null) {
+          transforms.push('rotate(' + this.attrs.transform_rotate + 'deg)');
+        }
+        if (this.attrs.transform_scale != null) {
+          transforms.push('scale(' + this.attrs.transform_scale + ')');
         }
         return transforms;
       }
@@ -9318,7 +9352,7 @@ module.exports = View = function () {
   return View;
 }.call(undefined);
 
-},{"../utils":2,"../vent":3}],11:[function(_dereq_,module,exports){
+},{"../utils":2,"../vent":3}],12:[function(_dereq_,module,exports){
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -10039,7 +10073,7 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 
 }(window, document));
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 /*! lozad.js - v1.2.0 - 2018-01-23
 * https://github.com/ApoorvSaxena/lozad.js
 * Copyright (c) 2018 Apoorv Saxena; Licensed MIT */
@@ -10163,7 +10197,7 @@ return lozad;
 
 })));
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 /**
  * MicroEvent - to make any js object an event emitter (server or browser)
  * 

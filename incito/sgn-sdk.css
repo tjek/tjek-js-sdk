@@ -955,6 +955,8 @@
   transform-origin: 0 0;
   background-clip: padding-box;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 .incito__view [data-gravity="center_horizontal"] {
   margin-left: auto;
@@ -973,8 +975,9 @@
   display: flex;
 }
 .incito__image-view {
-  border: 0;
+  border: none;
   display: block;
+  box-shadow: none;
 }
 .incito__text-view {
   margin: 0;
@@ -989,8 +992,8 @@
 .incito__text-view > sup {
   vertical-align: baseline;
   position: relative;
-  top: -0.74em;
-  font-size: 0.5em;
+  top: -0.5em;
+  font-size: 0.6em;
 }
 .incito__video-embed-view {
   width: 100%;

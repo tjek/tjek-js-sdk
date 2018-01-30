@@ -502,7 +502,7 @@ parseCookies = function parseCookies() {
   return parsedCookies;
 };
 
-var request$1 = function request() {
+var request$1 = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments[1];
 
@@ -574,7 +574,7 @@ var _request;
 
 SGN$2 = sgn;
 
-_request = function request() {
+_request = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
   var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
