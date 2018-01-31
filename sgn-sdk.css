@@ -933,4 +933,83 @@
 .sgn-popover__header {
   line-height: 1;
 }
+.incito {
+  position: relative;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+}
+.incito *:before,
+.incito *,
+.incito *:after {
+  box-sizing: inherit;
+}
+.incito[data-debug="true"] .incito__view {
+  border: 1px solid #f00 !important;
+}
+.incito [data-link],
+.incito [data-callback] {
+  cursor: pointer;
+}
+.incito__view {
+  transform-origin: 0 0;
+  background-clip: padding-box;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.incito__view [data-gravity="center_horizontal"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+.incito__absolute-layout-view {
+  position: relative;
+}
+.incito__absolute-layout-view > * {
+  position: absolute;
+}
+.incito__linear-layout-view {
+  overflow: auto;
+}
+.incito__flex-layout-view {
+  display: flex;
+}
+.incito__image-view {
+  border: none;
+  display: block;
+  box-shadow: none;
+}
+.incito__text-view {
+  margin: 0;
+  font-family: inherit;
+  hyphens: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.incito__text-view[data-single-line="true"] {
+  white-space: nowrap;
+}
+.incito__text-view > sup {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.5em;
+  font-size: 0.6em;
+}
+.incito__video-embed-view {
+  width: 100%;
+  position: relative;
+}
+.incito__video-embed-view iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.sgn__incito {
+  position: relative;
+  outline: 0;
+}
 /*# sourceMappingURL=sgn-sdk.css.map */

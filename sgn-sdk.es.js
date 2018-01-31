@@ -4,6 +4,8 @@ import process from 'process';
 import request from 'request';
 import sha256 from 'sha256';
 
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -89,7 +91,7 @@ Config = Config = function () {
   Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'graphUrl', 'eventsTrackUrl', 'eventsPulseUrl', 'assetsFileUploadUrl'];
 
   return Config;
-}();
+}.call(commonjsGlobal);
 
 MicroEvent.mixin(Config);
 
@@ -119,14 +121,14 @@ var translations = {
   }
 };
 
-var process$1;
+var process$$1;
 var util;
 
-process$1 = process;
+process$$1 = process;
 
 util = {
   isBrowser: function isBrowser() {
-    return typeof process$1 !== 'undefined' && process$1.browser;
+    return typeof process$$1 !== 'undefined' && process$$1.browser;
   },
   isNode: function isNode() {
     return !util.isBrowser();
@@ -203,30 +205,39 @@ util = {
     }
     return name;
   },
-  btoa: function (_btoa) {
-    function btoa(_x2) {
-      return _btoa.apply(this, arguments);
-    }
-
-    btoa.toString = function () {
-      return _btoa.toString();
-    };
-
-    return btoa;
-  }(function (str) {
-    var buffer;
-    if (util.isBrowser()) {
-      return btoa(str);
-    } else {
-      buffer = null;
-      if (str instanceof Buffer) {
-        buffer = str;
+  getDeviceCategory: function getDeviceCategory() {
+    var deviceCategory;
+    deviceCategory = 'desktop';
+    if (navigator.platform === 'iPod' || navigator.platform === 'iPhone') {
+      deviceCategory = 'mobile';
+    } else if (navigator.platform === 'iPad') {
+      deviceCategory = 'tablet';
+    } else if (navigator.platform === 'Android') {
+      if (/tablet/gi.test(navigator.userAgent)) {
+        deviceCategory = 'tablet';
       } else {
-        buffer = new Buffer(str.toString(), 'binary');
+        deviceCategory = 'mobile';
       }
-      return buffer.toString('base64');
     }
-  }),
+    return deviceCategory;
+  },
+  getPointer: function getPointer() {
+    var pointer;
+    pointer = 'fine';
+    if (matchMedia('(pointer:coarse)').matches) {
+      pointer = 'coarse';
+    }
+    return pointer;
+  },
+  getOrientation: function getOrientation(width, height) {
+    if (width === height) {
+      return 'quadratic';
+    } else if (width > height) {
+      return 'horizontal';
+    } else {
+      return 'vertical';
+    }
+  },
   getScreenDimensions: function getScreenDimensions() {
     var density, logical, physical, ref;
     density = (ref = window.devicePixelRatio) != null ? ref : 1;
@@ -277,6 +288,30 @@ util = {
       return 'light';
     }
   },
+  btoa: function (_btoa) {
+    function btoa(_x2) {
+      return _btoa.apply(this, arguments);
+    }
+
+    btoa.toString = function () {
+      return _btoa.toString();
+    };
+
+    return btoa;
+  }(function (str) {
+    var buffer;
+    if (util.isBrowser()) {
+      return btoa(str);
+    } else {
+      buffer = null;
+      if (str instanceof Buffer) {
+        buffer = str;
+      } else {
+        buffer = new Buffer(str.toString(), 'binary');
+      }
+      return buffer.toString('base64');
+    }
+  }),
   find: function find(arr, fn) {
     var item, j, len;
     for (j = 0, len = arr.length; j < len; j++) {
@@ -406,9 +441,9 @@ var core = {
 
 var sgn = core;
 
-var request$1;
+var request$$1;
 
-request$1 = request;
+request$$1 = request;
 
 var node = function node() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -427,13 +462,13 @@ var node = function node() {
     qs: options.qs
   };
   if (Array.isArray(options.cookies)) {
-    jar = request$1.jar();
+    jar = request$$1.jar();
     options.cookies.forEach(function (cookie) {
-      jar.setCookie(request$1.cookie(cookie.key + '=' + cookie.value), cookie.url);
+      jar.setCookie(request$$1.cookie(cookie.key + '=' + cookie.value), cookie.url);
     });
     requestOptions.jar = jar;
   }
-  request$1(requestOptions, function (err, response, body) {
+  request$$1(requestOptions, function (err, response, body) {
     if (err != null) {
       callback(new Error());
     } else {
@@ -467,7 +502,7 @@ parseCookies = function parseCookies() {
   return parsedCookies;
 };
 
-var request$2 = function request$$1() {
+var request$1 = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments[1];
 
@@ -531,7 +566,7 @@ var request$2 = function request$$1() {
 };
 
 var graph = {
-  request: request$2
+  request: request$1
 };
 
 var SGN$2;
@@ -679,11 +714,11 @@ var callbackQueue;
 var clientCookieStorage;
 var renewed;
 var session;
-var sha256$1;
+var sha256$$1;
 
 SGN$4 = sgn;
 
-sha256$1 = sha256;
+sha256$$1 = sha256;
 
 clientCookieStorage = clientCookie;
 
@@ -814,21 +849,21 @@ session = {
     }
   },
   sign: function sign(appSecret, token) {
-    return sha256$1([appSecret, token].join(''));
+    return sha256$$1([appSecret, token].join(''));
   }
 };
 
 var session_1 = session;
 
-var request$4;
+var request$3;
 var session$1;
 
-request$4 = request_1;
+request$3 = request_1;
 
 session$1 = session_1;
 
 var core$2 = {
-  request: request$4,
+  request: request$3,
   session: session$1
 };
 

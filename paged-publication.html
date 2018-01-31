@@ -232,7 +232,7 @@
             </div>
 
             <!-- The optional header -->
-            <header class="sgn-pp__header sgn__navbar">
+            <!-- <header class="sgn-pp__header sgn__navbar">
                 <section class="sgn-navbar__section">
                     <a href="#" class="sgn__btn sgn-btn--fab">1</a>
                 </section>
@@ -241,7 +241,7 @@
                     <a href="#" class="sgn__btn sgn-btn--fab">2</a>
                     <a href="#" class="sgn__btn sgn-btn--fab">3</a>
                 </section>
-            </header>
+            </header> -->
 
             <!-- The optional progress bar -->
             <div class="sgn-pp__progress">
@@ -258,12 +258,16 @@
 
         <script src="sgn-sdk.js?t=2" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
         <script>
-            SGN.PagedPublicationKit.initialize({
+            var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
                 el: document.querySelector('.sgn__pp'),
                 id: SGN.util.getQueryParam('id') || '4c4euCC',
                 eventTracker: SGN.config.get('eventTracker')
-            }, function (err, viewer, data) {
+            });
+
+            bootstrapper.fetch(function (err, data) {
                 if (!err) {
+                    var viewer = bootstrapper.createViewer(data);
+
                     viewer.bind('hotspotClicked', function (hotspot) {
                         console.log('Hotspot clicked.', hotspot);
                     });
@@ -273,6 +277,13 @@
                     });
 
                     viewer.start();
+
+                    // Fetch hotspots after rendering the viewer as they are not critical for initial render.
+                    bootstrapper.fetchHotspots(function (err2, hotspots) {
+                        if (!err2) {
+                            bootstrapper.applyHotspots(viewer, hotspots);
+                        }
+                    });
                 }
             });
         </script>

@@ -8,6 +8,8 @@ var process = _interopDefault(require('process'));
 var request = _interopDefault(require('request'));
 var sha256 = _interopDefault(require('sha256'));
 
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -93,7 +95,7 @@ Config = Config = function () {
   Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'graphUrl', 'eventsTrackUrl', 'eventsPulseUrl', 'assetsFileUploadUrl'];
 
   return Config;
-}();
+}.call(commonjsGlobal);
 
 MicroEvent.mixin(Config);
 
@@ -207,30 +209,39 @@ util = {
     }
     return name;
   },
-  btoa: function (_btoa) {
-    function btoa(_x2) {
-      return _btoa.apply(this, arguments);
-    }
-
-    btoa.toString = function () {
-      return _btoa.toString();
-    };
-
-    return btoa;
-  }(function (str) {
-    var buffer;
-    if (util.isBrowser()) {
-      return btoa(str);
-    } else {
-      buffer = null;
-      if (str instanceof Buffer) {
-        buffer = str;
+  getDeviceCategory: function getDeviceCategory() {
+    var deviceCategory;
+    deviceCategory = 'desktop';
+    if (navigator.platform === 'iPod' || navigator.platform === 'iPhone') {
+      deviceCategory = 'mobile';
+    } else if (navigator.platform === 'iPad') {
+      deviceCategory = 'tablet';
+    } else if (navigator.platform === 'Android') {
+      if (/tablet/gi.test(navigator.userAgent)) {
+        deviceCategory = 'tablet';
       } else {
-        buffer = new Buffer(str.toString(), 'binary');
+        deviceCategory = 'mobile';
       }
-      return buffer.toString('base64');
     }
-  }),
+    return deviceCategory;
+  },
+  getPointer: function getPointer() {
+    var pointer;
+    pointer = 'fine';
+    if (matchMedia('(pointer:coarse)').matches) {
+      pointer = 'coarse';
+    }
+    return pointer;
+  },
+  getOrientation: function getOrientation(width, height) {
+    if (width === height) {
+      return 'quadratic';
+    } else if (width > height) {
+      return 'horizontal';
+    } else {
+      return 'vertical';
+    }
+  },
   getScreenDimensions: function getScreenDimensions() {
     var density, logical, physical, ref;
     density = (ref = window.devicePixelRatio) != null ? ref : 1;
@@ -281,6 +292,30 @@ util = {
       return 'light';
     }
   },
+  btoa: function (_btoa) {
+    function btoa(_x2) {
+      return _btoa.apply(this, arguments);
+    }
+
+    btoa.toString = function () {
+      return _btoa.toString();
+    };
+
+    return btoa;
+  }(function (str) {
+    var buffer;
+    if (util.isBrowser()) {
+      return btoa(str);
+    } else {
+      buffer = null;
+      if (str instanceof Buffer) {
+        buffer = str;
+      } else {
+        buffer = new Buffer(str.toString(), 'binary');
+      }
+      return buffer.toString('base64');
+    }
+  }),
   find: function find(arr, fn) {
     var item, j, len;
     for (j = 0, len = arr.length; j < len; j++) {
