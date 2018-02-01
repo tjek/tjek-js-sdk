@@ -8478,7 +8478,8 @@ Incito = function () {
         }
         this.el.appendChild(frag);
         this.lazyload = lozad('.incito--lazyload', {
-          rootMargin: '500px 0px'
+          rootMargin: '1500px 0px',
+          threshold: 1
         });
         this.lazyload.observe();
         return this;
@@ -8761,7 +8762,6 @@ module.exports = Image = function () {
     _createClass(Image, [{
       key: 'render',
       value: function render() {
-        this.el.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
         if (typeof this.attrs.src === 'string') {
           this.el.setAttribute('data-src', this.attrs.src);
         }
@@ -9104,23 +9104,46 @@ module.exports = View = function () {
           this.el.setAttribute('data-gravity', this.attrs.gravity);
         }
 
-        // Link or callback.
+        // Link or click callback.
         if (typeof this.attrs.link === 'string') {
           this.el.setAttribute('data-link', this.attrs.link);
           this.el.onclick = function (e) {
             e.stopPropagation();
             window.open(_this.attrs.link, '_blank');
           };
-        } else if (typeof this.attrs.on_click === 'string') {
-          this.el.setAttribute('data-callback', this.attrs.on_click);
+        } else if (typeof this.attrs.onclick === 'string') {
+          this.el.setAttribute('data-click-callback', this.attrs.onclick);
           this.el.onclick = function (e) {
             e.stopPropagation();
-            vent.trigger(_this.attrs.on_click, _this.attrs);
+            vent.trigger(_this.attrs.onclick, _this.attrs);
+          };
+        }
+        // Context click callback.
+        if (typeof this.attrs.oncontextclick === 'string') {
+          this.el.setAttribute('data-context-click-callback', this.attrs.oncontextclick);
+          this.el.oncontextmenu = function (e) {
+            vent.trigger(_this.attrs.oncontextclick, _this.attrs);
+            return false;
+          };
+        }
+
+        // Long click callback.
+        if (typeof this.attrs.onlongclick === 'string') {
+          this.el.setAttribute('data-long-click-callback', this.attrs.onlongclick);
+          this.el.onmouseup = function () {
+            clearTimeout(_this.longclickTimer);
+            return false;
+          };
+          this.el.onmousedown = function () {
+            _this.longclickTimer = window.setTimeout(function () {
+              return vent.trigger(_this.attrs.onlongclick, _this.attrs);
+            }, 500);
+            return false;
           };
         }
         // Width.
         if (this.attrs.layout_width === 'match_parent') {
-          this.el.style.display = 'block';
+          this.el.style.width = '100%';
         } else if (this.attrs.layout_width === 'wrap_content') {
           this.el.style.display = 'inline-block';
         } else if (this.attrs.layout_width != null) {

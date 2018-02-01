@@ -948,15 +948,17 @@
   border: 1px solid #f00 !important;
 }
 .incito [data-link],
-.incito [data-callback] {
+.incito [data-click-callback],
+.incito [data-context-click-callback],
+.incito [data-long-click-callback] {
   cursor: pointer;
 }
 .incito__view {
   transform-origin: 0 0;
-  background-clip: padding-box;
   overflow: hidden;
   margin: 0;
   padding: 0;
+  display: block;
 }
 .incito__view [data-gravity="center_horizontal"] {
   margin-left: auto;
@@ -976,8 +978,10 @@
 }
 .incito__image-view {
   border: none;
-  display: block;
   box-shadow: none;
+}
+.incito__image-view:not([data-loaded="true"]) {
+  visibility: hidden;
 }
 .incito__text-view {
   margin: 0;
