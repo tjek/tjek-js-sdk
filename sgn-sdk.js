@@ -8534,6 +8534,9 @@ Incito = function () {
         if (theme.font_family != null) {
           this.el.style.fontFamily = theme.font_family.join(', ');
         }
+        if (theme.background_color != null) {
+          this.el.style.backgroundColor = theme.background_color;
+        }
         if (theme.line_spacing_multiplier != null) {
           this.el.style.lineHeight = theme.line_spacing_multiplier;
         }
@@ -8918,6 +8921,11 @@ module.exports = TextView = function () {
         if (this.attrs.single_line === true) {
           this.el.setAttribute('data-single-line', true);
         }
+
+        // All caps.
+        if (this.attrs.text_all_caps === true) {
+          this.el.style.textTransform = 'uppercase';
+        }
         return this;
       }
     }, {
@@ -9083,7 +9091,7 @@ module.exports = View = function () {
       value: function setAttributes() {
         var _this = this;
 
-        var dropShadowBlurRadius, dropShadowColor, dropShadowLeft, dropShadowTop, dropShadowValues, ref, ref1, ref2, ref3, ref4, ref5, strokeStyles, transforms;
+        var ref, ref1, ref2, ref3, ref4, ref5, strokeStyles, transforms;
         // Identifier.
         if (typeof this.attrs.id === 'string') {
           this.el.setAttribute('data-id', this.attrs.id);
@@ -9097,7 +9105,6 @@ module.exports = View = function () {
         // Accessibility label.
         if (typeof this.attrs.accessibility_label === 'string') {
           this.el.setAttribute('aria-label', this.attrs.accessibility_label);
-          this.el.setAttribute('title', this.attrs.accessibility_label);
         }
         // Gravity.
         if (typeof this.attrs.gravity === 'string') {
@@ -9207,16 +9214,6 @@ module.exports = View = function () {
           this.el.style.backgroundSize = 'cover';
         } else if (this.attrs.background_image_scale_type === 'center_inside') {
           this.el.style.backgroundSize = 'contain';
-        }
-
-        // Drop shadow.
-        if (this.attrs.drop_shadow != null) {
-          dropShadowLeft = this.attrs.drop_shadow.left;
-          dropShadowTop = this.attrs.drop_shadow.top;
-          dropShadowBlurRadius = this.attrs.drop_shadow.blur_radius;
-          dropShadowColor = this.attrs.drop_shadow.color || 'transparent';
-          dropShadowValues = [utils.formatUnit(dropShadowLeft), utils.formatUnit(dropShadowTop), utils.formatUnit(dropShadowBlurRadius), dropShadowColor].join(' ');
-          this.el.style.filter = 'drop-shadow(' + dropShadowValues + ')';
         }
         // Margin.
         if (this.attrs.layout_margin != null) {

@@ -938,6 +938,7 @@
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   box-sizing: border-box;
   text-rendering: optimizeLegibility;
+  min-height: 120vh;
 }
 .incito *:before,
 .incito *,
@@ -959,6 +960,7 @@
   margin: 0;
   padding: 0;
   display: block;
+  background-repeat: no-repeat;
 }
 .incito__view [data-gravity="center_horizontal"] {
   margin-left: auto;
