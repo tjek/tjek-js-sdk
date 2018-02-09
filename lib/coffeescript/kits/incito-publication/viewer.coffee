@@ -1,4 +1,5 @@
 Incito = require 'incito-browser'
+MicroEvent = require 'microevent'
 
 class Viewer
     constructor: (el, @options = {}) ->
@@ -7,6 +8,14 @@ class Viewer
             incito: el.querySelector '.incito'
         @incito = new Incito @els.incito,
             incito: @options.incito
+        
+        trigger = @incito.trigger
+
+        @incito.trigger = (args...) =>
+            trigger.apply @incito, args
+            @trigger.apply @, args
+            
+            return
 
         return
     
@@ -21,5 +30,7 @@ class Viewer
     
     destroy: ->
         return
+
+MicroEvent.mixin Viewer
 
 module.exports = Viewer
