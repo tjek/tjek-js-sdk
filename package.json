@@ -84,7 +84,7 @@
     "coffeescript": "^2.2.1",
     "gator": "^1.2.4",
     "gh-pages": "^1.1.0",
-    "incito-browser": "0.0.8",
+    "incito-browser": "0.0.11",
     "jest": "^22.2.1",
     "jest-cli": "^22.2.1",
     "nib": "^1.1.2",
@@ -99,7 +99,7 @@
     "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^3.0.0",
     "stylus": "^0.54.5",
-    "uglify-es": "^3.3.9",
+    "uglify-es": "^3.3.10",
     "verso-browser": "^1.0.16"
   },
   "dependencies": {
