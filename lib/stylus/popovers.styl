@@ -1,9 +1,51 @@
-.sgn__popover
+.sgn-popover__content
+    padding 8px
+
+.sgn-popover
+    absolute top left
+    right 0
+    bottom 0
+    z-index 3
+    outline 0
+    overflow auto
+
+.sgn-popover__menu
+    position absolute
+    z-index 3
+    outline 0
     background-color #fff
     color #000
     border-radius 12px
     max-width 220px
     box-shadow 0 0 8px rgba(#000, 0.2)
+
+    ul
+        list-style-type none
+        margin 0
+        padding 0
+
+    li
+        margin 0
+        padding 8px 0
+        border-bottom 1px solid #e6e6e6
+        cursor pointer
+
+        &:first-child
+            padding-top 0
+
+        &:last-child
+            padding-bottom 0
+            border-bottom 0
+
+        > p:first-child
+            font-size 15px
+            margin 0 0 2px
+            overflow ellipsis
+
+        > p:last-child
+            font-size 12px
+            margin 0
+            overflow ellipsis
 
 .sgn-popover__header
     padding 10px 12px
@@ -14,5 +56,11 @@
     border-radius top right 12px
     border-bottom 1px solid #e6e6e6
 
-.sgn-popover__content
-    padding 8px
+.sgn-pp-hotspot-picker__background
+    absolute top left
+    right 0
+    bottom 0
+    cursor pointer
+
+.sgn-popover__header
+    line-height 1

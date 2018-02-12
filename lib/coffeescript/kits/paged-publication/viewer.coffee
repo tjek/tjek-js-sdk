@@ -1,5 +1,6 @@
 MicroEvent = require 'microevent'
 SGN = require '../../sgn'
+Popover = require '../../popover'
 Core = require './core'
 Hotspots = require './hotspots'
 Controls = require './controls'
@@ -22,7 +23,7 @@ class Viewer
         @viewSession = SGN.util.uuid()
         @hotspots = null
         @hotspotQueue = []
-        @hotspotPicker = null
+        @popover = null
 
         @_setupEventListeners()
 
@@ -220,35 +221,35 @@ class Viewer
         if hotspots.length is 1
             callback hotspots[0]
         else if hotspots.length > 1
-            hotspots = hotspots
+            singleChoiceItems = hotspots
                 .filter (hotspot) -> hotspot.type is 'offer'
                 .map (hotspot) ->
                     id: hotspot.id
                     title: hotspot.offer.heading
                     subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
 
-            @hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
+            @popover = new Popover
                 header: SGN.translations.t 'paged_publication.hotspot_picker.header'
                 x: e.verso.x
                 y: e.verso.y
-                hotspots: hotspots
+                singleChoiceItems: singleChoiceItems
 
-            @hotspotPicker.bind 'selected', (e) =>
+            @popover.bind 'selected', (e) =>
                 callback @hotspots[e.id]
 
-                @hotspotPicker.destroy()
+                @popover.destroy()
 
                 return
 
-            @hotspotPicker.bind 'destroyed', =>
-                @hotspotPicker = null
+            @popover.bind 'destroyed', =>
+                @popover = null
 
                 @el.focus()
 
                 return
 
-            @el.appendChild @hotspotPicker.el
-            @hotspotPicker.render().el.focus()
+            @el.appendChild @popover.el
+            @popover.render().el.focus()
         
         return
 
@@ -297,7 +298,7 @@ class Viewer
         return
     
     beforeNavigation: ->
-        @hotspotPicker.destroy() if @hotspotPicker?
+        @popover.destroy() if @popover?
 
         return
     
