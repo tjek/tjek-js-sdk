@@ -37,22 +37,24 @@
                         incito: res.data.node.incito
                     });
 
-                    viewer.bind('view_clicked', function (attrs) {
-                        console.log('view clicked', attrs);
-    
-                        alert('view clicked: ' + attrs.role + ' ' + attrs.id);
+                    viewer.bind('view_clicked', function (e) {
+                        console.log('view clicked', e);
                     });
     
-                    viewer.bind('view_context_clicked', function (attrs) {
-                        console.log('view context clicked', attrs);
-    
-                        alert('view context clicked: ' + attrs.role);
+                    viewer.bind('view_context_clicked', function (e) {
+                        console.log('view context clicked', e);
+
+                        viewer.pickOfferProduct(e, function (product) {
+                            console.log(product);
+                        });
                     });
     
-                    viewer.bind('view_long_clicked', function (attrs) {
-                        console.log('view long clicked', attrs);
-    
-                        alert('view long clicked: ' + attrs.role);
+                    viewer.bind('view_long_clicked', function (e) {
+                        console.log('view long clicked', e);
+
+                        viewer.pickOfferProduct(e, function (product) {
+                            console.log(product);
+                        });
                     });
 
                     viewer.start();

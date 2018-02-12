@@ -1,6 +1,7 @@
 Mustache = require 'mustache'
 pairs =
     'paged_publication.hotspot_picker.header': 'Which offer did you mean?'
+    'incito_publication.product_picker.header': 'Which product?'
 
 module.exports =
     t: (key, view) ->

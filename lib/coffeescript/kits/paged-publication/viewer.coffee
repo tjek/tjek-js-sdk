@@ -212,7 +212,7 @@ class Viewer
 
         return
 
-    getSelectedHotspot: (e, callback) ->
+    pickHotspot: (e, callback) ->
         return if not @hotspots?
         
         hotspots = e.verso.overlayEls.map (overlayEl) =>
@@ -235,7 +235,7 @@ class Viewer
                 singleChoiceItems: singleChoiceItems
 
             @popover.bind 'selected', (e) =>
-                callback @hotspots[e.id]
+                callback hotspots[e.index]
 
                 @popover.destroy()
 
@@ -303,7 +303,7 @@ class Viewer
         return
     
     clicked: (e) ->
-        @getSelectedHotspot e, (hotspot) =>
+        @pickHotspot e, (hotspot) =>
             @trigger 'hotspotClicked', hotspot
 
             return
@@ -311,7 +311,7 @@ class Viewer
         return
     
     contextmenu: (e) ->
-        @getSelectedHotspot e, (hotspot) =>
+        @pickHotspot e, (hotspot) =>
             @trigger 'hotspotContextmenu', hotspot
 
             return
@@ -319,7 +319,7 @@ class Viewer
         return
     
     pressed: (e) ->
-        @getSelectedHotspot e, (hotspot) =>
+        @pickHotspot e, (hotspot) =>
             @trigger 'hotspotPressed', hotspot
 
             return
