@@ -1,10 +1,30 @@
 MicroEvent = require 'microevent'
 Gator = require 'gator'
 Mustache = require 'mustache'
-template = require './templates/hotspot-picker'
-keyCodes = require '../../key-codes'
+keyCodes = require './key-codes'
 
-class PagedPublicationHotspotPicker
+template = """
+<div class="sgn-popover__background" data-close></div>
+<div class="sgn-popover__menu">
+    {{#header}}
+        <div class="sgn-popover__header">{{header}}</div>
+    {{/header}}
+    <div class="sgn-popover__content">
+        <ul>
+            {{#singleChoiceItems}}
+                <li data-id="{{id}}">
+                    <p>{{title}}</p>
+                    {{#subtitle}}
+                        <p>{{subtitle}}</p>
+                    {{/subtitle}}
+                </li>
+            {{/singleChoiceItems}}
+        </ul>
+    </div>
+</div>
+"""
+
+class Popover
     constructor: (@options = {}) ->
         @el = document.createElement 'div'
         @resizeListener = @resize.bind @
@@ -18,17 +38,17 @@ class PagedPublicationHotspotPicker
         trigger = @trigger.bind @
         view =
             header: header
-            hotspots: @options.hotspots
+            singleChoiceItems: @options.singleChoiceItems
             top: @options.y
             left: @options.x
 
-        @el.className = 'sgn-pp__hotspot-picker'
+        @el.className = 'sgn-popover'
         @el.setAttribute 'tabindex', -1
         @el.innerHTML = Mustache.render template, view
 
-        popoverEl = @el.querySelector '.sgn__popover'
-        width = popoverEl.offsetWidth
-        height = popoverEl.offsetHeight
+        menuEl = @el.querySelector '.sgn-popover__menu'
+        width = menuEl.offsetWidth
+        height = menuEl.offsetHeight
         parentWidth = @el.parentNode.offsetWidth
         parentHeight = @el.parentNode.offsetHeight
         boundingRect = @el.parentNode.getBoundingClientRect()
@@ -37,14 +57,14 @@ class PagedPublicationHotspotPicker
         view.left -= boundingRect.left
 
         if view.top + height > parentHeight
-            popoverEl.style.top = parentHeight - height + 'px'
+            menuEl.style.top = parentHeight - height + 'px'
         else
-            popoverEl.style.top = view.top + 'px'
+            menuEl.style.top = view.top + 'px'
 
         if view.left + width > parentWidth
-            popoverEl.style.left = parentWidth - width + 'px'
+            menuEl.style.left = parentWidth - width + 'px'
         else
-            popoverEl.style.left = view.left + 'px'
+            menuEl.style.left = view.left + 'px'
 
         @el.addEventListener 'keyup', @keyUp.bind(@)
 
@@ -79,6 +99,6 @@ class PagedPublicationHotspotPicker
 
         return
 
-MicroEvent.mixin PagedPublicationHotspotPicker
+MicroEvent.mixin Popover
 
-module.exports = PagedPublicationHotspotPicker
+module.exports = Popover
