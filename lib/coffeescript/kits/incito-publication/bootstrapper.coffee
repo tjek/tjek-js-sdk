@@ -32,6 +32,10 @@ module.exports = class Bootstrapper
         @options.el.offsetWidth
 
     fetch: (callback) ->
+        data = SGN.storage.session.get "incito-#{@options.id}"
+
+        return callback null, data if data?
+
         SGN.GraphKit.request
             query: schema
             operationName: 'GetIncitoPublication'
@@ -43,7 +47,15 @@ module.exports = class Bootstrapper
                 orientation: 'ORIENTATION_' + @orientation.toUpperCase()
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
-        , callback
+        , (err, data) =>
+            if err?
+                callback err
+            else
+                callback null, data
+
+                SGN.storage.session.set "incito-#{@options.id}", data
+            
+            return
 
         return
     

@@ -3,6 +3,7 @@ SGN = require './sgn'
 # Expose storage backends.
 SGN.storage =
     local: require './storage/client-local'
+    session: require './storage/client-session'
     cookie: require './storage/client-cookie'
 
 # Expose request handler.
