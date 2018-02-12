@@ -121,14 +121,14 @@ var translations = {
   }
 };
 
-var process$$1;
+var process$1;
 var util;
 
-process$$1 = process;
+process$1 = process;
 
 util = {
   isBrowser: function isBrowser() {
-    return typeof process$$1 !== 'undefined' && process$$1.browser;
+    return typeof process$1 !== 'undefined' && process$1.browser;
   },
   isNode: function isNode() {
     return !util.isBrowser();
@@ -441,9 +441,9 @@ var core = {
 
 var sgn = core;
 
-var request$$1;
+var request$1;
 
-request$$1 = request;
+request$1 = request;
 
 var node = function node() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -462,13 +462,13 @@ var node = function node() {
     qs: options.qs
   };
   if (Array.isArray(options.cookies)) {
-    jar = request$$1.jar();
+    jar = request$1.jar();
     options.cookies.forEach(function (cookie) {
-      jar.setCookie(request$$1.cookie(cookie.key + '=' + cookie.value), cookie.url);
+      jar.setCookie(request$1.cookie(cookie.key + '=' + cookie.value), cookie.url);
     });
     requestOptions.jar = jar;
   }
-  request$$1(requestOptions, function (err, response, body) {
+  request$1(requestOptions, function (err, response, body) {
     if (err != null) {
       callback(new Error());
     } else {
@@ -502,7 +502,7 @@ parseCookies = function parseCookies() {
   return parsedCookies;
 };
 
-var request$1 = function request$$1() {
+var request$2 = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments[1];
 
@@ -566,7 +566,7 @@ var request$1 = function request$$1() {
 };
 
 var graph = {
-  request: request$1
+  request: request$2
 };
 
 var SGN$2;
@@ -714,11 +714,11 @@ var callbackQueue;
 var clientCookieStorage;
 var renewed;
 var session;
-var sha256$$1;
+var sha256$1;
 
 SGN$4 = sgn;
 
-sha256$$1 = sha256;
+sha256$1 = sha256;
 
 clientCookieStorage = clientCookie;
 
@@ -849,21 +849,21 @@ session = {
     }
   },
   sign: function sign(appSecret, token) {
-    return sha256$$1([appSecret, token].join(''));
+    return sha256$1([appSecret, token].join(''));
   }
 };
 
 var session_1 = session;
 
-var request$3;
+var request$4;
 var session$1;
 
-request$3 = request_1;
+request$4 = request_1;
 
 session$1 = session_1;
 
 var core$2 = {
-  request: request$3,
+  request: request$4,
   session: session$1
 };
 

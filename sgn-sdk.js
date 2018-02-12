@@ -2548,7 +2548,7 @@ var core$2 = {
 };
 
 var verso = createCommonjsModule(function (module, exports) {
-(function(f){{module.exports=f();}})(function(){var define;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof commonjsRequire=="function"&&commonjsRequire;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND", f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r);}return n[o].exports}var i=typeof commonjsRequire=="function"&&commonjsRequire;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function(f){{module.exports=f();}})(function(){var define;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof commonjsRequire=="function"&&commonjsRequire;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND", f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r);}return n[o].exports}var i=typeof commonjsRequire=="function"&&commonjsRequire;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2811,7 +2811,7 @@ Verso = function () {
     this.navigationDuration = (ref2 = this.options.navigationDuration) != null ? ref2 : 240;
     this.navigationPanDuration = (ref3 = this.options.navigationPanDuration) != null ? ref3 : 200;
     this.zoomDuration = (ref4 = this.options.zoomDuration) != null ? ref4 : 200;
-    this.doubleTapDelay = (ref5 = this.options.doubleTapDelay) != null ? ref5 : 250;
+    this.doubleTapDelay = (ref5 = this.options.doubleTapDelay) != null ? ref5 : 300;
     this.position = -1;
     this.pinching = false;
     this.panning = false;
@@ -8425,13 +8425,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AbsoluteLayout, FlexLayout, FragView, ImageView, Incito, LinearLayout, TextView, VideoEmbedView, View, lozad, vent;
+var AbsoluteLayout, FlexLayout, FragView, ImageView, Incito, LinearLayout, MicroEvent, TextView, VideoEmbedView, View, lozad;
 
 _dereq_('intersection-observer');
 
-lozad = _dereq_('lozad');
+MicroEvent = _dereq_('microevent');
 
-vent = _dereq_('./vent');
+lozad = _dereq_('lozad');
 
 View = _dereq_('./views/view');
 
@@ -8450,144 +8450,148 @@ AbsoluteLayout = _dereq_('./views/absolute-layout');
 FlexLayout = _dereq_('./views/flex-layout');
 
 Incito = function () {
-  var Incito = function () {
-    function Incito(el1) {
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  function Incito(el1) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-      _classCallCheck(this, Incito);
+    _classCallCheck(this, Incito);
 
-      this.el = el1;
-      this.options = options;
-      return;
+    this.el = el1;
+    this.options = options;
+    return;
+  }
+
+  _createClass(Incito, [{
+    key: 'start',
+    value: function start() {
+      var frag, incito;
+      incito = this.options.incito || {};
+      frag = document.createDocumentFragment();
+      this.loadFonts(incito.font_assets);
+      this.applyTheme(incito.theme);
+      this.render(frag, incito.root_view);
+      if (incito.locale != null) {
+        this.el.setAttribute('lang', incito.locale);
+      }
+      if (incito.debug === true) {
+        this.el.setAttribute('data-debug', true);
+      }
+      this.el.appendChild(frag);
+      this.lazyload = lozad('.incito--lazyload', {
+        rootMargin: '1500px 0px',
+        threshold: 1
+      });
+      this.lazyload.observe();
+      return this;
     }
+  }, {
+    key: 'render',
+    value: function render(el) {
+      var _this = this;
 
-    _createClass(Incito, [{
-      key: 'start',
-      value: function start() {
-        var frag, incito;
-        incito = this.options.incito || {};
-        frag = document.createDocumentFragment();
-        this.loadFonts(incito.font_assets);
-        this.applyTheme(incito.theme);
-        this.render(frag, incito.root_view);
-        if (incito.locale != null) {
-          this.el.setAttribute('lang', incito.locale);
-        }
-        if (incito.debug === true) {
-          this.el.setAttribute('data-debug', true);
-        }
-        this.el.appendChild(frag);
-        this.lazyload = lozad('.incito--lazyload', {
-          rootMargin: '1500px 0px',
-          threshold: 1
-        });
-        this.lazyload.observe();
-        return this;
+      var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var match, trigger, view, viewName;
+      match = null;
+      viewName = attrs.view_name;
+      if (!viewName || viewName === 'View') {
+        match = View;
+      } else if (viewName === 'FragView') {
+        match = FragView;
+      } else if (viewName === 'ImageView') {
+        match = ImageView;
+      } else if (viewName === 'TextView') {
+        match = TextView;
+      } else if (viewName === 'VideoEmbedView') {
+        match = VideoEmbedView;
+      } else if (viewName === 'LinearLayout') {
+        match = LinearLayout;
+      } else if (viewName === 'AbsoluteLayout') {
+        match = AbsoluteLayout;
+      } else if (viewName === 'FlexLayout') {
+        match = FlexLayout;
       }
-    }, {
-      key: 'render',
-      value: function render(el) {
-        var _this = this;
-
-        var view = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-        var match, viewEl, viewName;
-        match = null;
-        viewName = view.view_name;
-        if (!viewName || viewName === 'View') {
-          match = View;
-        } else if (viewName === 'FragView') {
-          match = FragView;
-        } else if (viewName === 'ImageView') {
-          match = ImageView;
-        } else if (viewName === 'TextView') {
-          match = TextView;
-        } else if (viewName === 'VideoEmbedView') {
-          match = VideoEmbedView;
-        } else if (viewName === 'LinearLayout') {
-          match = LinearLayout;
-        } else if (viewName === 'AbsoluteLayout') {
-          match = AbsoluteLayout;
-        } else if (viewName === 'FlexLayout') {
-          match = FlexLayout;
-        }
-        if (match != null) {
-          viewEl = new match(view).render().el;
-          if (Array.isArray(view.child_views)) {
-            view.child_views.forEach(function (childView) {
-              var childEl;
-              childEl = _this.render(viewEl, childView);
-              if (childEl != null) {
-                viewEl.appendChild(childEl);
-              }
-            });
+      if (match != null) {
+        view = new match(attrs);
+        trigger = view.trigger;
+        view.trigger = function () {
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
           }
-          el.appendChild(viewEl);
-          return viewEl;
+
+          trigger.apply(view, args);
+          _this.trigger.apply(_this, args);
+        };
+        view.render();
+        if (Array.isArray(attrs.child_views)) {
+          attrs.child_views.forEach(function (childView) {
+            var childEl;
+            childEl = _this.render(view.el, childView);
+            if (childEl != null) {
+              view.el.appendChild(childEl);
+            }
+          });
         }
+        el.appendChild(view.el);
+        return view.el;
       }
-    }, {
-      key: 'applyTheme',
-      value: function applyTheme() {
-        var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    }
+  }, {
+    key: 'applyTheme',
+    value: function applyTheme() {
+      var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        if (theme.font_family != null) {
-          this.el.style.fontFamily = theme.font_family.join(', ');
-        }
-        if (theme.background_color != null) {
-          this.el.style.backgroundColor = theme.background_color;
-        }
-        if (theme.line_spacing_multiplier != null) {
-          this.el.style.lineHeight = theme.line_spacing_multiplier;
-        }
+      if (theme.font_family != null) {
+        this.el.style.fontFamily = theme.font_family.join(', ');
       }
-    }, {
-      key: 'loadFonts',
-      value: function loadFonts() {
-        var fontAssets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-        var font, key, ref, ref1, styleEl, text, urls, value;
-        if ('FontFace' in window) {
-          for (key in fontAssets) {
-            value = fontAssets[key];
-            urls = value.src.map(function (src) {
-              return 'url(' + src[1] + ')';
-            }).join(', ');
-            font = new FontFace(key, urls, {
-              style: (ref = value.style) != null ? ref : 'normal',
-              weight: (ref1 = value.weight) != null ? ref1 : 'normal'
-            });
-            document.fonts.add(font);
-            font.load();
-          }
-        } else {
-          styleEl = document.createElement('style');
-          for (key in fontAssets) {
-            value = fontAssets[key];
-            urls = value.src.map(function (src) {
-              return 'url(\'' + src[1] + '\') format(\'' + src[0] + '\')';
-            }).join(', ');
-            text = '@font-face {\n    font-family: \'' + key + '\';\n    src: ' + urls + ';\n}';
-            styleEl.appendChild(document.createTextNode(text));
-          }
-          document.head.appendChild(styleEl);
-        }
+      if (theme.background_color != null) {
+        this.el.style.backgroundColor = theme.background_color;
       }
-    }]);
+      if (theme.line_spacing_multiplier != null) {
+        this.el.style.lineHeight = theme.line_spacing_multiplier;
+      }
+    }
+  }, {
+    key: 'loadFonts',
+    value: function loadFonts() {
+      var fontAssets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    return Incito;
-  }();
-
-  
-
-  Incito.vent = vent;
+      var font, key, ref, ref1, styleEl, text, urls, value;
+      if ('FontFace' in window) {
+        for (key in fontAssets) {
+          value = fontAssets[key];
+          urls = value.src.map(function (src) {
+            return 'url(' + src[1] + ')';
+          }).join(', ');
+          font = new FontFace(key, urls, {
+            style: (ref = value.style) != null ? ref : 'normal',
+            weight: (ref1 = value.weight) != null ? ref1 : 'normal'
+          });
+          document.fonts.add(font);
+          font.load();
+        }
+      } else {
+        styleEl = document.createElement('style');
+        for (key in fontAssets) {
+          value = fontAssets[key];
+          urls = value.src.map(function (src) {
+            return 'url(\'' + src[1] + '\') format(\'' + src[0] + '\')';
+          }).join(', ');
+          text = '@font-face {\n    font-family: \'' + key + '\';\n    src: ' + urls + ';\n}';
+          styleEl.appendChild(document.createTextNode(text));
+        }
+        document.head.appendChild(styleEl);
+      }
+    }
+  }]);
 
   return Incito;
-}.call(undefined);
+}();
+
+MicroEvent.mixin(Incito);
 
 module.exports = Incito;
 
-},{"./vent":3,"./views/absolute-layout":4,"./views/flex-layout":5,"./views/frag":6,"./views/image":7,"./views/linear-layout":8,"./views/text":9,"./views/video-embed":10,"./views/view":11,"intersection-observer":12,"lozad":13}],2:[function(_dereq_,module,exports){
+},{"./views/absolute-layout":3,"./views/flex-layout":4,"./views/frag":5,"./views/image":6,"./views/linear-layout":7,"./views/text":8,"./views/video-embed":9,"./views/view":10,"intersection-observer":11,"lozad":12,"microevent":13}],2:[function(_dereq_,module,exports){
 var utils;
 
 utils = {
@@ -8610,21 +8614,6 @@ utils = {
 module.exports = utils;
 
 },{}],3:[function(_dereq_,module,exports){
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var MicroEvent, Vent;
-
-MicroEvent = _dereq_('microevent');
-
-Vent = function Vent() {
-  _classCallCheck(this, Vent);
-};
-
-MicroEvent.mixin(Vent);
-
-module.exports = new Vent();
-
-},{"microevent":14}],4:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8664,7 +8653,7 @@ module.exports = AbsoluteLayout = function () {
   return AbsoluteLayout;
 }.call(undefined);
 
-},{"./view":11}],5:[function(_dereq_,module,exports){
+},{"./view":10}],4:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8692,15 +8681,31 @@ module.exports = FlexLayout = function () {
       value: function render() {
         if (this.attrs.layout_flex_align_items != null) {
           this.el.style.alignItems = this.attrs.layout_flex_align_items;
+          this.el.style.msAlignItems = this.attrs.layout_flex_align_items;
         }
         if (this.attrs.layout_flex_align_content != null) {
           this.el.style.alignContent = this.attrs.layout_flex_align_content;
+          this.el.style.msAlignContent = this.attrs.layout_flex_align_content;
         }
         if (this.attrs.layout_flex_justify_content != null) {
           this.el.style.justifyContent = this.attrs.layout_flex_justify_content;
+          this.el.style.msFlexPack = this.attrs.layout_flex_justify_content;
         }
         if (this.attrs.layout_flex_direction != null) {
           this.el.style.flexDirection = this.attrs.layout_flex_direction;
+          this.el.style.msFlexDirection = this.attrs.layout_flex_direction;
+        }
+        if (typeof this.attrs.layout_flex_shrink === 'number') {
+          this.el.style.flexShrink = this.attrs.layout_flex_shrink;
+          this.el.style.msFlexShrink = this.attrs.layout_flex_shrink;
+        }
+        if (typeof this.attrs.layout_flex_grow === 'number') {
+          this.el.style.flexGrow = this.attrs.layout_flex_grow;
+          this.el.style.msFlexGrow = this.attrs.layout_flex_grow;
+        }
+        if (this.attrs.layout_flex_basis != null) {
+          this.el.style.flexBasis = this.attrs.layout_flex_basis;
+          this.el.style.msFlexBasis = this.attrs.layout_flex_basis;
         }
         return this;
       }
@@ -8716,7 +8721,7 @@ module.exports = FlexLayout = function () {
   return FlexLayout;
 }.call(undefined);
 
-},{"./view":11}],6:[function(_dereq_,module,exports){
+},{"./view":10}],5:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8739,7 +8744,7 @@ module.exports = FragView = function () {
   return FragView;
 }();
 
-},{}],7:[function(_dereq_,module,exports){
+},{}],6:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8787,7 +8792,7 @@ module.exports = Image = function () {
   return Image;
 }.call(undefined);
 
-},{"./view":11}],8:[function(_dereq_,module,exports){
+},{"./view":10}],7:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8827,7 +8832,7 @@ module.exports = LinearLayout = function () {
   return LinearLayout;
 }.call(undefined);
 
-},{"./view":11}],9:[function(_dereq_,module,exports){
+},{"./view":10}],8:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8862,11 +8867,11 @@ module.exports = TextView = function () {
         textStyles = (this.attrs.text_style || '').split('|');
         parsedText = this.parseSpans(this.attrs.text, this.attrs.spans);
         text = parsedText.map(function (item) {
-          var escapedText, tagName;
+          var escapedText, spanName;
           escapedText = utils.escapeHTML(item.text);
-          if (item.span != null) {
-            tagName = item.span.type === 'superscript' ? 'sup' : 'span';
-            return '<' + tagName + '>' + escapedText + ('</' + tagName + '>');
+          if (item.span != null && item.span.name != null) {
+            spanName = utils.escapeHTML(item.span.name);
+            return '<span data-name="' + spanName + '">' + escapedText + '</span>';
           } else {
             return escapedText;
           }
@@ -8980,7 +8985,7 @@ module.exports = TextView = function () {
   return TextView;
 }.call(undefined);
 
-},{"../utils":2,"./view":11}],10:[function(_dereq_,module,exports){
+},{"../utils":2,"./view":10}],9:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9040,19 +9045,19 @@ module.exports = FlexLayout = function () {
   return FlexLayout;
 }.call(undefined);
 
-},{"./view":11}],11:[function(_dereq_,module,exports){
+},{"./view":10}],10:[function(_dereq_,module,exports){
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var View,
+var MicroEvent,
+    View,
     utils,
-    vent,
     indexOf = [].indexOf;
 
-utils = _dereq_('../utils');
+MicroEvent = _dereq_('microevent');
 
-vent = _dereq_('../vent');
+utils = _dereq_('../utils');
 
 module.exports = View = function () {
   var View = function () {
@@ -9122,14 +9127,14 @@ module.exports = View = function () {
           this.el.setAttribute('data-click-callback', this.attrs.onclick);
           this.el.onclick = function (e) {
             e.stopPropagation();
-            vent.trigger(_this.attrs.onclick, _this.attrs);
+            _this.trigger(_this.attrs.onclick, _this.attrs);
           };
         }
         // Context click callback.
         if (typeof this.attrs.oncontextclick === 'string') {
           this.el.setAttribute('data-context-click-callback', this.attrs.oncontextclick);
           this.el.oncontextmenu = function (e) {
-            vent.trigger(_this.attrs.oncontextclick, _this.attrs);
+            _this.trigger(_this.attrs.oncontextclick, _this.attrs);
             return false;
           };
         }
@@ -9143,7 +9148,7 @@ module.exports = View = function () {
           };
           this.el.onmousedown = function () {
             _this.longclickTimer = window.setTimeout(function () {
-              return vent.trigger(_this.attrs.onlongclick, _this.attrs);
+              return _this.trigger(_this.attrs.onlongclick, _this.attrs);
             }, 500);
             return false;
           };
@@ -9320,16 +9325,6 @@ module.exports = View = function () {
         if (ref5 = this.attrs.stroke_bottom_style, indexOf.call(strokeStyles, ref5) >= 0) {
           this.el.style.borderBottomStyle = this.attrs.stroke_bottom_style;
         }
-        // Flex layout.
-        if (typeof this.attrs.layout_flex_shrink === 'number') {
-          this.el.style.flexShrink = this.attrs.layout_flex_shrink;
-        }
-        if (typeof this.attrs.layout_flex_grow === 'number') {
-          this.el.style.flexGrow = this.attrs.layout_flex_grow;
-        }
-        if (this.attrs.layout_flex_basis != null) {
-          this.el.style.flexBasis = this.attrs.layout_flex_basis;
-        }
 
         // Transforms.
         transforms = this.getTransforms();
@@ -9352,7 +9347,7 @@ module.exports = View = function () {
         if (translateX !== 0 && translateY !== 0) {
           transforms.push('translate3d(' + translateX + ', ' + translateY + ', 0)');
         }
-        if (typeof this.attrs.transform_rotate === 'number' && this.attrs.transform_scale !== 1) {
+        if (typeof this.attrs.transform_rotate === 'number' && this.attrs.transform_rotate !== 1) {
           transforms.push('rotate3d(0, 0, 1, ' + this.attrs.transform_rotate + 'deg)');
         }
         if (typeof this.attrs.transform_scale === 'number' && this.attrs.transform_scale !== 1) {
@@ -9374,7 +9369,11 @@ module.exports = View = function () {
   return View;
 }.call(undefined);
 
-},{"../utils":2,"../vent":3}],12:[function(_dereq_,module,exports){
+MicroEvent.mixin(View);
+
+module.exports = View;
+
+},{"../utils":2,"microevent":13}],11:[function(_dereq_,module,exports){
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -10095,7 +10094,7 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 
 }(window, document));
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 /*! lozad.js - v1.2.0 - 2018-01-23
 * https://github.com/ApoorvSaxena/lozad.js
 * Copyright (c) 2018 Apoorv Saxena; Licensed MIT */
@@ -10219,7 +10218,7 @@ return lozad;
 
 })));
 
-},{}],14:[function(_dereq_,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 /**
  * MicroEvent - to make any js object an event emitter (server or browser)
  * 
@@ -10277,15 +10276,21 @@ if( typeof module !== "undefined" && ('exports' in module)){
 });
 
 var Incito;
+var MicroEvent$11;
 var Viewer$1;
 
 Incito = incito;
 
+MicroEvent$11 = microevent;
+
 Viewer$1 = function () {
   function Viewer(el) {
+    var _this = this;
+
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     classCallCheck(this, Viewer);
 
+    var trigger;
     this.options = options;
     this.els = {
       root: el,
@@ -10294,6 +10299,15 @@ Viewer$1 = function () {
     this.incito = new Incito(this.els.incito, {
       incito: this.options.incito
     });
+    trigger = this.incito.trigger;
+    this.incito.trigger = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      trigger.apply(_this.incito, args);
+      _this.trigger.apply(_this, args);
+    };
     return;
   }
 
@@ -10304,14 +10318,38 @@ Viewer$1 = function () {
       this.els.root.setAttribute('tabindex', '-1');
       this.els.root.focus();
       this.incito.start();
+      this._trackEvent({
+        type: 'x-incito-publication-opened',
+        properties: {}
+      });
       return this;
     }
   }, {
     key: 'destroy',
     value: function destroy() {}
+  }, {
+    key: '_trackEvent',
+    value: function _trackEvent(e) {
+      var eventTracker, key, properties, ref, type, value;
+      type = e.type;
+      properties = {
+        id: this.options.id
+      };
+      eventTracker = this.options.eventTracker;
+      ref = e.properties;
+      for (key in ref) {
+        value = ref[key];
+        properties[key] = value;
+      }
+      if (eventTracker != null) {
+        return eventTracker.trackEvent(type, properties);
+      }
+    }
   }]);
   return Viewer;
 }();
+
+MicroEvent$11.mixin(Viewer$1);
 
 var viewer$2 = Viewer$1;
 
