@@ -17,6 +17,7 @@
     color #000
     border-radius 12px
     max-width 220px
+    min-width 170px
     box-shadow 0 0 8px rgba(#000, 0.2)
 
     ul
@@ -34,33 +35,31 @@
             padding-top 0
 
         &:last-child
-            padding-bottom 0
             border-bottom 0
+            padding-bottom 0
 
-        > p:first-child
-            font-size 15px
-            margin 0 0 2px
-            overflow ellipsis
+.sgn-popover-item__title
+    font-size 16px
+    overflow ellipsis
+    margin 0
 
-        > p:last-child
-            font-size 12px
-            margin 0
-            overflow ellipsis
+.sgn-popover-item__subtitle
+    font-size 14px
+    margin 2px 0 0
+    overflow ellipsis
 
 .sgn-popover__header
     padding 10px 12px
-    font-size 14px
+    line-height 1
+    font-size 16px
     text-align center
     background-color #f9f9f9
     border-radius top left 12px
     border-radius top right 12px
     border-bottom 1px solid #e6e6e6
 
-.sgn-pp-hotspot-picker__background
+.sgn-popover__background
     absolute top left
     right 0
     bottom 0
     cursor pointer
-
-.sgn-popover__header
-    line-height 1

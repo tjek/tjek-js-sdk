@@ -12,11 +12,11 @@ template = """
     <div class="sgn-popover__content">
         <ul>
             {{#singleChoiceItems}}
-                <li data-id="{{id}}">
-                    <p>{{title}}</p>
-                    {{#subtitle}}
-                        <p>{{subtitle}}</p>
-                    {{/subtitle}}
+                <li data-index="{{index}}">
+                    <p class="sgn-popover-item__title">{{item.title}}</p>
+                    {{#item.subtitle}}
+                        <p class="sgn-popover-item__subtitle">{{item.subtitle}}</p>
+                    {{/item.subtitle}}
                 </li>
             {{/singleChoiceItems}}
         </ul>
@@ -38,7 +38,9 @@ class Popover
         trigger = @trigger.bind @
         view =
             header: header
-            singleChoiceItems: @options.singleChoiceItems
+            singleChoiceItems: @options.singleChoiceItems.map (item, i) ->
+                item: item
+                index: i
             top: @options.y
             left: @options.x
 
@@ -68,8 +70,8 @@ class Popover
 
         @el.addEventListener 'keyup', @keyUp.bind(@)
 
-        Gator(@el).on 'click', '[data-id]', ->
-            trigger 'selected', id: @getAttribute('data-id')
+        Gator(@el).on 'click', '[data-index]', (e) ->
+            trigger 'selected', index: +@getAttribute 'data-index'
 
             return
 
