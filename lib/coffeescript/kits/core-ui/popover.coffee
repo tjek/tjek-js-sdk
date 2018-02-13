@@ -1,7 +1,7 @@
 MicroEvent = require 'microevent'
 Gator = require 'gator'
 Mustache = require 'mustache'
-keyCodes = require './key-codes'
+keyCodes = require '../../key-codes'
 
 template = """
 <div class="sgn-popover__background" data-close></div>

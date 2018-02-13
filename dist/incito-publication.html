@@ -25,11 +25,30 @@
                 graphUrl: 'https://graph.service-staging.shopgun.com'
             });
             
+            var el = document.querySelector('.sgn__incito');
             var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
-                el: document.querySelector('.sgn__incito'),
+                el: el,
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
+
+            function pickProduct (e, callback) {
+                if (e.incito.role !== 'offer') {
+                    return;
+                }
+
+                var popover = SGN.CoreUIKit.singleChoicePopover({
+                    el: el,
+                    header: SGN.translations.t('incito_publication.product_picker.header'),
+                    x: e.originalEvent.x,
+                    y: e.originalEvent.y,
+                    items: e.incito.meta.products.map(function (product) {
+                        return {
+                            title: product.title
+                        };
+                    })
+                }, callback);
+            }
 
             bootstrapper.fetch(function (err, res) {
                 if (!err) {
@@ -38,22 +57,23 @@
                     });
 
                     viewer.bind('view_clicked', function (e) {
+
                         console.log('view clicked', e);
                     });
     
                     viewer.bind('view_context_clicked', function (e) {
                         console.log('view context clicked', e);
 
-                        viewer.pickOfferProduct(e, function (product) {
-                            console.log(product);
+                        pickProduct(e, function (product) {
+                            console.log('product selected', product);
                         });
                     });
     
                     viewer.bind('view_long_clicked', function (e) {
                         console.log('view long clicked', e);
 
-                        viewer.pickOfferProduct(e, function (product) {
-                            console.log(product);
+                        pickProduct(e, function (product) {
+                            console.log('product selected', product);
                         });
                     });
 
