@@ -35,6 +35,8 @@ class Viewer
         @
     
     destroy: ->
+        @popover.destroy() if @popover?
+        
         return
     
     pickOfferProduct: (e, callback) ->
@@ -42,17 +44,16 @@ class Viewer
 
         products = e.incito.meta.products
 
+        @popover.destroy() if @popover?
+
         if products.length is 1
             callback products[0]
         else if products.length > 1
-            singleChoiceItems = 
-
             @popover = new Popover
                 header: SGN.translations.t 'incito_publication.product_picker.header'
                 x: e.originalEvent.x
                 y: e.originalEvent.y
-                singleChoiceItems: products.map (product) ->
-                    title: product.title
+                singleChoiceItems: products.map (product) -> title: product.title
 
             @popover.bind 'selected', (e) =>
                 callback products[e.index]
