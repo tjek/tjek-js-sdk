@@ -1,15 +1,12 @@
-.sgn-popover__content
-    padding 8px
-
 .sgn-popover
-    absolute top left
+    fixed top left
     right 0
     bottom 0
     z-index 3
 
 .sgn-popover__menu
     position absolute
-    z-index 3
+    z-index 4
     outline 0
     background-color #fff
     color #000
@@ -35,6 +32,9 @@
         &:last-child
             border-bottom 0
             padding-bottom 0
+
+.sgn-popover__content
+    padding 8px
 
 .sgn-popover-item__title
     font-size 16px

@@ -13,14 +13,14 @@ module.exports = (ctx, callback) ->
             y: ctx.y
             singleChoiceItems: items
 
-        popover.bind 'selected', (e) =>
+        popover.bind 'selected', (e) ->
             callback items[e.index]
 
             popover.destroy()
 
             return
 
-        popover.bind 'destroyed', =>
+        popover.bind 'destroyed', ->
             ctx.el.focus()
 
             return

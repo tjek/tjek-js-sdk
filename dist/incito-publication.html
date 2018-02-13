@@ -31,14 +31,20 @@
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
+            var popover;
 
             function pickProduct (e, callback) {
+                if (popover) {
+                    popover.destroy();
+                    popover = null;
+                }
+
                 if (e.incito.role !== 'offer') {
                     return;
                 }
 
-                var popover = SGN.CoreUIKit.singleChoicePopover({
-                    el: el,
+                popover = SGN.CoreUIKit.singleChoicePopover({
+                    el: document.body,
                     header: SGN.translations.t('incito_publication.product_picker.header'),
                     x: e.originalEvent.x,
                     y: e.originalEvent.y,
@@ -57,7 +63,6 @@
                     });
 
                     viewer.bind('view_clicked', function (e) {
-
                         console.log('view clicked', e);
                     });
     

@@ -213,6 +213,10 @@ class Viewer
 
     pickHotspot: (e, callback) ->
         return if not @hotspots?
+
+        if @popover?
+            @popover.destroy()
+            @popover = null
         
         hotspots = e.verso.overlayEls.map (overlayEl) =>
             @hotspots[overlayEl.getAttribute('data-id')]
