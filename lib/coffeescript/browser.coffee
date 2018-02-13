@@ -16,6 +16,7 @@ SGN.GraphKit = require './kits/graph'
 SGN.CoreKit = require './kits/core'
 SGN.PagedPublicationKit = require './kits/paged-publication'
 SGN.IncitoPublicationKit = require './kits/incito-publication'
+SGN.CoreUIKit = require './kits/core-ui'
 
 # Set the core session from the cookie store if possible.
 session = SGN.storage.cookie.get 'session'

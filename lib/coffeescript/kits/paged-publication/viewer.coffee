@@ -1,6 +1,5 @@
 MicroEvent = require 'microevent'
 SGN = require '../../sgn'
-Popover = require '../../popover'
 Core = require './core'
 Hotspots = require './hotspots'
 Controls = require './controls'
@@ -221,35 +220,18 @@ class Viewer
         if hotspots.length is 1
             callback hotspots[0]
         else if hotspots.length > 1
-            singleChoiceItems = hotspots
-                .filter (hotspot) -> hotspot.type is 'offer'
-                .map (hotspot) ->
-                    id: hotspot.id
-                    title: hotspot.offer.heading
-                    subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
-
-            @popover = new Popover
+            @popover = SGN.CoreUIKit.singleChoicePopover
+                el: @el
                 header: SGN.translations.t 'paged_publication.hotspot_picker.header'
                 x: e.verso.x
                 y: e.verso.y
-                singleChoiceItems: singleChoiceItems
-
-            @popover.bind 'selected', (e) =>
-                callback hotspots[e.index]
-
-                @popover.destroy()
-
-                return
-
-            @popover.bind 'destroyed', =>
-                @popover = null
-
-                @el.focus()
-
-                return
-
-            @el.appendChild @popover.el
-            @popover.render().el.focus()
+                items: hotspots
+                    .filter (hotspot) -> hotspot.type is 'offer'
+                    .map (hotspot) ->
+                        id: hotspot.id
+                        title: hotspot.offer.heading
+                        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+            , callback
         
         return
 
