@@ -1062,17 +1062,12 @@
   opacity: 0.2;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
   filter: alpha(opacity=20);
-  -webkit-transition: opacity, -webkit-transform ease 0.2s;
-  -moz-transition: opacity, -moz-transform ease 0.2s;
-  -o-transition: opacity, -o-transform ease 0.2s;
-  -ms-transition: opacity, -ms-transform ease 0.2s;
-  transition: opacity, transform ease 0.2s;
+  -webkit-transition: opacity ease 0.2s;
+  -moz-transition: opacity ease 0.2s;
+  -o-transition: opacity ease 0.2s;
+  -ms-transition: opacity ease 0.2s;
+  transition: opacity ease 0.2s;
   outline: 0;
-  -webkit-transform: translateY(-50px);
-  -moz-transform: translateY(-50px);
-  -o-transform: translateY(-50px);
-  -ms-transform: translateY(-50px);
-  transform: translateY(-50px);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1081,10 +1076,5 @@
   opacity: 1;
   -ms-filter: none;
   filter: none;
-  -webkit-transform: translateY(0);
-  -moz-transform: translateY(0);
-  -o-transform: translateY(0);
-  -ms-transform: translateY(0);
-  transform: translateY(0);
 }
 /*# sourceMappingURL=sgn-sdk.css.map */
