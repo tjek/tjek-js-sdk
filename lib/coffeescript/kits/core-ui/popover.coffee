@@ -101,27 +101,24 @@ class Popover
 
         @el.addEventListener 'keyup', @keyUp.bind(@)
 
-        window.addEventListener 'click', =>
-            @destroy()
-
-            return
-
         Gator(@el).on 'click', '[data-index]', (e) ->
+            e.preventDefault()
             e.stopPropagation()
 
             trigger 'selected', index: +@getAttribute 'data-index'
 
             return
 
-        Gator(@el.querySelector('.sgn-popover__menu')).on 'click', (e) =>
-            e.stopPropagation()
-
-            return
-
         Gator(@el).on 'click', '[data-close]', (e) =>
+            e.preventDefault()
             e.stopPropagation()
             
             @destroy()
+
+            return
+
+        Gator(@el).on 'click', '.sgn-popover__menu', (e) ->
+            e.stopPropagation()
 
             return
 
