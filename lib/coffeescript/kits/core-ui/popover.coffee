@@ -113,6 +113,11 @@ class Popover
 
             return
 
+        Gator(@el.querySelector('.sgn-popover__menu')).on 'click', (e) =>
+            e.stopPropagation()
+
+            return
+
         Gator(@el).on 'click', '[data-close]', (e) =>
             e.stopPropagation()
             
