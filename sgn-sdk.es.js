@@ -213,7 +213,7 @@ util = {
       deviceCategory = 'mobile';
     } else if (navigator.platform === 'iPad') {
       deviceCategory = 'tablet';
-    } else if (navigator.platform === 'Android') {
+    } else if (navigator.platform === 'Android' || /android/gi.test(navigator.userAgent)) {
       if (/tablet/gi.test(navigator.userAgent)) {
         deviceCategory = 'tablet';
       } else {
