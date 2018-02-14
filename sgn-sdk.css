@@ -966,6 +966,16 @@
 .incito [data-callback] {
   cursor: pointer;
 }
+.incito [data-callback] {
+  touch-action: none;
+}
+.incito [data-disable-user-select] {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .incito__view {
   -webkit-transform-origin: 0 0;
   -moz-transform-origin: 0 0;
