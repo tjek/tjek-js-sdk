@@ -17,7 +17,7 @@ module.exports = class Bootstrapper
         util.getDeviceCategory()
     
     getPixelRatio: ->
-        window.devicePixelRatio || 1
+        window.devicePixelRatio or 1
     
     getPointer: ->
         util.getPointer()
