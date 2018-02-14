@@ -13,9 +13,29 @@
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             }
 
+            .btn {
+                display: inline-block;
+                border: 1px solid #eee;
+                cursor: pointer;
+                background: rgb(180, 21, 34);
+                border-radius: 6px;
+                padding: 2px 6px;
+                font-size: 16px;
+                font-family: inherit;
+                color: #fff;
+            }
+
             .offer-details__desc {
                 margin: 0;
                 font-weight: normal;
+            }
+
+            .offer-details__add {
+                float: right;
+            }
+
+            .offer-details__product {
+                margin-top: 6px;
             }
         </style>
 
@@ -26,11 +46,11 @@
                 {{#description}}
                     <p class="offer-details__desc">{{description}}</p>
                 {{/description}}
-                <ul>
-                    {{#products}}
-                        <li>{{title}}</li>
-                    {{/products}}
-                </ul>
+                {{#products}}
+                    <div class="offer-details__product">
+                        <button class="btn">+</button> {{title}}
+                    </div>
+                {{/products}}
             </div>
         </script>
     </head>
@@ -54,6 +74,7 @@
                 eventTracker: SGN.config.get('eventTracker')
             });
             var popover;
+            var detailsId;
             var details;
 
             function pickProduct (e, callback) {
@@ -86,10 +107,19 @@
                     });
 
                     viewer.bind('view_clicked', function (e) {
+                        if (detailsId === e.incito.id) {
+                            details.destroy();
+                            detailsId = null;
+                            details = null;
+
+                            return;
+                        }
+
                         if (details) {
                             details.destroy();
                         }
 
+                        detailsId = e.incito.id;
                         details = new SGN.IncitoPublicationKit.Details({
                             el: e.el,
                             template: document.querySelector('#offer-template').innerHTML,
