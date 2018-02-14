@@ -74,7 +74,7 @@ util =
             deviceCategory = 'mobile'
         else if navigator.platform is 'iPad'
             deviceCategory = 'tablet'
-        else if navigator.platform is 'Android'
+        else if navigator.platform is 'Android' or /android/gi.test(navigator.userAgent)
             if /tablet/gi.test(navigator.userAgent)
                 deviceCategory = 'tablet'
             else
