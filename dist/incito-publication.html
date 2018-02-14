@@ -8,10 +8,31 @@
         <style>
             body {
                 margin: 0;
+                font-size: 16px;
+                overflow-x: hidden;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+
+            .offer-details__desc {
+                margin: 0;
+                font-weight: normal;
             }
         </style>
 
         <link href="sgn-sdk.css" rel="stylesheet" type="text/css">
+
+        <script id="offer-template" type="text/template">
+            <div class="offer-details">
+                {{#description}}
+                    <p class="offer-details__desc">{{description}}</p>
+                {{/description}}
+                <ul>
+                    {{#products}}
+                        <li>{{title}}</li>
+                    {{/products}}
+                </ul>
+            </div>
+        </script>
     </head>
     <body>
         <div class="sgn__incito">
@@ -26,12 +47,14 @@
             });
             
             var el = document.querySelector('.sgn__incito');
+            var incitoEl = el.querySelector('.incito');
             var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
                 el: el,
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
             var popover;
+            var details;
 
             function pickProduct (e, callback) {
                 if (popover) {
@@ -63,20 +86,30 @@
                     });
 
                     viewer.bind('view_clicked', function (e) {
-                        console.log('view clicked', e);
+                        if (details) {
+                            details.destroy();
+                        }
+
+                        details = new SGN.IncitoPublicationKit.Details({
+                            el: e.el,
+                            template: document.querySelector('#offer-template').innerHTML,
+                            view: {
+                                description: e.incito.meta.description,
+                                products: e.incito.meta.products
+                            }
+                        });
+
+                        document.body.appendChild(details.render().el);
+                        details.show();
                     });
     
                     viewer.bind('view_context_clicked', function (e) {
-                        console.log('view context clicked', e);
-
                         pickProduct(e, function (product) {
                             console.log('product selected', product);
                         });
                     });
     
                     viewer.bind('view_long_clicked', function (e) {
-                        console.log('view long clicked', e);
-
                         pickProduct(e, function (product) {
                             console.log('product selected', product);
                         });

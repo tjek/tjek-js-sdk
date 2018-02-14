@@ -29,6 +29,7 @@ class Popover
         @el = document.createElement 'div'
         @backgroundEl = document.createElement 'div'
         @resizeListener = @resize.bind @
+        @scrollListener = @scroll.bind @
 
         return
 
@@ -42,12 +43,32 @@ class Popover
             singleChoiceItems: @options.singleChoiceItems.map (item, i) ->
                 item: item
                 index: i
-        top = @options.y
-        left = @options.x
 
         @el.className = 'sgn-popover'
         @el.setAttribute 'tabindex', -1
         @el.innerHTML = Mustache.render template, view
+
+        @position()
+        @addEventListeners()
+
+        @
+
+    destroy: ->
+        Gator(@el).off()
+
+        window.removeEventListener 'resize', @resizeListener
+        window.removeEventListener 'scroll', @scrollListener
+
+        if @el.parentNode?
+            @el.parentNode.removeChild @el
+
+            @trigger 'destroyed'
+
+        return
+    
+    position: ->
+        top = @options.y
+        left = @options.x
 
         menuEl = @el.querySelector '.sgn-popover__menu'
 
@@ -72,6 +93,11 @@ class Popover
             menuEl.style.left = parentWidth - width + 'px'
         else
             menuEl.style.left = left + 'px'
+        
+        return
+    
+    addEventListeners: ->
+        trigger = @trigger.bind @
 
         @el.addEventListener 'keyup', @keyUp.bind(@)
 
@@ -95,16 +121,7 @@ class Popover
             return
 
         window.addEventListener 'resize', @resizeListener, false
-
-        @
-
-    destroy: ->
-        Gator(@el).off()
-
-        if @el.parentNode?
-            @el.parentNode.removeChild @el
-
-            @trigger 'destroyed'
+        window.addEventListener 'scroll', @scrollListener, false
 
         return
 
@@ -114,8 +131,11 @@ class Popover
         return
 
     resize: ->
-        window.removeEventListener 'resize', @resizeListener
+        @destroy()
 
+        return
+
+    scroll: ->
         @destroy()
 
         return
