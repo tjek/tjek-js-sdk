@@ -107,7 +107,8 @@ var pairs;
 Mustache = mustache;
 
 pairs = {
-  'paged_publication.hotspot_picker.header': 'Which offer did you mean?'
+  'paged_publication.hotspot_picker.header': 'Which offer did you mean?',
+  'incito_publication.product_picker.header': 'Which product?'
 };
 
 var translations = {

@@ -8,10 +8,54 @@
         <style>
             body {
                 margin: 0;
+                font-size: 16px;
+                overflow-x: hidden;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+
+            .btn {
+                display: inline-block;
+                border: 1px solid #eee;
+                cursor: pointer;
+                background: rgb(180, 21, 34);
+                border-radius: 6px;
+                padding: 2px 6px;
+                font-size: 16px;
+                font-family: inherit;
+                color: #fff;
+            }
+
+            .offer-details__desc {
+                margin: 0;
+            }
+
+            .offer-details__add {
+                float: right;
+            }
+
+            .offer-details__product {
+                margin-top: 5px;
+            }
+
+            .offer-details__desc + .offer-details__product {
+                margin-top: 10px;
             }
         </style>
 
         <link href="sgn-sdk.css" rel="stylesheet" type="text/css">
+
+        <script id="offer-template" type="text/template">
+            <div class="offer-details">
+                {{#description}}
+                    <p class="offer-details__desc">{{description}}</p>
+                {{/description}}
+                {{#products}}
+                    <div class="offer-details__product">
+                        <button class="btn">+</button> {{title}}
+                    </div>
+                {{/products}}
+            </div>
+        </script>
     </head>
     <body>
         <div class="sgn__incito">
@@ -25,11 +69,39 @@
                 graphUrl: 'https://graph.service-staging.shopgun.com'
             });
             
+            var el = document.querySelector('.sgn__incito');
+            var incitoEl = el.querySelector('.incito');
             var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
-                el: document.querySelector('.sgn__incito'),
+                el: el,
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
+            var popover;
+            var detailsId;
+            var details;
+
+            function pickProduct (e, callback) {
+                if (popover) {
+                    popover.destroy();
+                    popover = null;
+                }
+
+                if (e.incito.role !== 'offer') {
+                    return;
+                }
+
+                popover = SGN.CoreUIKit.singleChoicePopover({
+                    el: document.body,
+                    header: SGN.translations.t('incito_publication.product_picker.header'),
+                    x: e.originalEvent.x,
+                    y: e.originalEvent.y,
+                    items: e.incito.meta.products.map(function (product) {
+                        return {
+                            title: product.title
+                        };
+                    })
+                }, callback);
+            }
 
             bootstrapper.fetch(function (err, res) {
                 if (!err) {
@@ -37,22 +109,43 @@
                         incito: res.data.node.incito
                     });
 
-                    viewer.bind('view_clicked', function (attrs) {
-                        console.log('view clicked', attrs);
-    
-                        alert('view clicked: ' + attrs.role + ' ' + attrs.id);
+                    viewer.bind('view_clicked', function (e) {
+                        if (detailsId === e.incito.id) {
+                            details.destroy();
+                            detailsId = null;
+                            details = null;
+
+                            return;
+                        }
+
+                        if (details) {
+                            details.destroy();
+                        }
+
+                        detailsId = e.incito.id;
+                        details = new SGN.IncitoPublicationKit.Details({
+                            el: e.el,
+                            template: document.querySelector('#offer-template').innerHTML,
+                            view: {
+                                description: e.incito.meta.description,
+                                products: e.incito.meta.products
+                            }
+                        });
+
+                        document.body.appendChild(details.render().el);
+                        details.show();
                     });
     
-                    viewer.bind('view_context_clicked', function (attrs) {
-                        console.log('view context clicked', attrs);
-    
-                        alert('view context clicked: ' + attrs.role);
+                    viewer.bind('view_context_clicked', function (e) {
+                        pickProduct(e, function (product) {
+                            console.log('product selected', product);
+                        });
                     });
     
-                    viewer.bind('view_long_clicked', function (attrs) {
-                        console.log('view long clicked', attrs);
-    
-                        alert('view long clicked: ' + attrs.role);
+                    viewer.bind('view_long_clicked', function (e) {
+                        pickProduct(e, function (product) {
+                            console.log('product selected', product);
+                        });
                     });
 
                     viewer.start();
