@@ -12,16 +12,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
-
-
-
-
-
-
-
-
-
-
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -46,9 +36,9 @@ var createClass = function () {
   };
 }();
 
-var Config;
-var MicroEvent;
-var indexOf = [].indexOf;
+var Config,
+    MicroEvent,
+    indexOf = [].indexOf;
 
 MicroEvent = microevent;
 
@@ -86,8 +76,6 @@ Config = Config = function () {
     return Config;
   }();
 
-  
-
   Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'graphUrl', 'eventsTrackUrl', 'eventsPulseUrl', 'assetsFileUploadUrl'];
 
   return Config;
@@ -97,8 +85,7 @@ MicroEvent.mixin(Config);
 
 var config = Config;
 
-var Mustache;
-var pairs;
+var Mustache, pairs;
 
 Mustache = mustache;
 
@@ -122,8 +109,7 @@ var translations = {
   }
 };
 
-var process$1;
-var util;
+var process$1, util;
 
 process$1 = process;
 
@@ -411,10 +397,7 @@ util = {
 
 var util_1 = util;
 
-var Config$1;
-var config$2;
-var translations$2;
-var util$1;
+var Config$1, config$2, translations$2, util$1;
 
 Config$1 = config;
 
@@ -482,8 +465,7 @@ var node = function node() {
   });
 };
 
-var SGN$1;
-var parseCookies;
+var SGN$1, parseCookies;
 
 SGN$1 = sgn;
 
@@ -570,8 +552,7 @@ var graph = {
   request: request$2
 };
 
-var SGN$2;
-var _request;
+var SGN$2, _request;
 
 SGN$2 = sgn;
 
@@ -664,8 +645,7 @@ _request = function request$$1() {
 
 var request_1 = _request;
 
-var SGN$3;
-var prefixKey;
+var SGN$3, prefixKey;
 
 SGN$3 = sgn;
 
@@ -673,7 +653,7 @@ prefixKey = 'sgn-';
 
 var clientCookie = {
   get: function get(key) {
-    var c, ca, ct, err, i, len, name, value;
+    var c, ca, ct, i, len, name, value;
     if (SGN$3.util.isNode()) {
       return;
     }
@@ -694,7 +674,7 @@ var clientCookie = {
     return value;
   },
   set: function set(key, value) {
-    var date, days, err, str;
+    var date, days, str;
     if (SGN$3.util.isNode()) {
       return;
     }
@@ -705,17 +685,11 @@ var clientCookie = {
       date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
       document.cookie = '' + prefixKey + key + '=' + str + ';expires=' + date.toUTCString() + ';path=/';
     } catch (error) {
-      
     }
   }
 };
 
-var SGN$4;
-var callbackQueue;
-var clientCookieStorage;
-var renewed;
-var session;
-var sha256$1;
+var SGN$4, callbackQueue, clientCookieStorage, renewed, session, sha256$1;
 
 SGN$4 = sgn;
 
@@ -856,8 +830,7 @@ session = {
 
 var session_1 = session;
 
-var request$4;
-var session$1;
+var request$4, session$1;
 
 request$4 = request_1;
 

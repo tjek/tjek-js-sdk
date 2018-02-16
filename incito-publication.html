@@ -9,6 +9,7 @@
             body {
                 margin: 0;
                 font-size: 16px;
+                line-height: 1.4;
                 overflow-x: hidden;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             }
@@ -25,8 +26,14 @@
                 color: #fff;
             }
 
+            .offer-details__title {
+                margin: 0 0 5px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
             .offer-details__desc {
-                margin: 0;
+                margin: 0 0 10px;
             }
 
             .offer-details__add {
@@ -34,12 +41,12 @@
             }
 
             .offer-details__product {
-                margin-top: 5px;
+                margin-bottom: 5px;
                 font-weight: bold;
             }
 
-            .offer-details__desc + .offer-details__product {
-                margin-top: 10px;
+            .offer-details__product:last-child {
+                margin-bottom: 0;
             }
         </style>
 
@@ -47,6 +54,9 @@
 
         <script id="offer-template" type="text/template">
             <div class="offer-details">
+                {{#title}}
+                    <p class="offer-details__title">{{title}}</p>
+                {{/title}}
                 {{#description}}
                     <p class="offer-details__desc">{{description}}</p>
                 {{/description}}
@@ -128,6 +138,7 @@
                             el: e.el,
                             template: document.querySelector('#offer-template').innerHTML,
                             view: {
+                                title: e.incito.accessibility_label || e.incito.meta.title,
                                 description: e.incito.meta.description,
                                 products: e.incito.meta.products
                             }

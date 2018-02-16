@@ -10,8 +10,6 @@ function commonjsRequire () {
 	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
 }
 
-
-
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
@@ -75,16 +73,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
-
-
-
-
-
-
-
-
-
-
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -109,9 +97,9 @@ var createClass = function () {
   };
 }();
 
-var Config;
-var MicroEvent;
-var indexOf = [].indexOf;
+var Config,
+    MicroEvent,
+    indexOf = [].indexOf;
 
 MicroEvent = microevent;
 
@@ -148,8 +136,6 @@ Config = Config = function () {
     }]);
     return Config;
   }();
-
-  
 
   Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'graphUrl', 'eventsTrackUrl', 'eventsPulseUrl', 'assetsFileUploadUrl'];
 
@@ -793,8 +779,7 @@ var mustache = createCommonjsModule(function (module, exports) {
 }));
 });
 
-var Mustache;
-var pairs;
+var Mustache, pairs;
 
 Mustache = mustache;
 
@@ -1005,8 +990,7 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 });
 
-var process;
-var util;
+var process, util;
 
 process = browser;
 
@@ -1294,10 +1278,7 @@ util = {
 
 var util_1 = util;
 
-var Config$1;
-var config$2;
-var translations$2;
-var util$1;
+var Config$1, config$2, translations$2, util$1;
 
 Config$1 = config;
 
@@ -1385,8 +1366,7 @@ var clientSession = {
   }
 };
 
-var SGN$3;
-var prefixKey$2;
+var SGN$3, prefixKey$2;
 
 SGN$3 = sgn;
 
@@ -1394,7 +1374,7 @@ prefixKey$2 = 'sgn-';
 
 var clientCookie = {
   get: function get(key) {
-    var c, ca, ct, err, i, len, name, value;
+    var c, ca, ct, i, len, name, value;
     if (SGN$3.util.isNode()) {
       return;
     }
@@ -1415,7 +1395,7 @@ var clientCookie = {
     return value;
   },
   set: function set(key, value) {
-    var date, days, err, str;
+    var date, days, str;
     if (SGN$3.util.isNode()) {
       return;
     }
@@ -1426,7 +1406,6 @@ var clientCookie = {
       date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
       document.cookie = '' + prefixKey$2 + key + '=' + str + ';expires=' + date.toUTCString() + ';path=/';
     } catch (error) {
-      
     }
   }
 };
@@ -1585,11 +1564,7 @@ var assets = {
   fileUpload: fileUpload
 };
 
-var SGN$6;
-var Tracker;
-var clientLocalStorage;
-var getPool;
-var pool;
+var SGN$6, Tracker, clientLocalStorage, getPool, pool;
 
 SGN$6 = sgn;
 
@@ -1922,8 +1897,6 @@ var tracker = Tracker = function () {
     return Tracker;
   }();
 
-  
-
   Tracker.prototype.defaultOptions = {
     trackId: null,
     dispatchInterval: 3000,
@@ -1935,8 +1908,7 @@ var tracker = Tracker = function () {
   return Tracker;
 }.call(commonjsGlobal);
 
-var MicroEvent$1;
-var Pulse;
+var MicroEvent$1, Pulse;
 
 MicroEvent$1 = microevent;
 
@@ -2006,8 +1978,7 @@ var events = {
   Pulse: pulse
 };
 
-var SGN$7;
-var parseCookies;
+var SGN$7, parseCookies;
 
 SGN$7 = sgn;
 
@@ -2094,8 +2065,7 @@ var graph = {
   request: request
 };
 
-var SGN$8;
-var _request;
+var SGN$8, _request;
 
 SGN$8 = sgn;
 
@@ -2190,6 +2160,7 @@ var request_1 = _request;
 
 var convertHex = createCommonjsModule(function (module) {
 !function(globals) {
+
 var convertHex = {
   bytesToHex: function(bytes) {
     /*if (typeof bytes.byteLength != 'undefined') {
@@ -2238,6 +2209,7 @@ if ('object' !== 'undefined' && module.exports) { //CommonJS
 
 var convertString = createCommonjsModule(function (module) {
 !function(globals) {
+
 var convertString = {
   bytesToString: function(bytes) {
     return bytes.map(function(x){ return String.fromCharCode(x) }).join('')
@@ -2268,6 +2240,7 @@ if ('object' !== 'undefined' && module.exports) { //CommonJS
 
 var sha256 = createCommonjsModule(function (module) {
 !function(globals) {
+
 var _imports = {};
 
 if ('object' !== 'undefined' && module.exports) { //CommonJS
@@ -2338,8 +2311,8 @@ var W = [];
 
 var processBlock = function (H, M, offset) {
   // Working variables
-  var a = H[0], b = H[1], c = H[2], d = H[3];
-  var e = H[4], f = H[5], g = H[6], h = H[7];
+  var a = H[0], b = H[1], c = H[2], d = H[3];;;;
+  var e = H[4], f = H[5], g = H[6], h = H[7];;;;
 
     // Computation
   for (var i = 0; i < 64; i++) {
@@ -2389,8 +2362,7 @@ var processBlock = function (H, M, offset) {
   H[7] = (H[7] + h) | 0;
 };
 
-function sha256(message, options) {
-  if (message.constructor === String) {
+function sha256(message, options) {  if (message.constructor === String) {
     message = _imports.convertString.UTF8.stringToBytes(message);
   }
 
@@ -2420,12 +2392,7 @@ sha256.x2 = function(message, options) {
 }(commonjsGlobal);
 });
 
-var SGN$9;
-var callbackQueue;
-var clientCookieStorage;
-var renewed;
-var session;
-var sha256$2;
+var SGN$9, callbackQueue, clientCookieStorage, renewed, session, sha256$2;
 
 SGN$9 = sgn;
 
@@ -2566,8 +2533,7 @@ session = {
 
 var session_1 = session;
 
-var request$2;
-var session$1;
+var request$2, session$1;
 
 request$2 = request_1;
 
@@ -2580,6 +2546,7 @@ var core$2 = {
 
 var verso = createCommonjsModule(function (module, exports) {
 (function(f){{module.exports=f();}})(function(){var define;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof commonjsRequire=="function"&&commonjsRequire;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND", f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r);}return n[o].exports}var i=typeof commonjsRequire=="function"&&commonjsRequire;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2638,6 +2605,7 @@ module.exports = Animation = function () {
 }();
 
 },{}],2:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2814,6 +2782,7 @@ module.exports = PageSpread = function () {
 }();
 
 },{}],3:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3515,7 +3484,8 @@ module.exports = Verso;
  * Copyright (c) 2016 Jorik Tangelder;
  * Licensed under the MIT license */
 (function(window, document, exportName, undefined) {
-  var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
+
+var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
 var TEST_ELEMENT = document.createElement('div');
 
 var TYPE_FUNCTION = 'function';
@@ -6208,9 +6178,7 @@ if( typeof module !== "undefined" && ('exports' in module)){
 
 });
 
-var MicroEvent$2;
-var PagedPublicationPageSpread;
-var SGN$11;
+var MicroEvent$2, PagedPublicationPageSpread, SGN$11;
 
 MicroEvent$2 = microevent;
 
@@ -6364,10 +6332,7 @@ MicroEvent$2.mixin(PagedPublicationPageSpread);
 
 var pageSpread = PagedPublicationPageSpread;
 
-var MicroEvent$3;
-var PageSpread;
-var PagedPublicationPageSpreads;
-var SGN$12;
+var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$12;
 
 MicroEvent$3 = microevent;
 
@@ -6462,11 +6427,7 @@ MicroEvent$3.mixin(PagedPublicationPageSpreads);
 
 var pageSpreads = PagedPublicationPageSpreads;
 
-var MicroEvent$4;
-var PageSpreads;
-var PagedPublicationCore;
-var SGN$13;
-var Verso;
+var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$13, Verso;
 
 MicroEvent$4 = microevent;
 
@@ -6920,8 +6881,6 @@ PagedPublicationCore = function () {
     return PagedPublicationCore;
   }();
 
-  
-
   PagedPublicationCore.prototype.defaults = {
     pages: [],
     pageSpreadWidth: 100,
@@ -6938,9 +6897,7 @@ MicroEvent$4.mixin(PagedPublicationCore);
 
 var core$4 = PagedPublicationCore;
 
-var MicroEvent$5;
-var Mustache$1;
-var PagedPublicationHotspots;
+var MicroEvent$5, Mustache$1, PagedPublicationHotspots;
 
 MicroEvent$5 = microevent;
 
@@ -7133,10 +7090,7 @@ var keyCodes = {
   NUMBER_ONE: 49
 };
 
-var MicroEvent$6;
-var PagedPublicationControls;
-var SGN$14;
-var keyCodes$2;
+var MicroEvent$6, PagedPublicationControls, SGN$14, keyCodes$2;
 
 MicroEvent$6 = microevent;
 
@@ -7263,8 +7217,7 @@ MicroEvent$6.mixin(PagedPublicationControls);
 
 var controls = PagedPublicationControls;
 
-var MicroEvent$7;
-var PagedPublicationEventTracking;
+var MicroEvent$7, PagedPublicationEventTracking;
 
 MicroEvent$7 = microevent;
 
@@ -7501,13 +7454,7 @@ MicroEvent$7.mixin(PagedPublicationEventTracking);
 
 var eventTracking = PagedPublicationEventTracking;
 
-var Controls;
-var Core;
-var EventTracking;
-var Hotspots;
-var MicroEvent$8;
-var SGN$15;
-var Viewer;
+var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$15, Viewer;
 
 MicroEvent$8 = microevent;
 
@@ -7862,8 +7809,7 @@ MicroEvent$8.mixin(Viewer);
 
 var viewer = Viewer;
 
-var Bootstrapper;
-var SGN$16;
+var Bootstrapper, SGN$16;
 
 SGN$16 = core;
 
@@ -7965,6 +7911,7 @@ var pagedPublication = {
 
 var incito = createCommonjsModule(function (module, exports) {
 (function(f){{module.exports=f();}})(function(){var define;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof commonjsRequire=="function"&&commonjsRequire;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND", f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r);}return n[o].exports}var i=typeof commonjsRequire=="function"&&commonjsRequire;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8136,6 +8083,7 @@ MicroEvent.mixin(Incito);
 module.exports = Incito;
 
 },{"./views/absolute-layout":3,"./views/flex-layout":4,"./views/frag":5,"./views/image":6,"./views/linear-layout":7,"./views/text":8,"./views/video-embed":9,"./views/view":10,"intersection-observer":11,"lozad":12,"microevent":13}],2:[function(_dereq_,module,exports){
+
 var utils;
 
 utils = {
@@ -8161,6 +8109,7 @@ utils = {
 module.exports = utils;
 
 },{}],3:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8193,14 +8142,13 @@ module.exports = AbsoluteLayout = function () {
     return AbsoluteLayout;
   }(View);
 
-  
-
   AbsoluteLayout.prototype.className = 'incito__absolute-layout-view';
 
   return AbsoluteLayout;
 }.call(undefined);
 
 },{"./view":10}],4:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8263,14 +8211,13 @@ module.exports = FlexLayout = function () {
     return FlexLayout;
   }(View);
 
-  
-
   FlexLayout.prototype.className = 'incito__flex-layout-view';
 
   return FlexLayout;
 }.call(undefined);
 
 },{"../utils":2,"./view":10}],5:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8294,6 +8241,7 @@ module.exports = FragView = function () {
 }();
 
 },{}],6:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8334,8 +8282,6 @@ module.exports = Image = function () {
     return Image;
   }(View);
 
-  
-
   Image.prototype.tagName = 'img';
 
   Image.prototype.className = 'incito__image-view incito--lazyload';
@@ -8344,6 +8290,7 @@ module.exports = Image = function () {
 }.call(undefined);
 
 },{"../utils":2,"./view":10}],7:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8376,14 +8323,13 @@ module.exports = LinearLayout = function () {
     return LinearLayout;
   }(View);
 
-  
-
   LinearLayout.prototype.className = 'incito__linear-layout-view';
 
   return LinearLayout;
 }.call(undefined);
 
 },{"./view":10}],8:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8527,8 +8473,6 @@ module.exports = TextView = function () {
     return TextView;
   }(View);
 
-  
-
   TextView.prototype.tagName = 'p';
 
   TextView.prototype.className = 'incito__text-view';
@@ -8537,6 +8481,7 @@ module.exports = TextView = function () {
 }.call(undefined);
 
 },{"../utils":2,"./view":10}],9:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8591,14 +8536,13 @@ module.exports = FlexLayout = function () {
     return FlexLayout;
   }(View);
 
-  
-
   FlexLayout.prototype.className = 'incito__video-embed-view';
 
   return FlexLayout;
 }.call(undefined);
 
 },{"../utils":2,"./view":10}],10:[function(_dereq_,module,exports){
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8980,8 +8924,6 @@ module.exports = View = function () {
     return View;
   }();
 
-  
-
   View.prototype.tagName = 'div';
 
   View.prototype.className = null;
@@ -9004,6 +8946,10 @@ module.exports = View;
  */
 
 (function(window, document) {
+
+
+// Exits early if all IntersectionObserver and IntersectionObserverEntry
+// features are natively supported.
 if ('IntersectionObserver' in window &&
     'IntersectionObserverEntry' in window &&
     'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
@@ -9020,15 +8966,6 @@ if ('IntersectionObserver' in window &&
   }
   return;
 }
-
-
-/**
- * An IntersectionObserver registry. This registry exists to hold a strong
- * reference to IntersectionObserver instances currently observering a target
- * element. Without this registry, instances without another reference may be
- * garbage collected.
- */
-var registry = [];
 
 
 /**
@@ -9516,9 +9453,6 @@ IntersectionObserver.prototype._rootContainsTarget = function(target) {
  * @private
  */
 IntersectionObserver.prototype._registerInstance = function() {
-  if (registry.indexOf(this) < 0) {
-    registry.push(this);
-  }
 };
 
 
@@ -9527,8 +9461,6 @@ IntersectionObserver.prototype._registerInstance = function() {
  * @private
  */
 IntersectionObserver.prototype._unregisterInstance = function() {
-  var index = registry.indexOf(this);
-  if (index != -1) registry.splice(index, 1);
 };
 
 
@@ -9724,7 +9656,8 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
 	(global.lozad = factory());
-}(this, (function () { var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+}(this, (function () {
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 /**
  * Detect IE browser
@@ -9895,9 +9828,7 @@ if( typeof module !== "undefined" && ('exports' in module)){
 
 });
 
-var Incito;
-var MicroEvent$10;
-var Viewer$1;
+var Incito, MicroEvent$10, Viewer$1;
 
 Incito = incito;
 
@@ -9981,10 +9912,7 @@ var incito$3 = Object.freeze({
 
 var require$$2$5 = ( incito$3 && incito$2 ) || incito$3;
 
-var Bootstrapper$1;
-var SGN$17;
-var schema;
-var util$2;
+var Bootstrapper$1, SGN$17, schema, util$2;
 
 util$2 = util_1;
 
@@ -10086,8 +10014,7 @@ var bootstrapper$2 = Bootstrapper$1 = function () {
   return Bootstrapper;
 }();
 
-var Details;
-var Mustache$2;
+var Details, Mustache$2;
 
 Mustache$2 = mustache;
 
@@ -10520,12 +10447,7 @@ var gator = createCommonjsModule(function (module) {
 }) ();
 });
 
-var Gator;
-var MicroEvent$11;
-var Mustache$3;
-var Popover;
-var keyCodes$3;
-var template;
+var Gator, MicroEvent$11, Mustache$3, Popover, keyCodes$3, template;
 
 MicroEvent$11 = microevent;
 
@@ -10706,12 +10628,7 @@ var coreUi = {
   singleChoicePopover: singleChoicePopover
 };
 
-var SGN$18;
-var appKey;
-var config$3;
-var scriptEl;
-var session$2;
-var trackId;
+var SGN$18, appKey, config$3, scriptEl, session$2, trackId;
 
 SGN$18 = sgn;
 
