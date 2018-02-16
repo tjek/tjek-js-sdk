@@ -20,8 +20,13 @@ class Viewer
         @_controls = new Controls @el, keyboard: @options.keyboard
         @_eventTracking = new EventTracking()
         @viewSession = SGN.util.uuid()
+        @hotspots = null
+        @hotspotQueue = []
+        @popover = null
 
         @_setupEventListeners()
+
+        return
 
         return
 
@@ -198,17 +203,113 @@ class Viewer
 
             return
 
-        @bind 'hotspotsReceived', (e) =>
+        @bind 'hotspotsRequested', @hotspotsRequested.bind(@)
+        @bind 'beforeNavigation', @beforeNavigation.bind(@)
+        @bind 'clicked', @clicked.bind(@)
+        @bind 'contextmenu', @contextmenu.bind(@)
+        @bind 'pressed', @pressed.bind(@)
+
+        return
+
+    pickHotspot: (e, callback) ->
+        return if not @hotspots?
+
+        if @popover?
+            @popover.destroy()
+            @popover = null
+        
+        hotspots = e.verso.overlayEls.map (overlayEl) =>
+            @hotspots[overlayEl.getAttribute('data-id')]
+
+        if hotspots.length is 1
+            callback hotspots[0]
+        else if hotspots.length > 1
+            @popover = SGN.CoreUIKit.singleChoicePopover
+                el: @el
+                header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+                x: e.verso.x
+                y: e.verso.y
+                items: hotspots
+                    .filter (hotspot) -> hotspot.type is 'offer'
+                    .map (hotspot) ->
+                        id: hotspot.id
+                        title: hotspot.offer.heading
+                        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+            , callback
+        
+        return
+
+    processHotspotQueue: ->
+        return if not @hotspots?
+
+        @hotspotQueue = @hotspotQueue.filter (hotspotRequest) =>
+            hotspots = {}
+            versoPageSpread = SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
+                pageSpread.getId() is hotspotRequest.id
+
+            for id, hotspot of @hotspots
+                continue if hotspots[id]?
+
+                for page in hotspotRequest.pages
+                    if hotspot.locations[page.pageNumber]?
+                        hotspots[id] =
+                            type: hotspot.type
+                            id: hotspot.id
+                            locations: hotspot.locations
+                        
+                        break
+
             @_hotspots.trigger 'hotspotsReceived',
-                pageSpread: @_core.pageSpreads.get e.id
-                versoPageSpread: SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
-                    pageSpread.getId() is e.id
-                ratio: e.ratio
-                pages: e.pages
-                hotspots: e.hotspots
+                pageSpread: @_core.pageSpreads.get hotspotRequest.id
+                versoPageSpread: versoPageSpread
+                ratio: @options.hotspotRatio
+                pages: hotspotRequest.pages
+                hotspots: hotspots
+
+            false
+
+        return
+
+    hotspotsRequested: (e) ->
+        @hotspotQueue.push e
+        @processHotspotQueue()
+
+        return
+    
+    applyHotspots: (hotspots = {}) ->
+        @hotspots = hotspots
+
+        @processHotspotQueue()
+
+        return
+    
+    beforeNavigation: ->
+        @popover.destroy() if @popover?
+
+        return
+    
+    clicked: (e) ->
+        @pickHotspot e, (hotspot) =>
+            @trigger 'hotspotClicked', hotspot
 
             return
+            
+        return
+    
+    contextmenu: (e) ->
+        @pickHotspot e, (hotspot) =>
+            @trigger 'hotspotContextmenu', hotspot
 
+            return
+        
+        return
+    
+    pressed: (e) ->
+        @pickHotspot e, (hotspot) =>
+            @trigger 'hotspotPressed', hotspot
+
+            return
+            
         return
 
 MicroEvent.mixin Viewer
