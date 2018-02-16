@@ -1,4 +1,5 @@
 MicroEvent = require 'microevent'
+Verso = require 'verso-browser'
 PageSpreads = require './page-spreads'
 clientLocalStorage = require '../../storage/client-local'
 SGN = require '../../sgn'
@@ -96,7 +97,6 @@ class PagedPublicationCore
         return
 
     createVerso: ->
-        Verso = require 'verso-browser'
         verso = new Verso @els.verso, pageId: @pageId
 
         verso.pageSpreads.forEach @overridePageSpreadContentRect.bind(@)

@@ -1,6 +1,6 @@
 SGN = require '../lib/coffeescript/node'
-appKey = '00j486xcipwzk2rmcbzfalpk4sgx9v3i'
-appSecret = '00j486xcipwg451xiucovj60t2buq5f6'
+appKey = '00j4o5wpwptl84fuubdig2s6ej5uyna8'
+appSecret = '00j4o5wpwppwtw4ojzn3rey7ujgy79nn'
 
 SGN.config.set
     appKey: appKey
@@ -8,7 +8,7 @@ SGN.config.set
 
 test 'Making a request', (done) ->
     SGN.CoreKit.request
-        url: '/v2/countries'
+        url: '/v2/catalogs'
     , (err, data) ->
         expect(data).toBeDefined()
 
