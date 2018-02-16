@@ -70,3 +70,4 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - Introduced IncitoPublicationKit
 - Removed unused files
 - Fixed incorrect positioning of hotspots and hotspot picker in Internet Explorer
+- Added CoreUIKit to core UI components such as a popover
