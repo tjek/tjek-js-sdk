@@ -20,10 +20,6 @@ class Viewer
         return
     
     start: ->
-        @els.root.setAttribute 'data-started', ''
-        @els.root.setAttribute 'tabindex', '-1'
-        @els.root.focus()
-
         @incito.start()
 
         @_trackEvent
