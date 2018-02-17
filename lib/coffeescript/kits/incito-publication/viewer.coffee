@@ -2,11 +2,8 @@ Incito = require 'incito-browser'
 MicroEvent = require 'microevent'
 
 class Viewer
-    constructor: (el, @options = {}) ->
-        @els =
-            root: el
-            incito: el.querySelector '.incito'
-        @incito = new Incito @els.incito,
+    constructor: (@el, @options = {}) ->
+        @incito = new Incito @el,
             incito: @options.incito
         
         trigger = @incito.trigger
@@ -29,6 +26,8 @@ class Viewer
         @
     
     destroy: ->
+        @incito.destroy()
+
         return
     
     _trackEvent: (e) ->

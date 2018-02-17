@@ -69,10 +69,7 @@
         </script>
     </head>
     <body>
-        <div class="sgn__incito">
-            <!-- The required Incito placeholder -->
-            <div class="incito"></div>
-        </div>
+        <div class="sgn__incito"></div>
 
         <script src="sgn-sdk.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
         <script>
@@ -81,7 +78,6 @@
             });
             
             var el = document.querySelector('.sgn__incito');
-            var incitoEl = el.querySelector('.incito');
             var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
                 el: el,
                 id: SGN.util.getQueryParam('id'),
