@@ -7941,13 +7941,14 @@ AbsoluteLayout = _dereq_('./views/absolute-layout');
 FlexLayout = _dereq_('./views/flex-layout');
 
 Incito = function () {
-  function Incito(el1) {
+  function Incito(containerEl) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     _classCallCheck(this, Incito);
 
-    this.el = el1;
+    this.containerEl = containerEl;
     this.options = options;
+    this.el = document.createElement('div');
     return;
   }
 
@@ -7960,6 +7961,7 @@ Incito = function () {
       this.loadFonts(incito.font_assets);
       this.applyTheme(incito.theme);
       this.render(frag, incito.root_view);
+      this.el.className = 'incito';
       if (incito.locale != null) {
         this.el.setAttribute('lang', incito.locale);
       }
@@ -7967,12 +7969,17 @@ Incito = function () {
         this.el.setAttribute('data-debug', true);
       }
       this.el.appendChild(frag);
+      this.containerEl.appendChild(this.el);
       this.lazyload = lozad('.incito--lazyload', {
-        rootMargin: '1500px 0px',
-        threshold: 1
+        rootMargin: '1500px 0px'
       });
       this.lazyload.observe();
       return this;
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      this.containerEl.removeChild(this.el);
     }
   }, {
     key: 'render',
@@ -9647,7 +9654,7 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 }(window, document));
 
 },{}],12:[function(_dereq_,module,exports){
-/*! lozad.js - v1.2.0 - 2018-01-23
+/*! lozad.js - v1.3.0 - 2018-02-16
 * https://github.com/ApoorvSaxena/lozad.js
 * Copyright (c) 2018 Apoorv Saxena; Licensed MIT */
 
@@ -9686,7 +9693,8 @@ var defaultConfig = {
     if (element.getAttribute('data-background-image')) {
       element.style.backgroundImage = 'url(' + element.getAttribute('data-background-image') + ')';
     }
-  }
+  },
+  loaded: function loaded() {}
 };
 
 function markAsLoaded(element) {
@@ -9697,7 +9705,7 @@ var isLoaded = function isLoaded(element) {
   return element.getAttribute('data-loaded') === 'true';
 };
 
-var onIntersection = function onIntersection(load) {
+var onIntersection = function onIntersection(load, loaded) {
   return function (entries, observer) {
     entries.forEach(function (entry) {
       if (entry.intersectionRatio > 0) {
@@ -9706,6 +9714,7 @@ var onIntersection = function onIntersection(load) {
         if (!isLoaded(entry.target)) {
           load(entry.target);
           markAsLoaded(entry.target);
+          loaded(entry.target);
         }
       }
     });
@@ -9729,12 +9738,13 @@ var lozad = function () {
   var _defaultConfig$option = _extends({}, defaultConfig, options),
       rootMargin = _defaultConfig$option.rootMargin,
       threshold = _defaultConfig$option.threshold,
-      load = _defaultConfig$option.load;
+      load = _defaultConfig$option.load,
+      loaded = _defaultConfig$option.loaded;
 
   var observer = void 0;
 
   if (window.IntersectionObserver) {
-    observer = new IntersectionObserver(onIntersection(load), {
+    observer = new IntersectionObserver(onIntersection(load, loaded), {
       rootMargin: rootMargin,
       threshold: threshold
     });
@@ -9754,6 +9764,7 @@ var lozad = function () {
         }
         load(elements[i]);
         markAsLoaded(elements[i]);
+        loaded(elements[i]);
       }
     },
     triggerLoad: function triggerLoad(element) {
@@ -9763,6 +9774,7 @@ var lozad = function () {
 
       load(element);
       markAsLoaded(element);
+      loaded(element);
     }
   };
 };
@@ -9842,12 +9854,9 @@ Viewer$1 = function () {
     classCallCheck(this, Viewer);
 
     var trigger;
+    this.el = el;
     this.options = options;
-    this.els = {
-      root: el,
-      incito: el.querySelector('.incito')
-    };
-    this.incito = new Incito(this.els.incito, {
+    this.incito = new Incito(this.el, {
       incito: this.options.incito
     });
     trigger = this.incito.trigger;
@@ -9865,9 +9874,6 @@ Viewer$1 = function () {
   createClass(Viewer, [{
     key: 'start',
     value: function start() {
-      this.els.root.setAttribute('data-started', '');
-      this.els.root.setAttribute('tabindex', '-1');
-      this.els.root.focus();
       this.incito.start();
       this._trackEvent({
         type: 'x-incito-publication-opened',
@@ -9877,7 +9883,9 @@ Viewer$1 = function () {
     }
   }, {
     key: 'destroy',
-    value: function destroy() {}
+    value: function destroy() {
+      this.incito.destroy();
+    }
   }, {
     key: '_trackEvent',
     value: function _trackEvent(e) {
