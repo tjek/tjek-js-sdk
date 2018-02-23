@@ -8367,12 +8367,12 @@ module.exports = TextView = function () {
     _createClass(TextView, [{
       key: 'render',
       value: function render() {
-        var parsedText, ref, text, textStyles;
+        var parsedText, ref, text, textShadow, textStyles;
         textStyles = (this.attrs.text_style || '').split('|');
         parsedText = this.parseSpans(this.attrs.text, this.attrs.spans);
         text = parsedText.map(function (item) {
           var escapedText, spanName;
-          escapedText = utils.escapeHTML(item.text);
+          escapedText = utils.escapeHTML(item.text || '');
           if (item.span != null && item.span.name != null) {
             spanName = utils.escapeHTML(item.span.name);
             return '<span data-name="' + spanName + '">' + escapedText + '</span>';
@@ -8410,6 +8410,12 @@ module.exports = TextView = function () {
         }
         if (indexOf.call(textStyles, 'italic') >= 0) {
           this.el.style.fontStyle = 'italic';
+        }
+
+        // Text shadow.
+        textShadow = this.getTextShadow();
+        if (textShadow != null) {
+          this.el.style.textShadow = textShadow.dx + 'px ' + textShadow.dy + 'px ' + textShadow.radius + 'px ' + textShadow.color;
         }
 
         // Text alignment.
@@ -8474,6 +8480,23 @@ module.exports = TextView = function () {
           }
         });
         return result;
+      }
+    }, {
+      key: 'getTextShadow',
+      value: function getTextShadow() {
+        var color, dx, dy, radius;
+        if (utils.isDefinedStr(this.attrs.shadow_color)) {
+          dx = typeof this.attrs.shadow_dx === 'number' ? this.attrs.shadow_dx : 0;
+          dy = typeof this.attrs.shadow_dy === 'number' ? this.attrs.shadow_dy : 0;
+          radius = typeof this.attrs.shadow_radius === 'number' ? this.attrs.shadow_radius : 0;
+          color = this.attrs.shadow_color;
+          return {
+            dx: dx,
+            dy: dy,
+            radius: radius,
+            color: color
+          };
+        }
       }
     }]);
 
@@ -8684,17 +8707,17 @@ module.exports = View = function () {
         }
 
         // Background.
-        if (this.attrs.background_color != null) {
+        if (utils.isDefinedStr(this.attrs.background_color)) {
           this.el.style.backgroundColor = this.attrs.background_color;
         }
-        if (this.attrs.background_image != null) {
+        if (utils.isDefinedStr(this.attrs.background_image)) {
           this.el.setAttribute('data-background-image', this.attrs.background_image);
           this.el.className += ' incito--lazyload';
         }
         if ((ref = this.attrs.background_tile_mode) === 'repeat_x' || ref === 'repeat_y' || ref === 'repeat') {
           this.el.style.backgroundRepeat = this.attrs.background_tile_mode.replace('_', '-');
         }
-        if (this.attrs.background_image_position != null) {
+        if (utils.isDefinedStr(this.attrs.background_image_position)) {
           this.el.style.backgroundPosition = this.attrs.background_image_position.replace('_', ' ');
         }
         if (this.attrs.background_image_scale_type === 'center_crop') {
