@@ -7916,7 +7916,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AbsoluteLayout, FlexLayout, FragView, ImageView, Incito, LinearLayout, MicroEvent, TextView, VideoEmbedView, View, lozad;
+var AbsoluteLayout, FlexLayout, FragView, ImageView, Incito, LinearLayout, MicroEvent, TextView, VideoEmbedView, VideoView, View, lozad;
 
 _dereq_('intersection-observer');
 
@@ -7933,6 +7933,8 @@ ImageView = _dereq_('./views/image');
 TextView = _dereq_('./views/text');
 
 VideoEmbedView = _dereq_('./views/video-embed');
+
+VideoView = _dereq_('./views/video');
 
 LinearLayout = _dereq_('./views/linear-layout');
 
@@ -7970,10 +7972,11 @@ Incito = function () {
       }
       this.el.appendChild(frag);
       this.containerEl.appendChild(this.el);
-      this.lazyload = lozad('.incito--lazyload', {
-        rootMargin: '1500px 0px'
+      this.lazyloader = lozad('.incito--lazyload', {
+        rootMargin: '1500px 0px',
+        load: this.lazyload.bind(this)
       });
-      this.lazyload.observe();
+      this.lazyloader.observe();
       return this;
     }
   }, {
@@ -8001,6 +8004,8 @@ Incito = function () {
         match = TextView;
       } else if (viewName === 'VideoEmbedView') {
         match = VideoEmbedView;
+      } else if (viewName === 'VideoView') {
+        match = VideoView;
       } else if (viewName === 'LinearLayout') {
         match = LinearLayout;
       } else if (viewName === 'AbsoluteLayout') {
@@ -8080,6 +8085,25 @@ Incito = function () {
         document.head.appendChild(styleEl);
       }
     }
+  }, {
+    key: 'lazyload',
+    value: function lazyload(el) {
+      var i, len, sourceEl, sourceEls;
+      if (el.nodeName.toLowerCase() === 'video') {
+        sourceEls = el.querySelectorAll('source');
+        for (i = 0, len = sourceEls.length; i < len; i++) {
+          sourceEl = sourceEls[i];
+          sourceEl.src = sourceEl.getAttribute('data-src');
+        }
+        el.play();
+      }
+      if (el.getAttribute('data-src')) {
+        el.src = el.getAttribute('data-src');
+      }
+      if (el.getAttribute('data-background-image')) {
+        el.style.backgroundImage = 'url(' + el.getAttribute('data-background-image') + ')';
+      }
+    }
   }]);
 
   return Incito;
@@ -8089,7 +8113,7 @@ MicroEvent.mixin(Incito);
 
 module.exports = Incito;
 
-},{"./views/absolute-layout":3,"./views/flex-layout":4,"./views/frag":5,"./views/image":6,"./views/linear-layout":7,"./views/text":8,"./views/video-embed":9,"./views/view":10,"intersection-observer":11,"lozad":12,"microevent":13}],2:[function(_dereq_,module,exports){
+},{"./views/absolute-layout":3,"./views/flex-layout":4,"./views/frag":5,"./views/image":6,"./views/linear-layout":7,"./views/text":8,"./views/video":10,"./views/video-embed":9,"./views/view":11,"intersection-observer":12,"lozad":13,"microevent":14}],2:[function(_dereq_,module,exports){
 
 var utils;
 
@@ -8154,7 +8178,7 @@ module.exports = AbsoluteLayout = function () {
   return AbsoluteLayout;
 }.call(undefined);
 
-},{"./view":10}],4:[function(_dereq_,module,exports){
+},{"./view":11}],4:[function(_dereq_,module,exports){
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8223,7 +8247,7 @@ module.exports = FlexLayout = function () {
   return FlexLayout;
 }.call(undefined);
 
-},{"../utils":2,"./view":10}],5:[function(_dereq_,module,exports){
+},{"../utils":2,"./view":11}],5:[function(_dereq_,module,exports){
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8296,7 +8320,7 @@ module.exports = Image = function () {
   return Image;
 }.call(undefined);
 
-},{"../utils":2,"./view":10}],7:[function(_dereq_,module,exports){
+},{"../utils":2,"./view":11}],7:[function(_dereq_,module,exports){
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8335,7 +8359,7 @@ module.exports = LinearLayout = function () {
   return LinearLayout;
 }.call(undefined);
 
-},{"./view":10}],8:[function(_dereq_,module,exports){
+},{"./view":11}],8:[function(_dereq_,module,exports){
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8510,7 +8534,7 @@ module.exports = TextView = function () {
   return TextView;
 }.call(undefined);
 
-},{"../utils":2,"./view":10}],9:[function(_dereq_,module,exports){
+},{"../utils":2,"./view":11}],9:[function(_dereq_,module,exports){
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8545,18 +8569,12 @@ module.exports = FlexLayout = function () {
     _createClass(FlexLayout, [{
       key: 'render',
       value: function render() {
-        var height, iframeEl, linkEl, ratio, ref, width;
+        var linkEl, ref;
         linkEl = document.createElement('a');
-        iframeEl = document.createElement('iframe');
-        width = this.attrs.video_width || 100;
-        height = this.attrs.video_height || 100;
-        ratio = height / width * 100;
         if (utils.isDefinedStr(this.attrs.src)) {
           linkEl.setAttribute('href', this.attrs.src);
           if (ref = linkEl.hostname, indexOf.call(allowedHostnames, ref) >= 0) {
-            iframeEl.setAttribute('src', this.attrs.src);
-            this.el.style.paddingTop = ratio + '%';
-            this.el.appendChild(iframeEl);
+            this.el.setAttribute('data-src', this.attrs.src);
           }
         }
         return this;
@@ -8566,12 +8584,74 @@ module.exports = FlexLayout = function () {
     return FlexLayout;
   }(View);
 
-  FlexLayout.prototype.className = 'incito__video-embed-view';
+  FlexLayout.prototype.className = 'incito__video-embed-view incito--lazyload';
+
+  FlexLayout.prototype.tagName = 'iframe';
 
   return FlexLayout;
 }.call(undefined);
 
-},{"../utils":2,"./view":10}],10:[function(_dereq_,module,exports){
+},{"../utils":2,"./view":11}],10:[function(_dereq_,module,exports){
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Video, View, utils;
+
+View = _dereq_('./view');
+
+utils = _dereq_('../utils');
+
+module.exports = Video = function () {
+  var Video = function (_View) {
+    _inherits(Video, _View);
+
+    function Video() {
+      _classCallCheck(this, Video);
+
+      return _possibleConstructorReturn(this, (Video.__proto__ || Object.getPrototypeOf(Video)).apply(this, arguments));
+    }
+
+    _createClass(Video, [{
+      key: 'render',
+      value: function render() {
+        var sourceEl;
+        if (this.attrs.autoplay === true) {
+          this.el.setAttribute('autoplay', '');
+        }
+        if (this.attrs.loop === true) {
+          this.el.setAttribute('loop', '');
+        }
+        if (this.attrs.controls === true) {
+          this.el.setAttribute('controls', '');
+        }
+        this.el.setAttribute('muted', '');
+        if (utils.isDefinedStr(this.attrs.src)) {
+          sourceEl = document.createElement('source');
+          sourceEl.setAttribute('data-src', this.attrs.src);
+          sourceEl.setAttribute('type', this.attrs.mime);
+          this.el.appendChild(sourceEl);
+        }
+        return this;
+      }
+    }]);
+
+    return Video;
+  }(View);
+
+  Video.prototype.className = 'incito__video-view incito--lazyload';
+
+  Video.prototype.tagName = 'video';
+
+  return Video;
+}.call(undefined);
+
+},{"../utils":2,"./view":11}],11:[function(_dereq_,module,exports){
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8965,7 +9045,7 @@ MicroEvent.mixin(View);
 
 module.exports = View;
 
-},{"../utils":2,"microevent":13}],11:[function(_dereq_,module,exports){
+},{"../utils":2,"microevent":14}],12:[function(_dereq_,module,exports){
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -9676,7 +9756,7 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 
 }(window, document));
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 /*! lozad.js - v1.3.0 - 2018-02-16
 * https://github.com/ApoorvSaxena/lozad.js
 * Copyright (c) 2018 Apoorv Saxena; Licensed MIT */
@@ -9806,7 +9886,7 @@ return lozad;
 
 })));
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 /**
  * MicroEvent - to make any js object an event emitter (server or browser)
  * 
