@@ -1,0 +1,13 @@
+<div class="offer-details">
+    {{#title}}
+        <p class="offer-details__title">{{title}}</p>
+    {{/title}}
+    {{#description}}
+        <p class="offer-details__desc">{{description}}</p>
+    {{/description}}
+    {{#products}}
+        <div class="offer-details__product">
+            <button class="btn">+</button> {{title}}
+        </div>
+    {{/products}}
+</div>
