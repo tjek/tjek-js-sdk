@@ -2,36 +2,16 @@
     absolute top left
     z-index 10
     background-color #fff
-    border-bottom 4px solid #000
+    border 4px solid rgba(#000, 0.8)
+    border-radius bottom left 10px
+    border-radius bottom right 10px
     padding 10px
-    box-shadow 0 4px 2px -2px rgba(#000, 0.4)
     opacity 0.2
-    transition opacity ease 0.2s
+    transition all ease 0.2s
+    transform translateY(-50%) scale(0.8)
     outline 0
     box-sizing border-box
 
     &.in
         opacity 1
-
-// .offer-details__title {
-//     margin: 0 0 5px;
-//     font-size: 20px;
-//     font-weight: bold;
-// }
-
-// .offer-details__desc {
-//     margin: 0 0 10px;
-// }
-
-// .offer-details__add {
-//     float: right;
-// }
-
-// .offer-details__product {
-//     margin-bottom: 5px;
-//     font-weight: bold;
-// }
-
-// .offer-details__product:last-child {
-//     margin-bottom: 0;
-// }
+        transform translateY(0px) scale(1)
