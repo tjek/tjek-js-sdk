@@ -1,6 +1,6 @@
 Mustache = require 'mustache'
 
-module.exports = class Details
+module.exports = class OfferDetails
     constructor: (@options = {}) ->
         @el = document.createElement 'div'
         @resizeListener = @resize.bind @
@@ -8,7 +8,7 @@ module.exports = class Details
         return
     
     render: ->
-        @el.className = 'sgn-ip__details'
+        @el.className = 'sgn-offer-details'
         @el.setAttribute 'tabindex', -1
         @el.innerHTML = Mustache.render @options.template, @options.view
 
