@@ -401,18 +401,18 @@ util = {
 
 var util_1 = util;
 
-var Config$1, config$2, translations$2, util$1;
+var Config$1, config$1, translations$1, util$1;
 
 Config$1 = config;
 
-translations$2 = translations;
+translations$1 = translations;
 
 util$1 = util_1;
 
-config$2 = new Config$1();
+config$1 = new Config$1();
 
 // Set default values.
-config$2.set({
+config$1.set({
   locale: 'en_US',
   coreUrl: 'https://api.etilbudsavis.dk',
   graphUrl: 'https://graph.service.shopgun.com',
@@ -422,8 +422,8 @@ config$2.set({
 });
 
 var core = {
-  config: config$2,
-  translations: translations$2,
+  config: config$1,
+  translations: translations$1,
   util: util$1
 };
 
@@ -834,14 +834,14 @@ session = {
 
 var session_1 = session;
 
-var request$4, session$1;
+var request$3, session$1;
 
-request$4 = request_1;
+request$3 = request_1;
 
 session$1 = session_1;
 
-var core$2 = {
-  request: request$4,
+var core$1 = {
+  request: request$3,
   session: session$1
 };
 
@@ -854,33 +854,22 @@ var fileUpload = function fileUpload() {
   var callback = arguments[1];
   var progressCallback = arguments[2];
 
-  var formData, timeout, url;
+  var timeout, url;
   if (options.file == null) {
     throw new Error('File is not defined');
   }
   url = SGN$6.config.get('assetsFileUploadUrl');
-  formData = {
-    file: options.file
-  };
-  if (options.contentType != null) {
-    formData = {
-      file: {
-        value: options.file,
-        options: {
-          contentType: options.contentType
-        }
-      }
-    };
-  }
   timeout = 1000 * 60 * 60;
   SGN$6.request({
     method: 'post',
     url: url,
     headers: {
-      'Content-Type': options.contentType,
+      'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    formData: formData,
+    formData: {
+      file: options.file
+    },
     timeout: timeout
   }, function (err, data) {
     if (err != null) {
@@ -921,11 +910,11 @@ SGN$7.request = node;
 // Expose the different kits.
 SGN$7.GraphKit = graph;
 
-SGN$7.CoreKit = core$2;
+SGN$7.CoreKit = core$1;
 
 SGN$7.AssetsKit = assets;
 
-var node$2 = SGN$7;
+var node$1 = SGN$7;
 
-module.exports = node$2;
+module.exports = node$1;
 //# sourceMappingURL=sgn-sdk.cjs.js.map

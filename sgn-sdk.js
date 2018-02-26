@@ -1278,18 +1278,18 @@ util = {
 
 var util_1 = util;
 
-var Config$1, config$2, translations$2, util$1;
+var Config$1, config$1, translations$1, util$1;
 
 Config$1 = config;
 
-translations$2 = translations;
+translations$1 = translations;
 
 util$1 = util_1;
 
-config$2 = new Config$1();
+config$1 = new Config$1();
 
 // Set default values.
-config$2.set({
+config$1.set({
   locale: 'en_US',
   coreUrl: 'https://api.etilbudsavis.dk',
   graphUrl: 'https://graph.service.shopgun.com',
@@ -1299,8 +1299,8 @@ config$2.set({
 });
 
 var core = {
-  config: config$2,
-  translations: translations$2,
+  config: config$1,
+  translations: translations$1,
   util: util$1
 };
 
@@ -1414,7 +1414,7 @@ var SGN$4;
 
 SGN$4 = sgn;
 
-var browser$2 = function browser() {
+var browser$1 = function browser() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments[1];
   var progressCallback = arguments[2];
@@ -1446,7 +1446,9 @@ var browser$2 = function browser() {
   ref2 = options.headers;
   for (header in ref2) {
     value = ref2[header];
-    http.setRequestHeader(header, value);
+    if (value != null) {
+      http.setRequestHeader(header, value);
+    }
   }
   http.addEventListener('load', function () {
     var body;
@@ -1506,33 +1508,22 @@ var fileUpload = function fileUpload() {
   var callback = arguments[1];
   var progressCallback = arguments[2];
 
-  var formData, timeout, url;
+  var timeout, url;
   if (options.file == null) {
     throw new Error('File is not defined');
   }
   url = SGN$5.config.get('assetsFileUploadUrl');
-  formData = {
-    file: options.file
-  };
-  if (options.contentType != null) {
-    formData = {
-      file: {
-        value: options.file,
-        options: {
-          contentType: options.contentType
-        }
-      }
-    };
-  }
   timeout = 1000 * 60 * 60;
   SGN$5.request({
     method: 'post',
     url: url,
     headers: {
-      'Content-Type': options.contentType,
+      'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    formData: formData,
+    formData: {
+      file: options.file
+    },
     timeout: timeout
   }, function (err, data) {
     if (err != null) {
@@ -2311,8 +2302,8 @@ var W = [];
 
 var processBlock = function (H, M, offset) {
   // Working variables
-  var a = H[0], b = H[1], c = H[2], d = H[3];;;;
-  var e = H[4], f = H[5], g = H[6], h = H[7];;;;
+  var a = H[0], b = H[1], c = H[2], d = H[3];
+  var e = H[4], f = H[5], g = H[6], h = H[7];
 
     // Computation
   for (var i = 0; i < 64; i++) {
@@ -2392,11 +2383,11 @@ sha256.x2 = function(message, options) {
 }(commonjsGlobal);
 });
 
-var SGN$9, callbackQueue, clientCookieStorage, renewed, session, sha256$2;
+var SGN$9, callbackQueue, clientCookieStorage, renewed, session, sha256$1;
 
 SGN$9 = sgn;
 
-sha256$2 = sha256;
+sha256$1 = sha256;
 
 clientCookieStorage = clientCookie;
 
@@ -2527,20 +2518,20 @@ session = {
     }
   },
   sign: function sign(appSecret, token) {
-    return sha256$2([appSecret, token].join(''));
+    return sha256$1([appSecret, token].join(''));
   }
 };
 
 var session_1 = session;
 
-var request$2, session$1;
+var request$1, session$1;
 
-request$2 = request_1;
+request$1 = request_1;
 
 session$1 = session_1;
 
-var core$2 = {
-  request: request$2,
+var core$1 = {
+  request: request$1,
   session: session$1
 };
 
@@ -6895,7 +6886,7 @@ PagedPublicationCore = function () {
 
 MicroEvent$4.mixin(PagedPublicationCore);
 
-var core$4 = PagedPublicationCore;
+var core$2 = PagedPublicationCore;
 
 var MicroEvent$5, Mustache$1, PagedPublicationHotspots;
 
@@ -7090,13 +7081,13 @@ var keyCodes = {
   NUMBER_ONE: 49
 };
 
-var MicroEvent$6, PagedPublicationControls, SGN$14, keyCodes$2;
+var MicroEvent$6, PagedPublicationControls, SGN$14, keyCodes$1;
 
 MicroEvent$6 = microevent;
 
 SGN$14 = sgn;
 
-keyCodes$2 = keyCodes;
+keyCodes$1 = keyCodes;
 
 PagedPublicationControls = function () {
   function PagedPublicationControls(el) {
@@ -7195,15 +7186,15 @@ PagedPublicationControls = function () {
     value: function keyDown(e) {
       var keyCode;
       keyCode = e.keyCode;
-      if (keyCodes$2.ARROW_LEFT === keyCode) {
+      if (keyCodes$1.ARROW_LEFT === keyCode) {
         this.trigger('prev', {
           duration: 0
         });
-      } else if (keyCodes$2.ARROW_RIGHT === keyCode || keyCodes$2.SPACE === keyCode) {
+      } else if (keyCodes$1.ARROW_RIGHT === keyCode || keyCodes$1.SPACE === keyCode) {
         this.trigger('next', {
           duration: 0
         });
-      } else if (keyCodes$2.NUMBER_ONE === keyCode) {
+      } else if (keyCodes$1.NUMBER_ONE === keyCode) {
         this.trigger('first', {
           duration: 0
         });
@@ -7460,7 +7451,7 @@ MicroEvent$8 = microevent;
 
 SGN$15 = sgn;
 
-Core = core$4;
+Core = core$2;
 
 Hotspots = hotspots;
 
@@ -10013,15 +10004,15 @@ Viewer$1 = function () {
 
 MicroEvent$10.mixin(Viewer$1);
 
-var viewer$2 = Viewer$1;
+var viewer$1 = Viewer$1;
 
-var incito$2 = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported)\n    }\n  }\n}";
+var incito$1 = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported)\n    }\n  }\n}";
 
-var incito$3 = Object.freeze({
-	default: incito$2
+var incito$2 = Object.freeze({
+	default: incito$1
 });
 
-var require$$2$5 = ( incito$3 && incito$2 ) || incito$3;
+var require$$2 = ( incito$2 && incito$1 ) || incito$2;
 
 var Bootstrapper$1, SGN$17, schema, util$2;
 
@@ -10029,9 +10020,9 @@ util$2 = util_1;
 
 SGN$17 = core;
 
-schema = require$$2$5;
+schema = require$$2;
 
-var bootstrapper$2 = Bootstrapper$1 = function () {
+var bootstrapper$1 = Bootstrapper$1 = function () {
   function Bootstrapper() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     classCallCheck(this, Bootstrapper);
@@ -10125,14 +10116,19 @@ var bootstrapper$2 = Bootstrapper$1 = function () {
   return Bootstrapper;
 }();
 
-var Details, Mustache$2;
+var incitoPublication = {
+  Viewer: viewer$1,
+  Bootstrapper: bootstrapper$1
+};
+
+var Mustache$2, OfferDetails;
 
 Mustache$2 = mustache;
 
-var details = Details = function () {
-  function Details() {
+var offerDetails = OfferDetails = function () {
+  function OfferDetails() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    classCallCheck(this, Details);
+    classCallCheck(this, OfferDetails);
 
     this.options = options;
     this.el = document.createElement('div');
@@ -10140,10 +10136,10 @@ var details = Details = function () {
     return;
   }
 
-  createClass(Details, [{
+  createClass(OfferDetails, [{
     key: 'render',
     value: function render() {
-      this.el.className = 'sgn-ip__details';
+      this.el.className = 'sgn-offer-details';
       this.el.setAttribute('tabindex', -1);
       this.el.innerHTML = Mustache$2.render(this.options.template, this.options.view);
       this.position();
@@ -10180,14 +10176,8 @@ var details = Details = function () {
       this.position();
     }
   }]);
-  return Details;
+  return OfferDetails;
 }();
-
-var incitoPublication = {
-  Viewer: viewer$2,
-  Bootstrapper: bootstrapper$2,
-  Details: details
-};
 
 var gator = createCommonjsModule(function (module) {
 /**
@@ -10558,7 +10548,7 @@ var gator = createCommonjsModule(function (module) {
 }) ();
 });
 
-var Gator, MicroEvent$11, Mustache$3, Popover, keyCodes$3, template;
+var Gator, MicroEvent$11, Mustache$3, Popover, keyCodes$2, template;
 
 MicroEvent$11 = microevent;
 
@@ -10566,7 +10556,7 @@ Gator = gator;
 
 Mustache$3 = mustache;
 
-keyCodes$3 = keyCodes;
+keyCodes$2 = keyCodes;
 
 template = "<div class=\"sgn-popover__background\" data-close></div>\n<div class=\"sgn-popover__menu\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#singleChoiceItems}}\n                <li data-index=\"{{index}}\">\n                    <p class=\"sgn-popover-item__title\">{{item.title}}</p>\n                    {{#item.subtitle}}\n                        <p class=\"sgn-popover-item__subtitle\">{{item.subtitle}}</p>\n                    {{/item.subtitle}}\n                </li>\n            {{/singleChoiceItems}}\n        </ul>\n    </div>\n</div>";
 
@@ -10676,7 +10666,7 @@ Popover = function () {
   }, {
     key: 'keyUp',
     value: function keyUp(e) {
-      if (e.keyCode === keyCodes$3.ESC) {
+      if (e.keyCode === keyCodes$2.ESC) {
         this.destroy();
       }
     }
@@ -10735,11 +10725,12 @@ var singleChoicePopover = function singleChoicePopover(ctx, callback) {
 };
 
 var coreUi = {
+  OfferDetails: offerDetails,
   Popover: popover,
   singleChoicePopover: singleChoicePopover
 };
 
-var SGN$18, appKey, config$3, scriptEl, session$2, trackId;
+var SGN$18, appKey, config$2, scriptEl, session$2, trackId;
 
 SGN$18 = sgn;
 
@@ -10751,7 +10742,7 @@ SGN$18.storage = {
 };
 
 // Expose request handler.
-SGN$18.request = browser$2;
+SGN$18.request = browser$1;
 
 // Expose the different kits.
 SGN$18.AssetsKit = assets;
@@ -10760,7 +10751,7 @@ SGN$18.EventsKit = events;
 
 SGN$18.GraphKit = graph;
 
-SGN$18.CoreKit = core$2;
+SGN$18.CoreKit = core$1;
 
 SGN$18.PagedPublicationKit = pagedPublication;
 
@@ -10811,21 +10802,21 @@ scriptEl = document.getElementById('sgn-sdk');
 if (scriptEl != null) {
   appKey = scriptEl.getAttribute('data-app-key');
   trackId = scriptEl.getAttribute('data-track-id');
-  config$3 = {};
+  config$2 = {};
   if (appKey != null) {
-    config$3.appKey = appKey;
+    config$2.appKey = appKey;
   }
   if (trackId != null) {
-    config$3.eventTracker = new SGN$18.EventsKit.Tracker({
+    config$2.eventTracker = new SGN$18.EventsKit.Tracker({
       trackId: trackId
     });
   }
-  SGN$18.config.set(config$3);
+  SGN$18.config.set(config$2);
 }
 
-var browser$4 = SGN$18;
+var browser$2 = SGN$18;
 
-return browser$4;
+return browser$2;
 
 })));
 //# sourceMappingURL=sgn-sdk.js.map
