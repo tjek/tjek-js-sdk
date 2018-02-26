@@ -23,7 +23,7 @@ module.exports = (options = {}, callback, progressCallback) ->
         headers['Accept'] = 'application/json'
 
     for header, value of options.headers
-        http.setRequestHeader header, value
+        http.setRequestHeader header, value if value?
 
     http.addEventListener 'load', ->
         headers = http.getAllResponseHeaders().split '\r\n'
