@@ -864,7 +864,6 @@ var fileUpload = function fileUpload() {
     method: 'post',
     url: url,
     headers: {
-      'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
     formData: {
