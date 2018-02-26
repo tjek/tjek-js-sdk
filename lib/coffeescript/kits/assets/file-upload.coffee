@@ -10,7 +10,6 @@ module.exports = (options = {}, callback, progressCallback) ->
         method: 'post'
         url: url
         headers:
-            'Content-Type': 'application/json'
             'Accept': 'application/json'
         formData:
             file: options.file
