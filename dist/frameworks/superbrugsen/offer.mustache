@@ -1,3 +1,10 @@
+{{#labels.length}}
+    <div class="sgn-offer-details__labels">
+        {{#labels}}
+            <img src={{label.src}} title={{label.title}}>
+        {{/labels}}
+    </div>
+{{/labels}}
 {{#title}}
     <p class="sgn-offer-details__title">{{title}}</p>
 {{/title}}

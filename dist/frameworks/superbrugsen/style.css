@@ -1,3 +1,12 @@
+.sgn-offer-details__labels {
+    margin-bottom: 10px;
+}
+
+.sgn-offer-details__labels img {
+    display: inline-block;
+    height: 30px;
+}
+
 .sgn-offer-details__title {
     margin: 0 0 5px;
     font-size: 20px;
