@@ -73,9 +73,10 @@
                     self.detailsId = e.incito.id;
                     self.details = new SGN.CoreUIKit.OfferDetails({
                         el: e.el,
-                        template: 'insert your template here',
+                        template: "insert template here",
                         view: {
                             title: e.incito.accessibility_label || e.incito.meta.title,
+                            labels: e.incito.meta.labels,
                             description: e.incito.meta.description,
                             products: e.incito.meta.products
                         }
