@@ -22,9 +22,9 @@
 
         <script src="sgn-sdk.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
         <script>
-            // SGN.config.set({
-            //     graphUrl: 'https://graph.service-staging.shopgun.com'
-            // });
+            SGN.config.set({
+                graphUrl: 'https://graph.service-staging.shopgun.com'
+            });
 
             function IncitoPublication (options) {
                 this.options = options || {};
@@ -84,6 +84,11 @@
                     document.body.appendChild(self.details.render().el);
 
                     self.details.show();
+
+                    e.el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 });
 
                 viewer.bind('view_context_clicked', function (e) {
