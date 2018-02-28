@@ -971,6 +971,10 @@
   word-break: break-word;
   overflow-wrap: break-word;
 }
+.incito__text-view a {
+  color: inherit;
+  text-decoration: underline;
+}
 .incito__text-view[data-single-line="true"] {
   white-space: nowrap;
 }
@@ -1052,7 +1056,7 @@
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-.incito__image-view:not([data-loaded="true"]) {
+.incito__image-view:not(.loaded) {
   visibility: hidden;
 }
 .incito__text-view {
@@ -1064,6 +1068,10 @@
   hyphens: auto;
   word-break: break-word;
   overflow-wrap: break-word;
+}
+.incito__text-view a {
+  color: inherit;
+  text-decoration: underline;
 }
 .incito__text-view[data-single-line="true"] {
   white-space: nowrap;
