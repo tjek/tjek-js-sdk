@@ -8623,8 +8623,9 @@ module.exports = Video = function () {
         if (this.attrs.controls === true) {
           this.el.setAttribute('controls', '');
         }
-        this.el.setAttribute('muted', '');
+        this.el.setAttribute('muted', 'true');
         this.el.setAttribute('preload', 'metadata');
+        this.el.setAttribute('playsinline', '');
         if (utils.isDefinedStr(this.attrs.src)) {
           sourceEl = document.createElement('source');
           sourceEl.setAttribute('src', this.attrs.src);
