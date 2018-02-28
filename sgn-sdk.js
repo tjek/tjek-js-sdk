@@ -7964,8 +7964,9 @@ Incito = function () {
       this.containerEl.appendChild(this.el);
       this.lazyload = new LazyLoad({
         elements_selector: '.incito--lazyload',
+        threshold: 800,
         callback_enter: function callback_enter(el) {
-          if (el.nodeName.toLowerCase() === 'video' && el.getAttribute('data-autoplay') && el.muted === true) {
+          if (el.nodeName.toLowerCase() === 'video' && el.getAttribute('data-autoplay')) {
             el.play();
           }
         }
@@ -8622,7 +8623,7 @@ module.exports = Video = function () {
         if (this.attrs.controls === true) {
           this.el.setAttribute('controls', '');
         }
-        this.el.setAttribute('muted', 'true');
+        this.el.setAttribute('muted', '');
         this.el.setAttribute('preload', 'metadata');
         if (utils.isDefinedStr(this.attrs.src)) {
           sourceEl = document.createElement('source');
