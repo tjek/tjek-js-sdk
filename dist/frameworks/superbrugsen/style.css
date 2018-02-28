@@ -5,6 +5,7 @@
 .sgn-offer-details__labels img {
     display: inline-block;
     height: 30px;
+    margin-right: 5px;
 }
 
 .sgn-offer-details__title {
