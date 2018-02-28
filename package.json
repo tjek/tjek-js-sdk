@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -68,7 +68,7 @@
     "sha256": "^0.2.0"
   },
   "devDependencies": {
-    "aws-sdk": "^2.202.0",
+    "aws-sdk": "^2.203.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "browserify": "^16.1.0",
@@ -79,7 +79,7 @@
     "coffeescript": "^2.2.2",
     "gator": "^1.2.4",
     "gh-pages": "^1.1.0",
-    "incito-browser": "0.0.23",
+    "incito-browser": "1.0.3",
     "jest": "^22.4.2",
     "jest-cli": "^22.4.2",
     "nib": "^1.1.2",

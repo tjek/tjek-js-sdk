@@ -17,7 +17,6 @@ module.exports = class OfferDetails
         @
     
     show: ->
-        @el.focus()
         @el.className += ' in'
 
         window.addEventListener 'resize', @resizeListener, false
@@ -35,10 +34,11 @@ module.exports = class OfferDetails
         rect = @options.el.getBoundingClientRect()
         top = window.pageYOffset + rect.top + @options.el.offsetHeight
         left = window.pageXOffset + rect.left
+        width = @options.el.offsetWidth
 
         @el.style.top = top + 'px'
         @el.style.left = left + 'px'
-        @el.style.width = @options.el.offsetWidth + 'px'
+        @el.style.width = width + 'px'
 
         return
     
