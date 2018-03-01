@@ -365,6 +365,12 @@ util = {
     dist = dist * 1.609344 * 1000;
     return dist;
   },
+  isElementInViewport: function isElementInViewport(el) {
+    var html, rect;
+    rect = el.getBoundingClientRect();
+    html = document.documentElement;
+    return rect.top >= 0 && rect.left >= 0 && rect.bottom <= window.innerHeight && rect.right <= window.innerWidth;
+  },
   async: {
     parallel: function parallel(asyncCalls, sharedCallback) {
       var allResults, counter, k, makeCallback;
