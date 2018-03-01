@@ -1,5 +1,6 @@
 util = require '../../util'
 SGN = require '../../core'
+Controls = require './controls'
 schema = require '../../../graphql/incito.graphql'
 
 module.exports = class Bootstrapper
@@ -67,5 +68,6 @@ module.exports = class Bootstrapper
             id: @options.id
             incito: data.incito
             eventTracker: @options.eventTracker
+        controls = new Controls viewer
 
         viewer
