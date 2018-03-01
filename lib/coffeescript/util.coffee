@@ -210,6 +210,12 @@ util =
         dist = dist * 1.609344 * 1000
 
         dist
+    
+    isElementInViewport: (el) ->
+        rect = el.getBoundingClientRect()
+        html = document.documentElement
+
+        rect.top >= 0 and rect.left >= 0 and rect.bottom <= window.innerHeight and rect.right <= window.innerWidth
 
     async:
         parallel: (asyncCalls, sharedCallback) ->
