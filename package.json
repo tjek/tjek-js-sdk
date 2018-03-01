@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -85,6 +85,7 @@
     "nib": "^1.1.2",
     "npm-run-all": "^4.1.2",
     "npm-watch": "^0.3.0",
+    "process": "^0.11.10",
     "rollup": "^0.56.3",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-coffee-script": "^2.0.0",
@@ -93,9 +94,9 @@
     "rollup-plugin-node-resolve": "^3.0.3",
     "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^3.0.0",
+    "smoothscroll-polyfill": "^0.4.3",
     "stylus": "^0.54.5",
     "uglify-es": "^3.3.10",
-    "verso-browser": "^1.0.17",
-    "process": "^0.11.10"
+    "verso-browser": "^1.0.17"
   }
 }

@@ -3,7 +3,7 @@
     <head>
         <title>Incito Publication</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta charset="utf-8">
         <style>
             body {
@@ -87,10 +87,12 @@
 
                     self.details.show();
 
-                    e.el.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    if (!SGN.util.isElementInViewport(e.el)) {
+                        e.el.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 });
 
                 viewer.bind('view_context_clicked', function (e) {
