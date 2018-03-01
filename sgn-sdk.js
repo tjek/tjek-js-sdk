@@ -9202,38 +9202,34 @@ var controls$1 = Controls$1 = function () {
     classCallCheck(this, Controls);
 
     this.viewer = viewer;
-    this.progressDelay = 1500;
     this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
+    this.scrollListener = this.scroll.bind(this);
     if (this.progressEl != null) {
-      this.setupProgress();
+      window.addEventListener('scroll', this.scrollListener, false);
+      this.viewer.bind('destroyed', function () {
+        window.removeEventListener('scroll', _this.scrollListener);
+      });
     }
-    this.viewer.bind('destroyed', function () {
-      clearInterval(_this.progressInterval);
-    });
     return;
   }
 
   createClass(Controls, [{
-    key: 'setupProgress',
-    value: function setupProgress() {
-      var _this2 = this;
-
-      this.progressInterval = setInterval(function () {
-        var docHeight, progress, scrollTop, winHeight;
-        scrollTop = window.scrollY;
-        winHeight = window.innerHeight;
-        docHeight = document.body.clientHeight;
-        progress = Math.round((scrollTop + winHeight) / docHeight * 100);
-        if (scrollTop < 300) {
-          _this2.progressEl.style.opacity = 0;
-        } else if (scrollTop >= docHeight - winHeight) {
-          _this2.progressEl.textContent = '100%';
-          _this2.progressEl.style.opacity = 1;
-        } else {
-          _this2.progressEl.textContent = progress + '%';
-          _this2.progressEl.style.opacity = 1;
-        }
-      }, this.progressDelay);
+    key: 'scroll',
+    value: function scroll() {
+      var docHeight, progress, scrollTop, winHeight;
+      scrollTop = window.scrollY;
+      winHeight = window.innerHeight;
+      docHeight = document.body.clientHeight;
+      progress = Math.round((scrollTop + winHeight) / docHeight * 100);
+      if (scrollTop < 300) {
+        this.progressEl.style.opacity = 0;
+      } else if (scrollTop >= docHeight - winHeight) {
+        this.progressEl.textContent = '100%';
+        this.progressEl.style.opacity = 1;
+      } else {
+        this.progressEl.textContent = progress + '%';
+        this.progressEl.style.opacity = 1;
+      }
     }
   }]);
   return Controls;
