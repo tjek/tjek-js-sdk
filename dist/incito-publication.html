@@ -18,7 +18,9 @@
         <link href="sgn-sdk.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <div class="sgn__incito"></div>
+        <div class="sgn__incito">
+            <div class="sgn-incito__progress"></div>
+        </div>
 
         <script src="sgn-sdk.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
         <script>
@@ -34,15 +36,18 @@
                 });
             }
 
-            IncitoPublication.prototype.start = function () {
+            IncitoPublication.prototype.start = function (callback) {
                 var self = this;
 
                 this.bootstrapper.fetch(function (err, res) {
                     if (err) {
+                        callback(err);
                     } else {
                         var viewer = self.createviewer(res.data.node.incito);
 
                         viewer.start();
+
+                        callback(null, viewer);
                     }
                 });
             };
@@ -69,7 +74,7 @@
                     self.detailsId = e.incito.id;
                     self.details = new SGN.CoreUIKit.OfferDetails({
                         el: e.el,
-                        template: "insert template here",
+                        template: "<div>{{description}}</div>{{#products}}<div>{{title}}</div>{{/products}}",
                         view: {
                             title: e.incito.accessibility_label || e.incito.meta.title,
                             labels: e.incito.meta.labels,
@@ -132,7 +137,8 @@
                 eventTracker: SGN.config.get('eventTracker')
             });
 
-            incitoPublication.start();
+            incitoPublication.start(function (err, viewer) {
+            });
         </script>
     </body>
 </html>
