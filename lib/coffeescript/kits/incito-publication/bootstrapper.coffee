@@ -11,6 +11,7 @@ module.exports = class Bootstrapper
         @orientation = @getOrientation()
         @maxWidth = @getMaxWidth()
         @versionsSupported = ['1.0.0']
+        @storageKey = "incito-#{@options.id}-#{@maxWidth}"
 
         return
     
@@ -33,7 +34,7 @@ module.exports = class Bootstrapper
         @options.el.offsetWidth
 
     fetch: (callback) ->
-        data = SGN.storage.session.get "incito-#{@options.id}"
+        data = SGN.storage.session.get @storageKey
 
         return callback null, data if data?
 
@@ -54,7 +55,7 @@ module.exports = class Bootstrapper
             else
                 callback null, data
 
-                SGN.storage.session.set "incito-#{@options.id}", data
+                SGN.storage.session.set @storageKey, data
             
             return
 
