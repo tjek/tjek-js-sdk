@@ -25,7 +25,7 @@ module.exports = class Controls
             @progressEl.textContent = '100%'
             @progressEl.style.opacity = 1
         else
-            @progressEl.textContent = "#{progress}%"
+            @progressEl.textContent = "#{progress} %"
             @progressEl.style.opacity = 1
 
         return
