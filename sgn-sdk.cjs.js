@@ -370,10 +370,15 @@ util = {
     return dist;
   },
   isElementInViewport: function isElementInViewport(el) {
-    var html, rect;
+    var margins = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var bottom, left, rect, ref, ref1, ref2, ref3, right, top;
     rect = el.getBoundingClientRect();
-    html = document.documentElement;
-    return rect.top >= 0 && rect.left >= 0 && rect.bottom <= window.innerHeight && rect.right <= window.innerWidth;
+    top = rect.top - ((ref = margins.top) != null ? ref : 0);
+    left = rect.left - ((ref1 = margins.left) != null ? ref1 : 0);
+    right = rect.right + ((ref2 = margins.right) != null ? ref2 : 0);
+    bottom = rect.bottom + ((ref3 = margins.bottom) != null ? ref3 : 0);
+    return top >= 0 && left >= 0 && bottom <= window.innerHeight && right <= window.innerWidth;
   },
   async: {
     parallel: function parallel(asyncCalls, sharedCallback) {

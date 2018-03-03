@@ -87,7 +87,7 @@
 
                     self.details.show();
 
-                    if (!SGN.util.isElementInViewport(e.el)) {
+                    if (!SGN.util.isElementInViewport(e.el, { bottom: 150 })) {
                         e.el.scrollIntoView({
                             behavior: 'smooth',
                             block: 'start'

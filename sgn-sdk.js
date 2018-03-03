@@ -1247,10 +1247,15 @@ util = {
     return dist;
   },
   isElementInViewport: function isElementInViewport(el) {
-    var html, rect;
+    var margins = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var bottom, left, rect, ref, ref1, ref2, ref3, right, top;
     rect = el.getBoundingClientRect();
-    html = document.documentElement;
-    return rect.top >= 0 && rect.left >= 0 && rect.bottom <= window.innerHeight && rect.right <= window.innerWidth;
+    top = rect.top - ((ref = margins.top) != null ? ref : 0);
+    left = rect.left - ((ref1 = margins.left) != null ? ref1 : 0);
+    right = rect.right + ((ref2 = margins.right) != null ? ref2 : 0);
+    bottom = rect.bottom + ((ref3 = margins.bottom) != null ? ref3 : 0);
+    return top >= 0 && left >= 0 && bottom <= window.innerHeight && right <= window.innerWidth;
   },
   async: {
     parallel: function parallel(asyncCalls, sharedCallback) {
@@ -8965,7 +8970,7 @@ module.exports = View = function () {
       value: function setupCallbacks() {
         var _this = this;
 
-        var clickDelay, down, downTimeout, endTime, isMouseSupported, isTouchSupported, longclickDelay, move, startPos, startTime, threshold, trigger, up, useTouch;
+        var clickDelay, down, endTime, isMouseSupported, isTouchSupported, longclickDelay, longclickTimeout, move, startPos, startTime, threshold, trigger, up, useTouch;
         startPos = {
           x: null,
           y: null
@@ -8975,7 +8980,7 @@ module.exports = View = function () {
         longclickDelay = 500;
         clickDelay = 300;
         threshold = 20;
-        downTimeout = null;
+        longclickTimeout = null;
         isTouchSupported = 'ontouchend' in document;
         isMouseSupported = window.matchMedia('(pointer: fine)').matches;
         useTouch = isTouchSupported && !isMouseSupported;
@@ -8992,13 +8997,13 @@ module.exports = View = function () {
           startPos.y = e.clientY || e.touches[0].clientY;
           startTime = new Date().getTime();
           if (e.which !== 3 && e.button !== 2 && utils.isDefinedStr(_this.attrs.onlongclick)) {
-            downTimeout = setTimeout(function () {
+            longclickTimeout = setTimeout(function () {
               trigger(_this.attrs.onlongclick, e);
             }, longclickDelay);
           }
         };
         move = function move(e) {
-          clearTimeout(downTimeout);
+          clearTimeout(longclickTimeout);
         };
         up = function up(e) {
           var delta, deltaX, deltaY, x, y;
@@ -9009,7 +9014,7 @@ module.exports = View = function () {
           deltaY = Math.abs(y - startPos.y);
           endTime = new Date().getTime();
           delta = endTime - startTime;
-          clearTimeout(downTimeout);
+          clearTimeout(longclickTimeout);
           if (e.which !== 3 && e.button !== 2 && delta < clickDelay) {
             if (deltaX < threshold && deltaY < threshold) {
               if (utils.isDefinedStr(_this.attrs.onclick)) {
@@ -9028,6 +9033,7 @@ module.exports = View = function () {
           this.el.ontouchcancel = up;
         } else {
           this.el.onmousedown = down;
+          this.el.onmousemove = move;
           this.el.onmouseup = up;
         }
         if (utils.isDefinedStr(this.attrs.oncontextclick)) {
@@ -9678,7 +9684,7 @@ var controls$1 = Controls$1 = function () {
         this.progressEl.textContent = '100%';
         this.progressEl.style.opacity = 1;
       } else {
-        this.progressEl.textContent = progress + '%';
+        this.progressEl.textContent = progress + ' %';
         this.progressEl.style.opacity = 1;
       }
     }
@@ -9716,6 +9722,7 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
     this.orientation = this.getOrientation();
     this.maxWidth = this.getMaxWidth();
     this.versionsSupported = ['1.0.0'];
+    this.storageKey = 'incito-' + this.options.id + '-' + this.maxWidth;
     return;
   }
 
@@ -9755,7 +9762,7 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
       var _this = this;
 
       var data;
-      data = SGN$17.storage.session.get('incito-' + this.options.id);
+      data = SGN$17.storage.session.get(this.storageKey);
       if (data != null) {
         return callback(null, data);
       }
@@ -9776,7 +9783,7 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
           callback(err);
         } else {
           callback(null, data);
-          SGN$17.storage.session.set('incito-' + _this.options.id, data);
+          SGN$17.storage.session.set(_this.storageKey, data);
         }
       });
     }
