@@ -15,8 +15,8 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.0.8.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.0.8.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.0.9.min.css" rel="stylesheet" type="text/css">
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.0.9.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
 By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself.
@@ -61,6 +61,11 @@ To learn more about integrating the same experience on iOS and Android be sure t
 * [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+
+### Version 2.0.9
+
+- Added `margins` parameter for `util.isElementInViewport`
+- Updated Incito library
 
 ### Version 2.0.0
 
