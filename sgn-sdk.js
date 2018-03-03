@@ -7708,7 +7708,9 @@ Viewer = function () {
               subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
             };
           })
-        }, callback);
+        }, function (e) {
+          callback(_this2.hotspots[e.id]);
+        });
       }
     }
   }, {
