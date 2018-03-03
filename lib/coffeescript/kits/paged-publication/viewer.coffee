@@ -235,7 +235,10 @@ class Viewer
                         id: hotspot.id
                         title: hotspot.offer.heading
                         subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
-            , callback
+            , (e) =>
+                callback @hotspots[e.id]
+
+                return
         
         return
 
