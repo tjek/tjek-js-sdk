@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -33,7 +33,7 @@
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
     "build:css-min": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
     "build": "run-p -l build:js build:css build:css-min",
-    "serve": "python -m SimpleHTTPServer 8001",
+    "serve": "python3 -m http.server 8001",
     "prepublishOnly": "npm run build"
   },
   "jest": {
