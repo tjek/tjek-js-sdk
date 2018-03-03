@@ -211,11 +211,14 @@ util =
 
         dist
     
-    isElementInViewport: (el) ->
+    isElementInViewport: (el, margins = {}) ->
         rect = el.getBoundingClientRect()
-        html = document.documentElement
+        top = rect.top - (margins.top ? 0)
+        left = rect.left - (margins.left ? 0)
+        right = rect.right + (margins.right ? 0)
+        bottom = rect.bottom + (margins.bottom ? 0)
 
-        rect.top >= 0 and rect.left >= 0 and rect.bottom <= window.innerHeight and rect.right <= window.innerWidth
+        top >= 0 and left >= 0 and bottom <= window.innerHeight and right <= window.innerWidth
 
     async:
         parallel: (asyncCalls, sharedCallback) ->

@@ -40,7 +40,7 @@ export default [
         extensions: ['.js', '.coffee']
       }),
       babel({
-        exclude: ['node_modules/**', '*.graphql']
+        exclude: ['*.graphql']
       }),
     ]
   },
