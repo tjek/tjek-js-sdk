@@ -7970,9 +7970,6 @@ Incito = function () {
       if (incito.locale != null) {
         this.el.setAttribute('lang', incito.locale);
       }
-      if (incito.debug === true) {
-        this.el.setAttribute('data-debug', true);
-      }
       this.el.appendChild(frag);
       this.containerEl.appendChild(this.el);
       this.lazyload = new LazyLoad({

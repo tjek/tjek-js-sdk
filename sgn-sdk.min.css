@@ -443,9 +443,6 @@
   -moz-box-sizing: inherit;
   box-sizing: inherit;
 }
-.incito[data-debug="true"] .incito__view {
-  border: 1px solid #f00 !important;
-}
 .incito [data-link],
 .incito [data-callback] {
   cursor: pointer;
@@ -476,6 +473,12 @@
 .incito__view[data-gravity="center_horizontal"] {
   margin-left: auto;
   margin-right: auto;
+}
+.incito__view[data-gravity="left_horizontal"] {
+  margin-right: auto;
+}
+.incito__view[data-gravity="right_horizontal"] {
+  margin-left: auto;
 }
 .incito__absolute-layout-view {
   position: relative;
