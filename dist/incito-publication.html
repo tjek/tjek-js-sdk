@@ -140,6 +140,9 @@
             });
 
             incitoPublication.start(function (err, viewer) {
+                if (err) {
+                    console.log(err);
+                }
             });
         </script>
     </body>
