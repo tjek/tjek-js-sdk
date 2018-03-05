@@ -9721,7 +9721,7 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
     this.orientation = this.getOrientation();
     this.maxWidth = this.getMaxWidth();
     this.versionsSupported = ['1.0.0'];
-    this.storageKey = 'incito-' + this.options.id + '-' + this.maxWidth;
+    this.storageKey = 'incito-' + this.options.id;
     return;
   }
 
@@ -9762,8 +9762,8 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
 
       var data;
       data = SGN$17.storage.session.get(this.storageKey);
-      if (data != null) {
-        return callback(null, data);
+      if (data != null && data.response != null && data.width === this.maxWidth) {
+        return callback(null, data.response);
       }
       SGN$17.GraphKit.request({
         query: schema,
@@ -9777,12 +9777,17 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
           maxWidth: this.maxWidth,
           versionsSupported: this.versionsSupported
         }
-      }, function (err, data) {
+      }, function (err, res) {
         if (err != null) {
           callback(err);
+        } else if (res.errors && res.errors.length > 0) {
+          callback(util$2.error(new Error(), 'graph request contained errors'));
         } else {
-          callback(null, data);
-          SGN$17.storage.session.set(_this.storageKey, data);
+          callback(null, res);
+          SGN$17.storage.session.set(_this.storageKey, {
+            width: _this.maxWidth,
+            response: res
+          });
         }
       });
     }
