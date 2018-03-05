@@ -11,7 +11,7 @@ module.exports = class Bootstrapper
         @orientation = @getOrientation()
         @maxWidth = @getMaxWidth()
         @versionsSupported = ['1.0.0']
-        @storageKey = "incito-#{@options.id}-#{@maxWidth}"
+        @storageKey = "incito-#{@options.id}"
 
         return
     
@@ -36,7 +36,8 @@ module.exports = class Bootstrapper
     fetch: (callback) ->
         data = SGN.storage.session.get @storageKey
 
-        return callback null, data if data?
+        if data? and data.response? and data.width is @maxWidth
+            return callback null, data.response
 
         SGN.GraphKit.request
             query: schema
@@ -49,13 +50,17 @@ module.exports = class Bootstrapper
                 orientation: 'ORIENTATION_' + @orientation.toUpperCase()
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
-        , (err, data) =>
+        , (err, res) =>
             if err?
                 callback err
+            else if res.errors and res.errors.length > 0
+                callback util.error(new Error(), 'graph request contained errors')
             else
-                callback null, data
+                callback null, res
 
-                SGN.storage.session.set @storageKey, data
+                SGN.storage.session.set @storageKey,
+                    width: @maxWidth
+                    response: res
             
             return
 
