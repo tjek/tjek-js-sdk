@@ -16,7 +16,7 @@
 
 .sgn-offer-details__desc {
     margin: 0 0 10px;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 .sgn-offer-details__add {

@@ -1,18 +1,23 @@
-Mustache = require 'mustache'
-
 module.exports = class OfferDetails
     constructor: (@options = {}) ->
         @el = document.createElement 'div'
+
+        @el.className = 'sgn-offer-details'
+        @el.setAttribute 'tabindex', -1
+        @el.appendChild @options.contentEl
+
         @resizeListener = @resize.bind @
+
+        @position()
 
         return
     
-    render: ->
-        @el.className = 'sgn-offer-details'
-        @el.setAttribute 'tabindex', -1
-        @el.innerHTML = Mustache.render @options.template, @options.view
+    appendTo: (el) ->
+        el.appendChild @el
 
-        @position()
+        @el.offsetWidth
+
+        @show()
 
         @
     
@@ -31,10 +36,10 @@ module.exports = class OfferDetails
         return
     
     position: ->
-        rect = @options.el.getBoundingClientRect()
-        top = window.pageYOffset + rect.top + @options.el.offsetHeight
+        rect = @options.anchorEl.getBoundingClientRect()
+        top = window.pageYOffset + rect.top + @options.anchorEl.offsetHeight
         left = window.pageXOffset + rect.left
-        width = @options.el.offsetWidth
+        width = @options.anchorEl.offsetWidth
 
         @el.style.top = top + 'px'
         @el.style.left = left + 'px'

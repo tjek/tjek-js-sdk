@@ -6,25 +6,22 @@ smoothscroll.polyfill()
 
 class Viewer
     constructor: (@el, @options = {}) ->
-        @incito = new Incito @el,
+        incito = new Incito @el,
             incito: @options.incito
-        
-        trigger = @incito.trigger
+        trigger = incito.trigger
 
-        @incito.trigger = (args...) =>
-            trigger.apply @incito, args
+        incito.trigger = (args...) =>
+            trigger.apply incito, args
             @trigger.apply @, args
             
             return
+        
+        @incito = incito
             
         return
     
     start: ->
         @incito.start()
-
-        @_trackEvent
-            type: 'x-incito-publication-opened',
-            properties: {}
 
         @
     
