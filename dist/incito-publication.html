@@ -52,6 +52,21 @@
                 });
             };
 
+            IncitoPublication.prototype.closeDetails = function () {
+                if (this.details) {
+                    this.details.destroy();
+                    this.detailsId = null;
+                    this.details = null;
+                }
+            };
+
+            IncitoPublication.prototype.closePopover = function () {
+                if (this.popover) {
+                    this.popover.destroy();
+                    this.popover = null;
+                }
+            };
+
             IncitoPublication.prototype.createviewer = function (incito) {
                 var self = this;
                 var viewer = this.bootstrapper.createViewer({
@@ -60,34 +75,25 @@
 
                 viewer.bind('view_clicked', function (e) {
                     if (self.detailsId === e.incito.id) {
-                        self.details.destroy();
-                        self.detailsId = null;
-                        self.details = null;
+                        self.closeDetails();
 
                         return;
                     }
 
-                    if (self.details) {
-                        self.details.destroy();
-                    }
+                    self.closeDetails();
+
+                    var contentEl = document.createElement('div');
+
+                    contentEl.innerHTML = 'show details here';
 
                     self.detailsId = e.incito.id;
                     self.details = new SGN.CoreUIKit.OfferDetails({
-                        el: e.el,
-                        template: "<div>{{description}}</div>{{#products}}<div>{{title}}</div>{{/products}}",
-                        view: {
-                            title: e.incito.accessibility_label || e.incito.meta.title,
-                            labels: e.incito.meta.labels,
-                            description: e.incito.meta.description,
-                            products: e.incito.meta.products
-                        }
+                        anchorEl: e.el,
+                        contentEl: contentEl
                     });
+                    self.details.appendTo(document.body);
 
-                    document.body.appendChild(self.details.render().el);
-
-                    self.details.show();
-
-                    if (!SGN.util.isElementInViewport(e.el, { bottom: 150 })) {
+                    if (!SGN.util.isElementInViewport(e.el, { bottom: 200 })) {
                         e.el.scrollIntoView({
                             behavior: 'smooth',
                             block: 'start'
@@ -111,10 +117,8 @@
             };
 
             IncitoPublication.prototype.pickProduct = function (e, callback) {
-                if (this.popover) {
-                    this.popover.destroy();
-                    this.popover = null;
-                }
+                this.closeDetails();
+                this.closePopover();
 
                 if (e.incito.role !== 'offer') {
                     return;
