@@ -7960,6 +7960,8 @@ Incito = function () {
   _createClass(Incito, [{
     key: 'start',
     value: function start() {
+      var _this = this;
+
       var frag, incito;
       incito = this.options.incito || {};
       frag = document.createDocumentFragment();
@@ -7972,15 +7974,17 @@ Incito = function () {
       }
       this.el.appendChild(frag);
       this.containerEl.appendChild(this.el);
-      this.lazyload = new LazyLoad({
-        elements_selector: '.incito--lazyload',
-        threshold: 800,
-        callback_enter: function callback_enter(el) {
-          if (el.nodeName.toLowerCase() === 'video' && el.getAttribute('data-autoplay')) {
-            el.play();
+      setTimeout(function () {
+        _this.lazyload = new LazyLoad({
+          elements_selector: '.incito--lazyload',
+          threshold: 1000,
+          callback_enter: function callback_enter(el) {
+            if (el.nodeName.toLowerCase() === 'video' && el.getAttribute('data-autoplay')) {
+              el.play();
+            }
           }
-        }
-      });
+        });
+      }, 0);
       return this;
     }
   }, {
@@ -7995,7 +7999,7 @@ Incito = function () {
   }, {
     key: 'render',
     value: function render(el) {
-      var _this = this;
+      var _this2 = this;
 
       var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -8022,13 +8026,13 @@ Incito = function () {
         }
 
         trigger.apply(view, args);
-        _this.trigger.apply(_this, args);
+        _this2.trigger.apply(_this2, args);
       };
       view.render();
       if (Array.isArray(attrs.child_views)) {
         attrs.child_views.forEach(function (childView) {
           var childEl;
-          childEl = _this.render(view.el, childView);
+          childEl = _this2.render(view.el, childView);
           if (childEl != null) {
             view.el.appendChild(childEl);
           }
@@ -9590,21 +9594,22 @@ Viewer$1 = function () {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     classCallCheck(this, Viewer);
 
-    var trigger;
+    var incito$$1, trigger;
     this.el = el;
     this.options = options;
-    this.incito = new Incito(this.el, {
+    incito$$1 = new Incito(this.el, {
       incito: this.options.incito
     });
-    trigger = this.incito.trigger;
-    this.incito.trigger = function () {
+    trigger = incito$$1.trigger;
+    incito$$1.trigger = function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      trigger.apply(_this.incito, args);
+      trigger.apply(incito$$1, args);
       _this.trigger.apply(_this, args);
     };
+    this.incito = incito$$1;
     return;
   }
 
@@ -9612,10 +9617,6 @@ Viewer$1 = function () {
     key: 'start',
     value: function start() {
       this.incito.start();
-      this._trackEvent({
-        type: 'x-incito-publication-opened',
-        properties: {}
-      });
       return this;
     }
   }, {
@@ -9815,9 +9816,7 @@ var incitoPublication = {
   Bootstrapper: bootstrapper$1
 };
 
-var Mustache$2, OfferDetails;
-
-Mustache$2 = mustache;
+var OfferDetails;
 
 var offerDetails = OfferDetails = function () {
   function OfferDetails() {
@@ -9826,17 +9825,20 @@ var offerDetails = OfferDetails = function () {
 
     this.options = options;
     this.el = document.createElement('div');
+    this.el.className = 'sgn-offer-details';
+    this.el.setAttribute('tabindex', -1);
+    this.el.appendChild(this.options.contentEl);
     this.resizeListener = this.resize.bind(this);
+    this.position();
     return;
   }
 
   createClass(OfferDetails, [{
-    key: 'render',
-    value: function render() {
-      this.el.className = 'sgn-offer-details';
-      this.el.setAttribute('tabindex', -1);
-      this.el.innerHTML = Mustache$2.render(this.options.template, this.options.view);
-      this.position();
+    key: 'appendTo',
+    value: function appendTo(el) {
+      el.appendChild(this.el);
+      this.el.offsetWidth;
+      this.show();
       return this;
     }
   }, {
@@ -9856,10 +9858,10 @@ var offerDetails = OfferDetails = function () {
     key: 'position',
     value: function position() {
       var left, rect, top, width;
-      rect = this.options.el.getBoundingClientRect();
-      top = window.pageYOffset + rect.top + this.options.el.offsetHeight;
+      rect = this.options.anchorEl.getBoundingClientRect();
+      top = window.pageYOffset + rect.top + this.options.anchorEl.offsetHeight;
       left = window.pageXOffset + rect.left;
-      width = this.options.el.offsetWidth;
+      width = this.options.anchorEl.offsetWidth;
       this.el.style.top = top + 'px';
       this.el.style.left = left + 'px';
       this.el.style.width = width + 'px';
@@ -10242,13 +10244,13 @@ var gator = createCommonjsModule(function (module) {
 }) ();
 });
 
-var Gator, MicroEvent$11, Mustache$3, Popover, keyCodes$2, template;
+var Gator, MicroEvent$11, Mustache$2, Popover, keyCodes$2, template;
 
 MicroEvent$11 = microevent;
 
 Gator = gator;
 
-Mustache$3 = mustache;
+Mustache$2 = mustache;
 
 keyCodes$2 = keyCodes;
 
@@ -10288,7 +10290,7 @@ Popover = function () {
       };
       this.el.className = 'sgn-popover';
       this.el.setAttribute('tabindex', -1);
-      this.el.innerHTML = Mustache$3.render(template, view);
+      this.el.innerHTML = Mustache$2.render(template, view);
       this.position();
       this.addEventListeners();
       return this;
