@@ -94,10 +94,17 @@
                     self.details.appendTo(document.body);
 
                     if (!SGN.util.isElementInViewport(e.el, { bottom: 200 })) {
-                        e.el.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                        if (e.el.offsetHeight >= window.innerHeight - 200) {
+                            self.details.el.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        } else {
+                            e.el.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
                     }
                 });
 

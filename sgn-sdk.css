@@ -188,9 +188,9 @@
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   padding: 10px;
-  opacity: 0.2;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-  filter: alpha(opacity=20);
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
   -webkit-transition: all ease 0.2s;
   -moz-transition: all ease 0.2s;
   -o-transition: all ease 0.2s;
