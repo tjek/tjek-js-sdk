@@ -6,11 +6,26 @@ SGN.config.set
     appKey: appKey
     appSecret: appSecret
 
-test 'Making a request', (done) ->
+test 'Making a request with JSON response', (done) ->
     SGN.CoreKit.request
         url: '/v2/catalogs'
     , (err, data) ->
         expect(data).toBeDefined()
+        expect(typeof data).toBe('object')
+
+        done()
+        
+        return
+
+    return
+
+test 'Making a request with string response', (done) ->
+    SGN.CoreKit.request
+        url: '/v2/catalogs'
+        json: false
+    , (err, data) ->
+        expect(data).toBeDefined()
+        expect(typeof data).toBe('string')
 
         done()
         

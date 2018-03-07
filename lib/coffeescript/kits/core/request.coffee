@@ -6,6 +6,7 @@ request = (options = {}, callback = ->, runs = 0) ->
 
         url = options.url ? ''
         headers = options.headers ? {}
+        json = if typeof options.json is 'boolean' then options.json else true
         token = SGN.config.get 'coreSessionToken'
         clientId = SGN.config.get 'coreSessionClientId'
         appVersion = SGN.config.get 'appVersion'
@@ -34,7 +35,7 @@ request = (options = {}, callback = ->, runs = 0) ->
             body: options.body
             formData: options.formData
             headers: headers
-            json: true
+            json: json
             useCookies: false
         , (err, data) ->
             if err?
