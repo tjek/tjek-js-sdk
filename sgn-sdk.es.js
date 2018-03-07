@@ -573,12 +573,13 @@ _request = function request$$1() {
   var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
   SGN$2.CoreKit.session.ensure(function (err) {
-    var appSecret, appVersion, clientId, geo, headers, locale, qs, ref, ref1, ref2, token, url;
+    var appSecret, appVersion, clientId, geo, headers, json, locale, qs, ref, ref1, ref2, token, url;
     if (err != null) {
       return callback(err);
     }
     url = (ref = options.url) != null ? ref : '';
     headers = (ref1 = options.headers) != null ? ref1 : {};
+    json = typeof options.json === 'boolean' ? options.json : true;
     token = SGN$2.config.get('coreSessionToken');
     clientId = SGN$2.config.get('coreSessionClientId');
     appVersion = SGN$2.config.get('appVersion');
@@ -620,7 +621,7 @@ _request = function request$$1() {
       body: options.body,
       formData: options.formData,
       headers: headers,
-      json: true,
+      json: json,
       useCookies: false
     }, function (err, data) {
       var ref3, responseToken;
