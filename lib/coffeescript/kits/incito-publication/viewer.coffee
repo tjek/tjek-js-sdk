@@ -15,6 +15,15 @@ class Viewer
             @trigger.apply @, args
             
             return
+        incito.bind 'view_clicked', (e) =>
+            if e.incito.role is 'offer'
+                @_trackEvent
+                    type: 'x-incito-publication-offer-clicked'
+                    properties:
+                        ipid: @options.id
+                        id: e.incito.id
+
+            return
         
         @incito = incito
             
@@ -22,6 +31,11 @@ class Viewer
     
     start: ->
         @incito.start()
+
+        @_trackEvent
+            type: 'x-incito-publication-opened'
+            properties:
+                id: @options.id
 
         @
     
