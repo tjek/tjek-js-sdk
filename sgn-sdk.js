@@ -7963,17 +7963,15 @@ Incito = function () {
   _createClass(Incito, [{
     key: 'start',
     value: function start() {
-      var frag, incito;
+      var incito;
       incito = this.options.incito || {};
-      frag = document.createDocumentFragment();
-      this.loadFonts(incito.font_assets);
-      this.applyTheme(incito.theme);
-      this.render(frag, incito.root_view);
       this.el.className = 'incito';
       if (incito.locale != null) {
         this.el.setAttribute('lang', incito.locale);
       }
-      this.el.appendChild(frag);
+      this.loadFonts(incito.font_assets);
+      this.applyTheme(incito.theme);
+      this.render(this.el, incito.root_view);
       this.containerEl.appendChild(this.el);
       this.lazyLoader = this.createLazyLoader();
       return this;
@@ -8022,11 +8020,7 @@ Incito = function () {
       view.render();
       if (Array.isArray(attrs.child_views)) {
         attrs.child_views.forEach(function (childView) {
-          var childEl;
-          childEl = _this.render(view.el, childView);
-          if (childEl != null) {
-            view.el.appendChild(childEl);
-          }
+          _this.render(view.el, childView);
         });
       }
       el.appendChild(view.el);
@@ -8088,9 +8082,7 @@ Incito = function () {
         elements_selector: '.incito .incito--lazyload',
         threshold: 1000,
         callback_enter: function callback_enter(el) {
-          if (el.nodeName.toLowerCase() === 'video') {
-            el.dispatchEvent(new Event('incito-play'));
-          }
+          el.dispatchEvent(new Event('incito-lazyload'));
         }
       });
     }
@@ -8433,7 +8425,9 @@ var utils;
 
 utils = {
   formatUnit: function formatUnit(unit) {
-    if (typeof unit === 'number') {
+    if (unit == null) {
+      return 0;
+    } else if (typeof unit === 'number') {
       return unit + 'px';
     } else if (typeof unit === 'string') {
       return unit.replace('dp', 'px');
@@ -8909,12 +8903,20 @@ module.exports = FlexLayout = function () {
     _createClass(FlexLayout, [{
       key: 'render',
       value: function render() {
-        var linkEl, ref;
-        linkEl = document.createElement('a');
+        this.el.addEventListener('incito-lazyload', this.renderIframe.bind(this));
+        return this;
+      }
+    }, {
+      key: 'renderIframe',
+      value: function renderIframe() {
+        var iframeEl, linkEl, ref;
         if (utils.isDefinedStr(this.attrs.src)) {
+          iframeEl = document.createElement('iframe');
+          linkEl = document.createElement('a');
           linkEl.setAttribute('href', this.attrs.src);
           if (ref = linkEl.hostname, indexOf.call(allowedHostnames, ref) >= 0) {
-            this.el.setAttribute('data-src', this.attrs.src);
+            iframeEl.setAttribute('src', this.attrs.src);
+            this.el.appendChild(iframeEl);
           }
         }
         return this;
@@ -8925,8 +8927,6 @@ module.exports = FlexLayout = function () {
   }(View);
 
   FlexLayout.prototype.className = 'incito__video-embed-view incito--lazyload';
-
-  FlexLayout.prototype.tagName = 'iframe';
 
   return FlexLayout;
 }.call(undefined);
@@ -8963,7 +8963,7 @@ module.exports = Video = function () {
         if (!utils.isDefinedStr(this.attrs.src)) {
           return;
         }
-        this.el.addEventListener('incito-play', this.renderVideo.bind(this));
+        this.el.addEventListener('incito-lazyload', this.renderVideo.bind(this));
         if (this.attrs.autoplay === true) {
           this.el.setAttribute('autoplay', '');
         }
@@ -9008,12 +9008,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var MicroEvent,
     View,
+    isMouseSupported,
+    isTouchSupported,
+    useTouch,
     utils,
     indexOf = [].indexOf;
 
 MicroEvent = _dereq_('microevent');
 
 utils = _dereq_('../utils');
+
+isTouchSupported = 'ontouchend' in document;
+
+isMouseSupported = window.matchMedia('(pointer: fine)').matches;
+
+useTouch = isTouchSupported && !isMouseSupported;
 
 module.exports = View = function () {
   var View = function () {
@@ -9025,13 +9034,10 @@ module.exports = View = function () {
       this.attrs = attrs;
       this.el = this.createElement();
       this.setAttributes();
-      this.initialize();
+      return;
     }
 
     _createClass(View, [{
-      key: 'initialize',
-      value: function initialize() {}
-    }, {
       key: 'render',
       value: function render() {
         return this;
@@ -9039,12 +9045,10 @@ module.exports = View = function () {
     }, {
       key: 'createElement',
       value: function createElement() {
-        var el;
+        var className, el, ref;
         el = document.createElement(this.tagName);
-        el.className = 'incito__view';
-        if (this.className != null) {
-          el.className += ' ' + this.className;
-        }
+        className = (ref = this.className) != null ? ref : '';
+        el.className = 'incito__view ' + className;
         return el;
       }
     }, {
@@ -9310,7 +9314,7 @@ module.exports = View = function () {
       value: function setupCallbacks() {
         var _this = this;
 
-        var clickDelay, down, endTime, isMouseSupported, isTouchSupported, longclickDelay, longclickTimeout, move, startPos, startTime, threshold, trigger, up, useTouch;
+        var clickDelay, down, endTime, longclickDelay, longclickTimeout, move, startPos, startTime, threshold, trigger, up;
         startPos = {
           x: null,
           y: null
@@ -9321,9 +9325,6 @@ module.exports = View = function () {
         clickDelay = 300;
         threshold = 20;
         longclickTimeout = null;
-        isTouchSupported = 'ontouchend' in document;
-        isMouseSupported = window.matchMedia('(pointer: fine)').matches;
-        useTouch = isTouchSupported && !isMouseSupported;
         trigger = function trigger(eventName, e) {
           _this.trigger(eventName, {
             originalEvent: e,
