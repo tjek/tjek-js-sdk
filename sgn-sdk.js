@@ -10113,7 +10113,11 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
   }, {
     key: 'getMaxWidth',
     value: function getMaxWidth() {
-      return this.options.el.offsetWidth;
+      if (Math.abs(window.orientation) === 90) {
+        return Math.min(this.options.el.offsetWidth, window.innerHeight);
+      } else {
+        return this.options.el.offsetWidth;
+      }
     }
   }, {
     key: 'fetch',
