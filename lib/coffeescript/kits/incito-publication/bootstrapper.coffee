@@ -31,7 +31,10 @@ module.exports = class Bootstrapper
         orientation
     
     getMaxWidth: ->
-        @options.el.offsetWidth
+        if Math.abs(window.orientation) is 90
+            Math.min @options.el.offsetWidth, window.innerHeight
+        else
+            @options.el.offsetWidth
 
     fetch: (callback) ->
         data = SGN.storage.session.get @storageKey
