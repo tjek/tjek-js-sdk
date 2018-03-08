@@ -969,7 +969,7 @@
   font-family: inherit;
   hyphens: auto;
   word-break: break-word;
-  overflow-wrap: break-word;
+  text-overflow: ellipsis;
 }
 .incito__text-view a {
   color: inherit;
@@ -1070,7 +1070,8 @@
   -ms-hyphens: auto;
   hyphens: auto;
   word-break: break-word;
-  overflow-wrap: break-word;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 .incito__text-view a {
   color: inherit;
