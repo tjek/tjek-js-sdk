@@ -67,6 +67,25 @@
                 }
             };
 
+            IncitoPublication.prototype.scrollTo = function (elementY, duration) {
+                var startingY = window.pageYOffset;
+                var diff = elementY - startingY;
+                var start;
+
+                window.requestAnimationFrame(function step (timestamp) {
+                    if (!start) start = timestamp;
+
+                    var time = timestamp - start;
+                    var percent = Math.min(time / duration, 1);
+
+                    window.scrollTo(0, startingY + diff * percent);
+
+                    if (time < duration) {
+                        window.requestAnimationFrame(step);
+                    }
+                });
+            };
+
             IncitoPublication.prototype.createviewer = function (incito) {
                 var self = this;
                 var viewer = this.bootstrapper.createViewer({
@@ -94,16 +113,12 @@
                     self.details.appendTo(document.body);
 
                     if (!SGN.util.isElementInViewport(e.el, { bottom: 200 })) {
+                        var scrollTop = e.el.getBoundingClientRect().top + window.pageYOffset;
+
                         if (e.el.offsetHeight >= window.innerHeight - 200) {
-                            self.details.el.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
+                            self.scrollTo(scrollTop + e.el.offsetHeight / 2, 300);
                         } else {
-                            e.el.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
+                            self.scrollTo(scrollTop - 90, 300);
                         }
                     }
                 });
