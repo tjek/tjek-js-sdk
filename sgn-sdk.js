@@ -8082,7 +8082,16 @@ Incito = function () {
         elements_selector: '.incito .incito--lazyload',
         threshold: 1000,
         callback_enter: function callback_enter(el) {
-          el.dispatchEvent(new Event('incito-lazyload'));
+          var completeEvent, eventName;
+          completeEvent = null;
+          eventName = 'incito-lazyload';
+          if (typeof CustomEvent === 'function') {
+            completeEvent = new CustomEvent(eventName);
+          } else {
+            completeEvent = document.createEvent('CustomEvent');
+            completeEvent.initCustomEvent(eventName, false, false, void 0);
+          }
+          el.dispatchEvent(completeEvent);
         }
       });
     }
