@@ -25,14 +25,14 @@ module.exports = class Bootstrapper
         util.getPointer()
     
     getOrientation: ->
-        orientation = util.getOrientation window.innerWidth, window.innerHeight
+        orientation = util.getOrientation screen.width, screen.height
         orientation = 'horizontal' if orientation is 'quadratic'
 
         orientation
     
     getMaxWidth: ->
         if Math.abs(window.orientation) is 90
-            Math.min @options.el.offsetWidth, window.innerHeight
+            Math.min @options.el.offsetWidth, screen.width
         else
             @options.el.offsetWidth
 
