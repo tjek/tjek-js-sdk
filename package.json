@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.0.19",
+  "version": "2.0.20",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -76,7 +76,7 @@
     "coffeescript": "^2.2.2",
     "gator": "^1.2.4",
     "gh-pages": "^1.1.0",
-    "incito-browser": "1.0.14",
+    "incito-browser": "1.0.15",
     "jest": "^22.4.2",
     "jest-cli": "^22.4.2",
     "nib": "^1.1.2",
