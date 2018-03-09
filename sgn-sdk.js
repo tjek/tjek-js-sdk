@@ -10104,7 +10104,7 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
     key: 'getOrientation',
     value: function getOrientation() {
       var orientation;
-      orientation = util$2.getOrientation(window.innerWidth, window.innerHeight);
+      orientation = util$2.getOrientation(screen.width, screen.height);
       if (orientation === 'quadratic') {
         orientation = 'horizontal';
       }
@@ -10114,7 +10114,7 @@ var bootstrapper$1 = Bootstrapper$1 = function () {
     key: 'getMaxWidth',
     value: function getMaxWidth() {
       if (Math.abs(window.orientation) === 90) {
-        return Math.min(this.options.el.offsetWidth, window.innerHeight);
+        return Math.min(this.options.el.offsetWidth, screen.width);
       } else {
         return this.options.el.offsetWidth;
       }
