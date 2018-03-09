@@ -103,9 +103,8 @@
 
                     var contentEl = document.createElement('div');
                     var rect = e.el.getBoundingClientRect();
-                    var threshold = 200;
 
-                    contentEl.innerHTML = 'show details here';
+                    contentEl.innerHTML = 'insert your custom HTML here';
 
                     self.detailsId = e.incito.id;
                     self.details = new SGN.CoreUIKit.OfferDetails({
@@ -113,6 +112,8 @@
                         contentEl: contentEl
                     });
                     self.details.appendTo(document.body);
+
+                    var threshold = self.details.el.offsetHeight;
 
                     if (rect.height + rect.top > window.innerHeight - threshold) {
                         self.scrollTo(rect.top + window.pageYOffset - (window.innerHeight - rect.height) + threshold, 300);
