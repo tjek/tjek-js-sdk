@@ -102,6 +102,8 @@
                     self.closeDetails();
 
                     var contentEl = document.createElement('div');
+                    var rect = e.el.getBoundingClientRect();
+                    var threshold = 200;
 
                     contentEl.innerHTML = 'show details here';
 
@@ -112,14 +114,8 @@
                     });
                     self.details.appendTo(document.body);
 
-                    if (!SGN.util.isElementInViewport(e.el, { bottom: 200 })) {
-                        var scrollTop = e.el.getBoundingClientRect().top + window.pageYOffset;
-
-                        if (e.el.offsetHeight >= window.innerHeight - 200) {
-                            self.scrollTo(scrollTop + e.el.offsetHeight / 2, 300);
-                        } else {
-                            self.scrollTo(scrollTop - 90, 300);
-                        }
+                    if (rect.height + rect.top > window.innerHeight - threshold) {
+                        self.scrollTo(rect.top + window.pageYOffset - (window.innerHeight - rect.height) + threshold, 300);
                     }
                 });
 
