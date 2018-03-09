@@ -1,8 +1,5 @@
 Incito = require 'incito-browser'
 MicroEvent = require 'microevent'
-smoothscroll = require 'smoothscroll-polyfill'
-
-smoothscroll.polyfill()
 
 class Viewer
     constructor: (@el, @options = {}) ->

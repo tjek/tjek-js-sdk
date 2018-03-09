@@ -90,7 +90,6 @@
     "rollup-plugin-node-resolve": "^3.2.0",
     "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^3.0.0",
-    "smoothscroll-polyfill": "^0.4.3",
     "stylus": "^0.54.5",
     "uglify-es": "^3.3.10",
     "verso-browser": "^1.0.17"
