@@ -67,6 +67,25 @@
                 }
             };
 
+            IncitoPublication.prototype.scrollTo = function (elementY, duration) {
+                var startingY = window.pageYOffset;
+                var diff = elementY - startingY;
+                var start;
+
+                window.requestAnimationFrame(function step (timestamp) {
+                    if (!start) start = timestamp;
+
+                    var time = timestamp - start;
+                    var percent = Math.min(time / duration, 1);
+
+                    window.scrollTo(0, startingY + diff * percent);
+
+                    if (time < duration) {
+                        window.requestAnimationFrame(step);
+                    }
+                });
+            };
+
             IncitoPublication.prototype.createviewer = function (incito) {
                 var self = this;
                 var viewer = this.bootstrapper.createViewer({
@@ -83,8 +102,9 @@
                     self.closeDetails();
 
                     var contentEl = document.createElement('div');
+                    var rect = e.el.getBoundingClientRect();
 
-                    contentEl.innerHTML = 'show details here';
+                    contentEl.innerHTML = 'insert your custom HTML here';
 
                     self.detailsId = e.incito.id;
                     self.details = new SGN.CoreUIKit.OfferDetails({
@@ -93,18 +113,10 @@
                     });
                     self.details.appendTo(document.body);
 
-                    if (!SGN.util.isElementInViewport(e.el, { bottom: 200 })) {
-                        if (e.el.offsetHeight >= window.innerHeight - 200) {
-                            self.details.el.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        } else {
-                            e.el.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        }
+                    var threshold = self.details.el.offsetHeight;
+
+                    if (rect.height + rect.top > window.innerHeight - threshold) {
+                        self.scrollTo(rect.top + window.pageYOffset - (window.innerHeight - rect.height) + threshold, 300);
                     }
                 });
 

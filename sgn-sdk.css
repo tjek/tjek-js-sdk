@@ -686,6 +686,12 @@
 .sgn__pp[data-zoomed-in="true"] .sgn-pp__control {
   display: none;
 }
+.sgn__pp[data-zoomed-in="true"] .sgn-pp__page-spread {
+  -webkit-perspective: none;
+  -moz-perspective: none;
+  -ms-perspective: none;
+  perspective: none;
+}
 .sgn__pp [data-active="true"] .sgn-pp-page__loader {
   -webkit-animation: pageLoaderAnimation 2s infinite;
   -moz-animation: pageLoaderAnimation 2s infinite;
