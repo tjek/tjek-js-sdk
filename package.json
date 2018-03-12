@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.0.20",
+  "version": "2.0.21",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -61,7 +61,7 @@
   "dependencies": {
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "sha256": "^0.2.0"
   },
   "devDependencies": {
@@ -73,7 +73,7 @@
     "bundlesize": "^0.16.0",
     "coffeeify": "^3.0.1",
     "coffeelint": "^2.1.0",
-    "coffeescript": "^2.2.2",
+    "coffeescript": "^2.2.3",
     "gator": "^1.2.4",
     "gh-pages": "^1.1.0",
     "incito-browser": "1.0.15",
@@ -85,7 +85,7 @@
     "rollup": "^0.56.5",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-coffee-script": "^2.0.0",
-    "rollup-plugin-commonjs": "^9.0.0",
+    "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-filesize": "^1.5.0",
     "rollup-plugin-node-resolve": "^3.2.0",
     "rollup-plugin-string": "^2.0.2",
