@@ -93,7 +93,7 @@ class PagedPublicationPageSpread
 
         pageEls.forEach (pageEl) =>
             id = pageEl.getAttribute 'data-id'
-            page = SGN.util.find pages, (page) -> page.id is id
+            page = pages.find (page) -> page.id is id
             image = page.images.large
 
             SGN.util.loadImage image, (err) =>

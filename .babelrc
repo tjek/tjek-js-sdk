@@ -1,19 +1,17 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
-          "browsers": [
-            "last 2 versions"
-          ],
+          "browsers": ["> 3%", "IE 11"],
           "node": 8
         },
-        "modules": false
+        "modules": false,
+        "debug": true,
+        "useBuiltIns": "usage"
       }
     ]
   ],
-  "plugins": [
-    "external-helpers"
-  ]
+  "plugins": ["@babel/plugin-external-helpers"]
 }
