@@ -12,6 +12,5 @@
         "useBuiltIns": "usage"
       }
     ]
-  ],
-  "plugins": ["@babel/plugin-external-helpers"]
+  ]
 }
