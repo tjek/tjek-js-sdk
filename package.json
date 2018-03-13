@@ -29,11 +29,11 @@
     "test:lint": "coffeelint lib/coffeescript __tests__",
     "test:ci": "jest --ci",
     "test:size": "bundlesize",
-    "build:js": "rollup -c -m",
+    "build:js": "rollup -c -m --environment NODE_ENV:production",
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
     "build:css-min": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
     "build": "run-p -l build:js build:css build:css-min",
-    "serve": "python3 -m http.server 8001",
+    "serve": "serve --port 8001",
     "prepublishOnly": "npm run build"
   },
   "jest": {
@@ -90,6 +90,7 @@
     "rollup-plugin-node-resolve": "^3.2.0",
     "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^3.0.0",
+    "serve": "^6.5.3",
     "stylus": "^0.54.5",
     "uglify-es": "^3.3.10",
     "verso-browser": "^1.0.17"
