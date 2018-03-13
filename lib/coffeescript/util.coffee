@@ -152,10 +152,6 @@ util =
 
             buffer.toString 'base64'
 
-    find: (arr, fn) ->
-        for item in arr
-            return item if fn(item) is true
-
     chunk: (arr, size) ->
         results = []
 
