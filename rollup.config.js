@@ -39,7 +39,7 @@ let configs = [
         extensions: [".js", ".coffee"]
       }),
       babel({
-        exclude: ["*.graphql"]
+        exclude: ["node_modules/**", "*.graphql"]
       })
     ]
   },
@@ -70,7 +70,7 @@ let configs = [
       name: "SGN"
     },
     watch: {
-      include: 'lib/**'
+      include: "lib/**"
     },
     plugins: [
       string({
