@@ -247,7 +247,7 @@ class Viewer
 
         @hotspotQueue = @hotspotQueue.filter (hotspotRequest) =>
             hotspots = {}
-            versoPageSpread = SGN.util.find @_core.getVerso().pageSpreads, (pageSpread) ->
+            versoPageSpread = @_core.getVerso().pageSpreads.find (pageSpread) ->
                 pageSpread.getId() is hotspotRequest.id
 
             for id, hotspot of @hotspots
