@@ -1,99 +1,106 @@
 import microevent from 'microevent';
 import mustache from 'mustache';
 import process from 'process';
+import 'core-js/modules/es6.regexp.replace';
+import 'core-js/modules/es6.function.name';
 import request from 'request';
+import 'core-js/modules/es6.regexp.split';
 import sha256 from 'sha256';
 
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+function _typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
+  return _typeof(obj);
+}
 
-var classCallCheck = function (instance, Constructor) {
+function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
-};
+}
 
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
   }
+}
 
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 var Config,
     MicroEvent,
     indexOf = [].indexOf;
-
 MicroEvent = microevent;
 
 Config = Config = function () {
-  var Config = function () {
+  var Config =
+  /*#__PURE__*/
+  function () {
     function Config() {
-      classCallCheck(this, Config);
+      _classCallCheck(this, Config);
 
       this.attrs = {};
       return;
     }
 
-    createClass(Config, [{
-      key: 'set',
-      value: function set$$1() {
+    _createClass(Config, [{
+      key: "set",
+      value: function set() {
         var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
         var changedAttributes, key, value;
         changedAttributes = {};
+
         for (key in config) {
           value = config[key];
+
           if (indexOf.call(this.keys, key) >= 0) {
             this.attrs[key] = value;
             changedAttributes[key] = value;
           }
         }
+
         this.trigger('change', changedAttributes);
       }
     }, {
-      key: 'get',
-      value: function get$$1(option) {
+      key: "get",
+      value: function get(option) {
         return this.attrs[option];
       }
     }]);
+
     return Config;
   }();
-
   Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'graphUrl', 'eventsTrackUrl', 'eventsPulseUrl', 'assetsFileUploadUrl'];
-
   return Config;
 }.call(commonjsGlobal);
 
 MicroEvent.mixin(Config);
-
 var config = Config;
 
 var Mustache, pairs;
-
 Mustache = mustache;
-
 pairs = {
   'paged_publication.hotspot_picker.header': 'Which offer did you mean?',
   'incito_publication.product_picker.header': 'Which product?'
 };
-
 var translations = {
   t: function t(key, view) {
     var ref, template;
@@ -102,6 +109,7 @@ var translations = {
   },
   update: function update(translations) {
     var key, value;
+
     for (key in translations) {
       value = translations[key];
       pairs[key] = value;
@@ -110,9 +118,7 @@ var translations = {
 };
 
 var process$1, util;
-
 process$1 = process;
-
 util = {
   isBrowser: function isBrowser() {
     return typeof process$1 !== 'undefined' && process$1.browser;
@@ -123,23 +129,28 @@ util = {
   error: function error(err, options) {
     var key, value;
     err.message = err.message || null;
+
     if (typeof options === 'string') {
       err.message = options;
-    } else if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object' && options != null) {
+    } else if (_typeof(options) === 'object' && options != null) {
       for (key in options) {
         value = options[key];
         err[key] = value;
       }
+
       if (options.message != null) {
         err.message = options.message;
       }
+
       if (options.code != null || options.message != null) {
         err.code = options.code || options.name;
       }
+
       if (options.stack != null) {
         err.stack = options.stack;
       }
     }
+
     err.name = options && options.name || err.name || err.code || 'Error';
     err.time = new Date();
     return err;
@@ -157,6 +168,7 @@ util = {
     href = url ? url : window.location.href;
     reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
     string = reg.exec(href);
+
     if (string) {
       return string[1];
     } else {
@@ -165,7 +177,6 @@ util = {
   },
   formatQueryParams: function formatQueryParams() {
     var queryParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
     return Object.keys(queryParams).map(function (key) {
       return key + '=' + encodeURIComponent(queryParams[key]);
     }).join('&');
@@ -177,6 +188,7 @@ util = {
     var name, ua;
     name = null;
     ua = window.navigator.userAgent;
+
     if (ua.indexOf('Windows') > -1) {
       name = 'Windows';
     } else if (ua.indexOf('Mac') > -1) {
@@ -190,11 +202,13 @@ util = {
     } else if (ua.indexOf('Android') > -1) {
       name = 'Android';
     }
+
     return name;
   },
   getDeviceCategory: function getDeviceCategory() {
     var deviceCategory;
     deviceCategory = 'desktop';
+
     if (navigator.platform === 'iPod' || navigator.platform === 'iPhone') {
       deviceCategory = 'mobile';
     } else if (navigator.platform === 'iPad') {
@@ -206,14 +220,17 @@ util = {
         deviceCategory = 'mobile';
       }
     }
+
     return deviceCategory;
   },
   getPointer: function getPointer() {
     var pointer;
     pointer = 'fine';
+
     if (matchMedia('(pointer:coarse)').matches) {
       pointer = 'coarse';
     }
+
     return pointer;
   },
   getOrientation: function getOrientation(width, height) {
@@ -261,14 +278,18 @@ util = {
     rgb = [];
     sum = 0;
     x = 0;
+
     while (x < 3) {
       s = parseInt(color.substring(2 * x, 2), 16);
       rgb[x] = s;
+
       if (s > 0) {
         sum += s;
       }
+
       ++x;
     }
+
     if (sum <= 381) {
       return 'dark';
     } else {
@@ -276,7 +297,7 @@ util = {
     }
   },
   btoa: function (_btoa) {
-    function btoa(_x2) {
+    function btoa(_x) {
       return _btoa.apply(this, arguments);
     }
 
@@ -287,39 +308,34 @@ util = {
     return btoa;
   }(function (str) {
     var buffer;
+
     if (util.isBrowser()) {
       return btoa(str);
     } else {
       buffer = null;
+
       if (str instanceof Buffer) {
         buffer = str;
       } else {
         buffer = new Buffer(str.toString(), 'binary');
       }
+
       return buffer.toString('base64');
     }
   }),
-  find: function find(arr, fn) {
-    var item, j, len;
-    for (j = 0, len = arr.length; j < len; j++) {
-      item = arr[j];
-      if (fn(item) === true) {
-        return item;
-      }
-    }
-  },
   chunk: function chunk(arr, size) {
     var results;
     results = [];
+
     while (arr.length) {
       results.push(arr.splice(0, size));
     }
+
     return results;
   },
   throttle: function throttle(fn) {
     var threshold = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 250;
-    var scope = arguments[2];
-
+    var scope = arguments.length > 2 ? arguments[2] : undefined;
     var deferTimer, last;
     last = void 0;
     deferTimer = void 0;
@@ -328,6 +344,7 @@ util = {
       context = scope || this;
       now = new Date().getTime();
       args = arguments;
+
       if (last && now < last + threshold) {
         clearTimeout(deferTimer);
         deferTimer = setTimeout(function () {
@@ -343,12 +360,15 @@ util = {
   loadImage: function loadImage(src, callback) {
     var img;
     img = new Image();
+
     img.onload = function () {
       return callback(null, img.width, img.height);
     };
+
     img.onerror = function () {
       return callback(new Error());
     };
+
     img.src = src;
     return img;
   },
@@ -367,7 +387,6 @@ util = {
   },
   isElementInViewport: function isElementInViewport(el) {
     var margins = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
     var bottom, left, rect, ref, ref1, ref2, ref3, right, top;
     rect = el.getBoundingClientRect();
     top = rect.top - ((ref = margins.top) != null ? ref : 0);
@@ -382,22 +401,27 @@ util = {
       counter = asyncCalls.length;
       allResults = [];
       k = 0;
+
       makeCallback = function makeCallback(index) {
         return function () {
           var i, results;
           results = [];
           i = 0;
           counter--;
+
           while (i < arguments.length) {
             results.push(arguments[i]);
             i++;
           }
+
           allResults[index] = results;
+
           if (counter === 0) {
             sharedCallback(allResults);
           }
         };
       };
+
       while (k < asyncCalls.length) {
         asyncCalls[k](makeCallback(k));
         k++;
@@ -405,20 +429,14 @@ util = {
     }
   }
 };
-
 var util_1 = util;
 
 var Config$1, config$1, translations$1, util$1;
-
 Config$1 = config;
-
 translations$1 = translations;
-
 util$1 = util_1;
+config$1 = new Config$1(); // Set default values.
 
-config$1 = new Config$1();
-
-// Set default values.
 config$1.set({
   locale: 'en_US',
   coreUrl: 'https://api.etilbudsavis.dk',
@@ -427,7 +445,6 @@ config$1.set({
   eventsPulseUrl: 'wss://events.service.shopgun.com/pulse',
   assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
 });
-
 var core = {
   config: config$1,
   translations: translations$1,
@@ -437,13 +454,11 @@ var core = {
 var sgn = core;
 
 var request$1;
-
 request$1 = request;
 
 var node = function node() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments[1];
-
+  var callback = arguments.length > 1 ? arguments[1] : undefined;
   var jar, requestOptions;
   requestOptions = {
     method: options.method,
@@ -456,13 +471,15 @@ var node = function node() {
     forever: true,
     qs: options.qs
   };
+
   if (Array.isArray(options.cookies)) {
     jar = request$1.jar();
     options.cookies.forEach(function (cookie) {
-      jar.setCookie(request$1.cookie(cookie.key + '=' + cookie.value), cookie.url);
+      jar.setCookie(request$1.cookie("".concat(cookie.key, "=").concat(cookie.value)), cookie.url);
     });
     requestOptions.jar = jar;
   }
+
   request$1(requestOptions, function (err, response, body) {
     if (err != null) {
       callback(new Error());
@@ -477,12 +494,10 @@ var node = function node() {
 };
 
 var SGN$1, parseCookies;
-
 SGN$1 = sgn;
 
 parseCookies = function parseCookies() {
   var cookies = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
   var parsedCookies;
   parsedCookies = {};
   cookies.map(function (cookie) {
@@ -498,8 +513,7 @@ parseCookies = function parseCookies() {
 
 var request$2 = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments[1];
-
+  var callback = arguments.length > 1 ? arguments[1] : undefined;
   var appKey, authToken, authTokenCookieName, timeout, url;
   url = SGN$1.config.get('graphUrl');
   timeout = 1000 * 12;
@@ -518,11 +532,13 @@ var request$2 = function request$$1() {
       variables: options.variables
     }
   };
+
   if (appKey != null) {
     // Apply authorization header when app key is provided to avoid rate limiting.
-    options.headers.Authorization = 'Basic ' + SGN$1.util.btoa('app-key:' + appKey);
-  }
-  // Set cookies manually in node.js.
+    options.headers.Authorization = 'Basic ' + SGN$1.util.btoa("app-key:".concat(appKey));
+  } // Set cookies manually in node.js.
+
+
   if (SGN$1.util.isNode() && authToken != null) {
     options.cookies = [{
       key: authTokenCookieName,
@@ -532,8 +548,10 @@ var request$2 = function request$$1() {
   } else if (SGN$1.util.isBrowser()) {
     options.useCookies = true;
   }
+
   SGN$1.request(options, function (err, data) {
     var authCookie, cookies, ref;
+
     if (err != null) {
       callback(SGN$1.util.error(new Error('Graph request error'), {
         code: 'GraphRequestError'
@@ -543,10 +561,12 @@ var request$2 = function request$$1() {
       if (SGN$1.util.isNode()) {
         cookies = parseCookies((ref = data.headers) != null ? ref['set-cookie'] : void 0);
         authCookie = cookies[authTokenCookieName];
+
         if (SGN$1.config.get('authToken') !== authCookie) {
           SGN$1.config.set('authToken', authCookie);
         }
       }
+
       if (data.statusCode === 200) {
         callback(null, data.body);
       } else {
@@ -571,12 +591,13 @@ _request = function request$$1() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
   var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
   SGN$2.CoreKit.session.ensure(function (err) {
     var appSecret, appVersion, clientId, geo, headers, json, locale, qs, ref, ref1, ref2, token, url;
+
     if (err != null) {
       return callback(err);
     }
+
     url = (ref = options.url) != null ? ref : '';
     headers = (ref1 = options.headers) != null ? ref1 : {};
     json = typeof options.json === 'boolean' ? options.json : true;
@@ -588,32 +609,41 @@ _request = function request$$1() {
     qs = (ref2 = options.qs) != null ? ref2 : {};
     geo = options.geolocation;
     headers['X-Token'] = token;
+
     if (appSecret != null) {
       headers['X-Signature'] = SGN$2.CoreKit.session.sign(appSecret, token);
     }
+
     if (locale != null) {
       qs.r_locale = locale;
     }
+
     if (appVersion != null) {
       qs.api_av = appVersion;
     }
+
     if (clientId != null) {
       qs.client_id = clientId;
     }
+
     if (geo != null) {
       if (geo.latitude != null && qs.r_lat == null) {
         qs.r_lat = geo.latitude;
       }
+
       if (geo.longitude != null && qs.r_lng == null) {
         qs.r_lng = geo.longitude;
       }
+
       if (geo.radius != null && qs.r_radius == null) {
         qs.r_radius = geo.radius;
       }
+
       if (geo.sensor != null && qs.r_sensor == null) {
         qs.r_sensor = geo.sensor;
       }
     }
+
     return SGN$2.request({
       method: options.method,
       url: SGN$2.config.get('coreUrl') + url,
@@ -625,6 +655,7 @@ _request = function request$$1() {
       useCookies: false
     }, function (err, data) {
       var ref3, responseToken;
+
       if (err != null) {
         callback(SGN$2.util.error(new Error('Core request error'), {
           code: 'CoreRequestError'
@@ -632,9 +663,11 @@ _request = function request$$1() {
       } else {
         token = SGN$2.config.get('coreSessionToken');
         responseToken = data.headers['x-token'];
+
         if (responseToken && token !== responseToken) {
           SGN$2.CoreKit.session.saveToken(responseToken);
         }
+
         if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
           callback(null, data.body);
         } else {
@@ -642,6 +675,7 @@ _request = function request$$1() {
             SGN$2.config.set({
               coreSessionToken: void 0
             });
+
             _request(options, callback, ++runs);
           } else {
             callback(SGN$2.util.error(new Error('Core API error'), {
@@ -658,67 +692,67 @@ _request = function request$$1() {
 var request_1 = _request;
 
 var SGN$3, prefixKey;
-
 SGN$3 = sgn;
-
 prefixKey = 'sgn-';
-
 var clientCookie = {
   get: function get(key) {
     var c, ca, ct, i, len, name, value;
+
     if (SGN$3.util.isNode()) {
       return;
     }
+
     try {
-      name = '' + prefixKey + key + '=';
+      name = "".concat(prefixKey).concat(key, "=");
       ca = document.cookie.split(';');
+
       for (i = 0, len = ca.length; i < len; i++) {
         c = ca[i];
         ct = c.trim();
+
         if (ct.indexOf(name) === 0) {
           value = ct.substring(name.length, ct.length);
         }
       }
+
       value = JSON.parse(value);
     } catch (error) {
       value = {};
     }
+
     return value;
   },
   set: function set(key, value) {
     var date, days, str;
+
     if (SGN$3.util.isNode()) {
       return;
     }
+
     try {
       days = 365;
       date = new Date();
       str = JSON.stringify(value);
       date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-      document.cookie = '' + prefixKey + key + '=' + str + ';expires=' + date.toUTCString() + ';path=/';
+      document.cookie = "".concat(prefixKey).concat(key, "=").concat(str, ";expires=").concat(date.toUTCString(), ";path=/");
     } catch (error) {
     }
   }
 };
 
 var SGN$4, callbackQueue, clientCookieStorage, renewed, session, sha256$1;
-
 SGN$4 = sgn;
-
 sha256$1 = sha256;
-
 clientCookieStorage = clientCookie;
-
 callbackQueue = [];
-
 renewed = false;
-
 session = {
   ttl: 1 * 60 * 60 * 24 * 60,
   saveToken: function saveToken(token) {
     if (!token) {
       throw new Error('No token provided for saving');
     }
+
     SGN$4.config.set({
       coreSessionToken: token
     });
@@ -763,9 +797,11 @@ session = {
     token = SGN$4.config.get('coreSessionToken');
     appSecret = SGN$4.config.get('appSecret');
     headers['X-Token'] = token;
+
     if (appSecret != null) {
       headers['X-Signature'] = session.sign(appSecret, token);
     }
+
     SGN$4.request({
       url: SGN$4.config.get('coreUrl') + '/v2/sessions',
       headers: headers,
@@ -788,9 +824,11 @@ session = {
     token = SGN$4.config.get('coreSessionToken');
     appSecret = SGN$4.config.get('appSecret');
     headers['X-Token'] = token;
+
     if (appSecret != null) {
       headers['X-Signature'] = session.sign(appSecret, token);
     }
+
     SGN$4.request({
       method: 'put',
       url: SGN$4.config.get('coreUrl') + '/v2/sessions',
@@ -811,13 +849,16 @@ session = {
   ensure: function ensure(callback) {
     var complete, queueCount;
     queueCount = callbackQueue.length;
+
     complete = function complete(err) {
       callbackQueue = callbackQueue.filter(function (fn) {
         fn(err);
         return false;
       });
     };
+
     callbackQueue.push(callback);
+
     if (queueCount === 0) {
       if (SGN$4.config.get('coreSessionToken') == null) {
         session.create(complete);
@@ -839,33 +880,29 @@ session = {
     return sha256$1([appSecret, token].join(''));
   }
 };
-
 var session_1 = session;
 
 var request$3, session$1;
-
 request$3 = request_1;
-
 session$1 = session_1;
-
 var core$1 = {
   request: request$3,
   session: session$1
 };
 
 var SGN$6;
-
 SGN$6 = sgn;
 
 var fileUpload = function fileUpload() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments[1];
-  var progressCallback = arguments[2];
-
+  var callback = arguments.length > 1 ? arguments[1] : undefined;
+  var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
   var timeout, url;
+
   if (options.file == null) {
     throw new Error('File is not defined');
   }
+
   url = SGN$6.config.get('assetsFileUploadUrl');
   timeout = 1000 * 60 * 60;
   SGN$6.request({
@@ -909,18 +946,12 @@ var assets = {
 };
 
 var SGN$7;
-
 SGN$7 = sgn;
+SGN$7.request = node; // Expose the different kits.
 
-SGN$7.request = node;
-
-// Expose the different kits.
 SGN$7.GraphKit = graph;
-
 SGN$7.CoreKit = core$1;
-
 SGN$7.AssetsKit = assets;
-
 var node$1 = SGN$7;
 
 export default node$1;
