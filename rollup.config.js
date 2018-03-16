@@ -6,13 +6,9 @@ import path from "path";
 import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
 import string from "rollup-plugin-string";
+import replace from "rollup-plugin-replace";
 
-var inputs = {
-  // Long term we want to get rid of the separate entry points and
-  // instead have one entry point that behaves properly according to environment.
-  node: path.join(__dirname, "lib", "coffeescript", "node.coffee"),
-  browser: path.join(__dirname, "lib", "coffeescript", "browser.coffee")
-};
+var input = path.join(__dirname, "lib", "coffeescript", "browser.coffee");
 
 var outputs = {
   // Exclusive bundles(external `require`s untouched), for node, webpack etc.
@@ -25,12 +21,15 @@ var outputs = {
 
 let configs = [
   {
-    input: inputs.node,
+    input,
     output: {
       file: outputs.jsCJS,
       format: "cjs"
     },
     plugins: [
+      replace({
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      }),
       string({
         include: "lib/graphql/*"
       }),
@@ -44,12 +43,15 @@ let configs = [
     ]
   },
   {
-    input: inputs.node,
+    input,
     output: {
       file: outputs.jsES,
       format: "es"
     },
     plugins: [
+      replace({
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      }),
       string({
         include: "lib/graphql/*"
       }),
@@ -63,7 +65,7 @@ let configs = [
     ]
   },
   {
-    input: inputs.browser,
+    input,
     output: {
       file: outputs.jsBrowser,
       format: "umd",
@@ -73,6 +75,9 @@ let configs = [
       include: "lib/**"
     },
     plugins: [
+      replace({
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      }),
       string({
         include: "lib/graphql/*"
       }),
@@ -92,13 +97,16 @@ let configs = [
     ]
   },
   {
-    input: inputs.browser,
+    input,
     output: {
       file: outputs.jsBrowserMin,
       format: "umd",
       name: "SGN"
     },
     plugins: [
+      replace({
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+      }),
       string({
         include: "lib/graphql/*"
       }),

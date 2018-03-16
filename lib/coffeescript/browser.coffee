@@ -7,7 +7,7 @@ SGN.storage =
     cookie: require './storage/client-cookie'
 
 # Expose request handler.
-SGN.request = require './request/browser'
+SGN.request = require './request'
 
 # Expose the different kits.
 SGN.AssetsKit = require './kits/assets'
