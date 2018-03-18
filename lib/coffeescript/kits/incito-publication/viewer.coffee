@@ -3,26 +3,8 @@ MicroEvent = require 'microevent'
 
 class Viewer
     constructor: (@el, @options = {}) ->
-        incito = new Incito @el,
+        @incito = new Incito @el,
             incito: @options.incito
-        trigger = incito.trigger
-
-        incito.trigger = (args...) =>
-            trigger.apply incito, args
-            @trigger.apply @, args
-            
-            return
-        incito.bind 'view_clicked', (e) =>
-            if e.incito.role is 'offer'
-                @_trackEvent
-                    type: 'x-incito-publication-offer-clicked'
-                    properties:
-                        ipid: @options.id
-                        id: e.incito.id
-
-            return
-        
-        @incito = incito
             
         return
     

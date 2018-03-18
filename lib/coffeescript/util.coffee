@@ -206,15 +206,6 @@ util =
         dist = dist * 1.609344 * 1000
 
         dist
-    
-    isElementInViewport: (el, margins = {}) ->
-        rect = el.getBoundingClientRect()
-        top = rect.top - (margins.top ? 0)
-        left = rect.left - (margins.left ? 0)
-        right = rect.right + (margins.right ? 0)
-        bottom = rect.bottom + (margins.bottom ? 0)
-
-        top >= 0 and left >= 0 and bottom <= window.innerHeight and right <= window.innerWidth
 
     async:
         parallel: (asyncCalls, sharedCallback) ->
