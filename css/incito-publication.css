@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.incito__view[role="offer"] {
+    cursor: pointer;
+}

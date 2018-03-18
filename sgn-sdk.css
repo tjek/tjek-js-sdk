@@ -1006,20 +1006,8 @@
   -moz-box-sizing: inherit;
   box-sizing: inherit;
 }
-.incito [data-link],
-.incito [data-callback] {
+.incito [data-link] {
   cursor: pointer;
-}
-.incito [data-callback] {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(255,255,255,0);
-}
-.incito [data-disable-user-select] {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .incito__view {
   -webkit-transform-origin: 0 0;
