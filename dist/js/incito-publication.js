@@ -125,7 +125,7 @@
             return;
         }
         
-        SGN.CoreUIKit.on(el, 'click', '.incito__view[role="offer"]', function (e) {
+        SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
             var id = this.getAttribute('data-id');
             var meta = viewer.incito.ids[id];
 
@@ -141,7 +141,7 @@
             });
         });
     
-        SGN.CoreUIKit.on(el, 'contextmenu', '.incito__view[role="offer"]', function (e) {
+        SGN.CoreUIKit.on(el, 'contextmenu', '.incito__view[data-role="offer"]', function (e) {
             var id = this.getAttribute('data-id');
             var meta = viewer.incito.ids[id];
 
