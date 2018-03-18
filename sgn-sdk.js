@@ -10913,12 +10913,17 @@
 
 
             if (utils$1.isDefinedStr(this.attrs.role)) {
-              this.el.setAttribute('role', this.attrs.role);
+              this.el.setAttribute('data-role', this.attrs.role);
             } // Accessibility label.
 
 
             if (utils$1.isDefinedStr(this.attrs.accessibility_label)) {
               this.el.setAttribute('aria-label', this.attrs.accessibility_label);
+            } // Accessibility visibility.
+
+
+            if (this.attrs.accessibility_hidden === true) {
+              this.el.setAttribute('aria-hidden', true);
             } // Title.
 
 
@@ -11967,10 +11972,17 @@
       }, {
         key: "createLazyLoader",
         value: function createLazyLoader() {
-          var LazyLoader, ref;
-          LazyLoader = 'IntersectionObserver' in window ? LazyLoad : LazyLoadLegacy;
+          var LazyLoader, container, supportsIntersectionObserver;
+          supportsIntersectionObserver = 'IntersectionObserver' in window;
+          LazyLoader = supportsIntersectionObserver ? LazyLoad : LazyLoadLegacy;
+          container = this.options.scrollEl;
+
+          if (container == null) {
+            container = supportsIntersectionObserver ? document : window;
+          }
+
           return new LazyLoader({
-            container: (ref = this.options.scrollEl) != null ? ref : window,
+            container: container,
             elements_selector: '.incito .incito--lazyload',
             threshold: 1000,
             callback_enter: function callback_enter(el) {
