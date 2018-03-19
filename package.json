@@ -9,7 +9,7 @@
   "bundlesize": [
     {
       "path": "./dist/sgn-sdk.js",
-      "maxSize": "400 kB"
+      "maxSize": "100 kB"
     },
     {
       "path": "./dist/sgn-sdk.min.js",
@@ -17,11 +17,11 @@
     },
     {
       "path": "./dist/sgn-sdk.cjs.js",
-      "maxSize": "10 kB"
+      "maxSize": "25 kB"
     },
     {
       "path": "./dist/sgn-sdk.es.js",
-      "maxSize": "10 kB"
+      "maxSize": "25 kB"
     }
   ],
   "scripts": {
