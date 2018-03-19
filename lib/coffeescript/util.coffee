@@ -1,6 +1,6 @@
 util =
     isBrowser: ->
-        typeof window == 'object'
+        typeof window == 'object' and typeof document == 'object'
 
     isNode: ->
         typeof process == 'object'
