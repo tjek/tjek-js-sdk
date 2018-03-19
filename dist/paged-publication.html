@@ -3,64 +3,14 @@
     <head>
         <title>Paged Publication</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta charset="utf-8">
 
         <link href="sgn-sdk.css?t=3" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="css/spectre.min.css">
         <link rel="stylesheet" type="text/css" href="css/spectre-exp.min.css">
         <link rel="stylesheet" type="text/css" href="css/spectre-icons.min.css">
-        <style>
-            iframe {
-                border: 0;
-            }
-
-            .container a {
-                color: #fff;
-                text-decoration: underline;
-            }
-
-            .section--air {
-                margin-bottom: 70px;
-            }
-
-            .page .container {
-                padding-top: 100px;
-            }
-
-            #intro .timeline {
-                margin-top: 30px;
-                max-width: 600px;
-            }
-
-            #outro .video-responsive {
-                margin-bottom: 20px;
-            }
-
-            .btn.btn-primary,
-            .btn.btn-primary:hover {
-                background: #000;
-                border-color: #000;
-            }
-
-            @media (max-width: 600px) {
-                #outro .container {
-                    padding-top: 50px;
-                }
-
-                h1 {
-                    font-size: 3rem;
-                }
-
-                h2 {
-                    font-size: 2.5rem;
-                }
-
-                h4 {
-                    font-size: 2rem;
-                }
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/paged-publication.css">
     </head>
     <body>
         <!-- The main element of the paged publication -->
@@ -231,18 +181,6 @@
                 </div>
             </div>
 
-            <!-- The optional header -->
-            <!-- <header class="sgn-pp__header sgn__navbar">
-                <section class="sgn-navbar__section">
-                    <a href="#" class="sgn__btn sgn-btn--fab">1</a>
-                </section>
-
-                <section class="sgn-navbar__section">
-                    <a href="#" class="sgn__btn sgn-btn--fab">2</a>
-                    <a href="#" class="sgn__btn sgn-btn--fab">3</a>
-                </section>
-            </header> -->
-
             <!-- The optional progress bar -->
             <div class="sgn-pp__progress">
                 <div class="sgn-pp-progress__bar"></div>
@@ -257,35 +195,6 @@
         </div>
 
         <script src="sgn-sdk.js?t=3" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="00j4o5wpwptl84fuubdig2s6ej5uyna8"></script>
-        <script>
-            var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
-                el: document.querySelector('.sgn__pp'),
-                id: SGN.util.getQueryParam('id') || '4c4euCC',
-                eventTracker: SGN.config.get('eventTracker')
-            });
-
-            bootstrapper.fetch(function (err, data) {
-                if (!err) {
-                    var viewer = bootstrapper.createViewer(data);
-
-                    viewer.bind('hotspotClicked', function (hotspot) {
-                        console.log('Hotspot clicked.', hotspot);
-                    });
-
-                    viewer.bind('hotspotPressed', function (hotspot) {
-                        console.log('Hotspot pressed.', hotspot);
-                    });
-
-                    viewer.start();
-
-                    // Fetch hotspots after rendering the viewer as they are not critical for initial render.
-                    bootstrapper.fetchHotspots(function (err2, hotspots) {
-                        if (!err2) {
-                            bootstrapper.applyHotspots(viewer, hotspots);
-                        }
-                    });
-                }
-            });
-        </script>
+        <script src="js/paged-publication.js"></script>
     </body>
 </html>

@@ -1,4 +1,7 @@
-# ShopGun JavaScript SDK [![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=develop)](https://travis-ci.org/shopgun/shopgun-js-sdk)
+# ShopGun JavaScript SDK
+
+[![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=develop)](https://travis-ci.org/shopgun/shopgun-js-sdk)
+[![NPM version](https://img.shields.io/npm/v/shopgun-sdk.svg?style=flat)](https://npmjs.org/package/shopgun-sdk)
 
 This SDK works both client-side in your browser but also server-side in a Node.js environment.
 
@@ -15,8 +18,8 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.0.22.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.0.22.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.1.2.min.css" rel="stylesheet" type="text/css">
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.1.2.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
 By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself.
@@ -61,6 +64,12 @@ To learn more about integrating the same experience on iOS and Android be sure t
 * [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+
+### Version 2.1.0
+
+- Updated Incito library. Now, it's up to you to add event delegation to Incito rather than binding e.g. `view_clicked` to the Incito viewer. This gives you way more flexibility
+- Split JS and CSS into separate files for Incito Publication demo
+- Removed `util.isElementInViewport`
 
 ### Version 2.0.9
 
