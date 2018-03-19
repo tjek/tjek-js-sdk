@@ -1,52 +1,80 @@
-module.exports = require('./browser')
-###
 SGN = require '../sgn'
-axios = require 'axios'
-NodeFormData = require 'form-data'
+
+{ isBrowser } = require '../util'
+
+XMLHttpRequest = if isBrowser() then window.XMLHttpRequest else require("../../../vendor/xmlhttprequest").XMLHttpRequest
+
 module.exports = (options = {}, callback, progressCallback) ->
+    http = new XMLHttpRequest()
+    method = options.method ? 'get'
+    url = options.url
+    headers = options.headers ? {}
+
+    if options.qs?
+        queryParams = SGN.util.formatQueryParams options.qs
+
+        if url.indexOf('?') is -1
+            url += '?' + queryParams
+        else
+            url += '&' + queryParams
+
+    http.open method.toUpperCase(), url
+    http.timeout = options.timeout if options.timeout?
+    http.withCredentials = true if options.useCookies is true
+
+    if options.json is true
+        headers['Content-Type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+
+    for header, value of options.headers
+        http.setRequestHeader header, value if value?
+
+    http.addEventListener 'load', ->
+        headers = http.getAllResponseHeaders().split '\r\n'
+        headers = headers.reduce (acc, current, i) ->
+            parts = current.split ': '
+
+            acc[parts[0].toLowerCase()] = parts[1]
+
+            acc
+        , {}
+        body = http.responseText
+
+        body = JSON.parse body if options.json is true
+
+        callback null,
+            statusCode: http.status
+            headers: headers
+            body: body
+
+        return
+    http.addEventListener 'error', ->
+        callback new Error()
+
+        return
+    http.addEventListener 'timeout', ->
+        callback new Error()
+
+        return
+    http.addEventListener 'progress', (e) ->
+        if e.lengthComputable and typeof progressCallback is 'function'
+            progressCallback e.loaded, e.total
+
+        return
+
     if options.formData?
-        formData = if typeof FormData != 'undefined' then new FormData() else new NodeFormData()
-        formData = new NodeFormData()
         formData = new FormData()
-        console.log options.formData
+
         for key, value of options.formData
             formData.append key, value
-        console.log Object.entries formData
-        console.log formData.entries()
-    
-    requestOptions =
-        method: options.method or 'get'
-        url: options.url
-        headers: options.headers
-        timeout: options.timeout
-        responseType: if options.json then 'json' else 'text'
-        data: options.body
-        formData: formData if options.formData
-        forever: true
-        params: options.qs
-        withCredentials: options.useCookies
-        onUploadProgress: progressCallback || ->
-        onDownloadProgress: progressCallback || ->
-    
-    if Array.isArray options.cookies
-        jar = request.jar()
 
-        options.cookies.forEach (cookie) ->
-            jar.setCookie request.cookie("#{cookie.key}=#{cookie.value}"), cookie.url
-
-            return
-
-        requestOptions.jar = jar
-
-    axios(requestOptions).then((response) ->
-        callback null,
-            statusCode: response.status
-            headers: response.headers
-            body: if typeof response.data == 'object' && !options.json then JSON.stringify(response.data)
-                    else response.data
-    ).catch((error) ->
-        callback error
-    )
+        http.send formData
+    else if options.body?
+        if options.json is true
+            http.send JSON.stringify(options.body)
+        else
+            http.send options.body
+    else
+        http.send()
 
     return
-###

@@ -9,7 +9,7 @@ import string from "rollup-plugin-string";
 import replace from "rollup-plugin-replace";
 import json from "rollup-plugin-json";
 
-var input = path.join(__dirname, "lib", "coffeescript", "browser.coffee");
+var input = path.join(__dirname, "lib", "coffeescript", "index.coffee");
 
 var outputs = {
   // Exclusive bundles(external `require`s untouched), for node, webpack etc.

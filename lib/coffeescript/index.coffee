@@ -1,6 +1,6 @@
 { isBrowser } = require './util'
 
-SGN = require './sgn'
+SGN = require './core'
 
 # Expose storage backends.
 SGN.storage =
