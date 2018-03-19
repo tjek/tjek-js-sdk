@@ -17,11 +17,11 @@
     },
     {
       "path": "./dist/sgn-sdk.cjs.js",
-      "maxSize": "25 kB"
+      "maxSize": "35 kB"
     },
     {
       "path": "./dist/sgn-sdk.es.js",
-      "maxSize": "25 kB"
+      "maxSize": "35 kB"
     }
   ],
   "scripts": {

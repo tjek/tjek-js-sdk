@@ -7,7 +7,7 @@ import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
 import string from "rollup-plugin-string";
 import replace from "rollup-plugin-replace";
-import json from 'rollup-plugin-json';
+import json from "rollup-plugin-json";
 
 var input = path.join(__dirname, "lib", "coffeescript", "browser.coffee");
 
@@ -74,6 +74,7 @@ let configs = [
       format: "umd",
       name: "SGN"
     },
+    external: ["url", "child_process", "fs", "http", "https"],
     watch: {
       include: "lib/**"
     },
@@ -90,7 +91,7 @@ let configs = [
         jsnext: true,
         main: true,
         browser: true,
-        preferBuiltins: false
+        preferBuiltins: true
       }),
       commonjs({
         extensions: [".js", ".coffee"]
@@ -120,7 +121,7 @@ let configs = [
         jsnext: true,
         main: true,
         browser: true,
-        preferBuiltins: false
+        preferBuiltins: true
       }),
       commonjs({
         extensions: [".js", ".coffee"]
