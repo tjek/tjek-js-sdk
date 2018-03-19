@@ -1,5 +1,5 @@
 MicroEvent = require 'microevent'
-Gator = require 'gator'
+Gator = require '../../../../vendor/gator'
 Mustache = require 'mustache'
 keyCodes = require '../../key-codes'
 

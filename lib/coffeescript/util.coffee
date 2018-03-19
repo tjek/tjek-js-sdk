@@ -1,11 +1,9 @@
-process = require 'process'
-
 util =
     isBrowser: ->
-        typeof process isnt 'undefined' and process.browser
+        typeof window == 'object' and typeof document == 'object'
 
     isNode: ->
-        not util.isBrowser()
+        typeof process == 'object'
 
     error: (err, options) ->
         err.message = err.message or null
