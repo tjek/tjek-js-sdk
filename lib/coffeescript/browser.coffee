@@ -1,3 +1,5 @@
+{ isBrowser } = require './util'
+
 SGN = require './sgn'
 
 # Expose storage backends.
@@ -49,17 +51,18 @@ SGN.config.bind 'change', (changedAttributes) ->
 
     return
 
-# Autoconfigure the SDK.
-scriptEl = document.getElementById 'sgn-sdk'
+if isBrowser()
+    # Autoconfigure the SDK.
+    scriptEl = document.getElementById 'sgn-sdk'
 
-if scriptEl?
-    appKey = scriptEl.getAttribute 'data-app-key'
-    trackId = scriptEl.getAttribute 'data-track-id'
-    config = {}
+    if scriptEl?
+        appKey = scriptEl.getAttribute 'data-app-key'
+        trackId = scriptEl.getAttribute 'data-track-id'
+        config = {}
 
-    config.appKey = appKey if appKey?
-    config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
+        config.appKey = appKey if appKey?
+        config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
 
-    SGN.config.set config
+        SGN.config.set config
 
 module.exports = SGN
