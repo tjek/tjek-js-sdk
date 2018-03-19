@@ -362,5 +362,7 @@
         module.exports = Gator;
     }
 
-    window.Gator = Gator;
+    if (typeof window !== 'undefined' && window.exports) {
+        window.Gator = Gator;
+    }
 }) ();
