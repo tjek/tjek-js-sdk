@@ -10708,9 +10708,10 @@
             this.entries.forEach(observer.observe.bind(observer));
           } else {
             isInsideViewport = function isInsideViewport(el) {
-              var rect;
+              var rect, ref, windowHeight;
               rect = el.getBoundingClientRect();
-              return rect.top >= -threshold && rect.bottom <= window.innerHeight + threshold;
+              windowHeight = (ref = window.innerHeight) != null ? ref : document.documentElement.clientHeight;
+              return rect.top <= windowHeight + threshold && rect.top + rect.height >= -threshold;
             };
 
             check = function check() {
