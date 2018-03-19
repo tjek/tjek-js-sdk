@@ -32,69 +32,67 @@
  *                            _____..'  .'
  *                           '-._____.-'
  */
-(function() {
-    var _matcher,
-        _level = 0,
-        _id = 0,
-        _handlers = {},
-        _gatorInstances = {};
+var _matcher,
+  _level = 0,
+  _id = 0,
+  _handlers = {},
+  _gatorInstances = {};
 
-    function _addEvent(gator, type, callback) {
+function _addEvent(gator, type, callback) {
+  // blur and focus do not bubble up but if you use event capturing
+  // then you will get them
+  var useCapture = type == "blur" || type == "focus";
+  gator.element.addEventListener(type, callback, useCapture);
+}
 
-        // blur and focus do not bubble up but if you use event capturing
-        // then you will get them
-        var useCapture = type == 'blur' || type == 'focus';
-        gator.element.addEventListener(type, callback, useCapture);
-    }
+function _cancel(e) {
+  e.preventDefault();
+  e.stopPropagation();
+}
 
-    function _cancel(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    /**
+/**
      * returns function to use for determining if an element
      * matches a query selector
      *
      * @returns {Function}
      */
-    function _getMatcher(element) {
-        if (_matcher) {
-            return _matcher;
-        }
+function _getMatcher(element) {
+  if (_matcher) {
+    return _matcher;
+  }
 
-        if (element.matches) {
-            _matcher = element.matches;
-            return _matcher;
-        }
+  if (element.matches) {
+    _matcher = element.matches;
+    return _matcher;
+  }
 
-        if (element.webkitMatchesSelector) {
-            _matcher = element.webkitMatchesSelector;
-            return _matcher;
-        }
+  if (element.webkitMatchesSelector) {
+    _matcher = element.webkitMatchesSelector;
+    return _matcher;
+  }
 
-        if (element.mozMatchesSelector) {
-            _matcher = element.mozMatchesSelector;
-            return _matcher;
-        }
+  if (element.mozMatchesSelector) {
+    _matcher = element.mozMatchesSelector;
+    return _matcher;
+  }
 
-        if (element.msMatchesSelector) {
-            _matcher = element.msMatchesSelector;
-            return _matcher;
-        }
+  if (element.msMatchesSelector) {
+    _matcher = element.msMatchesSelector;
+    return _matcher;
+  }
 
-        if (element.oMatchesSelector) {
-            _matcher = element.oMatchesSelector;
-            return _matcher;
-        }
+  if (element.oMatchesSelector) {
+    _matcher = element.oMatchesSelector;
+    return _matcher;
+  }
 
-        // if it doesn't match a native browser method
-        // fall back to the gator function
-        _matcher = Gator.matchesSelector;
-        return _matcher;
-    }
+  // if it doesn't match a native browser method
+  // fall back to the gator function
+  _matcher = Gator.matchesSelector;
+  return _matcher;
+}
 
-    /**
+/**
      * determines if the specified element matches a given selector
      *
      * @param {Node} element - the element to compare against the selector
@@ -102,151 +100,158 @@
      * @param {Node} boundElement - the element the listener was attached to
      * @returns {void|Node}
      */
-    function _matchesSelector(element, selector, boundElement) {
+function _matchesSelector(element, selector, boundElement) {
+  // no selector means this event was bound directly to this element
+  if (selector == "_root") {
+    return boundElement;
+  }
 
-        // no selector means this event was bound directly to this element
-        if (selector == '_root') {
-            return boundElement;
-        }
+  // if we have moved up to the element you bound the event to
+  // then we have come too far
+  if (element === boundElement) {
+    return;
+  }
 
-        // if we have moved up to the element you bound the event to
-        // then we have come too far
-        if (element === boundElement) {
-            return;
-        }
+  // if this is a match then we are done!
+  if (_getMatcher(element).call(element, selector)) {
+    return element;
+  }
 
-        // if this is a match then we are done!
-        if (_getMatcher(element).call(element, selector)) {
-            return element;
-        }
+  // if this element did not match but has a parent we should try
+  // going up the tree to see if any of the parent elements match
+  // for example if you are looking for a click on an <a> tag but there
+  // is a <span> inside of the a tag that it is the target,
+  // it should still work
+  if (element.parentNode) {
+    _level++;
+    return _matchesSelector(element.parentNode, selector, boundElement);
+  }
+}
 
-        // if this element did not match but has a parent we should try
-        // going up the tree to see if any of the parent elements match
-        // for example if you are looking for a click on an <a> tag but there
-        // is a <span> inside of the a tag that it is the target,
-        // it should still work
-        if (element.parentNode) {
-            _level++;
-            return _matchesSelector(element.parentNode, selector, boundElement);
-        }
+function _addHandler(gator, event, selector, callback) {
+  if (!_handlers[gator.id]) {
+    _handlers[gator.id] = {};
+  }
+
+  if (!_handlers[gator.id][event]) {
+    _handlers[gator.id][event] = {};
+  }
+
+  if (!_handlers[gator.id][event][selector]) {
+    _handlers[gator.id][event][selector] = [];
+  }
+
+  _handlers[gator.id][event][selector].push(callback);
+}
+
+function _removeHandler(gator, event, selector, callback) {
+  // if there are no events tied to this element at all
+  // then don't do anything
+  if (!_handlers[gator.id]) {
+    return;
+  }
+
+  // if there is no event type specified then remove all events
+  // example: Gator(element).off()
+  if (!event) {
+    for (var type in _handlers[gator.id]) {
+      if (_handlers[gator.id].hasOwnProperty(type)) {
+        _handlers[gator.id][type] = {};
+      }
     }
+    return;
+  }
 
-    function _addHandler(gator, event, selector, callback) {
-        if (!_handlers[gator.id]) {
-            _handlers[gator.id] = {};
-        }
+  // if no callback or selector is specified remove all events of this type
+  // example: Gator(element).off('click')
+  if (!callback && !selector) {
+    _handlers[gator.id][event] = {};
+    return;
+  }
 
-        if (!_handlers[gator.id][event]) {
-            _handlers[gator.id][event] = {};
-        }
+  // if a selector is specified but no callback remove all events
+  // for this selector
+  // example: Gator(element).off('click', '.sub-element')
+  if (!callback) {
+    delete _handlers[gator.id][event][selector];
+    return;
+  }
 
-        if (!_handlers[gator.id][event][selector]) {
-            _handlers[gator.id][event][selector] = [];
-        }
+  // if we have specified an event type, selector, and callback then we
+  // need to make sure there are callbacks tied to this selector to
+  // begin with.  if there aren't then we can stop here
+  if (!_handlers[gator.id][event][selector]) {
+    return;
+  }
 
-        _handlers[gator.id][event][selector].push(callback);
+  // if there are then loop through all the callbacks and if we find
+  // one that matches remove it from the array
+  for (var i = 0; i < _handlers[gator.id][event][selector].length; i++) {
+    if (_handlers[gator.id][event][selector][i] === callback) {
+      _handlers[gator.id][event][selector].splice(i, 1);
+      break;
     }
+  }
+}
 
-    function _removeHandler(gator, event, selector, callback) {
+function _handleEvent(id, e, type) {
+  if (!_handlers[id][type]) {
+    return;
+  }
 
-        // if there are no events tied to this element at all
-        // then don't do anything
-        if (!_handlers[gator.id]) {
-            return;
-        }
+  var target = e.target || e.srcElement,
+    selector,
+    match,
+    matches = {},
+    i = 0,
+    j = 0;
 
-        // if there is no event type specified then remove all events
-        // example: Gator(element).off()
-        if (!event) {
-            for (var type in _handlers[gator.id]) {
-                if (_handlers[gator.id].hasOwnProperty(type)) {
-                    _handlers[gator.id][type] = {};
-                }
-            }
-            return;
-        }
+  // find all events that match
+  _level = 0;
+  for (selector in _handlers[id][type]) {
+    if (_handlers[id][type].hasOwnProperty(selector)) {
+      match = _matchesSelector(target, selector, _gatorInstances[id].element);
 
-        // if no callback or selector is specified remove all events of this type
-        // example: Gator(element).off('click')
-        if (!callback && !selector) {
-            _handlers[gator.id][event] = {};
-            return;
-        }
-
-        // if a selector is specified but no callback remove all events
-        // for this selector
-        // example: Gator(element).off('click', '.sub-element')
-        if (!callback) {
-            delete _handlers[gator.id][event][selector];
-            return;
-        }
-
-        // if we have specified an event type, selector, and callback then we
-        // need to make sure there are callbacks tied to this selector to
-        // begin with.  if there aren't then we can stop here
-        if (!_handlers[gator.id][event][selector]) {
-            return;
-        }
-
-        // if there are then loop through all the callbacks and if we find
-        // one that matches remove it from the array
-        for (var i = 0; i < _handlers[gator.id][event][selector].length; i++) {
-            if (_handlers[gator.id][event][selector][i] === callback) {
-                _handlers[gator.id][event][selector].splice(i, 1);
-                break;
-            }
-        }
+      if (
+        match &&
+        Gator.matchesEvent(
+          type,
+          _gatorInstances[id].element,
+          match,
+          selector == "_root",
+          e
+        )
+      ) {
+        _level++;
+        _handlers[id][type][selector].match = match;
+        matches[_level] = _handlers[id][type][selector];
+      }
     }
+  }
 
-    function _handleEvent(id, e, type) {
-        if (!_handlers[id][type]) {
-            return;
+  // stopPropagation() fails to set cancelBubble to true in Webkit
+  // @see http://code.google.com/p/chromium/issues/detail?id=162270
+  e.stopPropagation = function() {
+    e.cancelBubble = true;
+  };
+
+  for (i = 0; i <= _level; i++) {
+    if (matches[i]) {
+      for (j = 0; j < matches[i].length; j++) {
+        if (matches[i][j].call(matches[i].match, e) === false) {
+          Gator.cancel(e);
+          return;
         }
 
-        var target = e.target || e.srcElement,
-            selector,
-            match,
-            matches = {},
-            i = 0,
-            j = 0;
-
-        // find all events that match
-        _level = 0;
-        for (selector in _handlers[id][type]) {
-            if (_handlers[id][type].hasOwnProperty(selector)) {
-                match = _matchesSelector(target, selector, _gatorInstances[id].element);
-
-                if (match && Gator.matchesEvent(type, _gatorInstances[id].element, match, selector == '_root', e)) {
-                    _level++;
-                    _handlers[id][type][selector].match = match;
-                    matches[_level] = _handlers[id][type][selector];
-                }
-            }
+        if (e.cancelBubble) {
+          return;
         }
-
-        // stopPropagation() fails to set cancelBubble to true in Webkit
-        // @see http://code.google.com/p/chromium/issues/detail?id=162270
-        e.stopPropagation = function() {
-            e.cancelBubble = true;
-        };
-
-        for (i = 0; i <= _level; i++) {
-            if (matches[i]) {
-                for (j = 0; j < matches[i].length; j++) {
-                    if (matches[i][j].call(matches[i].match, e) === false) {
-                        Gator.cancel(e);
-                        return;
-                    }
-
-                    if (e.cancelBubble) {
-                        return;
-                    }
-                }
-            }
-        }
+      }
     }
+  }
+}
 
-    /**
+/**
      * binds the specified events to the element
      *
      * @param {string|Array} events
@@ -255,79 +260,77 @@
      * @param {boolean=} remove
      * @returns {Object}
      */
-    function _bind(events, selector, callback, remove) {
+function _bind(events, selector, callback, remove) {
+  // fail silently if you pass null or undefined as an alement
+  // in the Gator constructor
+  if (!this.element) {
+    return;
+  }
 
-        // fail silently if you pass null or undefined as an alement
-        // in the Gator constructor
-        if (!this.element) {
-            return;
-        }
+  if (!(events instanceof Array)) {
+    events = [events];
+  }
 
-        if (!(events instanceof Array)) {
-            events = [events];
-        }
+  if (!callback && typeof selector == "function") {
+    callback = selector;
+    selector = "_root";
+  }
 
-        if (!callback && typeof(selector) == 'function') {
-            callback = selector;
-            selector = '_root';
-        }
+  var id = this.id,
+    i;
 
-        var id = this.id,
-            i;
+  function _getGlobalCallback(type) {
+    return function(e) {
+      _handleEvent(id, e, type);
+    };
+  }
 
-        function _getGlobalCallback(type) {
-            return function(e) {
-                _handleEvent(id, e, type);
-            };
-        }
-
-        for (i = 0; i < events.length; i++) {
-            if (remove) {
-                _removeHandler(this, events[i], selector, callback);
-                continue;
-            }
-
-            if (!_handlers[id] || !_handlers[id][events[i]]) {
-                Gator.addEvent(this, events[i], _getGlobalCallback(events[i]));
-            }
-
-            _addHandler(this, events[i], selector, callback);
-        }
-
-        return this;
+  for (i = 0; i < events.length; i++) {
+    if (remove) {
+      _removeHandler(this, events[i], selector, callback);
+      continue;
     }
 
-    /**
+    if (!_handlers[id] || !_handlers[id][events[i]]) {
+      Gator.addEvent(this, events[i], _getGlobalCallback(events[i]));
+    }
+
+    _addHandler(this, events[i], selector, callback);
+  }
+
+  return this;
+}
+
+/**
      * Gator object constructor
      *
      * @param {Node} element
      */
-    function Gator(element, id) {
-
-        // called as function
-        if (!(this instanceof Gator)) {
-            // only keep one Gator instance per node to make sure that
-            // we don't create a ton of new objects if you want to delegate
-            // multiple events from the same node
-            //
-            // for example: Gator(document).on(...
-            for (var key in _gatorInstances) {
-                if (_gatorInstances[key].element === element) {
-                    return _gatorInstances[key];
-                }
-            }
-
-            _id++;
-            _gatorInstances[_id] = new Gator(element, _id);
-
-            return _gatorInstances[_id];
-        }
-
-        this.element = element;
-        this.id = id;
+function Gator(element, id) {
+  // called as function
+  if (!(this instanceof Gator)) {
+    // only keep one Gator instance per node to make sure that
+    // we don't create a ton of new objects if you want to delegate
+    // multiple events from the same node
+    //
+    // for example: Gator(document).on(...
+    for (var key in _gatorInstances) {
+      if (_gatorInstances[key].element === element) {
+        return _gatorInstances[key];
+      }
     }
 
-    /**
+    _id++;
+    _gatorInstances[_id] = new Gator(element, _id);
+
+    return _gatorInstances[_id];
+  }
+
+  this.element = element;
+  this.id = id;
+}
+
+/**
      * adds an event
      *
      * @param {string|Array} events
@@ -335,11 +338,11 @@
      * @param {Function} callback
      * @returns {Object}
      */
-    Gator.prototype.on = function(events, selector, callback) {
-        return _bind.call(this, events, selector, callback);
-    };
+Gator.prototype.on = function(events, selector, callback) {
+  return _bind.call(this, events, selector, callback);
+};
 
-    /**
+/**
      * removes an event
      *
      * @param {string|Array} events
@@ -347,22 +350,21 @@
      * @param {Function} callback
      * @returns {Object}
      */
-    Gator.prototype.off = function(events, selector, callback) {
-        return _bind.call(this, events, selector, callback, true);
-    };
+Gator.prototype.off = function(events, selector, callback) {
+  return _bind.call(this, events, selector, callback, true);
+};
 
-    Gator.matchesSelector = function() {};
-    Gator.cancel = _cancel;
-    Gator.addEvent = _addEvent;
-    Gator.matchesEvent = function() {
-        return true;
-    };
+Gator.matchesSelector = function() {};
+Gator.cancel = _cancel;
+Gator.addEvent = _addEvent;
+Gator.matchesEvent = function() {
+  return true;
+};
 
-    if (typeof module !== 'undefined' && module.exports) {
-        module.exports = Gator;
-    }
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = Gator;
+}
 
-    if (typeof window !== 'undefined' && window.exports) {
-        window.Gator = Gator;
-    }
-}) ();
+if (typeof window !== "undefined" && window.exports) {
+  window.Gator = Gator;
+}
