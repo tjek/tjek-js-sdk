@@ -27,7 +27,9 @@
   "scripts": {
     "test": "npm run test:lint && npm run test:ci && npm run test:size",
     "test:lint": "coffeelint lib/coffeescript __tests__",
-    "test:ci": "jest --ci",
+    "test:ci": "run-s -l -c test:node test:jsdom",
+    "test:node": "jest --ci --env=node",
+    "test:jsdom": "jest --ci --env=jsdom",
     "test:size": "bundlesize",
     "build:js": "rollup -c -m --environment NODE_ENV:production",
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
