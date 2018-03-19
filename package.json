@@ -66,11 +66,10 @@
   "dependencies": {
     "core-js": "^2.5.3",
     "incito-browser": "1.1.3",
-    "verso-browser": "^1.0.18",
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
-    "request": "^2.85.0",
     "sha256": "^0.2.0",
+    "verso-browser": "^1.0.18",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
