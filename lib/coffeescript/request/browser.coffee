@@ -1,4 +1,10 @@
 SGN = require '../sgn'
+NodeXMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
+
+try
+    new XMLHttpRequest
+catch
+    XMLHttpRequest = NodeXMLHttpRequest
 
 module.exports = (options = {}, callback, progressCallback) ->
     http = new XMLHttpRequest()

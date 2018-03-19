@@ -7,6 +7,7 @@ import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
 import string from "rollup-plugin-string";
 import replace from "rollup-plugin-replace";
+import json from 'rollup-plugin-json';
 
 var input = path.join(__dirname, "lib", "coffeescript", "browser.coffee");
 
@@ -27,6 +28,7 @@ let configs = [
       format: "cjs"
     },
     plugins: [
+      json(),
       replace({
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
       }),
@@ -49,6 +51,7 @@ let configs = [
       format: "es"
     },
     plugins: [
+      json(),
       replace({
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
       }),
@@ -75,6 +78,7 @@ let configs = [
       include: "lib/**"
     },
     plugins: [
+      json(),
       replace({
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
       }),
@@ -104,6 +108,7 @@ let configs = [
       name: "SGN"
     },
     plugins: [
+      json(),
       replace({
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
       }),

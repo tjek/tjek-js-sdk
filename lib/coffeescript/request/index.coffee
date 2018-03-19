@@ -1,4 +1,4 @@
-module.exports = if typeof XMLHttpRequest != 'undefined' then require('./browser') else require('./node')
+module.exports = require('./browser')
 ###
 SGN = require '../sgn'
 axios = require 'axios'
@@ -42,7 +42,8 @@ module.exports = (options = {}, callback, progressCallback) ->
         callback null,
             statusCode: response.status
             headers: response.headers
-            body: if typeof response.data == 'object' && !options.json then JSON.stringify(response.data) else response.data
+            body: if typeof response.data == 'object' && !options.json then JSON.stringify(response.data)
+                    else response.data
     ).catch((error) ->
         callback error
     )
