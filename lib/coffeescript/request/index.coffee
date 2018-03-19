@@ -1,5 +1,9 @@
 SGN = require '../sgn'
 
+{ isBrowser } = require '../util'
+
+XMLHttpRequest = if isBrowser() then window.XMLHttpRequest else require("../../../vendor/xmlhttprequest").XMLHttpRequest
+
 module.exports = (options = {}, callback, progressCallback) ->
     http = new XMLHttpRequest()
     method = options.method ? 'get'

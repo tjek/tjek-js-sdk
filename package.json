@@ -9,7 +9,7 @@
   "bundlesize": [
     {
       "path": "./dist/sgn-sdk.js",
-      "maxSize": "400 kB"
+      "maxSize": "100 kB"
     },
     {
       "path": "./dist/sgn-sdk.min.js",
@@ -17,17 +17,19 @@
     },
     {
       "path": "./dist/sgn-sdk.cjs.js",
-      "maxSize": "10 kB"
+      "maxSize": "35 kB"
     },
     {
       "path": "./dist/sgn-sdk.es.js",
-      "maxSize": "10 kB"
+      "maxSize": "35 kB"
     }
   ],
   "scripts": {
     "test": "npm run test:lint && npm run test:ci && npm run test:size",
     "test:lint": "coffeelint lib/coffeescript __tests__",
-    "test:ci": "jest --ci",
+    "test:ci": "run-s -l -c test:node test:jsdom",
+    "test:node": "jest --ci --env=node",
+    "test:jsdom": "jest --ci --env=jsdom",
     "test:size": "bundlesize",
     "build:js": "rollup -c -m --environment NODE_ENV:production",
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
@@ -62,10 +64,13 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "dependencies": {
+    "core-js": "^2.5.3",
+    "incito-browser": "1.1.4",
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
-    "request": "^2.85.0",
-    "sha256": "^0.2.0"
+    "sha256": "^0.2.0",
+    "verso-browser": "^1.0.18",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.42",
@@ -75,9 +80,7 @@
     "bundlesize": "^0.16.0",
     "coffeelint": "^2.1.0",
     "coffeescript": "^2.2.3",
-    "gator": "^1.2.4",
     "gh-pages": "^1.1.0",
-    "incito-browser": "1.1.4",
     "jest": "^22.4.2",
     "jest-cli": "^23.0.0-alpha.0",
     "nib": "^1.1.2",
@@ -87,12 +90,13 @@
     "rollup-plugin-babel": "^4.0.0-beta.2",
     "rollup-plugin-coffee-script": "^2.0.0",
     "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^3.0.0",
     "serve": "^6.5.3",
     "stylus": "^0.54.5",
-    "uglify-es": "^3.3.10",
-    "verso-browser": "^1.0.18"
+    "uglify-es": "^3.3.10"
   }
 }

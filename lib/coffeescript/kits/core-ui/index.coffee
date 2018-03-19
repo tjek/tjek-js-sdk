@@ -1,4 +1,4 @@
-Gator = require 'gator'
+Gator = require '../../../../vendor/gator'
 
 module.exports =
     OfferDetails: require './offer-details'
