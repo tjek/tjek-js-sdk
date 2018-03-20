@@ -1,5 +1,5 @@
-MicroEvent = require 'microevent'
-Mustache = require 'mustache'
+import MicroEvent from 'microevent'
+import Mustache from 'mustache'
 
 class PagedPublicationHotspots
     constructor: ->
@@ -139,6 +139,6 @@ class PagedPublicationHotspots
 
 MicroEvent.mixin PagedPublicationHotspots
 
-module.exports = PagedPublicationHotspots
+export default PagedPublicationHotspots
 
 

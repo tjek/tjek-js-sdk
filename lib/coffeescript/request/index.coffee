@@ -1,17 +1,16 @@
-SGN = require '../sgn'
+import { isBrowser, formatQueryParams } from '../util'
+import XMLHttpRequestNodefill from '../../../vendor/xmlhttprequest'
 
-{ isBrowser } = require '../util'
+XMLHttpRequest = if isBrowser() then window.XMLHttpRequest else XMLHttpRequestNodefill.XMLHttpRequest
 
-XMLHttpRequest = if isBrowser() then window.XMLHttpRequest else require("../../../vendor/xmlhttprequest").XMLHttpRequest
-
-module.exports = (options = {}, callback, progressCallback) ->
+export default (options = {}, callback, progressCallback) ->
     http = new XMLHttpRequest()
     method = options.method ? 'get'
     url = options.url
     headers = options.headers ? {}
 
     if options.qs?
-        queryParams = SGN.util.formatQueryParams options.qs
+        queryParams = formatQueryParams options.qs
 
         if url.indexOf('?') is -1
             url += '?' + queryParams

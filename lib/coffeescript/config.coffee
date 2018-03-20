@@ -1,4 +1,4 @@
-MicroEvent = require 'microevent'
+import MicroEvent from 'microevent'
 Config = class Config
     keys: [
         'appVersion',
@@ -38,4 +38,4 @@ Config = class Config
 
 MicroEvent.mixin Config
 
-module.exports = Config
+export default Config

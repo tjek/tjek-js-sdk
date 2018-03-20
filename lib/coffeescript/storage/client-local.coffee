@@ -1,7 +1,6 @@
-SGN = require '../sgn'
 prefixKey = 'sgn-'
 
-module.exports =
+export default
     key: 'sgn-'
 
     storage: do ->

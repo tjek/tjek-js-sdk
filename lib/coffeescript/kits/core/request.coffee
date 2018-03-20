@@ -1,22 +1,26 @@
-SGN = require '../../sgn'
+import * as session from './session'
+import { error } from '../../util'
+import { config } from '../../core'
+import request from '../../request'
 
-request = (options = {}, callback = ->, runs = 0) ->
-    SGN.CoreKit.session.ensure (err) ->
+
+coreRequest = (options = {}, callback = ->, runs = 0) ->
+    session.ensure (err) ->
         return callback err if err?
 
         url = options.url ? ''
         headers = options.headers ? {}
         json = if typeof options.json is 'boolean' then options.json else true
-        token = SGN.config.get 'coreSessionToken'
-        clientId = SGN.config.get 'coreSessionClientId'
-        appVersion = SGN.config.get 'appVersion'
-        appSecret = SGN.config.get 'appSecret'
-        locale = SGN.config.get 'locale'
+        token = config.get 'coreSessionToken'
+        clientId = config.get 'coreSessionClientId'
+        appVersion = config.get 'appVersion'
+        appSecret = config.get 'appSecret'
+        locale = config.get 'locale'
         qs = options.qs ? {}
         geo = options.geolocation
 
         headers['X-Token'] = token
-        headers['X-Signature'] = SGN.CoreKit.session.sign appSecret, token if appSecret?
+        headers['X-Signature'] = session.sign appSecret, token if appSecret?
 
         qs.r_locale = locale if locale?
         qs.api_av = appVersion if appVersion?
@@ -28,9 +32,9 @@ request = (options = {}, callback = ->, runs = 0) ->
             qs.r_radius = geo.radius if geo.radius? and not qs.r_radius?
             qs.r_sensor = geo.sensor if geo.sensor? and not qs.r_sensor?
 
-        SGN.request
+        request
             method: options.method
-            url: SGN.config.get('coreUrl') + url
+            url: config.get('coreUrl') + url
             qs: qs
             body: options.body
             formData: options.formData
@@ -39,24 +43,24 @@ request = (options = {}, callback = ->, runs = 0) ->
             useCookies: false
         , (err, data) ->
             if err?
-                callback SGN.util.error(new Error('Core request error'),
+                callback error(new Error('Core request error'),
                     code: 'CoreRequestError'
                 )
             else
-                token = SGN.config.get 'coreSessionToken'
+                token = config.get 'coreSessionToken'
                 responseToken = data.headers['x-token']
 
-                SGN.CoreKit.session.saveToken responseToken if responseToken and token isnt responseToken
+                session.saveToken responseToken if responseToken and token isnt responseToken
 
                 if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
                     callback null, data.body
                 else
                     if runs is 0 and data.body? and data.body.code in [1101, 1107, 1108]
-                        SGN.config.set coreSessionToken: undefined
+                        config.set coreSessionToken: undefined
 
                         request options, callback, ++runs
                     else
-                        callback SGN.util.error(new Error('Core API error'),
+                        callback error(new Error('Core API error'),
                             code: 'CoreAPIError'
                             statusCode: data.statusCode
                         ), data.body
@@ -65,4 +69,4 @@ request = (options = {}, callback = ->, runs = 0) ->
 
     return
 
-module.exports = request
+export default coreRequest
