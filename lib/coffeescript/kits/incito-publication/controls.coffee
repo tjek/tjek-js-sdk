@@ -1,4 +1,4 @@
-module.exports = class Controls
+export default class Controls
     constructor: (@viewer) ->
         @progressEl = @viewer.el.querySelector '.sgn-incito__progress'
         @scrollListener = @scroll.bind @
