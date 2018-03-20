@@ -63,7 +63,6 @@ SGN.config.bind 'change', (changedAttributes) ->
 if util.isBrowser()
     # Autoconfigure the SDK.
     scriptEl = document.getElementById 'sgn-sdk'
-    console.log(SGN)
     if scriptEl?
         appKey = scriptEl.getAttribute 'data-app-key'
         trackId = scriptEl.getAttribute 'data-track-id'
