@@ -12,5 +12,10 @@
         "useBuiltIns": "usage"
       }
     ]
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": ["@babel/preset-env"]
+    }
+  }
 }

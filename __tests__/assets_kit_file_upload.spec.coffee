@@ -1,4 +1,4 @@
-SGN = require '../dist/sgn-sdk.js'
+import * as AssetsKit from '../lib/coffeescript/kits/assets'
 
 if typeof Blob != 'undefined'
     test 'Uploading a JSON blob', (done) ->
@@ -8,7 +8,7 @@ if typeof Blob != 'undefined'
         blob = new Blob [JSON.stringify(json)],
             type: 'application/json'
         
-        SGN.AssetsKit.fileUpload
+        AssetsKit.fileUpload
             file: blob
         , (err, res) ->
             expect(res).toBeInstanceOf(Object)
