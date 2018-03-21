@@ -54,7 +54,7 @@ SGN.config.set({
 
 ## Paged Publications
 
-To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](/dist/paged-publications.html) that shows how it can work.
+To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](/dist/paged-publication.html) that shows how it can work.
 
 ## More Platforms
 
