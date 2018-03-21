@@ -114,7 +114,6 @@
     };
 
     var el = document.querySelector('.sgn__incito');
-    var viewId = SGN.util.getQueryParam('view_id');
     var incitoPublication = new IncitoPublication({
         el: el,
         id: SGN.util.getQueryParam('id'),
@@ -162,14 +161,13 @@
             return false;
         });
 
-        if (viewId) {
-            var viewEl = el.querySelector('.incito__view[data-id="' + viewId + '"]');
+        var viewId = SGN.util.getQueryParam('view_id');
+        var viewEl = viewId && el.querySelector('.incito__view[data-id="' + viewId + '"]');
 
-            if (viewEl) {
-                setTimeout(function () {
-                    viewEl.scrollIntoView();
-                }, 0);
-            }
+        if (viewEl) {
+            setTimeout(function () {
+                viewEl.scrollIntoView();
+            }, 0);
         }
     });
 })();
