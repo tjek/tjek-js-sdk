@@ -166,7 +166,9 @@
 
         if (viewEl) {
             setTimeout(function () {
-                viewEl.scrollIntoView();
+				var rect = viewEl.getBoundingClientRect();
+
+                window.scrollTo(0, rect.top + window.pageYOffset);
             }, 0);
         }
     });
