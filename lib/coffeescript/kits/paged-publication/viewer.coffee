@@ -17,7 +17,8 @@ class Viewer
             resizeDelay: @options.resizeDelay
             color: @options.color
         @_hotspots = new Hotspots()
-        @_controls = new Controls @el, keyboard: @options.keyboard
+        @_controls = new Controls @el,
+            keyboard: @options.keyboard
         @_eventTracking = new EventTracking()
         @viewSession = SGN.util.uuid()
         @hotspots = null
