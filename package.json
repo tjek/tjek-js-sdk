@@ -69,7 +69,7 @@
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
     "sha256": "^0.2.0",
-    "verso-browser": "^1.0.19",
+    "verso-browser": "^1.0.20",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
