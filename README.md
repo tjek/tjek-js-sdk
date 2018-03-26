@@ -18,8 +18,8 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.1.3.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.1.3.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.1.4.min.css" rel="stylesheet" type="text/css">
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.1.4.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
 By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself.
@@ -54,7 +54,7 @@ SGN.config.set({
 
 ## Paged Publications
 
-To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](/dist/paged-publications.html) that shows how it can work.
+To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](https://shopgun.github.io/shopgun-js-sdk/paged-publication.html) that shows how it can work.
 
 ## More Platforms
 

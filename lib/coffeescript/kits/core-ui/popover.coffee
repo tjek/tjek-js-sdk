@@ -40,7 +40,7 @@ class Popover
         trigger = @trigger.bind @
         view =
             header: header
-            singleChoiceItems: @options.singleChoiceItems.map (item, i) ->
+            singleChoiceItems: @options.singleChoiceItems?.map (item, i) ->
                 item: item
                 index: i
 
