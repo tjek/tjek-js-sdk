@@ -74,7 +74,7 @@ let configs = [
       format: "umd",
       name: "SGN"
     },
-    external: ["url", "child_process", "fs", "http", "https"],
+    external: ["xmlhttprequest"],
     watch: {
       include: "lib/**"
     },
@@ -108,6 +108,7 @@ let configs = [
       format: "umd",
       name: "SGN"
     },
+    external: ["xmlhttprequest"],
     plugins: [
       json(),
       replace({
