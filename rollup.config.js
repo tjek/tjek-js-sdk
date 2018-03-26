@@ -74,7 +74,6 @@ let configs = [
       format: "umd",
       name: "SGN"
     },
-    external: ["url", "child_process", "fs", "http", "https"],
     watch: {
       include: "lib/**"
     },

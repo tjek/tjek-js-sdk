@@ -1,5 +1,5 @@
 SGN = require '../dist/sgn-sdk.js'
-
+global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 test 'Making a request', (done) ->
     SGN.GraphKit.request
         query: """query PlanningSuggestions {

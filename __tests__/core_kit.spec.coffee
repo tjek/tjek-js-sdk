@@ -1,4 +1,5 @@
 SGN = require '../dist/sgn-sdk.js'
+global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 appKey = '00j4o5wpwptl84fuubdig2s6ej5uyna8'
 appSecret = '00j4o5wpwppwtw4ojzn3rey7ujgy79nn'
 

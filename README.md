@@ -28,7 +28,7 @@ By defining your app key and track identifier as data attributes when including 
 
 We recommend you use npm to install the SDK. To install, simply type the following into a terminal window:
 
-```
+```bash
 npm install shopgun-sdk
 ```
 
@@ -50,6 +50,13 @@ SGN.config.set({
     appKey: process.env.SHOPGUN_APP_KEY,
     appSecret: process.env.SHOPGUN_APP_SECRET
 });
+```
+
+Depending on which features you want to use, you might need to supply an XMLHttpRequest polyfill. An error will also tell you.
+
+[node-XMLHttpRequest](https://github.com/driverdan/node-XMLHttpRequest) is what we use and test with on Node. You supply it like so:
+```js
+global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 ```
 
 ## Paged Publications
