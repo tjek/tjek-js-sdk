@@ -1,16 +1,14 @@
-import Gator from '../../../../vendor/gator'
+Gator = require '../../../../vendor/gator'
 
+module.exports =
+    OfferDetails: require './offer-details'
 
-On = (el, events, selector, callback) ->
-    Gator(el).on events, selector, callback
+    Popover: require './popover'
 
-Off = (el, events, selector, callback) ->
-    Gator(el).off events, selector, callback
-    
-# on and off are reserved indentifiers in coffeescript
-# at least this works
-export { On as on }
-export { Off as off }
-export { default as OfferDetails } from './offer-details'
-export { default as Popover } from './popover'
-export { default as singleChoicePopover } from './single-choice-popover'
+    singleChoicePopover: require './single-choice-popover'
+
+    on: (el, events, selector, callback) ->
+        Gator(el).on events, selector, callback
+
+    off: (el, events, selector, callback) ->
+        Gator(el).off events, selector, callback

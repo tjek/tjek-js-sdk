@@ -1,233 +1,237 @@
-export isBrowser = ->
-    typeof window == 'object' and typeof document == 'object'
+util =
+    isBrowser: ->
+        typeof window == 'object' and typeof document == 'object'
 
-export isNode = ->
-    typeof process == 'object'
+    isNode: ->
+        typeof process == 'object'
 
-export error = (err, options) ->
-    err.message = err.message or null
+    error: (err, options) ->
+        err.message = err.message or null
 
-    if typeof options is 'string'
-        err.message = options
-    else if typeof options is 'object' and options?
-        for key, value of options
-            err[key] = value
+        if typeof options is 'string'
+            err.message = options
+        else if typeof options is 'object' and options?
+            for key, value of options
+                err[key] = value
 
-        err.message = options.message if options.message?
-        err.code = options.code or options.name if options.code? or options.message?
-        err.stack = options.stack if options.stack?
+            err.message = options.message if options.message?
+            err.code = options.code or options.name if options.code? or options.message?
+            err.stack = options.stack if options.stack?
 
-    err.name = options and options.name or err.name or err.code or 'Error'
-    err.time = new Date()
+        err.name = options and options.name or err.name or err.code or 'Error'
+        err.time = new Date()
 
-    err
+        err
 
-export uuid = ->
-    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
-        r = Math.random() * 16 | 0
-        v = if c is 'x' then r else (r & 0x3|0x8)
+    uuid: ->
+        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
+            r = Math.random() * 16 | 0
+            v = if c is 'x' then r else (r & 0x3|0x8)
 
-        v.toString 16
+            v.toString 16
 
-export getQueryParam = (field, url) ->
-    href = if url then url else window.location.href
-    reg = new RegExp '[?&]' + field + '=([^&#]*)', 'i'
-    string = reg.exec href
+    getQueryParam: (field, url) ->
+        href = if url then url else window.location.href
+        reg = new RegExp '[?&]' + field + '=([^&#]*)', 'i'
+        string = reg.exec href
 
-    if string then string[1] else undefined
+        if string then string[1] else undefined
 
-export formatQueryParams = (queryParams = {}) ->
-    Object
-        .keys queryParams
-        .map (key) -> key + '=' + encodeURIComponent(queryParams[key])
-        .join '&'
+    formatQueryParams: (queryParams = {}) ->
+        Object
+            .keys queryParams
+            .map (key) -> key + '=' + encodeURIComponent(queryParams[key])
+            .join '&'
 
-export getRandomNumberBetween = (from, to) ->
-    Math.floor(Math.random() * to) + from
+    getRandomNumberBetween: (from, to) ->
+        Math.floor(Math.random() * to) + from
 
-export getOS = ->
-    name = null
-    ua = window.navigator.userAgent
+    getOS: ->
+        name = null
+        ua = window.navigator.userAgent
 
-    if ua.indexOf('Windows') > -1
-        name = 'Windows'
-    else if ua.indexOf('Mac') > -1
-        name = 'macOS'
-    else if ua.indexOf('X11') > -1
-        name = 'unix'
-    else if ua.indexOf('Linux') > -1
-        name = 'Linux'
-    else if ua.indexOf('iOS') > -1
-        name = 'iOS'
-    else if ua.indexOf('Android') > -1
-        name = 'Android'
+        if ua.indexOf('Windows') > -1
+            name = 'Windows'
+        else if ua.indexOf('Mac') > -1
+            name = 'macOS'
+        else if ua.indexOf('X11') > -1
+            name = 'unix'
+        else if ua.indexOf('Linux') > -1
+            name = 'Linux'
+        else if ua.indexOf('iOS') > -1
+            name = 'iOS'
+        else if ua.indexOf('Android') > -1
+            name = 'Android'
 
-    name
+        name
+    
+    getDeviceCategory: ->
+        deviceCategory = 'desktop'
 
-export getDeviceCategory = ->
-    deviceCategory = 'desktop'
-
-    if navigator.platform is 'iPod' or navigator.platform is 'iPhone'
-        deviceCategory = 'mobile'
-    else if navigator.platform is 'iPad'
-        deviceCategory = 'tablet'
-    else if navigator.platform is 'Android' or /android/gi.test(navigator.userAgent)
-        if /tablet/gi.test(navigator.userAgent)
-            deviceCategory = 'tablet'
-        else
+        if navigator.platform is 'iPod' or navigator.platform is 'iPhone'
             deviceCategory = 'mobile'
+        else if navigator.platform is 'iPad'
+            deviceCategory = 'tablet'
+        else if navigator.platform is 'Android' or /android/gi.test(navigator.userAgent)
+            if /tablet/gi.test(navigator.userAgent)
+                deviceCategory = 'tablet'
+            else
+                deviceCategory = 'mobile'
 
-    deviceCategory
+        deviceCategory
+    
+    getPointer: ->
+        pointer = 'fine'
 
-export getPointer = ->
-    pointer = 'fine'
+        pointer = 'coarse' if matchMedia('(pointer:coarse)').matches
 
-    pointer = 'coarse' if matchMedia('(pointer:coarse)').matches
-
-    pointer
-
-export getOrientation = (width, height) ->
-    if width is height
-        'quadratic'
-    else if width > height
-        'horizontal'
-    else
-        'vertical'
-
-export getScreenDimensions = ->
-    density = window.devicePixelRatio ? 1
-    logical =
-        width: window.screen.width
-        height: window.screen.height
-    physical =
-        width: Math.round logical.width * density
-        height: Math.round logical.height * density
-
-    density: density
-    logical: logical
-    physical: physical
-
-export getUtcOffsetSeconds = ->
-    now = new Date()
-    jan1 = new Date now.getFullYear(), 0, 1, 0, 0, 0, 0
-    tmp = jan1.toGMTString()
-    jan2 = new Date tmp.substring(0, tmp.lastIndexOf(' ') - 1)
-    stdTimeOffset = (jan1 - jan2) / 1000
-
-    stdTimeOffset
-
-export getUtcDstOffsetSeconds = ->
-    new Date().getTimezoneOffset() * 60 * -1
-
-export getColorBrightness = (color) ->
-    color = color.replace '#', ''
-    hex = parseInt (hex + '').replace(/[^a-f0-9]/gi, ''), 16
-    rgb = []
-    sum = 0
-    x = 0
-
-    while x < 3
-        s = parseInt(color.substring(2 * x, 2), 16)
-        rgb[x] = s
-
-        sum += s if s > 0
-
-        ++x
-
-    if sum <= 381 then 'dark' else 'light'
-
-export btoa = (str) ->
-    if isBrowser()
-        window.btoa str
-    else
-        buffer = null
-
-        if str instanceof Buffer
-            buffer = str
+        pointer
+    
+    getOrientation: (width, height) ->
+        if width is height
+            'quadratic'
+        else if width > height
+            'horizontal'
         else
-            buffer = new Buffer str.toString(), 'binary'
+            'vertical'
 
-        buffer.toString 'base64'
+    getScreenDimensions: ->
+        density = window.devicePixelRatio ? 1
+        logical =
+            width: window.screen.width
+            height: window.screen.height
+        physical =
+            width: Math.round logical.width * density
+            height: Math.round logical.height * density
 
-export chunk = (arr, size) ->
-    results = []
+        density: density
+        logical: logical
+        physical: physical
 
-    while arr.length
-        results.push arr.splice(0, size)
+    getUtcOffsetSeconds: ->
+        now = new Date()
+        jan1 = new Date now.getFullYear(), 0, 1, 0, 0, 0, 0
+        tmp = jan1.toGMTString()
+        jan2 = new Date tmp.substring(0, tmp.lastIndexOf(' ') - 1)
+        stdTimeOffset = (jan1 - jan2) / 1000
 
-    results
+        stdTimeOffset
 
-export throttle = (fn, threshold = 250, scope) ->
-    last = undefined
-    deferTimer = undefined
+    getUtcDstOffsetSeconds: ->
+        new Date().getTimezoneOffset() * 60 * -1
 
-    ->
-        context = scope or @
-        now = new Date().getTime()
-        args = arguments
+    getColorBrightness: (color) ->
+        color = color.replace '#', ''
+        hex = parseInt (hex + '').replace(/[^a-f0-9]/gi, ''), 16
+        rgb = []
+        sum = 0
+        x = 0
 
-        if last and now < last + threshold
-            clearTimeout deferTimer
+        while x < 3
+            s = parseInt(color.substring(2 * x, 2), 16)
+            rgb[x] = s
 
-            deferTimer = setTimeout ->
-                last = now
-                
-                fn.apply context, args
-            
-                return
-            , threshold
+            sum += s if s > 0
+
+            ++x
+
+        if sum <= 381 then 'dark' else 'light'
+
+    btoa: (str) ->
+        if util.isBrowser()
+            btoa str
         else
-            last = now
-            fn.apply context, args
+            buffer = null
 
-        return
+            if str instanceof Buffer
+                buffer = str
+            else
+                buffer = new Buffer str.toString(), 'binary'
 
-export loadImage = (src, callback) ->
-    img = new Image()
+            buffer.toString 'base64'
 
-    img.onload = -> callback null, img.width, img.height
-    img.onerror = -> callback new Error()
-    img.src = src
+    chunk: (arr, size) ->
+        results = []
 
-    img
+        while arr.length
+            results.push arr.splice(0, size)
 
-export distance = (lat1, lng1, lat2, lng2) ->
-    radlat1 = Math.PI * lat1 / 180
-    radlat2 = Math.PI * lat2 / 180
-    theta = lng1 - lng2
-    radtheta = Math.PI * theta / 180
-    dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
-    dist = Math.acos(dist)
-    dist = dist * 180 / Math.PI
-    dist = dist * 60 * 1.1515
-    dist = dist * 1.609344 * 1000
+        results
 
-    dist
+    throttle: (fn, threshold = 250, scope) ->
+        last = undefined
+        deferTimer = undefined
 
-export asyncParallel = (asyncCalls, sharedCallback) ->
-    counter = asyncCalls.length
-    allResults = []
-    k = 0
-
-    makeCallback = (index) ->
         ->
-            results = []
-            i = 0
+            context = scope or @
+            now = new Date().getTime()
+            args = arguments
 
-            counter--
+            if last and now < last + threshold
+                clearTimeout deferTimer
 
-            while i < arguments.length
-                results.push arguments[i]
-                i++
-
-            allResults[index] = results
-
-            sharedCallback allResults if counter is 0
+                deferTimer = setTimeout ->
+                    last = now
+                    
+                    fn.apply context, args
+                
+                    return
+                , threshold
+            else
+                last = now
+                fn.apply context, args
 
             return
 
-    while k < asyncCalls.length
-        asyncCalls[k] makeCallback(k)
-        k++
+    loadImage: (src, callback) ->
+        img = new Image()
 
-    return
+        img.onload = -> callback null, img.width, img.height
+        img.onerror = -> callback new Error()
+        img.src = src
+
+        img
+
+    distance: (lat1, lng1, lat2, lng2) ->
+        radlat1 = Math.PI * lat1 / 180
+        radlat2 = Math.PI * lat2 / 180
+        theta = lng1 - lng2
+        radtheta = Math.PI * theta / 180
+        dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+        dist = Math.acos(dist)
+        dist = dist * 180 / Math.PI
+        dist = dist * 60 * 1.1515
+        dist = dist * 1.609344 * 1000
+
+        dist
+
+    async:
+        parallel: (asyncCalls, sharedCallback) ->
+            counter = asyncCalls.length
+            allResults = []
+            k = 0
+
+            makeCallback = (index) ->
+                ->
+                    results = []
+                    i = 0
+
+                    counter--
+
+                    while i < arguments.length
+                        results.push arguments[i]
+                        i++
+
+                    allResults[index] = results
+
+                    sharedCallback allResults if counter is 0
+
+                    return
+
+            while k < asyncCalls.length
+                asyncCalls[k] makeCallback(k)
+                k++
+
+            return
+
+module.exports = util

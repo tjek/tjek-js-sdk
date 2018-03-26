@@ -72,11 +72,9 @@ let configs = [
     output: {
       file: outputs.jsBrowser,
       format: "umd",
-      name: "SGN",
-      amd: {
-        define: "rollupNeedsAnOptionToDisableAMDInUMD"
-      }
+      name: "SGN"
     },
+    external: ["url", "child_process", "fs", "http", "https"],
     watch: {
       include: "lib/**"
     },
@@ -108,10 +106,7 @@ let configs = [
     output: {
       file: outputs.jsBrowserMin,
       format: "umd",
-      name: "SGN",
-      amd: {
-        define: "rollupNeedsAnOptionToDisableAMDInUMD"
-      }
+      name: "SGN"
     },
     plugins: [
       json(),

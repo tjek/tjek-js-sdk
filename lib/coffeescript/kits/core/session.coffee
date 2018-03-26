@@ -1,141 +1,143 @@
-import { config } from '../../core'
-import sha256 from 'sha256'
-import * as clientCookieStorage from '../../storage/client-cookie'
-import request from '../../request'
+SGN = require '../../sgn'
+sha256 = require 'sha256'
+clientCookieStorage = require '../../storage/client-cookie'
 callbackQueue = []
 renewed = false
 
-export ttl = 1 * 60 * 60 * 24 * 60
+session =
+    ttl: 1 * 60 * 60 * 24 * 60
 
-export saveToken = (token) ->
-    throw new Error('No token provided for saving') if not token
+    saveToken: (token) ->
+        throw new Error('No token provided for saving') if not token
 
-    config.set coreSessionToken: token
+        SGN.config.set coreSessionToken: token
 
-    saveCookie()
-
-    return
-
-export saveClientId = (clientId) ->
-    config.set coreSessionClientId: clientId
-
-    saveCookie()
-
-    return
-
-export saveCookie = ->
-    clientCookieStorage.set 'session',
-        token: config.get 'coreSessionToken'
-        client_id: config.get 'coreSessionClientId'
-
-    return
-
-export create = (callback) ->
-    request
-        method: 'post'
-        url: config.get('coreUrl') + '/v2/sessions'
-        json: true
-        qs:
-            api_key: config.get 'appKey'
-            token_ttl: ttl
-    , (err, data) ->
-        if err?
-            callback err
-        else if data.statusCode is 201
-            saveToken data.body.token
-            saveClientId data.body.client_id
-
-            callback err, data.body
-        else
-            callback new Error('Could not create session')
+        session.saveCookie()
 
         return
 
-    return
+    saveClientId: (clientId) ->
+        SGN.config.set coreSessionClientId: clientId
 
-export update = (callback) ->
-    headers = {}
-    token = config.get 'coreSessionToken'
-    appSecret = config.get 'appSecret'
-
-    headers['X-Token'] = token
-    headers['X-Signature'] = sign appSecret, token if appSecret?
-
-    request
-        url: config.get('coreUrl') + '/v2/sessions'
-        headers: headers
-        json: true
-    , (err, data) ->
-        if err?
-            callback err
-        else if data.statusCode is 200
-            saveToken data.body.token
-            saveClientId data.body.client_id
-
-            callback err, data.body
-        else
-            callback new Error('Could not update session')
+        session.saveCookie()
 
         return
 
-    return
-
-export renew = (callback) ->
-    headers = {}
-    token = config.get 'coreSessionToken'
-    appSecret = config.get 'appSecret'
-
-    headers['X-Token'] = token
-    headers['X-Signature'] = sign appSecret, token if appSecret?
-
-    request
-        method: 'put'
-        url: config.get('coreUrl') + '/v2/sessions'
-        headers: headers
-        json: true
-    , (err, data) ->
-        if err?
-            callback err
-        else if data.statusCode is 200
-            saveToken data.body.token
-            saveClientId data.body.client_id
-
-            callback err, data.body
-        else
-            callback new Error('Could not renew session')
+    saveCookie: ->
+        clientCookieStorage.set 'session',
+            token: SGN.config.get 'coreSessionToken'
+            client_id: SGN.config.get 'coreSessionClientId'
 
         return
 
-    return
+    create: (callback) ->
+        SGN.request
+            method: 'post'
+            url: SGN.config.get('coreUrl') + '/v2/sessions'
+            json: true
+            qs:
+                api_key: SGN.config.get 'appKey'
+                token_ttl: session.ttl
+        , (err, data) ->
+            if err?
+                callback err
+            else if data.statusCode is 201
+                session.saveToken data.body.token
+                session.saveClientId data.body.client_id
 
-export ensure = (callback) ->
-    queueCount = callbackQueue.length
-    complete = (err) ->
-        callbackQueue = callbackQueue.filter (fn) ->
-            fn err
+                callback err, data.body
+            else
+                callback new Error('Could not create session')
 
-            false
+            return
+
+        return
+    
+    update: (callback) ->
+        headers = {}
+        token = SGN.config.get 'coreSessionToken'
+        appSecret = SGN.config.get 'appSecret'
+
+        headers['X-Token'] = token
+        headers['X-Signature'] = session.sign appSecret, token if appSecret?
+
+        SGN.request
+            url: SGN.config.get('coreUrl') + '/v2/sessions'
+            headers: headers
+            json: true
+        , (err, data) ->
+            if err?
+                callback err
+            else if data.statusCode is 200
+                session.saveToken data.body.token
+                session.saveClientId data.body.client_id
+
+                callback err, data.body
+            else
+                callback new Error('Could not update session')
+
+            return
 
         return
 
-    callbackQueue.push callback
+    renew: (callback) ->
+        headers = {}
+        token = SGN.config.get 'coreSessionToken'
+        appSecret = SGN.config.get 'appSecret'
 
-    if queueCount is 0
-        if not config.get('coreSessionToken')?
-            create complete
-        else if renewed is false
-            renewed = true
-            renew (err) ->
-                if err?
-                    create complete
-                else
-                    complete()
-                
-                return
-        else
-            complete()
+        headers['X-Token'] = token
+        headers['X-Signature'] = session.sign appSecret, token if appSecret?
 
-    return
+        SGN.request
+            method: 'put'
+            url: SGN.config.get('coreUrl') + '/v2/sessions'
+            headers: headers
+            json: true
+        , (err, data) ->
+            if err?
+                callback err
+            else if data.statusCode is 200
+                session.saveToken data.body.token
+                session.saveClientId data.body.client_id
 
-export sign = (appSecret, token) ->
-    sha256 [appSecret, token].join('')
+                callback err, data.body
+            else
+                callback new Error('Could not renew session')
+
+            return
+
+        return
+
+    ensure: (callback) ->
+        queueCount = callbackQueue.length
+        complete = (err) ->
+            callbackQueue = callbackQueue.filter (fn) ->
+                fn err
+
+                false
+
+            return
+
+        callbackQueue.push callback
+
+        if queueCount is 0
+            if not SGN.config.get('coreSessionToken')?
+                session.create complete
+            else if renewed is false
+                renewed = true
+                session.renew (err) ->
+                    if err?
+                        session.create complete
+                    else
+                        complete()
+                    
+                    return
+            else
+                complete()
+
+        return
+
+    sign: (appSecret, token) ->
+        sha256 [appSecret, token].join('')
+
+module.exports = session

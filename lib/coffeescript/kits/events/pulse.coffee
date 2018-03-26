@@ -1,5 +1,4 @@
-import MicroEvent from 'microevent'
-import { config } from '../../core'
+MicroEvent = require 'microevent'
 
 class Pulse
     constructor: ->
@@ -16,7 +15,7 @@ class Pulse
         @
 
     connect: ->
-        connection = new WebSocket config.get('eventsPulseUrl')
+        connection = new WebSocket SGN.config.get('eventsPulseUrl')
 
         connection.onopen = @onOpen.bind @
         connection.onmessage = @onMessage.bind @
@@ -51,4 +50,4 @@ class Pulse
 
 MicroEvent.mixin Pulse
 
-export default Pulse
+module.exports = Pulse

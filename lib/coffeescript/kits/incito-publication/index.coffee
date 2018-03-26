@@ -1,2 +1,4 @@
-export { default as Bootstrapper } from './bootstrapper'
-export { default as Viewer } from './viewer'
+module.exports =
+    Viewer: require './viewer'
+
+    Bootstrapper: require './bootstrapper'

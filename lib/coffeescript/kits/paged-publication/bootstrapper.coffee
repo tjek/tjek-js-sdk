@@ -1,13 +1,12 @@
-import { request } from '../core'
-import { asyncParallel } from '../../util'
-import Viewer from './viewer'
+MicroEvent = require 'microevent'
+SGN = require '../../core'
 
-export default class Bootstrapper
+module.exports = class Bootstrapper
     constructor: (@options = {}) ->
         return
 
     createViewer: (data) ->
-        new Viewer @options.el,
+        new SGN.PagedPublicationKit.Viewer @options.el,
             id: @options.id
             ownedBy: data.details.dealer_id
             color: '#' + data.details.branding.pageflip.color
@@ -38,7 +37,7 @@ export default class Bootstrapper
         return
     
     fetch: (callback) ->
-        asyncParallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) ->
+        SGN.util.async.parallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) ->
             data =
                 details: result[0][1]
                 pages: result[1][1]
@@ -53,21 +52,21 @@ export default class Bootstrapper
         return
 
     fetchDetails: (callback) ->
-        request
+        SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}"
         , callback
 
         return
 
     fetchPages: (callback) ->
-        request
+        SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}/pages"
         , callback
 
         return
 
     fetchHotspots: (callback) ->
-        request
+        SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}/hotspots"
         , callback
 

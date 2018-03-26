@@ -1,4 +1,8 @@
-import * as Session from './session'
-export { default as request } from './request'
-export session = Session
+SGN = require '../../sgn'
+request = require './request'
+session = require './session'
 
+module.exports =
+    request: request
+
+    session: session

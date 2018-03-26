@@ -1,6 +1,4 @@
-import { config } from '../../core'
-import { btoa, error, isBrowser, isNode } from '../../util'
-import request from '../../request'
+SGN = require '../../sgn'
 
 parseCookies = (cookies = []) ->
     parsedCookies = {}
@@ -17,11 +15,11 @@ parseCookies = (cookies = []) ->
     
     parsedCookies
 
-export default (options = {}, callback) ->
-    url = config.get 'graphUrl'
+module.exports = (options = {}, callback) ->
+    url = SGN.config.get 'graphUrl'
     timeout = 1000 * 12
-    appKey = config.get 'appKey'
-    authToken = config.get 'authToken'
+    appKey = SGN.config.get 'appKey'
+    authToken = SGN.config.get 'authToken'
     authTokenCookieName = 'shopgun-auth-token'
     options =
         method: 'post'
@@ -35,36 +33,36 @@ export default (options = {}, callback) ->
             variables: options.variables
 
     # Apply authorization header when app key is provided to avoid rate limiting.
-    options.headers.Authorization = 'Basic ' + btoa("app-key:#{appKey}") if appKey?
+    options.headers.Authorization = 'Basic ' + SGN.util.btoa("app-key:#{appKey}") if appKey?
 
     # Set cookies manually in node.js.
-    if isNode() and authToken?
+    if SGN.util.isNode() and authToken?
         options.cookies = [
             key: authTokenCookieName
             value: authToken
             url: url
         ]
-    else if isBrowser()
+    else if SGN.util.isBrowser()
         options.useCookies = true
 
-    request options, (err, data) ->
+    SGN.request options, (err, data) ->
         if err?
-            callback error(new Error('Graph request error'),
+            callback SGN.util.error(new Error('Graph request error'),
                 code: 'GraphRequestError'
             )
         else
             # Update auth token as it might have changed.
-            if isNode()
+            if SGN.util.isNode()
                 cookies = parseCookies data.headers?['set-cookie']
                 authCookie = cookies[authTokenCookieName]
 
-                if config.get('authToken') isnt authCookie
-                    config.set 'authToken', authCookie
+                if SGN.config.get('authToken') isnt authCookie
+                    SGN.config.set 'authToken', authCookie
 
             if data.statusCode is 200
                 callback null, data.body
             else
-                callback error(new Error('Graph API error'),
+                callback SGN.util.error(new Error('Graph API error'),
                     code: 'GraphAPIError'
                     statusCode: data.statusCode
                 )

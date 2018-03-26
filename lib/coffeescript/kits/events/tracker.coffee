@@ -1,17 +1,5 @@
-import client from '../../client'
-import { config } from '../../core'
-import {
-    uuid,
-    getQueryParam,
-    getUtcDstOffsetSeconds,
-    getUtcOffsetSeconds,
-    error,
-    getOS,
-    getScreenDimensions
-} from '../../util'
-
-import clientLocalStorage from '../../storage/client-local'
-
+SGN = require '../../sgn'
+clientLocalStorage = require '../../storage/client-local'
 getPool = ->
     data = clientLocalStorage.get 'event-tracker-pool'
     data = [] if Array.isArray(data) is false
@@ -30,7 +18,7 @@ try
         return
     , false
 
-class Tracker
+module.exports = class Tracker
     defaultOptions:
         trackId: null
         dispatchInterval: 3000
@@ -41,12 +29,13 @@ class Tracker
     constructor: (options = {}) ->
         for key, value of @defaultOptions
             @[key] = options[key] or value
+
         @dispatching = false
         @session =
-            id: uuid()
+            id: SGN.util.uuid()
         @client =
             trackId: @trackId
-            id: client.id
+            id: SGN.client.id
         @view =
             path: []
             previousPath: []
@@ -61,11 +50,11 @@ class Tracker
         return
 
     trackEvent: (type, properties = {}, version = '1.0.0') ->
-        throw error(new Error('Event type is required')) if typeof type isnt 'string'
+        throw SGN.util.error(new Error('Event type is required')) if typeof type isnt 'string'
         return if not @trackId?
 
         pool.push
-            id: uuid()
+            id: SGN.util.uuid()
             type: type
             version: version
             recordedAt: new Date().toISOString()
@@ -122,14 +111,14 @@ class Tracker
         view
 
     getContext: ->
-        screenDimensions = getScreenDimensions()
-        os = getOS()
+        screenDimensions = SGN.util.getScreenDimensions()
+        os = SGN.util.getOS()
         context =
             userAgent: window.navigator.userAgent
             locale: navigator.language
             timeZone:
-                utcOffsetSeconds: getUtcOffsetSeconds()
-                utcDstOffsetSeconds: getUtcDstOffsetSeconds()
+                utcOffsetSeconds: SGN.util.getUtcOffsetSeconds()
+                utcDstOffsetSeconds: SGN.util.getUtcDstOffsetSeconds()
             device:
                 screen:
                     width: screenDimensions.physical.width
@@ -143,11 +132,11 @@ class Tracker
             version: @application.version
             build: @application.build
         campaign =
-            source: getQueryParam 'utm_source'
-            medium: getQueryParam 'utm_medium'
-            name: getQueryParam 'utm_campaign'
-            term: getQueryParam 'utm_term'
-            content: getQueryParam 'utm_content'
+            source: SGN.util.getQueryParam 'utm_source'
+            medium: SGN.util.getQueryParam 'utm_medium'
+            name: SGN.util.getQueryParam 'utm_campaign'
+            term: SGN.util.getQueryParam 'utm_term'
+            content: SGN.util.getQueryParam 'utm_content'
         loc =
             determinedAt: @location.determinedAt
             latitude: @location.latitude
@@ -225,7 +214,7 @@ class Tracker
 
     ship: (events = [], callback) ->
         http = new XMLHttpRequest()
-        url = config.get 'eventsTrackUrl'
+        url = SGN.config.get 'eventsTrackUrl'
         payload = events: events.map (event) ->
             event.sentAt = new Date().toISOString()
 
@@ -240,17 +229,15 @@ class Tracker
                 try
                     callback null, JSON.parse(http.responseText)
                 catch err
-                    callback error(new Error('Could not parse JSON'))
+                    callback SGN.util.error(new Error('Could not parse JSON'))
             else
-                callback error(new Error('Server did not accept request'))
+                callback SGN.util.error(new Error('Server did not accept request'))
 
             return
         http.onerror = ->
-            callback error(new Error('Could not perform network request'))
+            callback SGN.util.error(new Error('Could not perform network request'))
 
             return
         http.send JSON.stringify(payload)
 
         @
-
-export default Tracker

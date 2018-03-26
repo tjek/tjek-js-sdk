@@ -1,2 +1,4 @@
-export { default as Tracker } from './tracker'
-export { default as Pulse } from './pulse'
+module.exports =
+    Tracker: require './tracker'
+
+    Pulse: require './pulse'
