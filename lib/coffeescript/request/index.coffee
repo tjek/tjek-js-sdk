@@ -2,9 +2,21 @@ SGN = require '../sgn'
 
 { isBrowser } = require '../util'
 
-XMLHttpRequest = if isBrowser() then window.XMLHttpRequest else require("../../../vendor/xmlhttprequest").XMLHttpRequest
+getXMLHttpRequest = ->
+    if isBrowser()
+        XMLHttpRequest = window.XMLHttpRequest
+    else if global.XMLHttpRequest
+        XMLHttpRequest = global.XMLHttpRequest
+    if not XMLHttpRequest then throw new Error("
+        You need to include an XMLHttpRequest implementation for your platform,
+        here's one for node: https://www.npmjs.com/package/xmlhttprequest
+        You'd add it like so, before invoking an SDK method:
+        global.XMLHttpRequest = require(\"xmlhttprequest\").XMLHttpRequest
+    ")
+    XMLHttpRequest
 
 module.exports = (options = {}, callback, progressCallback) ->
+    XMLHttpRequest = getXMLHttpRequest()
     http = new XMLHttpRequest()
     method = options.method ? 'get'
     url = options.url
