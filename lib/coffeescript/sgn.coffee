@@ -1,1 +1,1 @@
-module.exports = require './core'
+export { default } from "./core"

@@ -1,6 +1,6 @@
-MicroEvent = require 'microevent'
-PageSpread = require './page-spread'
-SGN = require '../../sgn'
+import MicroEvent from 'microevent'
+import PageSpread from './page-spread'
+import { chunk } from '../../util'
 
 class PagedPublicationPageSpreads
     constructor: (@options) ->
@@ -31,7 +31,7 @@ class PagedPublicationPageSpreads
         else
             firstPage = pages.shift()
             lastPage = if pages.length % 2 is 1 then pages.pop() else null
-            midstPageSpreads = SGN.util.chunk pages, 2
+            midstPageSpreads = chunk pages, 2
 
             pageSpreads.push [firstPage] if firstPage?
             midstPageSpreads.forEach (midstPages) -> pageSpreads.push midstPages.map (page) -> page
@@ -57,4 +57,4 @@ class PagedPublicationPageSpreads
 
 MicroEvent.mixin PagedPublicationPageSpreads
 
-module.exports = PagedPublicationPageSpreads
+export default PagedPublicationPageSpreads

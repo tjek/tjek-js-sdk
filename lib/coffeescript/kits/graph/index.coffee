@@ -1,2 +1,1 @@
-module.exports =
-    request: require './request'
+export { default as request } from './request'

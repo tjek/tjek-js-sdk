@@ -1,9 +1,11 @@
-util = require '../../util'
-SGN = require '../../core'
-Controls = require './controls'
-schema = require '../../../graphql/incito.graphql'
+import { getPointer, error, getDeviceCategory, getOrientation } from '../../util'
+import * as Controls from './controls'
+import * as schema from '../../../graphql/incito.graphql'
+import sessionStorage from '../../storage/client-session'
+import * as GraphKit from '../graph'
+import Viewer from './viewer'
 
-module.exports = class Bootstrapper
+export default class Bootstrapper
     constructor: (@options = {}) ->
         @deviceCategory = @getDeviceCategory()
         @pixelRatio = @getPixelRatio()
@@ -16,16 +18,16 @@ module.exports = class Bootstrapper
         return
     
     getDeviceCategory: ->
-        util.getDeviceCategory()
+        getDeviceCategory()
     
     getPixelRatio: ->
         window.devicePixelRatio or 1
     
     getPointer: ->
-        util.getPointer()
+        getPointer()
     
     getOrientation: ->
-        orientation = util.getOrientation screen.width, screen.height
+        orientation = getOrientation screen.width, screen.height
         orientation = 'horizontal' if orientation is 'quadratic'
 
         orientation
@@ -37,12 +39,12 @@ module.exports = class Bootstrapper
             @options.el.offsetWidth
 
     fetch: (callback) ->
-        data = SGN.storage.session.get @storageKey
+        data = sessionStorage.get @storageKey
 
         if data? and data.response? and data.width is @maxWidth
             return callback null, data.response
 
-        SGN.GraphKit.request
+        GraphKit.request
             query: schema
             operationName: 'GetIncitoPublication'
             variables:
@@ -57,11 +59,11 @@ module.exports = class Bootstrapper
             if err?
                 callback err
             else if res.errors and res.errors.length > 0
-                callback util.error(new Error(), 'graph request contained errors')
+                callback error(new Error(), 'graph request contained errors')
             else
                 callback null, res
 
-                SGN.storage.session.set @storageKey,
+                sessionStorage.set @storageKey,
                     width: @maxWidth
                     response: res
             
@@ -71,9 +73,9 @@ module.exports = class Bootstrapper
     
     createViewer: (data) ->
         if not data.incito?
-            throw util.error new Error(), 'you need to supply valid Incito to create a viewer'
+            throw error new Error(), 'you need to supply valid Incito to create a viewer'
 
-        viewer = new SGN.IncitoPublicationKit.Viewer @options.el,
+        viewer = new Viewer @options.el,
             id: @options.id
             incito: data.incito
             eventTracker: @options.eventTracker
