@@ -86,30 +86,30 @@
     };
 
     IncitoPublication.prototype.showOffer = function (ctx) {
-        if (incitoPublication.detailsId === ctx.id) {
+        if (this.detailsId === ctx.id) {
             incitoPublication.closeDetails();
 
             return;
         }
 
-        incitoPublication.closeDetails();
+        this.closeDetails();
 
         var contentEl = document.createElement('div');
         var rect = ctx.el.getBoundingClientRect();
 
         contentEl.innerHTML = 'insert your custom HTML here';
 
-        incitoPublication.detailsId = ctx.id;
-        incitoPublication.details = new SGN.CoreUIKit.OfferDetails({
+        this.detailsId = ctx.id;
+        this.details = new SGN.CoreUIKit.OfferDetails({
             anchorEl: ctx.el,
             contentEl: contentEl
         });
-        incitoPublication.details.appendTo(document.body);
+        this.details.appendTo(document.body);
 
-        var threshold = incitoPublication.details.el.offsetHeight;
+        var threshold = this.details.el.offsetHeight;
 
         if (rect.height + rect.top > window.innerHeight - threshold) {
-            incitoPublication.scrollTo(rect.top + window.pageYOffset - (window.innerHeight - rect.height) + threshold, 300);
+            this.scrollTo(rect.top + window.pageYOffset - (window.innerHeight - rect.height) + threshold, 300);
         }
     };
 
@@ -126,6 +126,8 @@
         }
         
         SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
+            e.preventDefault();
+            
             var id = this.getAttribute('data-id');
             var meta = viewer.incito.ids[id];
 
@@ -160,5 +162,16 @@
     
             return false;
         });
+
+        var viewId = SGN.util.getQueryParam('view_id');
+        var viewEl = viewId && el.querySelector('.incito__view[data-id="' + viewId + '"]');
+
+        if (viewEl) {
+            setTimeout(function () {
+				var rect = viewEl.getBoundingClientRect();
+
+                window.scrollTo(0, rect.top + window.pageYOffset);
+            }, 0);
+        }
     });
 })();

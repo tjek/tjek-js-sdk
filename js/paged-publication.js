@@ -10,11 +10,15 @@
             var viewer = bootstrapper.createViewer(data);
 
             viewer.bind('hotspotClicked', function (hotspot) {
-                console.log('Hotspot clicked.', hotspot);
+                console.log('Hotspot clicked', hotspot);
             });
 
             viewer.bind('hotspotPressed', function (hotspot) {
-                console.log('Hotspot pressed.', hotspot);
+                console.log('Hotspot pressed', hotspot);
+            });
+
+            viewer.bind('hotspotContextmenu', function (hotspot) {
+                console.log('Hotspot contextmenu', hotspot);
             });
 
             viewer.start();

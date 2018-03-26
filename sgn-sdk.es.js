@@ -4089,7 +4089,7 @@ function () {
   _createClass(Popover, [{
     key: "render",
     value: function render() {
-      var header, ref, trigger, view, width;
+      var header, ref, ref1, trigger, view, width;
       width = (ref = this.options.width) != null ? ref : 100;
       header = this.options.header;
 
@@ -4100,12 +4100,12 @@ function () {
       trigger = this.trigger.bind(this);
       view = {
         header: header,
-        singleChoiceItems: this.options.singleChoiceItems.map(function (item, i) {
+        singleChoiceItems: (ref1 = this.options.singleChoiceItems) != null ? ref1.map(function (item, i) {
           return {
             item: item,
             index: i
           };
-        })
+        }) : void 0
       };
       this.el.className = 'sgn-popover';
       this.el.setAttribute('tabindex', -1);
