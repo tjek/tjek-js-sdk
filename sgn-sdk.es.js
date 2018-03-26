@@ -3,12 +3,7 @@ import 'core-js/modules/es6.function.name';
 import require$$0 from 'microevent';
 import mustache from 'mustache';
 import 'core-js/modules/es6.regexp.split';
-import url from 'url';
-import child_process from 'child_process';
-import fs from 'fs';
-import http from 'http';
-import https from 'https';
-import 'core-js/modules/es6.regexp.search';
+import xmlhttprequest from 'xmlhttprequest';
 import sha256 from 'sha256';
 import 'core-js/modules/es6.array.find';
 import versoBrowser from 'verso-browser';
@@ -96,9 +91,9 @@ util = {
       return v.toString(16);
     });
   },
-  getQueryParam: function getQueryParam(field, url$$1) {
+  getQueryParam: function getQueryParam(field, url) {
     var href, reg, string;
-    href = url$$1 ? url$$1 : window.location.href;
+    href = url ? url : window.location.href;
     reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
     string = reg.exec(href);
 
@@ -563,603 +558,39 @@ var clientCookie = {
   }
 };
 
-/**
- * Wrapper for built-in http.js to emulate the browser XMLHttpRequest object.
- *
- * This can be used with JS designed for browsers to improve reuse of code and
- * allow the use of existing libraries.
- *
- * Usage: include("XMLHttpRequest.js") and use XMLHttpRequest per W3C specs.
- *
- * @author Dan DeFelippi <dan@driverdan.com>
- * @contributor David Ellis <d.f.ellis@ieee.org>
- * @license MIT
- */
-
-var XMLHttpRequest$1 = function XMLHttpRequest() {
-  /**
-   * Private variables
-   */
-
-  var self = this;
-  var http$$1 = http;
-  var https$$1 = https; // Holds http.js objects
-
-  var request;
-  var response; // Request settings
-
-  var settings = {}; // Disable header blacklist.
-  // Not part of XHR specs.
-
-  var disableHeaderCheck = false; // Set some default headers
-
-  var defaultHeaders = {
-    "User-Agent": "node-XMLHttpRequest",
-    "Accept": "*/*"
-  };
-  var headers = {};
-  var headersCase = {}; // These headers are not user setable.
-  // The following are allowed but banned in the spec:
-  // * user-agent
-
-  var forbiddenRequestHeaders = ["accept-charset", "accept-encoding", "access-control-request-headers", "access-control-request-method", "connection", "content-length", "content-transfer-encoding", "cookie", "cookie2", "date", "expect", "host", "keep-alive", "origin", "referer", "te", "trailer", "transfer-encoding", "upgrade", "via"]; // These request methods are not allowed
-
-  var forbiddenRequestMethods = ["TRACE", "TRACK", "CONNECT"]; // Send flag
-
-  var sendFlag = false; // Error flag, used when errors occur or abort is called
-
-  var errorFlag = false; // Event listeners
-
-  var listeners = {};
-  /**
-   * Constants
-   */
-
-  this.UNSENT = 0;
-  this.OPENED = 1;
-  this.HEADERS_RECEIVED = 2;
-  this.LOADING = 3;
-  this.DONE = 4;
-  /**
-   * Public vars
-   */
-  // Current state
-
-  this.readyState = this.UNSENT; // default ready state change handler in case one is not set or is set late
-
-  this.onreadystatechange = null; // Result & response
-
-  this.responseText = "";
-  this.responseXML = "";
-  this.status = null;
-  this.statusText = null; // Whether cross-site Access-Control requests should be made using
-  // credentials such as cookies or authorization headers
-
-  this.withCredentials = false;
-  /**
-   * Private methods
-   */
-
-  /**
-   * Check if the specified header is allowed.
-   *
-   * @param string header Header to validate
-   * @return boolean False if not allowed, otherwise true
-   */
-
-  var isAllowedHttpHeader = function isAllowedHttpHeader(header) {
-    return disableHeaderCheck || header && forbiddenRequestHeaders.indexOf(header.toLowerCase()) === -1;
-  };
-  /**
-   * Check if the specified method is allowed.
-   *
-   * @param string method Request method to validate
-   * @return boolean False if not allowed, otherwise true
-   */
-
-
-  var isAllowedHttpMethod = function isAllowedHttpMethod(method) {
-    return method && forbiddenRequestMethods.indexOf(method) === -1;
-  };
-  /**
-   * Public methods
-   */
-
-  /**
-   * Open the connection. Currently supports local server requests.
-   *
-   * @param string method Connection method (eg GET, POST)
-   * @param string url URL for the connection.
-   * @param boolean async Asynchronous connection. Default is true.
-   * @param string user Username for basic authentication (optional)
-   * @param string password Password for basic authentication (optional)
-   */
-
-
-  this.open = function (method, url$$1, async, user, password) {
-    this.abort();
-    errorFlag = false; // Check for valid request method
-
-    if (!isAllowedHttpMethod(method)) {
-      throw new Error("SecurityError: Request method not allowed");
-    }
-
-    settings = {
-      "method": method,
-      "url": url$$1.toString(),
-      "async": typeof async !== "boolean" ? true : async,
-      "user": user || null,
-      "password": password || null
-    };
-    setState(this.OPENED);
-  };
-  /**
-   * Disables or enables isAllowedHttpHeader() check the request. Enabled by default.
-   * This does not conform to the W3C spec.
-   *
-   * @param boolean state Enable or disable header checking.
-   */
-
-
-  this.setDisableHeaderCheck = function (state) {
-    disableHeaderCheck = state;
-  };
-  /**
-   * Sets a header for the request or appends the value if one is already set.
-   *
-   * @param string header Header name
-   * @param string value Header value
-   */
-
-
-  this.setRequestHeader = function (header, value) {
-    if (this.readyState !== this.OPENED) {
-      throw new Error("INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN");
-    }
-
-    if (!isAllowedHttpHeader(header)) {
-      console.warn("Refused to set unsafe header \"" + header + "\"");
-      return;
-    }
-
-    if (sendFlag) {
-      throw new Error("INVALID_STATE_ERR: send flag is true");
-    }
-
-    header = headersCase[header.toLowerCase()] || header;
-    headersCase[header.toLowerCase()] = header;
-    headers[header] = headers[header] ? headers[header] + ', ' + value : value;
-  };
-  /**
-   * Gets a header from the server response.
-   *
-   * @param string header Name of header to get.
-   * @return string Text of the header or null if it doesn't exist.
-   */
-
-
-  this.getResponseHeader = function (header) {
-    if (typeof header === "string" && this.readyState > this.OPENED && response && response.headers && response.headers[header.toLowerCase()] && !errorFlag) {
-      return response.headers[header.toLowerCase()];
-    }
-
-    return null;
-  };
-  /**
-   * Gets all the response headers.
-   *
-   * @return string A string with all response headers separated by CR+LF
-   */
-
-
-  this.getAllResponseHeaders = function () {
-    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
-      return "";
-    }
-
-    var result = "";
-
-    for (var i in response.headers) {
-      // Cookie headers are excluded
-      if (i !== "set-cookie" && i !== "set-cookie2") {
-        result += i + ": " + response.headers[i] + "\r\n";
-      }
-    }
-
-    return result.substr(0, result.length - 2);
-  };
-  /**
-   * Gets a request header
-   *
-   * @param string name Name of header to get
-   * @return string Returns the request header or empty string if not set
-   */
-
-
-  this.getRequestHeader = function (name) {
-    if (typeof name === "string" && headersCase[name.toLowerCase()]) {
-      return headers[headersCase[name.toLowerCase()]];
-    }
-
-    return "";
-  };
-  /**
-   * Sends the request to the server.
-   *
-   * @param string data Optional data to send as request body.
-   */
-
-
-  this.send = function (data) {
-    if (this.readyState !== this.OPENED) {
-      throw new Error("INVALID_STATE_ERR: connection must be opened before send() is called");
-    }
-
-    if (sendFlag) {
-      throw new Error("INVALID_STATE_ERR: send has already been called");
-    }
-
-    var ssl = false,
-        local = false;
-    var url$$1 = url.parse(settings.url);
-    var host; // Determine the server
-
-    switch (url$$1.protocol) {
-      case "https:":
-        ssl = true;
-      // SSL & non-SSL both need host, no break here.
-
-      case "http:":
-        host = url$$1.hostname;
-        break;
-
-      case "file:":
-        local = true;
-        break;
-
-      case undefined:
-      case null:
-      case "":
-        host = "localhost";
-        break;
-
-      default:
-        throw new Error("Protocol not supported.");
-    } // Load files off the local filesystem (file://)
-
-
-    if (local) {
-      if (settings.method !== "GET") {
-        throw new Error("XMLHttpRequest: Only GET method is supported");
-      }
-
-      if (settings.async) {
-        fs.readFile(url$$1.pathname, "utf8", function (error, data) {
-          if (error) {
-            self.handleError(error);
-          } else {
-            self.status = 200;
-            self.responseText = data;
-            setState(self.DONE);
-          }
-        });
-      } else {
-        try {
-          this.responseText = fs.readFileSync(url$$1.pathname, "utf8");
-          this.status = 200;
-          setState(self.DONE);
-        } catch (e) {
-          this.handleError(e);
-        }
-      }
-
-      return;
-    } // Default to port 80. If accessing localhost on another port be sure
-    // to use http://localhost:port/path
-
-
-    var port = url$$1.port || (ssl ? 443 : 80); // Add query string if one is used
-
-    var uri = url$$1.pathname + (url$$1.search ? url$$1.search : ""); // Set the defaults if they haven't been set
-
-    for (var name in defaultHeaders) {
-      if (!headersCase[name.toLowerCase()]) {
-        headers[name] = defaultHeaders[name];
-      }
-    } // Set the Host header or the server may reject the request
-
-
-    headers.Host = host;
-
-    if (!(ssl && port === 443 || port === 80)) {
-      headers.Host += ":" + url$$1.port;
-    } // Set Basic Auth if necessary
-
-
-    if (settings.user) {
-      if (typeof settings.password === "undefined") {
-        settings.password = "";
-      }
-
-      var authBuf = new Buffer(settings.user + ":" + settings.password);
-      headers.Authorization = "Basic " + authBuf.toString("base64");
-    } // Set content length header
-
-
-    if (settings.method === "GET" || settings.method === "HEAD") {
-      data = null;
-    } else if (data) {
-      headers["Content-Length"] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data);
-
-      if (!this.getRequestHeader("Content-Type")) {
-        headers["Content-Type"] = "text/plain;charset=UTF-8";
-      }
-    } else if (settings.method === "POST") {
-      // For a post with no data set Content-Length: 0.
-      // This is required by buggy servers that don't meet the specs.
-      headers["Content-Length"] = 0;
-    }
-
-    var options = {
-      host: host,
-      port: port,
-      path: uri,
-      method: settings.method,
-      headers: headers,
-      agent: false,
-      withCredentials: self.withCredentials
-    }; // Reset error flag
-
-    errorFlag = false; // Handle async requests
-
-    if (settings.async) {
-      // Use the proper protocol
-      var doRequest = ssl ? https$$1.request : http$$1.request; // Request is being sent, set send flag
-
-      sendFlag = true; // As per spec, this is called here for historical reasons.
-
-      self.dispatchEvent("readystatechange"); // Handler for the response
-
-      var responseHandler = function responseHandler(resp) {
-        // Set response var to the response we got back
-        // This is so it remains accessable outside this scope
-        response = resp; // Check for redirect
-        // @TODO Prevent looped redirects
-
-        if (response.statusCode === 301 || response.statusCode === 302 || response.statusCode === 303 || response.statusCode === 307) {
-          // Change URL to the redirect location
-          settings.url = response.headers.location;
-          var url$$1 = url.parse(settings.url); // Set host var in case it's used later
-
-          host = url$$1.hostname; // Options for the new request
-
-          var newOptions = {
-            hostname: url$$1.hostname,
-            port: url$$1.port,
-            path: url$$1.path,
-            method: response.statusCode === 303 ? "GET" : settings.method,
-            headers: headers,
-            withCredentials: self.withCredentials
-          }; // Issue the new request
-
-          request = doRequest(newOptions, responseHandler).on("error", errorHandler);
-          request.end(); // @TODO Check if an XHR event needs to be fired here
-
-          return;
-        }
-
-        response.setEncoding("utf8");
-        setState(self.HEADERS_RECEIVED);
-        self.status = response.statusCode;
-        response.on("data", function (chunk) {
-          // Make sure there's some data
-          if (chunk) {
-            self.responseText += chunk;
-          } // Don't emit state changes if the connection has been aborted.
-
-
-          if (sendFlag) {
-            setState(self.LOADING);
-          }
-        });
-        response.on("end", function () {
-          if (sendFlag) {
-            // Discard the end event if the connection has been aborted
-            setState(self.DONE);
-            sendFlag = false;
-          }
-        });
-        response.on("error", function (error) {
-          self.handleError(error);
-        });
-      }; // Error handler for the request
-
-
-      var errorHandler = function errorHandler(error) {
-        self.handleError(error);
-      }; // Create the request
-
-
-      request = doRequest(options, responseHandler).on("error", errorHandler); // Node 0.4 and later won't accept empty data. Make sure it's needed.
-
-      if (data) {
-        request.write(data);
-      }
-
-      request.end();
-      self.dispatchEvent("loadstart");
-    } else {
-      // Synchronous
-      // Create a temporary file for communication with the other Node process
-      var contentFile = ".node-xmlhttprequest-content-" + process.pid;
-      var syncFile = ".node-xmlhttprequest-sync-" + process.pid;
-      fs.writeFileSync(syncFile, "", "utf8"); // The async request the other Node process executes
-
-      var execString = "var http = require('http'), https = require('https'), fs = require('fs');" + "var doRequest = http" + (ssl ? "s" : "") + ".request;" + "var options = " + JSON.stringify(options) + ";" + "var responseText = '';" + "var req = doRequest(options, function(response) {" + "response.setEncoding('utf8');" + "response.on('data', function(chunk) {" + "  responseText += chunk;" + "});" + "response.on('end', function() {" + "fs.writeFileSync('" + contentFile + "', JSON.stringify({err: null, data: {statusCode: response.statusCode, headers: response.headers, text: responseText}}), 'utf8');" + "fs.unlinkSync('" + syncFile + "');" + "});" + "response.on('error', function(error) {" + "fs.writeFileSync('" + contentFile + "', JSON.stringify({err: error}), 'utf8');" + "fs.unlinkSync('" + syncFile + "');" + "});" + "}).on('error', function(error) {" + "fs.writeFileSync('" + contentFile + "', JSON.stringify({err: error}), 'utf8');" + "fs.unlinkSync('" + syncFile + "');" + "});" + (data ? "req.write('" + JSON.stringify(data).slice(1, -1).replace(/'/g, "\\'") + "');" : "") + "req.end();"; // Start the other Node Process, executing this string
-
-      var syncProc = child_process.spawn(process.argv[0], ["-e", execString]);
-
-      while (fs.existsSync(syncFile)) {// Wait while the sync file is empty
-      }
-
-      var resp = JSON.parse(fs.readFileSync(contentFile, 'utf8')); // Kill the child process once the file has data
-
-      syncProc.stdin.end(); // Remove the temporary file
-
-      fs.unlinkSync(contentFile);
-
-      if (resp.err) {
-        self.handleError(resp.err);
-      } else {
-        response = resp.data;
-        self.status = resp.data.statusCode;
-        self.responseText = resp.data.text;
-        setState(self.DONE);
-      }
-    }
-  };
-  /**
-   * Called when an error is encountered to deal with it.
-   */
-
-
-  this.handleError = function (error) {
-    this.status = 0;
-    this.statusText = error;
-    this.responseText = error.stack;
-    errorFlag = true;
-    setState(this.DONE);
-    this.dispatchEvent('error');
-  };
-  /**
-   * Aborts a request.
-   */
-
-
-  this.abort = function () {
-    if (request) {
-      request.abort();
-      request = null;
-    }
-
-    headers = defaultHeaders;
-    this.status = 0;
-    this.responseText = "";
-    this.responseXML = "";
-    errorFlag = true;
-
-    if (this.readyState !== this.UNSENT && (this.readyState !== this.OPENED || sendFlag) && this.readyState !== this.DONE) {
-      sendFlag = false;
-      setState(this.DONE);
-    }
-
-    this.readyState = this.UNSENT;
-    this.dispatchEvent('abort');
-  };
-  /**
-   * Adds an event listener. Preferred method of binding to events.
-   */
-
-
-  this.addEventListener = function (event, callback) {
-    if (!(event in listeners)) {
-      listeners[event] = [];
-    } // Currently allows duplicate callbacks. Should it?
-
-
-    listeners[event].push(callback);
-  };
-  /**
-   * Remove an event callback that has already been bound.
-   * Only works on the matching funciton, cannot be a copy.
-   */
-
-
-  this.removeEventListener = function (event, callback) {
-    if (event in listeners) {
-      // Filter will return a new array with the callback removed
-      listeners[event] = listeners[event].filter(function (ev) {
-        return ev !== callback;
-      });
-    }
-  };
-  /**
-   * Dispatch any events, including both "on" methods and events attached using addEventListener.
-   */
-
-
-  this.dispatchEvent = function (event) {
-    if (typeof self["on" + event] === "function") {
-      self["on" + event]();
-    }
-
-    if (event in listeners) {
-      for (var i = 0, len = listeners[event].length; i < len; i++) {
-        listeners[event][i].call(self);
-      }
-    }
-  };
-  /**
-   * Changes readyState and calls onreadystatechange.
-   *
-   * @param int state New state
-   */
-
-
-  var setState = function setState(state) {
-    if (state == self.LOADING || self.readyState !== state) {
-      self.readyState = state;
-
-      if (settings.async || self.readyState < self.OPENED || self.readyState === self.DONE) {
-        self.dispatchEvent("readystatechange");
-      }
-
-      if (self.readyState === self.DONE && !errorFlag) {
-        self.dispatchEvent("load"); // @TODO figure out InspectorInstrumentation::didLoadXHR(cookie)
-
-        self.dispatchEvent("loadend");
-      }
-    }
-  };
-};
-
-var xmlhttprequest = {
-  XMLHttpRequest: XMLHttpRequest$1
-};
-
-var SGN$4, XMLHttpRequest$2, isBrowser;
+var SGN$4, XMLHttpRequest$1, isBrowser, ref;
 SGN$4 = sgn;
 isBrowser = util_1.isBrowser;
-XMLHttpRequest$2 = isBrowser() ? window.XMLHttpRequest : xmlhttprequest.XMLHttpRequest;
+XMLHttpRequest$1 = isBrowser() ? window.XMLHttpRequest : (ref = xmlhttprequest) != null ? ref.XMLHttpRequest : void 0;
 
 var request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-  var formData, header, headers, http$$1, key, method, queryParams, ref, ref1, ref2, ref3, url$$1, value;
-  http$$1 = new XMLHttpRequest$2();
-  method = (ref = options.method) != null ? ref : 'get';
-  url$$1 = options.url;
-  headers = (ref1 = options.headers) != null ? ref1 : {};
+  var formData, header, headers, http, key, method, queryParams, ref1, ref2, ref3, ref4, url, value;
+  http = new XMLHttpRequest$1();
+  method = (ref1 = options.method) != null ? ref1 : 'get';
+  url = options.url;
+  headers = (ref2 = options.headers) != null ? ref2 : {};
 
   if (options.qs != null) {
     queryParams = SGN$4.util.formatQueryParams(options.qs);
 
-    if (url$$1.indexOf('?') === -1) {
-      url$$1 += '?' + queryParams;
+    if (url.indexOf('?') === -1) {
+      url += '?' + queryParams;
     } else {
-      url$$1 += '&' + queryParams;
+      url += '&' + queryParams;
     }
   }
 
-  http$$1.open(method.toUpperCase(), url$$1);
+  http.open(method.toUpperCase(), url);
 
   if (options.timeout != null) {
-    http$$1.timeout = options.timeout;
+    http.timeout = options.timeout;
   }
 
   if (options.useCookies === true) {
-    http$$1.withCredentials = true;
+    http.withCredentials = true;
   }
 
   if (options.json === true) {
@@ -1167,44 +598,44 @@ var request = function request() {
     headers['Accept'] = 'application/json';
   }
 
-  ref2 = options.headers;
+  ref3 = options.headers;
 
-  for (header in ref2) {
-    value = ref2[header];
+  for (header in ref3) {
+    value = ref3[header];
 
     if (value != null) {
-      http$$1.setRequestHeader(header, value);
+      http.setRequestHeader(header, value);
     }
   }
 
-  http$$1.addEventListener('load', function () {
+  http.addEventListener('load', function () {
     var body;
-    headers = http$$1.getAllResponseHeaders().split('\r\n');
+    headers = http.getAllResponseHeaders().split('\r\n');
     headers = headers.reduce(function (acc, current, i) {
       var parts;
       parts = current.split(': ');
       acc[parts[0].toLowerCase()] = parts[1];
       return acc;
     }, {});
-    body = http$$1.responseText;
+    body = http.responseText;
 
     if (options.json === true) {
       body = JSON.parse(body);
     }
 
     callback(null, {
-      statusCode: http$$1.status,
+      statusCode: http.status,
       headers: headers,
       body: body
     });
   });
-  http$$1.addEventListener('error', function () {
+  http.addEventListener('error', function () {
     callback(new Error());
   });
-  http$$1.addEventListener('timeout', function () {
+  http.addEventListener('timeout', function () {
     callback(new Error());
   });
-  http$$1.addEventListener('progress', function (e) {
+  http.addEventListener('progress', function (e) {
     if (e.lengthComputable && typeof progressCallback === 'function') {
       progressCallback(e.loaded, e.total);
     }
@@ -1212,22 +643,22 @@ var request = function request() {
 
   if (options.formData != null) {
     formData = new FormData();
-    ref3 = options.formData;
+    ref4 = options.formData;
 
-    for (key in ref3) {
-      value = ref3[key];
+    for (key in ref4) {
+      value = ref4[key];
       formData.append(key, value);
     }
 
-    http$$1.send(formData);
+    http.send(formData);
   } else if (options.body != null) {
     if (options.json === true) {
-      http$$1.send(JSON.stringify(options.body));
+      http.send(JSON.stringify(options.body));
     } else {
-      http$$1.send(options.body);
+      http.send(options.body);
     }
   } else {
-    http$$1.send();
+    http.send();
   }
 };
 
@@ -1238,17 +669,17 @@ var fileUpload = function fileUpload() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-  var timeout, url$$1;
+  var timeout, url;
 
   if (options.file == null) {
     throw new Error('File is not defined');
   }
 
-  url$$1 = SGN$5.config.get('assetsFileUploadUrl');
+  url = SGN$5.config.get('assetsFileUploadUrl');
   timeout = 1000 * 60 * 60;
   SGN$5.request({
     method: 'post',
-    url: url$$1,
+    url: url,
     headers: {
       'Accept': 'application/json'
     },
@@ -1615,25 +1046,25 @@ var tracker = Tracker = function () {
       value: function ship() {
         var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
         var callback = arguments.length > 1 ? arguments[1] : undefined;
-        var http$$1, payload, url$$1;
-        http$$1 = new XMLHttpRequest();
-        url$$1 = SGN$6.config.get('eventsTrackUrl');
+        var http, payload, url;
+        http = new XMLHttpRequest();
+        url = SGN$6.config.get('eventsTrackUrl');
         payload = {
           events: events.map(function (event) {
             event.sentAt = new Date().toISOString();
             return event;
           })
         };
-        http$$1.open('POST', url$$1);
-        http$$1.setRequestHeader('Content-Type', 'application/json');
-        http$$1.setRequestHeader('Accept', 'application/json');
-        http$$1.timeout = 1000 * 20;
+        http.open('POST', url);
+        http.setRequestHeader('Content-Type', 'application/json');
+        http.setRequestHeader('Accept', 'application/json');
+        http.timeout = 1000 * 20;
 
-        http$$1.onload = function () {
+        http.onload = function () {
 
-          if (http$$1.status === 200) {
+          if (http.status === 200) {
             try {
-              callback(null, JSON.parse(http$$1.responseText));
+              callback(null, JSON.parse(http.responseText));
             } catch (error) {
               callback(SGN$6.util.error(new Error('Could not parse JSON')));
             }
@@ -1642,11 +1073,11 @@ var tracker = Tracker = function () {
           }
         };
 
-        http$$1.onerror = function () {
+        http.onerror = function () {
           callback(SGN$6.util.error(new Error('Could not perform network request')));
         };
 
-        http$$1.send(JSON.stringify(payload));
+        http.send(JSON.stringify(payload));
         return this;
       }
     }]);
@@ -1755,15 +1186,15 @@ parseCookies = function parseCookies() {
 var request$1 = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
-  var appKey, authToken, authTokenCookieName, timeout, url$$1;
-  url$$1 = SGN$7.config.get('graphUrl');
+  var appKey, authToken, authTokenCookieName, timeout, url;
+  url = SGN$7.config.get('graphUrl');
   timeout = 1000 * 12;
   appKey = SGN$7.config.get('appKey');
   authToken = SGN$7.config.get('authToken');
   authTokenCookieName = 'shopgun-auth-token';
   options = {
     method: 'post',
-    url: url$$1,
+    url: url,
     timeout: timeout,
     json: true,
     headers: {},
@@ -1784,7 +1215,7 @@ var request$1 = function request() {
     options.cookies = [{
       key: authTokenCookieName,
       value: authToken,
-      url: url$$1
+      url: url
     }];
   } else if (SGN$7.util.isBrowser()) {
     options.useCookies = true;
@@ -1833,13 +1264,13 @@ _request = function request() {
   var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
   var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
   SGN$8.CoreKit.session.ensure(function (err) {
-    var appSecret, appVersion, clientId, geo, headers, json, locale, qs, ref, ref1, ref2, token, url$$1;
+    var appSecret, appVersion, clientId, geo, headers, json, locale, qs, ref, ref1, ref2, token, url;
 
     if (err != null) {
       return callback(err);
     }
 
-    url$$1 = (ref = options.url) != null ? ref : '';
+    url = (ref = options.url) != null ? ref : '';
     headers = (ref1 = options.headers) != null ? ref1 : {};
     json = typeof options.json === 'boolean' ? options.json : true;
     token = SGN$8.config.get('coreSessionToken');
@@ -1887,7 +1318,7 @@ _request = function request() {
 
     return SGN$8.request({
       method: options.method,
-      url: SGN$8.config.get('coreUrl') + url$$1,
+      url: SGN$8.config.get('coreUrl') + url,
       qs: qs,
       body: options.body,
       formData: options.formData,
