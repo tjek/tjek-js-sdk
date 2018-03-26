@@ -1,2 +1,1 @@
-module.exports =
-    fileUpload: require './file-upload'
+export { default as fileUpload } from './file-upload'

@@ -1,6 +1,6 @@
-Popover = require './popover'
+import Popover from './popover'
 
-module.exports = (ctx, callback) ->
+export default (ctx, callback) ->
     items = ctx.items
     popover = null
 

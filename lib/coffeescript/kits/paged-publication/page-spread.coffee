@@ -1,5 +1,5 @@
-MicroEvent = require 'microevent'
-SGN = require '../../sgn'
+import MicroEvent from 'microevent'
+import { loadImage } from '../../util'
 
 class PagedPublicationPageSpread
     constructor: (@options = {}) ->
@@ -57,7 +57,7 @@ class PagedPublicationPageSpread
             loaderEl.className = 'sgn-pp-page__loader'
             loaderEl.innerHTML = "<span>#{page.label}</span>"
 
-            SGN.util.loadImage image, (err, width, height) =>
+            loadImage image, (err, width, height) =>
                 if not err?
                     isComplete = ++imageLoads is pageCount
 
@@ -96,7 +96,7 @@ class PagedPublicationPageSpread
             page = pages.find (page) -> page.id is id
             image = page.images.large
 
-            SGN.util.loadImage image, (err) =>
+            loadImage image, (err) =>
                 if not err? and @el.getAttribute('data-active') is 'true'
                     pageEl.setAttribute 'data-image', pageEl.style.backgroundImage
                     pageEl.style.backgroundImage = "url(#{image})"
@@ -121,4 +121,4 @@ class PagedPublicationPageSpread
 
 MicroEvent.mixin PagedPublicationPageSpread
 
-module.exports = PagedPublicationPageSpread
+export default PagedPublicationPageSpread
