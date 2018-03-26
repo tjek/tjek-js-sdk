@@ -74,7 +74,7 @@
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
     "sha256": "^0.2.0",
-    "verso-browser": "^1.0.18",
+    "verso-browser": "^1.0.20",
     "xmlhttprequest": "driverdan/node-XMLHttpRequest#a88264a27bffd7c8b73498b5a395261502dd7820"
   },
   "devDependencies": {
@@ -82,12 +82,12 @@
     "@babel/plugin-external-helpers": "^7.0.0-beta.42",
     "@babel/preset-env": "^7.0.0-beta.42",
     "app-root-path": "^2.0.1",
-    "aws-sdk": "^2.211.0",
-    "bundlesize": "^0.16.0",
+    "aws-sdk": "^2.213.1",
+    "bundlesize": "^0.17.0",
     "coffeelint": "^2.1.0",
     "coffeescript": "^2.2.3",
     "gh-pages": "^1.1.0",
-    "jest": "^22.4.2",
+    "jest": "^22.4.3",
     "jest-cli": "^23.0.0-alpha.0",
     "jest-puppeteer": "^2.2.1",
     "memory-fs": "^0.4.1",
@@ -108,6 +108,6 @@
     "stylus": "^0.54.5",
     "thenify": "^3.3.0",
     "uglify-es": "^3.3.10",
-    "webpack": "^3.11.0"
+    "webpack": "^4.2.0"
   }
 }
