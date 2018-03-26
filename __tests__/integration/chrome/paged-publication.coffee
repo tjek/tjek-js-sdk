@@ -1,5 +1,5 @@
-puppeteer = require('puppeteer')
-path = require('path')
+puppeteer = require 'puppeteer'
+path = require 'path'
 
 describe 'Chrome: Paged Publication', ->
     beforeAll ->
