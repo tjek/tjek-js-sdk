@@ -1,44 +1,24 @@
-import * as util from './util'
+{ isBrowser } = require './util'
 
-import { config } from './core'
-import client from './client'
-import clientLocalStorage from './storage/client-local'
-import clientSessionStorage from './storage/client-session'
-import * as clientCookieStorage from './storage/client-cookie'
-
-import request from './request'
-
-import * as AssetsKit from './kits/assets'
-import * as EventsKit from './kits/events'
-import * as GraphKit from './kits/graph'
-import * as CoreKit from './kits/core'
-import * as PagedPublicationKit from './kits/paged-publication'
-import * as IncitoPublicationKit from './kits/incito-publication'
-import * as CoreUIKit from './kits/core-ui'
-
-
-
-SGN =
-    config: config
-    util: util
+SGN = require './core'
 
 # Expose storage backends.
 SGN.storage =
-    local: clientLocalStorage
-    session: clientSessionStorage
-    cookie: clientCookieStorage
+    local: require './storage/client-local'
+    session: require './storage/client-session'
+    cookie: require './storage/client-cookie'
 
 # Expose request handler.
-SGN.request = request
+SGN.request = require './request'
 
 # Expose the different kits.
-SGN.AssetsKit = AssetsKit
-SGN.EventsKit = EventsKit
-SGN.GraphKit = GraphKit
-SGN.CoreKit = CoreKit
-SGN.PagedPublicationKit = PagedPublicationKit
-SGN.IncitoPublicationKit = IncitoPublicationKit
-SGN.CoreUIKit = CoreUIKit
+SGN.AssetsKit = require './kits/assets'
+SGN.EventsKit = require './kits/events'
+SGN.GraphKit = require './kits/graph'
+SGN.CoreKit = require './kits/core'
+SGN.PagedPublicationKit = require './kits/paged-publication'
+SGN.IncitoPublicationKit = require './kits/incito-publication'
+SGN.CoreUIKit = require './kits/core-ui'
 
 # Set the core session from the cookie store if possible.
 session = SGN.storage.cookie.get 'session'
@@ -48,7 +28,18 @@ if typeof session is 'object'
         coreSessionToken: session.token
         coreSessionClientId: session.client_id
 
-SGN.client = client
+SGN.client = do ->
+    id = SGN.storage.local.get 'client-id'
+    id = id?.data
+    firstOpen = not id?
+
+    if firstOpen
+        id = SGN.util.uuid()
+        
+        SGN.storage.local.set 'client-id', id
+
+    firstOpen: firstOpen
+    id: id
 
 # Listen for changes in the config.
 SGN.config.bind 'change', (changedAttributes) ->
@@ -60,17 +51,18 @@ SGN.config.bind 'change', (changedAttributes) ->
 
     return
 
-if util.isBrowser()
+if isBrowser()
     # Autoconfigure the SDK.
     scriptEl = document.getElementById 'sgn-sdk'
+
     if scriptEl?
         appKey = scriptEl.getAttribute 'data-app-key'
         trackId = scriptEl.getAttribute 'data-track-id'
-        autoConfig = {}
+        config = {}
 
-        autoConfig.appKey = appKey if appKey?
-        autoConfig.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
+        config.appKey = appKey if appKey?
+        config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
 
-        SGN.config.set autoConfig
+        SGN.config.set config
 
-export default SGN
+module.exports = SGN

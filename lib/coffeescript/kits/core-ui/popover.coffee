@@ -1,7 +1,7 @@
-import MicroEvent from 'microevent'
-import Gator from '../../../../vendor/gator'
-import Mustache from 'mustache'
-import keyCodes from '../../key-codes'
+MicroEvent = require 'microevent'
+Gator = require '../../../../vendor/gator'
+Mustache = require 'mustache'
+keyCodes = require '../../key-codes'
 
 template = """
 <div class="sgn-popover__background" data-close></div>
@@ -40,7 +40,7 @@ class Popover
         trigger = @trigger.bind @
         view =
             header: header
-            singleChoiceItems: @options.singleChoiceItems?.map (item, i) ->
+            singleChoiceItems: @options.singleChoiceItems.map (item, i) ->
                 item: item
                 index: i
 
@@ -144,4 +144,4 @@ class Popover
 
 MicroEvent.mixin Popover
 
-export default Popover
+module.exports = Popover

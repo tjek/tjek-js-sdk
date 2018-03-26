@@ -1,5 +1,5 @@
-import Incito from 'incito-browser'
-import MicroEvent from 'microevent'
+Incito = require 'incito-browser'
+MicroEvent = require 'microevent'
 
 class Viewer
     constructor: (@el, @options = {}) ->
@@ -35,4 +35,4 @@ class Viewer
 
 MicroEvent.mixin Viewer
 
-export default Viewer
+module.exports = Viewer

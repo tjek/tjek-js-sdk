@@ -1,14 +1,12 @@
-import { config } from '../../core'
-import request from '../../request'
-import { error } from '../../util'
+SGN = require '../../sgn'
 
-export default (options = {}, callback, progressCallback) ->
+module.exports = (options = {}, callback, progressCallback) ->
     throw new Error('File is not defined') if not options.file?
 
-    url = config.get 'assetsFileUploadUrl'
+    url = SGN.config.get 'assetsFileUploadUrl'
     timeout = 1000 * 60 * 60
 
-    request
+    SGN.request
         method: 'post'
         url: url
         headers:
@@ -18,14 +16,14 @@ export default (options = {}, callback, progressCallback) ->
         timeout: timeout
     , (err, data) ->
         if err?
-            callback error(new Error('Request error'),
+            callback SGN.util.error(new Error('Request error'),
                 code: 'RequestError'
             )
         else
             if data.statusCode is 200
                 callback null, JSON.parse(data.body)
             else
-                callback error(new Error('Request error'),
+                callback SGN.util.error(new Error('Request error'),
                     code: 'RequestError'
                     statusCode: data.statusCode
                 )

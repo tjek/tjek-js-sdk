@@ -1,6 +1,6 @@
-import MicroEvent from 'microevent'
-import keyCodes from '../../key-codes'
-import { throttle } from '../../util'
+MicroEvent = require 'microevent'
+SGN = require '../../sgn'
+keyCodes = require '../../key-codes'
 
 class PagedPublicationControls
     constructor: (el, @options = {}) ->
@@ -13,7 +13,7 @@ class PagedPublicationControls
             nextControl: el.querySelector '.sgn-pp__control[data-direction=next]'
             close: el.querySelector '.sgn-pp--close'
 
-        @keyDownListener = throttle @keyDown, 150, @
+        @keyDownListener = SGN.util.throttle @keyDown, 150, @
 
         @els.root.addEventListener 'keydown', @keyDownListener, false if @options.keyboard is true
         @els.prevControl.addEventListener 'click', @prevClicked.bind(@), false if @els.prevControl?
@@ -97,4 +97,4 @@ class PagedPublicationControls
 
 MicroEvent.mixin PagedPublicationControls
 
-export default PagedPublicationControls
+module.exports = PagedPublicationControls

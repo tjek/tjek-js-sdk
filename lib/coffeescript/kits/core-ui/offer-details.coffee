@@ -1,4 +1,4 @@
-export default class OfferDetails
+module.exports = class OfferDetails
     constructor: (@options = {}) ->
         @el = document.createElement 'div'
 

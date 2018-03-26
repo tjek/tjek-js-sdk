@@ -1,5 +1,6 @@
-import Config from './config'
-
+Config = require './config'
+translations = require './translations'
+util = require './util'
 config = new Config()
 
 # Set default values.
@@ -11,7 +12,9 @@ config.set
     eventsPulseUrl: 'wss://events.service.shopgun.com/pulse'
     assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
 
-export config = config
-
-export default
+module.exports =
     config: config
+
+    translations: translations
+
+    util: util
