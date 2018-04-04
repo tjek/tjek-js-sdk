@@ -1,7 +1,7 @@
 # ShopGun JavaScript SDK
 
 [![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=develop)](https://travis-ci.org/shopgun/shopgun-js-sdk)
-[![NPM version](https://img.shields.io/npm/v/shopgun-sdk.svg?style=flat)](https://npmjs.org/package/shopgun-sdk)
+[![npm version](https://badge.fury.io/js/shopgun-sdk.svg)](https://badge.fury.io/js/shopgun-sdk)
 
 This SDK works both client-side in your browser but also server-side in a Node.js environment.
 
