@@ -53,10 +53,11 @@ module.exports = async function compile(code, config = {}) {
   //point webpack to memoryfs for the entry file
   const compiler = webpack({
     entry: entry,
+    ...config,
     output: {
-      filename: outputName
+      filename: outputName,
+      ...config.output,
     },
-    ...config
   });
   compiler.run = thenify(compiler.run);
 
