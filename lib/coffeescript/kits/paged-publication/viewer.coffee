@@ -18,7 +18,7 @@ class Viewer
             color: @options.color
         @_hotspots = new Hotspots()
         @_controls = new Controls @el, keyboard: @options.keyboard
-        @_eventTracking = new EventTracking()
+        @_eventTracking = new EventTracking @options.eventTracker, @options.id
         @viewSession = SGN.util.uuid()
         @hotspots = null
         @hotspotQueue = []
@@ -81,26 +81,7 @@ class Viewer
 
         @
 
-    _trackEvent: (e) ->
-        type = e.type
-        idType = 'legacy'
-        properties = pagedPublication:
-            id: [idType, @options.id]
-            ownedBy: [idType, @options.ownedBy]
-        eventTracker = @options.eventTracker
-
-        properties[key] = value for key, value of e.properties
-
-        eventTracker.trackEvent type, properties if eventTracker?
-
-        return
-
     _setupEventListeners: ->
-        @_eventTracking.bind 'trackEvent', (e) =>
-            @_trackEvent e
-
-            return
-
         @_controls.bind 'prev', (e) =>
             @prev e
             

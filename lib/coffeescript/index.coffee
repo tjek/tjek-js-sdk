@@ -31,14 +31,12 @@ if typeof session is 'object'
 SGN.client = do ->
     id = SGN.storage.local.get 'client-id'
     id = id?.data
-    firstOpen = not id?
 
-    if firstOpen
+    if not id?
         id = SGN.util.uuid()
         
         SGN.storage.local.set 'client-id', id
 
-    firstOpen: firstOpen
     id: id
 
 # Listen for changes in the config.
@@ -46,8 +44,7 @@ SGN.config.bind 'change', (changedAttributes) ->
     eventTracker = changedAttributes.eventTracker
 
     if eventTracker?
-        eventTracker.trackEvent 'first-client-session-opened', {}, '1.0.0' if SGN.client.firstOpen is true
-        eventTracker.trackEvent 'client-session-opened', {}, '1.0.0'
+        eventTracker.trackClientSessionOpened()
 
     return
 

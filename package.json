@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.1.6",
+  "version": "2.2.0",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -71,6 +71,7 @@
   "dependencies": {
     "core-js": "^2.5.5",
     "incito-browser": "1.1.4",
+    "md5": "^2.2.1",
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
     "sha256": "^0.2.0",
