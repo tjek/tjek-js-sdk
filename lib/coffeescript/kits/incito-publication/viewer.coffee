@@ -11,11 +11,6 @@ class Viewer
     start: ->
         @incito.start()
 
-        @_trackEvent
-            type: 'x-incito-publication-opened'
-            properties:
-                id: @options.id
-
         @
     
     destroy: ->
