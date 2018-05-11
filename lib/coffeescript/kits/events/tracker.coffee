@@ -31,7 +31,7 @@ module.exports = class Tracker
             @[key] = options[key] or value
 
         @location =
-            hash: undefined
+            geohash: undefined
             time: undefined
             country: undefined
         @dispatching = false
@@ -51,7 +51,7 @@ module.exports = class Tracker
             '_i': SGN.util.uuid()
             '_t': Math.round(new Date().getTime() / 1000)
             '_a': @trackId
-            'l.h': @location.hash
+            'l.h': @location.geohash
             'l.ht': @location.time
             'l.c': @location.country
         })
