@@ -30,7 +30,7 @@ if typeof session is 'object'
 
 SGN.client = do ->
     id = SGN.storage.local.get 'client-id'
-    id = id?.data
+    id = id.data if id?.data
 
     if not id?
         id = SGN.util.uuid()

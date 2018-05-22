@@ -45,6 +45,9 @@ module.exports = class Tracker
         throw SGN.util.error(new Error('Event type is required')) if typeof type isnt 'number'
         return if not @trackId?
 
+        if SGN.config.get('appKey') is @trackId
+            throw SGN.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
+
         pool.push Object.assign({}, properties, {
             '_e': type
             '_v': version
@@ -120,7 +123,7 @@ module.exports = class Tracker
             callback SGN.util.error(new Error('Could not perform network request'))
 
             return
-        http.send JSON.stringify(events)
+        http.send JSON.stringify(events: events)
 
         @
 
