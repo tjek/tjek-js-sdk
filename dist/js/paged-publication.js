@@ -29,6 +29,8 @@
                     bootstrapper.applyHotspots(viewer, hotspots);
                 }
             });
+        } else {
+            console.log(err);
         }
     });
 })();
