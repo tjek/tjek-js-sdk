@@ -88,7 +88,7 @@ class PagedPublicationEventTracking
         return
     
     getViewToken: (parts) ->
-        util.btoa md5(parts.join('')).slice(0,8)
+        util.btoa md5(parts.join('')).slice(0, 8)
 
 MicroEvent.mixin PagedPublicationEventTracking
 

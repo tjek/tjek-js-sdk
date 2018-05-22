@@ -17,16 +17,6 @@ class Viewer
         @incito.destroy()
 
         return
-    
-    _trackEvent: (e) ->
-        type = e.type
-        properties =
-            id: @options.id
-        eventTracker = @options.eventTracker
-
-        properties[key] = value for key, value of e.properties
-
-        eventTracker.trackEvent type, properties if eventTracker?
 
 MicroEvent.mixin Viewer
 
