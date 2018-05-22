@@ -31,9 +31,9 @@ module.exports = class Tracker
             @[key] = options[key] or value
 
         @location =
-            geohash: undefined
-            time: undefined
-            country: undefined
+            geohash: null
+            time: null
+            country: null
         @dispatching = false
 
         # Dispatch events periodically.
@@ -47,18 +47,20 @@ module.exports = class Tracker
 
         if SGN.config.get('appKey') is @trackId
             throw SGN.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
-
-        pool.push Object.assign({}, properties, {
+        
+        evt = Object.assign {}, properties, {
             '_e': type
             '_v': version
             '_i': SGN.util.uuid()
             '_t': Math.round(new Date().getTime() / 1000)
             '_a': @trackId
-            'l.h': @location.geohash
-            'l.ht': @location.time
-            'l.c': @location.country
-        })
+        }
 
+        evt['l.h'] = @location.geohash if @location.geohash?
+        evt['l.ht'] = @location.time if @location.time?
+        evt['l.c'] = @location.country if @location.country?
+
+        pool.push evt
         pool.shift() while @getPoolSize() > @poolLimit
 
         @
@@ -88,7 +90,7 @@ module.exports = class Tracker
             if not err?
                 response.events.forEach (resEvent) ->
                     if resEvent.status is 'validation_error' or resEvent.status is 'ack'
-                        pool = pool.filter (poolEvent) -> poolEvent.id isnt resEvent.id
+                        pool = pool.filter (poolEvent) -> poolEvent._i isnt resEvent.id
                     else if 'nack'
                         nacks++
 
