@@ -89,7 +89,7 @@ class PagedPublicationEventTracking
     
     getViewToken: (parts) ->
         str = parts.join ''
-        viewToken = util.btoa String.fromCharCode.apply(null, (new Uint8Array(md5(str, {asBytes: true}))).slice(0,8))
+        viewToken = util.btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
 
         viewToken
 
