@@ -22,7 +22,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.0.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
-By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself.
+By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://business.shopgun.com/developers/apps).
 
 ### In Node.js
 
