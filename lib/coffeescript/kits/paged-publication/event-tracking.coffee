@@ -88,7 +88,10 @@ class PagedPublicationEventTracking
         return
     
     getViewToken: (parts) ->
-        util.btoa md5(parts.join('')).slice(0, 8)
+        str = parts.join ''
+        viewToken = util.btoa(String.fromCharCode.apply(null, (new Uint8Array(md5(str, {asBytes: true}))).slice(0,8)))
+
+        viewToken
 
 MicroEvent.mixin PagedPublicationEventTracking
 
