@@ -1,4 +1,3 @@
-puppeteer = require 'puppeteer'
 path = require 'path'
 
 describe 'Chrome: Paged Publication', ->

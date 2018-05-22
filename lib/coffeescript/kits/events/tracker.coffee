@@ -46,6 +46,7 @@ module.exports = class Tracker
         return if not @trackId?
 
         if SGN.config.get('appKey') is @trackId
+            # coffeelint: disable=max_line_length
             throw SGN.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
         
         evt = Object.assign {}, properties, {
