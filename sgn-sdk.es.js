@@ -1,12 +1,19 @@
+import 'core-js/modules/web.dom.iterable';
+import 'core-js/modules/es6.array.iterator';
+import 'core-js/modules/es6.object.keys';
+import 'core-js/modules/es6.regexp.constructor';
+import 'core-js/modules/es6.regexp.to-string';
 import 'core-js/modules/es6.regexp.replace';
 import 'core-js/modules/es6.function.name';
 import require$$0 from 'microevent';
 import mustache from 'mustache';
 import 'core-js/modules/es6.regexp.split';
 import xmlhttprequest from 'xmlhttprequest';
+import 'core-js/modules/es6.object.assign';
 import sha256 from 'sha256';
 import 'core-js/modules/es6.array.find';
 import versoBrowser from 'verso-browser';
+import md5 from 'md5';
 import incitoBrowser from 'incito-browser';
 import 'core-js/modules/es6.regexp.match';
 
@@ -437,7 +444,7 @@ config$1.set({
   locale: 'en_US',
   coreUrl: 'https://api.etilbudsavis.dk',
   graphUrl: 'https://graph.service.shopgun.com',
-  eventsTrackUrl: 'https://events.service.shopgun.com/track',
+  eventsTrackUrl: 'https://events.service.shopgun.com/sync',
   eventsPulseUrl: 'wss://events.service.shopgun.com/pulse',
   assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
 });
@@ -759,22 +766,12 @@ var tracker = Tracker = function () {
         this[key] = options[key] || value;
       }
 
-      this.dispatching = false;
-      this.session = {
-        id: SGN$6.util.uuid()
+      this.location = {
+        geohash: null,
+        time: null,
+        country: null
       };
-      this.client = {
-        trackId: this.trackId,
-        id: SGN$6.client.id
-      };
-      this.view = {
-        path: [],
-        previousPath: [],
-        uri: null
-      };
-      this.location = {};
-      this.application = {};
-      this.identity = {}; // Dispatch events periodically.
+      this.dispatching = false; // Dispatch events periodically.
 
       this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
       return;
@@ -784,9 +781,10 @@ var tracker = Tracker = function () {
       key: "trackEvent",
       value: function trackEvent(type) {
         var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '1.0.0';
+        var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+        var evt;
 
-        if (typeof type !== 'string') {
+        if (typeof type !== 'number') {
           throw SGN$6.util.error(new Error('Event type is required'));
         }
 
@@ -794,19 +792,32 @@ var tracker = Tracker = function () {
           return;
         }
 
-        pool.push({
-          id: SGN$6.util.uuid(),
-          type: type,
-          version: version,
-          recordedAt: new Date().toISOString(),
-          sentAt: null,
-          client: {
-            id: this.client.id,
-            trackId: this.client.trackId
-          },
-          context: this.getContext(),
-          properties: properties
+        if (SGN$6.config.get('appKey') === this.trackId) {
+          // coffeelint: disable=max_line_length
+          throw SGN$6.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
+        }
+
+        evt = Object.assign({}, properties, {
+          '_e': type,
+          '_v': version,
+          '_i': SGN$6.util.uuid(),
+          '_t': Math.round(new Date().getTime() / 1000),
+          '_a': this.trackId
         });
+
+        if (this.location.geohash != null) {
+          evt['l.h'] = this.location.geohash;
+        }
+
+        if (this.location.time != null) {
+          evt['l.ht'] = this.location.time;
+        }
+
+        if (this.location.country != null) {
+          evt['l.c'] = this.location.country;
+        }
+
+        pool.push(evt);
 
         while (this.getPoolSize() > this.poolLimit) {
           pool.shift();
@@ -815,186 +826,20 @@ var tracker = Tracker = function () {
         return this;
       }
     }, {
-      key: "identify",
-      value: function identify(id) {
-        this.identity.id = id;
-        return this;
-      }
-    }, {
       key: "setLocation",
       value: function setLocation() {
         var location = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var ref, ref1;
-        this.location.determinedAt = new Date(location.timestamp).toISOString();
-        this.location.latitude = location.latitude;
-        this.location.longitude = location.longitude;
-        this.location.altitude = location.altitude;
-        this.location.accuracy = {
-          horizontal: (ref = location.accuracy) != null ? ref.horizontal : void 0,
-          vertical: (ref1 = location.accuracy) != null ? ref1.vertical : void 0
-        };
-        this.location.speed = location.speed;
-        this.location.floor = location.floor;
+        var key, value;
+
+        for (key in location) {
+          value = location[key];
+
+          if (this.location.hasOwnProperty(key)) {
+            this.location[key] = value;
+          }
+        }
+
         return this;
-      }
-    }, {
-      key: "setApplication",
-      value: function setApplication() {
-        var application = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        this.application.name = application.name;
-        this.application.version = application.version;
-        this.application.build = application.build;
-        return this;
-      }
-    }, {
-      key: "setView",
-      value: function setView(path) {
-        this.view.previousPath = this.view.path;
-
-        if (Array.isArray(path) === true) {
-          this.view.path = path;
-        }
-
-        this.view.uri = window.location.href;
-        return this;
-      }
-    }, {
-      key: "getView",
-      value: function getView() {
-        var view;
-        view = {};
-
-        if (this.view.path.length > 0) {
-          view.path = this.view.path;
-        }
-
-        if (this.view.previousPath.length > 0) {
-          view.previousPath = this.view.previousPath;
-        }
-
-        if (this.view.uri != null) {
-          view.uri = this.view.uri;
-        }
-
-        return view;
-      }
-    }, {
-      key: "getContext",
-      value: function getContext() {
-        var application, campaign, context, loc, os, ref, ref1, screenDimensions;
-        screenDimensions = SGN$6.util.getScreenDimensions();
-        os = SGN$6.util.getOS();
-        context = {
-          userAgent: window.navigator.userAgent,
-          locale: navigator.language,
-          timeZone: {
-            utcOffsetSeconds: SGN$6.util.getUtcOffsetSeconds(),
-            utcDstOffsetSeconds: SGN$6.util.getUtcDstOffsetSeconds()
-          },
-          device: {
-            screen: {
-              width: screenDimensions.physical.width,
-              height: screenDimensions.physical.height,
-              density: screenDimensions.density
-            }
-          },
-          session: {
-            id: this.session.id
-          },
-          view: this.getView()
-        };
-        application = {
-          name: this.application.name,
-          version: this.application.version,
-          build: this.application.build
-        };
-        campaign = {
-          source: SGN$6.util.getQueryParam('utm_source'),
-          medium: SGN$6.util.getQueryParam('utm_medium'),
-          name: SGN$6.util.getQueryParam('utm_campaign'),
-          term: SGN$6.util.getQueryParam('utm_term'),
-          content: SGN$6.util.getQueryParam('utm_content')
-        };
-        loc = {
-          determinedAt: this.location.determinedAt,
-          latitude: this.location.latitude,
-          longitude: this.location.longitude,
-          altitude: this.location.altitude,
-          speed: this.location.speed,
-          floor: this.location.floor,
-          accuracy: {
-            horizontal: (ref = this.location.accuracy) != null ? ref.horizontal : void 0,
-            vertical: (ref1 = this.location.accuracy) != null ? ref1.vertical : void 0
-          }
-        };
-
-        if (os != null) {
-          // Operating system.
-          context.os = {
-            name: os
-          };
-        }
-
-        if (document.referrer.length > 0) {
-          // Session referrer.
-          context.session.referrer = document.referrer;
-        } // Application.
-
-
-        ['name', 'version', 'build'].forEach(function (key) {
-          if (typeof application[key] !== 'string' || application[key].length === 0) {
-            delete application[key];
-          }
-        });
-
-        if (Object.keys(application).length > 0) {
-          context.application = application;
-        } // Campaign.
-
-
-        ['source', 'medium', 'name', 'term', 'content'].forEach(function (key) {
-          if (typeof campaign[key] !== 'string' || campaign[key].length === 0) {
-            delete campaign[key];
-          }
-        });
-
-        if (Object.keys(campaign).length > 0) {
-          context.campaign = campaign;
-        } // Location.
-
-
-        ['latitude', 'longitude', 'altitude', 'speed', 'floor'].forEach(function (key) {
-          if (typeof loc[key] !== 'number') {
-            delete loc[key];
-          }
-        });
-
-        if (typeof loc.accuracy.horizontal !== 'number') {
-          delete loc.accuracy.horizontal;
-        }
-
-        if (typeof loc.accuracy.vertical !== 'number') {
-          delete loc.accuracy.vertical;
-        }
-
-        if (Object.keys(loc.accuracy).length === 0) {
-          delete loc.accuracy;
-        }
-
-        if (typeof loc.determinedAt !== 'string' || loc.determinedAt.length === 0) {
-          delete loc.determinedAt;
-        }
-
-        if (Object.keys(loc).length > 0) {
-          context.location = loc;
-        }
-
-        if (this.identity.id != null) {
-          // Person identifier.
-          context.personId = this.identity.id;
-        }
-
-        return context;
       }
     }, {
       key: "getPoolSize",
@@ -1026,7 +871,7 @@ var tracker = Tracker = function () {
             response.events.forEach(function (resEvent) {
               if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
                 pool = pool.filter(function (poolEvent) {
-                  return poolEvent.id !== resEvent.id;
+                  return poolEvent._i !== resEvent.id;
                 });
               } else {
                 nacks++;
@@ -1046,15 +891,9 @@ var tracker = Tracker = function () {
       value: function ship() {
         var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
         var callback = arguments.length > 1 ? arguments[1] : undefined;
-        var http, payload, url;
+        var http, url;
         http = new XMLHttpRequest();
         url = SGN$6.config.get('eventsTrackUrl');
-        payload = {
-          events: events.map(function (event) {
-            event.sentAt = new Date().toISOString();
-            return event;
-          })
-        };
         http.open('POST', url);
         http.setRequestHeader('Content-Type', 'application/json');
         http.setRequestHeader('Accept', 'application/json');
@@ -1077,8 +916,35 @@ var tracker = Tracker = function () {
           callback(SGN$6.util.error(new Error('Could not perform network request')));
         };
 
-        http.send(JSON.stringify(payload));
+        http.send(JSON.stringify({
+          events: events
+        }));
         return this;
+      }
+    }, {
+      key: "trackPagedPublicationOpened",
+      value: function trackPagedPublicationOpened(properties, version) {
+        return this.trackEvent(1, properties, version);
+      }
+    }, {
+      key: "trackPagedPublicationPageDisappeared",
+      value: function trackPagedPublicationPageDisappeared(properties, version) {
+        return this.trackEvent(2, properties, version);
+      }
+    }, {
+      key: "trackOfferOpened",
+      value: function trackOfferOpened(properties, version) {
+        return this.trackEvent(3, properties, version);
+      }
+    }, {
+      key: "trackClientSessionOpened",
+      value: function trackClientSessionOpened(properties, version) {
+        return this.trackEvent(4, properties, version);
+      }
+    }, {
+      key: "trackSearched",
+      value: function trackSearched(properties, version) {
+        return this.trackEvent(5, properties, version);
       }
     }]);
 
@@ -1513,9 +1379,9 @@ var core$1 = {
   session: session$1
 };
 
-var MicroEvent$2, PagedPublicationPageSpread, SGN$11;
+var MicroEvent$2, PagedPublicationPageSpread, SGN$b;
 MicroEvent$2 = require$$0;
-SGN$11 = sgn;
+SGN$b = sgn;
 
 PagedPublicationPageSpread =
 /*#__PURE__*/
@@ -1594,7 +1460,7 @@ function () {
         el.appendChild(pageEl);
         loaderEl.className = 'sgn-pp-page__loader';
         loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
-        SGN$11.util.loadImage(image, function (err, width, height) {
+        SGN$b.util.loadImage(image, function (err, width, height) {
           var isComplete;
 
           if (err == null) {
@@ -1649,7 +1515,7 @@ function () {
           return page.id === id;
         });
         image = page.images.large;
-        SGN$11.util.loadImage(image, function (err) {
+        SGN$b.util.loadImage(image, function (err) {
           if (err == null && _this2.el.getAttribute('data-active') === 'true') {
             pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
             pageEl.style.backgroundImage = "url(".concat(image, ")");
@@ -1675,10 +1541,10 @@ function () {
 MicroEvent$2.mixin(PagedPublicationPageSpread);
 var pageSpread = PagedPublicationPageSpread;
 
-var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$12;
+var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$c;
 MicroEvent$3 = require$$0;
 PageSpread = pageSpread;
-SGN$12 = sgn;
+SGN$c = sgn;
 
 PagedPublicationPageSpreads =
 /*#__PURE__*/
@@ -1727,7 +1593,7 @@ function () {
       } else {
         firstPage = pages.shift();
         lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-        midstPageSpreads = SGN$12.util.chunk(pages, 2);
+        midstPageSpreads = SGN$c.util.chunk(pages, 2);
 
         if (firstPage != null) {
           pageSpreads.push([firstPage]);
@@ -1773,11 +1639,11 @@ function () {
 MicroEvent$3.mixin(PagedPublicationPageSpreads);
 var pageSpreads = PagedPublicationPageSpreads;
 
-var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$13, Verso;
+var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$d, Verso;
 MicroEvent$4 = require$$0;
 Verso = versoBrowser;
 PageSpreads = pageSpreads;
-SGN$13 = sgn;
+SGN$d = sgn;
 
 PagedPublicationCore = function () {
   var PagedPublicationCore =
@@ -1817,7 +1683,7 @@ PagedPublicationCore = function () {
       value: function start() {
         this.getVerso().start();
         this.visibilityChangeListener = this.visibilityChange.bind(this);
-        this.resizeListener = SGN$13.util.throttle(this.resize, this.getOption('resizeDelay'), this);
+        this.resizeListener = SGN$d.util.throttle(this.resize, this.getOption('resizeDelay'), this);
         this.unloadListener = this.unload.bind(this);
         document.addEventListener('visibilitychange', this.visibilityChangeListener, false);
         window.addEventListener('resize', this.resizeListener, false);
@@ -1870,7 +1736,7 @@ PagedPublicationCore = function () {
     }, {
       key: "setColor",
       value: function setColor(color) {
-        this.els.root.setAttribute('data-color-brightness', SGN$13.util.getColorBrightness(color));
+        this.els.root.setAttribute('data-color-brightness', SGN$d.util.getColorBrightness(color));
         this.els.root.style.backgroundColor = color;
       }
     }, {
@@ -2478,9 +2344,9 @@ var keyCodes = {
   NUMBER_ONE: 49
 };
 
-var MicroEvent$6, PagedPublicationControls, SGN$14, keyCodes$1;
+var MicroEvent$6, PagedPublicationControls, SGN$e, keyCodes$1;
 MicroEvent$6 = require$$0;
-SGN$14 = sgn;
+SGN$e = sgn;
 keyCodes$1 = keyCodes;
 
 PagedPublicationControls =
@@ -2501,7 +2367,7 @@ function () {
       nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
       close: el.querySelector('.sgn-pp--close')
     };
-    this.keyDownListener = SGN$14.util.throttle(this.keyDown, 150, this);
+    this.keyDownListener = SGN$e.util.throttle(this.keyDown, 150, this);
 
     if (this.options.keyboard === true) {
       this.els.root.addEventListener('keydown', this.keyDownListener, false);
@@ -2616,16 +2482,20 @@ function () {
 MicroEvent$6.mixin(PagedPublicationControls);
 var controls = PagedPublicationControls;
 
-var MicroEvent$7, PagedPublicationEventTracking;
+var MicroEvent$7, PagedPublicationEventTracking, SGN$f, md5$1, util$2;
 MicroEvent$7 = require$$0;
+md5$1 = md5;
+util$2 = util_1;
+SGN$f = sgn;
 
 PagedPublicationEventTracking =
 /*#__PURE__*/
 function () {
-  function PagedPublicationEventTracking() {
+  function PagedPublicationEventTracking(eventTracker, id) {
     _classCallCheck(this, PagedPublicationEventTracking);
 
-    this.doubleClicked = this.doubleClicked.bind(this);
+    this.eventTracker = eventTracker;
+    this.id = id;
     this.hidden = true;
     this.pageSpread = null;
     this.bind('appeared', this.appeared.bind(this));
@@ -2633,12 +2503,7 @@ function () {
     this.bind('beforeNavigation', this.beforeNavigation.bind(this));
     this.bind('afterNavigation', this.afterNavigation.bind(this));
     this.bind('attemptedNavigation', this.attemptedNavigation.bind(this));
-    this.bind('clicked', this.clicked.bind(this));
-    this.bind('doubleClicked', this.doubleClicked.bind(this));
-    this.bind('pressed', this.pressed.bind(this));
     this.bind('panStart', this.panStart.bind(this));
-    this.bind('zoomedIn', this.zoomedIn.bind(this));
-    this.bind('zoomedOut', this.zoomedOut.bind(this));
     this.bind('destroyed', this.destroy.bind(this));
     return;
   }
@@ -2649,66 +2514,26 @@ function () {
       this.pageSpreadDisappeared();
     }
   }, {
-    key: "trackEvent",
-    value: function trackEvent(type) {
-      var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      this.trigger('trackEvent', {
-        type: type,
-        properties: properties
-      });
-    }
-  }, {
     key: "trackOpened",
     value: function trackOpened(properties) {
-      this.trackEvent('paged-publication-opened', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageClicked",
-    value: function trackPageClicked(properties) {
-      this.trackEvent('paged-publication-page-clicked', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageDoubleClicked",
-    value: function trackPageDoubleClicked(properties) {
-      this.trackEvent('paged-publication-page-double-clicked', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageLongPressed",
-    value: function trackPageLongPressed(properties) {
-      this.trackEvent('paged-publication-page-long-pressed', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageHotspotsClicked",
-    value: function trackPageHotspotsClicked(properties) {
-      this.trackEvent('paged-publication-page-hotspots-clicked', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageSpreadAppeared",
-    value: function trackPageSpreadAppeared(properties) {
-      this.trackEvent('paged-publication-page-spread-appeared', properties);
+      this.eventTracker.trackPagedPublicationOpened({
+        'pp.id': this.id,
+        'vt': this.getViewToken([SGN$f.client.id, this.id])
+      });
       return this;
     }
   }, {
     key: "trackPageSpreadDisappeared",
-    value: function trackPageSpreadDisappeared(properties) {
-      this.trackEvent('paged-publication-page-spread-disappeared', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageSpreadZoomedIn",
-    value: function trackPageSpreadZoomedIn(properties) {
-      this.trackEvent('paged-publication-page-spread-zoomed-in', properties);
-      return this;
-    }
-  }, {
-    key: "trackPageSpreadZoomedOut",
-    value: function trackPageSpreadZoomedOut(properties) {
-      this.trackEvent('paged-publication-page-spread-zoomed-out', properties);
+    value: function trackPageSpreadDisappeared(pageNumbers) {
+      var _this = this;
+
+      pageNumbers.forEach(function (pageNumber) {
+        _this.eventTracker.trackPagedPublicationPageDisappeared({
+          'pp.id': _this.id,
+          'ppp.n': pageNumber,
+          'vt': _this.getViewToken([SGN$f.client.id, _this.id, pageNumber])
+        });
+      });
       return this;
     }
   }, {
@@ -2737,54 +2562,6 @@ function () {
       this.pageSpreadAppeared(e.pageSpread);
     }
   }, {
-    key: "clicked",
-    value: function clicked(e) {
-      var properties;
-
-      if (e.page != null) {
-        properties = {
-          pageNumber: e.page.pageNumber,
-          x: e.verso.pageX,
-          y: e.verso.pageY
-        };
-        this.trackPageClicked({
-          pagedPublicationPage: properties
-        });
-
-        if (e.verso.overlayEls.length > 0) {
-          this.trackPageHotspotsClicked({
-            pagedPublicationPage: properties
-          });
-        }
-      }
-    }
-  }, {
-    key: "doubleClicked",
-    value: function doubleClicked(e) {
-      if (e.page != null) {
-        this.trackPageDoubleClicked({
-          pagedPublicationPage: {
-            pageNumber: e.page.pageNumber,
-            x: e.verso.pageX,
-            y: e.verso.pageY
-          }
-        });
-      }
-    }
-  }, {
-    key: "pressed",
-    value: function pressed(e) {
-      if (e.page != null) {
-        this.trackPageLongPressed({
-          pagedPublicationPage: {
-            pageNumber: e.page.pageNumber,
-            x: e.verso.pageX,
-            y: e.verso.pageY
-          }
-        });
-      }
-    }
-  }, {
     key: "panStart",
     value: function panStart(e) {
       if (e.scale === 1) {
@@ -2792,43 +2569,10 @@ function () {
       }
     }
   }, {
-    key: "zoomedIn",
-    value: function zoomedIn(e) {
-      if (e.pageSpread != null) {
-        this.trackPageSpreadZoomedIn({
-          pagedPublicationPageSpread: {
-            pageNumbers: e.pageSpread.getPages().map(function (page) {
-              return page.pageNumber;
-            })
-          }
-        });
-      }
-    }
-  }, {
-    key: "zoomedOut",
-    value: function zoomedOut(e) {
-      if (e.pageSpread != null) {
-        this.trackPageSpreadZoomedOut({
-          pagedPublicationPageSpread: {
-            pageNumbers: e.pageSpread.getPages().map(function (page) {
-              return page.pageNumber;
-            })
-          }
-        });
-      }
-    }
-  }, {
     key: "pageSpreadAppeared",
     value: function pageSpreadAppeared(pageSpread) {
       if (pageSpread != null && this.hidden === true) {
         this.pageSpread = pageSpread;
-        this.trackPageSpreadAppeared({
-          pagedPublicationPageSpread: {
-            pageNumbers: pageSpread.getPages().map(function (page) {
-              return page.pageNumber;
-            })
-          }
-        });
         this.hidden = false;
       }
     }
@@ -2836,16 +2580,22 @@ function () {
     key: "pageSpreadDisappeared",
     value: function pageSpreadDisappeared() {
       if (this.pageSpread != null && this.hidden === false) {
-        this.trackPageSpreadDisappeared({
-          pagedPublicationPageSpread: {
-            pageNumbers: this.pageSpread.getPages().map(function (page) {
-              return page.pageNumber;
-            })
-          }
-        });
+        this.trackPageSpreadDisappeared(this.pageSpread.getPages().map(function (page) {
+          return page.pageNumber;
+        }));
         this.hidden = true;
         this.pageSpread = null;
       }
+    }
+  }, {
+    key: "getViewToken",
+    value: function getViewToken(parts) {
+      var str, viewToken;
+      str = parts.join('');
+      viewToken = util$2.btoa(String.fromCharCode.apply(null, md5$1(str, {
+        asBytes: true
+      }).slice(0, 8)));
+      return viewToken;
     }
   }]);
 
@@ -2855,9 +2605,9 @@ function () {
 MicroEvent$7.mixin(PagedPublicationEventTracking);
 var eventTracking = PagedPublicationEventTracking;
 
-var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$15, Viewer;
+var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$g, Viewer;
 MicroEvent$8 = require$$0;
-SGN$15 = sgn;
+SGN$g = sgn;
 Core = core$2;
 Hotspots = hotspots;
 Controls = controls;
@@ -2887,8 +2637,8 @@ function () {
     this._controls = new Controls(this.el, {
       keyboard: this.options.keyboard
     });
-    this._eventTracking = new EventTracking();
-    this.viewSession = SGN$15.util.uuid();
+    this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
+    this.viewSession = SGN$g.util.uuid();
     this.hotspots = null;
     this.hotspotQueue = [];
     this.popover = null;
@@ -2971,37 +2721,9 @@ function () {
       return this;
     }
   }, {
-    key: "_trackEvent",
-    value: function _trackEvent(e) {
-      var eventTracker, idType, key, properties, ref, type, value;
-      type = e.type;
-      idType = 'legacy';
-      properties = {
-        pagedPublication: {
-          id: [idType, this.options.id],
-          ownedBy: [idType, this.options.ownedBy]
-        }
-      };
-      eventTracker = this.options.eventTracker;
-      ref = e.properties;
-
-      for (key in ref) {
-        value = ref[key];
-        properties[key] = value;
-      }
-
-      if (eventTracker != null) {
-        eventTracker.trackEvent(type, properties);
-      }
-    }
-  }, {
     key: "_setupEventListeners",
     value: function _setupEventListeners() {
       var _this = this;
-
-      this._eventTracking.bind('trackEvent', function (e) {
-        _this._trackEvent(e);
-      });
 
       this._controls.bind('prev', function (e) {
         _this.prev(e);
@@ -3148,9 +2870,9 @@ function () {
       if (hotspots$$1.length === 1) {
         callback(hotspots$$1[0]);
       } else if (hotspots$$1.length > 1) {
-        this.popover = SGN$15.CoreUIKit.singleChoicePopover({
+        this.popover = SGN$g.CoreUIKit.singleChoicePopover({
           el: this.el,
-          header: SGN$15.translations.t('paged_publication.hotspot_picker.header'),
+          header: SGN$g.translations.t('paged_publication.hotspot_picker.header'),
           x: e.verso.x,
           y: e.verso.y,
           items: hotspots$$1.filter(function (hotspot) {
@@ -3273,8 +2995,8 @@ function () {
 MicroEvent$8.mixin(Viewer);
 var viewer = Viewer;
 
-var Bootstrapper, SGN$16;
-SGN$16 = core;
+var Bootstrapper, SGN$h;
+SGN$h = core;
 
 var bootstrapper = Bootstrapper =
 /*#__PURE__*/
@@ -3291,7 +3013,7 @@ function () {
   _createClass(Bootstrapper, [{
     key: "createViewer",
     value: function createViewer(data) {
-      return new SGN$16.PagedPublicationKit.Viewer(this.options.el, {
+      return new SGN$h.PagedPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         ownedBy: data.details.dealer_id,
         color: '#' + data.details.branding.pageflip.color,
@@ -3332,14 +3054,18 @@ function () {
   }, {
     key: "fetch",
     value: function fetch(callback) {
-      SGN$16.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+      SGN$h.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
         var data;
         data = {
           details: result[0][1],
           pages: result[1][1]
         };
 
-        if (data.details != null && data.pages != null) {
+        if (result[0][0] != null) {
+          callback(result[0][0]);
+        } else if (result[1][0] != null) {
+          callback(result[1][0]);
+        } else if (data.details != null && data.pages != null) {
           callback(null, data);
         } else {
           callback(new Error());
@@ -3349,21 +3075,21 @@ function () {
   }, {
     key: "fetchDetails",
     value: function fetchDetails(callback) {
-      SGN$16.CoreKit.request({
+      SGN$h.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
     }
   }, {
     key: "fetchPages",
     value: function fetchPages(callback) {
-      SGN$16.CoreKit.request({
+      SGN$h.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/pages")
       }, callback);
     }
   }, {
     key: "fetchHotspots",
     value: function fetchHotspots(callback) {
-      SGN$16.CoreKit.request({
+      SGN$h.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
       }, callback);
     }
@@ -3377,9 +3103,9 @@ var pagedPublication = {
   Bootstrapper: bootstrapper
 };
 
-var Incito, MicroEvent$10, Viewer$1;
+var Incito, MicroEvent$a, Viewer$1;
 Incito = incitoBrowser;
-MicroEvent$10 = require$$0;
+MicroEvent$a = require$$0;
 
 Viewer$1 =
 /*#__PURE__*/
@@ -3401,14 +3127,6 @@ function () {
     key: "start",
     value: function start() {
       this.incito.start();
-
-      this._trackEvent({
-        type: 'x-incito-publication-opened',
-        properties: {
-          id: this.options.id
-        }
-      });
-
       return this;
     }
   }, {
@@ -3416,32 +3134,12 @@ function () {
     value: function destroy() {
       this.incito.destroy();
     }
-  }, {
-    key: "_trackEvent",
-    value: function _trackEvent(e) {
-      var eventTracker, key, properties, ref, type, value;
-      type = e.type;
-      properties = {
-        id: this.options.id
-      };
-      eventTracker = this.options.eventTracker;
-      ref = e.properties;
-
-      for (key in ref) {
-        value = ref[key];
-        properties[key] = value;
-      }
-
-      if (eventTracker != null) {
-        return eventTracker.trackEvent(type, properties);
-      }
-    }
   }]);
 
   return Viewer;
 }();
 
-MicroEvent$10.mixin(Viewer$1);
+MicroEvent$a.mixin(Viewer$1);
 var viewer$1 = Viewer$1;
 
 var Controls$1;
@@ -3500,9 +3198,9 @@ var incito$1 = /*#__PURE__*/Object.freeze({
 
 var require$$3 = ( incito$1 && incito ) || incito$1;
 
-var Bootstrapper$1, Controls$2, SGN$17, schema, util$2;
-util$2 = util_1;
-SGN$17 = core;
+var Bootstrapper$1, Controls$2, SGN$i, schema, util$3;
+util$3 = util_1;
+SGN$i = core;
 Controls$2 = controls$1;
 schema = require$$3;
 
@@ -3528,7 +3226,7 @@ function () {
   _createClass(Bootstrapper, [{
     key: "getDeviceCategory",
     value: function getDeviceCategory() {
-      return util$2.getDeviceCategory();
+      return util$3.getDeviceCategory();
     }
   }, {
     key: "getPixelRatio",
@@ -3538,13 +3236,13 @@ function () {
   }, {
     key: "getPointer",
     value: function getPointer() {
-      return util$2.getPointer();
+      return util$3.getPointer();
     }
   }, {
     key: "getOrientation",
     value: function getOrientation() {
       var orientation;
-      orientation = util$2.getOrientation(screen.width, screen.height);
+      orientation = util$3.getOrientation(screen.width, screen.height);
 
       if (orientation === 'quadratic') {
         orientation = 'horizontal';
@@ -3567,13 +3265,13 @@ function () {
       var _this = this;
 
       var data;
-      data = SGN$17.storage.session.get(this.storageKey);
+      data = SGN$i.storage.session.get(this.storageKey);
 
       if (data != null && data.response != null && data.width === this.maxWidth) {
         return callback(null, data.response);
       }
 
-      SGN$17.GraphKit.request({
+      SGN$i.GraphKit.request({
         query: schema,
         operationName: 'GetIncitoPublication',
         variables: {
@@ -3589,10 +3287,10 @@ function () {
         if (err != null) {
           callback(err);
         } else if (res.errors && res.errors.length > 0) {
-          callback(util$2.error(new Error(), 'graph request contained errors'));
+          callback(util$3.error(new Error(), 'graph request contained errors'));
         } else {
           callback(null, res);
-          SGN$17.storage.session.set(_this.storageKey, {
+          SGN$i.storage.session.set(_this.storageKey, {
             width: _this.maxWidth,
             response: res
           });
@@ -3605,10 +3303,10 @@ function () {
       var controls, viewer;
 
       if (data.incito == null) {
-        throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
+        throw util$3.error(new Error(), 'you need to supply valid Incito to create a viewer');
       }
 
-      viewer = new SGN$17.IncitoPublicationKit.Viewer(this.options.el, {
+      viewer = new SGN$i.IncitoPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         incito: data.incito,
         eventTracker: this.options.eventTracker
@@ -3991,7 +3689,7 @@ var gator = createCommonjsModule(function (module) {
     return true;
   };
 
-  if ('object' !== "undefined" && module.exports) {
+  if (module.exports) {
     module.exports = Gator;
   }
 
@@ -4063,8 +3761,8 @@ function () {
   return OfferDetails;
 }();
 
-var Gator, MicroEvent$11, Mustache$2, Popover, keyCodes$2, template;
-MicroEvent$11 = require$$0;
+var Gator, MicroEvent$b, Mustache$2, Popover, keyCodes$2, template;
+MicroEvent$b = require$$0;
 Gator = gator;
 Mustache$2 = mustache;
 keyCodes$2 = keyCodes;
@@ -4204,7 +3902,7 @@ function () {
   return Popover;
 }();
 
-MicroEvent$11.mixin(Popover);
+MicroEvent$b.mixin(Popover);
 var popover = Popover;
 
 var Popover$1;
@@ -4258,63 +3956,60 @@ var coreUi = {
   }
 };
 
-var SGN$18, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
+var SGN$j, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
 isBrowser$1 = util_1.isBrowser;
-SGN$18 = core; // Expose storage backends.
+SGN$j = core; // Expose storage backends.
 
-SGN$18.storage = {
+SGN$j.storage = {
   local: clientLocal,
   session: clientSession,
   cookie: clientCookie
 }; // Expose request handler.
 
-SGN$18.request = request; // Expose the different kits.
+SGN$j.request = request; // Expose the different kits.
 
-SGN$18.AssetsKit = assets;
-SGN$18.EventsKit = events;
-SGN$18.GraphKit = graph;
-SGN$18.CoreKit = core$1;
-SGN$18.PagedPublicationKit = pagedPublication;
-SGN$18.IncitoPublicationKit = incitoPublication;
-SGN$18.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
+SGN$j.AssetsKit = assets;
+SGN$j.EventsKit = events;
+SGN$j.GraphKit = graph;
+SGN$j.CoreKit = core$1;
+SGN$j.PagedPublicationKit = pagedPublication;
+SGN$j.IncitoPublicationKit = incitoPublication;
+SGN$j.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-session$2 = SGN$18.storage.cookie.get('session');
+session$2 = SGN$j.storage.cookie.get('session');
 
 if (_typeof(session$2) === 'object') {
-  SGN$18.config.set({
+  SGN$j.config.set({
     coreSessionToken: session$2.token,
     coreSessionClientId: session$2.client_id
   });
 }
 
-SGN$18.client = function () {
-  var firstOpen, id;
-  id = SGN$18.storage.local.get('client-id');
-  id = id != null ? id.data : void 0;
-  firstOpen = id == null;
+SGN$j.client = function () {
+  var id;
+  id = SGN$j.storage.local.get('client-id');
 
-  if (firstOpen) {
-    id = SGN$18.util.uuid();
-    SGN$18.storage.local.set('client-id', id);
+  if (id != null ? id.data : void 0) {
+    id = id.data;
+  }
+
+  if (id == null) {
+    id = SGN$j.util.uuid();
+    SGN$j.storage.local.set('client-id', id);
   }
 
   return {
-    firstOpen: firstOpen,
     id: id
   };
 }(); // Listen for changes in the config.
 
 
-SGN$18.config.bind('change', function (changedAttributes) {
+SGN$j.config.bind('change', function (changedAttributes) {
   var eventTracker;
   eventTracker = changedAttributes.eventTracker;
 
   if (eventTracker != null) {
-    if (SGN$18.client.firstOpen === true) {
-      eventTracker.trackEvent('first-client-session-opened', {}, '1.0.0');
-    }
-
-    eventTracker.trackEvent('client-session-opened', {}, '1.0.0');
+    eventTracker.trackClientSessionOpened();
   }
 });
 
@@ -4332,16 +4027,16 @@ if (isBrowser$1()) {
     }
 
     if (trackId != null) {
-      config$2.eventTracker = new SGN$18.EventsKit.Tracker({
+      config$2.eventTracker = new SGN$j.EventsKit.Tracker({
         trackId: trackId
       });
     }
 
-    SGN$18.config.set(config$2);
+    SGN$j.config.set(config$2);
   }
 }
 
-var coffeescript = SGN$18;
+var coffeescript = SGN$j;
 
 export default coffeescript;
 //# sourceMappingURL=sgn-sdk.es.js.map

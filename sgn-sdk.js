@@ -42,6 +42,60 @@
     return Constructor;
   }
 
+  var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+  function createCommonjsModule(fn, module) {
+  	return module = { exports: {} }, fn(module, module.exports), module.exports;
+  }
+
+  var _core = createCommonjsModule(function (module) {
+  var core = module.exports = { version: '2.5.6' };
+  if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+  });
+  var _core_1 = _core.version;
+
+  var _global = createCommonjsModule(function (module) {
+  // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+  var global = module.exports = typeof window != 'undefined' && window.Math == Math
+    ? window : typeof self != 'undefined' && self.Math == Math ? self
+    // eslint-disable-next-line no-new-func
+    : Function('return this')();
+  if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+  });
+
+  var _shared = createCommonjsModule(function (module) {
+  var SHARED = '__core-js_shared__';
+  var store = _global[SHARED] || (_global[SHARED] = {});
+
+  (module.exports = function (key, value) {
+    return store[key] || (store[key] = value !== undefined ? value : {});
+  })('versions', []).push({
+    version: _core.version,
+    mode: 'global',
+    copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+  });
+  });
+
+  var id = 0;
+  var px = Math.random();
+  var _uid = function (key) {
+    return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+  };
+
+  var _wks = createCommonjsModule(function (module) {
+  var store = _shared('wks');
+
+  var Symbol = _global.Symbol;
+  var USE_SYMBOL = typeof Symbol == 'function';
+
+  var $exports = module.exports = function (name) {
+    return store[name] || (store[name] =
+      USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : _uid)('Symbol.' + name));
+  };
+
+  $exports.store = store;
+  });
+
   var _isObject = function (it) {
     return typeof it === 'object' ? it !== null : typeof it === 'function';
   };
@@ -62,21 +116,6 @@
   // Thank's IE8 for his funny defineProperty
   var _descriptors = !_fails(function () {
     return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-  });
-
-  var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-  function createCommonjsModule(fn, module) {
-  	return module = { exports: {} }, fn(module, module.exports), module.exports;
-  }
-
-  var _global = createCommonjsModule(function (module) {
-  // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-  var global = module.exports = typeof window != 'undefined' && window.Math == Math
-    ? window : typeof self != 'undefined' && self.Math == Math ? self
-    // eslint-disable-next-line no-new-func
-    : Function('return this')();
-  if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
   });
 
   var document$1 = _global.document;
@@ -137,22 +176,50 @@
     return object;
   };
 
+  // 22.1.3.31 Array.prototype[@@unscopables]
+  var UNSCOPABLES = _wks('unscopables');
+  var ArrayProto = Array.prototype;
+  if (ArrayProto[UNSCOPABLES] == undefined) _hide(ArrayProto, UNSCOPABLES, {});
+  var _addToUnscopables = function (key) {
+    ArrayProto[UNSCOPABLES][key] = true;
+  };
+
+  var _iterStep = function (done, value) {
+    return { value: value, done: !!done };
+  };
+
+  var _iterators = {};
+
+  var toString = {}.toString;
+
+  var _cof = function (it) {
+    return toString.call(it).slice(8, -1);
+  };
+
+  // fallback for non-array-like ES3 and non-enumerable old V8 strings
+
+  // eslint-disable-next-line no-prototype-builtins
+  var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+    return _cof(it) == 'String' ? it.split('') : Object(it);
+  };
+
+  // 7.2.1 RequireObjectCoercible(argument)
+  var _defined = function (it) {
+    if (it == undefined) throw TypeError("Can't call method on  " + it);
+    return it;
+  };
+
+  // to indexed object, toObject with fallback for non-array-like ES3 strings
+
+
+  var _toIobject = function (it) {
+    return _iobject(_defined(it));
+  };
+
   var hasOwnProperty = {}.hasOwnProperty;
   var _has = function (it, key) {
     return hasOwnProperty.call(it, key);
   };
-
-  var id = 0;
-  var px = Math.random();
-  var _uid = function (key) {
-    return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-  };
-
-  var _core = createCommonjsModule(function (module) {
-  var core = module.exports = { version: '2.5.3' };
-  if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-  });
-  var _core_1 = _core.version;
 
   var _redefine = createCommonjsModule(function (module) {
   var SRC = _uid('src');
@@ -185,31 +252,575 @@
   });
   });
 
-  // 7.2.1 RequireObjectCoercible(argument)
-  var _defined = function (it) {
-    if (it == undefined) throw TypeError("Can't call method on  " + it);
+  var _aFunction = function (it) {
+    if (typeof it != 'function') throw TypeError(it + ' is not a function!');
     return it;
   };
 
-  var SHARED = '__core-js_shared__';
-  var store = _global[SHARED] || (_global[SHARED] = {});
-  var _shared = function (key) {
-    return store[key] || (store[key] = {});
+  // optional / simple context binding
+
+  var _ctx = function (fn, that, length) {
+    _aFunction(fn);
+    if (that === undefined) return fn;
+    switch (length) {
+      case 1: return function (a) {
+        return fn.call(that, a);
+      };
+      case 2: return function (a, b) {
+        return fn.call(that, a, b);
+      };
+      case 3: return function (a, b, c) {
+        return fn.call(that, a, b, c);
+      };
+    }
+    return function (/* ...args */) {
+      return fn.apply(that, arguments);
+    };
   };
 
-  var _wks = createCommonjsModule(function (module) {
-  var store = _shared('wks');
+  var PROTOTYPE = 'prototype';
 
-  var Symbol = _global.Symbol;
-  var USE_SYMBOL = typeof Symbol == 'function';
+  var $export = function (type, name, source) {
+    var IS_FORCED = type & $export.F;
+    var IS_GLOBAL = type & $export.G;
+    var IS_STATIC = type & $export.S;
+    var IS_PROTO = type & $export.P;
+    var IS_BIND = type & $export.B;
+    var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] || (_global[name] = {}) : (_global[name] || {})[PROTOTYPE];
+    var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
+    var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
+    var key, own, out, exp;
+    if (IS_GLOBAL) source = name;
+    for (key in source) {
+      // contains in native
+      own = !IS_FORCED && target && target[key] !== undefined;
+      // export native or passed
+      out = (own ? target : source)[key];
+      // bind timers to global for call from export context
+      exp = IS_BIND && own ? _ctx(out, _global) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
+      // extend global
+      if (target) _redefine(target, key, out, type & $export.U);
+      // export
+      if (exports[key] != out) _hide(exports, key, exp);
+      if (IS_PROTO && expProto[key] != out) expProto[key] = out;
+    }
+  };
+  _global.core = _core;
+  // type bitmap
+  $export.F = 1;   // forced
+  $export.G = 2;   // global
+  $export.S = 4;   // static
+  $export.P = 8;   // proto
+  $export.B = 16;  // bind
+  $export.W = 32;  // wrap
+  $export.U = 64;  // safe
+  $export.R = 128; // real proto method for `library`
+  var _export = $export;
 
-  var $exports = module.exports = function (name) {
-    return store[name] || (store[name] =
-      USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : _uid)('Symbol.' + name));
+  // 7.1.4 ToInteger
+  var ceil = Math.ceil;
+  var floor = Math.floor;
+  var _toInteger = function (it) {
+    return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
   };
 
-  $exports.store = store;
+  // 7.1.15 ToLength
+
+  var min = Math.min;
+  var _toLength = function (it) {
+    return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+  };
+
+  var max = Math.max;
+  var min$1 = Math.min;
+  var _toAbsoluteIndex = function (index, length) {
+    index = _toInteger(index);
+    return index < 0 ? max(index + length, 0) : min$1(index, length);
+  };
+
+  // false -> Array#indexOf
+  // true  -> Array#includes
+
+
+
+  var _arrayIncludes = function (IS_INCLUDES) {
+    return function ($this, el, fromIndex) {
+      var O = _toIobject($this);
+      var length = _toLength(O.length);
+      var index = _toAbsoluteIndex(fromIndex, length);
+      var value;
+      // Array#includes uses SameValueZero equality algorithm
+      // eslint-disable-next-line no-self-compare
+      if (IS_INCLUDES && el != el) while (length > index) {
+        value = O[index++];
+        // eslint-disable-next-line no-self-compare
+        if (value != value) return true;
+      // Array#indexOf ignores holes, Array#includes - not
+      } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+        if (O[index] === el) return IS_INCLUDES || index || 0;
+      } return !IS_INCLUDES && -1;
+    };
+  };
+
+  var shared = _shared('keys');
+
+  var _sharedKey = function (key) {
+    return shared[key] || (shared[key] = _uid(key));
+  };
+
+  var arrayIndexOf = _arrayIncludes(false);
+  var IE_PROTO = _sharedKey('IE_PROTO');
+
+  var _objectKeysInternal = function (object, names) {
+    var O = _toIobject(object);
+    var i = 0;
+    var result = [];
+    var key;
+    for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
+    // Don't enum bug & hidden keys
+    while (names.length > i) if (_has(O, key = names[i++])) {
+      ~arrayIndexOf(result, key) || result.push(key);
+    }
+    return result;
+  };
+
+  // IE 8- don't enum bug keys
+  var _enumBugKeys = (
+    'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+  ).split(',');
+
+  // 19.1.2.14 / 15.2.3.14 Object.keys(O)
+
+
+
+  var _objectKeys = Object.keys || function keys(O) {
+    return _objectKeysInternal(O, _enumBugKeys);
+  };
+
+  var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
+    _anObject(O);
+    var keys = _objectKeys(Properties);
+    var length = keys.length;
+    var i = 0;
+    var P;
+    while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
+    return O;
+  };
+
+  var document$2 = _global.document;
+  var _html = document$2 && document$2.documentElement;
+
+  // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+
+
+
+  var IE_PROTO$1 = _sharedKey('IE_PROTO');
+  var Empty = function () { /* empty */ };
+  var PROTOTYPE$1 = 'prototype';
+
+  // Create object with fake `null` prototype: use iframe Object with cleared prototype
+  var createDict = function () {
+    // Thrash, waste and sodomy: IE GC bug
+    var iframe = _domCreate('iframe');
+    var i = _enumBugKeys.length;
+    var lt = '<';
+    var gt = '>';
+    var iframeDocument;
+    iframe.style.display = 'none';
+    _html.appendChild(iframe);
+    iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+    // createDict = iframe.contentWindow.Object;
+    // html.removeChild(iframe);
+    iframeDocument = iframe.contentWindow.document;
+    iframeDocument.open();
+    iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+    iframeDocument.close();
+    createDict = iframeDocument.F;
+    while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
+    return createDict();
+  };
+
+  var _objectCreate = Object.create || function create(O, Properties) {
+    var result;
+    if (O !== null) {
+      Empty[PROTOTYPE$1] = _anObject(O);
+      result = new Empty();
+      Empty[PROTOTYPE$1] = null;
+      // add "__proto__" for Object.getPrototypeOf polyfill
+      result[IE_PROTO$1] = O;
+    } else result = createDict();
+    return Properties === undefined ? result : _objectDps(result, Properties);
+  };
+
+  var def = _objectDp.f;
+
+  var TAG = _wks('toStringTag');
+
+  var _setToStringTag = function (it, tag, stat) {
+    if (it && !_has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+  };
+
+  var IteratorPrototype = {};
+
+  // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+  _hide(IteratorPrototype, _wks('iterator'), function () { return this; });
+
+  var _iterCreate = function (Constructor, NAME, next) {
+    Constructor.prototype = _objectCreate(IteratorPrototype, { next: _propertyDesc(1, next) });
+    _setToStringTag(Constructor, NAME + ' Iterator');
+  };
+
+  // 7.1.13 ToObject(argument)
+
+  var _toObject = function (it) {
+    return Object(_defined(it));
+  };
+
+  // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+
+
+  var IE_PROTO$2 = _sharedKey('IE_PROTO');
+  var ObjectProto = Object.prototype;
+
+  var _objectGpo = Object.getPrototypeOf || function (O) {
+    O = _toObject(O);
+    if (_has(O, IE_PROTO$2)) return O[IE_PROTO$2];
+    if (typeof O.constructor == 'function' && O instanceof O.constructor) {
+      return O.constructor.prototype;
+    } return O instanceof Object ? ObjectProto : null;
+  };
+
+  var ITERATOR = _wks('iterator');
+  var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+  var FF_ITERATOR = '@@iterator';
+  var KEYS = 'keys';
+  var VALUES = 'values';
+
+  var returnThis = function () { return this; };
+
+  var _iterDefine = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+    _iterCreate(Constructor, NAME, next);
+    var getMethod = function (kind) {
+      if (!BUGGY && kind in proto) return proto[kind];
+      switch (kind) {
+        case KEYS: return function keys() { return new Constructor(this, kind); };
+        case VALUES: return function values() { return new Constructor(this, kind); };
+      } return function entries() { return new Constructor(this, kind); };
+    };
+    var TAG = NAME + ' Iterator';
+    var DEF_VALUES = DEFAULT == VALUES;
+    var VALUES_BUG = false;
+    var proto = Base.prototype;
+    var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+    var $default = $native || getMethod(DEFAULT);
+    var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+    var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+    var methods, key, IteratorPrototype;
+    // Fix native
+    if ($anyNative) {
+      IteratorPrototype = _objectGpo($anyNative.call(new Base()));
+      if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
+        // Set @@toStringTag to native iterators
+        _setToStringTag(IteratorPrototype, TAG, true);
+        // fix for some old engines
+        if (typeof IteratorPrototype[ITERATOR] != 'function') _hide(IteratorPrototype, ITERATOR, returnThis);
+      }
+    }
+    // fix Array#{values, @@iterator}.name in V8 / FF
+    if (DEF_VALUES && $native && $native.name !== VALUES) {
+      VALUES_BUG = true;
+      $default = function values() { return $native.call(this); };
+    }
+    // Define iterator
+    if (BUGGY || VALUES_BUG || !proto[ITERATOR]) {
+      _hide(proto, ITERATOR, $default);
+    }
+    // Plug for library
+    _iterators[NAME] = $default;
+    _iterators[TAG] = returnThis;
+    if (DEFAULT) {
+      methods = {
+        values: DEF_VALUES ? $default : getMethod(VALUES),
+        keys: IS_SET ? $default : getMethod(KEYS),
+        entries: $entries
+      };
+      if (FORCED) for (key in methods) {
+        if (!(key in proto)) _redefine(proto, key, methods[key]);
+      } else _export(_export.P + _export.F * (BUGGY || VALUES_BUG), NAME, methods);
+    }
+    return methods;
+  };
+
+  // 22.1.3.4 Array.prototype.entries()
+  // 22.1.3.13 Array.prototype.keys()
+  // 22.1.3.29 Array.prototype.values()
+  // 22.1.3.30 Array.prototype[@@iterator]()
+  var es6_array_iterator = _iterDefine(Array, 'Array', function (iterated, kind) {
+    this._t = _toIobject(iterated); // target
+    this._i = 0;                   // next index
+    this._k = kind;                // kind
+  // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+  }, function () {
+    var O = this._t;
+    var kind = this._k;
+    var index = this._i++;
+    if (!O || index >= O.length) {
+      this._t = undefined;
+      return _iterStep(1);
+    }
+    if (kind == 'keys') return _iterStep(0, index);
+    if (kind == 'values') return _iterStep(0, O[index]);
+    return _iterStep(0, [index, O[index]]);
+  }, 'values');
+
+  // argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+  _iterators.Arguments = _iterators.Array;
+
+  _addToUnscopables('keys');
+  _addToUnscopables('values');
+  _addToUnscopables('entries');
+
+  var ITERATOR$1 = _wks('iterator');
+  var TO_STRING_TAG = _wks('toStringTag');
+  var ArrayValues = _iterators.Array;
+
+  var DOMIterables = {
+    CSSRuleList: true, // TODO: Not spec compliant, should be false.
+    CSSStyleDeclaration: false,
+    CSSValueList: false,
+    ClientRectList: false,
+    DOMRectList: false,
+    DOMStringList: false,
+    DOMTokenList: true,
+    DataTransferItemList: false,
+    FileList: false,
+    HTMLAllCollection: false,
+    HTMLCollection: false,
+    HTMLFormElement: false,
+    HTMLSelectElement: false,
+    MediaList: true, // TODO: Not spec compliant, should be false.
+    MimeTypeArray: false,
+    NamedNodeMap: false,
+    NodeList: true,
+    PaintRequestList: false,
+    Plugin: false,
+    PluginArray: false,
+    SVGLengthList: false,
+    SVGNumberList: false,
+    SVGPathSegList: false,
+    SVGPointList: false,
+    SVGStringList: false,
+    SVGTransformList: false,
+    SourceBufferList: false,
+    StyleSheetList: true, // TODO: Not spec compliant, should be false.
+    TextTrackCueList: false,
+    TextTrackList: false,
+    TouchList: false
+  };
+
+  for (var collections = _objectKeys(DOMIterables), i = 0; i < collections.length; i++) {
+    var NAME = collections[i];
+    var explicit = DOMIterables[NAME];
+    var Collection = _global[NAME];
+    var proto = Collection && Collection.prototype;
+    var key;
+    if (proto) {
+      if (!proto[ITERATOR$1]) _hide(proto, ITERATOR$1, ArrayValues);
+      if (!proto[TO_STRING_TAG]) _hide(proto, TO_STRING_TAG, NAME);
+      _iterators[NAME] = ArrayValues;
+      if (explicit) for (key in es6_array_iterator) if (!proto[key]) _redefine(proto, key, es6_array_iterator[key], true);
+    }
+  }
+
+  // most Object methods by ES6 should accept primitives
+
+
+
+  var _objectSap = function (KEY, exec) {
+    var fn = (_core.Object || {})[KEY] || Object[KEY];
+    var exp = {};
+    exp[KEY] = exec(fn);
+    _export(_export.S + _export.F * _fails(function () { fn(1); }), 'Object', exp);
+  };
+
+  // 19.1.2.14 Object.keys(O)
+
+
+
+  _objectSap('keys', function () {
+    return function keys(it) {
+      return _objectKeys(_toObject(it));
+    };
   });
+
+  var f$1 = {}.propertyIsEnumerable;
+
+  var _objectPie = {
+  	f: f$1
+  };
+
+  var gOPD = Object.getOwnPropertyDescriptor;
+
+  var f$2 = _descriptors ? gOPD : function getOwnPropertyDescriptor(O, P) {
+    O = _toIobject(O);
+    P = _toPrimitive(P, true);
+    if (_ie8DomDefine) try {
+      return gOPD(O, P);
+    } catch (e) { /* empty */ }
+    if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
+  };
+
+  var _objectGopd = {
+  	f: f$2
+  };
+
+  // Works with __proto__ only. Old v8 can't work with null proto objects.
+  /* eslint-disable no-proto */
+
+
+  var check = function (O, proto) {
+    _anObject(O);
+    if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
+  };
+  var _setProto = {
+    set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+      function (test, buggy, set) {
+        try {
+          set = _ctx(Function.call, _objectGopd.f(Object.prototype, '__proto__').set, 2);
+          set(test, []);
+          buggy = !(test instanceof Array);
+        } catch (e) { buggy = true; }
+        return function setPrototypeOf(O, proto) {
+          check(O, proto);
+          if (buggy) O.__proto__ = proto;
+          else set(O, proto);
+          return O;
+        };
+      }({}, false) : undefined),
+    check: check
+  };
+
+  var setPrototypeOf = _setProto.set;
+  var _inheritIfRequired = function (that, target, C) {
+    var S = target.constructor;
+    var P;
+    if (S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && _isObject(P) && setPrototypeOf) {
+      setPrototypeOf(that, P);
+    } return that;
+  };
+
+  // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+
+  var hiddenKeys = _enumBugKeys.concat('length', 'prototype');
+
+  var f$3 = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+    return _objectKeysInternal(O, hiddenKeys);
+  };
+
+  var _objectGopn = {
+  	f: f$3
+  };
+
+  // 7.2.8 IsRegExp(argument)
+
+
+  var MATCH = _wks('match');
+  var _isRegexp = function (it) {
+    var isRegExp;
+    return _isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : _cof(it) == 'RegExp');
+  };
+
+  // 21.2.5.3 get RegExp.prototype.flags
+
+  var _flags = function () {
+    var that = _anObject(this);
+    var result = '';
+    if (that.global) result += 'g';
+    if (that.ignoreCase) result += 'i';
+    if (that.multiline) result += 'm';
+    if (that.unicode) result += 'u';
+    if (that.sticky) result += 'y';
+    return result;
+  };
+
+  var SPECIES = _wks('species');
+
+  var _setSpecies = function (KEY) {
+    var C = _global[KEY];
+    if (_descriptors && C && !C[SPECIES]) _objectDp.f(C, SPECIES, {
+      configurable: true,
+      get: function () { return this; }
+    });
+  };
+
+  var dP$1 = _objectDp.f;
+  var gOPN = _objectGopn.f;
+
+
+  var $RegExp = _global.RegExp;
+  var Base = $RegExp;
+  var proto$1 = $RegExp.prototype;
+  var re1 = /a/g;
+  var re2 = /a/g;
+  // "new" creates a new object, old webkit buggy here
+  var CORRECT_NEW = new $RegExp(re1) !== re1;
+
+  if (_descriptors && (!CORRECT_NEW || _fails(function () {
+    re2[_wks('match')] = false;
+    // RegExp constructor can alter flags and IsRegExp works correct with @@match
+    return $RegExp(re1) != re1 || $RegExp(re2) == re2 || $RegExp(re1, 'i') != '/a/i';
+  }))) {
+    $RegExp = function RegExp(p, f) {
+      var tiRE = this instanceof $RegExp;
+      var piRE = _isRegexp(p);
+      var fiU = f === undefined;
+      return !tiRE && piRE && p.constructor === $RegExp && fiU ? p
+        : _inheritIfRequired(CORRECT_NEW
+          ? new Base(piRE && !fiU ? p.source : p, f)
+          : Base((piRE = p instanceof $RegExp) ? p.source : p, piRE && fiU ? _flags.call(p) : f)
+        , tiRE ? this : proto$1, $RegExp);
+    };
+    var proxy = function (key) {
+      key in $RegExp || dP$1($RegExp, key, {
+        configurable: true,
+        get: function () { return Base[key]; },
+        set: function (it) { Base[key] = it; }
+      });
+    };
+    for (var keys = gOPN(Base), i$1 = 0; keys.length > i$1;) proxy(keys[i$1++]);
+    proto$1.constructor = $RegExp;
+    $RegExp.prototype = proto$1;
+    _redefine(_global, 'RegExp', $RegExp);
+  }
+
+  _setSpecies('RegExp');
+
+  // 21.2.5.3 get RegExp.prototype.flags()
+  if (_descriptors && /./g.flags != 'g') _objectDp.f(RegExp.prototype, 'flags', {
+    configurable: true,
+    get: _flags
+  });
+
+  var TO_STRING = 'toString';
+  var $toString = /./[TO_STRING];
+
+  var define = function (fn) {
+    _redefine(RegExp.prototype, TO_STRING, fn, true);
+  };
+
+  // 21.2.5.14 RegExp.prototype.toString()
+  if (_fails(function () { return $toString.call({ source: 'a', flags: 'b' }) != '/a/b'; })) {
+    define(function toString() {
+      var R = _anObject(this);
+      return '/'.concat(R.source, '/',
+        'flags' in R ? R.flags : !_descriptors && R instanceof RegExp ? _flags.call(R) : undefined);
+    });
+  // FF44- RegExp#toString has a wrong name
+  } else if ($toString.name != TO_STRING) {
+    define(function toString() {
+      return $toString.call(this);
+    });
+  }
 
   var _fixReWks = function (KEY, length, exec) {
     var SYMBOL = _wks(KEY);
@@ -245,13 +856,13 @@
     }, $replace];
   });
 
-  var dP$1 = _objectDp.f;
+  var dP$2 = _objectDp.f;
   var FProto = Function.prototype;
   var nameRE = /^\s*function ([^ (]*)/;
-  var NAME = 'name';
+  var NAME$1 = 'name';
 
   // 19.2.4.2 name
-  NAME in FProto || _descriptors && dP$1(FProto, NAME, {
+  NAME$1 in FProto || _descriptors && dP$2(FProto, NAME$1, {
     configurable: true,
     get: function () {
       try {
@@ -613,7 +1224,7 @@
   };
 
   // export in common js
-  if( 'object' !== "undefined" && ('exports' in module)){
+  if( 'exports' in module){
   	module.exports	= MicroEvent;
   }
   });
@@ -677,7 +1288,7 @@
   /*global define: false Mustache: true*/
 
   (function defineMustache (global, factory) {
-    if ('object' === 'object' && exports && typeof exports.nodeName !== 'string') {
+    if (exports && typeof exports.nodeName !== 'string') {
       factory(exports); // CommonJS
     } else if (typeof undefined === 'function' && undefined.amd) {
       undefined(['exports'], factory); // AMD
@@ -1333,7 +1944,7 @@
     locale: 'en_US',
     coreUrl: 'https://api.etilbudsavis.dk',
     graphUrl: 'https://graph.service.shopgun.com',
-    eventsTrackUrl: 'https://events.service.shopgun.com/track',
+    eventsTrackUrl: 'https://events.service.shopgun.com/sync',
     eventsPulseUrl: 'wss://events.service.shopgun.com/pulse',
     assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
   });
@@ -1403,21 +2014,6 @@
 
       return this;
     }
-  };
-
-  var toString = {}.toString;
-
-  var _cof = function (it) {
-    return toString.call(it).slice(8, -1);
-  };
-
-  // 7.2.8 IsRegExp(argument)
-
-
-  var MATCH = _wks('match');
-  var _isRegexp = function (it) {
-    var isRegExp;
-    return _isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : _cof(it) == 'RegExp');
   };
 
   // @@split logic
@@ -1699,6 +2295,51 @@
     fileUpload: fileUpload
   };
 
+  var f$4 = Object.getOwnPropertySymbols;
+
+  var _objectGops = {
+  	f: f$4
+  };
+
+  // 19.1.2.1 Object.assign(target, source, ...)
+
+
+
+
+
+  var $assign = Object.assign;
+
+  // should work with symbols and should have deterministic property order (V8 bug)
+  var _objectAssign = !$assign || _fails(function () {
+    var A = {};
+    var B = {};
+    // eslint-disable-next-line no-undef
+    var S = Symbol();
+    var K = 'abcdefghijklmnopqrst';
+    A[S] = 7;
+    K.split('').forEach(function (k) { B[k] = k; });
+    return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+  }) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+    var T = _toObject(target);
+    var aLen = arguments.length;
+    var index = 1;
+    var getSymbols = _objectGops.f;
+    var isEnum = _objectPie.f;
+    while (aLen > index) {
+      var S = _iobject(arguments[index++]);
+      var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
+      var length = keys.length;
+      var j = 0;
+      var key;
+      while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+    } return T;
+  } : $assign;
+
+  // 19.1.3.1 Object.assign(target, source)
+
+
+  _export(_export.S + _export.F, 'Object', { assign: _objectAssign });
+
   var SGN$6, Tracker, clientLocalStorage, getPool, pool;
   SGN$6 = sgn;
   clientLocalStorage = clientLocal;
@@ -1741,22 +2382,12 @@
           this[key] = options[key] || value;
         }
 
-        this.dispatching = false;
-        this.session = {
-          id: SGN$6.util.uuid()
+        this.location = {
+          geohash: null,
+          time: null,
+          country: null
         };
-        this.client = {
-          trackId: this.trackId,
-          id: SGN$6.client.id
-        };
-        this.view = {
-          path: [],
-          previousPath: [],
-          uri: null
-        };
-        this.location = {};
-        this.application = {};
-        this.identity = {}; // Dispatch events periodically.
+        this.dispatching = false; // Dispatch events periodically.
 
         this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
         return;
@@ -1766,9 +2397,10 @@
         key: "trackEvent",
         value: function trackEvent(type) {
           var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-          var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '1.0.0';
+          var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+          var evt;
 
-          if (typeof type !== 'string') {
+          if (typeof type !== 'number') {
             throw SGN$6.util.error(new Error('Event type is required'));
           }
 
@@ -1776,19 +2408,32 @@
             return;
           }
 
-          pool.push({
-            id: SGN$6.util.uuid(),
-            type: type,
-            version: version,
-            recordedAt: new Date().toISOString(),
-            sentAt: null,
-            client: {
-              id: this.client.id,
-              trackId: this.client.trackId
-            },
-            context: this.getContext(),
-            properties: properties
+          if (SGN$6.config.get('appKey') === this.trackId) {
+            // coffeelint: disable=max_line_length
+            throw SGN$6.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
+          }
+
+          evt = Object.assign({}, properties, {
+            '_e': type,
+            '_v': version,
+            '_i': SGN$6.util.uuid(),
+            '_t': Math.round(new Date().getTime() / 1000),
+            '_a': this.trackId
           });
+
+          if (this.location.geohash != null) {
+            evt['l.h'] = this.location.geohash;
+          }
+
+          if (this.location.time != null) {
+            evt['l.ht'] = this.location.time;
+          }
+
+          if (this.location.country != null) {
+            evt['l.c'] = this.location.country;
+          }
+
+          pool.push(evt);
 
           while (this.getPoolSize() > this.poolLimit) {
             pool.shift();
@@ -1797,186 +2442,20 @@
           return this;
         }
       }, {
-        key: "identify",
-        value: function identify(id) {
-          this.identity.id = id;
-          return this;
-        }
-      }, {
         key: "setLocation",
         value: function setLocation() {
           var location = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-          var ref, ref1;
-          this.location.determinedAt = new Date(location.timestamp).toISOString();
-          this.location.latitude = location.latitude;
-          this.location.longitude = location.longitude;
-          this.location.altitude = location.altitude;
-          this.location.accuracy = {
-            horizontal: (ref = location.accuracy) != null ? ref.horizontal : void 0,
-            vertical: (ref1 = location.accuracy) != null ? ref1.vertical : void 0
-          };
-          this.location.speed = location.speed;
-          this.location.floor = location.floor;
+          var key, value;
+
+          for (key in location) {
+            value = location[key];
+
+            if (this.location.hasOwnProperty(key)) {
+              this.location[key] = value;
+            }
+          }
+
           return this;
-        }
-      }, {
-        key: "setApplication",
-        value: function setApplication() {
-          var application = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-          this.application.name = application.name;
-          this.application.version = application.version;
-          this.application.build = application.build;
-          return this;
-        }
-      }, {
-        key: "setView",
-        value: function setView(path) {
-          this.view.previousPath = this.view.path;
-
-          if (Array.isArray(path) === true) {
-            this.view.path = path;
-          }
-
-          this.view.uri = window.location.href;
-          return this;
-        }
-      }, {
-        key: "getView",
-        value: function getView() {
-          var view;
-          view = {};
-
-          if (this.view.path.length > 0) {
-            view.path = this.view.path;
-          }
-
-          if (this.view.previousPath.length > 0) {
-            view.previousPath = this.view.previousPath;
-          }
-
-          if (this.view.uri != null) {
-            view.uri = this.view.uri;
-          }
-
-          return view;
-        }
-      }, {
-        key: "getContext",
-        value: function getContext() {
-          var application, campaign, context, loc, os, ref, ref1, screenDimensions;
-          screenDimensions = SGN$6.util.getScreenDimensions();
-          os = SGN$6.util.getOS();
-          context = {
-            userAgent: window.navigator.userAgent,
-            locale: navigator.language,
-            timeZone: {
-              utcOffsetSeconds: SGN$6.util.getUtcOffsetSeconds(),
-              utcDstOffsetSeconds: SGN$6.util.getUtcDstOffsetSeconds()
-            },
-            device: {
-              screen: {
-                width: screenDimensions.physical.width,
-                height: screenDimensions.physical.height,
-                density: screenDimensions.density
-              }
-            },
-            session: {
-              id: this.session.id
-            },
-            view: this.getView()
-          };
-          application = {
-            name: this.application.name,
-            version: this.application.version,
-            build: this.application.build
-          };
-          campaign = {
-            source: SGN$6.util.getQueryParam('utm_source'),
-            medium: SGN$6.util.getQueryParam('utm_medium'),
-            name: SGN$6.util.getQueryParam('utm_campaign'),
-            term: SGN$6.util.getQueryParam('utm_term'),
-            content: SGN$6.util.getQueryParam('utm_content')
-          };
-          loc = {
-            determinedAt: this.location.determinedAt,
-            latitude: this.location.latitude,
-            longitude: this.location.longitude,
-            altitude: this.location.altitude,
-            speed: this.location.speed,
-            floor: this.location.floor,
-            accuracy: {
-              horizontal: (ref = this.location.accuracy) != null ? ref.horizontal : void 0,
-              vertical: (ref1 = this.location.accuracy) != null ? ref1.vertical : void 0
-            }
-          };
-
-          if (os != null) {
-            // Operating system.
-            context.os = {
-              name: os
-            };
-          }
-
-          if (document.referrer.length > 0) {
-            // Session referrer.
-            context.session.referrer = document.referrer;
-          } // Application.
-
-
-          ['name', 'version', 'build'].forEach(function (key) {
-            if (typeof application[key] !== 'string' || application[key].length === 0) {
-              delete application[key];
-            }
-          });
-
-          if (Object.keys(application).length > 0) {
-            context.application = application;
-          } // Campaign.
-
-
-          ['source', 'medium', 'name', 'term', 'content'].forEach(function (key) {
-            if (typeof campaign[key] !== 'string' || campaign[key].length === 0) {
-              delete campaign[key];
-            }
-          });
-
-          if (Object.keys(campaign).length > 0) {
-            context.campaign = campaign;
-          } // Location.
-
-
-          ['latitude', 'longitude', 'altitude', 'speed', 'floor'].forEach(function (key) {
-            if (typeof loc[key] !== 'number') {
-              delete loc[key];
-            }
-          });
-
-          if (typeof loc.accuracy.horizontal !== 'number') {
-            delete loc.accuracy.horizontal;
-          }
-
-          if (typeof loc.accuracy.vertical !== 'number') {
-            delete loc.accuracy.vertical;
-          }
-
-          if (Object.keys(loc.accuracy).length === 0) {
-            delete loc.accuracy;
-          }
-
-          if (typeof loc.determinedAt !== 'string' || loc.determinedAt.length === 0) {
-            delete loc.determinedAt;
-          }
-
-          if (Object.keys(loc).length > 0) {
-            context.location = loc;
-          }
-
-          if (this.identity.id != null) {
-            // Person identifier.
-            context.personId = this.identity.id;
-          }
-
-          return context;
         }
       }, {
         key: "getPoolSize",
@@ -2008,7 +2487,7 @@
               response.events.forEach(function (resEvent) {
                 if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
                   pool = pool.filter(function (poolEvent) {
-                    return poolEvent.id !== resEvent.id;
+                    return poolEvent._i !== resEvent.id;
                   });
                 } else {
                   nacks++;
@@ -2028,15 +2507,9 @@
         value: function ship() {
           var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
           var callback = arguments.length > 1 ? arguments[1] : undefined;
-          var http, payload, url;
+          var http, url;
           http = new XMLHttpRequest();
           url = SGN$6.config.get('eventsTrackUrl');
-          payload = {
-            events: events.map(function (event) {
-              event.sentAt = new Date().toISOString();
-              return event;
-            })
-          };
           http.open('POST', url);
           http.setRequestHeader('Content-Type', 'application/json');
           http.setRequestHeader('Accept', 'application/json');
@@ -2059,8 +2532,35 @@
             callback(SGN$6.util.error(new Error('Could not perform network request')));
           };
 
-          http.send(JSON.stringify(payload));
+          http.send(JSON.stringify({
+            events: events
+          }));
           return this;
+        }
+      }, {
+        key: "trackPagedPublicationOpened",
+        value: function trackPagedPublicationOpened(properties, version) {
+          return this.trackEvent(1, properties, version);
+        }
+      }, {
+        key: "trackPagedPublicationPageDisappeared",
+        value: function trackPagedPublicationPageDisappeared(properties, version) {
+          return this.trackEvent(2, properties, version);
+        }
+      }, {
+        key: "trackOfferOpened",
+        value: function trackOfferOpened(properties, version) {
+          return this.trackEvent(3, properties, version);
+        }
+      }, {
+        key: "trackClientSessionOpened",
+        value: function trackClientSessionOpened(properties, version) {
+          return this.trackEvent(4, properties, version);
+        }
+      }, {
+        key: "trackSearched",
+        value: function trackSearched(properties, version) {
+          return this.trackEvent(5, properties, version);
         }
       }]);
 
@@ -2385,7 +2885,7 @@
   }
 
 
-  if ('object' !== 'undefined' && module.exports) { //CommonJS
+  if (module.exports) { //CommonJS
     module.exports = convertHex;
   } else {
     globals.convertHex = convertHex;
@@ -2416,7 +2916,7 @@
     }
   };
 
-  if ('object' !== 'undefined' && module.exports) { //CommonJS
+  if (module.exports) { //CommonJS
     module.exports = convertString;
   } else {
     globals.convertString = convertString;
@@ -2430,7 +2930,7 @@
 
   var _imports = {};
 
-  if ('object' !== 'undefined' && module.exports) { //CommonJS
+  if (module.exports) { //CommonJS
     _imports.bytesToHex = convertHex.bytesToHex;
     _imports.convertString = convertString;
     module.exports = sha256;
@@ -2729,105 +3229,13 @@
     session: session$1
   };
 
-  var _aFunction = function (it) {
-    if (typeof it != 'function') throw TypeError(it + ' is not a function!');
-    return it;
-  };
-
-  // optional / simple context binding
-
-  var _ctx = function (fn, that, length) {
-    _aFunction(fn);
-    if (that === undefined) return fn;
-    switch (length) {
-      case 1: return function (a) {
-        return fn.call(that, a);
-      };
-      case 2: return function (a, b) {
-        return fn.call(that, a, b);
-      };
-      case 3: return function (a, b, c) {
-        return fn.call(that, a, b, c);
-      };
-    }
-    return function (/* ...args */) {
-      return fn.apply(that, arguments);
-    };
-  };
-
-  var PROTOTYPE = 'prototype';
-
-  var $export = function (type, name, source) {
-    var IS_FORCED = type & $export.F;
-    var IS_GLOBAL = type & $export.G;
-    var IS_STATIC = type & $export.S;
-    var IS_PROTO = type & $export.P;
-    var IS_BIND = type & $export.B;
-    var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] || (_global[name] = {}) : (_global[name] || {})[PROTOTYPE];
-    var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
-    var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
-    var key, own, out, exp;
-    if (IS_GLOBAL) source = name;
-    for (key in source) {
-      // contains in native
-      own = !IS_FORCED && target && target[key] !== undefined;
-      // export native or passed
-      out = (own ? target : source)[key];
-      // bind timers to global for call from export context
-      exp = IS_BIND && own ? _ctx(out, _global) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
-      // extend global
-      if (target) _redefine(target, key, out, type & $export.U);
-      // export
-      if (exports[key] != out) _hide(exports, key, exp);
-      if (IS_PROTO && expProto[key] != out) expProto[key] = out;
-    }
-  };
-  _global.core = _core;
-  // type bitmap
-  $export.F = 1;   // forced
-  $export.G = 2;   // global
-  $export.S = 4;   // static
-  $export.P = 8;   // proto
-  $export.B = 16;  // bind
-  $export.W = 32;  // wrap
-  $export.U = 64;  // safe
-  $export.R = 128; // real proto method for `library`
-  var _export = $export;
-
-  // fallback for non-array-like ES3 and non-enumerable old V8 strings
-
-  // eslint-disable-next-line no-prototype-builtins
-  var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
-    return _cof(it) == 'String' ? it.split('') : Object(it);
-  };
-
-  // 7.1.13 ToObject(argument)
-
-  var _toObject = function (it) {
-    return Object(_defined(it));
-  };
-
-  // 7.1.4 ToInteger
-  var ceil = Math.ceil;
-  var floor = Math.floor;
-  var _toInteger = function (it) {
-    return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-  };
-
-  // 7.1.15 ToLength
-
-  var min = Math.min;
-  var _toLength = function (it) {
-    return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-  };
-
   // 7.2.2 IsArray(argument)
 
   var _isArray = Array.isArray || function isArray(arg) {
     return _cof(arg) == 'Array';
   };
 
-  var SPECIES = _wks('species');
+  var SPECIES$1 = _wks('species');
 
   var _arraySpeciesConstructor = function (original) {
     var C;
@@ -2836,7 +3244,7 @@
       // cross-realm fallback
       if (typeof C == 'function' && (C === Array || _isArray(C.prototype))) C = undefined;
       if (_isObject(C)) {
-        C = C[SPECIES];
+        C = C[SPECIES$1];
         if (C === null) C = undefined;
       }
     } return C === undefined ? Array : C;
@@ -2892,14 +3300,6 @@
       }
       return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
     };
-  };
-
-  // 22.1.3.31 Array.prototype[@@unscopables]
-  var UNSCOPABLES = _wks('unscopables');
-  var ArrayProto = Array.prototype;
-  if (ArrayProto[UNSCOPABLES] == undefined) _hide(ArrayProto, UNSCOPABLES, {});
-  var _addToUnscopables = function (key) {
-    ArrayProto[UNSCOPABLES][key] = true;
   };
 
   // 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
@@ -6188,7 +6588,7 @@
     };
 
     // export in common js
-    if( 'object' !== "undefined" && ('exports' in module)){
+    if( 'exports' in module){
     	module.exports	= MicroEvent;
     }
     });
@@ -7197,9 +7597,9 @@
 
   });
 
-  var MicroEvent$2, PagedPublicationPageSpread, SGN$11;
+  var MicroEvent$2, PagedPublicationPageSpread, SGN$b;
   MicroEvent$2 = microevent;
-  SGN$11 = sgn;
+  SGN$b = sgn;
 
   PagedPublicationPageSpread =
   /*#__PURE__*/
@@ -7278,7 +7678,7 @@
           el.appendChild(pageEl);
           loaderEl.className = 'sgn-pp-page__loader';
           loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
-          SGN$11.util.loadImage(image, function (err, width, height) {
+          SGN$b.util.loadImage(image, function (err, width, height) {
             var isComplete;
 
             if (err == null) {
@@ -7333,7 +7733,7 @@
             return page.id === id;
           });
           image = page.images.large;
-          SGN$11.util.loadImage(image, function (err) {
+          SGN$b.util.loadImage(image, function (err) {
             if (err == null && _this2.el.getAttribute('data-active') === 'true') {
               pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
               pageEl.style.backgroundImage = "url(".concat(image, ")");
@@ -7359,10 +7759,10 @@
   MicroEvent$2.mixin(PagedPublicationPageSpread);
   var pageSpread = PagedPublicationPageSpread;
 
-  var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$12;
+  var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$c;
   MicroEvent$3 = microevent;
   PageSpread = pageSpread;
-  SGN$12 = sgn;
+  SGN$c = sgn;
 
   PagedPublicationPageSpreads =
   /*#__PURE__*/
@@ -7411,7 +7811,7 @@
         } else {
           firstPage = pages.shift();
           lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-          midstPageSpreads = SGN$12.util.chunk(pages, 2);
+          midstPageSpreads = SGN$c.util.chunk(pages, 2);
 
           if (firstPage != null) {
             pageSpreads.push([firstPage]);
@@ -7457,11 +7857,11 @@
   MicroEvent$3.mixin(PagedPublicationPageSpreads);
   var pageSpreads = PagedPublicationPageSpreads;
 
-  var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$13, Verso;
+  var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$d, Verso;
   MicroEvent$4 = microevent;
   Verso = verso;
   PageSpreads = pageSpreads;
-  SGN$13 = sgn;
+  SGN$d = sgn;
 
   PagedPublicationCore = function () {
     var PagedPublicationCore =
@@ -7501,7 +7901,7 @@
         value: function start() {
           this.getVerso().start();
           this.visibilityChangeListener = this.visibilityChange.bind(this);
-          this.resizeListener = SGN$13.util.throttle(this.resize, this.getOption('resizeDelay'), this);
+          this.resizeListener = SGN$d.util.throttle(this.resize, this.getOption('resizeDelay'), this);
           this.unloadListener = this.unload.bind(this);
           document.addEventListener('visibilitychange', this.visibilityChangeListener, false);
           window.addEventListener('resize', this.resizeListener, false);
@@ -7554,7 +7954,7 @@
       }, {
         key: "setColor",
         value: function setColor(color) {
-          this.els.root.setAttribute('data-color-brightness', SGN$13.util.getColorBrightness(color));
+          this.els.root.setAttribute('data-color-brightness', SGN$d.util.getColorBrightness(color));
           this.els.root.style.backgroundColor = color;
         }
       }, {
@@ -8162,9 +8562,9 @@
     NUMBER_ONE: 49
   };
 
-  var MicroEvent$6, PagedPublicationControls, SGN$14, keyCodes$1;
+  var MicroEvent$6, PagedPublicationControls, SGN$e, keyCodes$1;
   MicroEvent$6 = microevent;
-  SGN$14 = sgn;
+  SGN$e = sgn;
   keyCodes$1 = keyCodes;
 
   PagedPublicationControls =
@@ -8185,7 +8585,7 @@
         nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
         close: el.querySelector('.sgn-pp--close')
       };
-      this.keyDownListener = SGN$14.util.throttle(this.keyDown, 150, this);
+      this.keyDownListener = SGN$e.util.throttle(this.keyDown, 150, this);
 
       if (this.options.keyboard === true) {
         this.els.root.addEventListener('keydown', this.keyDownListener, false);
@@ -8300,16 +8700,338 @@
   MicroEvent$6.mixin(PagedPublicationControls);
   var controls = PagedPublicationControls;
 
-  var MicroEvent$7, PagedPublicationEventTracking;
+  var crypt = createCommonjsModule(function (module) {
+  (function() {
+    var base64map
+        = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+
+    crypt = {
+      // Bit-wise rotation left
+      rotl: function(n, b) {
+        return (n << b) | (n >>> (32 - b));
+      },
+
+      // Bit-wise rotation right
+      rotr: function(n, b) {
+        return (n << (32 - b)) | (n >>> b);
+      },
+
+      // Swap big-endian to little-endian and vice versa
+      endian: function(n) {
+        // If number given, swap endian
+        if (n.constructor == Number) {
+          return crypt.rotl(n, 8) & 0x00FF00FF | crypt.rotl(n, 24) & 0xFF00FF00;
+        }
+
+        // Else, assume array and swap all items
+        for (var i = 0; i < n.length; i++)
+          n[i] = crypt.endian(n[i]);
+        return n;
+      },
+
+      // Generate an array of any length of random bytes
+      randomBytes: function(n) {
+        for (var bytes = []; n > 0; n--)
+          bytes.push(Math.floor(Math.random() * 256));
+        return bytes;
+      },
+
+      // Convert a byte array to big-endian 32-bit words
+      bytesToWords: function(bytes) {
+        for (var words = [], i = 0, b = 0; i < bytes.length; i++, b += 8)
+          words[b >>> 5] |= bytes[i] << (24 - b % 32);
+        return words;
+      },
+
+      // Convert big-endian 32-bit words to a byte array
+      wordsToBytes: function(words) {
+        for (var bytes = [], b = 0; b < words.length * 32; b += 8)
+          bytes.push((words[b >>> 5] >>> (24 - b % 32)) & 0xFF);
+        return bytes;
+      },
+
+      // Convert a byte array to a hex string
+      bytesToHex: function(bytes) {
+        for (var hex = [], i = 0; i < bytes.length; i++) {
+          hex.push((bytes[i] >>> 4).toString(16));
+          hex.push((bytes[i] & 0xF).toString(16));
+        }
+        return hex.join('');
+      },
+
+      // Convert a hex string to a byte array
+      hexToBytes: function(hex) {
+        for (var bytes = [], c = 0; c < hex.length; c += 2)
+          bytes.push(parseInt(hex.substr(c, 2), 16));
+        return bytes;
+      },
+
+      // Convert a byte array to a base-64 string
+      bytesToBase64: function(bytes) {
+        for (var base64 = [], i = 0; i < bytes.length; i += 3) {
+          var triplet = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+          for (var j = 0; j < 4; j++)
+            if (i * 8 + j * 6 <= bytes.length * 8)
+              base64.push(base64map.charAt((triplet >>> 6 * (3 - j)) & 0x3F));
+            else
+              base64.push('=');
+        }
+        return base64.join('');
+      },
+
+      // Convert a base-64 string to a byte array
+      base64ToBytes: function(base64) {
+        // Remove non-base-64 characters
+        base64 = base64.replace(/[^A-Z0-9+\/]/ig, '');
+
+        for (var bytes = [], i = 0, imod4 = 0; i < base64.length;
+            imod4 = ++i % 4) {
+          if (imod4 == 0) continue;
+          bytes.push(((base64map.indexOf(base64.charAt(i - 1))
+              & (Math.pow(2, -2 * imod4 + 8) - 1)) << (imod4 * 2))
+              | (base64map.indexOf(base64.charAt(i)) >>> (6 - imod4 * 2)));
+        }
+        return bytes;
+      }
+    };
+
+    module.exports = crypt;
+  })();
+  });
+
+  var charenc = {
+    // UTF-8 encoding
+    utf8: {
+      // Convert a string to a byte array
+      stringToBytes: function(str) {
+        return charenc.bin.stringToBytes(unescape(encodeURIComponent(str)));
+      },
+
+      // Convert a byte array to a string
+      bytesToString: function(bytes) {
+        return decodeURIComponent(escape(charenc.bin.bytesToString(bytes)));
+      }
+    },
+
+    // Binary encoding
+    bin: {
+      // Convert a string to a byte array
+      stringToBytes: function(str) {
+        for (var bytes = [], i = 0; i < str.length; i++)
+          bytes.push(str.charCodeAt(i) & 0xFF);
+        return bytes;
+      },
+
+      // Convert a byte array to a string
+      bytesToString: function(bytes) {
+        for (var str = [], i = 0; i < bytes.length; i++)
+          str.push(String.fromCharCode(bytes[i]));
+        return str.join('');
+      }
+    }
+  };
+
+  var charenc_1 = charenc;
+
+  /*!
+   * Determine if an object is a Buffer
+   *
+   * @author   Feross Aboukhadijeh <https://feross.org>
+   * @license  MIT
+   */
+
+  // The _isBuffer check is for Safari 5-7 support, because it's missing
+  // Object.prototype.constructor. Remove this eventually
+  var isBuffer_1 = function (obj) {
+    return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+  };
+
+  function isBuffer (obj) {
+    return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+  }
+
+  // For Node v0.10 support. Remove this eventually.
+  function isSlowBuffer (obj) {
+    return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+  }
+
+  var md5 = createCommonjsModule(function (module) {
+  (function(){
+    var crypt$$1 = crypt,
+        utf8 = charenc_1.utf8,
+        isBuffer = isBuffer_1,
+        bin = charenc_1.bin,
+
+    // The core
+    md5 = function (message, options) {
+      // Convert to byte array
+      if (message.constructor == String)
+        if (options && options.encoding === 'binary')
+          message = bin.stringToBytes(message);
+        else
+          message = utf8.stringToBytes(message);
+      else if (isBuffer(message))
+        message = Array.prototype.slice.call(message, 0);
+      else if (!Array.isArray(message))
+        message = message.toString();
+      // else, assume byte array already
+
+      var m = crypt$$1.bytesToWords(message),
+          l = message.length * 8,
+          a =  1732584193,
+          b = -271733879,
+          c = -1732584194,
+          d =  271733878;
+
+      // Swap endian
+      for (var i = 0; i < m.length; i++) {
+        m[i] = ((m[i] <<  8) | (m[i] >>> 24)) & 0x00FF00FF |
+               ((m[i] << 24) | (m[i] >>>  8)) & 0xFF00FF00;
+      }
+
+      // Padding
+      m[l >>> 5] |= 0x80 << (l % 32);
+      m[(((l + 64) >>> 9) << 4) + 14] = l;
+
+      // Method shortcuts
+      var FF = md5._ff,
+          GG = md5._gg,
+          HH = md5._hh,
+          II = md5._ii;
+
+      for (var i = 0; i < m.length; i += 16) {
+
+        var aa = a,
+            bb = b,
+            cc = c,
+            dd = d;
+
+        a = FF(a, b, c, d, m[i+ 0],  7, -680876936);
+        d = FF(d, a, b, c, m[i+ 1], 12, -389564586);
+        c = FF(c, d, a, b, m[i+ 2], 17,  606105819);
+        b = FF(b, c, d, a, m[i+ 3], 22, -1044525330);
+        a = FF(a, b, c, d, m[i+ 4],  7, -176418897);
+        d = FF(d, a, b, c, m[i+ 5], 12,  1200080426);
+        c = FF(c, d, a, b, m[i+ 6], 17, -1473231341);
+        b = FF(b, c, d, a, m[i+ 7], 22, -45705983);
+        a = FF(a, b, c, d, m[i+ 8],  7,  1770035416);
+        d = FF(d, a, b, c, m[i+ 9], 12, -1958414417);
+        c = FF(c, d, a, b, m[i+10], 17, -42063);
+        b = FF(b, c, d, a, m[i+11], 22, -1990404162);
+        a = FF(a, b, c, d, m[i+12],  7,  1804603682);
+        d = FF(d, a, b, c, m[i+13], 12, -40341101);
+        c = FF(c, d, a, b, m[i+14], 17, -1502002290);
+        b = FF(b, c, d, a, m[i+15], 22,  1236535329);
+
+        a = GG(a, b, c, d, m[i+ 1],  5, -165796510);
+        d = GG(d, a, b, c, m[i+ 6],  9, -1069501632);
+        c = GG(c, d, a, b, m[i+11], 14,  643717713);
+        b = GG(b, c, d, a, m[i+ 0], 20, -373897302);
+        a = GG(a, b, c, d, m[i+ 5],  5, -701558691);
+        d = GG(d, a, b, c, m[i+10],  9,  38016083);
+        c = GG(c, d, a, b, m[i+15], 14, -660478335);
+        b = GG(b, c, d, a, m[i+ 4], 20, -405537848);
+        a = GG(a, b, c, d, m[i+ 9],  5,  568446438);
+        d = GG(d, a, b, c, m[i+14],  9, -1019803690);
+        c = GG(c, d, a, b, m[i+ 3], 14, -187363961);
+        b = GG(b, c, d, a, m[i+ 8], 20,  1163531501);
+        a = GG(a, b, c, d, m[i+13],  5, -1444681467);
+        d = GG(d, a, b, c, m[i+ 2],  9, -51403784);
+        c = GG(c, d, a, b, m[i+ 7], 14,  1735328473);
+        b = GG(b, c, d, a, m[i+12], 20, -1926607734);
+
+        a = HH(a, b, c, d, m[i+ 5],  4, -378558);
+        d = HH(d, a, b, c, m[i+ 8], 11, -2022574463);
+        c = HH(c, d, a, b, m[i+11], 16,  1839030562);
+        b = HH(b, c, d, a, m[i+14], 23, -35309556);
+        a = HH(a, b, c, d, m[i+ 1],  4, -1530992060);
+        d = HH(d, a, b, c, m[i+ 4], 11,  1272893353);
+        c = HH(c, d, a, b, m[i+ 7], 16, -155497632);
+        b = HH(b, c, d, a, m[i+10], 23, -1094730640);
+        a = HH(a, b, c, d, m[i+13],  4,  681279174);
+        d = HH(d, a, b, c, m[i+ 0], 11, -358537222);
+        c = HH(c, d, a, b, m[i+ 3], 16, -722521979);
+        b = HH(b, c, d, a, m[i+ 6], 23,  76029189);
+        a = HH(a, b, c, d, m[i+ 9],  4, -640364487);
+        d = HH(d, a, b, c, m[i+12], 11, -421815835);
+        c = HH(c, d, a, b, m[i+15], 16,  530742520);
+        b = HH(b, c, d, a, m[i+ 2], 23, -995338651);
+
+        a = II(a, b, c, d, m[i+ 0],  6, -198630844);
+        d = II(d, a, b, c, m[i+ 7], 10,  1126891415);
+        c = II(c, d, a, b, m[i+14], 15, -1416354905);
+        b = II(b, c, d, a, m[i+ 5], 21, -57434055);
+        a = II(a, b, c, d, m[i+12],  6,  1700485571);
+        d = II(d, a, b, c, m[i+ 3], 10, -1894986606);
+        c = II(c, d, a, b, m[i+10], 15, -1051523);
+        b = II(b, c, d, a, m[i+ 1], 21, -2054922799);
+        a = II(a, b, c, d, m[i+ 8],  6,  1873313359);
+        d = II(d, a, b, c, m[i+15], 10, -30611744);
+        c = II(c, d, a, b, m[i+ 6], 15, -1560198380);
+        b = II(b, c, d, a, m[i+13], 21,  1309151649);
+        a = II(a, b, c, d, m[i+ 4],  6, -145523070);
+        d = II(d, a, b, c, m[i+11], 10, -1120210379);
+        c = II(c, d, a, b, m[i+ 2], 15,  718787259);
+        b = II(b, c, d, a, m[i+ 9], 21, -343485551);
+
+        a = (a + aa) >>> 0;
+        b = (b + bb) >>> 0;
+        c = (c + cc) >>> 0;
+        d = (d + dd) >>> 0;
+      }
+
+      return crypt$$1.endian([a, b, c, d]);
+    };
+
+    // Auxiliary functions
+    md5._ff  = function (a, b, c, d, x, s, t) {
+      var n = a + (b & c | ~b & d) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+    md5._gg  = function (a, b, c, d, x, s, t) {
+      var n = a + (b & d | c & ~d) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+    md5._hh  = function (a, b, c, d, x, s, t) {
+      var n = a + (b ^ c ^ d) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+    md5._ii  = function (a, b, c, d, x, s, t) {
+      var n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+
+    // Package private blocksize
+    md5._blocksize = 16;
+    md5._digestsize = 16;
+
+    module.exports = function (message, options) {
+      if (message === undefined || message === null)
+        throw new Error('Illegal argument ' + message);
+
+      var digestbytes = crypt$$1.wordsToBytes(md5(message, options));
+      return options && options.asBytes ? digestbytes :
+          options && options.asString ? bin.bytesToString(digestbytes) :
+          crypt$$1.bytesToHex(digestbytes);
+    };
+
+  })();
+  });
+
+  var MicroEvent$7, PagedPublicationEventTracking, SGN$f, md5$1, util$2;
   MicroEvent$7 = microevent;
+  md5$1 = md5;
+  util$2 = util_1;
+  SGN$f = sgn;
 
   PagedPublicationEventTracking =
   /*#__PURE__*/
   function () {
-    function PagedPublicationEventTracking() {
+    function PagedPublicationEventTracking(eventTracker, id) {
       _classCallCheck(this, PagedPublicationEventTracking);
 
-      this.doubleClicked = this.doubleClicked.bind(this);
+      this.eventTracker = eventTracker;
+      this.id = id;
       this.hidden = true;
       this.pageSpread = null;
       this.bind('appeared', this.appeared.bind(this));
@@ -8317,12 +9039,7 @@
       this.bind('beforeNavigation', this.beforeNavigation.bind(this));
       this.bind('afterNavigation', this.afterNavigation.bind(this));
       this.bind('attemptedNavigation', this.attemptedNavigation.bind(this));
-      this.bind('clicked', this.clicked.bind(this));
-      this.bind('doubleClicked', this.doubleClicked.bind(this));
-      this.bind('pressed', this.pressed.bind(this));
       this.bind('panStart', this.panStart.bind(this));
-      this.bind('zoomedIn', this.zoomedIn.bind(this));
-      this.bind('zoomedOut', this.zoomedOut.bind(this));
       this.bind('destroyed', this.destroy.bind(this));
       return;
     }
@@ -8333,66 +9050,26 @@
         this.pageSpreadDisappeared();
       }
     }, {
-      key: "trackEvent",
-      value: function trackEvent(type) {
-        var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        this.trigger('trackEvent', {
-          type: type,
-          properties: properties
-        });
-      }
-    }, {
       key: "trackOpened",
       value: function trackOpened(properties) {
-        this.trackEvent('paged-publication-opened', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageClicked",
-      value: function trackPageClicked(properties) {
-        this.trackEvent('paged-publication-page-clicked', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageDoubleClicked",
-      value: function trackPageDoubleClicked(properties) {
-        this.trackEvent('paged-publication-page-double-clicked', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageLongPressed",
-      value: function trackPageLongPressed(properties) {
-        this.trackEvent('paged-publication-page-long-pressed', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageHotspotsClicked",
-      value: function trackPageHotspotsClicked(properties) {
-        this.trackEvent('paged-publication-page-hotspots-clicked', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageSpreadAppeared",
-      value: function trackPageSpreadAppeared(properties) {
-        this.trackEvent('paged-publication-page-spread-appeared', properties);
+        this.eventTracker.trackPagedPublicationOpened({
+          'pp.id': this.id,
+          'vt': this.getViewToken([SGN$f.client.id, this.id])
+        });
         return this;
       }
     }, {
       key: "trackPageSpreadDisappeared",
-      value: function trackPageSpreadDisappeared(properties) {
-        this.trackEvent('paged-publication-page-spread-disappeared', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageSpreadZoomedIn",
-      value: function trackPageSpreadZoomedIn(properties) {
-        this.trackEvent('paged-publication-page-spread-zoomed-in', properties);
-        return this;
-      }
-    }, {
-      key: "trackPageSpreadZoomedOut",
-      value: function trackPageSpreadZoomedOut(properties) {
-        this.trackEvent('paged-publication-page-spread-zoomed-out', properties);
+      value: function trackPageSpreadDisappeared(pageNumbers) {
+        var _this = this;
+
+        pageNumbers.forEach(function (pageNumber) {
+          _this.eventTracker.trackPagedPublicationPageDisappeared({
+            'pp.id': _this.id,
+            'ppp.n': pageNumber,
+            'vt': _this.getViewToken([SGN$f.client.id, _this.id, pageNumber])
+          });
+        });
         return this;
       }
     }, {
@@ -8421,54 +9098,6 @@
         this.pageSpreadAppeared(e.pageSpread);
       }
     }, {
-      key: "clicked",
-      value: function clicked(e) {
-        var properties;
-
-        if (e.page != null) {
-          properties = {
-            pageNumber: e.page.pageNumber,
-            x: e.verso.pageX,
-            y: e.verso.pageY
-          };
-          this.trackPageClicked({
-            pagedPublicationPage: properties
-          });
-
-          if (e.verso.overlayEls.length > 0) {
-            this.trackPageHotspotsClicked({
-              pagedPublicationPage: properties
-            });
-          }
-        }
-      }
-    }, {
-      key: "doubleClicked",
-      value: function doubleClicked(e) {
-        if (e.page != null) {
-          this.trackPageDoubleClicked({
-            pagedPublicationPage: {
-              pageNumber: e.page.pageNumber,
-              x: e.verso.pageX,
-              y: e.verso.pageY
-            }
-          });
-        }
-      }
-    }, {
-      key: "pressed",
-      value: function pressed(e) {
-        if (e.page != null) {
-          this.trackPageLongPressed({
-            pagedPublicationPage: {
-              pageNumber: e.page.pageNumber,
-              x: e.verso.pageX,
-              y: e.verso.pageY
-            }
-          });
-        }
-      }
-    }, {
       key: "panStart",
       value: function panStart(e) {
         if (e.scale === 1) {
@@ -8476,43 +9105,10 @@
         }
       }
     }, {
-      key: "zoomedIn",
-      value: function zoomedIn(e) {
-        if (e.pageSpread != null) {
-          this.trackPageSpreadZoomedIn({
-            pagedPublicationPageSpread: {
-              pageNumbers: e.pageSpread.getPages().map(function (page) {
-                return page.pageNumber;
-              })
-            }
-          });
-        }
-      }
-    }, {
-      key: "zoomedOut",
-      value: function zoomedOut(e) {
-        if (e.pageSpread != null) {
-          this.trackPageSpreadZoomedOut({
-            pagedPublicationPageSpread: {
-              pageNumbers: e.pageSpread.getPages().map(function (page) {
-                return page.pageNumber;
-              })
-            }
-          });
-        }
-      }
-    }, {
       key: "pageSpreadAppeared",
       value: function pageSpreadAppeared(pageSpread) {
         if (pageSpread != null && this.hidden === true) {
           this.pageSpread = pageSpread;
-          this.trackPageSpreadAppeared({
-            pagedPublicationPageSpread: {
-              pageNumbers: pageSpread.getPages().map(function (page) {
-                return page.pageNumber;
-              })
-            }
-          });
           this.hidden = false;
         }
       }
@@ -8520,16 +9116,22 @@
       key: "pageSpreadDisappeared",
       value: function pageSpreadDisappeared() {
         if (this.pageSpread != null && this.hidden === false) {
-          this.trackPageSpreadDisappeared({
-            pagedPublicationPageSpread: {
-              pageNumbers: this.pageSpread.getPages().map(function (page) {
-                return page.pageNumber;
-              })
-            }
-          });
+          this.trackPageSpreadDisappeared(this.pageSpread.getPages().map(function (page) {
+            return page.pageNumber;
+          }));
           this.hidden = true;
           this.pageSpread = null;
         }
+      }
+    }, {
+      key: "getViewToken",
+      value: function getViewToken(parts) {
+        var str, viewToken;
+        str = parts.join('');
+        viewToken = util$2.btoa(String.fromCharCode.apply(null, md5$1(str, {
+          asBytes: true
+        }).slice(0, 8)));
+        return viewToken;
       }
     }]);
 
@@ -8539,9 +9141,9 @@
   MicroEvent$7.mixin(PagedPublicationEventTracking);
   var eventTracking = PagedPublicationEventTracking;
 
-  var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$15, Viewer;
+  var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$g, Viewer;
   MicroEvent$8 = microevent;
-  SGN$15 = sgn;
+  SGN$g = sgn;
   Core = core$2;
   Hotspots = hotspots;
   Controls = controls;
@@ -8571,8 +9173,8 @@
       this._controls = new Controls(this.el, {
         keyboard: this.options.keyboard
       });
-      this._eventTracking = new EventTracking();
-      this.viewSession = SGN$15.util.uuid();
+      this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
+      this.viewSession = SGN$g.util.uuid();
       this.hotspots = null;
       this.hotspotQueue = [];
       this.popover = null;
@@ -8655,37 +9257,9 @@
         return this;
       }
     }, {
-      key: "_trackEvent",
-      value: function _trackEvent(e) {
-        var eventTracker, idType, key, properties, ref, type, value;
-        type = e.type;
-        idType = 'legacy';
-        properties = {
-          pagedPublication: {
-            id: [idType, this.options.id],
-            ownedBy: [idType, this.options.ownedBy]
-          }
-        };
-        eventTracker = this.options.eventTracker;
-        ref = e.properties;
-
-        for (key in ref) {
-          value = ref[key];
-          properties[key] = value;
-        }
-
-        if (eventTracker != null) {
-          eventTracker.trackEvent(type, properties);
-        }
-      }
-    }, {
       key: "_setupEventListeners",
       value: function _setupEventListeners() {
         var _this = this;
-
-        this._eventTracking.bind('trackEvent', function (e) {
-          _this._trackEvent(e);
-        });
 
         this._controls.bind('prev', function (e) {
           _this.prev(e);
@@ -8832,9 +9406,9 @@
         if (hotspots$$1.length === 1) {
           callback(hotspots$$1[0]);
         } else if (hotspots$$1.length > 1) {
-          this.popover = SGN$15.CoreUIKit.singleChoicePopover({
+          this.popover = SGN$g.CoreUIKit.singleChoicePopover({
             el: this.el,
-            header: SGN$15.translations.t('paged_publication.hotspot_picker.header'),
+            header: SGN$g.translations.t('paged_publication.hotspot_picker.header'),
             x: e.verso.x,
             y: e.verso.y,
             items: hotspots$$1.filter(function (hotspot) {
@@ -8957,8 +9531,8 @@
   MicroEvent$8.mixin(Viewer);
   var viewer = Viewer;
 
-  var Bootstrapper, SGN$16;
-  SGN$16 = core;
+  var Bootstrapper, SGN$h;
+  SGN$h = core;
 
   var bootstrapper = Bootstrapper =
   /*#__PURE__*/
@@ -8975,7 +9549,7 @@
     _createClass(Bootstrapper, [{
       key: "createViewer",
       value: function createViewer(data) {
-        return new SGN$16.PagedPublicationKit.Viewer(this.options.el, {
+        return new SGN$h.PagedPublicationKit.Viewer(this.options.el, {
           id: this.options.id,
           ownedBy: data.details.dealer_id,
           color: '#' + data.details.branding.pageflip.color,
@@ -9016,14 +9590,18 @@
     }, {
       key: "fetch",
       value: function fetch(callback) {
-        SGN$16.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+        SGN$h.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
           var data;
           data = {
             details: result[0][1],
             pages: result[1][1]
           };
 
-          if (data.details != null && data.pages != null) {
+          if (result[0][0] != null) {
+            callback(result[0][0]);
+          } else if (result[1][0] != null) {
+            callback(result[1][0]);
+          } else if (data.details != null && data.pages != null) {
             callback(null, data);
           } else {
             callback(new Error());
@@ -9033,21 +9611,21 @@
     }, {
       key: "fetchDetails",
       value: function fetchDetails(callback) {
-        SGN$16.CoreKit.request({
+        SGN$h.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id)
         }, callback);
       }
     }, {
       key: "fetchPages",
       value: function fetchPages(callback) {
-        SGN$16.CoreKit.request({
+        SGN$h.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id, "/pages")
         }, callback);
       }
     }, {
       key: "fetchHotspots",
       value: function fetchHotspots(callback) {
-        SGN$16.CoreKit.request({
+        SGN$h.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
         }, callback);
       }
@@ -9187,7 +9765,7 @@
     };
 
     // export in common js
-    if( 'object' !== "undefined" && ('exports' in module)){
+    if( 'exports' in module){
     	module.exports	= MicroEvent;
     }
     });
@@ -10614,9 +11192,9 @@
 
   });
 
-  var Incito, MicroEvent$10, Viewer$1;
+  var Incito, MicroEvent$a, Viewer$1;
   Incito = incito;
-  MicroEvent$10 = microevent;
+  MicroEvent$a = microevent;
 
   Viewer$1 =
   /*#__PURE__*/
@@ -10638,14 +11216,6 @@
       key: "start",
       value: function start() {
         this.incito.start();
-
-        this._trackEvent({
-          type: 'x-incito-publication-opened',
-          properties: {
-            id: this.options.id
-          }
-        });
-
         return this;
       }
     }, {
@@ -10653,32 +11223,12 @@
       value: function destroy() {
         this.incito.destroy();
       }
-    }, {
-      key: "_trackEvent",
-      value: function _trackEvent(e) {
-        var eventTracker, key, properties, ref, type, value;
-        type = e.type;
-        properties = {
-          id: this.options.id
-        };
-        eventTracker = this.options.eventTracker;
-        ref = e.properties;
-
-        for (key in ref) {
-          value = ref[key];
-          properties[key] = value;
-        }
-
-        if (eventTracker != null) {
-          return eventTracker.trackEvent(type, properties);
-        }
-      }
     }]);
 
     return Viewer;
   }();
 
-  MicroEvent$10.mixin(Viewer$1);
+  MicroEvent$a.mixin(Viewer$1);
   var viewer$1 = Viewer$1;
 
   var Controls$1;
@@ -10737,9 +11287,9 @@
 
   var require$$3 = ( incito$2 && incito$1 ) || incito$2;
 
-  var Bootstrapper$1, Controls$2, SGN$17, schema, util$2;
-  util$2 = util_1;
-  SGN$17 = core;
+  var Bootstrapper$1, Controls$2, SGN$i, schema, util$3;
+  util$3 = util_1;
+  SGN$i = core;
   Controls$2 = controls$1;
   schema = require$$3;
 
@@ -10765,7 +11315,7 @@
     _createClass(Bootstrapper, [{
       key: "getDeviceCategory",
       value: function getDeviceCategory() {
-        return util$2.getDeviceCategory();
+        return util$3.getDeviceCategory();
       }
     }, {
       key: "getPixelRatio",
@@ -10775,13 +11325,13 @@
     }, {
       key: "getPointer",
       value: function getPointer() {
-        return util$2.getPointer();
+        return util$3.getPointer();
       }
     }, {
       key: "getOrientation",
       value: function getOrientation() {
         var orientation;
-        orientation = util$2.getOrientation(screen.width, screen.height);
+        orientation = util$3.getOrientation(screen.width, screen.height);
 
         if (orientation === 'quadratic') {
           orientation = 'horizontal';
@@ -10804,13 +11354,13 @@
         var _this = this;
 
         var data;
-        data = SGN$17.storage.session.get(this.storageKey);
+        data = SGN$i.storage.session.get(this.storageKey);
 
         if (data != null && data.response != null && data.width === this.maxWidth) {
           return callback(null, data.response);
         }
 
-        SGN$17.GraphKit.request({
+        SGN$i.GraphKit.request({
           query: schema,
           operationName: 'GetIncitoPublication',
           variables: {
@@ -10826,10 +11376,10 @@
           if (err != null) {
             callback(err);
           } else if (res.errors && res.errors.length > 0) {
-            callback(util$2.error(new Error(), 'graph request contained errors'));
+            callback(util$3.error(new Error(), 'graph request contained errors'));
           } else {
             callback(null, res);
-            SGN$17.storage.session.set(_this.storageKey, {
+            SGN$i.storage.session.set(_this.storageKey, {
               width: _this.maxWidth,
               response: res
             });
@@ -10842,10 +11392,10 @@
         var controls, viewer;
 
         if (data.incito == null) {
-          throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
+          throw util$3.error(new Error(), 'you need to supply valid Incito to create a viewer');
         }
 
-        viewer = new SGN$17.IncitoPublicationKit.Viewer(this.options.el, {
+        viewer = new SGN$i.IncitoPublicationKit.Viewer(this.options.el, {
           id: this.options.id,
           incito: data.incito,
           eventTracker: this.options.eventTracker
@@ -11238,7 +11788,7 @@
       return true;
     };
 
-    if ('object' !== "undefined" && module.exports) {
+    if (module.exports) {
       module.exports = Gator;
     }
 
@@ -11310,8 +11860,8 @@
     return OfferDetails;
   }();
 
-  var Gator, MicroEvent$11, Mustache$2, Popover, keyCodes$2, template;
-  MicroEvent$11 = microevent;
+  var Gator, MicroEvent$b, Mustache$2, Popover, keyCodes$2, template;
+  MicroEvent$b = microevent;
   Gator = gator;
   Mustache$2 = mustache;
   keyCodes$2 = keyCodes;
@@ -11451,7 +12001,7 @@
     return Popover;
   }();
 
-  MicroEvent$11.mixin(Popover);
+  MicroEvent$b.mixin(Popover);
   var popover = Popover;
 
   var Popover$1;
@@ -11505,63 +12055,60 @@
     }
   };
 
-  var SGN$18, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
+  var SGN$j, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
   isBrowser$1 = util_1.isBrowser;
-  SGN$18 = core; // Expose storage backends.
+  SGN$j = core; // Expose storage backends.
 
-  SGN$18.storage = {
+  SGN$j.storage = {
     local: clientLocal,
     session: clientSession,
     cookie: clientCookie
   }; // Expose request handler.
 
-  SGN$18.request = request; // Expose the different kits.
+  SGN$j.request = request; // Expose the different kits.
 
-  SGN$18.AssetsKit = assets;
-  SGN$18.EventsKit = events;
-  SGN$18.GraphKit = graph;
-  SGN$18.CoreKit = core$1;
-  SGN$18.PagedPublicationKit = pagedPublication;
-  SGN$18.IncitoPublicationKit = incitoPublication;
-  SGN$18.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
+  SGN$j.AssetsKit = assets;
+  SGN$j.EventsKit = events;
+  SGN$j.GraphKit = graph;
+  SGN$j.CoreKit = core$1;
+  SGN$j.PagedPublicationKit = pagedPublication;
+  SGN$j.IncitoPublicationKit = incitoPublication;
+  SGN$j.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-  session$2 = SGN$18.storage.cookie.get('session');
+  session$2 = SGN$j.storage.cookie.get('session');
 
   if (_typeof(session$2) === 'object') {
-    SGN$18.config.set({
+    SGN$j.config.set({
       coreSessionToken: session$2.token,
       coreSessionClientId: session$2.client_id
     });
   }
 
-  SGN$18.client = function () {
-    var firstOpen, id;
-    id = SGN$18.storage.local.get('client-id');
-    id = id != null ? id.data : void 0;
-    firstOpen = id == null;
+  SGN$j.client = function () {
+    var id;
+    id = SGN$j.storage.local.get('client-id');
 
-    if (firstOpen) {
-      id = SGN$18.util.uuid();
-      SGN$18.storage.local.set('client-id', id);
+    if (id != null ? id.data : void 0) {
+      id = id.data;
+    }
+
+    if (id == null) {
+      id = SGN$j.util.uuid();
+      SGN$j.storage.local.set('client-id', id);
     }
 
     return {
-      firstOpen: firstOpen,
       id: id
     };
   }(); // Listen for changes in the config.
 
 
-  SGN$18.config.bind('change', function (changedAttributes) {
+  SGN$j.config.bind('change', function (changedAttributes) {
     var eventTracker;
     eventTracker = changedAttributes.eventTracker;
 
     if (eventTracker != null) {
-      if (SGN$18.client.firstOpen === true) {
-        eventTracker.trackEvent('first-client-session-opened', {}, '1.0.0');
-      }
-
-      eventTracker.trackEvent('client-session-opened', {}, '1.0.0');
+      eventTracker.trackClientSessionOpened();
     }
   });
 
@@ -11579,16 +12126,16 @@
       }
 
       if (trackId != null) {
-        config$2.eventTracker = new SGN$18.EventsKit.Tracker({
+        config$2.eventTracker = new SGN$j.EventsKit.Tracker({
           trackId: trackId
         });
       }
 
-      SGN$18.config.set(config$2);
+      SGN$j.config.set(config$2);
     }
   }
 
-  var coffeescript = SGN$18;
+  var coffeescript = SGN$j;
 
   return coffeescript;
 
