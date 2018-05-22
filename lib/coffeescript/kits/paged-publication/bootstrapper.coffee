@@ -42,7 +42,11 @@ module.exports = class Bootstrapper
                 details: result[0][1]
                 pages: result[1][1]
 
-            if data.details? and data.pages?
+            if result[0][0]?
+                callback result[0][0]
+            else if result[1][0]?
+                callback result[1][0]
+            else if data.details? and data.pages?
                 callback null, data
             else
                 callback new Error()
