@@ -1,5 +1,6 @@
 SGN = require '../../sgn'
 md5 = require 'md5'
+{isBrowser} = require '../../util'
 clientLocalStorage = require '../../storage/client-local'
 
 getPool = ->
@@ -39,7 +40,7 @@ module.exports = class Tracker
         @dispatching = false
 
         # Dispatch events periodically.
-        @interval = setInterval @dispatch.bind(@), @dispatchInterval
+        @interval = setInterval @dispatch.bind(@), @dispatchInterval if isBrowser()
 
         return
 

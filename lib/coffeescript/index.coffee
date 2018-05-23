@@ -1,4 +1,4 @@
-{ isBrowser } = require './util'
+{isBrowser} = require './util'
 
 SGN = require './core'
 
