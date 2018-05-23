@@ -6,6 +6,8 @@ clientLocalStorage = require '../../storage/client-local'
 getPool = ->
     data = clientLocalStorage.get 'event-tracker-pool'
     data = [] if Array.isArray(data) is false
+    data = data.filter (evt) ->
+        typeof evt._i is 'string'
 
     data
 pool = getPool()
