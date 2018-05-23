@@ -9,11 +9,11 @@ import require$$0 from 'microevent';
 import mustache from 'mustache';
 import 'core-js/modules/es6.regexp.split';
 import xmlhttprequest from 'xmlhttprequest';
+import md5 from 'md5';
 import 'core-js/modules/es6.object.assign';
 import sha256 from 'sha256';
 import 'core-js/modules/es6.array.find';
 import versoBrowser from 'verso-browser';
-import md5 from 'md5';
 import incitoBrowser from 'incito-browser';
 import 'core-js/modules/es6.regexp.match';
 
@@ -724,8 +724,9 @@ var assets = {
   fileUpload: fileUpload
 };
 
-var SGN$6, Tracker, clientLocalStorage, getPool, pool;
+var SGN$6, Tracker, clientLocalStorage, getPool, md5$1, pool;
 SGN$6 = sgn;
+md5$1 = md5;
 clientLocalStorage = clientLocal;
 
 getPool = function getPool() {
@@ -945,6 +946,21 @@ var tracker = Tracker = function () {
       key: "trackSearched",
       value: function trackSearched(properties, version) {
         return this.trackEvent(5, properties, version);
+      }
+    }, {
+      key: "createViewToken",
+      value: function createViewToken() {
+        var str, viewToken;
+
+        for (var _len = arguments.length, parts = new Array(_len), _key = 0; _key < _len; _key++) {
+          parts[_key] = arguments[_key];
+        }
+
+        str = [SGN$6.client.id].concat(parts).join('');
+        viewToken = SGN$6.util.btoa(String.fromCharCode.apply(null, md5$1(str, {
+          asBytes: true
+        }).slice(0, 8)));
+        return viewToken;
       }
     }]);
 
@@ -2482,11 +2498,8 @@ function () {
 MicroEvent$6.mixin(PagedPublicationControls);
 var controls = PagedPublicationControls;
 
-var MicroEvent$7, PagedPublicationEventTracking, SGN$f, md5$1, util$2;
+var MicroEvent$7, PagedPublicationEventTracking;
 MicroEvent$7 = require$$0;
-md5$1 = md5;
-util$2 = util_1;
-SGN$f = sgn;
 
 PagedPublicationEventTracking =
 /*#__PURE__*/
@@ -2518,7 +2531,7 @@ function () {
     value: function trackOpened(properties) {
       this.eventTracker.trackPagedPublicationOpened({
         'pp.id': this.id,
-        'vt': this.getViewToken([SGN$f.client.id, this.id])
+        'vt': this.eventTracker.createViewToken(this.id)
       });
       return this;
     }
@@ -2531,7 +2544,7 @@ function () {
         _this.eventTracker.trackPagedPublicationPageDisappeared({
           'pp.id': _this.id,
           'ppp.n': pageNumber,
-          'vt': _this.getViewToken([SGN$f.client.id, _this.id, pageNumber])
+          'vt': _this.eventTracker.createViewToken(_this.id, pageNumber)
         });
       });
       return this;
@@ -2587,16 +2600,6 @@ function () {
         this.pageSpread = null;
       }
     }
-  }, {
-    key: "getViewToken",
-    value: function getViewToken(parts) {
-      var str, viewToken;
-      str = parts.join('');
-      viewToken = util$2.btoa(String.fromCharCode.apply(null, md5$1(str, {
-        asBytes: true
-      }).slice(0, 8)));
-      return viewToken;
-    }
   }]);
 
   return PagedPublicationEventTracking;
@@ -2605,9 +2608,9 @@ function () {
 MicroEvent$7.mixin(PagedPublicationEventTracking);
 var eventTracking = PagedPublicationEventTracking;
 
-var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$g, Viewer;
+var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$f, Viewer;
 MicroEvent$8 = require$$0;
-SGN$g = sgn;
+SGN$f = sgn;
 Core = core$2;
 Hotspots = hotspots;
 Controls = controls;
@@ -2638,7 +2641,7 @@ function () {
       keyboard: this.options.keyboard
     });
     this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
-    this.viewSession = SGN$g.util.uuid();
+    this.viewSession = SGN$f.util.uuid();
     this.hotspots = null;
     this.hotspotQueue = [];
     this.popover = null;
@@ -2870,9 +2873,9 @@ function () {
       if (hotspots$$1.length === 1) {
         callback(hotspots$$1[0]);
       } else if (hotspots$$1.length > 1) {
-        this.popover = SGN$g.CoreUIKit.singleChoicePopover({
+        this.popover = SGN$f.CoreUIKit.singleChoicePopover({
           el: this.el,
-          header: SGN$g.translations.t('paged_publication.hotspot_picker.header'),
+          header: SGN$f.translations.t('paged_publication.hotspot_picker.header'),
           x: e.verso.x,
           y: e.verso.y,
           items: hotspots$$1.filter(function (hotspot) {
@@ -2995,8 +2998,8 @@ function () {
 MicroEvent$8.mixin(Viewer);
 var viewer = Viewer;
 
-var Bootstrapper, SGN$h;
-SGN$h = core;
+var Bootstrapper, SGN$g;
+SGN$g = core;
 
 var bootstrapper = Bootstrapper =
 /*#__PURE__*/
@@ -3013,7 +3016,7 @@ function () {
   _createClass(Bootstrapper, [{
     key: "createViewer",
     value: function createViewer(data) {
-      return new SGN$h.PagedPublicationKit.Viewer(this.options.el, {
+      return new SGN$g.PagedPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         ownedBy: data.details.dealer_id,
         color: '#' + data.details.branding.pageflip.color,
@@ -3054,7 +3057,7 @@ function () {
   }, {
     key: "fetch",
     value: function fetch(callback) {
-      SGN$h.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+      SGN$g.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
         var data;
         data = {
           details: result[0][1],
@@ -3075,21 +3078,21 @@ function () {
   }, {
     key: "fetchDetails",
     value: function fetchDetails(callback) {
-      SGN$h.CoreKit.request({
+      SGN$g.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
     }
   }, {
     key: "fetchPages",
     value: function fetchPages(callback) {
-      SGN$h.CoreKit.request({
+      SGN$g.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/pages")
       }, callback);
     }
   }, {
     key: "fetchHotspots",
     value: function fetchHotspots(callback) {
-      SGN$h.CoreKit.request({
+      SGN$g.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
       }, callback);
     }
@@ -3198,9 +3201,9 @@ var incito$1 = /*#__PURE__*/Object.freeze({
 
 var require$$3 = ( incito$1 && incito ) || incito$1;
 
-var Bootstrapper$1, Controls$2, SGN$i, schema, util$3;
-util$3 = util_1;
-SGN$i = core;
+var Bootstrapper$1, Controls$2, SGN$h, schema, util$2;
+util$2 = util_1;
+SGN$h = core;
 Controls$2 = controls$1;
 schema = require$$3;
 
@@ -3226,7 +3229,7 @@ function () {
   _createClass(Bootstrapper, [{
     key: "getDeviceCategory",
     value: function getDeviceCategory() {
-      return util$3.getDeviceCategory();
+      return util$2.getDeviceCategory();
     }
   }, {
     key: "getPixelRatio",
@@ -3236,13 +3239,13 @@ function () {
   }, {
     key: "getPointer",
     value: function getPointer() {
-      return util$3.getPointer();
+      return util$2.getPointer();
     }
   }, {
     key: "getOrientation",
     value: function getOrientation() {
       var orientation;
-      orientation = util$3.getOrientation(screen.width, screen.height);
+      orientation = util$2.getOrientation(screen.width, screen.height);
 
       if (orientation === 'quadratic') {
         orientation = 'horizontal';
@@ -3265,13 +3268,13 @@ function () {
       var _this = this;
 
       var data;
-      data = SGN$i.storage.session.get(this.storageKey);
+      data = SGN$h.storage.session.get(this.storageKey);
 
       if (data != null && data.response != null && data.width === this.maxWidth) {
         return callback(null, data.response);
       }
 
-      SGN$i.GraphKit.request({
+      SGN$h.GraphKit.request({
         query: schema,
         operationName: 'GetIncitoPublication',
         variables: {
@@ -3287,10 +3290,10 @@ function () {
         if (err != null) {
           callback(err);
         } else if (res.errors && res.errors.length > 0) {
-          callback(util$3.error(new Error(), 'graph request contained errors'));
+          callback(util$2.error(new Error(), 'graph request contained errors'));
         } else {
           callback(null, res);
-          SGN$i.storage.session.set(_this.storageKey, {
+          SGN$h.storage.session.set(_this.storageKey, {
             width: _this.maxWidth,
             response: res
           });
@@ -3303,10 +3306,10 @@ function () {
       var controls, viewer;
 
       if (data.incito == null) {
-        throw util$3.error(new Error(), 'you need to supply valid Incito to create a viewer');
+        throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
       }
 
-      viewer = new SGN$i.IncitoPublicationKit.Viewer(this.options.el, {
+      viewer = new SGN$h.IncitoPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         incito: data.incito,
         eventTracker: this.options.eventTracker
@@ -3956,46 +3959,46 @@ var coreUi = {
   }
 };
 
-var SGN$j, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
+var SGN$i, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
 isBrowser$1 = util_1.isBrowser;
-SGN$j = core; // Expose storage backends.
+SGN$i = core; // Expose storage backends.
 
-SGN$j.storage = {
+SGN$i.storage = {
   local: clientLocal,
   session: clientSession,
   cookie: clientCookie
 }; // Expose request handler.
 
-SGN$j.request = request; // Expose the different kits.
+SGN$i.request = request; // Expose the different kits.
 
-SGN$j.AssetsKit = assets;
-SGN$j.EventsKit = events;
-SGN$j.GraphKit = graph;
-SGN$j.CoreKit = core$1;
-SGN$j.PagedPublicationKit = pagedPublication;
-SGN$j.IncitoPublicationKit = incitoPublication;
-SGN$j.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
+SGN$i.AssetsKit = assets;
+SGN$i.EventsKit = events;
+SGN$i.GraphKit = graph;
+SGN$i.CoreKit = core$1;
+SGN$i.PagedPublicationKit = pagedPublication;
+SGN$i.IncitoPublicationKit = incitoPublication;
+SGN$i.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-session$2 = SGN$j.storage.cookie.get('session');
+session$2 = SGN$i.storage.cookie.get('session');
 
 if (_typeof(session$2) === 'object') {
-  SGN$j.config.set({
+  SGN$i.config.set({
     coreSessionToken: session$2.token,
     coreSessionClientId: session$2.client_id
   });
 }
 
-SGN$j.client = function () {
+SGN$i.client = function () {
   var id;
-  id = SGN$j.storage.local.get('client-id');
+  id = SGN$i.storage.local.get('client-id');
 
   if (id != null ? id.data : void 0) {
     id = id.data;
   }
 
   if (id == null) {
-    id = SGN$j.util.uuid();
-    SGN$j.storage.local.set('client-id', id);
+    id = SGN$i.util.uuid();
+    SGN$i.storage.local.set('client-id', id);
   }
 
   return {
@@ -4004,7 +4007,7 @@ SGN$j.client = function () {
 }(); // Listen for changes in the config.
 
 
-SGN$j.config.bind('change', function (changedAttributes) {
+SGN$i.config.bind('change', function (changedAttributes) {
   var eventTracker;
   eventTracker = changedAttributes.eventTracker;
 
@@ -4027,16 +4030,16 @@ if (isBrowser$1()) {
     }
 
     if (trackId != null) {
-      config$2.eventTracker = new SGN$j.EventsKit.Tracker({
+      config$2.eventTracker = new SGN$i.EventsKit.Tracker({
         trackId: trackId
       });
     }
 
-    SGN$j.config.set(config$2);
+    SGN$i.config.set(config$2);
   }
 }
 
-var coffeescript = SGN$j;
+var coffeescript = SGN$i;
 
 export default coffeescript;
 //# sourceMappingURL=sgn-sdk.es.js.map

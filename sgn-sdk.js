@@ -2340,8 +2340,327 @@
 
   _export(_export.S + _export.F, 'Object', { assign: _objectAssign });
 
-  var SGN$6, Tracker, clientLocalStorage, getPool, pool;
+  var crypt = createCommonjsModule(function (module) {
+  (function() {
+    var base64map
+        = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+
+    crypt = {
+      // Bit-wise rotation left
+      rotl: function(n, b) {
+        return (n << b) | (n >>> (32 - b));
+      },
+
+      // Bit-wise rotation right
+      rotr: function(n, b) {
+        return (n << (32 - b)) | (n >>> b);
+      },
+
+      // Swap big-endian to little-endian and vice versa
+      endian: function(n) {
+        // If number given, swap endian
+        if (n.constructor == Number) {
+          return crypt.rotl(n, 8) & 0x00FF00FF | crypt.rotl(n, 24) & 0xFF00FF00;
+        }
+
+        // Else, assume array and swap all items
+        for (var i = 0; i < n.length; i++)
+          n[i] = crypt.endian(n[i]);
+        return n;
+      },
+
+      // Generate an array of any length of random bytes
+      randomBytes: function(n) {
+        for (var bytes = []; n > 0; n--)
+          bytes.push(Math.floor(Math.random() * 256));
+        return bytes;
+      },
+
+      // Convert a byte array to big-endian 32-bit words
+      bytesToWords: function(bytes) {
+        for (var words = [], i = 0, b = 0; i < bytes.length; i++, b += 8)
+          words[b >>> 5] |= bytes[i] << (24 - b % 32);
+        return words;
+      },
+
+      // Convert big-endian 32-bit words to a byte array
+      wordsToBytes: function(words) {
+        for (var bytes = [], b = 0; b < words.length * 32; b += 8)
+          bytes.push((words[b >>> 5] >>> (24 - b % 32)) & 0xFF);
+        return bytes;
+      },
+
+      // Convert a byte array to a hex string
+      bytesToHex: function(bytes) {
+        for (var hex = [], i = 0; i < bytes.length; i++) {
+          hex.push((bytes[i] >>> 4).toString(16));
+          hex.push((bytes[i] & 0xF).toString(16));
+        }
+        return hex.join('');
+      },
+
+      // Convert a hex string to a byte array
+      hexToBytes: function(hex) {
+        for (var bytes = [], c = 0; c < hex.length; c += 2)
+          bytes.push(parseInt(hex.substr(c, 2), 16));
+        return bytes;
+      },
+
+      // Convert a byte array to a base-64 string
+      bytesToBase64: function(bytes) {
+        for (var base64 = [], i = 0; i < bytes.length; i += 3) {
+          var triplet = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+          for (var j = 0; j < 4; j++)
+            if (i * 8 + j * 6 <= bytes.length * 8)
+              base64.push(base64map.charAt((triplet >>> 6 * (3 - j)) & 0x3F));
+            else
+              base64.push('=');
+        }
+        return base64.join('');
+      },
+
+      // Convert a base-64 string to a byte array
+      base64ToBytes: function(base64) {
+        // Remove non-base-64 characters
+        base64 = base64.replace(/[^A-Z0-9+\/]/ig, '');
+
+        for (var bytes = [], i = 0, imod4 = 0; i < base64.length;
+            imod4 = ++i % 4) {
+          if (imod4 == 0) continue;
+          bytes.push(((base64map.indexOf(base64.charAt(i - 1))
+              & (Math.pow(2, -2 * imod4 + 8) - 1)) << (imod4 * 2))
+              | (base64map.indexOf(base64.charAt(i)) >>> (6 - imod4 * 2)));
+        }
+        return bytes;
+      }
+    };
+
+    module.exports = crypt;
+  })();
+  });
+
+  var charenc = {
+    // UTF-8 encoding
+    utf8: {
+      // Convert a string to a byte array
+      stringToBytes: function(str) {
+        return charenc.bin.stringToBytes(unescape(encodeURIComponent(str)));
+      },
+
+      // Convert a byte array to a string
+      bytesToString: function(bytes) {
+        return decodeURIComponent(escape(charenc.bin.bytesToString(bytes)));
+      }
+    },
+
+    // Binary encoding
+    bin: {
+      // Convert a string to a byte array
+      stringToBytes: function(str) {
+        for (var bytes = [], i = 0; i < str.length; i++)
+          bytes.push(str.charCodeAt(i) & 0xFF);
+        return bytes;
+      },
+
+      // Convert a byte array to a string
+      bytesToString: function(bytes) {
+        for (var str = [], i = 0; i < bytes.length; i++)
+          str.push(String.fromCharCode(bytes[i]));
+        return str.join('');
+      }
+    }
+  };
+
+  var charenc_1 = charenc;
+
+  /*!
+   * Determine if an object is a Buffer
+   *
+   * @author   Feross Aboukhadijeh <https://feross.org>
+   * @license  MIT
+   */
+
+  // The _isBuffer check is for Safari 5-7 support, because it's missing
+  // Object.prototype.constructor. Remove this eventually
+  var isBuffer_1 = function (obj) {
+    return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+  };
+
+  function isBuffer (obj) {
+    return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+  }
+
+  // For Node v0.10 support. Remove this eventually.
+  function isSlowBuffer (obj) {
+    return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+  }
+
+  var md5 = createCommonjsModule(function (module) {
+  (function(){
+    var crypt$$1 = crypt,
+        utf8 = charenc_1.utf8,
+        isBuffer = isBuffer_1,
+        bin = charenc_1.bin,
+
+    // The core
+    md5 = function (message, options) {
+      // Convert to byte array
+      if (message.constructor == String)
+        if (options && options.encoding === 'binary')
+          message = bin.stringToBytes(message);
+        else
+          message = utf8.stringToBytes(message);
+      else if (isBuffer(message))
+        message = Array.prototype.slice.call(message, 0);
+      else if (!Array.isArray(message))
+        message = message.toString();
+      // else, assume byte array already
+
+      var m = crypt$$1.bytesToWords(message),
+          l = message.length * 8,
+          a =  1732584193,
+          b = -271733879,
+          c = -1732584194,
+          d =  271733878;
+
+      // Swap endian
+      for (var i = 0; i < m.length; i++) {
+        m[i] = ((m[i] <<  8) | (m[i] >>> 24)) & 0x00FF00FF |
+               ((m[i] << 24) | (m[i] >>>  8)) & 0xFF00FF00;
+      }
+
+      // Padding
+      m[l >>> 5] |= 0x80 << (l % 32);
+      m[(((l + 64) >>> 9) << 4) + 14] = l;
+
+      // Method shortcuts
+      var FF = md5._ff,
+          GG = md5._gg,
+          HH = md5._hh,
+          II = md5._ii;
+
+      for (var i = 0; i < m.length; i += 16) {
+
+        var aa = a,
+            bb = b,
+            cc = c,
+            dd = d;
+
+        a = FF(a, b, c, d, m[i+ 0],  7, -680876936);
+        d = FF(d, a, b, c, m[i+ 1], 12, -389564586);
+        c = FF(c, d, a, b, m[i+ 2], 17,  606105819);
+        b = FF(b, c, d, a, m[i+ 3], 22, -1044525330);
+        a = FF(a, b, c, d, m[i+ 4],  7, -176418897);
+        d = FF(d, a, b, c, m[i+ 5], 12,  1200080426);
+        c = FF(c, d, a, b, m[i+ 6], 17, -1473231341);
+        b = FF(b, c, d, a, m[i+ 7], 22, -45705983);
+        a = FF(a, b, c, d, m[i+ 8],  7,  1770035416);
+        d = FF(d, a, b, c, m[i+ 9], 12, -1958414417);
+        c = FF(c, d, a, b, m[i+10], 17, -42063);
+        b = FF(b, c, d, a, m[i+11], 22, -1990404162);
+        a = FF(a, b, c, d, m[i+12],  7,  1804603682);
+        d = FF(d, a, b, c, m[i+13], 12, -40341101);
+        c = FF(c, d, a, b, m[i+14], 17, -1502002290);
+        b = FF(b, c, d, a, m[i+15], 22,  1236535329);
+
+        a = GG(a, b, c, d, m[i+ 1],  5, -165796510);
+        d = GG(d, a, b, c, m[i+ 6],  9, -1069501632);
+        c = GG(c, d, a, b, m[i+11], 14,  643717713);
+        b = GG(b, c, d, a, m[i+ 0], 20, -373897302);
+        a = GG(a, b, c, d, m[i+ 5],  5, -701558691);
+        d = GG(d, a, b, c, m[i+10],  9,  38016083);
+        c = GG(c, d, a, b, m[i+15], 14, -660478335);
+        b = GG(b, c, d, a, m[i+ 4], 20, -405537848);
+        a = GG(a, b, c, d, m[i+ 9],  5,  568446438);
+        d = GG(d, a, b, c, m[i+14],  9, -1019803690);
+        c = GG(c, d, a, b, m[i+ 3], 14, -187363961);
+        b = GG(b, c, d, a, m[i+ 8], 20,  1163531501);
+        a = GG(a, b, c, d, m[i+13],  5, -1444681467);
+        d = GG(d, a, b, c, m[i+ 2],  9, -51403784);
+        c = GG(c, d, a, b, m[i+ 7], 14,  1735328473);
+        b = GG(b, c, d, a, m[i+12], 20, -1926607734);
+
+        a = HH(a, b, c, d, m[i+ 5],  4, -378558);
+        d = HH(d, a, b, c, m[i+ 8], 11, -2022574463);
+        c = HH(c, d, a, b, m[i+11], 16,  1839030562);
+        b = HH(b, c, d, a, m[i+14], 23, -35309556);
+        a = HH(a, b, c, d, m[i+ 1],  4, -1530992060);
+        d = HH(d, a, b, c, m[i+ 4], 11,  1272893353);
+        c = HH(c, d, a, b, m[i+ 7], 16, -155497632);
+        b = HH(b, c, d, a, m[i+10], 23, -1094730640);
+        a = HH(a, b, c, d, m[i+13],  4,  681279174);
+        d = HH(d, a, b, c, m[i+ 0], 11, -358537222);
+        c = HH(c, d, a, b, m[i+ 3], 16, -722521979);
+        b = HH(b, c, d, a, m[i+ 6], 23,  76029189);
+        a = HH(a, b, c, d, m[i+ 9],  4, -640364487);
+        d = HH(d, a, b, c, m[i+12], 11, -421815835);
+        c = HH(c, d, a, b, m[i+15], 16,  530742520);
+        b = HH(b, c, d, a, m[i+ 2], 23, -995338651);
+
+        a = II(a, b, c, d, m[i+ 0],  6, -198630844);
+        d = II(d, a, b, c, m[i+ 7], 10,  1126891415);
+        c = II(c, d, a, b, m[i+14], 15, -1416354905);
+        b = II(b, c, d, a, m[i+ 5], 21, -57434055);
+        a = II(a, b, c, d, m[i+12],  6,  1700485571);
+        d = II(d, a, b, c, m[i+ 3], 10, -1894986606);
+        c = II(c, d, a, b, m[i+10], 15, -1051523);
+        b = II(b, c, d, a, m[i+ 1], 21, -2054922799);
+        a = II(a, b, c, d, m[i+ 8],  6,  1873313359);
+        d = II(d, a, b, c, m[i+15], 10, -30611744);
+        c = II(c, d, a, b, m[i+ 6], 15, -1560198380);
+        b = II(b, c, d, a, m[i+13], 21,  1309151649);
+        a = II(a, b, c, d, m[i+ 4],  6, -145523070);
+        d = II(d, a, b, c, m[i+11], 10, -1120210379);
+        c = II(c, d, a, b, m[i+ 2], 15,  718787259);
+        b = II(b, c, d, a, m[i+ 9], 21, -343485551);
+
+        a = (a + aa) >>> 0;
+        b = (b + bb) >>> 0;
+        c = (c + cc) >>> 0;
+        d = (d + dd) >>> 0;
+      }
+
+      return crypt$$1.endian([a, b, c, d]);
+    };
+
+    // Auxiliary functions
+    md5._ff  = function (a, b, c, d, x, s, t) {
+      var n = a + (b & c | ~b & d) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+    md5._gg  = function (a, b, c, d, x, s, t) {
+      var n = a + (b & d | c & ~d) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+    md5._hh  = function (a, b, c, d, x, s, t) {
+      var n = a + (b ^ c ^ d) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+    md5._ii  = function (a, b, c, d, x, s, t) {
+      var n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
+      return ((n << s) | (n >>> (32 - s))) + b;
+    };
+
+    // Package private blocksize
+    md5._blocksize = 16;
+    md5._digestsize = 16;
+
+    module.exports = function (message, options) {
+      if (message === undefined || message === null)
+        throw new Error('Illegal argument ' + message);
+
+      var digestbytes = crypt$$1.wordsToBytes(md5(message, options));
+      return options && options.asBytes ? digestbytes :
+          options && options.asString ? bin.bytesToString(digestbytes) :
+          crypt$$1.bytesToHex(digestbytes);
+    };
+
+  })();
+  });
+
+  var SGN$6, Tracker, clientLocalStorage, getPool, md5$1, pool;
   SGN$6 = sgn;
+  md5$1 = md5;
   clientLocalStorage = clientLocal;
 
   getPool = function getPool() {
@@ -2561,6 +2880,21 @@
         key: "trackSearched",
         value: function trackSearched(properties, version) {
           return this.trackEvent(5, properties, version);
+        }
+      }, {
+        key: "createViewToken",
+        value: function createViewToken() {
+          var str, viewToken;
+
+          for (var _len = arguments.length, parts = new Array(_len), _key = 0; _key < _len; _key++) {
+            parts[_key] = arguments[_key];
+          }
+
+          str = [SGN$6.client.id].concat(parts).join('');
+          viewToken = SGN$6.util.btoa(String.fromCharCode.apply(null, md5$1(str, {
+            asBytes: true
+          }).slice(0, 8)));
+          return viewToken;
         }
       }]);
 
@@ -8700,329 +9034,8 @@
   MicroEvent$6.mixin(PagedPublicationControls);
   var controls = PagedPublicationControls;
 
-  var crypt = createCommonjsModule(function (module) {
-  (function() {
-    var base64map
-        = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
-
-    crypt = {
-      // Bit-wise rotation left
-      rotl: function(n, b) {
-        return (n << b) | (n >>> (32 - b));
-      },
-
-      // Bit-wise rotation right
-      rotr: function(n, b) {
-        return (n << (32 - b)) | (n >>> b);
-      },
-
-      // Swap big-endian to little-endian and vice versa
-      endian: function(n) {
-        // If number given, swap endian
-        if (n.constructor == Number) {
-          return crypt.rotl(n, 8) & 0x00FF00FF | crypt.rotl(n, 24) & 0xFF00FF00;
-        }
-
-        // Else, assume array and swap all items
-        for (var i = 0; i < n.length; i++)
-          n[i] = crypt.endian(n[i]);
-        return n;
-      },
-
-      // Generate an array of any length of random bytes
-      randomBytes: function(n) {
-        for (var bytes = []; n > 0; n--)
-          bytes.push(Math.floor(Math.random() * 256));
-        return bytes;
-      },
-
-      // Convert a byte array to big-endian 32-bit words
-      bytesToWords: function(bytes) {
-        for (var words = [], i = 0, b = 0; i < bytes.length; i++, b += 8)
-          words[b >>> 5] |= bytes[i] << (24 - b % 32);
-        return words;
-      },
-
-      // Convert big-endian 32-bit words to a byte array
-      wordsToBytes: function(words) {
-        for (var bytes = [], b = 0; b < words.length * 32; b += 8)
-          bytes.push((words[b >>> 5] >>> (24 - b % 32)) & 0xFF);
-        return bytes;
-      },
-
-      // Convert a byte array to a hex string
-      bytesToHex: function(bytes) {
-        for (var hex = [], i = 0; i < bytes.length; i++) {
-          hex.push((bytes[i] >>> 4).toString(16));
-          hex.push((bytes[i] & 0xF).toString(16));
-        }
-        return hex.join('');
-      },
-
-      // Convert a hex string to a byte array
-      hexToBytes: function(hex) {
-        for (var bytes = [], c = 0; c < hex.length; c += 2)
-          bytes.push(parseInt(hex.substr(c, 2), 16));
-        return bytes;
-      },
-
-      // Convert a byte array to a base-64 string
-      bytesToBase64: function(bytes) {
-        for (var base64 = [], i = 0; i < bytes.length; i += 3) {
-          var triplet = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
-          for (var j = 0; j < 4; j++)
-            if (i * 8 + j * 6 <= bytes.length * 8)
-              base64.push(base64map.charAt((triplet >>> 6 * (3 - j)) & 0x3F));
-            else
-              base64.push('=');
-        }
-        return base64.join('');
-      },
-
-      // Convert a base-64 string to a byte array
-      base64ToBytes: function(base64) {
-        // Remove non-base-64 characters
-        base64 = base64.replace(/[^A-Z0-9+\/]/ig, '');
-
-        for (var bytes = [], i = 0, imod4 = 0; i < base64.length;
-            imod4 = ++i % 4) {
-          if (imod4 == 0) continue;
-          bytes.push(((base64map.indexOf(base64.charAt(i - 1))
-              & (Math.pow(2, -2 * imod4 + 8) - 1)) << (imod4 * 2))
-              | (base64map.indexOf(base64.charAt(i)) >>> (6 - imod4 * 2)));
-        }
-        return bytes;
-      }
-    };
-
-    module.exports = crypt;
-  })();
-  });
-
-  var charenc = {
-    // UTF-8 encoding
-    utf8: {
-      // Convert a string to a byte array
-      stringToBytes: function(str) {
-        return charenc.bin.stringToBytes(unescape(encodeURIComponent(str)));
-      },
-
-      // Convert a byte array to a string
-      bytesToString: function(bytes) {
-        return decodeURIComponent(escape(charenc.bin.bytesToString(bytes)));
-      }
-    },
-
-    // Binary encoding
-    bin: {
-      // Convert a string to a byte array
-      stringToBytes: function(str) {
-        for (var bytes = [], i = 0; i < str.length; i++)
-          bytes.push(str.charCodeAt(i) & 0xFF);
-        return bytes;
-      },
-
-      // Convert a byte array to a string
-      bytesToString: function(bytes) {
-        for (var str = [], i = 0; i < bytes.length; i++)
-          str.push(String.fromCharCode(bytes[i]));
-        return str.join('');
-      }
-    }
-  };
-
-  var charenc_1 = charenc;
-
-  /*!
-   * Determine if an object is a Buffer
-   *
-   * @author   Feross Aboukhadijeh <https://feross.org>
-   * @license  MIT
-   */
-
-  // The _isBuffer check is for Safari 5-7 support, because it's missing
-  // Object.prototype.constructor. Remove this eventually
-  var isBuffer_1 = function (obj) {
-    return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
-  };
-
-  function isBuffer (obj) {
-    return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-  }
-
-  // For Node v0.10 support. Remove this eventually.
-  function isSlowBuffer (obj) {
-    return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
-  }
-
-  var md5 = createCommonjsModule(function (module) {
-  (function(){
-    var crypt$$1 = crypt,
-        utf8 = charenc_1.utf8,
-        isBuffer = isBuffer_1,
-        bin = charenc_1.bin,
-
-    // The core
-    md5 = function (message, options) {
-      // Convert to byte array
-      if (message.constructor == String)
-        if (options && options.encoding === 'binary')
-          message = bin.stringToBytes(message);
-        else
-          message = utf8.stringToBytes(message);
-      else if (isBuffer(message))
-        message = Array.prototype.slice.call(message, 0);
-      else if (!Array.isArray(message))
-        message = message.toString();
-      // else, assume byte array already
-
-      var m = crypt$$1.bytesToWords(message),
-          l = message.length * 8,
-          a =  1732584193,
-          b = -271733879,
-          c = -1732584194,
-          d =  271733878;
-
-      // Swap endian
-      for (var i = 0; i < m.length; i++) {
-        m[i] = ((m[i] <<  8) | (m[i] >>> 24)) & 0x00FF00FF |
-               ((m[i] << 24) | (m[i] >>>  8)) & 0xFF00FF00;
-      }
-
-      // Padding
-      m[l >>> 5] |= 0x80 << (l % 32);
-      m[(((l + 64) >>> 9) << 4) + 14] = l;
-
-      // Method shortcuts
-      var FF = md5._ff,
-          GG = md5._gg,
-          HH = md5._hh,
-          II = md5._ii;
-
-      for (var i = 0; i < m.length; i += 16) {
-
-        var aa = a,
-            bb = b,
-            cc = c,
-            dd = d;
-
-        a = FF(a, b, c, d, m[i+ 0],  7, -680876936);
-        d = FF(d, a, b, c, m[i+ 1], 12, -389564586);
-        c = FF(c, d, a, b, m[i+ 2], 17,  606105819);
-        b = FF(b, c, d, a, m[i+ 3], 22, -1044525330);
-        a = FF(a, b, c, d, m[i+ 4],  7, -176418897);
-        d = FF(d, a, b, c, m[i+ 5], 12,  1200080426);
-        c = FF(c, d, a, b, m[i+ 6], 17, -1473231341);
-        b = FF(b, c, d, a, m[i+ 7], 22, -45705983);
-        a = FF(a, b, c, d, m[i+ 8],  7,  1770035416);
-        d = FF(d, a, b, c, m[i+ 9], 12, -1958414417);
-        c = FF(c, d, a, b, m[i+10], 17, -42063);
-        b = FF(b, c, d, a, m[i+11], 22, -1990404162);
-        a = FF(a, b, c, d, m[i+12],  7,  1804603682);
-        d = FF(d, a, b, c, m[i+13], 12, -40341101);
-        c = FF(c, d, a, b, m[i+14], 17, -1502002290);
-        b = FF(b, c, d, a, m[i+15], 22,  1236535329);
-
-        a = GG(a, b, c, d, m[i+ 1],  5, -165796510);
-        d = GG(d, a, b, c, m[i+ 6],  9, -1069501632);
-        c = GG(c, d, a, b, m[i+11], 14,  643717713);
-        b = GG(b, c, d, a, m[i+ 0], 20, -373897302);
-        a = GG(a, b, c, d, m[i+ 5],  5, -701558691);
-        d = GG(d, a, b, c, m[i+10],  9,  38016083);
-        c = GG(c, d, a, b, m[i+15], 14, -660478335);
-        b = GG(b, c, d, a, m[i+ 4], 20, -405537848);
-        a = GG(a, b, c, d, m[i+ 9],  5,  568446438);
-        d = GG(d, a, b, c, m[i+14],  9, -1019803690);
-        c = GG(c, d, a, b, m[i+ 3], 14, -187363961);
-        b = GG(b, c, d, a, m[i+ 8], 20,  1163531501);
-        a = GG(a, b, c, d, m[i+13],  5, -1444681467);
-        d = GG(d, a, b, c, m[i+ 2],  9, -51403784);
-        c = GG(c, d, a, b, m[i+ 7], 14,  1735328473);
-        b = GG(b, c, d, a, m[i+12], 20, -1926607734);
-
-        a = HH(a, b, c, d, m[i+ 5],  4, -378558);
-        d = HH(d, a, b, c, m[i+ 8], 11, -2022574463);
-        c = HH(c, d, a, b, m[i+11], 16,  1839030562);
-        b = HH(b, c, d, a, m[i+14], 23, -35309556);
-        a = HH(a, b, c, d, m[i+ 1],  4, -1530992060);
-        d = HH(d, a, b, c, m[i+ 4], 11,  1272893353);
-        c = HH(c, d, a, b, m[i+ 7], 16, -155497632);
-        b = HH(b, c, d, a, m[i+10], 23, -1094730640);
-        a = HH(a, b, c, d, m[i+13],  4,  681279174);
-        d = HH(d, a, b, c, m[i+ 0], 11, -358537222);
-        c = HH(c, d, a, b, m[i+ 3], 16, -722521979);
-        b = HH(b, c, d, a, m[i+ 6], 23,  76029189);
-        a = HH(a, b, c, d, m[i+ 9],  4, -640364487);
-        d = HH(d, a, b, c, m[i+12], 11, -421815835);
-        c = HH(c, d, a, b, m[i+15], 16,  530742520);
-        b = HH(b, c, d, a, m[i+ 2], 23, -995338651);
-
-        a = II(a, b, c, d, m[i+ 0],  6, -198630844);
-        d = II(d, a, b, c, m[i+ 7], 10,  1126891415);
-        c = II(c, d, a, b, m[i+14], 15, -1416354905);
-        b = II(b, c, d, a, m[i+ 5], 21, -57434055);
-        a = II(a, b, c, d, m[i+12],  6,  1700485571);
-        d = II(d, a, b, c, m[i+ 3], 10, -1894986606);
-        c = II(c, d, a, b, m[i+10], 15, -1051523);
-        b = II(b, c, d, a, m[i+ 1], 21, -2054922799);
-        a = II(a, b, c, d, m[i+ 8],  6,  1873313359);
-        d = II(d, a, b, c, m[i+15], 10, -30611744);
-        c = II(c, d, a, b, m[i+ 6], 15, -1560198380);
-        b = II(b, c, d, a, m[i+13], 21,  1309151649);
-        a = II(a, b, c, d, m[i+ 4],  6, -145523070);
-        d = II(d, a, b, c, m[i+11], 10, -1120210379);
-        c = II(c, d, a, b, m[i+ 2], 15,  718787259);
-        b = II(b, c, d, a, m[i+ 9], 21, -343485551);
-
-        a = (a + aa) >>> 0;
-        b = (b + bb) >>> 0;
-        c = (c + cc) >>> 0;
-        d = (d + dd) >>> 0;
-      }
-
-      return crypt$$1.endian([a, b, c, d]);
-    };
-
-    // Auxiliary functions
-    md5._ff  = function (a, b, c, d, x, s, t) {
-      var n = a + (b & c | ~b & d) + (x >>> 0) + t;
-      return ((n << s) | (n >>> (32 - s))) + b;
-    };
-    md5._gg  = function (a, b, c, d, x, s, t) {
-      var n = a + (b & d | c & ~d) + (x >>> 0) + t;
-      return ((n << s) | (n >>> (32 - s))) + b;
-    };
-    md5._hh  = function (a, b, c, d, x, s, t) {
-      var n = a + (b ^ c ^ d) + (x >>> 0) + t;
-      return ((n << s) | (n >>> (32 - s))) + b;
-    };
-    md5._ii  = function (a, b, c, d, x, s, t) {
-      var n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
-      return ((n << s) | (n >>> (32 - s))) + b;
-    };
-
-    // Package private blocksize
-    md5._blocksize = 16;
-    md5._digestsize = 16;
-
-    module.exports = function (message, options) {
-      if (message === undefined || message === null)
-        throw new Error('Illegal argument ' + message);
-
-      var digestbytes = crypt$$1.wordsToBytes(md5(message, options));
-      return options && options.asBytes ? digestbytes :
-          options && options.asString ? bin.bytesToString(digestbytes) :
-          crypt$$1.bytesToHex(digestbytes);
-    };
-
-  })();
-  });
-
-  var MicroEvent$7, PagedPublicationEventTracking, SGN$f, md5$1, util$2;
+  var MicroEvent$7, PagedPublicationEventTracking;
   MicroEvent$7 = microevent;
-  md5$1 = md5;
-  util$2 = util_1;
-  SGN$f = sgn;
 
   PagedPublicationEventTracking =
   /*#__PURE__*/
@@ -9054,7 +9067,7 @@
       value: function trackOpened(properties) {
         this.eventTracker.trackPagedPublicationOpened({
           'pp.id': this.id,
-          'vt': this.getViewToken([SGN$f.client.id, this.id])
+          'vt': this.eventTracker.createViewToken(this.id)
         });
         return this;
       }
@@ -9067,7 +9080,7 @@
           _this.eventTracker.trackPagedPublicationPageDisappeared({
             'pp.id': _this.id,
             'ppp.n': pageNumber,
-            'vt': _this.getViewToken([SGN$f.client.id, _this.id, pageNumber])
+            'vt': _this.eventTracker.createViewToken(_this.id, pageNumber)
           });
         });
         return this;
@@ -9123,16 +9136,6 @@
           this.pageSpread = null;
         }
       }
-    }, {
-      key: "getViewToken",
-      value: function getViewToken(parts) {
-        var str, viewToken;
-        str = parts.join('');
-        viewToken = util$2.btoa(String.fromCharCode.apply(null, md5$1(str, {
-          asBytes: true
-        }).slice(0, 8)));
-        return viewToken;
-      }
     }]);
 
     return PagedPublicationEventTracking;
@@ -9141,9 +9144,9 @@
   MicroEvent$7.mixin(PagedPublicationEventTracking);
   var eventTracking = PagedPublicationEventTracking;
 
-  var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$g, Viewer;
+  var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$f, Viewer;
   MicroEvent$8 = microevent;
-  SGN$g = sgn;
+  SGN$f = sgn;
   Core = core$2;
   Hotspots = hotspots;
   Controls = controls;
@@ -9174,7 +9177,7 @@
         keyboard: this.options.keyboard
       });
       this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
-      this.viewSession = SGN$g.util.uuid();
+      this.viewSession = SGN$f.util.uuid();
       this.hotspots = null;
       this.hotspotQueue = [];
       this.popover = null;
@@ -9406,9 +9409,9 @@
         if (hotspots$$1.length === 1) {
           callback(hotspots$$1[0]);
         } else if (hotspots$$1.length > 1) {
-          this.popover = SGN$g.CoreUIKit.singleChoicePopover({
+          this.popover = SGN$f.CoreUIKit.singleChoicePopover({
             el: this.el,
-            header: SGN$g.translations.t('paged_publication.hotspot_picker.header'),
+            header: SGN$f.translations.t('paged_publication.hotspot_picker.header'),
             x: e.verso.x,
             y: e.verso.y,
             items: hotspots$$1.filter(function (hotspot) {
@@ -9531,8 +9534,8 @@
   MicroEvent$8.mixin(Viewer);
   var viewer = Viewer;
 
-  var Bootstrapper, SGN$h;
-  SGN$h = core;
+  var Bootstrapper, SGN$g;
+  SGN$g = core;
 
   var bootstrapper = Bootstrapper =
   /*#__PURE__*/
@@ -9549,7 +9552,7 @@
     _createClass(Bootstrapper, [{
       key: "createViewer",
       value: function createViewer(data) {
-        return new SGN$h.PagedPublicationKit.Viewer(this.options.el, {
+        return new SGN$g.PagedPublicationKit.Viewer(this.options.el, {
           id: this.options.id,
           ownedBy: data.details.dealer_id,
           color: '#' + data.details.branding.pageflip.color,
@@ -9590,7 +9593,7 @@
     }, {
       key: "fetch",
       value: function fetch(callback) {
-        SGN$h.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+        SGN$g.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
           var data;
           data = {
             details: result[0][1],
@@ -9611,21 +9614,21 @@
     }, {
       key: "fetchDetails",
       value: function fetchDetails(callback) {
-        SGN$h.CoreKit.request({
+        SGN$g.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id)
         }, callback);
       }
     }, {
       key: "fetchPages",
       value: function fetchPages(callback) {
-        SGN$h.CoreKit.request({
+        SGN$g.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id, "/pages")
         }, callback);
       }
     }, {
       key: "fetchHotspots",
       value: function fetchHotspots(callback) {
-        SGN$h.CoreKit.request({
+        SGN$g.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
         }, callback);
       }
@@ -11287,9 +11290,9 @@
 
   var require$$3 = ( incito$2 && incito$1 ) || incito$2;
 
-  var Bootstrapper$1, Controls$2, SGN$i, schema, util$3;
-  util$3 = util_1;
-  SGN$i = core;
+  var Bootstrapper$1, Controls$2, SGN$h, schema, util$2;
+  util$2 = util_1;
+  SGN$h = core;
   Controls$2 = controls$1;
   schema = require$$3;
 
@@ -11315,7 +11318,7 @@
     _createClass(Bootstrapper, [{
       key: "getDeviceCategory",
       value: function getDeviceCategory() {
-        return util$3.getDeviceCategory();
+        return util$2.getDeviceCategory();
       }
     }, {
       key: "getPixelRatio",
@@ -11325,13 +11328,13 @@
     }, {
       key: "getPointer",
       value: function getPointer() {
-        return util$3.getPointer();
+        return util$2.getPointer();
       }
     }, {
       key: "getOrientation",
       value: function getOrientation() {
         var orientation;
-        orientation = util$3.getOrientation(screen.width, screen.height);
+        orientation = util$2.getOrientation(screen.width, screen.height);
 
         if (orientation === 'quadratic') {
           orientation = 'horizontal';
@@ -11354,13 +11357,13 @@
         var _this = this;
 
         var data;
-        data = SGN$i.storage.session.get(this.storageKey);
+        data = SGN$h.storage.session.get(this.storageKey);
 
         if (data != null && data.response != null && data.width === this.maxWidth) {
           return callback(null, data.response);
         }
 
-        SGN$i.GraphKit.request({
+        SGN$h.GraphKit.request({
           query: schema,
           operationName: 'GetIncitoPublication',
           variables: {
@@ -11376,10 +11379,10 @@
           if (err != null) {
             callback(err);
           } else if (res.errors && res.errors.length > 0) {
-            callback(util$3.error(new Error(), 'graph request contained errors'));
+            callback(util$2.error(new Error(), 'graph request contained errors'));
           } else {
             callback(null, res);
-            SGN$i.storage.session.set(_this.storageKey, {
+            SGN$h.storage.session.set(_this.storageKey, {
               width: _this.maxWidth,
               response: res
             });
@@ -11392,10 +11395,10 @@
         var controls, viewer;
 
         if (data.incito == null) {
-          throw util$3.error(new Error(), 'you need to supply valid Incito to create a viewer');
+          throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
         }
 
-        viewer = new SGN$i.IncitoPublicationKit.Viewer(this.options.el, {
+        viewer = new SGN$h.IncitoPublicationKit.Viewer(this.options.el, {
           id: this.options.id,
           incito: data.incito,
           eventTracker: this.options.eventTracker
@@ -12055,46 +12058,46 @@
     }
   };
 
-  var SGN$j, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
+  var SGN$i, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
   isBrowser$1 = util_1.isBrowser;
-  SGN$j = core; // Expose storage backends.
+  SGN$i = core; // Expose storage backends.
 
-  SGN$j.storage = {
+  SGN$i.storage = {
     local: clientLocal,
     session: clientSession,
     cookie: clientCookie
   }; // Expose request handler.
 
-  SGN$j.request = request; // Expose the different kits.
+  SGN$i.request = request; // Expose the different kits.
 
-  SGN$j.AssetsKit = assets;
-  SGN$j.EventsKit = events;
-  SGN$j.GraphKit = graph;
-  SGN$j.CoreKit = core$1;
-  SGN$j.PagedPublicationKit = pagedPublication;
-  SGN$j.IncitoPublicationKit = incitoPublication;
-  SGN$j.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
+  SGN$i.AssetsKit = assets;
+  SGN$i.EventsKit = events;
+  SGN$i.GraphKit = graph;
+  SGN$i.CoreKit = core$1;
+  SGN$i.PagedPublicationKit = pagedPublication;
+  SGN$i.IncitoPublicationKit = incitoPublication;
+  SGN$i.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-  session$2 = SGN$j.storage.cookie.get('session');
+  session$2 = SGN$i.storage.cookie.get('session');
 
   if (_typeof(session$2) === 'object') {
-    SGN$j.config.set({
+    SGN$i.config.set({
       coreSessionToken: session$2.token,
       coreSessionClientId: session$2.client_id
     });
   }
 
-  SGN$j.client = function () {
+  SGN$i.client = function () {
     var id;
-    id = SGN$j.storage.local.get('client-id');
+    id = SGN$i.storage.local.get('client-id');
 
     if (id != null ? id.data : void 0) {
       id = id.data;
     }
 
     if (id == null) {
-      id = SGN$j.util.uuid();
-      SGN$j.storage.local.set('client-id', id);
+      id = SGN$i.util.uuid();
+      SGN$i.storage.local.set('client-id', id);
     }
 
     return {
@@ -12103,7 +12106,7 @@
   }(); // Listen for changes in the config.
 
 
-  SGN$j.config.bind('change', function (changedAttributes) {
+  SGN$i.config.bind('change', function (changedAttributes) {
     var eventTracker;
     eventTracker = changedAttributes.eventTracker;
 
@@ -12126,16 +12129,16 @@
       }
 
       if (trackId != null) {
-        config$2.eventTracker = new SGN$j.EventsKit.Tracker({
+        config$2.eventTracker = new SGN$i.EventsKit.Tracker({
           trackId: trackId
         });
       }
 
-      SGN$j.config.set(config$2);
+      SGN$i.config.set(config$2);
     }
   }
 
-  var coffeescript = SGN$j;
+  var coffeescript = SGN$i;
 
   return coffeescript;
 
