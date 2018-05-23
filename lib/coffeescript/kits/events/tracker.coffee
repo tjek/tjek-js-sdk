@@ -1,5 +1,7 @@
 SGN = require '../../sgn'
+md5 = require 'md5'
 clientLocalStorage = require '../../storage/client-local'
+
 getPool = ->
     data = clientLocalStorage.get 'event-tracker-pool'
     data = [] if Array.isArray(data) is false
@@ -133,7 +135,7 @@ module.exports = class Tracker
     trackPagedPublicationOpened: (properties, version) ->
         @trackEvent 1, properties, version
     
-    trackPagedPublicationPageDisappeared: (properties, version) ->
+    trackPagedPublicationPageSpreadDisappeared: (properties, version) ->
         @trackEvent 2, properties, version
     
     trackOfferOpened: (properties, version) ->
@@ -144,3 +146,9 @@ module.exports = class Tracker
     
     trackSearched: (properties, version) ->
         @trackEvent 5, properties, version
+    
+    createViewToken: (...parts) ->
+        str = [SGN.client.id].concat(parts).join ''
+        viewToken = SGN.util.btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
+
+        viewToken
