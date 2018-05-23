@@ -1,7 +1,4 @@
 MicroEvent = require 'microevent'
-md5 = require 'md5'
-util = require '../../util'
-SGN = require '../../sgn'
 
 class PagedPublicationEventTracking
     constructor: (@eventTracker, @id) ->
@@ -26,16 +23,16 @@ class PagedPublicationEventTracking
     trackOpened: (properties) ->
         @eventTracker.trackPagedPublicationOpened
             'pp.id': @id
-            'vt': @getViewToken([SGN.client.id, @id])
+            'vt': @eventTracker.createViewToken(@id)
 
         @
 
     trackPageSpreadDisappeared: (pageNumbers) ->
         pageNumbers.forEach (pageNumber) =>
-            @eventTracker.trackPagedPublicationPageDisappeared
+            @eventTracker.trackPagedPublicationPageSpreadDisappeared
                 'pp.id': @id
                 'ppp.n': pageNumber
-                'vt': @getViewToken([SGN.client.id, @id, pageNumber])
+                'vt': @eventTracker.createViewToken(@id, pageNumber)
             
             return
 
@@ -86,12 +83,6 @@ class PagedPublicationEventTracking
             @pageSpread = null
 
         return
-    
-    getViewToken: (parts) ->
-        str = parts.join ''
-        viewToken = util.btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
-
-        viewToken
 
 MicroEvent.mixin PagedPublicationEventTracking
 
