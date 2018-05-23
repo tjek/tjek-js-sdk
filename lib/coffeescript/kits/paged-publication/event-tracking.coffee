@@ -29,7 +29,7 @@ class PagedPublicationEventTracking
 
     trackPageSpreadDisappeared: (pageNumbers) ->
         pageNumbers.forEach (pageNumber) =>
-            @eventTracker.trackPagedPublicationPageSpreadDisappeared
+            @eventTracker.trackPagedPublicationPageDisappeared
                 'pp.id': @id
                 'ppp.n': pageNumber
                 'vt': @eventTracker.createViewToken(@id, pageNumber)

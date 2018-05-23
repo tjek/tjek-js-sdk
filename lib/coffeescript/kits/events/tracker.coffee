@@ -135,7 +135,7 @@ module.exports = class Tracker
     trackPagedPublicationOpened: (properties, version) ->
         @trackEvent 1, properties, version
     
-    trackPagedPublicationPageSpreadDisappeared: (properties, version) ->
+    trackPagedPublicationPageDisappeared: (properties, version) ->
         @trackEvent 2, properties, version
     
     trackOfferOpened: (properties, version) ->
