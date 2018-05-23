@@ -728,9 +728,10 @@ var assets = {
   fileUpload: fileUpload
 };
 
-var SGN$6, Tracker, clientLocalStorage, getPool, md5$1, pool;
+var SGN$6, Tracker, clientLocalStorage, getPool, isBrowser$1, md5$1, pool;
 SGN$6 = sgn;
 md5$1 = md5;
+isBrowser$1 = util_1.isBrowser;
 clientLocalStorage = clientLocal;
 
 getPool = function getPool() {
@@ -741,6 +742,9 @@ getPool = function getPool() {
     data = [];
   }
 
+  data = data.filter(function (evt) {
+    return typeof evt._i === 'string';
+  });
   return data;
 };
 
@@ -776,9 +780,13 @@ var tracker = Tracker = function () {
         time: null,
         country: null
       };
-      this.dispatching = false; // Dispatch events periodically.
+      this.dispatching = false;
 
-      this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
+      if (isBrowser$1()) {
+        // Dispatch events periodically.
+        this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
+      }
+
       return;
     }
 
@@ -3963,8 +3971,8 @@ var coreUi = {
   }
 };
 
-var SGN$i, appKey, config$2, isBrowser$1, scriptEl, session$2, trackId;
-isBrowser$1 = util_1.isBrowser;
+var SGN$i, appKey, config$2, isBrowser$2, scriptEl, session$2, trackId;
+isBrowser$2 = util_1.isBrowser;
 SGN$i = core; // Expose storage backends.
 
 SGN$i.storage = {
@@ -4020,7 +4028,7 @@ SGN$i.config.bind('change', function (changedAttributes) {
   }
 });
 
-if (isBrowser$1()) {
+if (isBrowser$2()) {
   // Autoconfigure the SDK.
   scriptEl = document.getElementById('sgn-sdk');
 
