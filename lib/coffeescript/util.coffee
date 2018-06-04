@@ -233,5 +233,34 @@ util =
                 k++
 
             return
+    promiseCallbackInterop: (fun, cbParameterIndex = fun.length - 1) ->
+        makePromise = (fun, cbParameterIndex, parameters) ->
+            new Promise(
+                (resolve, reject) ->
+                    neoCallback = (error, result) ->
+                        if error then reject error else resolve result
+
+                    callParameters = []
+                    for i in [0...(Math.max(parameters.length, cbParameterIndex) + 1)]
+                        callParameters.push if i == cbParameterIndex then neoCallback else parameters[i]
+
+                    fun.apply this, callParameters
+            )
+        (...parameters) ->
+            if typeof parameters[cbParameterIndex] == 'function'
+                #No promise support so we'll just
+                fun.apply null, parameters
+            else if typeof Promise == 'function'
+                #We have Promise support so we'll
+                #return a Promise and optionally call the callback function
+                makePromise fun, cbParameterIndex, parameters
+            else
+                throw new Error("""To be able to use this asynchronous method you should:
+
+Supply a callback function as argument ##{1+cbParameterIndex}.
+This callback function will be called with the method call response.
+
+Alternatively, when supported, it can return a Promise if no callback function is given.
+                """)
 
 module.exports = util

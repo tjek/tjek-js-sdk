@@ -1,4 +1,5 @@
 SGN = require '../../sgn'
+{ promiseCallbackInterop } = require '../../util'
 
 request = (options = {}, callback = ->, runs = 0) ->
     SGN.CoreKit.session.ensure (err) ->
@@ -65,4 +66,4 @@ request = (options = {}, callback = ->, runs = 0) ->
 
     return
 
-module.exports = request
+module.exports = promiseCallbackInterop(request, 1)
