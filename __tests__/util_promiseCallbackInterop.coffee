@@ -28,7 +28,7 @@ testFun4 = (shouldError, derp, callback, somethingElseWeWontUse) ->
         else callback(undefined, testResult)
     )
 
-describe 'util: promiseCallbackInterOp', ->
+describe 'util: promiseCallbackInterOp, Promise mode', ->
     test 'works with a simple callback-only function', ->
         interopedFun = promiseCallbackInterop(testFun1)
         expect(interopedFun()).resolves.toEqual(testResult)
@@ -61,21 +61,22 @@ describe 'util: promiseCallbackInterOp', ->
         interopedFunThatErrors = promiseCallbackInterop(testFun4, 2)
         expect(interopedFunThatErrors(true)).rejects.toEqual(testError)
 
-    test 'cb: works with a simple callback-only function', (done) ->
+    test 'works with a simple callback-only function', (done) ->
         interopedFun = promiseCallbackInterop(testFun1)
         interopedFun((err, res) ->
             expect(res).toEqual(testResult)
             done()
         )
 
-    test 'cb: works with a simple callback-only function that errors', (done) ->
+describe 'util: promiseCallbackInterOp, callback mode', ->
+    test 'works with a simple callback-only function that errors', (done) ->
         interopedFun = promiseCallbackInterop(testFun1Error)
         interopedFun((err, res) ->
             expect(err).toEqual(testError)
             done()
         )
 
-    test 'cb: orks with a function that takes an option and callback',
+    test 'works with a function that takes an option and callback',
         (done) ->
             interopedFun = promiseCallbackInterop(testFun2)
             interopedFun(false, (err, res) ->
@@ -83,7 +84,7 @@ describe 'util: promiseCallbackInterOp', ->
                 done()
             )
 
-    test 'cb: works with a function that takes an option and callback that errors',
+    test 'works with a function that takes an option and callback that errors',
         (done) ->
             interopedFunThatErrors = promiseCallbackInterop(testFun2)
             interopedFunThatErrors(true, (err, res) ->
@@ -91,7 +92,7 @@ describe 'util: promiseCallbackInterOp', ->
                 done()
             )
 
-    test 'cb: accepts a callback position for functions that take options and a callback and options',
+    test 'accepts a callback position for functions that take options and a callback and options',
         (done) ->
             interopedFun = promiseCallbackInterop(testFun3, 1)
             interopedFun(false, (err, res) ->
@@ -99,7 +100,7 @@ describe 'util: promiseCallbackInterOp', ->
                 done()
             )
 
-    test 'cb: accepts a callback position for functions that take options and a callback and options that errors',
+    test 'accepts a callback position for functions that take options and a callback and options that errors',
         (done) ->
             interopedFunThatErrors = promiseCallbackInterop(testFun3, 1)
             interopedFunThatErrors(true, (err, res) ->
@@ -107,7 +108,7 @@ describe 'util: promiseCallbackInterOp', ->
                 done()
             )
 
-    test 'cb: accepts another callback position for functions that take options and a callback and options',
+    test 'accepts another callback position for functions that take options and a callback and options',
         (done) ->
             interopedFun = promiseCallbackInterop(testFun4, 2)
             interopedFun(false, undefined, (err, res) ->
@@ -115,7 +116,7 @@ describe 'util: promiseCallbackInterOp', ->
                 done()
             )
 
-    test 'cb: accepts another callback position for functions that take options and a callback and options that errors',
+    test 'accepts another callback position for functions that take options and a callback and options that errors',
         (done) ->
             interopedFunThatErrors = promiseCallbackInterop(testFun4, 2)
             interopedFunThatErrors(true, undefined, (err, res) ->
