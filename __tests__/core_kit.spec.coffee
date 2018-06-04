@@ -19,6 +19,11 @@ test 'Making a request with JSON response', (done) ->
 
     return
 
+test 'Making a request with JSON response, promises async/await style', ->
+    data = await SGN.CoreKit.request url: '/v2/catalogs'
+    expect(data).toBeDefined()
+    expect(typeof data).toBe('object')
+
 test 'Making a request with string response', (done) ->
     SGN.CoreKit.request
         url: '/v2/catalogs'
