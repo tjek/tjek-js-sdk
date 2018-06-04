@@ -233,7 +233,10 @@ util =
                 k++
 
             return
+    # method for wrapping a function that takes a callback in any position
+    # to return promises if no callback is given in a call
     promiseCallbackInterop: (fun, cbParameterIndex = fun.length - 1) ->
+        # this is the function that actually wraps and calls a method to return a promise
         makePromise = (fun, cbParameterIndex, parameters) ->
             new Promise(
                 (resolve, reject) ->
@@ -246,15 +249,16 @@ util =
 
                     fun.apply this, callParameters
             )
+        # wrapper function that decides what to do per-call
         (...parameters) ->
             if typeof parameters[cbParameterIndex] == 'function'
-                #No promise support so we'll just
+                # callback given, regular old call
                 fun.apply null, parameters
             else if typeof Promise == 'function'
-                #We have Promise support so we'll
-                #return a Promise and optionally call the callback function
+                # no callback given, and we have promise support, use makePromise to wrap the call
                 makePromise fun, cbParameterIndex, parameters
             else
+                #Ain't got callback, ain't got promise support; we gotta tell the developer
                 throw new Error("""To be able to use this asynchronous method you should:
 
 Supply a callback function as argument ##{1+cbParameterIndex}.
