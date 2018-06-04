@@ -235,6 +235,7 @@ util =
             return
     # method for wrapping a function that takes a callback in any position
     # to return promises if no callback is given in a call
+    # The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
     # CoffeeScript optional parameters messes with this function arity detection,
     # not sure what to do about that, other than always setting cbParameterIndex at callsites.
     promiseCallbackInterop: (fun, cbParameterIndex = fun.length - 1) ->
