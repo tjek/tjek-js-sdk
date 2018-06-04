@@ -20,7 +20,7 @@ test 'Making a request', (done) ->
 
     return
 
-test 'Making a request, promises async/await style', (done) ->
+test 'Making a request, promises async/await style', ->
     data = await SGN.GraphKit.request
         query: """query PlanningSuggestions {
           planningSuggestions(locale: "da_DK", term: "c") {
