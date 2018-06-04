@@ -235,6 +235,8 @@ util =
             return
     # method for wrapping a function that takes a callback in any position
     # to return promises if no callback is given in a call
+    # CoffeeScript optional parameters messes with this function arity detection,
+    # not sure what to do about that, other than always setting cbParameterIndex at callsites.
     promiseCallbackInterop: (fun, cbParameterIndex = fun.length - 1) ->
         # this is the function that actually wraps and calls a method to return a promise
         makePromise = (fun, cbParameterIndex, parameters) ->
