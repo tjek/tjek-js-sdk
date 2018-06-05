@@ -1,9 +1,9 @@
 util =
     isBrowser: ->
-        typeof window == 'object' and typeof document == 'object'
+        typeof window is 'object' and typeof document is 'object'
 
     isNode: ->
-        typeof process == 'object'
+        typeof process is 'object'
 
     error: (err, options) ->
         err.message = err.message or null
@@ -233,6 +233,7 @@ util =
                 k++
 
             return
+
     # Method for wrapping a function that takes a callback in any position
     # to return promises if no callback is given in a call.
     # The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
@@ -247,17 +248,17 @@ util =
                         if error then reject error else resolve result
 
                     callParameters = []
-                    for i in [0...(Math.max(parameters.length, cbParameterIndex) + 1)]
-                        callParameters.push if i == cbParameterIndex then neoCallback else parameters[i]
+                    for i in [0...((Math.max parameters.length, cbParameterIndex) + 1)]
+                        callParameters.push if i is cbParameterIndex then neoCallback else parameters[i]
 
                     fun.apply this, callParameters
             )
         # Wrapper function that decides what to do per-call.
         (...parameters) ->
-            if typeof parameters[cbParameterIndex] == 'function'
+            if typeof parameters[cbParameterIndex] is 'function'
                 # Callback given, do a regular old call.
                 fun.apply null, parameters
-            else if typeof Promise == 'function'
+            else if typeof Promise is 'function'
                 # No callback given, and we have promise support, use makePromise to wrap the call.
                 makePromise fun, cbParameterIndex, parameters
             else
