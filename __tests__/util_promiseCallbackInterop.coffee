@@ -1,6 +1,7 @@
 { promiseCallbackInterop } = require '../lib/coffeescript/util'
-testResult = { results: ['a result'] }
-testError = { error: 'messed up' }
+
+testResult = results: ['a result']
+testError = error: 'messed up'
 testFun1 = (callback) ->
     setTimeout(->
         callback(undefined, testResult)

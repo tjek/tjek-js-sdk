@@ -31,4 +31,5 @@ test 'Making a request, promises async/await style', ->
         }
         """,
         operationName: 'PlanningSuggestions'
+
     expect(data).toBeDefined()

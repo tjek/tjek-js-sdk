@@ -66,4 +66,4 @@ request = (options = {}, callback = ->, runs = 0) ->
 
     return
 
-module.exports = promiseCallbackInterop(request, 1)
+module.exports = promiseCallbackInterop request, 1
