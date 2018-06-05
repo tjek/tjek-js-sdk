@@ -2,6 +2,7 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+require('core-js/modules/es6.promise');
 require('core-js/modules/web.dom.iterable');
 require('core-js/modules/es6.array.iterator');
 require('core-js/modules/es6.object.keys');
@@ -356,6 +357,55 @@ util = {
         k++;
       }
     }
+  },
+  // Method for wrapping a function that takes a callback in any position
+  // to return promises if no callback is given in a call.
+  // The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
+  // CoffeeScript optional parameters messes with this function arity detection,
+  // not sure what to do about that, other than always setting cbParameterIndex at callsites.
+  promiseCallbackInterop: function promiseCallbackInterop(fun) {
+    var cbParameterIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : fun.length - 1;
+    var makePromise; // This is the function that actually wraps and calls a method to return a promise.
+
+    makePromise = function makePromise(fun, cbParameterIndex, parameters) {
+      return new Promise(function (resolve, reject) {
+        var callParameters, i, j, neoCallback, ref;
+
+        neoCallback = function neoCallback(error, result) {
+          if (error) {
+            return reject(error);
+          } else {
+            return resolve(result);
+          }
+        };
+
+        callParameters = [];
+
+        for (i = j = 0, ref = Math.max(parameters.length, cbParameterIndex) + 1; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          callParameters.push(i === cbParameterIndex ? neoCallback : parameters[i]);
+        }
+
+        return fun.apply(this, callParameters);
+      });
+    }; // Wrapper function that decides what to do per-call.
+
+
+    return function () {
+      for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
+        parameters[_key] = arguments[_key];
+      }
+
+      if (typeof parameters[cbParameterIndex] === 'function') {
+        // Callback given, do a regular old call.
+        return fun.apply(null, parameters);
+      } else if (typeof Promise === 'function') {
+        // No callback given, and we have promise support, use makePromise to wrap the call.
+        return makePromise(fun, cbParameterIndex, parameters);
+      } else {
+        // Ain't got callback, ain't got promise support; we gotta tell the developer.
+        throw new Error("To be able to use this asynchronous method you should:\n\nSupply a callback function as argument #".concat(1 + cbParameterIndex, ".\nThis callback function will be called with the method call response.\n\nAlternatively, when supported, it can return a Promise if no callback function is given."));
+      }
+    };
   }
 };
 var util_1 = util;
@@ -1059,8 +1109,9 @@ var events = {
   Pulse: pulse
 };
 
-var SGN$7, parseCookies;
+var SGN$7, parseCookies, promiseCallbackInterop, request$1;
 SGN$7 = sgn;
+promiseCallbackInterop = util_1.promiseCallbackInterop;
 
 parseCookies = function parseCookies() {
   var cookies = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -1077,7 +1128,7 @@ parseCookies = function parseCookies() {
   return parsedCookies;
 };
 
-var request$1 = function request() {
+request$1 = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var appKey, authToken, authTokenCookieName, timeout, url;
@@ -1145,13 +1196,16 @@ var request$1 = function request() {
   });
 };
 
+var request_1 = promiseCallbackInterop(request$1, 1);
+
 var graph = {
-  request: request$1
+  request: request_1
 };
 
-var SGN$8, _request;
+var SGN$8, promiseCallbackInterop$1, _request;
 
 SGN$8 = sgn;
+promiseCallbackInterop$1 = util_1.promiseCallbackInterop;
 
 _request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -1255,7 +1309,7 @@ _request = function request() {
   });
 };
 
-var request_1 = _request;
+var request_1$1 = promiseCallbackInterop$1(_request, 1);
 
 var SGN$9, callbackQueue, clientCookieStorage, renewed, session, sha256$1;
 SGN$9 = sgn;
@@ -1400,7 +1454,7 @@ session = {
 var session_1 = session;
 
 var request$2, session$1;
-request$2 = request_1;
+request$2 = request_1$1;
 session$1 = session_1;
 var core$1 = {
   request: request$2,
