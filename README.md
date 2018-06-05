@@ -18,8 +18,8 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.2.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.2.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.3.min.css" rel="stylesheet" type="text/css">
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.3.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
 By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://business.shopgun.com/developers/apps).
@@ -64,6 +64,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 * [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+
+### Version 2.2.3
+
+- Added promise return values to `SGN.CoreKit.request` and `SGN.CoreKit.request` calls without callback, when supported.
 
 ### Version 2.2.0
 
