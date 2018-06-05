@@ -233,5 +233,41 @@ util =
                 k++
 
             return
+    # Method for wrapping a function that takes a callback in any position
+    # to return promises if no callback is given in a call.
+    # The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
+    # CoffeeScript optional parameters messes with this function arity detection,
+    # not sure what to do about that, other than always setting cbParameterIndex at callsites.
+    promiseCallbackInterop: (fun, cbParameterIndex = fun.length - 1) ->
+        # This is the function that actually wraps and calls a method to return a promise.
+        makePromise = (fun, cbParameterIndex, parameters) ->
+            new Promise(
+                (resolve, reject) ->
+                    neoCallback = (error, result) ->
+                        if error then reject error else resolve result
+
+                    callParameters = []
+                    for i in [0...(Math.max(parameters.length, cbParameterIndex) + 1)]
+                        callParameters.push if i == cbParameterIndex then neoCallback else parameters[i]
+
+                    fun.apply this, callParameters
+            )
+        # Wrapper function that decides what to do per-call.
+        (...parameters) ->
+            if typeof parameters[cbParameterIndex] == 'function'
+                # Callback given, do a regular old call.
+                fun.apply null, parameters
+            else if typeof Promise == 'function'
+                # No callback given, and we have promise support, use makePromise to wrap the call.
+                makePromise fun, cbParameterIndex, parameters
+            else
+                # Ain't got callback, ain't got promise support; we gotta tell the developer.
+                throw new Error("""To be able to use this asynchronous method you should:
+
+Supply a callback function as argument ##{1+cbParameterIndex}.
+This callback function will be called with the method call response.
+
+Alternatively, when supported, it can return a Promise if no callback function is given.
+                """)
 
 module.exports = util
