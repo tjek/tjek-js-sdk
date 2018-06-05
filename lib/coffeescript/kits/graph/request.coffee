@@ -1,4 +1,5 @@
 SGN = require '../../sgn'
+{ promiseCallbackInterop } = require '../../util'
 
 parseCookies = (cookies = []) ->
     parsedCookies = {}
@@ -15,7 +16,7 @@ parseCookies = (cookies = []) ->
     
     parsedCookies
 
-module.exports = (options = {}, callback) ->
+request = (options = {}, callback) ->
     url = SGN.config.get 'graphUrl'
     timeout = 1000 * 12
     appKey = SGN.config.get 'appKey'
@@ -71,4 +72,4 @@ module.exports = (options = {}, callback) ->
 
     return
 
-
+module.exports = promiseCallbackInterop request, 1
