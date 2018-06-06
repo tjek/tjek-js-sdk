@@ -16,9 +16,9 @@ class PagedPublicationControls
         @keyDownListener = SGN.util.throttle @keyDown, 150, @
 
         @els.root.addEventListener 'keydown', @keyDownListener, false if @options.keyboard is true
-        @els.prevControl.addEventListener 'click', @prevClicked.bind(@), false if @els.prevControl?
-        @els.nextControl.addEventListener 'click', @nextClicked.bind(@), false if @els.nextControl?
-        @els.close.addEventListener 'click', @closeClicked.bind(@), false if @els.close?
+        @els.prevControl.addEventListener 'mousedown', @prevClicked.bind(@), false if @els.prevControl?
+        @els.nextControl.addEventListener 'mousedown', @nextClicked.bind(@), false if @els.nextControl?
+        @els.close.addEventListener 'mousedown', @closeClicked.bind(@), false if @els.close?
 
         @bind 'beforeNavigation', @beforeNavigation.bind(@)
 
