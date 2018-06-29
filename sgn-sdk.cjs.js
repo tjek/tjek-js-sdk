@@ -619,17 +619,17 @@ var clientCookie = {
   }
 };
 
-var SGN$4, XMLHttpRequest$1, isBrowser, ref;
+var SGN$4, XMLHttpRequest, isBrowser, ref;
 SGN$4 = sgn;
 isBrowser = util_1.isBrowser;
-XMLHttpRequest$1 = isBrowser() ? window.XMLHttpRequest : (ref = xmlhttprequest) != null ? ref.XMLHttpRequest : void 0;
+XMLHttpRequest = isBrowser() ? window.XMLHttpRequest : (ref = xmlhttprequest) != null ? ref.XMLHttpRequest : void 0;
 
 var request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-  var formData, header, headers, http, key, method, queryParams, ref1, ref2, ref3, ref4, url, value;
-  http = new XMLHttpRequest$1();
+  var formData, header, headers, http, key, method, queryParams, ref1, ref2, ref3, url, value;
+  http = new XMLHttpRequest();
   method = (ref1 = options.method) != null ? ref1 : 'get';
   url = options.url;
   headers = (ref2 = options.headers) != null ? ref2 : {};
@@ -659,10 +659,8 @@ var request = function request() {
     headers['Accept'] = 'application/json';
   }
 
-  ref3 = options.headers;
-
-  for (header in ref3) {
-    value = ref3[header];
+  for (header in headers) {
+    value = headers[header];
 
     if (value != null) {
       http.setRequestHeader(header, value);
@@ -681,7 +679,9 @@ var request = function request() {
     body = http.responseText;
 
     if (options.json === true) {
-      body = JSON.parse(body);
+      try {
+        body = JSON.parse(body);
+      } catch (error) {}
     }
 
     callback(null, {
@@ -704,10 +704,10 @@ var request = function request() {
 
   if (options.formData != null) {
     formData = new FormData();
-    ref4 = options.formData;
+    ref3 = options.formData;
 
-    for (key in ref4) {
-      value = ref4[key];
+    for (key in ref3) {
+      value = ref3[key];
       formData.append(key, value);
     }
 
@@ -741,9 +741,7 @@ var fileUpload = function fileUpload() {
   SGN$5.request({
     method: 'post',
     url: url,
-    headers: {
-      'Accept': 'application/json'
-    },
+    json: true,
     formData: {
       file: options.file
     },
@@ -755,7 +753,7 @@ var fileUpload = function fileUpload() {
       }));
     } else {
       if (data.statusCode === 200) {
-        callback(null, JSON.parse(data.body));
+        callback(null, data.body);
       } else {
         callback(SGN$5.util.error(new Error('Request error'), {
           code: 'RequestError',
@@ -830,13 +828,9 @@ var tracker = Tracker = function () {
         time: null,
         country: null
       };
-      this.dispatching = false;
+      this.dispatching = false; // Dispatch events periodically.
 
-      if (isBrowser$1()) {
-        // Dispatch events periodically.
-        this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
-      }
-
+      this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
       return;
     }
 
@@ -907,7 +901,12 @@ var tracker = Tracker = function () {
     }, {
       key: "getPoolSize",
       value: function getPoolSize() {
-        return pool.length;
+        return this.getPool().length;
+      }
+    }, {
+      key: "getPool",
+      value: function getPool() {
+        return pool;
       }
     }, {
       key: "dispatch",
@@ -954,34 +953,30 @@ var tracker = Tracker = function () {
       value: function ship() {
         var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
         var callback = arguments.length > 1 ? arguments[1] : undefined;
-        var http, url;
-        http = new XMLHttpRequest();
-        url = SGN$6.config.get('eventsTrackUrl');
-        http.open('POST', url);
-        http.setRequestHeader('Content-Type', 'application/json');
-        http.setRequestHeader('Accept', 'application/json');
-        http.timeout = 1000 * 20;
-
-        http.onload = function () {
-
-          if (http.status === 200) {
-            try {
-              callback(null, JSON.parse(http.responseText));
-            } catch (error) {
-              callback(SGN$6.util.error(new Error('Could not parse JSON')));
-            }
-          } else {
-            callback(SGN$6.util.error(new Error('Server did not accept request')));
+        SGN$6.request({
+          method: 'post',
+          url: SGN$6.config.get('eventsTrackUrl'),
+          json: true,
+          timeout: 1000 * 20,
+          body: {
+            events: events
           }
-        };
-
-        http.onerror = function () {
-          callback(SGN$6.util.error(new Error('Could not perform network request')));
-        };
-
-        http.send(JSON.stringify({
-          events: events
-        }));
+        }, function (err, data) {
+          if (err != null) {
+            callback(SGN$6.util.error(new Error('Request error'), {
+              code: 'RequestError'
+            }));
+          } else {
+            if (data.statusCode === 200) {
+              callback(null, data.body);
+            } else {
+              callback(SGN$6.util.error(new Error('Request error'), {
+                code: 'RequestError',
+                statusCode: data.statusCode
+              }));
+            }
+          }
+        });
         return this;
       }
     }, {
@@ -1030,7 +1025,7 @@ var tracker = Tracker = function () {
   }();
   Tracker.prototype.defaultOptions = {
     trackId: null,
-    dispatchInterval: 3000,
+    dispatchInterval: 5000,
     dispatchLimit: 100,
     poolLimit: 1000,
     dryRun: false
@@ -1764,10 +1759,8 @@ PagedPublicationCore = function () {
       key: "start",
       value: function start() {
         this.getVerso().start();
-        this.visibilityChangeListener = this.visibilityChange.bind(this);
         this.resizeListener = SGN$d.util.throttle(this.resize, this.getOption('resizeDelay'), this);
         this.unloadListener = this.unload.bind(this);
-        document.addEventListener('visibilitychange', this.visibilityChangeListener, false);
         window.addEventListener('resize', this.resizeListener, false);
         window.addEventListener('beforeunload', this.unloadListener, false);
         this.els.root.setAttribute('data-started', '');
@@ -1793,7 +1786,6 @@ PagedPublicationCore = function () {
         }
 
         verso.destroy();
-        document.removeEventListener('visibilitychange', this.visibilityChangeListener, false);
         window.removeEventListener('resize', this.resizeListener, false);
         window.removeEventListener('beforeunload', this.unloadListener, false);
       }
@@ -2167,16 +2159,6 @@ PagedPublicationCore = function () {
         }
       }
     }, {
-      key: "visibilityChange",
-      value: function visibilityChange() {
-        var eventName, pageSpread;
-        pageSpread = this.getVerso().getPageSpreadFromPosition(this.getVerso().getPosition());
-        eventName = document.hidden === true ? 'disappeared' : 'appeared';
-        this.trigger(eventName, {
-          pageSpread: this.pageSpreads.get(pageSpread.id)
-        });
-      }
-    }, {
       key: "resize",
       value: function resize() {
         var pageMode;
@@ -2456,15 +2438,15 @@ function () {
     }
 
     if (this.els.prevControl != null) {
-      this.els.prevControl.addEventListener('click', this.prevClicked.bind(this), false);
+      this.els.prevControl.addEventListener('mousedown', this.prevClicked.bind(this), false);
     }
 
     if (this.els.nextControl != null) {
-      this.els.nextControl.addEventListener('click', this.nextClicked.bind(this), false);
+      this.els.nextControl.addEventListener('mousedown', this.nextClicked.bind(this), false);
     }
 
     if (this.els.close != null) {
-      this.els.close.addEventListener('click', this.closeClicked.bind(this), false);
+      this.els.close.addEventListener('mousedown', this.closeClicked.bind(this), false);
     }
 
     this.bind('beforeNavigation', this.beforeNavigation.bind(this));
