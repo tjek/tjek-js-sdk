@@ -1,5 +1,5 @@
 SGN = require '../../sgn'
-{ promiseCallbackInterop } = require '../../util'
+{promiseCallbackInterop} = require '../../util'
 
 parseCookies = (cookies = []) ->
     parsedCookies = {}
