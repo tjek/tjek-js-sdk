@@ -44,11 +44,9 @@ class PagedPublicationCore
     start: ->
         @getVerso().start()
 
-        @visibilityChangeListener = @visibilityChange.bind @
         @resizeListener = SGN.util.throttle @resize, @getOption('resizeDelay'), @
         @unloadListener = @unload.bind @
 
-        document.addEventListener 'visibilitychange', @visibilityChangeListener, false
         window.addEventListener 'resize', @resizeListener, false
         window.addEventListener 'beforeunload', @unloadListener, false
 
@@ -74,7 +72,6 @@ class PagedPublicationCore
 
         verso.destroy()
 
-        document.removeEventListener 'visibilitychange', @visibilityChangeListener, false
         window.removeEventListener 'resize', @resizeListener, false
         window.removeEventListener 'beforeunload', @unloadListener, false
 
@@ -360,14 +357,6 @@ class PagedPublicationCore
     overridePageSpreadContentRect: (pageSpread) ->
         if pageSpread.getType() is 'page'
             pageSpread.getContentRect = => @getContentRect pageSpread
-
-    visibilityChange: ->
-        pageSpread = @getVerso().getPageSpreadFromPosition @getVerso().getPosition()
-        eventName = if document.hidden is true then 'disappeared' else 'appeared'
-
-        @trigger eventName, pageSpread: @pageSpreads.get(pageSpread.id)
-
-        return
 
     resize: ->
         pageMode = @getPageMode()

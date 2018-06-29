@@ -1,22 +1,28 @@
 SGN = require '../dist/sgn-sdk.js'
 
-if typeof Blob != 'undefined'
+describe 'AssetsKit', ->
     test 'Uploading a JSON blob', (done) ->
-        json =
-            str: 'str'
-            int: 1
-        blob = new Blob [JSON.stringify(json)],
-            type: 'application/json'
-        
-        SGN.AssetsKit.fileUpload
-            file: blob
-        , (err, res) ->
-            expect(res).toBeInstanceOf(Object)
-            expect(typeof res.id).toBe('string')
+        if typeof Blob != 'undefined'
+            json =
+                str: 'str'
+                int: 1
+            blob = new Blob [JSON.stringify(json)],
+                type: 'application/json'
+            
+            SGN.AssetsKit.fileUpload
+                file: blob
+            , (err, res) ->
+                expect(res).toBeInstanceOf(Object)
+                expect(typeof res.id).toBe('string')
+
+                done()
+
+                return
+        else
+            expect(1).toEqual 1
 
             done()
 
-            return
-
         return
-else test('', ->)
+    
+    return

@@ -9,8 +9,7 @@ module.exports = (options = {}, callback, progressCallback) ->
     SGN.request
         method: 'post'
         url: url
-        headers:
-            'Accept': 'application/json'
+        json: true
         formData:
             file: options.file
         timeout: timeout
@@ -21,7 +20,7 @@ module.exports = (options = {}, callback, progressCallback) ->
             )
         else
             if data.statusCode is 200
-                callback null, JSON.parse(data.body)
+                callback null, data.body
             else
                 callback SGN.util.error(new Error('Request error'),
                     code: 'RequestError'

@@ -26,7 +26,7 @@ try
 module.exports = class Tracker
     defaultOptions:
         trackId: null
-        dispatchInterval: 3000
+        dispatchInterval: 5000
         dispatchLimit: 100
         poolLimit: 1000
         dryRun: false
@@ -42,7 +42,7 @@ module.exports = class Tracker
         @dispatching = false
 
         # Dispatch events periodically.
-        @interval = setInterval @dispatch.bind(@), @dispatchInterval if isBrowser()
+        @interval = setInterval @dispatch.bind(@), @dispatchInterval
 
         return
 
@@ -79,7 +79,10 @@ module.exports = class Tracker
         @
 
     getPoolSize: ->
-        pool.length
+        @getPool().length
+    
+    getPool: ->
+        pool
 
     dispatch: ->
         return if @dispatching is true or @getPoolSize() is 0
@@ -110,28 +113,28 @@ module.exports = class Tracker
         @
 
     ship: (events = [], callback) ->
-        http = new XMLHttpRequest()
-        url = SGN.config.get 'eventsTrackUrl'
-
-        http.open 'POST', url
-        http.setRequestHeader 'Content-Type', 'application/json'
-        http.setRequestHeader 'Accept', 'application/json'
-        http.timeout = 1000 * 20
-        http.onload = ->
-            if http.status is 200
-                try
-                    callback null, JSON.parse(http.responseText)
-                catch err
-                    callback SGN.util.error(new Error('Could not parse JSON'))
+        SGN.request
+            method: 'post'
+            url: SGN.config.get 'eventsTrackUrl'
+            json: true
+            timeout: 1000 * 20
+            body:
+                events: events
+        , (err, data) ->
+            if err?
+                callback SGN.util.error(new Error('Request error'),
+                    code: 'RequestError'
+                )
             else
-                callback SGN.util.error(new Error('Server did not accept request'))
-
+                if data.statusCode is 200
+                    callback null, data.body
+                else
+                    callback SGN.util.error(new Error('Request error'),
+                        code: 'RequestError'
+                        statusCode: data.statusCode
+                    )
+            
             return
-        http.onerror = ->
-            callback SGN.util.error(new Error('Could not perform network request'))
-
-            return
-        http.send JSON.stringify(events: events)
 
         @
 

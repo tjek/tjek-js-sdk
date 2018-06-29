@@ -26,7 +26,7 @@ module.exports = (options = {}, callback, progressCallback) ->
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
 
-    for header, value of options.headers
+    for header, value of headers
         http.setRequestHeader header, value if value?
 
     http.addEventListener 'load', ->
@@ -40,7 +40,9 @@ module.exports = (options = {}, callback, progressCallback) ->
         , {}
         body = http.responseText
 
-        body = JSON.parse body if options.json is true
+        if options.json is true
+            try
+                body = JSON.parse body
 
         callback null,
             statusCode: http.status
