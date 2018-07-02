@@ -48,7 +48,7 @@ class PagedPublicationHotspots
         el.className = 'sgn-pp__hotspot verso__overlay'
         el.setAttribute 'data-id', hotspot.id if hotspot.id?
         el.setAttribute 'data-type', hotspot.type if hotspot.type?
-        el.innerHTML = Mustache.render hotspot.template ? '', hotspot
+        el.innerHTML = Mustache.render '', hotspot
 
         el.style.top = "#{top}px"
         el.style.left = "#{left}px"
