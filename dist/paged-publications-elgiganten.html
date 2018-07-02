@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Paged Publications</title>
+        <title>Elgiganten: Paged Publications</title>
 
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta charset="utf-8">
@@ -57,6 +57,10 @@
             #publication__modal {
                 display: none;
                 position: fixed;
+            }
+
+            #publication__modal .sgn-pp__hotspot {
+                border-color: #88d41b;
             }
 
             #publication__modal .sgn__btn {
@@ -150,6 +154,49 @@
 
                     els.root.innerHTML = html;
                 };
+                var matchSKU = function (str) {
+                    var matches = str.match(/[a-z0-9A-Z]{7,20}/gim) || [];
+
+                    for (var i = 0; i < matches.length; i++) {
+                        if (matches[i].toUpperCase() === matches[i]) {
+                            return matches[i];
+                        }
+                    }
+
+                    if (str.split(' ').length === 1) {
+                        return str;
+                    }
+                };
+                var fetchOffers = function (id, callback) {
+                    var offset = 0;
+                    var limit = 100;
+                    var offers = [];
+                    var fetch = function () {
+                        SGN.CoreKit.request({
+                            url: '/v2/offers',
+                            qs: {
+                                catalog_id: id,
+                                offset: offset,
+                                limit: limit
+                            }
+                        }, function (err, res) {
+                            if (err) {
+                                callback(offers);
+                            } else if (res.length < limit) {
+                                offers = offers.concat(res);
+
+                                callback(offers);
+                            } else {
+                                offset += limit;
+                                offers = offers.concat(res);
+
+                                fetch();
+                            }
+                        });
+                    };
+
+                    fetch();
+                }
                 var openPublication = function (id) {
                     var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
                         el: els.modal,
@@ -164,7 +211,7 @@
                             var viewer = bootstrapper.createViewer(data);
 
                             viewer.bind('hotspotClicked', function (hotspot) {
-                                window.open(hotspot.webshop);
+                                window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.sku));
                             });
 
                             viewer.start();
@@ -172,7 +219,25 @@
                             // Fetch hotspots after rendering the viewer as they are not critical for initial render.
                             bootstrapper.fetchHotspots(function (err2, hotspots) {
                                 if (!err2) {
-                                    bootstrapper.applyHotspots(viewer, hotspots);
+                                    fetchOffers(id, function (offers) {
+                                        bootstrapper.applyHotspots(viewer, hotspots.filter(function (hotspot) {
+                                            var offer;
+                                            
+                                            for (let i = 0; i < offers.length; i++) {
+                                                if (hotspot.type === 'offer' && hotspot.id === offers[i].id) {
+                                                    var sku = matchSKU(offers[i].description);
+
+                                                    if (sku) {
+                                                        hotspot.sku = sku;
+
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+
+                                            return false;
+                                        }));
+                                    });
                                 }
                             });
 
