@@ -37,6 +37,7 @@ module.exports = class Bootstrapper
             @options.el.offsetWidth
 
     fetch: (callback) ->
+        callback = callback.bind @
         data = SGN.storage.session.get @storageKey
 
         if data? and data.response? and data.width is @maxWidth

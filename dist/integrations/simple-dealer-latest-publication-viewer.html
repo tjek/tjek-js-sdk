@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="sgn__pp" data-layout-absolute="true">
+      <div class="verso">
+        <div class="verso__scroller">
+          <div class="sgn-pp__pages"></div>
+        </div>
+      </div>
+      <div class="sgn-pp__progress">
+        <div class="sgn-pp-progress__bar"></div>
+      </div>
+      <div class="sgn-pp__progress-label"></div>
+      <a class="sgn-pp__control" href="#" role="button" data-direction="prev">&lsaquo;</a>
+      <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
+    </div>
+    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.js" id="sgn-sdk"
+      data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+    <script type="text/javascript">
+      function showDealerCatalog() {
+        var dealer_id = "4d4fag"; // A given Dealer/Business ID
+        
+        SGN.CoreKit.request({
+            url: "/v2/catalogs",
+            qs: {
+              dealer_id: dealer_id,
+              order_by: "-publication_date"
+            }
+          },
+          function(err, catalogs) {
+            if (err || catalogs.length === 0) {
+              return; // optionally handle no active catalogs
+            }
+            var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
+              el: document.querySelector(".sgn__pp"),
+              id: catalogs[0].id,
+              eventTracker: SGN.config.get("eventTracker")
+            })
+            bootstrapper.fetch(function(err, data) {
+              err || bootstrapper.createViewer(data).start();
+            });
+          }
+        );
+      }
+      window.addEventListener("load", showDealerCatalog, false);
+    </script>
+  </body>
+</html>
