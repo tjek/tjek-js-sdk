@@ -37,6 +37,7 @@ module.exports = class Bootstrapper
         return
     
     fetch: (callback) ->
+        callback = callback.bind @
         SGN.util.async.parallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) ->
             data =
                 details: result[0][1]
