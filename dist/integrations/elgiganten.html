@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta charset="utf-8">
 
-        <link href="sgn-sdk.css?t=3" rel="stylesheet" type="text/css">
+        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.4.min.css" rel="stylesheet" type="text/css">
         <style>
             #publications {
                 display: -ms-flexbox;
@@ -30,16 +30,26 @@
             }
 
             .publications__item {
-                width: 177px;
                 text-align: center;
                 margin: 10px;
+                padding: 0 50px;
+                transform: rotate(-20deg) skew(8deg, 8deg);
+                transition: transform ease 300ms;
+            }
+
+            .publications__item:hover {
+                transform: rotate(-20deg) skew(8deg, 8deg) scale(1.1);
             }
 
             .publications__item img {
                 display: block;
-                width: 170px;
+                max-width: 250px;
                 cursor: pointer;
                 margin: 0 auto 10px;
+                border-left: 1px solid #000;
+                border-bottom: 1px solid #333;
+                border-radius: 3px;
+                box-shadow: -3px 2px 4px rgba(0, 0, 0, 0.2);
             }
 
             .publications__item div {
@@ -97,7 +107,7 @@
             <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
         </div>
 
-        <script src="sgn-sdk.js?t=3" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="AAABrQ=="></script>
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.4.min.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="AAABrQ=="></script>
         <script>
             window.addEventListener('load', function () {
                 var orderBys = {
@@ -147,7 +157,7 @@
                         var formattedDate = [runFrom.getDate(), '/', runFrom.getMonth() + 1, ' - ', runTill.getDate(), '/', runTill.getMonth() + 1].join('');
 
                         html += '<div class="publications__item">';
-                        html += '<img data-id="' + item.id + '" src="' + item.images.thumb + '">';
+                        html += '<img data-id="' + item.id + '" src="' + item.images.view + '">';
                         html += '<div>' + formattedDate + '</div>';
                         html += '</div>';
                     });
@@ -155,7 +165,7 @@
                     els.root.innerHTML = html;
                 };
                 var matchSKU = function (str) {
-                    var matches = str.match(/[a-z0-9A-Z]{7,20}/gim) || [];
+                    var matches = str.match(/[a-z0-9A-Z]{6,20}/gim) || [];
 
                     for (var i = 0; i < matches.length; i++) {
                         if (matches[i].toUpperCase() === matches[i]) {
@@ -181,11 +191,11 @@
                             }
                         }, function (err, res) {
                             if (err) {
-                                callback(offers);
+                                callback(err);
                             } else if (res.length < limit) {
                                 offers = offers.concat(res);
 
-                                callback(offers);
+                                callback(null, offers);
                             } else {
                                 offset += limit;
                                 offers = offers.concat(res);
@@ -209,35 +219,40 @@
                     bootstrapper.fetch(function (err, data) {
                         if (!err) {
                             var viewer = bootstrapper.createViewer(data);
+                            var _fetchHotspots = bootstrapper.fetchHotspots.bind(bootstrapper);
+                            var _fetchOffers = function (callback) {
+                                return fetchOffers(id, callback);
+                            };
 
                             viewer.bind('hotspotClicked', function (hotspot) {
-                                window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.sku));
+                                var win = window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.sku), '_blank');
+
+                                win.focus();
                             });
 
                             viewer.start();
 
                             // Fetch hotspots after rendering the viewer as they are not critical for initial render.
-                            bootstrapper.fetchHotspots(function (err2, hotspots) {
-                                if (!err2) {
-                                    fetchOffers(id, function (offers) {
-                                        bootstrapper.applyHotspots(viewer, hotspots.filter(function (hotspot) {
-                                            var offer;
-                                            
-                                            for (let i = 0; i < offers.length; i++) {
-                                                if (hotspot.type === 'offer' && hotspot.id === offers[i].id) {
-                                                    var sku = matchSKU(offers[i].description);
+                            SGN.util.async.parallel([_fetchHotspots, _fetchOffers], function (result) {
+                                var hotspots = result[0][1];
+                                var offers = result[1][1];
 
-                                                    if (sku) {
-                                                        hotspot.sku = sku;
+                                if (hotspots && offers) {
+                                    bootstrapper.applyHotspots(viewer, hotspots.filter(function (hotspot) {
+                                        for (let i = 0; i < offers.length; i++) {
+                                            if (hotspot.type === 'offer' && hotspot.id === offers[i].id) {
+                                                var sku = matchSKU(offers[i].description);
 
-                                                        return true;
-                                                    }
+                                                if (sku) {
+                                                    hotspot.sku = sku;
+
+                                                    return true;
                                                 }
                                             }
+                                        }
 
-                                            return false;
-                                        }));
-                                    });
+                                        return false;
+                                    }));
                                 }
                             });
 
