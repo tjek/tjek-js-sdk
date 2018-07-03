@@ -28,31 +28,27 @@
                 -ms-flex-align: start;
                 align-items: flex-start;
                 min-height: 100px;
-                perspective: 1000;
             }
 
             .publications__item {
                 text-align: center;
                 margin: 10px;
                 padding: 0 50px;
-                transform: rotateY(40deg) skew(8deg, 8deg);
                 transition: transform ease 300ms;
             }
 
             .publications__item:hover {
-                transform: rotateY(40deg) skew(8deg, 8deg) scale(1.1);
+                transform: scale(1.1);
             }
 
             .publications__item img {
                 display: block;
-                max-width: 250px;
+                max-width: 300px;
                 min-height: 50px;
                 cursor: pointer;
                 margin: 0 auto 10px;
-                border: 1px solid #000;
-                border-bottom: 1px solid #333;
+                border: 1px solid #eee;
                 border-radius: 3px;
-                box-shadow: -3px 2px 4px rgba(0, 0, 0, 0.2);
             }
 
             .publications__item div {
@@ -140,7 +136,7 @@
   
                     return new Date(Date.UTC(dtcomps[0],dtcomps[1],dtcomps[2],dtcomps[3],dtcomps[4],dtcomps[5]));
                 };
-                var fetchPublications = function () {
+                var fetchPublications = function (callback) {
                     SGN.CoreKit.request({
                         url: '/v2/catalogs',
                         qs: {
@@ -149,31 +145,7 @@
                             offset: 0,
                             limit: 4
                         }
-                    }, function (err, res) {
-                        if (!err) {
-                            renderPublications(res);
-
-                            var parts = autoopen.split(',');
-
-                            if (parts[0] === 'future') {
-                                if (res[res.length - 1]) {
-                                    openPublication(res[res.length - 1].id,  parts[1]);
-                                }
-                            } else if (parts[0] === 'current') {
-                                if (res[0]) {
-                                    openPublication(res[0].id,  parts[1]);
-                                }
-                            } else if (parts[0]) {
-                                for (var i = 0; i < res.length; i++) {
-                                    if (parts[0] === res[i].id && res[i].dealer_id === config.businessId) {
-                                        openPublication(res[i].id, parts[1]);
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    }, callback);
                 };
                 var renderPublications = function (publications) {
                     var html = '';
@@ -233,7 +205,14 @@
                     };
 
                     fetch();
-                }
+                };
+                var openLatestPublication = function () {
+                    fetchPublications(function (err, res) {
+                        if (!err && res && res.length > 0) {
+                            openPublication(res[res.length - 1].id);
+                        }
+                    });
+                };
                 var openPublication = function (id, pageNumber) {
                     var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
                         el: els.modal,
@@ -301,17 +280,47 @@
                             els.close.addEventListener('click', close);
                         }
                     });
+                };
+
+                if (els.root) {
+                    els.root.addEventListener('click', function (e) {
+                        if (e.target.tagName === 'IMG') {
+                            var id = e.target.dataset.id;
+
+                            openPublication(id);
+                        }
+                    });
+
+                    fetchPublications(function (err, res) {
+                        if (!err) {
+                            renderPublications(res);
+
+                            var parts = autoopen.split(',');
+
+                            if (parts[0] === 'future') {
+                                if (res[res.length - 1]) {
+                                    openPublication(res[res.length - 1].id,  parts[1]);
+                                }
+                            } else if (parts[0] === 'current') {
+                                if (res[0]) {
+                                    openPublication(res[0].id,  parts[1]);
+                                }
+                            } else if (parts[0]) {
+                                for (var i = 0; i < res.length; i++) {
+                                    if (parts[0] === res[i].id && res[i].dealer_id === config.businessId) {
+                                        openPublication(res[i].id, parts[1]);
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
 
-                els.root.addEventListener('click', function (e) {
-                    if (e.target.tagName === 'IMG') {
-                        var id = e.target.dataset.id;
-
-                        openPublication(id);
-                    }
-                });
-
-                fetchPublications();
+                window.shopgun = {
+                    openLatestPublication: openLatestPublication
+                };
             })();
         </script>
     </body>
