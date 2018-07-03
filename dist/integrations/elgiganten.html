@@ -67,6 +67,8 @@
             #publication__modal {
                 display: none;
                 position: fixed;
+                z-index: 500;
+                user-select: none;
             }
 
             #publication__modal .sgn-pp__hotspot {
@@ -118,6 +120,7 @@
                     businessId: 'c35es',
                     orderBy: 'newest'
                 };
+                var autoopen = SGN.util.getQueryParam('autoopen');
                 var els = {
                     html: document.querySelector('html'),
                     root: document.querySelector('#publications'),
@@ -145,6 +148,26 @@
                     }, function (err, res) {
                         if (!err) {
                             renderPublications(res);
+
+                            if (autoopen === 'future') {
+                                if (res[res.length - 1]) {
+                                    openPublication(res[res.length - 1].id);
+                                }
+                            } else if (autoopen === 'current') {
+                                if (res[0]) {
+                                    openPublication(res[0].id);
+                                }
+                            } else if (autoopen) {
+                                var parts = autoopen.split(',');
+
+                                for (var i = 0; i < res.length; i++) {
+                                    if (parts[0] === res[i].id && res[i].dealer_id === config.businessId) {
+                                        openPublication(res[i].id, parts[1]);
+
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     });
                 };
@@ -154,7 +177,7 @@
                     publications.forEach(function (item) {
                         var runFrom = formatDate(item.run_from);
                         var runTill = formatDate(item.run_till);
-                        var formattedDate = [runFrom.getDate(), '/', runFrom.getMonth() + 1, ' - ', runTill.getDate(), '/', runTill.getMonth() + 1].join('');
+                        var formattedDate = ['Fra ', runFrom.getDate(), '/', runFrom.getMonth() + 1, ' t.o.m. ', runTill.getDate(), '/', runTill.getMonth() + 1].join('');
 
                         html += '<div class="publications__item">';
                         html += '<img data-id="' + item.id + '" src="' + item.images.view + '">';
@@ -207,10 +230,11 @@
 
                     fetch();
                 }
-                var openPublication = function (id) {
+                var openPublication = function (id, pageNumber) {
                     var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
                         el: els.modal,
                         id: id,
+                        pageId: 'page' + encodeURIComponent(pageNumber),
                         eventTracker: SGN.config.get('eventTracker')
                     });
 
@@ -225,7 +249,13 @@
                             };
 
                             viewer.bind('hotspotClicked', function (hotspot) {
-                                var win = window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.sku), '_blank');
+                                var win;
+
+                                if (hotspot.sku) {
+                                    win = window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=PDF_HOTSPOT', '_blank');
+                                } else {
+                                    win = window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.offer.heading), '_blank');
+                                }
 
                                 win.focus();
                             });
@@ -244,14 +274,14 @@
                                                 var sku = matchSKU(offers[i].description);
 
                                                 if (sku) {
-                                                    hotspot.sku = sku;
+                                                    hotspot.sku = sku.toUpperCase();
 
                                                     return true;
                                                 }
                                             }
                                         }
 
-                                        return false;
+                                        return true;
                                     }));
                                 }
                             });
