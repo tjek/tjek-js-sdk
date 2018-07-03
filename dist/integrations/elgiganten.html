@@ -28,18 +28,19 @@
                 -ms-flex-align: start;
                 align-items: flex-start;
                 min-height: 100px;
+                perspective: 1000;
             }
 
             .publications__item {
                 text-align: center;
                 margin: 10px;
                 padding: 0 50px;
-                transform: rotate(-20deg) skew(8deg, 8deg);
+                transform: rotateY(40deg) skew(8deg, 8deg);
                 transition: transform ease 300ms;
             }
 
             .publications__item:hover {
-                transform: rotate(-20deg) skew(8deg, 8deg) scale(1.1);
+                transform: rotateY(40deg) skew(8deg, 8deg) scale(1.1);
             }
 
             .publications__item img {
@@ -48,7 +49,7 @@
                 min-height: 50px;
                 cursor: pointer;
                 margin: 0 auto 10px;
-                border-left: 1px solid #000;
+                border: 1px solid #000;
                 border-bottom: 1px solid #333;
                 border-radius: 3px;
                 box-shadow: -3px 2px 4px rgba(0, 0, 0, 0.2);
