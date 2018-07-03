@@ -18,7 +18,7 @@ module.exports = (options = {}, callback, progressCallback) ->
         else
             url += '&' + queryParams
 
-    http.open method.toUpperCase(), url
+    http.open method.toUpperCase(), url, true
     http.timeout = options.timeout if options.timeout?
     http.withCredentials = true if options.useCookies is true
 
