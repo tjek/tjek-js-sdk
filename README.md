@@ -65,6 +65,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 2.2.5
+
+- Set async to true for requests
+
 ### Version 2.2.4
 
 - Added ability to use EventsKit tracker in a node.js context
