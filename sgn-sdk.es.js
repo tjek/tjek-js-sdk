@@ -640,7 +640,7 @@ var request = function request() {
     }
   }
 
-  http.open(method.toUpperCase(), url);
+  http.open(method.toUpperCase(), url, true);
 
   if (options.timeout != null) {
     http.timeout = options.timeout;
@@ -2239,7 +2239,7 @@ function () {
   }, {
     key: "renderHotspot",
     value: function renderHotspot(hotspot, position, contentRect, boundingRect) {
-      var el, height, left, ref, top, width;
+      var el, height, left, top, width;
       el = document.createElement('div');
       top = Math.round(contentRect.height / 100 * position.top);
       left = Math.round(contentRect.width / 100 * position.left);
@@ -2259,7 +2259,7 @@ function () {
         el.setAttribute('data-type', hotspot.type);
       }
 
-      el.innerHTML = Mustache$1.render((ref = hotspot.template) != null ? ref : '', hotspot);
+      el.innerHTML = Mustache$1.render('', hotspot);
       el.style.top = "".concat(top, "px");
       el.style.left = "".concat(left, "px");
       el.style.width = "".concat(width, "px");
