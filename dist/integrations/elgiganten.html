@@ -75,8 +75,6 @@
 
             #publication__modal .sgn__btn {
                 text-decoration: none;
-                background-color: rgba(255, 255, 255, 0.5);
-                color: #000;
             }
         </style>
     </head>
@@ -142,7 +140,7 @@
                             dealer_id: config.businessId,
                             order_by: orderBys[config.orderBy],
                             offset: 0,
-                            limit: 6
+                            limit: 4
                         }
                     }, function (err, res) {
                         if (!err) {
