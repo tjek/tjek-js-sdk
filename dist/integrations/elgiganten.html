@@ -81,7 +81,7 @@
         </style>
     </head>
     <body>
-        <div id="publications">Indlæser tilbudsaviser...</div>
+        <div id="publications"></div>
 
         <div id="publication__modal" class="sgn__pp" data-layout-absolute="true">
             <header class="sgn-pp__header sgn__navbar">
@@ -109,9 +109,9 @@
             <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
         </div>
 
-        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="AAABrQ=="></script>
         <script>
             (function () {
+                var initialized = false;
                 var orderBys = {
                     newest: '-publication_date',
                     oldest: 'publication_date'
@@ -120,7 +120,6 @@
                     businessId: 'c35es',
                     orderBy: 'newest'
                 };
-                var autoopen = SGN.util.getQueryParam('autoopen');
                 var els = {
                     html: document.querySelector('html'),
                     root: document.querySelector('#publications'),
@@ -206,7 +205,7 @@
 
                     fetch();
                 };
-                var openLatestPublication = function () {
+                var openOldestPublication = function () {
                     fetchPublications(function (err, res) {
                         if (!err && res && res.length > 0) {
                             openPublication(res[res.length - 1].id);
@@ -281,8 +280,15 @@
                         }
                     });
                 };
+                var init = function () {
+                    if (!els.root || initialized) {
+                        return;
+                    }
 
-                if (els.root) {
+                    var autoopen = SGN.util.getQueryParam('autoopen') || '';
+
+                    initialized = true;
+
                     els.root.addEventListener('click', function (e) {
                         if (e.target.tagName === 'IMG') {
                             var id = e.target.dataset.id;
@@ -305,7 +311,7 @@
                                 if (res[0]) {
                                     openPublication(res[0].id,  parts[1]);
                                 }
-                            } else if (parts[0]) {
+                            } else if (parts[0].length > 0) {
                                 for (var i = 0; i < res.length; i++) {
                                     if (parts[0] === res[i].id && res[i].dealer_id === config.businessId) {
                                         openPublication(res[i].id, parts[1]);
@@ -316,12 +322,14 @@
                             }
                         }
                     });
-                }
+                };
 
                 window.shopgun = {
-                    openLatestPublication: openLatestPublication
+                    init: init,
+                    openOldestPublication: openOldestPublication
                 };
             })();
         </script>
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.js" id="sgn-sdk" data-app-key="00jiy8zh8pcorcq4sz208bryny3u76zk" data-track-id="AAACDA==" async onload="window.shopgun.init();"></script>
     </body>
 </html>
