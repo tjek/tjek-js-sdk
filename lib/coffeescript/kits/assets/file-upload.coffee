@@ -9,7 +9,8 @@ module.exports = (options = {}, callback, progressCallback) ->
     SGN.request
         method: 'post'
         url: url
-        json: true
+        headers:
+            'Accept': 'application/json'
         formData:
             file: options.file
         timeout: timeout

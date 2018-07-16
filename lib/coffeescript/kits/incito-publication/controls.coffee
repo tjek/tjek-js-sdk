@@ -22,7 +22,7 @@ module.exports = class Controls
         if scrollTop < 300
             @progressEl.style.opacity = 0
         else if scrollTop >= docHeight - winHeight
-            @progressEl.textContent = '100%'
+            @progressEl.textContent = '100 %'
             @progressEl.style.opacity = 1
         else
             @progressEl.textContent = "#{progress} %"
