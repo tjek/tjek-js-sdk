@@ -9,6 +9,8 @@ module.exports = class Bootstrapper
         @pixelRatio = @getPixelRatio()
         @pointer = @getPointer()
         @orientation = @getOrientation()
+        @time = @getTime()
+        @locale = @getLocale()
         @maxWidth = @getMaxWidth()
         @versionsSupported = ['1.0.0']
         @storageKey = "incito-#{@options.id}"
@@ -29,6 +31,34 @@ module.exports = class Bootstrapper
         orientation = 'horizontal' if orientation is 'quadratic'
 
         orientation
+    
+    getTime: ->
+        new Date().toISOString()
+    
+    getLocale: ->
+        localeChain = []
+        locale = null
+
+        if Array.isArray(navigator.languages) and navigator.languages.length > 0
+            localeChain = localeChain.concat navigator.languages
+        else if typeof navigator.language == 'string' and navigator.language.length > 0
+            localeChain.push navigator.language
+        else if typeof navigator.browserLanguage == 'string' and navigator.browserLanguage.length > 0
+            localeChain.push navigator.browserLanguage
+
+        localeChain.push 'en_US'
+
+        for prefLocale in localeChain
+            continue if not prefLocale?
+
+            prefLocale = prefLocale.replace '-', '_'
+
+            if /[a-z][a-z]_[A-Z][A-Z]/g.test prefLocale
+                locale = prefLocale
+                
+                break
+
+        locale
     
     getMaxWidth: ->
         if Math.abs(window.orientation) is 90
@@ -52,6 +82,8 @@ module.exports = class Bootstrapper
                 pixelRatio: @pixelRatio
                 pointer: 'POINTER_' + @pointer.toUpperCase()
                 orientation: 'ORIENTATION_' + @orientation.toUpperCase()
+                time: @time
+                locale: @locale
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
         , (err, res) =>
