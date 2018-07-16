@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>File Upload</title>
+
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <meta charset="utf-8">
+        
+        <link href="css/incito-publication.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <input id="upload" type="file">
+
+        <script src="sgn-sdk.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="AAABrQ=="></script>
+        <script>
+            document.getElementById('upload').onchange = function () {
+                SGN.AssetsKit.fileUpload({
+                    file: this.files[0]
+                }, function (err, res) {
+                    console.log(err, res);
+                }, function (e) {
+                    console.log(e);
+                });
+            };
+        </script>
+    </body>
+</html>

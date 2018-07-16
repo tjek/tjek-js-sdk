@@ -10,6 +10,10 @@ module.exports = (options = {}, callback, progressCallback) ->
     url = options.url
     headers = options.headers ? {}
 
+    if options.json is true
+        headers['Content-Type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+
     if options.qs?
         queryParams = SGN.util.formatQueryParams options.qs
 
@@ -18,20 +22,9 @@ module.exports = (options = {}, callback, progressCallback) ->
         else
             url += '&' + queryParams
 
-    http.open method.toUpperCase(), url, true
-    http.timeout = options.timeout if options.timeout?
-    http.withCredentials = true if options.useCookies is true
-
-    if options.json is true
-        headers['Content-Type'] = 'application/json'
-        headers['Accept'] = 'application/json'
-
-    for header, value of headers
-        http.setRequestHeader header, value if value?
-
     http.addEventListener 'load', ->
-        headers = http.getAllResponseHeaders().split '\r\n'
-        headers = headers.reduce (acc, current, i) ->
+        resHeaders = http.getAllResponseHeaders().split '\r\n'
+        resHeaders = resHeaders.reduce (acc, current, i) ->
             parts = current.split ': '
 
             acc[parts[0].toLowerCase()] = parts[1]
@@ -40,13 +33,13 @@ module.exports = (options = {}, callback, progressCallback) ->
         , {}
         body = http.responseText
 
-        if options.json is true
+        if headers['Accept'] is 'application/json'
             try
                 body = JSON.parse body
 
         callback null,
             statusCode: http.status
-            headers: headers
+            headers: resHeaders
             body: body
 
         return
@@ -58,11 +51,20 @@ module.exports = (options = {}, callback, progressCallback) ->
         callback new Error()
 
         return
-    http.addEventListener 'progress', (e) ->
-        if e.lengthComputable and typeof progressCallback is 'function'
-            progressCallback e.loaded, e.total
+    
+    if typeof progressCallback is 'function'
+        http.upload.onprogress = (e) ->
+            if e.lengthComputable
+                progressCallback e.loaded, e.total
 
-        return
+            return
+
+    http.open method.toUpperCase(), url, true
+    http.timeout = options.timeout if options.timeout?
+    http.withCredentials = true if options.useCookies is true
+
+    for header, value of headers
+        http.setRequestHeader header, value if value?
 
     if options.formData?
         formData = new FormData()

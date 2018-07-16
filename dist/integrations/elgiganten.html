@@ -205,10 +205,17 @@
 
                     fetch();
                 };
-                var openOldestPublication = function (pageNumber) {
+                var openActivePublication = function (pageNumber) {
                     fetchPublications(function (err, res) {
                         if (!err && res && res.length > 0) {
-                            openPublication(res[res.length - 1].id, pageNumber);
+                            res.sort((a, b) => {
+                                var aDate = formatDate(a.run_from).getTime();
+                                var bDate = formatDate(b.run_from).getTime();
+                                
+                                return aDate - bDate;
+                            });
+
+                            openPublication(res[0].id, pageNumber);
                         }
                     });
                 };
@@ -331,7 +338,7 @@
 
                 window.shopgun = {
                     init: init,
-                    openOldestPublication: openOldestPublication
+                    openActivePublication: openActivePublication
                 };
             })();
         </script>
