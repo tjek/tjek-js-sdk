@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta charset="utf-8">
 
-        <link href="sgn-sdk.css?t=3" rel="stylesheet" type="text/css">
+        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.css" rel="stylesheet" type="text/css">
         <style>
             #publications {
                 display: -ms-flexbox;
@@ -27,19 +27,28 @@
                 -webkit-align-items: flex-start;
                 -ms-flex-align: start;
                 align-items: flex-start;
+                min-height: 100px;
             }
 
             .publications__item {
-                width: 177px;
                 text-align: center;
                 margin: 10px;
+                padding: 0 50px;
+                transition: transform ease 300ms;
+            }
+
+            .publications__item:hover {
+                transform: scale(1.1);
             }
 
             .publications__item img {
                 display: block;
-                width: 170px;
+                max-width: 300px;
+                min-height: 50px;
                 cursor: pointer;
                 margin: 0 auto 10px;
+                border: 1px solid #eee;
+                border-radius: 3px;
             }
 
             .publications__item div {
@@ -57,6 +66,9 @@
             #publication__modal {
                 display: none;
                 position: fixed;
+                z-index: 500;
+                user-select: none;
+                background-color: #fff;
             }
 
             #publication__modal .sgn__btn {
@@ -93,9 +105,9 @@
             <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
         </div>
 
-        <script src="sgn-sdk.js?t=3" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="AAABrQ=="></script>
         <script>
-            window.addEventListener('load', function () {
+            (function () {
+                var initialized = false;
                 var orderBys = {
                     newest: '-publication_date',
                     oldest: 'publication_date'
@@ -119,20 +131,16 @@
   
                     return new Date(Date.UTC(dtcomps[0],dtcomps[1],dtcomps[2],dtcomps[3],dtcomps[4],dtcomps[5]));
                 };
-                var fetchPublications = function () {
+                var fetchPublications = function (callback) {
                     SGN.CoreKit.request({
                         url: '/v2/catalogs',
                         qs: {
                             dealer_id: config.businessId,
                             order_by: orderBys[config.orderBy],
                             offset: 0,
-                            limit: 6
+                            limit: 4
                         }
-                    }, function (err, res) {
-                        if (!err) {
-                            renderPublications(res);
-                        }
-                    });
+                    }, callback);
                 };
                 var renderPublications = function (publications) {
                     var html = '';
@@ -140,22 +148,62 @@
                     publications.forEach(function (item) {
                         var runFrom = formatDate(item.run_from);
                         var runTill = formatDate(item.run_till);
-                        var formattedDate = [runFrom.getDate(), '/', runFrom.getMonth() + 1, ' - ', runTill.getDate(), '/', runTill.getMonth() + 1].join('');
+                        var formattedDate = ['Fra ', runFrom.getDate(), '/', runFrom.getMonth() + 1, ' t.o.m. ', runTill.getDate(), '/', runTill.getMonth() + 1].join('');
 
                         html += '<div class="publications__item">';
-                        html += '<img data-id="' + item.id + '" src="' + item.images.thumb + '">';
+                        html += '<img data-id="' + item.id + '" src="' + item.images.view + '">';
                         html += '<div>' + formattedDate + '</div>';
                         html += '</div>';
                     });
 
                     els.root.innerHTML = html;
                 };
-                var openPublication = function (id) {
+                var fetchOffers = function (id, callback) {
+                    var offset = 0;
+                    var limit = 100;
+                    var offers = [];
+                    var fetch = function () {
+                        SGN.CoreKit.request({
+                            url: '/v2/offers',
+                            qs: {
+                                catalog_id: id,
+                                offset: offset,
+                                limit: limit
+                            }
+                        }, function (err, res) {
+                            if (err) {
+                                callback(err);
+                            } else if (res.length < limit) {
+                                offers = offers.concat(res);
+
+                                callback(null, offers);
+                            } else {
+                                offset += limit;
+                                offers = offers.concat(res);
+
+                                fetch();
+                            }
+                        });
+                    };
+
+                    fetch();
+                };
+                var openLatestPublication = function () {
+                    fetchPublications(function (err, res) {
+                        if (!err && res && res.length > 0) {
+                            openPublication(res[res.length - 1].id);
+                        }
+                    });
+                };
+                var openPublication = function (id, pageNumber) {
                     var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
                         el: els.modal,
                         id: id,
+                        pageId: 'page' + encodeURIComponent(pageNumber),
                         eventTracker: SGN.config.get('eventTracker')
                     });
+                    
+                    window.scrollTo(0, 0);
 
                     els.html.classList.add('publication--open');
 
@@ -164,7 +212,6 @@
                             var viewer = bootstrapper.createViewer(data);
 
                             viewer.bind('hotspotClicked', function (hotspot) {
-                                window.open(hotspot.webshop);
                             });
 
                             viewer.start();
@@ -187,18 +234,57 @@
                             els.close.addEventListener('click', close);
                         }
                     });
-                }
-
-                els.root.addEventListener('click', function (e) {
-                    if (e.target.tagName === 'IMG') {
-                        var id = e.target.dataset.id;
-
-                        openPublication(id);
+                };
+                var init = function () {
+                    if (!els.root || initialized) {
+                        return;
                     }
-                });
 
-                fetchPublications();
-            });
+                    var autoopen = SGN.util.getQueryParam('autoopen') || '';
+
+                    initialized = true;
+
+                    els.root.addEventListener('click', function (e) {
+                        if (e.target.tagName === 'IMG') {
+                            var id = e.target.dataset.id;
+
+                            openPublication(id);
+                        }
+                    });
+
+                    fetchPublications(function (err, res) {
+                        if (!err) {
+                            renderPublications(res);
+
+                            var parts = autoopen.split(',');
+
+                            if (parts[0] === 'future') {
+                                if (res[res.length - 1]) {
+                                    openPublication(res[res.length - 1].id,  parts[1]);
+                                }
+                            } else if (parts[0] === 'current') {
+                                if (res[0]) {
+                                    openPublication(res[0].id,  parts[1]);
+                                }
+                            } else if (parts[0].length > 0) {
+                                for (var i = 0; i < res.length; i++) {
+                                    if (parts[0] === res[i].id && res[i].dealer_id === config.businessId) {
+                                        openPublication(res[i].id, parts[1]);
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+
+                window.shopgun = {
+                    init: init,
+                    openLatestPublication: openLatestPublication
+                };
+            })();
         </script>
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.js" id="sgn-sdk" data-app-key="00j4o5wpwptl84fuubdig2s6ej5uyna8" data-track-id="AAABrQ==" async onload="window.shopgun.init();"></script>
     </body>
 </html>

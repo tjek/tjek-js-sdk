@@ -634,6 +634,11 @@ var request = function request() {
   url = options.url;
   headers = (ref2 = options.headers) != null ? ref2 : {};
 
+  if (options.json === true) {
+    headers['Content-Type'] = 'application/json';
+    headers['Accept'] = 'application/json';
+  }
+
   if (options.qs != null) {
     queryParams = SGN$4.util.formatQueryParams(options.qs);
 
@@ -642,6 +647,44 @@ var request = function request() {
     } else {
       url += '&' + queryParams;
     }
+  }
+
+  http.addEventListener('load', function () {
+    var body, resHeaders;
+    resHeaders = http.getAllResponseHeaders().split('\r\n');
+    resHeaders = resHeaders.reduce(function (acc, current, i) {
+      var parts;
+      parts = current.split(': ');
+      acc[parts[0].toLowerCase()] = parts[1];
+      return acc;
+    }, {});
+    body = http.responseText;
+
+    if (headers['Accept'] === 'application/json') {
+      try {
+        body = JSON.parse(body);
+      } catch (error) {}
+    }
+
+    callback(null, {
+      statusCode: http.status,
+      headers: resHeaders,
+      body: body
+    });
+  });
+  http.addEventListener('error', function () {
+    callback(new Error());
+  });
+  http.addEventListener('timeout', function () {
+    callback(new Error());
+  });
+
+  if (typeof progressCallback === 'function') {
+    http.upload.onprogress = function (e) {
+      if (e.lengthComputable) {
+        progressCallback(e.loaded, e.total);
+      }
+    };
   }
 
   http.open(method.toUpperCase(), url, true);
@@ -654,11 +697,6 @@ var request = function request() {
     http.withCredentials = true;
   }
 
-  if (options.json === true) {
-    headers['Content-Type'] = 'application/json';
-    headers['Accept'] = 'application/json';
-  }
-
   for (header in headers) {
     value = headers[header];
 
@@ -666,41 +704,6 @@ var request = function request() {
       http.setRequestHeader(header, value);
     }
   }
-
-  http.addEventListener('load', function () {
-    var body;
-    headers = http.getAllResponseHeaders().split('\r\n');
-    headers = headers.reduce(function (acc, current, i) {
-      var parts;
-      parts = current.split(': ');
-      acc[parts[0].toLowerCase()] = parts[1];
-      return acc;
-    }, {});
-    body = http.responseText;
-
-    if (options.json === true) {
-      try {
-        body = JSON.parse(body);
-      } catch (error) {}
-    }
-
-    callback(null, {
-      statusCode: http.status,
-      headers: headers,
-      body: body
-    });
-  });
-  http.addEventListener('error', function () {
-    callback(new Error());
-  });
-  http.addEventListener('timeout', function () {
-    callback(new Error());
-  });
-  http.addEventListener('progress', function (e) {
-    if (e.lengthComputable && typeof progressCallback === 'function') {
-      progressCallback(e.loaded, e.total);
-    }
-  });
 
   if (options.formData != null) {
     formData = new FormData();
@@ -741,7 +744,9 @@ var fileUpload = function fileUpload() {
   SGN$5.request({
     method: 'post',
     url: url,
-    json: true,
+    headers: {
+      'Accept': 'application/json'
+    },
     formData: {
       file: options.file
     },
@@ -3105,6 +3110,7 @@ function () {
   }, {
     key: "fetch",
     value: function fetch(callback) {
+      callback = callback.bind(this);
       SGN$g.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
         var data;
         data = {
@@ -3229,7 +3235,7 @@ function () {
       if (scrollTop < 300) {
         this.progressEl.style.opacity = 0;
       } else if (scrollTop >= docHeight - winHeight) {
-        this.progressEl.textContent = '100%';
+        this.progressEl.textContent = '100 %';
         this.progressEl.style.opacity = 1;
       } else {
         this.progressEl.textContent = "".concat(progress, " %");
@@ -3268,6 +3274,8 @@ function () {
     this.pixelRatio = this.getPixelRatio();
     this.pointer = this.getPointer();
     this.orientation = this.getOrientation();
+    this.time = this.getTime();
+    this.locale = this.getLocale();
     this.maxWidth = this.getMaxWidth();
     this.versionsSupported = ['1.0.0'];
     this.storageKey = "incito-".concat(this.options.id);
@@ -3302,6 +3310,45 @@ function () {
       return orientation;
     }
   }, {
+    key: "getTime",
+    value: function getTime() {
+      return new Date().toISOString();
+    }
+  }, {
+    key: "getLocale",
+    value: function getLocale() {
+      var i, len, locale, localeChain, prefLocale;
+      localeChain = [];
+      locale = null;
+
+      if (Array.isArray(navigator.languages) && navigator.languages.length > 0) {
+        localeChain = localeChain.concat(navigator.languages);
+      } else if (typeof navigator.language === 'string' && navigator.language.length > 0) {
+        localeChain.push(navigator.language);
+      } else if (typeof navigator.browserLanguage === 'string' && navigator.browserLanguage.length > 0) {
+        localeChain.push(navigator.browserLanguage);
+      }
+
+      localeChain.push('en_US');
+
+      for (i = 0, len = localeChain.length; i < len; i++) {
+        prefLocale = localeChain[i];
+
+        if (prefLocale == null) {
+          continue;
+        }
+
+        prefLocale = prefLocale.replace('-', '_');
+
+        if (/[a-z][a-z]_[A-Z][A-Z]/g.test(prefLocale)) {
+          locale = prefLocale;
+          break;
+        }
+      }
+
+      return locale;
+    }
+  }, {
     key: "getMaxWidth",
     value: function getMaxWidth() {
       if (Math.abs(window.orientation) === 90) {
@@ -3316,6 +3363,7 @@ function () {
       var _this = this;
 
       var data;
+      callback = callback.bind(this);
       data = SGN$h.storage.session.get(this.storageKey);
 
       if (data != null && data.response != null && data.width === this.maxWidth) {
@@ -3331,6 +3379,8 @@ function () {
           pixelRatio: this.pixelRatio,
           pointer: 'POINTER_' + this.pointer.toUpperCase(),
           orientation: 'ORIENTATION_' + this.orientation.toUpperCase(),
+          time: this.time,
+          locale: this.locale,
           maxWidth: this.maxWidth,
           versionsSupported: this.versionsSupported
         }
