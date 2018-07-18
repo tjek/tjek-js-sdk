@@ -111,7 +111,7 @@
 
         <script>
             (function () {
-                function once(f) {
+                var once = function (f) {
                     var done = false;
                     return function() {
                         if(!done) {
@@ -144,8 +144,8 @@
   
                     return new Date(Date.UTC(dtcomps[0],dtcomps[1],dtcomps[2],dtcomps[3],dtcomps[4],dtcomps[5]));
                 };
-                function getPublicationRuntimeEventLabel(data) {
-                    return data.run_from.substr(0, 10)+'/'+data.run_till.substr(0, 10)
+                var getPublicationRuntimeEventLabel = function (data) {
+                    return data.run_from.substr(0, 10) + '/' + data.run_till.substr(0, 10);
                 }
                 var fetchPublications = function (callback) {
                     SGN.CoreKit.request({
@@ -257,11 +257,13 @@
                             };
 
                             viewer.bind('hotspotClicked', function (hotspot) {
-                                n('send', 'event', {
-                                    'eventCategory': 'Publication',
-                                    'eventAction': 'Offer Opened',
-                                    'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer)+'-'+hotspot.sku
-                                });
+                                if (hotspot.sku) {
+                                    n('send', 'event', {
+                                        'eventCategory': 'Publication',
+                                        'eventAction': 'Offer Opened',
+                                        'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer)+'-'+hotspot.sku
+                                    });
+                                }
                                 if (hotspot.webshop) {
                                     window.open(hotspot.webshop, '_blank');
                                 } else if (hotspot.sku) {
@@ -277,42 +279,44 @@
                                 });
                             }
                             var navigationHandlers = {
-                                page2: once(function() {
+                                page2: once(function () {
                                     n('send', 'event', {
                                         'eventCategory': 'Publication',
                                         'eventAction': 'Read-through page 2',
                                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
                                     });
                                 }),
-                                progress20: once(function() { trackProgress(20) }),
-                                progress40: once(function() { trackProgress(40) }),
-                                progress60: once(function() { trackProgress(60) }),
-                                progress80: once(function() { trackProgress(80) }),
-                                progress100: once(function() { trackProgress(100) })
+                                progress20: once(function () { trackProgress(20) }),
+                                progress40: once(function () { trackProgress(40) }),
+                                progress60: once(function () { trackProgress(60) }),
+                                progress80: once(function () { trackProgress(80) }),
+                                progress100: once(function () { trackProgress(100) })
                             }
-                            viewer.bind("beforeNavigation", function (navEvent) {
-                                console.log(navEvent);
-                                if (navEvent.verso.newPosition === 1) {
-                                    navigationHandlers.page2();
-                                }
-                                if (navEvent.progress >= 20) {
-                                    navigationHandlers.progress20();
-                                }
-                                if (navEvent.progress >= 40) {
-                                    navigationHandlers.progress40();
-                                }
-                                if (navEvent.progress >= 60) {
-                                    navigationHandlers.progress60();
-                                }
-                                if (navEvent.progress >= 80) {
-                                    navigationHandlers.progress80();
-                                }
-                                if (navEvent.progress >= 100) {
-                                    navigationHandlers.progress100();
-                                }
-                            });
+                            if (!(typeof pageNumber === 'number' && pageNumber > 1)) {
+                                viewer.bind('beforeNavigation', function (navEvent) {
+                                    if (navEvent.verso.newPosition === 1) {
+                                        navigationHandlers.page2();
+                                    }
+                                    if (navEvent.progress >= 20) {
+                                        navigationHandlers.progress20();
+                                    }
+                                    if (navEvent.progress >= 40) {
+                                        navigationHandlers.progress40();
+                                    }
+                                    if (navEvent.progress >= 60) {
+                                        navigationHandlers.progress60();
+                                    }
+                                    if (navEvent.progress >= 80) {
+                                        navigationHandlers.progress80();
+                                    }
+                                    if (navEvent.progress >= 100) {
+                                        navigationHandlers.progress100();
+                                    }
+                                });
+                            }
 
                             viewer.start();
+
                             n('send', 'event', {
                                 'eventCategory': 'Publication',
                                 'eventAction': 'Opened',
