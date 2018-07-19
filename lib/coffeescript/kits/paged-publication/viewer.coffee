@@ -28,8 +28,6 @@ class Viewer
 
         return
 
-        return
-
     start: ->
         @_eventTracking.trackOpened()
         @_core.trigger 'started'
