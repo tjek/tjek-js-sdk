@@ -111,6 +111,7 @@
 
         <script>
             (function () {
+                var nga = typeof n === 'function' ? n : function () {};
                 var once = function (f) {
                     var done = false;
                     return function() {
@@ -271,7 +272,7 @@
                                 }
                             });
                             var trackProgress = function (progress) {
-                                n('send', 'event', {
+                                nga('send', 'event', {
                                     'eventCategory': 'Publication',
                                     'eventAction': 'Read-through percent',
                                     'eventLabel': getPublicationRuntimeEventLabel(data.details),
@@ -280,7 +281,7 @@
                             }
                             var navigationHandlers = {
                                 page2: once(function () {
-                                    n('send', 'event', {
+                                    nga('send', 'event', {
                                         'eventCategory': 'Publication',
                                         'eventAction': 'Read-through page 2',
                                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
@@ -317,7 +318,7 @@
 
                             viewer.start();
 
-                            n('send', 'event', {
+                            nga('send', 'event', {
                                 'eventCategory': 'Publication',
                                 'eventAction': 'Opened',
                                 'eventLabel': getPublicationRuntimeEventLabel(data.details)
