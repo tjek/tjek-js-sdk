@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta charset="utf-8">
 
-        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.css" rel="stylesheet" type="text/css">
+        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.6.min.css" rel="stylesheet" type="text/css">
         <style>
             #publications {
                 display: -ms-flexbox;
@@ -111,17 +111,18 @@
 
         <script>
             (function () {
-                var nga = typeof n === 'function' ? n : function () { };
+                var nga = typeof n === 'function' ? n : function () {};
                 var once = function (f) {
                     var done = false;
 
                     return function () {
                         if (!done) {
                             done = true;
+                            
                             return f.apply(this, arguments);
                         }
                     };
-                }
+                };
                 var initialized = false;
                 var orderBys = {
                     newest: '-publication_date',
@@ -143,7 +144,7 @@
                     var dtcomps = dtstr.split(' ');
 
                     dtcomps[1]--;
-
+  
                     return new Date(Date.UTC(dtcomps[0], dtcomps[1], dtcomps[2], dtcomps[3], dtcomps[4], dtcomps[5]));
                 };
                 var getPublicationRuntimeEventLabel = function (data) {
@@ -177,16 +178,58 @@
                     els.root.innerHTML = html;
                 };
                 var matchSKU = function (str) {
-                    var matches = str.match(/[a-z0-9A-Z]{6,20}/gim) || [];
+                    var i = 0;
+                    var word;
+                    var words = [];
 
-                    for (var i = 0; i < matches.length; i++) {
-                        if (matches[i].toUpperCase() === matches[i]) {
-                            return matches[i];
+                    str.replace(/\./g, '').split(' ').forEach(function(word) {
+                        var parts = word.split(/\(/);
+
+                        parts.forEach(function(part) {
+                            words.push(part.replace(/\./, ''));
+                        });
+                    });
+
+                    words.reverse();
+                    
+                    while (i < words.length) {
+                        word = words[i];
+
+                        if (word.length >= 6) {
+                            if (word.toUpperCase() === word && /[A-Z]/.test(word) && /\d/.test(word)) {
+                                return word;
+                            }
                         }
+                    
+                        i++;
                     }
 
-                    if (str.split(' ').length === 1) {
-                        return str;
+                    i = 0;
+                    
+                    while (i < words.length) {
+                        word = words[i];
+
+                        if (word.length >= 6) {
+                            if (word.toUpperCase() === word && /^[a-zA-Z]*$/.test(word) && word !== 'SPARER') {
+                                return word;
+                            }
+                        }
+
+                        i++;
+                    }
+
+                    i = 0;
+
+                    while (i < words.length) {
+                        word = words[i];
+
+                        if (word.length >= 6) {
+                            if (/^[a-zA-Z0-9]*$/.test(word) && /\d/.test(word)) {
+                                return word;
+                            }
+                        }
+
+                        i++;
                     }
                 };
                 var fetchOffers = function (id, callback) {
@@ -225,7 +268,7 @@
                             res.sort((a, b) => {
                                 var aDate = formatDate(a.run_from).getTime();
                                 var bDate = formatDate(b.run_from).getTime();
-
+                                
                                 return aDate - bDate;
                             });
 
@@ -243,7 +286,7 @@
                     if (typeof pageNumber === 'number' && pageNumber > 0) {
                         options.pageId = 'page' + encodeURIComponent(pageNumber);
                     }
-
+                    
                     window.scrollTo(0, 0);
 
                     els.html.classList.add('publication--open');
@@ -255,6 +298,7 @@
                             var viewer = bootstrapper.createViewer(data);
                             var fetchCustomHotspots = function (callback) {
                                 var customHotspotsURL = 'https://s3-eu-west-1.amazonaws.com/sgn-clients/elgiganten/hotspots.json';
+
                                 function reqListener() {
                                     var catalogsCustomHotspots = JSON.parse(this.responseText);
                                     var customHotspots = id in catalogsCustomHotspots ? catalogsCustomHotspots[id] : [];
@@ -263,6 +307,7 @@
                                 }
 
                                 var oReq = new XMLHttpRequest();
+
                                 oReq.addEventListener("load", reqListener);
                                 oReq.addEventListener("error", function () {
                                     callback(null, []);
@@ -272,12 +317,13 @@
                                 });
                                 oReq.open("GET", customHotspotsURL);
                                 oReq.send();
-                            }
+                            };
                             var _fetchHotspots = function (callback) {
                                 SGN.util.async.parallel([bootstrapper.fetchHotspots.bind(bootstrapper), fetchCustomHotspots], function (result) {
                                     var offerHotspots = result[0][1];
                                     var customHotspots = result[1][1];
                                     var allHotspots = offerHotspots.concat(customHotspots);
+
                                     callback(null, allHotspots);
                                 })
                             };
@@ -286,27 +332,27 @@
                             };
 
                             viewer.bind('hotspotClicked', function (hotspot) {
-                                if (hotspot.sku) {
-                                    n('send', 'event', {
-                                        'eventCategory': 'Publication',
-                                        'eventAction': 'Offer Opened',
-                                        'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer) + '-' + hotspot.sku
-                                    });
-                                }
-                                if (hotspot.type === 'url' && hotspot.url) {
+                                if (hotspot.type === 'offer') {
+                                    if (hotspot.sku) {
+                                        nga('send', 'event', {
+                                            'eventCategory': 'Publication',
+                                            'eventAction': 'Offer Opened',
+                                            'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer) + '-' + hotspot.sku
+                                        });
+                                        
+                                        window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=INT_IPAPER_BUTTON', '_blank');
+                                    } else {
+                                        window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.offer.heading) + '&searchResultTab=&search=&intcid=INT_IPAPER_BUTTON', '_blank');
+                                    }
+                                } else if (hotspot.type === 'url' && hotspot.url) {
                                     window.open(hotspot.url, '_blank');
-                                } else if (hotspot.webshop) {
-                                    window.open(hotspot.webshop, '_blank');
-                                } else if (hotspot.sku) {
-                                    window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=PDF_HOTSPOT', '_blank');
                                 }
                             });
                             var trackProgress = function (progress) {
                                 nga('send', 'event', {
                                     'eventCategory': 'Publication',
-                                    'eventAction': 'Read-through percent',
-                                    'eventLabel': getPublicationRuntimeEventLabel(data.details),
-                                    'eventValue': progress
+                                    'eventAction': 'Read-through ' + progress + '%',
+                                    'eventLabel': getPublicationRuntimeEventLabel(data.details)
                                 });
                             }
                             var navigationHandlers = {
@@ -323,25 +369,23 @@
                                 progress80: once(function () { trackProgress(80) }),
                                 progress100: once(function () { trackProgress(100) })
                             }
+
                             if (!(typeof pageNumber === 'number' && pageNumber > 1)) {
                                 viewer.bind('beforeNavigation', function (navEvent) {
                                     if (navEvent.verso.newPosition === 1) {
                                         navigationHandlers.page2();
                                     }
-                                    if (navEvent.progress >= 20) {
-                                        navigationHandlers.progress20();
-                                    }
-                                    if (navEvent.progress >= 40) {
-                                        navigationHandlers.progress40();
-                                    }
-                                    if (navEvent.progress >= 60) {
-                                        navigationHandlers.progress60();
-                                    }
-                                    if (navEvent.progress >= 80) {
-                                        navigationHandlers.progress80();
-                                    }
+
                                     if (navEvent.progress >= 100) {
                                         navigationHandlers.progress100();
+                                    } else if (navEvent.progress >= 80) {
+                                        navigationHandlers.progress80();
+                                    } else if (navEvent.progress >= 60) {
+                                        navigationHandlers.progress60();
+                                    } else if (navEvent.progress >= 40) {
+                                        navigationHandlers.progress40();
+                                    } else if (navEvent.progress >= 20) {
+                                        navigationHandlers.progress20();
                                     }
                                 });
                             }
@@ -354,35 +398,27 @@
                                 'eventLabel': getPublicationRuntimeEventLabel(data.details)
                             });
 
-                            // Fetch hotspots after rendering the viewer as they are not critical for initial render.
                             SGN.util.async.parallel([_fetchHotspots, _fetchOffers], function (result) {
-                                var allHotspots = result[0][1];
+                                var hotspots = result[0][1];
                                 var offers = result[1][1];
 
-                                var filteredHotspots = allHotspots.filter(function (hotspot) {
-                                    for (let i = 0; i < offers.length; i++) {
-                                        if (hotspot.type === 'offer' && hotspot.id === offers[i].id) {
-                                            var sku = matchSKU(offers[i].description);
+                                if (hotspots && offers) {
+                                    hotspots.forEach(function (hotspot) {
+                                        for (let i = 0; i < offers.length; i++) {
+                                            if (hotspot.type === 'offer' && hotspot.offer.id === offers[i].id) {
+                                                var sku = matchSKU(offers[i].description);
 
-                                            if (sku) {
-                                                hotspot.sku = sku.toUpperCase();
+                                                if (sku) {
+                                                    hotspot.sku = sku.toUpperCase();
 
-                                                return true;
-                                            } else if (hotspot.webshop) {
-                                                return true;
+                                                    break;
+                                                }
                                             }
                                         }
-                                    }
-                                    if (hotspot.type === 'url' && hotspot.url) {
-                                        return true;
-                                    }
-
-                                    return false;
-                                });
-
-                                if (filteredHotspots && offers) {
-                                    bootstrapper.applyHotspots(viewer, filteredHotspots);
+                                    });
                                 }
+
+                                bootstrapper.applyHotspots(viewer, hotspots);
                             });
 
                             var close = function (e) {
@@ -447,6 +483,6 @@
                 };
             })();
         </script>
-        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.5.min.js" id="sgn-sdk" data-app-key="00jiy8zh8pcorcq4sz208bryny3u76zk" data-track-id="AAACDA==" async onload="window.shopgun.init();"></script>
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.6.min.js" id="sgn-sdk" data-app-key="00jiy8zh8pcorcq4sz208bryny3u76zk" data-track-id="AAACDA==" async onload="window.shopgun.init();"></script>
     </body>
 </html>
