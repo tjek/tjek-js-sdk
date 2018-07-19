@@ -110,7 +110,7 @@
         </div>
 
         <script>
-            (function () {
+            window.shopgun = (function () {
                 var nga = typeof n === 'function' ? n : function () {};
                 var once = function (f) {
                     var done = false;
@@ -139,9 +139,7 @@
                     close: document.querySelector('#publication-modal__close')
                 };
                 var formatDate = function (dtstr) {
-                    dtstr = dtstr.replace(/\D/g, ' ');
-
-                    var dtcomps = dtstr.split(' ');
+                    var dtcomps = dtstr.replace(/\D/g, ' ').split(' ');
 
                     dtcomps[1]--;
   
@@ -183,9 +181,7 @@
                     var words = [];
 
                     str.replace(/\./g, '').split(' ').forEach(function(word) {
-                        var parts = word.split(/\(/);
-
-                        parts.forEach(function(part) {
+                        word.split(/\(/).forEach(function(part) {
                             words.push(part.replace(/\./, ''));
                         });
                     });
@@ -308,14 +304,14 @@
 
                                 var oReq = new XMLHttpRequest();
 
-                                oReq.addEventListener("load", reqListener);
-                                oReq.addEventListener("error", function () {
+                                oReq.addEventListener('load', reqListener);
+                                oReq.addEventListener('error', function () {
                                     callback(null, []);
                                 });
-                                oReq.addEventListener("abort", function () {
+                                oReq.addEventListener('abort', function () {
                                     callback(null, []);
                                 });
-                                oReq.open("GET", customHotspotsURL);
+                                oReq.open('GET', customHotspotsURL, true);
                                 oReq.send();
                             };
                             var _fetchHotspots = function (callback) {
@@ -325,7 +321,7 @@
                                     var allHotspots = offerHotspots.concat(customHotspots);
 
                                     callback(null, allHotspots);
-                                })
+                                });
                             };
                             var _fetchOffers = function (callback) {
                                 return fetchOffers(id, callback);
@@ -477,7 +473,7 @@
                     });
                 };
 
-                window.shopgun = {
+                return {
                     init: init,
                     openActivePublication: openActivePublication
                 };
