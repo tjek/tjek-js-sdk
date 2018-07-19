@@ -111,11 +111,12 @@
 
         <script>
             (function () {
-                var nga = typeof n === 'function' ? n : function () {};
+                var nga = typeof n === 'function' ? n : function () { };
                 var once = function (f) {
                     var done = false;
-                    return function() {
-                        if(!done) {
+
+                    return function () {
+                        if (!done) {
                             done = true;
                             return f.apply(this, arguments);
                         }
@@ -142,8 +143,8 @@
                     var dtcomps = dtstr.split(' ');
 
                     dtcomps[1]--;
-  
-                    return new Date(Date.UTC(dtcomps[0],dtcomps[1],dtcomps[2],dtcomps[3],dtcomps[4],dtcomps[5]));
+
+                    return new Date(Date.UTC(dtcomps[0], dtcomps[1], dtcomps[2], dtcomps[3], dtcomps[4], dtcomps[5]));
                 };
                 var getPublicationRuntimeEventLabel = function (data) {
                     return data.run_from.substr(0, 10) + '/' + data.run_till.substr(0, 10);
@@ -224,7 +225,7 @@
                             res.sort((a, b) => {
                                 var aDate = formatDate(a.run_from).getTime();
                                 var bDate = formatDate(b.run_from).getTime();
-                                
+
                                 return aDate - bDate;
                             });
 
@@ -242,7 +243,7 @@
                     if (typeof pageNumber === 'number' && pageNumber > 0) {
                         options.pageId = 'page' + encodeURIComponent(pageNumber);
                     }
-                    
+
                     window.scrollTo(0, 0);
 
                     els.html.classList.add('publication--open');
@@ -252,7 +253,34 @@
                     bootstrapper.fetch(function (err, data) {
                         if (!err) {
                             var viewer = bootstrapper.createViewer(data);
-                            var _fetchHotspots = bootstrapper.fetchHotspots.bind(bootstrapper);
+                            var fetchCustomHotspots = function (callback) {
+                                var customHotspotsURL = 'https://s3-eu-west-1.amazonaws.com/sgn-clients/elgiganten/hotspots.json';
+                                function reqListener() {
+                                    var catalogsCustomHotspots = JSON.parse(this.responseText);
+                                    var customHotspots = id in catalogsCustomHotspots ? catalogsCustomHotspots[id] : [];
+
+                                    callback(null, customHotspots)
+                                }
+
+                                var oReq = new XMLHttpRequest();
+                                oReq.addEventListener("load", reqListener);
+                                oReq.addEventListener("error", function () {
+                                    callback(null, []);
+                                });
+                                oReq.addEventListener("abort", function () {
+                                    callback(null, []);
+                                });
+                                oReq.open("GET", customHotspotsURL);
+                                oReq.send();
+                            }
+                            var _fetchHotspots = function (callback) {
+                                SGN.util.async.parallel([bootstrapper.fetchHotspots.bind(bootstrapper), fetchCustomHotspots], function (result) {
+                                    var offerHotspots = result[0][1];
+                                    var customHotspots = result[1][1];
+                                    var allHotspots = offerHotspots.concat(customHotspots);
+                                    callback(null, allHotspots);
+                                })
+                            };
                             var _fetchOffers = function (callback) {
                                 return fetchOffers(id, callback);
                             };
@@ -262,10 +290,12 @@
                                     n('send', 'event', {
                                         'eventCategory': 'Publication',
                                         'eventAction': 'Offer Opened',
-                                        'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer)+'-'+hotspot.sku
+                                        'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer) + '-' + hotspot.sku
                                     });
                                 }
-                                if (hotspot.webshop) {
+                                if (hotspot.type === 'url' && hotspot.url) {
+                                    window.open(hotspot.url, '_blank');
+                                } else if (hotspot.webshop) {
                                     window.open(hotspot.webshop, '_blank');
                                 } else if (hotspot.sku) {
                                     window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=PDF_HOTSPOT', '_blank');
@@ -326,27 +356,32 @@
 
                             // Fetch hotspots after rendering the viewer as they are not critical for initial render.
                             SGN.util.async.parallel([_fetchHotspots, _fetchOffers], function (result) {
-                                var hotspots = result[0][1];
+                                var allHotspots = result[0][1];
                                 var offers = result[1][1];
 
-                                if (hotspots && offers) {
-                                    bootstrapper.applyHotspots(viewer, hotspots.filter(function (hotspot) {
-                                        for (let i = 0; i < offers.length; i++) {
-                                            if (hotspot.type === 'offer' && hotspot.id === offers[i].id) {
-                                                var sku = matchSKU(offers[i].description);
+                                var filteredHotspots = allHotspots.filter(function (hotspot) {
+                                    for (let i = 0; i < offers.length; i++) {
+                                        if (hotspot.type === 'offer' && hotspot.id === offers[i].id) {
+                                            var sku = matchSKU(offers[i].description);
 
-                                                if (sku) {
-                                                    hotspot.sku = sku.toUpperCase();
+                                            if (sku) {
+                                                hotspot.sku = sku.toUpperCase();
 
-                                                    return true;
-                                                } else if (hotspot.webshop) {
-                                                    return true;
-                                                }
+                                                return true;
+                                            } else if (hotspot.webshop) {
+                                                return true;
                                             }
                                         }
+                                    }
+                                    if (hotspot.type === 'url' && hotspot.url) {
+                                        return true;
+                                    }
 
-                                        return false;
-                                    }));
+                                    return false;
+                                });
+
+                                if (filteredHotspots && offers) {
+                                    bootstrapper.applyHotspots(viewer, filteredHotspots);
                                 }
                             });
 
