@@ -265,7 +265,7 @@
                 var openActivePublication = function (pageNumber) {
                     fetchPublications(function (err, res) {
                         if (!err && res && res.length > 0) {
-                            res.sort((a, b) => {
+                            res.sort(function (a, b) {
                                 var aDate = formatDate(a.run_from).getTime();
                                 var bDate = formatDate(b.run_from).getTime();
                                 
