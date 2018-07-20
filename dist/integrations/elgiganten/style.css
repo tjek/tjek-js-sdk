@@ -1,0 +1,119 @@
+#publications {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    min-height: 100px;
+}
+
+.publications__item {
+    text-align: center;
+    margin: 10px;
+    padding: 0 50px;
+    transition: transform ease 300ms;
+}
+
+.publications__item:hover {
+    transform: scale(1.1);
+}
+
+.publications__item img {
+    display: block;
+    max-width: 300px;
+    min-height: 50px;
+    cursor: pointer;
+    margin: 0 auto 10px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+
+.publications__item div {
+    font-weight: bold;
+}
+
+.publication--open {
+    overflow: hidden;
+}
+
+.publication--open #publication__modal {
+    display: block;
+}
+
+#publication__modal {
+    display: none;
+    position: fixed;
+    z-index: 500;
+    user-select: none;
+    background-color: #fff;
+}
+
+#publication__modal[data-color-brightness] .publications__spinner > div {
+    background-color: #fff;
+}
+
+#publication__modal[data-started] .publications__spinner {
+    display: none;
+}
+
+#publication__modal .sgn-pp__hotspot {
+    border-color: #88d41b;
+}
+
+#publication__modal .sgn__btn {
+    text-decoration: none;
+}
+
+.publications__spinner {
+    margin: 100px auto 0;
+    width: 70px;
+    text-align: center;
+  }
+  
+.publications__spinner > div {
+    width: 18px;
+    height: 18px;
+    background-color: #333;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: publications-bouncedelay 1.4s infinite ease-in-out both;
+    animation: publications-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.publications__spinner .publications__bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+
+.publications__spinner .publications__bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+@-webkit-keyframes publications-bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0) }
+    40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes publications-bouncedelay {
+    0%, 80%, 100% { 
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    } 40% { 
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+    }
+}
