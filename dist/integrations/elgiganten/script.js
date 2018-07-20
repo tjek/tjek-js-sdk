@@ -1,5 +1,9 @@
 window.shopgun = (function () {
-    var nga = typeof n === 'function' ? n : function () {};
+    var nga = function (arg1, arg2, arg3) {
+        if (typeof n === 'function') {
+            n(arg1, arg2, arg3);
+        }
+    };
     var once = function (f) {
         var done = false;
 
@@ -267,6 +271,12 @@ window.shopgun = (function () {
                 }
 
                 if (!(typeof pageNumber === 'number' && pageNumber > 1)) {
+                    nga('send', 'event', {
+                        'eventCategory': 'Publication',
+                        'eventAction': 'Opened',
+                        'eventLabel': getPublicationRuntimeEventLabel(data.details)
+                    });
+
                     viewer.bind('beforeNavigation', function (navEvent) {
                         if (navEvent.verso.newPosition === 1) {
                             navigationHandlers.page2();
@@ -284,15 +294,15 @@ window.shopgun = (function () {
                             navigationHandlers.progress20();
                         }
                     });
+                } else {
+                    nga('send', 'event', {
+                        'eventCategory': 'Publication',
+                        'eventAction': 'Opened Specific Page',
+                        'eventLabel': getPublicationRuntimeEventLabel(data.details)
+                    });
                 }
 
                 viewer.start();
-
-                nga('send', 'event', {
-                    'eventCategory': 'Publication',
-                    'eventAction': 'Opened',
-                    'eventLabel': getPublicationRuntimeEventLabel(data.details)
-                });
 
                 SGN.util.async.parallel([_fetchHotspots, _fetchOffers], function (result) {
                     var hotspots = result[0][1];
