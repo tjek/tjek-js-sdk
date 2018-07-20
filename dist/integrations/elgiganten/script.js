@@ -15,13 +15,8 @@ window.shopgun = (function () {
         };
     };
     var initialized = false;
-    var orderBys = {
-        newest: '-publication_date',
-        oldest: 'publication_date'
-    };
     var config = {
-        businessId: 'c35es',
-        orderBy: 'newest'
+        businessId: 'c35es'
     };
     var els = {
         html: document.querySelector('html'),
@@ -44,7 +39,7 @@ window.shopgun = (function () {
             url: '/v2/catalogs',
             qs: {
                 dealer_id: config.businessId,
-                order_by: orderBys[config.orderBy],
+                order_by: '-expiration_date',
                 offset: 0,
                 limit: 4
             }
