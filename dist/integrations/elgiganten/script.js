@@ -230,6 +230,16 @@ window.shopgun = (function () {
                                 'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-unknown'
                             });
 
+                            if (hotspot.offer.description) {
+                                var url = hotspot.offer.description.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+
+                                if (url && url.length > 0) {
+                                    window.open(url[0], '_blank');
+
+                                    return;
+                                }
+                            }
+
                             window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.offer.heading) + '&searchResultTab=&search=&intcid=INT_IPAPER_BUTTON', '_blank');
                         }
                     } else if (hotspot.type === 'url' && hotspot.url) {
@@ -308,6 +318,8 @@ window.shopgun = (function () {
                                 if (hotspot.type === 'offer' && hotspot.offer.id === offers[i].id) {
                                     var desc = offers[i].description;
                                     var sku = matchSKU(desc);
+
+                                    hotspot.offer.description = desc;
 
                                     if (sku) {
                                         hotspot.sku = sku.toUpperCase();
