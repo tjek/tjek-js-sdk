@@ -183,7 +183,7 @@ window.shopgun = (function () {
                 var time = new Date().getTime();
                 var fetchCustomHotspots = function (callback) {
                     var oReq = new XMLHttpRequest();
-                    var customHotspotsURL = 'https://s3-eu-west-1.amazonaws.com/sgn-clients/elgiganten/hotspots.json?=' + time;
+                    var customHotspotsURL = 'https://s3-eu-west-1.amazonaws.com/sgn-clients/elgiganten/hotspots.json?t=' + time;
 
                     function reqListener() {
                         var catalogsCustomHotspots = JSON.parse(this.responseText);
