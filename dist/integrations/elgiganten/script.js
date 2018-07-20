@@ -180,8 +180,10 @@ window.shopgun = (function () {
         bootstrapper.fetch(function (err, data) {
             if (!err) {
                 var viewer = bootstrapper.createViewer(data);
+                var time = new Date().getTime();
                 var fetchCustomHotspots = function (callback) {
-                    var customHotspotsURL = 'https://d3fcr4767gh93y.cloudfront.net/elgiganten/hotspots.json';
+                    var oReq = new XMLHttpRequest();
+                    var customHotspotsURL = 'https://s3-eu-west-1.amazonaws.com/sgn-clients/elgiganten/hotspots.json?=' + time;
 
                     function reqListener() {
                         var catalogsCustomHotspots = JSON.parse(this.responseText);
@@ -189,8 +191,6 @@ window.shopgun = (function () {
 
                         callback(null, customHotspots)
                     }
-
-                    var oReq = new XMLHttpRequest();
 
                     oReq.addEventListener('load', reqListener);
                     oReq.addEventListener('error', function () {
@@ -221,14 +221,26 @@ window.shopgun = (function () {
                             nga('send', 'event', {
                                 'eventCategory': 'Publication',
                                 'eventAction': 'Offer Opened',
-                                'eventLabel': getPublicationRuntimeEventLabel(hotspot.offer) + '-' + hotspot.sku
+                                'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-' + hotspot.sku
                             });
                             
                             window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=INT_IPAPER_BUTTON', '_blank');
                         } else {
+                            nga('send', 'event', {
+                                'eventCategory': 'Publication',
+                                'eventAction': 'Offer Opened',
+                                'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-unknown'
+                            });
+
                             window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.offer.heading) + '&searchResultTab=&search=&intcid=INT_IPAPER_BUTTON', '_blank');
                         }
                     } else if (hotspot.type === 'url' && hotspot.url) {
+                        nga('send', 'event', {
+                            'eventCategory': 'Publication',
+                            'eventAction': 'URL Opened',
+                            'eventLabel': getPublicationRuntimeEventLabel(data.details)
+                        });
+
                         window.open(hotspot.url, '_blank');
                     }
                 });
