@@ -1,8 +1,7 @@
 window.shopgun = (function () {
+    var ngaPool = [];
     var nga = function (arg1, arg2, arg3) {
-        if (typeof n === 'function') {
-            n(arg1, arg2, arg3);
-        }
+        ngaPool.push([arg1, arg2, arg3]);
     };
     var once = function (f) {
         var done = false;
@@ -368,11 +367,11 @@ window.shopgun = (function () {
 
                 var parts = autoopen.split(',');
 
-                if (parts[0] === 'future') {
+                if (parts[0] === 'current') {
                     if (res[res.length - 1]) {
                         openPublication(res[res.length - 1].id, parseInt(parts[1]));
                     }
-                } else if (parts[0] === 'current') {
+                } else if (parts[0] === 'future') {
                     if (res[0]) {
                         openPublication(res[0].id, parseInt(parts[1]));
                     }
@@ -388,6 +387,18 @@ window.shopgun = (function () {
             }
         });
     };
+
+    setInterval(function () {
+        if (ngaPool.length && typeof n === 'function') {
+            for (var i = 0; i < ngaPool.length; i++) {
+                var evt = ngaPool[i];
+
+                n(evt[0], evt[1], evt[2]);
+            }
+
+            ngaPool = [];
+        }
+    }, 1000);
 
     return {
         init: init,
