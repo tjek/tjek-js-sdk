@@ -2702,7 +2702,6 @@ function () {
     this._setupEventListeners();
 
     return;
-    return;
   }
 
   _createClass(Viewer, [{
