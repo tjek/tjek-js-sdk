@@ -2,7 +2,7 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var path = require('path');
 var pkg = require('./package');
-var credentials = new AWS.SharedIniFileCredentials({ profile: 'shopgun-js-sdk' });
+var credentials = new AWS.SharedIniFileCredentials({profile: 'shopgun-js-sdk'});
 var bucket = 'sgn-js-sdk';
 
 AWS.config.credentials = credentials;
@@ -14,7 +14,7 @@ function putObject (options) {
         Body: fs.readFileSync(options.bodyPath).toString(),
         ACL: 'public-read',
         ContentType: options.contentType
-    }, function (err, data) {
+    }, function (err) {
         if (err) {
             console.log('Could not upload ' + options.key);
         } else {
