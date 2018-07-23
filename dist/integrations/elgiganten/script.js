@@ -68,7 +68,11 @@ window.shopgun = (function () {
 
         str.replace(/\./g, '').split(' ').forEach(function(word) {
             word.split(/\(/).forEach(function(part) {
-                words.push(part.replace(/\./, ''));
+                var w = part.toLowerCase();
+
+                if (!(w === 'sparer' || w === 'tjek' || w === 'prisen')) {
+                    words.push(part.replace(/\./, ''));
+                }
             });
         });
 
@@ -92,7 +96,7 @@ window.shopgun = (function () {
             word = words[i];
 
             if (word.length >= 6) {
-                if (word.toUpperCase() === word && /^[a-zA-Z]*$/.test(word) && word !== 'SPARER') {
+                if (word.toUpperCase() === word && /^[a-zA-Z]*$/.test(word)) {
                     return word;
                 }
             }
