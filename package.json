@@ -70,7 +70,7 @@
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "dependencies": {
     "core-js": "^2.5.7",
-    "incito-browser": "1.1.5",
+    "incito-browser": "1.1.6",
     "md5": "^2.2.1",
     "microevent": "^1.0.0",
     "mustache": "^2.3.0",
@@ -83,7 +83,7 @@
     "@babel/plugin-external-helpers": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54",
     "app-root-path": "^2.1.0",
-    "aws-sdk": "^2.278.1",
+    "aws-sdk": "^2.279.1",
     "bundlesize": "^0.17.0",
     "coffeelint": "^2.1.0",
     "coffeescript": "^2.3.1",
@@ -109,6 +109,6 @@
     "stylus": "^0.54.5",
     "thenify": "^3.3.0",
     "uglify-es": "^3.3.10",
-    "webpack": "^4.16.1"
+    "webpack": "^4.16.2"
   }
 }
