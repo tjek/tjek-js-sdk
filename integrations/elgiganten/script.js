@@ -39,7 +39,7 @@ window.shopgun = (function () {
             url: '/v2/catalogs',
             qs: {
                 dealer_id: config.businessId,
-                order_by: '-expiration_date',
+                order_by: '-valid_date',
                 offset: 0,
                 limit: 4
             }
@@ -68,7 +68,11 @@ window.shopgun = (function () {
 
         str.replace(/\./g, '').split(' ').forEach(function(word) {
             word.split(/\(/).forEach(function(part) {
-                words.push(part.replace(/\./, ''));
+                var w = part.toLowerCase();
+
+                if (!(w === 'sparer' || w === 'tjek' || w === 'prisen')) {
+                    words.push(part.replace(/\./, ''));
+                }
             });
         });
 
@@ -92,7 +96,7 @@ window.shopgun = (function () {
             word = words[i];
 
             if (word.length >= 6) {
-                if (word.toUpperCase() === word && /^[a-zA-Z]*$/.test(word) && word !== 'SPARER') {
+                if (word.toUpperCase() === word && /^[a-zA-Z]*$/.test(word)) {
                     return word;
                 }
             }
@@ -374,17 +378,24 @@ window.shopgun = (function () {
 
                 var parts = autoopen.split(',');
 
-                if (parts[0] === 'current') {
-                    if (res[res.length - 1]) {
-                        openPublication(res[res.length - 1].id, parseInt(parts[1]));
-                    }
-                } else if (parts[0] === 'future') {
+                if (parts[0] === 'current' || parts[0] === 'future') {
+                    res.sort(function (a, b) {
+                        var aDate = formatDate(a.run_from).getTime();
+                        var bDate = formatDate(b.run_from).getTime();
+
+                        if (parts[0] === 'current') {
+                            return aDate - bDate;
+                        } else {
+                            return bDate - aDate;
+                        }
+                    });
+
                     if (res[0]) {
                         openPublication(res[0].id, parseInt(parts[1]));
                     }
                 } else if (parts[0].length > 0) {
                     for (var i = 0; i < res.length; i++) {
-                        if (parts[0] === res[i].id && res[i].dealer_id === config.businessId) {
+                        if (parts[0] === res[i].id) {
                             openPublication(res[i].id, parseInt(parts[1]));
 
                             break;
