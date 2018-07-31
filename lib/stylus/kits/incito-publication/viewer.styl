@@ -2,21 +2,32 @@
     position relative
     outline 0
 
+    &.sgn-incito--started
+        &:not(.sgn-incito--scrolling) .sgn-incito__progress
+            transition opacity ease 1s
+
+        &.sgn-incito--scrolling .sgn-incito__progress
+            opacity 1
+
 .sgn-incito__progress
     position fixed
-    right 14px
-    top 14px
+    left 50%
+    bottom 12px
+    transform translateX(-50%)
+    width auto
     display inline-block
     z-index 2
-    border-radius 8px
-    opacity 0
-    transition all ease-out 0.3s
-    background-color rgba(#000, 0.4)
+    background-color rgba(#000, 0.6)
+    opacity 0.5
+    color #fff
+    text-align center
+    min-width 80px
+    padding 6px 18px
+    border-radius 6px
     font-weight bold
     font-size 14px
     font-family "Lucida Sans Unicode", "Lucida Grande", sans-serif
     letter-spacing -1px
-    color #fff
-    text-align center
-    padding 6px 18px
-    z-index 2
+
+    &:hover
+        opacity 1

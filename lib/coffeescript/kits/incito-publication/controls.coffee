@@ -2,8 +2,11 @@ module.exports = class Controls
     constructor: (@viewer) ->
         @progressEl = @viewer.el.querySelector '.sgn-incito__progress'
         @scrollListener = @scroll.bind @
+        @isScrolling = false
 
         if @progressEl?
+            @progressEl.textContent = "0 %"
+
             window.addEventListener 'scroll', @scrollListener, false
 
             @viewer.bind 'destroyed', =>
@@ -17,15 +20,25 @@ module.exports = class Controls
         scrollTop = window.scrollY
         winHeight = window.innerHeight
         docHeight = document.body.clientHeight
-        progress = Math.round (scrollTop + winHeight) / docHeight * 100
+        progress = Math.round scrollTop / (docHeight - winHeight) * 100
 
-        if scrollTop < 300
-            @progressEl.style.opacity = 0
-        else if scrollTop >= docHeight - winHeight
-            @progressEl.textContent = '100 %'
-            @progressEl.style.opacity = 1
+        clearTimeout @scrollTimeout
+        @scrollTimeout = setTimeout =>
+            @isScrolling = false
+
+            @viewer.el.classList.remove 'sgn-incito--scrolling'
+
+            return
+        , 1000
+
+        if @isScrolling is false
+            @viewer.el.classList.add 'sgn-incito--scrolling'
+
+            @isScrolling = true
+
+        if progress is 100
+            @progressEl.textContent = '✅'
         else
             @progressEl.textContent = "#{progress} %"
-            @progressEl.style.opacity = 1
 
         return
