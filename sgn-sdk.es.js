@@ -3227,10 +3227,10 @@ function () {
       var _this2 = this;
 
       var docHeight, progress, scrollTop, winHeight;
-      scrollTop = window.scrollY;
+      scrollTop = window.pageYOffset;
       winHeight = window.innerHeight;
       docHeight = document.body.clientHeight;
-      progress = Math.round(scrollTop / (docHeight - winHeight) * 100);
+      progress = Math.round(scrollTop / (docHeight - winHeight - 200) * 100);
       clearTimeout(this.scrollTimeout);
       this.scrollTimeout = setTimeout(function () {
         _this2.isScrolling = false;
@@ -3243,11 +3243,7 @@ function () {
         this.isScrolling = true;
       }
 
-      if (progress === 100) {
-        this.progressEl.textContent = '✅';
-      } else {
-        this.progressEl.textContent = "".concat(progress, " %");
-      }
+      this.progressEl.textContent = "".concat(progress, " %");
     }
   }]);
 
