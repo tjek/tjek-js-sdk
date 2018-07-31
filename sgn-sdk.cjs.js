@@ -3183,6 +3183,7 @@ function () {
     key: "start",
     value: function start() {
       this.incito.start();
+      this.el.classList.add('sgn-incito--started');
       return this;
     }
   }, {
@@ -3211,8 +3212,10 @@ function () {
     this.viewer = viewer;
     this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
     this.scrollListener = this.scroll.bind(this);
+    this.isScrolling = false;
 
     if (this.progressEl != null) {
+      this.progressEl.textContent = "0 %";
       window.addEventListener('scroll', this.scrollListener, false);
       this.viewer.bind('destroyed', function () {
         window.removeEventListener('scroll', _this.scrollListener);
@@ -3225,20 +3228,29 @@ function () {
   _createClass(Controls, [{
     key: "scroll",
     value: function scroll() {
+      var _this2 = this;
+
       var docHeight, progress, scrollTop, winHeight;
       scrollTop = window.scrollY;
       winHeight = window.innerHeight;
       docHeight = document.body.clientHeight;
-      progress = Math.round((scrollTop + winHeight) / docHeight * 100);
+      progress = Math.round(scrollTop / (docHeight - winHeight) * 100);
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = setTimeout(function () {
+        _this2.isScrolling = false;
 
-      if (scrollTop < 300) {
-        this.progressEl.style.opacity = 0;
-      } else if (scrollTop >= docHeight - winHeight) {
-        this.progressEl.textContent = '100 %';
-        this.progressEl.style.opacity = 1;
+        _this2.viewer.el.classList.remove('sgn-incito--scrolling');
+      }, 1000);
+
+      if (this.isScrolling === false) {
+        this.viewer.el.classList.add('sgn-incito--scrolling');
+        this.isScrolling = true;
+      }
+
+      if (progress === 100) {
+        this.progressEl.textContent = '✅';
       } else {
         this.progressEl.textContent = "".concat(progress, " %");
-        this.progressEl.style.opacity = 1;
       }
     }
   }]);
