@@ -20,7 +20,7 @@ module.exports = class Controls
         scrollTop = window.pageYOffset
         winHeight = window.innerHeight
         docHeight = document.body.clientHeight
-        progress = Math.round scrollTop / (docHeight - winHeight - 200) * 100
+        progress = Math.round scrollTop / (docHeight - winHeight) * 100
 
         clearTimeout @scrollTimeout
         @scrollTimeout = setTimeout =>
