@@ -17,10 +17,10 @@ module.exports = class Controls
         return
     
     scroll: ->
-        scrollTop = window.scrollY
+        scrollTop = window.pageYOffset
         winHeight = window.innerHeight
         docHeight = document.body.clientHeight
-        progress = Math.round scrollTop / (docHeight - winHeight) * 100
+        progress = Math.round scrollTop / (docHeight - winHeight - 200) * 100
 
         clearTimeout @scrollTimeout
         @scrollTimeout = setTimeout =>
@@ -36,9 +36,6 @@ module.exports = class Controls
 
             @isScrolling = true
 
-        if progress is 100
-            @progressEl.textContent = '✅'
-        else
-            @progressEl.textContent = "#{progress} %"
+        @progressEl.textContent = "#{progress} %"
 
         return
