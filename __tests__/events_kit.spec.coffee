@@ -10,6 +10,7 @@ describe 'SGN.EventsKit', ->
 
         expect(tracker.createViewToken('test', 1)).toEqual '29g0Lh6ViFc='
         expect(tracker.createViewToken('go', 'go', 2, 'nice', 'øl')).toEqual 'nAu6OWTIWnc='
+        expect(tracker.createViewToken('🌈')).toEqual 'Pdz8/0+PiYk='
 
         return
     
