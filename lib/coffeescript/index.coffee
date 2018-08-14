@@ -8,9 +8,6 @@ SGN.storage =
     session: require './storage/client-session'
     cookie: require './storage/client-cookie'
 
-# Expose request handler.
-SGN.request = require './request'
-
 # Expose the different kits.
 SGN.AssetsKit = require './kits/assets'
 SGN.EventsKit = require './kits/events'

@@ -5,37 +5,32 @@ module.exports = (options = {}, callback, progressCallback) ->
 
     url = SGN.config.get 'assetsFileUploadUrl'
     timeout = 1000 * 60 * 60
+    formData = new FormData()
+    http = new XMLHttpRequest()
 
-    SGN.request
-        method: 'post'
-        url: url
-        headers:
-            'Accept': 'application/json'
-        formData:
-            file: options.file
-        timeout: timeout
-    , (err, data) ->
-        if err?
+    formData.append 'file', options.file
+
+    http.onload = ->
+        if http.status is 200
+            callback null, JSON.parse(http.response)
+        else
             callback SGN.util.error(new Error('Request error'),
                 code: 'RequestError'
+                statusCode: data.statusCode
             )
-        else
-            if data.statusCode is 200
-                callback null, data.body
-            else
-                callback SGN.util.error(new Error('Request error'),
-                    code: 'RequestError'
-                    statusCode: data.statusCode
-                )
-
+        
         return
-    , (loaded, total) ->
-        if typeof progressCallback is 'function'
+    http.upload.onprogress = (e) ->
+        if typeof progressCallback is 'function' and e.lengthComputable
             progressCallback
-                progress: loaded / total
-                loaded: loaded
-                total: total
-
+                progress: e.loaded / e.total
+                loaded: e.loaded
+                total: e.total
+        
         return
+    http.open 'post', url
+    http.timeout = timeout
+    http.setRequestHeader 'Accept', 'application/json'
+    http.send formData
 
     return
