@@ -1,6 +1,6 @@
-SGN = require '../../sgn'
+fetch = require 'cross-fetch'
 md5 = require 'md5'
-{isBrowser} = require '../../util'
+SGN = require '../../sgn'
 clientLocalStorage = require '../../storage/client-local'
 
 getPool = ->
@@ -10,26 +10,13 @@ getPool = ->
         typeof evt._i is 'string'
 
     data
+
 pool = getPool()
-
-clientLocalStorage.set 'event-tracker-pool', []
-
-try
-    window.addEventListener 'unload', ->
-        pool = pool.concat getPool()
-
-        clientLocalStorage.set 'event-tracker-pool', pool
-
-        return
-    , false
 
 module.exports = class Tracker
     defaultOptions:
         trackId: null
-        dispatchInterval: 5000
-        dispatchLimit: 100
         poolLimit: 1000
-        dryRun: false
 
     constructor: (options = {}) ->
         for key, value of @defaultOptions
@@ -40,9 +27,6 @@ module.exports = class Tracker
             time: null
             country: null
         @dispatching = false
-
-        # Dispatch events periodically.
-        @interval = setInterval @dispatch.bind(@), @dispatchInterval
 
         return
 
@@ -67,7 +51,7 @@ module.exports = class Tracker
         evt['l.c'] = @location.country if @location.country?
 
         pool.push evt
-        pool.shift() while @getPoolSize() > @poolLimit
+        pool.shift() while pool.length > @poolLimit
 
         @
 
@@ -75,66 +59,6 @@ module.exports = class Tracker
         for key, value of location
             if @location.hasOwnProperty(key)
                 @location[key] = value
-
-        @
-
-    getPoolSize: ->
-        @getPool().length
-    
-    getPool: ->
-        pool
-
-    dispatch: ->
-        return if @dispatching is true or @getPoolSize() is 0
-        return pool.splice(0, @dispatchLimit) if @dryRun is true
-
-        events = pool.slice 0, @dispatchLimit
-        nacks = 0
-
-        @dispatching = true
-
-        @ship events, (err, response) =>
-            @dispatching = false
-
-            if not err?
-                response.events.forEach (resEvent) ->
-                    if resEvent.status is 'validation_error' or resEvent.status is 'ack'
-                        pool = pool.filter (poolEvent) -> poolEvent._i isnt resEvent.id
-                    else if 'nack'
-                        nacks++
-
-                    return
-
-                # Keep dispatching until the pool size reaches a sane level.
-                @dispatch() if @getPoolSize() >= @dispatchLimit and nacks is 0
-
-            return
-
-        @
-
-    ship: (events = [], callback) ->
-        SGN.request
-            method: 'post'
-            url: SGN.config.get 'eventsTrackUrl'
-            json: true
-            timeout: 1000 * 20
-            body:
-                events: events
-        , (err, data) ->
-            if err?
-                callback SGN.util.error(new Error('Request error'),
-                    code: 'RequestError'
-                )
-            else
-                if data.statusCode is 200
-                    callback null, data.body
-                else
-                    callback SGN.util.error(new Error('Request error'),
-                        code: 'RequestError'
-                        statusCode: data.statusCode
-                    )
-            
-            return
 
         @
 
@@ -158,3 +82,63 @@ module.exports = class Tracker
         viewToken = SGN.util.btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
 
         viewToken
+
+dispatching = false
+dispatchLimit = 100
+
+ship = (events = []) ->
+    req = fetch SGN.config.get('eventsTrackUrl'),
+        method: 'post'
+        mode: 'cors'
+        timeout: 1000 * 20
+        keepalive: true
+        headers:
+            'Content-Type': 'application/json; charset=utf-8'
+        body: JSON.stringify(events: events)
+    
+    req.then (response) -> response.json()
+dispatch = ->
+    return if dispatching is true or pool.length is 0
+
+    events = pool.slice 0, dispatchLimit
+    nacks = 0
+    dispatching = true
+
+    ship(events)
+        .then (response) =>
+            dispatching = false
+
+            response.events.forEach (resEvent) ->
+                if resEvent.status is 'validation_error' or resEvent.status is 'ack'
+                    pool = pool.filter (poolEvent) -> poolEvent._i isnt resEvent.id
+                else if 'nack'
+                    nacks++
+
+                return
+
+            # Keep dispatching until the pool size reaches a sane level.
+            dispatch() if pool.length >= dispatchLimit and nacks is 0
+
+            return
+        .catch (err) =>
+            dispatching = false
+
+            throw err
+
+            return
+interval = setInterval dispatch, 5000
+
+clientLocalStorage.set 'event-tracker-pool', []
+
+try
+    window.addEventListener 'beforeunload', ->
+        clearInterval interval
+
+        dispatch()
+
+        pool = pool.concat getPool()
+
+        clientLocalStorage.set 'event-tracker-pool', pool
+
+        return
+    , false

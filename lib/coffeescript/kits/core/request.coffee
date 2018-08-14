@@ -1,7 +1,7 @@
+fetch = require 'cross-fetch'
 SGN = require '../../sgn'
-{ promiseCallbackInterop } = require '../../util'
 
-request = (options = {}, callback = ->, runs = 0) ->
+module.exports = (options = {}, callback = ->, runs = 0) ->
     SGN.CoreKit.session.ensure (err) ->
         return callback err if err?
 
@@ -29,41 +29,39 @@ request = (options = {}, callback = ->, runs = 0) ->
             qs.r_radius = geo.radius if geo.radius? and not qs.r_radius?
             qs.r_sensor = geo.sensor if geo.sensor? and not qs.r_sensor?
 
-        SGN.request
+        req = fetch SGN.config.get('coreUrl') + url,
             method: options.method
-            url: SGN.config.get('coreUrl') + url
             qs: qs
             body: options.body
             formData: options.formData
             headers: headers
-            json: json
             useCookies: false
-        , (err, data) ->
-            if err?
-                callback SGN.util.error(new Error('Core request error'),
-                    code: 'CoreRequestError'
-                )
-            else
-                token = SGN.config.get 'coreSessionToken'
-                responseToken = data.headers['x-token']
+        
+        req
+            .then (response) ->
+                response.json().then (json) ->
+                    token = SGN.config.get 'coreSessionToken'
+                    responseToken = response.headers['x-token']
 
-                SGN.CoreKit.session.saveToken responseToken if responseToken and token isnt responseToken
+                    SGN.CoreKit.session.saveToken responseToken if responseToken and token isnt responseToken
 
-                if data.statusCode >= 200 and data.statusCode < 300 or data.statusCode is 304
-                    callback null, data.body
-                else
-                    if runs is 0 and data.body? and data.body.code in [1101, 1107, 1108]
-                        SGN.config.set coreSessionToken: undefined
-
-                        request options, callback, ++runs
+                    if response.status >= 200 and response.status < 300 or response.status is 304
+                        callback null, json
                     else
-                        callback SGN.util.error(new Error('Core API error'),
-                            code: 'CoreAPIError'
-                            statusCode: data.statusCode
-                        ), data.body
+                        if runs is 0 and json? and json.code in [1101, 1107, 1108]
+                            SGN.config.set coreSessionToken: undefined
 
-            return
+                            request options, callback, ++runs
+                        else
+                            callback SGN.util.error(new Error('Core API error'),
+                                code: 'CoreAPIError'
+                                statusCode: response.status
+                            ), json
+                    
+                    return
+            .catch (err) ->
+                callback err
+
+                return
 
     return
-
-module.exports = promiseCallbackInterop request, 1
