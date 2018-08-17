@@ -11,7 +11,6 @@ getPool = ->
 
     data
 
-lastDispatch = null
 pool = getPool()
 
 module.exports = class Tracker
@@ -28,6 +27,8 @@ module.exports = class Tracker
             time: null
             country: null
         @dispatching = false
+
+        dispatch()
 
         return
 
@@ -55,9 +56,7 @@ module.exports = class Tracker
         pool.push evt
         pool.shift() while pool.length > @poolLimit
 
-        lastDispatch ?= now
-        
-        dispatch() if now - lastDispatch >= 5000
+        dispatch()
 
         @
 
@@ -93,7 +92,6 @@ dispatching = false
 dispatchLimit = 100
 
 ship = (events = []) ->
-    console.log SGN.config.get('eventsTrackUrl')
     req = fetch SGN.config.get('eventsTrackUrl'),
         method: 'post'
         timeout: 1000 * 20
@@ -104,13 +102,12 @@ ship = (events = []) ->
         body: JSON.stringify(events: events)
     
     req.then (response) -> response.json()
-dispatch = ->
+dispatch = SGN.util.throttle ->
     return if dispatching is true or pool.length is 0
 
     events = pool.slice 0, dispatchLimit
     nacks = 0
     dispatching = true
-    lastDispatch = new Date().getTime()
 
     ship(events)
         .then (response) ->
@@ -136,11 +133,12 @@ dispatch = ->
             throw err
 
             return
+, 5000
 
 clientLocalStorage.set 'event-tracker-pool', []
 
 try
-    window.addEventListener 'beforeunload', ->
+    window.addEventListener 'unload', ->
         dispatch()
 
         pool = pool.concat getPool()
