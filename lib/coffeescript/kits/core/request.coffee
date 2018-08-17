@@ -1,5 +1,6 @@
 fetch = require 'cross-fetch'
 SGN = require '../../sgn'
+{promiseCallbackInterop} = require '../../util'
 
 request = (options = {}, callback, secondTime) ->
     SGN.CoreKit.session.ensure (err) ->
@@ -65,4 +66,4 @@ request = (options = {}, callback, secondTime) ->
 
     return
 
-module.exports = request
+module.exports = promiseCallbackInterop request, 1
