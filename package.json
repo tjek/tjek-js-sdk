@@ -13,7 +13,7 @@
     },
     {
       "path": "./dist/sgn-sdk.min.js",
-      "maxSize": "50 kB"
+      "maxSize": "52 kB"
     },
     {
       "path": "./dist/sgn-sdk.cjs.js",
@@ -30,7 +30,7 @@
     "test:ci": "run-s -l -c test:node test:jsdom test:chrome",
     "test:node": "jest --ci --env=node",
     "test:jsdom": "jest --ci --env=jsdom",
-    "test:chrome": "jest --ci -c __tests__/integration/chrome/jest-config.js",
+    "test:chrome": "jest --ci -c jest-chrome.json",
     "test:size": "bundlesize",
     "build:js": "rollup -c -m --environment NODE_ENV:production",
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
@@ -44,18 +44,20 @@
   },
   "jest": {
     "moduleFileExtensions": [
+      "js",
+      "json",
       "coffee",
-      "js"
+      "litcoffee",
+      "coffee.md"
     ],
     "transform": {
-      "^.+\\.(coffee)$": "<rootDir>/jest-preprocessor.js"
+      "coffee|litcoffee|coffee.md": "./jest-coffeescript"
     },
-    "testMatch": [
-      "**/__tests__/**/*.(coffee|js)"
-    ],
+    "testRegex": "__tests__?/.*\\.(coffee|litcoffee|coffee.md)$",
     "testPathIgnorePatterns": [
-      "(/__tests__/integration/chrome/.*)\\.(coffee|js)?$",
-      "jest-config.js"
+      "__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
+      "node_modules",
+      "fixtures"
     ]
   },
   "repository": {
@@ -83,14 +85,14 @@
     "@babel/plugin-external-helpers": "^7.0.0-rc.1",
     "@babel/preset-env": "^7.0.0-rc.1",
     "app-root-path": "^2.1.0",
-    "aws-sdk": "^2.292.0",
+    "aws-sdk": "^2.295.0",
     "bundlesize": "^0.17.0",
     "coffeelint": "^2.1.0",
     "coffeescript": "^2.3.1",
     "gh-pages": "^1.2.0",
     "jest": "^23.5.0",
     "jest-cli": "^23.5.0",
-    "jest-puppeteer": "^3.2.1",
+    "jest-puppeteer-preset": "^3.3.0",
     "memory-fs": "^0.4.1",
     "nib": "^1.1.2",
     "npm-run-all": "^4.1.3",
@@ -105,7 +107,7 @@
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-string": "^2.0.2",
     "rollup-plugin-uglify": "^4.0.0",
-    "serve": "^9.4.2",
+    "serve": "^9.6.0",
     "stylus": "^0.54.5",
     "thenify": "^3.3.0",
     "uglify-es": "^3.3.10",

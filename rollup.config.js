@@ -77,7 +77,6 @@ let configs = [
         define: 'rollupNeedsAnOptionToDisableAMDInUMD'
       }
     },
-    external: ['xmlhttprequest'],
     watch: {
       include: 'lib/**'
     },
@@ -114,7 +113,6 @@ let configs = [
         define: 'rollupNeedsAnOptionToDisableAMDInUMD'
       }
     },
-    external: ['xmlhttprequest'],
     plugins: [
       json(),
       replace({
