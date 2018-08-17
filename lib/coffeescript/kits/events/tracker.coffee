@@ -95,14 +95,12 @@ ship = (events = []) ->
     req = fetch SGN.config.get('eventsTrackUrl'),
         method: 'post'
         timeout: 1000 * 20
-        keepalive: true
-        mode: 'cors'
         headers:
             'Content-Type': 'application/json; charset=utf-8'
         body: JSON.stringify(events: events)
     
     req.then (response) -> response.json()
-dispatch = SGN.util.throttle ->
+_dispatch = ->
     return if dispatching is true or pool.length is 0
 
     events = pool.slice 0, dispatchLimit
@@ -128,19 +126,17 @@ dispatch = SGN.util.throttle ->
         .catch (err) ->
             dispatching = false
 
-            console.log err
-
             throw err
 
             return
-, 5000
+    
+    return
+dispatch = SGN.util.throttle _dispatch, 4000
 
 clientLocalStorage.set 'event-tracker-pool', []
 
 try
-    window.addEventListener 'unload', ->
-        dispatch()
-
+    window.addEventListener 'beforeunload', (e) ->
         pool = pool.concat getPool()
 
         clientLocalStorage.set 'event-tracker-pool', pool
