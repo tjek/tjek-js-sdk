@@ -1,4 +1,4 @@
-SGN = require '../dist/sgn-sdk.js'
+SGN = require './sdk'
 
 describe 'SGN.translations', ->
     test 'can translate', ->

@@ -11,6 +11,7 @@ getPool = ->
 
     data
 
+lastDispatch = null
 pool = getPool()
 
 module.exports = class Tracker
@@ -38,6 +39,7 @@ module.exports = class Tracker
             # coffeelint: disable=max_line_length
             throw SGN.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
         
+        now = new Date().getTime()
         evt = Object.assign {}, properties, {
             '_e': type
             '_v': version
@@ -52,6 +54,10 @@ module.exports = class Tracker
 
         pool.push evt
         pool.shift() while pool.length > @poolLimit
+
+        lastDispatch ?= now
+        
+        dispatch() if now - lastDispatch >= 5000
 
         @
 
@@ -87,11 +93,12 @@ dispatching = false
 dispatchLimit = 100
 
 ship = (events = []) ->
+    console.log SGN.config.get('eventsTrackUrl')
     req = fetch SGN.config.get('eventsTrackUrl'),
         method: 'post'
-        mode: 'cors'
         timeout: 1000 * 20
         keepalive: true
+        mode: 'cors'
         headers:
             'Content-Type': 'application/json; charset=utf-8'
         body: JSON.stringify(events: events)
@@ -103,9 +110,10 @@ dispatch = ->
     events = pool.slice 0, dispatchLimit
     nacks = 0
     dispatching = true
+    lastDispatch = new Date().getTime()
 
     ship(events)
-        .then (response) =>
+        .then (response) ->
             dispatching = false
 
             response.events.forEach (resEvent) ->
@@ -120,20 +128,19 @@ dispatch = ->
             dispatch() if pool.length >= dispatchLimit and nacks is 0
 
             return
-        .catch (err) =>
+        .catch (err) ->
             dispatching = false
+
+            console.log err
 
             throw err
 
             return
-interval = setInterval dispatch, 5000
 
 clientLocalStorage.set 'event-tracker-pool', []
 
 try
     window.addEventListener 'beforeunload', ->
-        clearInterval interval
-
         dispatch()
 
         pool = pool.concat getPool()

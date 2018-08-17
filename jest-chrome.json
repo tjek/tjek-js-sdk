@@ -1,0 +1,18 @@
+{
+    "preset": "jest-puppeteer-preset",
+    "moduleFileExtensions": [
+        "js",
+        "json",
+        "coffee",
+        "litcoffee",
+        "coffee.md"
+    ],
+    "transform": {
+        "coffee|litcoffee|coffee.md": "./jest-coffeescript"
+    },
+    "testRegex": "__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
+    "testPathIgnorePatterns": [
+        "node_modules",
+        "fixtures"
+    ]
+}

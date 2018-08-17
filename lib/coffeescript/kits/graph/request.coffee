@@ -16,7 +16,7 @@ parseCookies = (cookies = []) ->
     
     parsedCookies
 
-module.exports = (options = {}) ->
+module.exports = (options = {}, callback) ->
     url = SGN.config.get 'graphUrl'
     timeout = 1000 * 12
     appKey = SGN.config.get 'appKey'
@@ -40,7 +40,7 @@ module.exports = (options = {}) ->
             url: url
         ]
     else if SGN.util.isBrowser()
-        options.useCookies = true
+        options.credentials = 'include'
 
     fetch(url, options)
         .then (response) ->
@@ -54,11 +54,12 @@ module.exports = (options = {}) ->
                         SGN.config.set 'authToken', authCookie
 
                 if response.status isnt 200
-                    throw SGN.util.error(new Error('Graph API error'),
+                    callback SGN.util.error(new Error('Graph API error'),
                         code: 'GraphAPIError'
                         statusCode: data.statusCode
                     )
-
-                json
-        .catch (err) ->
-            throw err
+                else
+                    callback null, json
+        .catch callback
+    
+    return
