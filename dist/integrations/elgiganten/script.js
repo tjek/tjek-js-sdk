@@ -1,7 +1,13 @@
 window.shopgun = (function () {
-    var ngaPool = [];
-    var nga = function (arg1, arg2, arg3) {
-        ngaPool.push([arg1, arg2, arg3]);
+    var nga = function (ctx) {
+        if ('dataLayer' in window) {
+            dataLayer.push({
+                'event': 'shopgun',
+                'shopgunCategory': ctx.eventCategory,
+                'shopgunAction': ctx.eventAction,
+                'shopgunLabel': ctx.eventLabel
+            });
+        }
     };
     var once = function (f) {
         var done = false;
@@ -220,7 +226,7 @@ window.shopgun = (function () {
                 viewer.bind('hotspotClicked', function (hotspot) {
                     if (hotspot.type === 'offer') {
                         if (hotspot.sku) {
-                            nga('send', 'event', {
+                            nga({
                                 'eventCategory': 'Publication',
                                 'eventAction': 'Offer Opened',
                                 'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-' + hotspot.sku
@@ -228,7 +234,7 @@ window.shopgun = (function () {
                             
                             window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=INT_IPAPER_BUTTON', '_blank');
                         } else {
-                            nga('send', 'event', {
+                            nga({
                                 'eventCategory': 'Publication',
                                 'eventAction': 'Offer Opened',
                                 'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-unknown'
@@ -247,7 +253,7 @@ window.shopgun = (function () {
                             window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.offer.heading) + '&searchResultTab=&search=&intcid=INT_IPAPER_BUTTON', '_blank');
                         }
                     } else if (hotspot.type === 'url' && hotspot.url) {
-                        nga('send', 'event', {
+                        nga({
                             'eventCategory': 'Publication',
                             'eventAction': 'URL Opened',
                             'eventLabel': getPublicationRuntimeEventLabel(data.details)
@@ -257,7 +263,7 @@ window.shopgun = (function () {
                     }
                 });
                 var trackProgress = function (progress) {
-                    nga('send', 'event', {
+                    nga({
                         'eventCategory': 'Publication',
                         'eventAction': 'Read-through ' + progress + '%',
                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
@@ -265,7 +271,7 @@ window.shopgun = (function () {
                 }
                 var navigationHandlers = {
                     page2: once(function () {
-                        nga('send', 'event', {
+                        nga({
                             'eventCategory': 'Publication',
                             'eventAction': 'Read-through page 2',
                             'eventLabel': getPublicationRuntimeEventLabel(data.details)
@@ -279,7 +285,7 @@ window.shopgun = (function () {
                 }
 
                 if (!(typeof pageNumber === 'number' && pageNumber > 1)) {
-                    nga('send', 'event', {
+                    nga({
                         'eventCategory': 'Publication',
                         'eventAction': 'Opened',
                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
@@ -303,7 +309,7 @@ window.shopgun = (function () {
                         }
                     });
                 } else {
-                    nga('send', 'event', {
+                    nga({
                         'eventCategory': 'Publication',
                         'eventAction': 'Opened Specific Page',
                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
@@ -405,18 +411,6 @@ window.shopgun = (function () {
             }
         });
     };
-
-    setInterval(function () {
-        if (ngaPool.length && typeof n === 'function') {
-            for (var i = 0; i < ngaPool.length; i++) {
-                var evt = ngaPool[i];
-
-                n(evt[0], evt[1], evt[2]);
-            }
-
-            ngaPool = [];
-        }
-    }, 1000);
 
     return {
         init: init,
