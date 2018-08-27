@@ -138,6 +138,7 @@ module.exports = class Tracker
 
         @
 
+    # 1-5 to be used as detailed in SGN-108
     trackPagedPublicationOpened: (properties, version) ->
         @trackEvent 1, properties, version
     
@@ -152,6 +153,10 @@ module.exports = class Tracker
     
     trackSearched: (properties, version) ->
         @trackEvent 5, properties, version
+
+    # 6 to be used as detailed in SGN-110
+    trackSearchOfferOpened: (properties, version) ->
+        @trackEvent 6, properties, version
     
     createViewToken: (...parts) ->
         str = [SGN.client.id].concat(parts).join ''
