@@ -21,6 +21,8 @@ class PagedPublicationEventTracking
         return
 
     trackOpened: (properties) ->
+        return @ if not @eventTracker?
+
         @eventTracker.trackPagedPublicationOpened
             'pp.id': @id
             'vt': @eventTracker.createViewToken(@id)
@@ -28,6 +30,8 @@ class PagedPublicationEventTracking
         @
 
     trackPageSpreadDisappeared: (pageNumbers) ->
+        return @ if not @eventTracker?
+        
         pageNumbers.forEach (pageNumber) =>
             @eventTracker.trackPagedPublicationPageDisappeared
                 'pp.id': @id
