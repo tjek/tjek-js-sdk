@@ -73,7 +73,6 @@
   "dependencies": {
     "core-js": "^2.5.7",
     "cross-fetch": "^2.2.2",
-    "es6-promise": "^4.2.5",
     "incito-browser": "1.1.6",
     "md5": "^2.2.1",
     "microevent": "^1.0.0",
