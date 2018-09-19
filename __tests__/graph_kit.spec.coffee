@@ -5,9 +5,9 @@ describe 'SGN.GraphKit', ->
         data = await SGN.GraphKit.request
             query: """query PlanningSuggestions {
                 planningSuggestions(locale: "da_DK", term: "c") {
-                phrases {
-                    name
-                }
+                    phrases {
+                        name
+                    }
                 }
             }
             """,
