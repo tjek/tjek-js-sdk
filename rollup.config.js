@@ -1,9 +1,8 @@
 import coffeescript from 'rollup-plugin-coffee-script';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
-import {uglify} from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 import path from 'path';
-import {minify} from 'uglify-es';
 import babel from 'rollup-plugin-babel';
 import string from 'rollup-plugin-string';
 import replace from 'rollup-plugin-replace';
@@ -19,6 +18,12 @@ var outputs = {
   jsBrowser: path.join(__dirname, 'dist', 'sgn-sdk.js'),
   jsBrowserMin: path.join(__dirname, 'dist', 'sgn-sdk.min.js')
 };
+
+const getBabelPlugin = () =>
+  babel({
+    exclude: ['node_modules/**', '*.graphql'],
+    extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.coffee']
+  });
 
 let configs = [
   {
@@ -39,9 +44,7 @@ let configs = [
       commonjs({
         extensions: ['.js', '.coffee']
       }),
-      babel({
-        exclude: ['node_modules/**', '*.graphql']
-      })
+      getBabelPlugin()
     ]
   },
   {
@@ -62,9 +65,7 @@ let configs = [
       commonjs({
         extensions: ['.js', '.coffee']
       }),
-      babel({
-        exclude: ['node_modules/**', '*.graphql']
-      })
+      getBabelPlugin()
     ]
   },
   {
@@ -98,9 +99,7 @@ let configs = [
       commonjs({
         extensions: ['.js', '.coffee']
       }),
-      babel({
-        exclude: ['node_modules/**', '*.graphql']
-      })
+      getBabelPlugin()
     ]
   },
   {
@@ -131,10 +130,8 @@ let configs = [
       commonjs({
         extensions: ['.js', '.coffee']
       }),
-      babel({
-        exclude: ['node_modules/**', '*.graphql']
-      }),
-      uglify({}, minify)
+      getBabelPlugin(),
+      terser()
     ]
   }
 ];
