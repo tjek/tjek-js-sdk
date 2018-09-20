@@ -1,5 +1,6 @@
-SGN = require '../../sgn'
+fetch = require 'cross-fetch'
 sha256 = require 'sha256'
+SGN = require '../../sgn'
 clientCookieStorage = require '../../storage/client-cookie'
 callbackQueue = []
 renewed = false
@@ -31,26 +32,29 @@ session =
         return
 
     create: (callback) ->
-        SGN.request
+        key = SGN.config.get 'appKey'
+        ttl = session.ttl
+
+        req = fetch SGN.config.get('coreUrl') + "/v2/sessions?api_key=#{key}&token_ttl=#{ttl}",
             method: 'post'
-            url: SGN.config.get('coreUrl') + '/v2/sessions'
-            json: true
-            qs:
-                api_key: SGN.config.get 'appKey'
-                token_ttl: session.ttl
-        , (err, data) ->
-            if err?
+
+        req
+            .then (response) ->
+                response.json().then (json) ->
+                    if response.status is 201
+                        session.saveToken json.token
+                        session.saveClientId json.client_id
+
+                        callback null, json
+                    else
+                        callback new Error('Could not create session')
+                    
+                    return
+            .catch (err) ->
                 callback err
-            else if data.statusCode is 201
-                session.saveToken data.body.token
-                session.saveClientId data.body.client_id
 
-                callback err, data.body
-            else
-                callback new Error('Could not create session')
-
-            return
-
+                return
+        
         return
     
     update: (callback) ->
@@ -61,22 +65,26 @@ session =
         headers['X-Token'] = token
         headers['X-Signature'] = session.sign appSecret, token if appSecret?
 
-        SGN.request
-            url: SGN.config.get('coreUrl') + '/v2/sessions'
+        req = fetch SGN.config.get('coreUrl') + '/v2/sessions',
+            method: 'put'
             headers: headers
-            json: true
-        , (err, data) ->
-            if err?
+
+        req
+            .then (response) ->
+                response.json().then (json) ->
+                    if response.status is 200
+                        session.saveToken json.token
+                        session.saveClientId json.client_id
+
+                        callback null, json
+                    else
+                        callback new Error('Could not update session')
+                    
+                    return
+            .catch (err) ->
                 callback err
-            else if data.statusCode is 200
-                session.saveToken data.body.token
-                session.saveClientId data.body.client_id
 
-                callback err, data.body
-            else
-                callback new Error('Could not update session')
-
-            return
+                return
 
         return
 
@@ -86,25 +94,28 @@ session =
         appSecret = SGN.config.get 'appSecret'
 
         headers['X-Token'] = token
-        headers['X-Signature'] = session.sign appSecret, token if appSecret?
+        headers['X-Signature'] = session.sign appSecret, token if appSecret
 
-        SGN.request
+        req = fetch SGN.config.get('coreUrl') + '/v2/sessions',
             method: 'put'
-            url: SGN.config.get('coreUrl') + '/v2/sessions'
             headers: headers
-            json: true
-        , (err, data) ->
-            if err?
+
+        req
+            .then (response) ->
+                response.json().then (json) ->
+                    if response.status is 200
+                        session.saveToken json.token
+                        session.saveClientId json.client_id
+
+                        callback null, json
+                    else
+                        callback new Error('Could not renew session')
+                    
+                    return
+            .catch (err) ->
                 callback err
-            else if data.statusCode is 200
-                session.saveToken data.body.token
-                session.saveClientId data.body.client_id
 
-                callback err, data.body
-            else
-                callback new Error('Could not renew session')
-
-            return
+                return
 
         return
 

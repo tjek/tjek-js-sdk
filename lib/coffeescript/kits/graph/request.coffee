@@ -1,3 +1,4 @@
+fetch = require 'cross-fetch'
 SGN = require '../../sgn'
 {promiseCallbackInterop} = require '../../util'
 
@@ -24,17 +25,13 @@ request = (options = {}, callback) ->
     authTokenCookieName = 'shopgun-auth-token'
     options =
         method: 'post'
-        url: url
         timeout: timeout
-        json: true
-        headers: {}
-        body:
+        headers:
+            'Content-Type': 'application/json; charset=utf-8'
+        body: JSON.stringify
             query: options.query
             operationName: options.operationName
             variables: options.variables
-
-    # Apply authorization header when app key is provided to avoid rate limiting.
-    options.headers.Authorization = 'Basic ' + SGN.util.btoa("app-key:#{appKey}") if appKey?
 
     # Set cookies manually in node.js.
     if SGN.util.isNode() and authToken?
@@ -44,32 +41,28 @@ request = (options = {}, callback) ->
             url: url
         ]
     else if SGN.util.isBrowser()
-        options.useCookies = true
+        options.credentials = 'include'
 
-    SGN.request options, (err, data) ->
-        if err?
-            callback SGN.util.error(new Error('Graph request error'),
-                code: 'GraphRequestError'
-            )
-        else
-            # Update auth token as it might have changed.
-            if SGN.util.isNode()
-                cookies = parseCookies data.headers?['set-cookie']
-                authCookie = cookies[authTokenCookieName]
+    fetch(url, options)
+        .then (response) ->
+            response.json().then (json) ->
+                # Update auth token as it might have changed.
+                if SGN.util.isNode()
+                    cookies = parseCookies response.headers?['set-cookie']
+                    authCookie = cookies[authTokenCookieName]
 
-                if SGN.config.get('authToken') isnt authCookie
-                    SGN.config.set 'authToken', authCookie
+                    if SGN.config.get('authToken') isnt authCookie
+                        SGN.config.set 'authToken', authCookie
 
-            if data.statusCode is 200
-                callback null, data.body
-            else
-                callback SGN.util.error(new Error('Graph API error'),
-                    code: 'GraphAPIError'
-                    statusCode: data.statusCode
-                )
-
-        return
-
+                if response.status isnt 200
+                    callback SGN.util.error(new Error('Graph API error'),
+                        code: 'GraphAPIError'
+                        statusCode: data.statusCode
+                    )
+                else
+                    callback null, json
+        .catch callback
+    
     return
 
 module.exports = promiseCallbackInterop request, 1
