@@ -28,15 +28,18 @@ putObject({
     bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.js'),
     contentType: 'application/javascript'
 });
-
 putObject({
     key: 'sgn-sdk-' + pkg.version + '.min.js.map',
     bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.js.map'),
     contentType: 'application/json'
 });
-
 putObject({
     key: 'sgn-sdk-' + pkg.version + '.min.css',
     bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css'),
     contentType: 'text/css'
+});
+putObject({
+    key: 'sgn-sdk-' + pkg.version + '.min.css.map',
+    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css.map'),
+    contentType: 'application/json'
 });
