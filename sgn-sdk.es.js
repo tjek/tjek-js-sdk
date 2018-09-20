@@ -1,17 +1,17 @@
 import 'core-js/modules/es6.promise';
-import 'core-js/modules/web.dom.iterable';
-import 'core-js/modules/es6.array.iterator';
-import 'core-js/modules/es6.object.keys';
 import 'core-js/modules/es6.regexp.constructor';
 import 'core-js/modules/es6.regexp.to-string';
 import 'core-js/modules/es6.regexp.replace';
 import 'core-js/modules/es6.function.name';
 import require$$0 from 'microevent';
+import 'core-js/modules/web.dom.iterable';
+import 'core-js/modules/es6.array.iterator';
 import mustache from 'mustache';
 import 'core-js/modules/es6.regexp.split';
-import xmlhttprequest from 'xmlhttprequest';
+import crossFetch from 'cross-fetch';
 import md5 from 'md5';
 import 'core-js/modules/es6.object.assign';
+import 'core-js/modules/es6.object.keys';
 import sha256 from 'sha256';
 import 'core-js/modules/es6.array.find';
 import versoBrowser from 'verso-browser';
@@ -110,12 +110,6 @@ util = {
     } else {
       return void 0;
     }
-  },
-  formatQueryParams: function formatQueryParams() {
-    var queryParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    return Object.keys(queryParams).map(function (key) {
-      return key + '=' + encodeURIComponent(queryParams[key]);
-    }).join('&');
   },
   getRandomNumberBetween: function getRandomNumberBetween(from, to) {
     return Math.floor(Math.random() * to) + from;
@@ -399,7 +393,7 @@ util = {
         return makePromise(fun, cbParameterIndex, parameters);
       } else {
         // Ain't got callback, ain't got promise support; we gotta tell the developer.
-        throw new Error("To be able to use this asynchronous method you should:\n\nSupply a callback function as argument #".concat(1 + cbParameterIndex, ".\nThis callback function will be called with the method call response.\n\nAlternatively, when supported, it can return a Promise if no callback function is given."));
+        throw new Error("To be able to use this asynchronous method you should:\nSupply a callback function as argument #".concat(1 + cbParameterIndex, ".\nThis callback function will be called with the method call response.\nAlternatively, when supported, it can return a Promise if no callback function is given."));
       }
     };
   }
@@ -615,172 +609,61 @@ var clientCookie = {
   }
 };
 
-var SGN$4, XMLHttpRequest, isBrowser, ref;
+var SGN$4;
 SGN$4 = sgn;
-isBrowser = util_1.isBrowser;
-XMLHttpRequest = isBrowser() ? window.XMLHttpRequest : (ref = xmlhttprequest) != null ? ref.XMLHttpRequest : void 0;
-
-var request = function request() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments.length > 1 ? arguments[1] : undefined;
-  var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-  var formData, header, headers, http, key, method, queryParams, ref1, ref2, ref3, url, value;
-  http = new XMLHttpRequest();
-  method = (ref1 = options.method) != null ? ref1 : 'get';
-  url = options.url;
-  headers = (ref2 = options.headers) != null ? ref2 : {};
-
-  if (options.json === true) {
-    headers['Content-Type'] = 'application/json';
-    headers['Accept'] = 'application/json';
-  }
-
-  if (options.qs != null) {
-    queryParams = SGN$4.util.formatQueryParams(options.qs);
-
-    if (url.indexOf('?') === -1) {
-      url += '?' + queryParams;
-    } else {
-      url += '&' + queryParams;
-    }
-  }
-
-  http.addEventListener('load', function () {
-    var body, resHeaders;
-    resHeaders = http.getAllResponseHeaders().split('\r\n');
-    resHeaders = resHeaders.reduce(function (acc, current, i) {
-      var parts;
-      parts = current.split(': ');
-      acc[parts[0].toLowerCase()] = parts[1];
-      return acc;
-    }, {});
-    body = http.responseText;
-
-    if (headers['Accept'] === 'application/json') {
-      try {
-        body = JSON.parse(body);
-      } catch (error) {}
-    }
-
-    callback(null, {
-      statusCode: http.status,
-      headers: resHeaders,
-      body: body
-    });
-  });
-  http.addEventListener('error', function () {
-    callback(new Error());
-  });
-  http.addEventListener('timeout', function () {
-    callback(new Error());
-  });
-
-  if (typeof progressCallback === 'function') {
-    http.upload.onprogress = function (e) {
-      if (e.lengthComputable) {
-        progressCallback(e.loaded, e.total);
-      }
-    };
-  }
-
-  http.open(method.toUpperCase(), url, true);
-
-  if (options.timeout != null) {
-    http.timeout = options.timeout;
-  }
-
-  if (options.useCookies === true) {
-    http.withCredentials = true;
-  }
-
-  for (header in headers) {
-    value = headers[header];
-
-    if (value != null) {
-      http.setRequestHeader(header, value);
-    }
-  }
-
-  if (options.formData != null) {
-    formData = new FormData();
-    ref3 = options.formData;
-
-    for (key in ref3) {
-      value = ref3[key];
-      formData.append(key, value);
-    }
-
-    http.send(formData);
-  } else if (options.body != null) {
-    if (options.json === true) {
-      http.send(JSON.stringify(options.body));
-    } else {
-      http.send(options.body);
-    }
-  } else {
-    http.send();
-  }
-};
-
-var SGN$5;
-SGN$5 = sgn;
 
 var fileUpload = function fileUpload() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-  var timeout, url;
+  var formData, http, timeout, url;
 
   if (options.file == null) {
     throw new Error('File is not defined');
   }
 
-  url = SGN$5.config.get('assetsFileUploadUrl');
+  url = SGN$4.config.get('assetsFileUploadUrl');
   timeout = 1000 * 60 * 60;
-  SGN$5.request({
-    method: 'post',
-    url: url,
-    headers: {
-      'Accept': 'application/json'
-    },
-    formData: {
-      file: options.file
-    },
-    timeout: timeout
-  }, function (err, data) {
-    if (err != null) {
-      callback(SGN$5.util.error(new Error('Request error'), {
-        code: 'RequestError'
-      }));
+  formData = new FormData();
+  http = new XMLHttpRequest();
+  formData.append('file', options.file);
+
+  http.onload = function () {
+    if (http.status === 200) {
+      callback(null, JSON.parse(http.response));
     } else {
-      if (data.statusCode === 200) {
-        callback(null, data.body);
-      } else {
-        callback(SGN$5.util.error(new Error('Request error'), {
-          code: 'RequestError',
-          statusCode: data.statusCode
-        }));
-      }
+      callback(SGN$4.util.error(new Error('Request error'), {
+        code: 'RequestError',
+        statusCode: data.statusCode
+      }));
     }
-  }, function (loaded, total) {
-    if (typeof progressCallback === 'function') {
+  };
+
+  http.upload.onprogress = function (e) {
+    if (typeof progressCallback === 'function' && e.lengthComputable) {
       progressCallback({
-        progress: loaded / total,
-        loaded: loaded,
-        total: total
+        progress: e.loaded / e.total,
+        loaded: e.loaded,
+        total: e.total
       });
     }
-  });
+  };
+
+  http.open('post', url);
+  http.timeout = timeout;
+  http.setRequestHeader('Accept', 'application/json');
+  http.send(formData);
 };
 
 var assets = {
   fileUpload: fileUpload
 };
 
-var SGN$6, Tracker, clientLocalStorage, getPool, isBrowser$1, md5$1, pool;
-SGN$6 = sgn;
+var SGN$5, Tracker, _dispatch, clientLocalStorage, dispatch, dispatchLimit, dispatching, fetch, getPool, md5$1, pool, ship;
+
+fetch = crossFetch;
 md5$1 = md5;
-isBrowser$1 = util_1.isBrowser;
+SGN$5 = sgn;
 clientLocalStorage = clientLocal;
 
 getPool = function getPool() {
@@ -798,14 +681,6 @@ getPool = function getPool() {
 };
 
 pool = getPool();
-clientLocalStorage.set('event-tracker-pool', []);
-
-try {
-  window.addEventListener('unload', function () {
-    pool = pool.concat(getPool());
-    clientLocalStorage.set('event-tracker-pool', pool);
-  }, false);
-} catch (error) {}
 
 var tracker = Tracker = function () {
   var Tracker =
@@ -829,9 +704,8 @@ var tracker = Tracker = function () {
         time: null,
         country: null
       };
-      this.dispatching = false; // Dispatch events periodically.
-
-      this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
+      this.dispatching = false;
+      dispatch();
       return;
     }
 
@@ -840,25 +714,26 @@ var tracker = Tracker = function () {
       value: function trackEvent(type) {
         var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
-        var evt;
+        var evt, now;
 
         if (typeof type !== 'number') {
-          throw SGN$6.util.error(new Error('Event type is required'));
+          throw SGN$5.util.error(new Error('Event type is required'));
         }
 
         if (this.trackId == null) {
           return;
         }
 
-        if (SGN$6.config.get('appKey') === this.trackId) {
+        if (SGN$5.config.get('appKey') === this.trackId) {
           // coffeelint: disable=max_line_length
-          throw SGN$6.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
+          throw SGN$5.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
         }
 
+        now = new Date().getTime();
         evt = Object.assign({}, properties, {
           '_e': type,
           '_v': version,
-          '_i': SGN$6.util.uuid(),
+          '_i': SGN$5.util.uuid(),
           '_t': Math.round(new Date().getTime() / 1000),
           '_a': this.trackId
         });
@@ -877,10 +752,11 @@ var tracker = Tracker = function () {
 
         pool.push(evt);
 
-        while (this.getPoolSize() > this.poolLimit) {
+        while (pool.length > this.poolLimit) {
           pool.shift();
         }
 
+        dispatch();
         return this;
       }
     }, {
@@ -897,87 +773,6 @@ var tracker = Tracker = function () {
           }
         }
 
-        return this;
-      }
-    }, {
-      key: "getPoolSize",
-      value: function getPoolSize() {
-        return this.getPool().length;
-      }
-    }, {
-      key: "getPool",
-      value: function getPool() {
-        return pool;
-      }
-    }, {
-      key: "dispatch",
-      value: function dispatch() {
-        var _this = this;
-
-        var events, nacks;
-
-        if (this.dispatching === true || this.getPoolSize() === 0) {
-          return;
-        }
-
-        if (this.dryRun === true) {
-          return pool.splice(0, this.dispatchLimit);
-        }
-
-        events = pool.slice(0, this.dispatchLimit);
-        nacks = 0;
-        this.dispatching = true;
-        this.ship(events, function (err, response) {
-          _this.dispatching = false;
-
-          if (err == null) {
-            response.events.forEach(function (resEvent) {
-              if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
-                pool = pool.filter(function (poolEvent) {
-                  return poolEvent._i !== resEvent.id;
-                });
-              } else {
-                nacks++;
-              }
-            });
-
-            if (_this.getPoolSize() >= _this.dispatchLimit && nacks === 0) {
-              // Keep dispatching until the pool size reaches a sane level.
-              _this.dispatch();
-            }
-          }
-        });
-        return this;
-      }
-    }, {
-      key: "ship",
-      value: function ship() {
-        var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-        var callback = arguments.length > 1 ? arguments[1] : undefined;
-        SGN$6.request({
-          method: 'post',
-          url: SGN$6.config.get('eventsTrackUrl'),
-          json: true,
-          timeout: 1000 * 20,
-          body: {
-            events: events
-          }
-        }, function (err, data) {
-          if (err != null) {
-            callback(SGN$6.util.error(new Error('Request error'), {
-              code: 'RequestError'
-            }));
-          } else {
-            if (data.statusCode === 200) {
-              callback(null, data.body);
-            } else {
-              callback(SGN$6.util.error(new Error('Request error'), {
-                code: 'RequestError',
-                statusCode: data.statusCode
-              }));
-            }
-          }
-        });
         return this;
       }
     }, {
@@ -1014,8 +809,8 @@ var tracker = Tracker = function () {
           parts[_key] = arguments[_key];
         }
 
-        str = [SGN$6.client.id].concat(parts).join('');
-        viewToken = SGN$6.util.btoa(String.fromCharCode.apply(null, md5$1(str, {
+        str = [SGN$5.client.id].concat(parts).join('');
+        viewToken = SGN$5.util.btoa(String.fromCharCode.apply(null, md5$1(str, {
           asBytes: true
         }).slice(0, 8)));
         return viewToken;
@@ -1026,13 +821,73 @@ var tracker = Tracker = function () {
   }();
   Tracker.prototype.defaultOptions = {
     trackId: null,
-    dispatchInterval: 5000,
-    dispatchLimit: 100,
-    poolLimit: 1000,
-    dryRun: false
+    poolLimit: 1000
   };
   return Tracker;
 }.call(commonjsGlobal);
+
+dispatching = false;
+dispatchLimit = 100;
+
+ship = function ship() {
+  var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var req;
+  req = fetch(SGN$5.config.get('eventsTrackUrl'), {
+    method: 'post',
+    timeout: 1000 * 20,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify({
+      events: events
+    })
+  });
+  return req.then(function (response) {
+    return response.json();
+  });
+};
+
+_dispatch = function _dispatch() {
+  var events, nacks;
+
+  if (dispatching === true || pool.length === 0) {
+    return;
+  }
+
+  events = pool.slice(0, dispatchLimit);
+  nacks = 0;
+  dispatching = true;
+  ship(events).then(function (response) {
+    dispatching = false;
+    response.events.forEach(function (resEvent) {
+      if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
+        pool = pool.filter(function (poolEvent) {
+          return poolEvent._i !== resEvent.id;
+        });
+      } else {
+        nacks++;
+      }
+    });
+
+    if (pool.length >= dispatchLimit && nacks === 0) {
+      // Keep dispatching until the pool size reaches a sane level.
+      dispatch();
+    }
+  }).catch(function (err) {
+    dispatching = false;
+    throw err;
+  });
+};
+
+dispatch = SGN$5.util.throttle(_dispatch, 4000);
+clientLocalStorage.set('event-tracker-pool', []);
+
+try {
+  window.addEventListener('beforeunload', function (e) {
+    pool = pool.concat(getPool());
+    clientLocalStorage.set('event-tracker-pool', pool);
+  }, false);
+} catch (error) {}
 
 var MicroEvent$1, Pulse;
 MicroEvent$1 = require$$0;
@@ -1105,8 +960,9 @@ var events = {
   Pulse: pulse
 };
 
-var SGN$7, parseCookies, promiseCallbackInterop, request$1;
-SGN$7 = sgn;
+var SGN$6, fetch$1, parseCookies, promiseCallbackInterop, request;
+fetch$1 = crossFetch;
+SGN$6 = sgn;
 promiseCallbackInterop = util_1.promiseCallbackInterop;
 
 parseCookies = function parseCookies() {
@@ -1124,110 +980,98 @@ parseCookies = function parseCookies() {
   return parsedCookies;
 };
 
-request$1 = function request() {
+request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var appKey, authToken, authTokenCookieName, timeout, url;
-  url = SGN$7.config.get('graphUrl');
+  url = SGN$6.config.get('graphUrl');
   timeout = 1000 * 12;
-  appKey = SGN$7.config.get('appKey');
-  authToken = SGN$7.config.get('authToken');
+  appKey = SGN$6.config.get('appKey');
+  authToken = SGN$6.config.get('authToken');
   authTokenCookieName = 'shopgun-auth-token';
   options = {
     method: 'post',
-    url: url,
     timeout: timeout,
-    json: true,
-    headers: {},
-    body: {
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify({
       query: options.query,
       operationName: options.operationName,
       variables: options.variables
-    }
-  };
+    })
+  }; // Set cookies manually in node.js.
 
-  if (appKey != null) {
-    // Apply authorization header when app key is provided to avoid rate limiting.
-    options.headers.Authorization = 'Basic ' + SGN$7.util.btoa("app-key:".concat(appKey));
-  } // Set cookies manually in node.js.
-
-
-  if (SGN$7.util.isNode() && authToken != null) {
+  if (SGN$6.util.isNode() && authToken != null) {
     options.cookies = [{
       key: authTokenCookieName,
       value: authToken,
       url: url
     }];
-  } else if (SGN$7.util.isBrowser()) {
-    options.useCookies = true;
+  } else if (SGN$6.util.isBrowser()) {
+    options.credentials = 'include';
   }
 
-  SGN$7.request(options, function (err, data) {
-    var authCookie, cookies, ref;
+  fetch$1(url, options).then(function (response) {
+    return response.json().then(function (json) {
+      var authCookie, cookies, ref; // Update auth token as it might have changed.
 
-    if (err != null) {
-      callback(SGN$7.util.error(new Error('Graph request error'), {
-        code: 'GraphRequestError'
-      }));
-    } else {
-      // Update auth token as it might have changed.
-      if (SGN$7.util.isNode()) {
-        cookies = parseCookies((ref = data.headers) != null ? ref['set-cookie'] : void 0);
+      if (SGN$6.util.isNode()) {
+        cookies = parseCookies((ref = response.headers) != null ? ref['set-cookie'] : void 0);
         authCookie = cookies[authTokenCookieName];
 
-        if (SGN$7.config.get('authToken') !== authCookie) {
-          SGN$7.config.set('authToken', authCookie);
+        if (SGN$6.config.get('authToken') !== authCookie) {
+          SGN$6.config.set('authToken', authCookie);
         }
       }
 
-      if (data.statusCode === 200) {
-        callback(null, data.body);
-      } else {
-        callback(SGN$7.util.error(new Error('Graph API error'), {
+      if (response.status !== 200) {
+        return callback(SGN$6.util.error(new Error('Graph API error'), {
           code: 'GraphAPIError',
           statusCode: data.statusCode
         }));
+      } else {
+        return callback(null, json);
       }
-    }
-  });
+    });
+  }).catch(callback);
 };
 
-var request_1 = promiseCallbackInterop(request$1, 1);
+var request_1 = promiseCallbackInterop(request, 1);
 
 var graph = {
   request: request_1
 };
 
-var SGN$8, promiseCallbackInterop$1, _request;
+var SGN$7, fetch$2, promiseCallbackInterop$1, _request;
 
-SGN$8 = sgn;
+fetch$2 = crossFetch;
+SGN$7 = sgn;
 promiseCallbackInterop$1 = util_1.promiseCallbackInterop;
 
 _request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
-  var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-  SGN$8.CoreKit.session.ensure(function (err) {
-    var appSecret, appVersion, clientId, geo, headers, json, locale, qs, ref, ref1, ref2, token, url;
+  var callback = arguments.length > 1 ? arguments[1] : undefined;
+  var secondTime = arguments.length > 2 ? arguments[2] : undefined;
+  SGN$7.CoreKit.session.ensure(function (err) {
+    var appSecret, appVersion, geo, headers, locale, qs, ref, ref1, ref2, req, token, url;
 
     if (err != null) {
-      return callback(err);
+      return reject(err);
     }
 
-    url = (ref = options.url) != null ? ref : '';
+    url = SGN$7.config.get('coreUrl') + ((ref = options.url) != null ? ref : '');
     headers = (ref1 = options.headers) != null ? ref1 : {};
-    json = typeof options.json === 'boolean' ? options.json : true;
-    token = SGN$8.config.get('coreSessionToken');
-    clientId = SGN$8.config.get('coreSessionClientId');
-    appVersion = SGN$8.config.get('appVersion');
-    appSecret = SGN$8.config.get('appSecret');
-    locale = SGN$8.config.get('locale');
+    token = SGN$7.config.get('coreSessionToken');
+    appVersion = SGN$7.config.get('appVersion');
+    appSecret = SGN$7.config.get('appSecret');
+    locale = SGN$7.config.get('locale');
     qs = (ref2 = options.qs) != null ? ref2 : {};
     geo = options.geolocation;
     headers['X-Token'] = token;
 
     if (appSecret != null) {
-      headers['X-Signature'] = SGN$8.CoreKit.session.sign(appSecret, token);
+      headers['X-Signature'] = SGN$7.CoreKit.session.sign(appSecret, token);
     }
 
     if (locale != null) {
@@ -1236,10 +1080,6 @@ _request = function request() {
 
     if (appVersion != null) {
       qs.api_av = appVersion;
-    }
-
-    if (clientId != null) {
-      qs.client_id = clientId;
     }
 
     if (geo != null) {
@@ -1260,56 +1100,60 @@ _request = function request() {
       }
     }
 
-    return SGN$8.request({
-      method: options.method,
-      url: SGN$8.config.get('coreUrl') + url,
-      qs: qs,
-      body: options.body,
-      formData: options.formData,
-      headers: headers,
-      json: json,
-      useCookies: false
-    }, function (err, data) {
-      var ref3, responseToken;
-
-      if (err != null) {
-        callback(SGN$8.util.error(new Error('Core request error'), {
-          code: 'CoreRequestError'
-        }));
-      } else {
-        token = SGN$8.config.get('coreSessionToken');
-        responseToken = data.headers['x-token'];
-
-        if (responseToken && token !== responseToken) {
-          SGN$8.CoreKit.session.saveToken(responseToken);
+    if (Object.keys(qs).length) {
+      url += '?' + Object.keys(qs).map(function (k) {
+        if (Array.isArray(k)) {
+          return qs[k].map(function (val) {
+            return "".concat(encodeURIComponent(k), "[]=").concat(encodeURIComponent(val));
+          }).join('&');
         }
 
-        if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
-          callback(null, data.body);
+        return "".concat(encodeURIComponent(k), "=").concat(encodeURIComponent(qs[k]));
+      }).join('&');
+    }
+
+    req = fetch$2(url, {
+      method: options.method,
+      body: options.body,
+      headers: headers
+    });
+    return req.then(function (response) {
+      return response.json().then(function (json) {
+        var ref3, responseToken;
+        token = SGN$7.config.get('coreSessionToken');
+        responseToken = response.headers['x-token'];
+
+        if (responseToken && token !== responseToken) {
+          SGN$7.CoreKit.session.saveToken(responseToken);
+        }
+
+        if (response.status >= 200 && response.status < 300 || response.status === 304) {
+          callback(null, json);
         } else {
-          if (runs === 0 && data.body != null && ((ref3 = data.body.code) === 1101 || ref3 === 1107 || ref3 === 1108)) {
-            SGN$8.config.set({
+          if (secondTime !== true && ((ref3 = json != null ? json.code : void 0) === 1101 || ref3 === 1107 || ref3 === 1108)) {
+            SGN$7.config.set({
               coreSessionToken: void 0
             });
 
-            _request(options, callback, ++runs);
+            _request(options, callback, true);
           } else {
-            callback(SGN$8.util.error(new Error('Core API error'), {
+            callback(SGN$7.util.error(new Error('Core API error'), {
               code: 'CoreAPIError',
-              statusCode: data.statusCode
-            }), data.body);
+              statusCode: response.status
+            }), json);
           }
         }
-      }
-    });
+      });
+    }).catch(callback);
   });
 };
 
 var request_1$1 = promiseCallbackInterop$1(_request, 1);
 
-var SGN$9, callbackQueue, clientCookieStorage, renewed, session, sha256$1;
-SGN$9 = sgn;
+var SGN$8, callbackQueue, clientCookieStorage, fetch$3, renewed, session, sha256$1;
+fetch$3 = crossFetch;
 sha256$1 = sha256;
+SGN$8 = sgn;
 clientCookieStorage = clientCookie;
 callbackQueue = [];
 renewed = false;
@@ -1320,97 +1164,100 @@ session = {
       throw new Error('No token provided for saving');
     }
 
-    SGN$9.config.set({
+    SGN$8.config.set({
       coreSessionToken: token
     });
     session.saveCookie();
   },
   saveClientId: function saveClientId(clientId) {
-    SGN$9.config.set({
+    SGN$8.config.set({
       coreSessionClientId: clientId
     });
     session.saveCookie();
   },
   saveCookie: function saveCookie() {
     clientCookieStorage.set('session', {
-      token: SGN$9.config.get('coreSessionToken'),
-      client_id: SGN$9.config.get('coreSessionClientId')
+      token: SGN$8.config.get('coreSessionToken'),
+      client_id: SGN$8.config.get('coreSessionClientId')
     });
   },
   create: function create(callback) {
-    SGN$9.request({
-      method: 'post',
-      url: SGN$9.config.get('coreUrl') + '/v2/sessions',
-      json: true,
-      qs: {
-        api_key: SGN$9.config.get('appKey'),
-        token_ttl: session.ttl
-      }
-    }, function (err, data) {
-      if (err != null) {
-        callback(err);
-      } else if (data.statusCode === 201) {
-        session.saveToken(data.body.token);
-        session.saveClientId(data.body.client_id);
-        callback(err, data.body);
-      } else {
-        callback(new Error('Could not create session'));
-      }
+    var key, req, ttl;
+    key = SGN$8.config.get('appKey');
+    ttl = session.ttl;
+    req = fetch$3(SGN$8.config.get('coreUrl') + "/v2/sessions?api_key=".concat(key, "&token_ttl=").concat(ttl), {
+      method: 'post'
+    });
+    req.then(function (response) {
+      return response.json().then(function (json) {
+        if (response.status === 201) {
+          session.saveToken(json.token);
+          session.saveClientId(json.client_id);
+          callback(null, json);
+        } else {
+          callback(new Error('Could not create session'));
+        }
+      });
+    }).catch(function (err) {
+      callback(err);
     });
   },
   update: function update(callback) {
-    var appSecret, headers, token;
+    var appSecret, headers, req, token;
     headers = {};
-    token = SGN$9.config.get('coreSessionToken');
-    appSecret = SGN$9.config.get('appSecret');
+    token = SGN$8.config.get('coreSessionToken');
+    appSecret = SGN$8.config.get('appSecret');
     headers['X-Token'] = token;
 
     if (appSecret != null) {
       headers['X-Signature'] = session.sign(appSecret, token);
     }
 
-    SGN$9.request({
-      url: SGN$9.config.get('coreUrl') + '/v2/sessions',
-      headers: headers,
-      json: true
-    }, function (err, data) {
-      if (err != null) {
-        callback(err);
-      } else if (data.statusCode === 200) {
-        session.saveToken(data.body.token);
-        session.saveClientId(data.body.client_id);
-        callback(err, data.body);
-      } else {
-        callback(new Error('Could not update session'));
-      }
+    req = fetch$3(SGN$8.config.get('coreUrl') + '/v2/sessions', {
+      method: 'put',
+      headers: headers
+    });
+    req.then(function (response) {
+      return response.json().then(function (json) {
+        if (response.status === 200) {
+          session.saveToken(json.token);
+          session.saveClientId(json.client_id);
+          callback(null, json);
+        } else {
+          callback(new Error('Could not update session'));
+        }
+      });
+    }).catch(function (err) {
+      callback(err);
     });
   },
   renew: function renew(callback) {
-    var appSecret, headers, token;
+    var appSecret, headers, req, token;
     headers = {};
-    token = SGN$9.config.get('coreSessionToken');
-    appSecret = SGN$9.config.get('appSecret');
+    token = SGN$8.config.get('coreSessionToken');
+    appSecret = SGN$8.config.get('appSecret');
     headers['X-Token'] = token;
 
-    if (appSecret != null) {
+    if (appSecret) {
       headers['X-Signature'] = session.sign(appSecret, token);
     }
 
-    SGN$9.request({
+    req = fetch$3(SGN$8.config.get('coreUrl') + '/v2/sessions', {
       method: 'put',
-      url: SGN$9.config.get('coreUrl') + '/v2/sessions',
-      headers: headers,
-      json: true
-    }, function (err, data) {
-      if (err != null) {
-        callback(err);
-      } else if (data.statusCode === 200) {
-        session.saveToken(data.body.token);
-        session.saveClientId(data.body.client_id);
-        callback(err, data.body);
-      } else {
-        callback(new Error('Could not renew session'));
-      }
+      headers: headers
+    });
+    req.then(function (response) {
+      return response.json().then(function (json) {
+        if (response.status === 200) {
+          session.saveToken(json.token);
+          session.saveClientId(json.client_id);
+          callback(null, json);
+        } else {
+          callback(new Error('Could not renew session'));
+        }
+      });
+    }).catch(function (err) {
+      callback(err);
     });
   },
   ensure: function ensure(callback) {
@@ -1427,7 +1274,7 @@ session = {
     callbackQueue.push(callback);
 
     if (queueCount === 0) {
-      if (SGN$9.config.get('coreSessionToken') == null) {
+      if (SGN$8.config.get('coreSessionToken') == null) {
         session.create(complete);
       } else if (renewed === false) {
         renewed = true;
@@ -1449,17 +1296,17 @@ session = {
 };
 var session_1 = session;
 
-var request$2, session$1;
-request$2 = request_1$1;
+var request$1, session$1;
+request$1 = request_1$1;
 session$1 = session_1;
 var core$1 = {
-  request: request$2,
+  request: request$1,
   session: session$1
 };
 
-var MicroEvent$2, PagedPublicationPageSpread, SGN$b;
+var MicroEvent$2, PagedPublicationPageSpread, SGN$a;
 MicroEvent$2 = require$$0;
-SGN$b = sgn;
+SGN$a = sgn;
 
 PagedPublicationPageSpread =
 /*#__PURE__*/
@@ -1538,7 +1385,7 @@ function () {
         el.appendChild(pageEl);
         loaderEl.className = 'sgn-pp-page__loader';
         loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
-        SGN$b.util.loadImage(image, function (err, width, height) {
+        SGN$a.util.loadImage(image, function (err, width, height) {
           var isComplete;
 
           if (err == null) {
@@ -1593,7 +1440,7 @@ function () {
           return page.id === id;
         });
         image = page.images.large;
-        SGN$b.util.loadImage(image, function (err) {
+        SGN$a.util.loadImage(image, function (err) {
           if (err == null && _this2.el.getAttribute('data-active') === 'true') {
             pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
             pageEl.style.backgroundImage = "url(".concat(image, ")");
@@ -1619,10 +1466,10 @@ function () {
 MicroEvent$2.mixin(PagedPublicationPageSpread);
 var pageSpread = PagedPublicationPageSpread;
 
-var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$c;
+var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$b;
 MicroEvent$3 = require$$0;
 PageSpread = pageSpread;
-SGN$c = sgn;
+SGN$b = sgn;
 
 PagedPublicationPageSpreads =
 /*#__PURE__*/
@@ -1671,7 +1518,7 @@ function () {
       } else {
         firstPage = pages.shift();
         lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-        midstPageSpreads = SGN$c.util.chunk(pages, 2);
+        midstPageSpreads = SGN$b.util.chunk(pages, 2);
 
         if (firstPage != null) {
           pageSpreads.push([firstPage]);
@@ -1717,11 +1564,11 @@ function () {
 MicroEvent$3.mixin(PagedPublicationPageSpreads);
 var pageSpreads = PagedPublicationPageSpreads;
 
-var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$d, Verso;
+var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$c, Verso;
 MicroEvent$4 = require$$0;
 Verso = versoBrowser;
 PageSpreads = pageSpreads;
-SGN$d = sgn;
+SGN$c = sgn;
 
 PagedPublicationCore = function () {
   var PagedPublicationCore =
@@ -1760,7 +1607,7 @@ PagedPublicationCore = function () {
       key: "start",
       value: function start() {
         this.getVerso().start();
-        this.resizeListener = SGN$d.util.throttle(this.resize, this.getOption('resizeDelay'), this);
+        this.resizeListener = SGN$c.util.throttle(this.resize, this.getOption('resizeDelay'), this);
         this.unloadListener = this.unload.bind(this);
         window.addEventListener('resize', this.resizeListener, false);
         window.addEventListener('beforeunload', this.unloadListener, false);
@@ -1811,7 +1658,7 @@ PagedPublicationCore = function () {
     }, {
       key: "setColor",
       value: function setColor(color) {
-        this.els.root.setAttribute('data-color-brightness', SGN$d.util.getColorBrightness(color));
+        this.els.root.setAttribute('data-color-brightness', SGN$c.util.getColorBrightness(color));
         this.els.root.style.backgroundColor = color;
       }
     }, {
@@ -2409,9 +2256,9 @@ var keyCodes = {
   NUMBER_ONE: 49
 };
 
-var MicroEvent$6, PagedPublicationControls, SGN$e, keyCodes$1;
+var MicroEvent$6, PagedPublicationControls, SGN$d, keyCodes$1;
 MicroEvent$6 = require$$0;
-SGN$e = sgn;
+SGN$d = sgn;
 keyCodes$1 = keyCodes;
 
 PagedPublicationControls =
@@ -2432,7 +2279,7 @@ function () {
       nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
       close: el.querySelector('.sgn-pp--close')
     };
-    this.keyDownListener = SGN$e.util.throttle(this.keyDown, 150, this);
+    this.keyDownListener = SGN$d.util.throttle(this.keyDown, 150, this);
 
     if (this.options.keyboard === true) {
       this.els.root.addEventListener('keydown', this.keyDownListener, false);
@@ -2578,6 +2425,10 @@ function () {
   }, {
     key: "trackOpened",
     value: function trackOpened(properties) {
+      if (this.eventTracker == null) {
+        return this;
+      }
+
       this.eventTracker.trackPagedPublicationOpened({
         'pp.id': this.id,
         'vt': this.eventTracker.createViewToken(this.id)
@@ -2588,6 +2439,10 @@ function () {
     key: "trackPageSpreadDisappeared",
     value: function trackPageSpreadDisappeared(pageNumbers) {
       var _this = this;
+
+      if (this.eventTracker == null) {
+        return this;
+      }
 
       pageNumbers.forEach(function (pageNumber) {
         _this.eventTracker.trackPagedPublicationPageDisappeared({
@@ -2657,9 +2512,9 @@ function () {
 MicroEvent$7.mixin(PagedPublicationEventTracking);
 var eventTracking = PagedPublicationEventTracking;
 
-var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$f, Viewer;
+var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$e, Viewer;
 MicroEvent$8 = require$$0;
-SGN$f = sgn;
+SGN$e = sgn;
 Core = core$2;
 Hotspots = hotspots;
 Controls = controls;
@@ -2690,7 +2545,7 @@ function () {
       keyboard: this.options.keyboard
     });
     this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
-    this.viewSession = SGN$f.util.uuid();
+    this.viewSession = SGN$e.util.uuid();
     this.hotspots = null;
     this.hotspotQueue = [];
     this.popover = null;
@@ -2921,9 +2776,9 @@ function () {
       if (hotspots$$1.length === 1) {
         callback(hotspots$$1[0]);
       } else if (hotspots$$1.length > 1) {
-        this.popover = SGN$f.CoreUIKit.singleChoicePopover({
+        this.popover = SGN$e.CoreUIKit.singleChoicePopover({
           el: this.el,
-          header: SGN$f.translations.t('paged_publication.hotspot_picker.header'),
+          header: SGN$e.translations.t('paged_publication.hotspot_picker.header'),
           x: e.verso.x,
           y: e.verso.y,
           items: hotspots$$1.filter(function (hotspot) {
@@ -3046,8 +2901,8 @@ function () {
 MicroEvent$8.mixin(Viewer);
 var viewer = Viewer;
 
-var Bootstrapper, SGN$g;
-SGN$g = core;
+var Bootstrapper, SGN$f;
+SGN$f = core;
 
 var bootstrapper = Bootstrapper =
 /*#__PURE__*/
@@ -3064,7 +2919,7 @@ function () {
   _createClass(Bootstrapper, [{
     key: "createViewer",
     value: function createViewer(data) {
-      return new SGN$g.PagedPublicationKit.Viewer(this.options.el, {
+      return new SGN$f.PagedPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         ownedBy: data.details.dealer_id,
         color: '#' + data.details.branding.pageflip.color,
@@ -3106,7 +2961,7 @@ function () {
     key: "fetch",
     value: function fetch(callback) {
       callback = callback.bind(this);
-      SGN$g.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+      SGN$f.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
         var data;
         data = {
           details: result[0][1],
@@ -3127,21 +2982,21 @@ function () {
   }, {
     key: "fetchDetails",
     value: function fetchDetails(callback) {
-      SGN$g.CoreKit.request({
+      SGN$f.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
     }
   }, {
     key: "fetchPages",
     value: function fetchPages(callback) {
-      SGN$g.CoreKit.request({
+      SGN$f.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/pages")
       }, callback);
     }
   }, {
     key: "fetchHotspots",
     value: function fetchHotspots(callback) {
-      SGN$g.CoreKit.request({
+      SGN$f.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
       }, callback);
     }
@@ -3250,7 +3105,7 @@ function () {
   return Controls;
 }();
 
-var incito = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported)\n    }\n  }\n}";
+var incito = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!, $locale: LocaleCode, $time: DateTime) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported, locale: $locale, time: $time)\n    }\n  }\n}";
 
 var incito$1 = /*#__PURE__*/Object.freeze({
   default: incito
@@ -3258,9 +3113,9 @@ var incito$1 = /*#__PURE__*/Object.freeze({
 
 var require$$3 = ( incito$1 && incito ) || incito$1;
 
-var Bootstrapper$1, Controls$2, SGN$h, schema, util$2;
+var Bootstrapper$1, Controls$2, SGN$g, schema, util$2;
 util$2 = util_1;
-SGN$h = core;
+SGN$g = core;
 Controls$2 = controls$1;
 schema = require$$3;
 
@@ -3367,13 +3222,13 @@ function () {
 
       var data;
       callback = callback.bind(this);
-      data = SGN$h.storage.session.get(this.storageKey);
+      data = SGN$g.storage.session.get(this.storageKey);
 
       if (data != null && data.response != null && data.width === this.maxWidth) {
         return callback(null, data.response);
       }
 
-      SGN$h.GraphKit.request({
+      SGN$g.GraphKit.request({
         query: schema,
         operationName: 'GetIncitoPublication',
         variables: {
@@ -3394,7 +3249,7 @@ function () {
           callback(util$2.error(new Error(), 'graph request contained errors'));
         } else {
           callback(null, res);
-          SGN$h.storage.session.set(_this.storageKey, {
+          SGN$g.storage.session.set(_this.storageKey, {
             width: _this.maxWidth,
             response: res
           });
@@ -3410,7 +3265,7 @@ function () {
         throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
       }
 
-      viewer = new SGN$h.IncitoPublicationKit.Viewer(this.options.el, {
+      viewer = new SGN$g.IncitoPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         incito: data.incito,
         eventTracker: this.options.eventTracker
@@ -4060,46 +3915,44 @@ var coreUi = {
   }
 };
 
-var SGN$i, appKey, config$2, isBrowser$2, scriptEl, session$2, trackId;
-isBrowser$2 = util_1.isBrowser;
-SGN$i = core; // Expose storage backends.
+var SGN$h, appKey, config$2, isBrowser, scriptEl, session$2, trackId;
+isBrowser = util_1.isBrowser;
+SGN$h = core; // Expose storage backends.
 
-SGN$i.storage = {
+SGN$h.storage = {
   local: clientLocal,
   session: clientSession,
   cookie: clientCookie
-}; // Expose request handler.
+}; // Expose the different kits.
 
-SGN$i.request = request; // Expose the different kits.
+SGN$h.AssetsKit = assets;
+SGN$h.EventsKit = events;
+SGN$h.GraphKit = graph;
+SGN$h.CoreKit = core$1;
+SGN$h.PagedPublicationKit = pagedPublication;
+SGN$h.IncitoPublicationKit = incitoPublication;
+SGN$h.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-SGN$i.AssetsKit = assets;
-SGN$i.EventsKit = events;
-SGN$i.GraphKit = graph;
-SGN$i.CoreKit = core$1;
-SGN$i.PagedPublicationKit = pagedPublication;
-SGN$i.IncitoPublicationKit = incitoPublication;
-SGN$i.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
-
-session$2 = SGN$i.storage.cookie.get('session');
+session$2 = SGN$h.storage.cookie.get('session');
 
 if (_typeof(session$2) === 'object') {
-  SGN$i.config.set({
+  SGN$h.config.set({
     coreSessionToken: session$2.token,
     coreSessionClientId: session$2.client_id
   });
 }
 
-SGN$i.client = function () {
+SGN$h.client = function () {
   var id;
-  id = SGN$i.storage.local.get('client-id');
+  id = SGN$h.storage.local.get('client-id');
 
   if (id != null ? id.data : void 0) {
     id = id.data;
   }
 
   if (id == null) {
-    id = SGN$i.util.uuid();
-    SGN$i.storage.local.set('client-id', id);
+    id = SGN$h.util.uuid();
+    SGN$h.storage.local.set('client-id', id);
   }
 
   return {
@@ -4108,7 +3961,7 @@ SGN$i.client = function () {
 }(); // Listen for changes in the config.
 
 
-SGN$i.config.bind('change', function (changedAttributes) {
+SGN$h.config.bind('change', function (changedAttributes) {
   var eventTracker;
   eventTracker = changedAttributes.eventTracker;
 
@@ -4117,7 +3970,7 @@ SGN$i.config.bind('change', function (changedAttributes) {
   }
 });
 
-if (isBrowser$2()) {
+if (isBrowser()) {
   // Autoconfigure the SDK.
   scriptEl = document.getElementById('sgn-sdk');
 
@@ -4131,16 +3984,16 @@ if (isBrowser$2()) {
     }
 
     if (trackId != null) {
-      config$2.eventTracker = new SGN$i.EventsKit.Tracker({
+      config$2.eventTracker = new SGN$h.EventsKit.Tracker({
         trackId: trackId
       });
     }
 
-    SGN$i.config.set(config$2);
+    SGN$h.config.set(config$2);
   }
 }
 
-var coffeescript = SGN$i;
+var coffeescript = SGN$h;
 
 export default coffeescript;
 //# sourceMappingURL=sgn-sdk.es.js.map

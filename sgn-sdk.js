@@ -1,10 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('xmlhttprequest')) :
-  typeof rollupNeedsAnOptionToDisableAMDInUMD === 'function' && rollupNeedsAnOptionToDisableAMDInUMD.amd ? rollupNeedsAnOptionToDisableAMDInUMD(['xmlhttprequest'], factory) :
-  (global.SGN = factory(global.xmlhttprequest));
-}(this, (function (xmlhttprequest) { 'use strict';
-
-  xmlhttprequest = xmlhttprequest && xmlhttprequest.hasOwnProperty('default') ? xmlhttprequest['default'] : xmlhttprequest;
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof rollupNeedsAnOptionToDisableAMDInUMD === 'function' && rollupNeedsAnOptionToDisableAMDInUMD.amd ? rollupNeedsAnOptionToDisableAMDInUMD(factory) :
+  (global.SGN = factory());
+}(this, (function () { 'use strict';
 
   function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -925,16 +923,10 @@
     }
   });
 
-  // 22.1.3.31 Array.prototype[@@unscopables]
-  var UNSCOPABLES = _wks('unscopables');
-  var ArrayProto$1 = Array.prototype;
-  if (ArrayProto$1[UNSCOPABLES] == undefined) _hide(ArrayProto$1, UNSCOPABLES, {});
-  var _addToUnscopables = function (key) {
-    ArrayProto$1[UNSCOPABLES][key] = true;
-  };
+  var f$2 = {}.propertyIsEnumerable;
 
-  var _iterStep = function (done, value) {
-    return { value: value, done: !!done };
+  var _objectPie = {
+  	f: f$2
   };
 
   // fallback for non-array-like ES3 and non-enumerable old V8 strings
@@ -955,6 +947,56 @@
 
   var _toIobject = function (it) {
     return _iobject(_defined(it));
+  };
+
+  var gOPD = Object.getOwnPropertyDescriptor;
+
+  var f$3 = _descriptors ? gOPD : function getOwnPropertyDescriptor(O, P) {
+    O = _toIobject(O);
+    P = _toPrimitive(P, true);
+    if (_ie8DomDefine) try {
+      return gOPD(O, P);
+    } catch (e) { /* empty */ }
+    if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
+  };
+
+  var _objectGopd = {
+  	f: f$3
+  };
+
+  // Works with __proto__ only. Old v8 can't work with null proto objects.
+  /* eslint-disable no-proto */
+
+
+  var check = function (O, proto) {
+    _anObject(O);
+    if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
+  };
+  var _setProto = {
+    set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+      function (test, buggy, set) {
+        try {
+          set = _ctx(Function.call, _objectGopd.f(Object.prototype, '__proto__').set, 2);
+          set(test, []);
+          buggy = !(test instanceof Array);
+        } catch (e) { buggy = true; }
+        return function setPrototypeOf(O, proto) {
+          check(O, proto);
+          if (buggy) O.__proto__ = proto;
+          else set(O, proto);
+          return O;
+        };
+      }({}, false) : undefined),
+    check: check
+  };
+
+  var setPrototypeOf = _setProto.set;
+  var _inheritIfRequired = function (that, target, C) {
+    var S = target.constructor;
+    var P;
+    if (S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && _isObject(P) && setPrototypeOf) {
+      setPrototypeOf(that, P);
+    } return that;
   };
 
   var max = Math.max;
@@ -1015,315 +1057,6 @@
     'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
   ).split(',');
 
-  // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-
-
-
-  var _objectKeys = Object.keys || function keys(O) {
-    return _objectKeysInternal(O, _enumBugKeys);
-  };
-
-  var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
-    _anObject(O);
-    var keys = _objectKeys(Properties);
-    var length = keys.length;
-    var i = 0;
-    var P;
-    while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
-    return O;
-  };
-
-  // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-
-
-
-  var IE_PROTO$1 = _sharedKey('IE_PROTO');
-  var Empty = function () { /* empty */ };
-  var PROTOTYPE$1 = 'prototype';
-
-  // Create object with fake `null` prototype: use iframe Object with cleared prototype
-  var createDict = function () {
-    // Thrash, waste and sodomy: IE GC bug
-    var iframe = _domCreate('iframe');
-    var i = _enumBugKeys.length;
-    var lt = '<';
-    var gt = '>';
-    var iframeDocument;
-    iframe.style.display = 'none';
-    _html.appendChild(iframe);
-    iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-    // createDict = iframe.contentWindow.Object;
-    // html.removeChild(iframe);
-    iframeDocument = iframe.contentWindow.document;
-    iframeDocument.open();
-    iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-    iframeDocument.close();
-    createDict = iframeDocument.F;
-    while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
-    return createDict();
-  };
-
-  var _objectCreate = Object.create || function create(O, Properties) {
-    var result;
-    if (O !== null) {
-      Empty[PROTOTYPE$1] = _anObject(O);
-      result = new Empty();
-      Empty[PROTOTYPE$1] = null;
-      // add "__proto__" for Object.getPrototypeOf polyfill
-      result[IE_PROTO$1] = O;
-    } else result = createDict();
-    return Properties === undefined ? result : _objectDps(result, Properties);
-  };
-
-  var IteratorPrototype = {};
-
-  // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-  _hide(IteratorPrototype, _wks('iterator'), function () { return this; });
-
-  var _iterCreate = function (Constructor, NAME, next) {
-    Constructor.prototype = _objectCreate(IteratorPrototype, { next: _propertyDesc(1, next) });
-    _setToStringTag(Constructor, NAME + ' Iterator');
-  };
-
-  // 7.1.13 ToObject(argument)
-
-  var _toObject = function (it) {
-    return Object(_defined(it));
-  };
-
-  // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-
-
-  var IE_PROTO$2 = _sharedKey('IE_PROTO');
-  var ObjectProto = Object.prototype;
-
-  var _objectGpo = Object.getPrototypeOf || function (O) {
-    O = _toObject(O);
-    if (_has(O, IE_PROTO$2)) return O[IE_PROTO$2];
-    if (typeof O.constructor == 'function' && O instanceof O.constructor) {
-      return O.constructor.prototype;
-    } return O instanceof Object ? ObjectProto : null;
-  };
-
-  var ITERATOR$3 = _wks('iterator');
-  var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
-  var FF_ITERATOR = '@@iterator';
-  var KEYS = 'keys';
-  var VALUES = 'values';
-
-  var returnThis = function () { return this; };
-
-  var _iterDefine = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
-    _iterCreate(Constructor, NAME, next);
-    var getMethod = function (kind) {
-      if (!BUGGY && kind in proto) return proto[kind];
-      switch (kind) {
-        case KEYS: return function keys() { return new Constructor(this, kind); };
-        case VALUES: return function values() { return new Constructor(this, kind); };
-      } return function entries() { return new Constructor(this, kind); };
-    };
-    var TAG = NAME + ' Iterator';
-    var DEF_VALUES = DEFAULT == VALUES;
-    var VALUES_BUG = false;
-    var proto = Base.prototype;
-    var $native = proto[ITERATOR$3] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-    var $default = $native || getMethod(DEFAULT);
-    var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
-    var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
-    var methods, key, IteratorPrototype;
-    // Fix native
-    if ($anyNative) {
-      IteratorPrototype = _objectGpo($anyNative.call(new Base()));
-      if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-        // Set @@toStringTag to native iterators
-        _setToStringTag(IteratorPrototype, TAG, true);
-        // fix for some old engines
-        if (typeof IteratorPrototype[ITERATOR$3] != 'function') _hide(IteratorPrototype, ITERATOR$3, returnThis);
-      }
-    }
-    // fix Array#{values, @@iterator}.name in V8 / FF
-    if (DEF_VALUES && $native && $native.name !== VALUES) {
-      VALUES_BUG = true;
-      $default = function values() { return $native.call(this); };
-    }
-    // Define iterator
-    if (BUGGY || VALUES_BUG || !proto[ITERATOR$3]) {
-      _hide(proto, ITERATOR$3, $default);
-    }
-    // Plug for library
-    _iterators[NAME] = $default;
-    _iterators[TAG] = returnThis;
-    if (DEFAULT) {
-      methods = {
-        values: DEF_VALUES ? $default : getMethod(VALUES),
-        keys: IS_SET ? $default : getMethod(KEYS),
-        entries: $entries
-      };
-      if (FORCED) for (key in methods) {
-        if (!(key in proto)) _redefine(proto, key, methods[key]);
-      } else _export(_export.P + _export.F * (BUGGY || VALUES_BUG), NAME, methods);
-    }
-    return methods;
-  };
-
-  // 22.1.3.4 Array.prototype.entries()
-  // 22.1.3.13 Array.prototype.keys()
-  // 22.1.3.29 Array.prototype.values()
-  // 22.1.3.30 Array.prototype[@@iterator]()
-  var es6_array_iterator = _iterDefine(Array, 'Array', function (iterated, kind) {
-    this._t = _toIobject(iterated); // target
-    this._i = 0;                   // next index
-    this._k = kind;                // kind
-  // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-  }, function () {
-    var O = this._t;
-    var kind = this._k;
-    var index = this._i++;
-    if (!O || index >= O.length) {
-      this._t = undefined;
-      return _iterStep(1);
-    }
-    if (kind == 'keys') return _iterStep(0, index);
-    if (kind == 'values') return _iterStep(0, O[index]);
-    return _iterStep(0, [index, O[index]]);
-  }, 'values');
-
-  // argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-  _iterators.Arguments = _iterators.Array;
-
-  _addToUnscopables('keys');
-  _addToUnscopables('values');
-  _addToUnscopables('entries');
-
-  var ITERATOR$4 = _wks('iterator');
-  var TO_STRING_TAG = _wks('toStringTag');
-  var ArrayValues = _iterators.Array;
-
-  var DOMIterables = {
-    CSSRuleList: true, // TODO: Not spec compliant, should be false.
-    CSSStyleDeclaration: false,
-    CSSValueList: false,
-    ClientRectList: false,
-    DOMRectList: false,
-    DOMStringList: false,
-    DOMTokenList: true,
-    DataTransferItemList: false,
-    FileList: false,
-    HTMLAllCollection: false,
-    HTMLCollection: false,
-    HTMLFormElement: false,
-    HTMLSelectElement: false,
-    MediaList: true, // TODO: Not spec compliant, should be false.
-    MimeTypeArray: false,
-    NamedNodeMap: false,
-    NodeList: true,
-    PaintRequestList: false,
-    Plugin: false,
-    PluginArray: false,
-    SVGLengthList: false,
-    SVGNumberList: false,
-    SVGPathSegList: false,
-    SVGPointList: false,
-    SVGStringList: false,
-    SVGTransformList: false,
-    SourceBufferList: false,
-    StyleSheetList: true, // TODO: Not spec compliant, should be false.
-    TextTrackCueList: false,
-    TextTrackList: false,
-    TouchList: false
-  };
-
-  for (var collections = _objectKeys(DOMIterables), i = 0; i < collections.length; i++) {
-    var NAME = collections[i];
-    var explicit = DOMIterables[NAME];
-    var Collection = _global[NAME];
-    var proto = Collection && Collection.prototype;
-    var key;
-    if (proto) {
-      if (!proto[ITERATOR$4]) _hide(proto, ITERATOR$4, ArrayValues);
-      if (!proto[TO_STRING_TAG]) _hide(proto, TO_STRING_TAG, NAME);
-      _iterators[NAME] = ArrayValues;
-      if (explicit) for (key in es6_array_iterator) if (!proto[key]) _redefine(proto, key, es6_array_iterator[key], true);
-    }
-  }
-
-  // most Object methods by ES6 should accept primitives
-
-
-
-  var _objectSap = function (KEY, exec) {
-    var fn = (_core.Object || {})[KEY] || Object[KEY];
-    var exp = {};
-    exp[KEY] = exec(fn);
-    _export(_export.S + _export.F * _fails(function () { fn(1); }), 'Object', exp);
-  };
-
-  // 19.1.2.14 Object.keys(O)
-
-
-
-  _objectSap('keys', function () {
-    return function keys(it) {
-      return _objectKeys(_toObject(it));
-    };
-  });
-
-  var f$2 = {}.propertyIsEnumerable;
-
-  var _objectPie = {
-  	f: f$2
-  };
-
-  var gOPD = Object.getOwnPropertyDescriptor;
-
-  var f$3 = _descriptors ? gOPD : function getOwnPropertyDescriptor(O, P) {
-    O = _toIobject(O);
-    P = _toPrimitive(P, true);
-    if (_ie8DomDefine) try {
-      return gOPD(O, P);
-    } catch (e) { /* empty */ }
-    if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
-  };
-
-  var _objectGopd = {
-  	f: f$3
-  };
-
-  // Works with __proto__ only. Old v8 can't work with null proto objects.
-  /* eslint-disable no-proto */
-
-
-  var check = function (O, proto) {
-    _anObject(O);
-    if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
-  };
-  var _setProto = {
-    set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-      function (test, buggy, set) {
-        try {
-          set = _ctx(Function.call, _objectGopd.f(Object.prototype, '__proto__').set, 2);
-          set(test, []);
-          buggy = !(test instanceof Array);
-        } catch (e) { buggy = true; }
-        return function setPrototypeOf(O, proto) {
-          check(O, proto);
-          if (buggy) O.__proto__ = proto;
-          else set(O, proto);
-          return O;
-        };
-      }({}, false) : undefined),
-    check: check
-  };
-
-  var setPrototypeOf = _setProto.set;
-  var _inheritIfRequired = function (that, target, C) {
-    var S = target.constructor;
-    var P;
-    if (S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && _isObject(P) && setPrototypeOf) {
-      setPrototypeOf(that, P);
-    } return that;
-  };
-
   // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
 
   var hiddenKeys = _enumBugKeys.concat('length', 'prototype');
@@ -1364,7 +1097,7 @@
 
   var $RegExp = _global.RegExp;
   var Base = $RegExp;
-  var proto$1 = $RegExp.prototype;
+  var proto = $RegExp.prototype;
   var re1 = /a/g;
   var re2 = /a/g;
   // "new" creates a new object, old webkit buggy here
@@ -1383,7 +1116,7 @@
         : _inheritIfRequired(CORRECT_NEW
           ? new Base(piRE && !fiU ? p.source : p, f)
           : Base((piRE = p instanceof $RegExp) ? p.source : p, piRE && fiU ? _flags.call(p) : f)
-        , tiRE ? this : proto$1, $RegExp);
+        , tiRE ? this : proto, $RegExp);
     };
     var proxy = function (key) {
       key in $RegExp || dP$1($RegExp, key, {
@@ -1392,9 +1125,9 @@
         set: function (it) { Base[key] = it; }
       });
     };
-    for (var keys = gOPN(Base), i$1 = 0; keys.length > i$1;) proxy(keys[i$1++]);
-    proto$1.constructor = $RegExp;
-    $RegExp.prototype = proto$1;
+    for (var keys = gOPN(Base), i = 0; keys.length > i;) proxy(keys[i++]);
+    proto.constructor = $RegExp;
+    $RegExp.prototype = proto;
     _redefine(_global, 'RegExp', $RegExp);
   }
 
@@ -1464,10 +1197,10 @@
   var dP$2 = _objectDp.f;
   var FProto = Function.prototype;
   var nameRE = /^\s*function ([^ (]*)/;
-  var NAME$1 = 'name';
+  var NAME = 'name';
 
   // 19.2.4.2 name
-  NAME$1 in FProto || _descriptors && dP$2(FProto, NAME$1, {
+  NAME in FProto || _descriptors && dP$2(FProto, NAME, {
     configurable: true,
     get: function () {
       try {
@@ -1534,12 +1267,6 @@
       } else {
         return void 0;
       }
-    },
-    formatQueryParams: function formatQueryParams() {
-      var queryParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      return Object.keys(queryParams).map(function (key) {
-        return key + '=' + encodeURIComponent(queryParams[key]);
-      }).join('&');
     },
     getRandomNumberBetween: function getRandomNumberBetween(from, to) {
       return Math.floor(Math.random() * to) + from;
@@ -1823,12 +1550,256 @@
           return makePromise(fun, cbParameterIndex, parameters);
         } else {
           // Ain't got callback, ain't got promise support; we gotta tell the developer.
-          throw new Error("To be able to use this asynchronous method you should:\n\nSupply a callback function as argument #".concat(1 + cbParameterIndex, ".\nThis callback function will be called with the method call response.\n\nAlternatively, when supported, it can return a Promise if no callback function is given."));
+          throw new Error("To be able to use this asynchronous method you should:\nSupply a callback function as argument #".concat(1 + cbParameterIndex, ".\nThis callback function will be called with the method call response.\nAlternatively, when supported, it can return a Promise if no callback function is given."));
         }
       };
     }
   };
   var util_1 = util;
+
+  // 22.1.3.31 Array.prototype[@@unscopables]
+  var UNSCOPABLES = _wks('unscopables');
+  var ArrayProto$1 = Array.prototype;
+  if (ArrayProto$1[UNSCOPABLES] == undefined) _hide(ArrayProto$1, UNSCOPABLES, {});
+  var _addToUnscopables = function (key) {
+    ArrayProto$1[UNSCOPABLES][key] = true;
+  };
+
+  var _iterStep = function (done, value) {
+    return { value: value, done: !!done };
+  };
+
+  // 19.1.2.14 / 15.2.3.14 Object.keys(O)
+
+
+
+  var _objectKeys = Object.keys || function keys(O) {
+    return _objectKeysInternal(O, _enumBugKeys);
+  };
+
+  var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
+    _anObject(O);
+    var keys = _objectKeys(Properties);
+    var length = keys.length;
+    var i = 0;
+    var P;
+    while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
+    return O;
+  };
+
+  // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+
+
+
+  var IE_PROTO$1 = _sharedKey('IE_PROTO');
+  var Empty = function () { /* empty */ };
+  var PROTOTYPE$1 = 'prototype';
+
+  // Create object with fake `null` prototype: use iframe Object with cleared prototype
+  var createDict = function () {
+    // Thrash, waste and sodomy: IE GC bug
+    var iframe = _domCreate('iframe');
+    var i = _enumBugKeys.length;
+    var lt = '<';
+    var gt = '>';
+    var iframeDocument;
+    iframe.style.display = 'none';
+    _html.appendChild(iframe);
+    iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+    // createDict = iframe.contentWindow.Object;
+    // html.removeChild(iframe);
+    iframeDocument = iframe.contentWindow.document;
+    iframeDocument.open();
+    iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+    iframeDocument.close();
+    createDict = iframeDocument.F;
+    while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
+    return createDict();
+  };
+
+  var _objectCreate = Object.create || function create(O, Properties) {
+    var result;
+    if (O !== null) {
+      Empty[PROTOTYPE$1] = _anObject(O);
+      result = new Empty();
+      Empty[PROTOTYPE$1] = null;
+      // add "__proto__" for Object.getPrototypeOf polyfill
+      result[IE_PROTO$1] = O;
+    } else result = createDict();
+    return Properties === undefined ? result : _objectDps(result, Properties);
+  };
+
+  var IteratorPrototype = {};
+
+  // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+  _hide(IteratorPrototype, _wks('iterator'), function () { return this; });
+
+  var _iterCreate = function (Constructor, NAME, next) {
+    Constructor.prototype = _objectCreate(IteratorPrototype, { next: _propertyDesc(1, next) });
+    _setToStringTag(Constructor, NAME + ' Iterator');
+  };
+
+  // 7.1.13 ToObject(argument)
+
+  var _toObject = function (it) {
+    return Object(_defined(it));
+  };
+
+  // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+
+
+  var IE_PROTO$2 = _sharedKey('IE_PROTO');
+  var ObjectProto = Object.prototype;
+
+  var _objectGpo = Object.getPrototypeOf || function (O) {
+    O = _toObject(O);
+    if (_has(O, IE_PROTO$2)) return O[IE_PROTO$2];
+    if (typeof O.constructor == 'function' && O instanceof O.constructor) {
+      return O.constructor.prototype;
+    } return O instanceof Object ? ObjectProto : null;
+  };
+
+  var ITERATOR$3 = _wks('iterator');
+  var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+  var FF_ITERATOR = '@@iterator';
+  var KEYS = 'keys';
+  var VALUES = 'values';
+
+  var returnThis = function () { return this; };
+
+  var _iterDefine = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+    _iterCreate(Constructor, NAME, next);
+    var getMethod = function (kind) {
+      if (!BUGGY && kind in proto) return proto[kind];
+      switch (kind) {
+        case KEYS: return function keys() { return new Constructor(this, kind); };
+        case VALUES: return function values() { return new Constructor(this, kind); };
+      } return function entries() { return new Constructor(this, kind); };
+    };
+    var TAG = NAME + ' Iterator';
+    var DEF_VALUES = DEFAULT == VALUES;
+    var VALUES_BUG = false;
+    var proto = Base.prototype;
+    var $native = proto[ITERATOR$3] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+    var $default = $native || getMethod(DEFAULT);
+    var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+    var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+    var methods, key, IteratorPrototype;
+    // Fix native
+    if ($anyNative) {
+      IteratorPrototype = _objectGpo($anyNative.call(new Base()));
+      if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
+        // Set @@toStringTag to native iterators
+        _setToStringTag(IteratorPrototype, TAG, true);
+        // fix for some old engines
+        if (typeof IteratorPrototype[ITERATOR$3] != 'function') _hide(IteratorPrototype, ITERATOR$3, returnThis);
+      }
+    }
+    // fix Array#{values, @@iterator}.name in V8 / FF
+    if (DEF_VALUES && $native && $native.name !== VALUES) {
+      VALUES_BUG = true;
+      $default = function values() { return $native.call(this); };
+    }
+    // Define iterator
+    if (BUGGY || VALUES_BUG || !proto[ITERATOR$3]) {
+      _hide(proto, ITERATOR$3, $default);
+    }
+    // Plug for library
+    _iterators[NAME] = $default;
+    _iterators[TAG] = returnThis;
+    if (DEFAULT) {
+      methods = {
+        values: DEF_VALUES ? $default : getMethod(VALUES),
+        keys: IS_SET ? $default : getMethod(KEYS),
+        entries: $entries
+      };
+      if (FORCED) for (key in methods) {
+        if (!(key in proto)) _redefine(proto, key, methods[key]);
+      } else _export(_export.P + _export.F * (BUGGY || VALUES_BUG), NAME, methods);
+    }
+    return methods;
+  };
+
+  // 22.1.3.4 Array.prototype.entries()
+  // 22.1.3.13 Array.prototype.keys()
+  // 22.1.3.29 Array.prototype.values()
+  // 22.1.3.30 Array.prototype[@@iterator]()
+  var es6_array_iterator = _iterDefine(Array, 'Array', function (iterated, kind) {
+    this._t = _toIobject(iterated); // target
+    this._i = 0;                   // next index
+    this._k = kind;                // kind
+  // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+  }, function () {
+    var O = this._t;
+    var kind = this._k;
+    var index = this._i++;
+    if (!O || index >= O.length) {
+      this._t = undefined;
+      return _iterStep(1);
+    }
+    if (kind == 'keys') return _iterStep(0, index);
+    if (kind == 'values') return _iterStep(0, O[index]);
+    return _iterStep(0, [index, O[index]]);
+  }, 'values');
+
+  // argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+  _iterators.Arguments = _iterators.Array;
+
+  _addToUnscopables('keys');
+  _addToUnscopables('values');
+  _addToUnscopables('entries');
+
+  var ITERATOR$4 = _wks('iterator');
+  var TO_STRING_TAG = _wks('toStringTag');
+  var ArrayValues = _iterators.Array;
+
+  var DOMIterables = {
+    CSSRuleList: true, // TODO: Not spec compliant, should be false.
+    CSSStyleDeclaration: false,
+    CSSValueList: false,
+    ClientRectList: false,
+    DOMRectList: false,
+    DOMStringList: false,
+    DOMTokenList: true,
+    DataTransferItemList: false,
+    FileList: false,
+    HTMLAllCollection: false,
+    HTMLCollection: false,
+    HTMLFormElement: false,
+    HTMLSelectElement: false,
+    MediaList: true, // TODO: Not spec compliant, should be false.
+    MimeTypeArray: false,
+    NamedNodeMap: false,
+    NodeList: true,
+    PaintRequestList: false,
+    Plugin: false,
+    PluginArray: false,
+    SVGLengthList: false,
+    SVGNumberList: false,
+    SVGPathSegList: false,
+    SVGPointList: false,
+    SVGStringList: false,
+    SVGTransformList: false,
+    SourceBufferList: false,
+    StyleSheetList: true, // TODO: Not spec compliant, should be false.
+    TextTrackCueList: false,
+    TextTrackList: false,
+    TouchList: false
+  };
+
+  for (var collections = _objectKeys(DOMIterables), i$1 = 0; i$1 < collections.length; i$1++) {
+    var NAME$1 = collections[i$1];
+    var explicit = DOMIterables[NAME$1];
+    var Collection = _global[NAME$1];
+    var proto$1 = Collection && Collection.prototype;
+    var key;
+    if (proto$1) {
+      if (!proto$1[ITERATOR$4]) _hide(proto$1, ITERATOR$4, ArrayValues);
+      if (!proto$1[TO_STRING_TAG]) _hide(proto$1, TO_STRING_TAG, NAME$1);
+      _iterators[NAME$1] = ArrayValues;
+      if (explicit) for (key in es6_array_iterator) if (!proto$1[key]) _redefine(proto$1, key, es6_array_iterator[key], true);
+    }
+  }
 
   var microevent = createCommonjsModule(function (module) {
   /**
@@ -1977,6 +1948,19 @@
      */
     function hasProperty (obj, propName) {
       return obj != null && typeof obj === 'object' && (propName in obj);
+    }
+
+    /**
+     * Safe way of detecting whether or not the given thing is a primitive and
+     * whether it has the given property
+     */
+    function primitiveHasOwnProperty (primitive, propName) {  
+      return (
+        primitive != null
+        && typeof primitive !== 'object'
+        && primitive.hasOwnProperty
+        && primitive.hasOwnProperty(propName)
+      );
     }
 
     // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
@@ -2311,11 +2295,11 @@
       if (cache.hasOwnProperty(name)) {
         value = cache[name];
       } else {
-        var context = this, names, index, lookupHit = false;
+        var context = this, intermediateValue, names, index, lookupHit = false;
 
         while (context) {
           if (name.indexOf('.') > 0) {
-            value = context.view;
+            intermediateValue = context.view;
             names = name.split('.');
             index = 0;
 
@@ -2329,20 +2313,51 @@
              *
              * This is specially necessary for when the value has been set to
              * `undefined` and we want to avoid looking up parent contexts.
+             *
+             * In the case where dot notation is used, we consider the lookup
+             * to be successful even if the last "object" in the path is
+             * not actually an object but a primitive (e.g., a string, or an
+             * integer), because it is sometimes useful to access a property
+             * of an autoboxed primitive, such as the length of a string.
              **/
-            while (value != null && index < names.length) {
+            while (intermediateValue != null && index < names.length) {
               if (index === names.length - 1)
-                lookupHit = hasProperty(value, names[index]);
+                lookupHit = (
+                  hasProperty(intermediateValue, names[index]) 
+                  || primitiveHasOwnProperty(intermediateValue, names[index])
+                );
 
-              value = value[names[index++]];
+              intermediateValue = intermediateValue[names[index++]];
             }
           } else {
-            value = context.view[name];
+            intermediateValue = context.view[name];
+
+            /**
+             * Only checking against `hasProperty`, which always returns `false` if
+             * `context.view` is not an object. Deliberately omitting the check
+             * against `primitiveHasOwnProperty` if dot notation is not used.
+             *
+             * Consider this example:
+             * ```
+             * Mustache.render("The length of a football field is {{#length}}{{length}}{{/length}}.", {length: "100 yards"})
+             * ```
+             *
+             * If we were to check also against `primitiveHasOwnProperty`, as we do
+             * in the dot notation case, then render call would return:
+             *
+             * "The length of a football field is 9."
+             *
+             * rather than the expected:
+             *
+             * "The length of a football field is 100 yards."
+             **/
             lookupHit = hasProperty(context.view, name);
           }
 
-          if (lookupHit)
+          if (lookupHit) {
+            value = intermediateValue;
             break;
+          }
 
           context = context.parent;
         }
@@ -2373,15 +2388,17 @@
     };
 
     /**
-     * Parses and caches the given `template` and returns the array of tokens
+     * Parses and caches the given `template` according to the given `tags` or
+     * `mustache.tags` if `tags` is omitted,  and returns the array of tokens
      * that is generated from the parse.
      */
     Writer.prototype.parse = function parse (template, tags) {
       var cache = this.cache;
-      var tokens = cache[template];
+      var cacheKey = template + ':' + (tags || mustache.tags).join(':');
+      var tokens = cache[cacheKey];
 
       if (tokens == null)
-        tokens = cache[template] = parseTemplate(template, tags);
+        tokens = cache[cacheKey] = parseTemplate(template, tags);
 
       return tokens;
     };
@@ -2394,9 +2411,13 @@
      * names and templates of partials that are used in the template. It may
      * also be a function that is used to load partial templates on the fly
      * that takes a single argument: the name of the partial.
+     *
+     * If the optional `tags` argument is given here it must be an array with two
+     * string values: the opening and closing tags used in the template (e.g.
+     * [ "<%", "%>" ]). The default is to mustache.tags.
      */
-    Writer.prototype.render = function render (template, view, partials) {
-      var tokens = this.parse(template);
+    Writer.prototype.render = function render (template, view, partials, tags) {
+      var tokens = this.parse(template, tags);
       var context = (view instanceof Context) ? view : new Context(view);
       return this.renderTokens(tokens, context, partials, template);
     };
@@ -2501,7 +2522,7 @@
     };
 
     mustache.name = 'mustache.js';
-    mustache.version = '2.3.0';
+    mustache.version = '3.0.0';
     mustache.tags = [ '{{', '}}' ];
 
     // All high-level mustache.* functions use this writer.
@@ -2525,16 +2546,18 @@
 
     /**
      * Renders the `template` with the given `view` and `partials` using the
-     * default writer.
+     * default writer. If the optional `tags` argument is given here it must be an
+     * array with two string values: the opening and closing tags used in the
+     * template (e.g. [ "<%", "%>" ]). The default is to mustache.tags.
      */
-    mustache.render = function render (template, view, partials) {
+    mustache.render = function render (template, view, partials, tags) {
       if (typeof template !== 'string') {
         throw new TypeError('Invalid template! Template should be a "string" ' +
                             'but "' + typeStr(template) + '" was given as the first ' +
                             'argument for mustache#render(template, view, partials)');
       }
 
-      return defaultWriter.render(template, view, partials);
+      return defaultWriter.render(template, view, partials, tags);
     };
 
     // This is here for backwards compatibility with 0.4.x.,
@@ -2788,162 +2811,50 @@
     }
   };
 
-  var SGN$4, XMLHttpRequest, isBrowser, ref;
+  var SGN$4;
   SGN$4 = sgn;
-  isBrowser = util_1.isBrowser;
-  XMLHttpRequest = isBrowser() ? window.XMLHttpRequest : (ref = xmlhttprequest) != null ? ref.XMLHttpRequest : void 0;
-
-  var request = function request() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var callback = arguments.length > 1 ? arguments[1] : undefined;
-    var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-    var formData, header, headers, http, key, method, queryParams, ref1, ref2, ref3, url, value;
-    http = new XMLHttpRequest();
-    method = (ref1 = options.method) != null ? ref1 : 'get';
-    url = options.url;
-    headers = (ref2 = options.headers) != null ? ref2 : {};
-
-    if (options.json === true) {
-      headers['Content-Type'] = 'application/json';
-      headers['Accept'] = 'application/json';
-    }
-
-    if (options.qs != null) {
-      queryParams = SGN$4.util.formatQueryParams(options.qs);
-
-      if (url.indexOf('?') === -1) {
-        url += '?' + queryParams;
-      } else {
-        url += '&' + queryParams;
-      }
-    }
-
-    http.addEventListener('load', function () {
-      var body, resHeaders;
-      resHeaders = http.getAllResponseHeaders().split('\r\n');
-      resHeaders = resHeaders.reduce(function (acc, current, i) {
-        var parts;
-        parts = current.split(': ');
-        acc[parts[0].toLowerCase()] = parts[1];
-        return acc;
-      }, {});
-      body = http.responseText;
-
-      if (headers['Accept'] === 'application/json') {
-        try {
-          body = JSON.parse(body);
-        } catch (error) {}
-      }
-
-      callback(null, {
-        statusCode: http.status,
-        headers: resHeaders,
-        body: body
-      });
-    });
-    http.addEventListener('error', function () {
-      callback(new Error());
-    });
-    http.addEventListener('timeout', function () {
-      callback(new Error());
-    });
-
-    if (typeof progressCallback === 'function') {
-      http.upload.onprogress = function (e) {
-        if (e.lengthComputable) {
-          progressCallback(e.loaded, e.total);
-        }
-      };
-    }
-
-    http.open(method.toUpperCase(), url, true);
-
-    if (options.timeout != null) {
-      http.timeout = options.timeout;
-    }
-
-    if (options.useCookies === true) {
-      http.withCredentials = true;
-    }
-
-    for (header in headers) {
-      value = headers[header];
-
-      if (value != null) {
-        http.setRequestHeader(header, value);
-      }
-    }
-
-    if (options.formData != null) {
-      formData = new FormData();
-      ref3 = options.formData;
-
-      for (key in ref3) {
-        value = ref3[key];
-        formData.append(key, value);
-      }
-
-      http.send(formData);
-    } else if (options.body != null) {
-      if (options.json === true) {
-        http.send(JSON.stringify(options.body));
-      } else {
-        http.send(options.body);
-      }
-    } else {
-      http.send();
-    }
-  };
-
-  var SGN$5;
-  SGN$5 = sgn;
 
   var fileUpload = function fileUpload() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var callback = arguments.length > 1 ? arguments[1] : undefined;
     var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-    var timeout, url;
+    var formData, http, timeout, url;
 
     if (options.file == null) {
       throw new Error('File is not defined');
     }
 
-    url = SGN$5.config.get('assetsFileUploadUrl');
+    url = SGN$4.config.get('assetsFileUploadUrl');
     timeout = 1000 * 60 * 60;
-    SGN$5.request({
-      method: 'post',
-      url: url,
-      headers: {
-        'Accept': 'application/json'
-      },
-      formData: {
-        file: options.file
-      },
-      timeout: timeout
-    }, function (err, data) {
-      if (err != null) {
-        callback(SGN$5.util.error(new Error('Request error'), {
-          code: 'RequestError'
-        }));
+    formData = new FormData();
+    http = new XMLHttpRequest();
+    formData.append('file', options.file);
+
+    http.onload = function () {
+      if (http.status === 200) {
+        callback(null, JSON.parse(http.response));
       } else {
-        if (data.statusCode === 200) {
-          callback(null, data.body);
-        } else {
-          callback(SGN$5.util.error(new Error('Request error'), {
-            code: 'RequestError',
-            statusCode: data.statusCode
-          }));
-        }
+        callback(SGN$4.util.error(new Error('Request error'), {
+          code: 'RequestError',
+          statusCode: data.statusCode
+        }));
       }
-    }, function (loaded, total) {
-      if (typeof progressCallback === 'function') {
+    };
+
+    http.upload.onprogress = function (e) {
+      if (typeof progressCallback === 'function' && e.lengthComputable) {
         progressCallback({
-          progress: loaded / total,
-          loaded: loaded,
-          total: total
+          progress: e.loaded / e.total,
+          loaded: e.loaded,
+          total: e.total
         });
       }
-    });
+    };
+
+    http.open('post', url);
+    http.timeout = timeout;
+    http.setRequestHeader('Accept', 'application/json');
+    http.send(formData);
   };
 
   var assets = {
@@ -2994,6 +2905,489 @@
 
 
   _export(_export.S + _export.F, 'Object', { assign: _objectAssign });
+
+  var browserPonyfill = createCommonjsModule(function (module) {
+  var __root__ = (function (root) {
+  function F() { this.fetch = false; }
+  F.prototype = root;
+  return new F();
+  })(typeof self !== 'undefined' ? self : commonjsGlobal);
+  (function(self) {
+
+  (function(self) {
+
+    if (self.fetch) {
+      return
+    }
+
+    var support = {
+      searchParams: 'URLSearchParams' in self,
+      iterable: 'Symbol' in self && 'iterator' in Symbol,
+      blob: 'FileReader' in self && 'Blob' in self && (function() {
+        try {
+          new Blob();
+          return true
+        } catch(e) {
+          return false
+        }
+      })(),
+      formData: 'FormData' in self,
+      arrayBuffer: 'ArrayBuffer' in self
+    };
+
+    if (support.arrayBuffer) {
+      var viewClasses = [
+        '[object Int8Array]',
+        '[object Uint8Array]',
+        '[object Uint8ClampedArray]',
+        '[object Int16Array]',
+        '[object Uint16Array]',
+        '[object Int32Array]',
+        '[object Uint32Array]',
+        '[object Float32Array]',
+        '[object Float64Array]'
+      ];
+
+      var isDataView = function(obj) {
+        return obj && DataView.prototype.isPrototypeOf(obj)
+      };
+
+      var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+        return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
+      };
+    }
+
+    function normalizeName(name) {
+      if (typeof name !== 'string') {
+        name = String(name);
+      }
+      if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+        throw new TypeError('Invalid character in header field name')
+      }
+      return name.toLowerCase()
+    }
+
+    function normalizeValue(value) {
+      if (typeof value !== 'string') {
+        value = String(value);
+      }
+      return value
+    }
+
+    // Build a destructive iterator for the value list
+    function iteratorFor(items) {
+      var iterator = {
+        next: function() {
+          var value = items.shift();
+          return {done: value === undefined, value: value}
+        }
+      };
+
+      if (support.iterable) {
+        iterator[Symbol.iterator] = function() {
+          return iterator
+        };
+      }
+
+      return iterator
+    }
+
+    function Headers(headers) {
+      this.map = {};
+
+      if (headers instanceof Headers) {
+        headers.forEach(function(value, name) {
+          this.append(name, value);
+        }, this);
+      } else if (Array.isArray(headers)) {
+        headers.forEach(function(header) {
+          this.append(header[0], header[1]);
+        }, this);
+      } else if (headers) {
+        Object.getOwnPropertyNames(headers).forEach(function(name) {
+          this.append(name, headers[name]);
+        }, this);
+      }
+    }
+
+    Headers.prototype.append = function(name, value) {
+      name = normalizeName(name);
+      value = normalizeValue(value);
+      var oldValue = this.map[name];
+      this.map[name] = oldValue ? oldValue+','+value : value;
+    };
+
+    Headers.prototype['delete'] = function(name) {
+      delete this.map[normalizeName(name)];
+    };
+
+    Headers.prototype.get = function(name) {
+      name = normalizeName(name);
+      return this.has(name) ? this.map[name] : null
+    };
+
+    Headers.prototype.has = function(name) {
+      return this.map.hasOwnProperty(normalizeName(name))
+    };
+
+    Headers.prototype.set = function(name, value) {
+      this.map[normalizeName(name)] = normalizeValue(value);
+    };
+
+    Headers.prototype.forEach = function(callback, thisArg) {
+      for (var name in this.map) {
+        if (this.map.hasOwnProperty(name)) {
+          callback.call(thisArg, this.map[name], name, this);
+        }
+      }
+    };
+
+    Headers.prototype.keys = function() {
+      var items = [];
+      this.forEach(function(value, name) { items.push(name); });
+      return iteratorFor(items)
+    };
+
+    Headers.prototype.values = function() {
+      var items = [];
+      this.forEach(function(value) { items.push(value); });
+      return iteratorFor(items)
+    };
+
+    Headers.prototype.entries = function() {
+      var items = [];
+      this.forEach(function(value, name) { items.push([name, value]); });
+      return iteratorFor(items)
+    };
+
+    if (support.iterable) {
+      Headers.prototype[Symbol.iterator] = Headers.prototype.entries;
+    }
+
+    function consumed(body) {
+      if (body.bodyUsed) {
+        return Promise.reject(new TypeError('Already read'))
+      }
+      body.bodyUsed = true;
+    }
+
+    function fileReaderReady(reader) {
+      return new Promise(function(resolve, reject) {
+        reader.onload = function() {
+          resolve(reader.result);
+        };
+        reader.onerror = function() {
+          reject(reader.error);
+        };
+      })
+    }
+
+    function readBlobAsArrayBuffer(blob) {
+      var reader = new FileReader();
+      var promise = fileReaderReady(reader);
+      reader.readAsArrayBuffer(blob);
+      return promise
+    }
+
+    function readBlobAsText(blob) {
+      var reader = new FileReader();
+      var promise = fileReaderReady(reader);
+      reader.readAsText(blob);
+      return promise
+    }
+
+    function readArrayBufferAsText(buf) {
+      var view = new Uint8Array(buf);
+      var chars = new Array(view.length);
+
+      for (var i = 0; i < view.length; i++) {
+        chars[i] = String.fromCharCode(view[i]);
+      }
+      return chars.join('')
+    }
+
+    function bufferClone(buf) {
+      if (buf.slice) {
+        return buf.slice(0)
+      } else {
+        var view = new Uint8Array(buf.byteLength);
+        view.set(new Uint8Array(buf));
+        return view.buffer
+      }
+    }
+
+    function Body() {
+      this.bodyUsed = false;
+
+      this._initBody = function(body) {
+        this._bodyInit = body;
+        if (!body) {
+          this._bodyText = '';
+        } else if (typeof body === 'string') {
+          this._bodyText = body;
+        } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+          this._bodyBlob = body;
+        } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+          this._bodyFormData = body;
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this._bodyText = body.toString();
+        } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+          this._bodyArrayBuffer = bufferClone(body.buffer);
+          // IE 10-11 can't handle a DataView body.
+          this._bodyInit = new Blob([this._bodyArrayBuffer]);
+        } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+          this._bodyArrayBuffer = bufferClone(body);
+        } else {
+          throw new Error('unsupported BodyInit type')
+        }
+
+        if (!this.headers.get('content-type')) {
+          if (typeof body === 'string') {
+            this.headers.set('content-type', 'text/plain;charset=UTF-8');
+          } else if (this._bodyBlob && this._bodyBlob.type) {
+            this.headers.set('content-type', this._bodyBlob.type);
+          } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+            this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+          }
+        }
+      };
+
+      if (support.blob) {
+        this.blob = function() {
+          var rejected = consumed(this);
+          if (rejected) {
+            return rejected
+          }
+
+          if (this._bodyBlob) {
+            return Promise.resolve(this._bodyBlob)
+          } else if (this._bodyArrayBuffer) {
+            return Promise.resolve(new Blob([this._bodyArrayBuffer]))
+          } else if (this._bodyFormData) {
+            throw new Error('could not read FormData body as blob')
+          } else {
+            return Promise.resolve(new Blob([this._bodyText]))
+          }
+        };
+
+        this.arrayBuffer = function() {
+          if (this._bodyArrayBuffer) {
+            return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
+          } else {
+            return this.blob().then(readBlobAsArrayBuffer)
+          }
+        };
+      }
+
+      this.text = function() {
+        var rejected = consumed(this);
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return readBlobAsText(this._bodyBlob)
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as text')
+        } else {
+          return Promise.resolve(this._bodyText)
+        }
+      };
+
+      if (support.formData) {
+        this.formData = function() {
+          return this.text().then(decode)
+        };
+      }
+
+      this.json = function() {
+        return this.text().then(JSON.parse)
+      };
+
+      return this
+    }
+
+    // HTTP methods whose capitalization should be normalized
+    var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
+
+    function normalizeMethod(method) {
+      var upcased = method.toUpperCase();
+      return (methods.indexOf(upcased) > -1) ? upcased : method
+    }
+
+    function Request(input, options) {
+      options = options || {};
+      var body = options.body;
+
+      if (input instanceof Request) {
+        if (input.bodyUsed) {
+          throw new TypeError('Already read')
+        }
+        this.url = input.url;
+        this.credentials = input.credentials;
+        if (!options.headers) {
+          this.headers = new Headers(input.headers);
+        }
+        this.method = input.method;
+        this.mode = input.mode;
+        if (!body && input._bodyInit != null) {
+          body = input._bodyInit;
+          input.bodyUsed = true;
+        }
+      } else {
+        this.url = String(input);
+      }
+
+      this.credentials = options.credentials || this.credentials || 'omit';
+      if (options.headers || !this.headers) {
+        this.headers = new Headers(options.headers);
+      }
+      this.method = normalizeMethod(options.method || this.method || 'GET');
+      this.mode = options.mode || this.mode || null;
+      this.referrer = null;
+
+      if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+        throw new TypeError('Body not allowed for GET or HEAD requests')
+      }
+      this._initBody(body);
+    }
+
+    Request.prototype.clone = function() {
+      return new Request(this, { body: this._bodyInit })
+    };
+
+    function decode(body) {
+      var form = new FormData();
+      body.trim().split('&').forEach(function(bytes) {
+        if (bytes) {
+          var split = bytes.split('=');
+          var name = split.shift().replace(/\+/g, ' ');
+          var value = split.join('=').replace(/\+/g, ' ');
+          form.append(decodeURIComponent(name), decodeURIComponent(value));
+        }
+      });
+      return form
+    }
+
+    function parseHeaders(rawHeaders) {
+      var headers = new Headers();
+      // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
+      // https://tools.ietf.org/html/rfc7230#section-3.2
+      var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
+      preProcessedHeaders.split(/\r?\n/).forEach(function(line) {
+        var parts = line.split(':');
+        var key = parts.shift().trim();
+        if (key) {
+          var value = parts.join(':').trim();
+          headers.append(key, value);
+        }
+      });
+      return headers
+    }
+
+    Body.call(Request.prototype);
+
+    function Response(bodyInit, options) {
+      if (!options) {
+        options = {};
+      }
+
+      this.type = 'default';
+      this.status = options.status === undefined ? 200 : options.status;
+      this.ok = this.status >= 200 && this.status < 300;
+      this.statusText = 'statusText' in options ? options.statusText : 'OK';
+      this.headers = new Headers(options.headers);
+      this.url = options.url || '';
+      this._initBody(bodyInit);
+    }
+
+    Body.call(Response.prototype);
+
+    Response.prototype.clone = function() {
+      return new Response(this._bodyInit, {
+        status: this.status,
+        statusText: this.statusText,
+        headers: new Headers(this.headers),
+        url: this.url
+      })
+    };
+
+    Response.error = function() {
+      var response = new Response(null, {status: 0, statusText: ''});
+      response.type = 'error';
+      return response
+    };
+
+    var redirectStatuses = [301, 302, 303, 307, 308];
+
+    Response.redirect = function(url, status) {
+      if (redirectStatuses.indexOf(status) === -1) {
+        throw new RangeError('Invalid status code')
+      }
+
+      return new Response(null, {status: status, headers: {location: url}})
+    };
+
+    self.Headers = Headers;
+    self.Request = Request;
+    self.Response = Response;
+
+    self.fetch = function(input, init) {
+      return new Promise(function(resolve, reject) {
+        var request = new Request(input, init);
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+          var options = {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+          };
+          options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
+          var body = 'response' in xhr ? xhr.response : xhr.responseText;
+          resolve(new Response(body, options));
+        };
+
+        xhr.onerror = function() {
+          reject(new TypeError('Network request failed'));
+        };
+
+        xhr.ontimeout = function() {
+          reject(new TypeError('Network request failed'));
+        };
+
+        xhr.open(request.method, request.url, true);
+
+        if (request.credentials === 'include') {
+          xhr.withCredentials = true;
+        } else if (request.credentials === 'omit') {
+          xhr.withCredentials = false;
+        }
+
+        if ('responseType' in xhr && support.blob) {
+          xhr.responseType = 'blob';
+        }
+
+        request.headers.forEach(function(value, name) {
+          xhr.setRequestHeader(name, value);
+        });
+
+        xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit);
+      })
+    };
+    self.fetch.polyfill = true;
+  })(typeof self !== 'undefined' ? self : this);
+  }).call(__root__, void(0));
+  var fetch = __root__.fetch;
+  var Response = fetch.Response = __root__.Response;
+  var Request = fetch.Request = __root__.Request;
+  var Headers = fetch.Headers = __root__.Headers;
+  if (module.exports) {
+  module.exports = fetch;
+  }
+  });
 
   var crypt = createCommonjsModule(function (module) {
   (function() {
@@ -3313,10 +3707,11 @@
   })();
   });
 
-  var SGN$6, Tracker, clientLocalStorage, getPool, isBrowser$1, md5$1, pool;
-  SGN$6 = sgn;
+  var SGN$5, Tracker, _dispatch, clientLocalStorage, dispatch, dispatchLimit, dispatching, fetch, getPool, md5$1, pool, ship;
+
+  fetch = browserPonyfill;
   md5$1 = md5;
-  isBrowser$1 = util_1.isBrowser;
+  SGN$5 = sgn;
   clientLocalStorage = clientLocal;
 
   getPool = function getPool() {
@@ -3334,14 +3729,6 @@
   };
 
   pool = getPool();
-  clientLocalStorage.set('event-tracker-pool', []);
-
-  try {
-    window.addEventListener('unload', function () {
-      pool = pool.concat(getPool());
-      clientLocalStorage.set('event-tracker-pool', pool);
-    }, false);
-  } catch (error) {}
 
   var tracker = Tracker = function () {
     var Tracker =
@@ -3365,9 +3752,8 @@
           time: null,
           country: null
         };
-        this.dispatching = false; // Dispatch events periodically.
-
-        this.interval = setInterval(this.dispatch.bind(this), this.dispatchInterval);
+        this.dispatching = false;
+        dispatch();
         return;
       }
 
@@ -3376,25 +3762,26 @@
         value: function trackEvent(type) {
           var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
           var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
-          var evt;
+          var evt, now;
 
           if (typeof type !== 'number') {
-            throw SGN$6.util.error(new Error('Event type is required'));
+            throw SGN$5.util.error(new Error('Event type is required'));
           }
 
           if (this.trackId == null) {
             return;
           }
 
-          if (SGN$6.config.get('appKey') === this.trackId) {
+          if (SGN$5.config.get('appKey') === this.trackId) {
             // coffeelint: disable=max_line_length
-            throw SGN$6.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
+            throw SGN$5.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
           }
 
+          now = new Date().getTime();
           evt = Object.assign({}, properties, {
             '_e': type,
             '_v': version,
-            '_i': SGN$6.util.uuid(),
+            '_i': SGN$5.util.uuid(),
             '_t': Math.round(new Date().getTime() / 1000),
             '_a': this.trackId
           });
@@ -3413,10 +3800,11 @@
 
           pool.push(evt);
 
-          while (this.getPoolSize() > this.poolLimit) {
+          while (pool.length > this.poolLimit) {
             pool.shift();
           }
 
+          dispatch();
           return this;
         }
       }, {
@@ -3433,87 +3821,6 @@
             }
           }
 
-          return this;
-        }
-      }, {
-        key: "getPoolSize",
-        value: function getPoolSize() {
-          return this.getPool().length;
-        }
-      }, {
-        key: "getPool",
-        value: function getPool() {
-          return pool;
-        }
-      }, {
-        key: "dispatch",
-        value: function dispatch() {
-          var _this = this;
-
-          var events, nacks;
-
-          if (this.dispatching === true || this.getPoolSize() === 0) {
-            return;
-          }
-
-          if (this.dryRun === true) {
-            return pool.splice(0, this.dispatchLimit);
-          }
-
-          events = pool.slice(0, this.dispatchLimit);
-          nacks = 0;
-          this.dispatching = true;
-          this.ship(events, function (err, response) {
-            _this.dispatching = false;
-
-            if (err == null) {
-              response.events.forEach(function (resEvent) {
-                if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
-                  pool = pool.filter(function (poolEvent) {
-                    return poolEvent._i !== resEvent.id;
-                  });
-                } else {
-                  nacks++;
-                }
-              });
-
-              if (_this.getPoolSize() >= _this.dispatchLimit && nacks === 0) {
-                // Keep dispatching until the pool size reaches a sane level.
-                _this.dispatch();
-              }
-            }
-          });
-          return this;
-        }
-      }, {
-        key: "ship",
-        value: function ship() {
-          var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-          var callback = arguments.length > 1 ? arguments[1] : undefined;
-          SGN$6.request({
-            method: 'post',
-            url: SGN$6.config.get('eventsTrackUrl'),
-            json: true,
-            timeout: 1000 * 20,
-            body: {
-              events: events
-            }
-          }, function (err, data) {
-            if (err != null) {
-              callback(SGN$6.util.error(new Error('Request error'), {
-                code: 'RequestError'
-              }));
-            } else {
-              if (data.statusCode === 200) {
-                callback(null, data.body);
-              } else {
-                callback(SGN$6.util.error(new Error('Request error'), {
-                  code: 'RequestError',
-                  statusCode: data.statusCode
-                }));
-              }
-            }
-          });
           return this;
         }
       }, {
@@ -3550,8 +3857,8 @@
             parts[_key] = arguments[_key];
           }
 
-          str = [SGN$6.client.id].concat(parts).join('');
-          viewToken = SGN$6.util.btoa(String.fromCharCode.apply(null, md5$1(str, {
+          str = [SGN$5.client.id].concat(parts).join('');
+          viewToken = SGN$5.util.btoa(String.fromCharCode.apply(null, md5$1(str, {
             asBytes: true
           }).slice(0, 8)));
           return viewToken;
@@ -3562,13 +3869,73 @@
     }();
     Tracker.prototype.defaultOptions = {
       trackId: null,
-      dispatchInterval: 5000,
-      dispatchLimit: 100,
-      poolLimit: 1000,
-      dryRun: false
+      poolLimit: 1000
     };
     return Tracker;
   }.call(commonjsGlobal);
+
+  dispatching = false;
+  dispatchLimit = 100;
+
+  ship = function ship() {
+    var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var req;
+    req = fetch(SGN$5.config.get('eventsTrackUrl'), {
+      method: 'post',
+      timeout: 1000 * 20,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify({
+        events: events
+      })
+    });
+    return req.then(function (response) {
+      return response.json();
+    });
+  };
+
+  _dispatch = function _dispatch() {
+    var events, nacks;
+
+    if (dispatching === true || pool.length === 0) {
+      return;
+    }
+
+    events = pool.slice(0, dispatchLimit);
+    nacks = 0;
+    dispatching = true;
+    ship(events).then(function (response) {
+      dispatching = false;
+      response.events.forEach(function (resEvent) {
+        if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
+          pool = pool.filter(function (poolEvent) {
+            return poolEvent._i !== resEvent.id;
+          });
+        } else {
+          nacks++;
+        }
+      });
+
+      if (pool.length >= dispatchLimit && nacks === 0) {
+        // Keep dispatching until the pool size reaches a sane level.
+        dispatch();
+      }
+    }).catch(function (err) {
+      dispatching = false;
+      throw err;
+    });
+  };
+
+  dispatch = SGN$5.util.throttle(_dispatch, 4000);
+  clientLocalStorage.set('event-tracker-pool', []);
+
+  try {
+    window.addEventListener('beforeunload', function (e) {
+      pool = pool.concat(getPool());
+      clientLocalStorage.set('event-tracker-pool', pool);
+    }, false);
+  } catch (error) {}
 
   var MicroEvent$1, Pulse;
   MicroEvent$1 = microevent;
@@ -3641,8 +4008,9 @@
     Pulse: pulse
   };
 
-  var SGN$7, parseCookies, promiseCallbackInterop, request$1;
-  SGN$7 = sgn;
+  var SGN$6, fetch$1, parseCookies, promiseCallbackInterop, request;
+  fetch$1 = browserPonyfill;
+  SGN$6 = sgn;
   promiseCallbackInterop = util_1.promiseCallbackInterop;
 
   parseCookies = function parseCookies() {
@@ -3660,110 +4028,119 @@
     return parsedCookies;
   };
 
-  request$1 = function request() {
+  request = function request() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var callback = arguments.length > 1 ? arguments[1] : undefined;
     var appKey, authToken, authTokenCookieName, timeout, url;
-    url = SGN$7.config.get('graphUrl');
+    url = SGN$6.config.get('graphUrl');
     timeout = 1000 * 12;
-    appKey = SGN$7.config.get('appKey');
-    authToken = SGN$7.config.get('authToken');
+    appKey = SGN$6.config.get('appKey');
+    authToken = SGN$6.config.get('authToken');
     authTokenCookieName = 'shopgun-auth-token';
     options = {
       method: 'post',
-      url: url,
       timeout: timeout,
-      json: true,
-      headers: {},
-      body: {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify({
         query: options.query,
         operationName: options.operationName,
         variables: options.variables
-      }
-    };
+      })
+    }; // Set cookies manually in node.js.
 
-    if (appKey != null) {
-      // Apply authorization header when app key is provided to avoid rate limiting.
-      options.headers.Authorization = 'Basic ' + SGN$7.util.btoa("app-key:".concat(appKey));
-    } // Set cookies manually in node.js.
-
-
-    if (SGN$7.util.isNode() && authToken != null) {
+    if (SGN$6.util.isNode() && authToken != null) {
       options.cookies = [{
         key: authTokenCookieName,
         value: authToken,
         url: url
       }];
-    } else if (SGN$7.util.isBrowser()) {
-      options.useCookies = true;
+    } else if (SGN$6.util.isBrowser()) {
+      options.credentials = 'include';
     }
 
-    SGN$7.request(options, function (err, data) {
-      var authCookie, cookies, ref;
+    fetch$1(url, options).then(function (response) {
+      return response.json().then(function (json) {
+        var authCookie, cookies, ref; // Update auth token as it might have changed.
 
-      if (err != null) {
-        callback(SGN$7.util.error(new Error('Graph request error'), {
-          code: 'GraphRequestError'
-        }));
-      } else {
-        // Update auth token as it might have changed.
-        if (SGN$7.util.isNode()) {
-          cookies = parseCookies((ref = data.headers) != null ? ref['set-cookie'] : void 0);
+        if (SGN$6.util.isNode()) {
+          cookies = parseCookies((ref = response.headers) != null ? ref['set-cookie'] : void 0);
           authCookie = cookies[authTokenCookieName];
 
-          if (SGN$7.config.get('authToken') !== authCookie) {
-            SGN$7.config.set('authToken', authCookie);
+          if (SGN$6.config.get('authToken') !== authCookie) {
+            SGN$6.config.set('authToken', authCookie);
           }
         }
 
-        if (data.statusCode === 200) {
-          callback(null, data.body);
-        } else {
-          callback(SGN$7.util.error(new Error('Graph API error'), {
+        if (response.status !== 200) {
+          return callback(SGN$6.util.error(new Error('Graph API error'), {
             code: 'GraphAPIError',
             statusCode: data.statusCode
           }));
+        } else {
+          return callback(null, json);
         }
-      }
-    });
+      });
+    }).catch(callback);
   };
 
-  var request_1 = promiseCallbackInterop(request$1, 1);
+  var request_1 = promiseCallbackInterop(request, 1);
 
   var graph = {
     request: request_1
   };
 
-  var SGN$8, promiseCallbackInterop$1, _request;
+  // most Object methods by ES6 should accept primitives
 
-  SGN$8 = sgn;
+
+
+  var _objectSap = function (KEY, exec) {
+    var fn = (_core.Object || {})[KEY] || Object[KEY];
+    var exp = {};
+    exp[KEY] = exec(fn);
+    _export(_export.S + _export.F * _fails(function () { fn(1); }), 'Object', exp);
+  };
+
+  // 19.1.2.14 Object.keys(O)
+
+
+
+  _objectSap('keys', function () {
+    return function keys(it) {
+      return _objectKeys(_toObject(it));
+    };
+  });
+
+  var SGN$7, fetch$2, promiseCallbackInterop$1, _request;
+
+  fetch$2 = browserPonyfill;
+  SGN$7 = sgn;
   promiseCallbackInterop$1 = util_1.promiseCallbackInterop;
 
   _request = function request() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
-    var runs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-    SGN$8.CoreKit.session.ensure(function (err) {
-      var appSecret, appVersion, clientId, geo, headers, json, locale, qs, ref, ref1, ref2, token, url;
+    var callback = arguments.length > 1 ? arguments[1] : undefined;
+    var secondTime = arguments.length > 2 ? arguments[2] : undefined;
+    SGN$7.CoreKit.session.ensure(function (err) {
+      var appSecret, appVersion, geo, headers, locale, qs, ref, ref1, ref2, req, token, url;
 
       if (err != null) {
-        return callback(err);
+        return reject(err);
       }
 
-      url = (ref = options.url) != null ? ref : '';
+      url = SGN$7.config.get('coreUrl') + ((ref = options.url) != null ? ref : '');
       headers = (ref1 = options.headers) != null ? ref1 : {};
-      json = typeof options.json === 'boolean' ? options.json : true;
-      token = SGN$8.config.get('coreSessionToken');
-      clientId = SGN$8.config.get('coreSessionClientId');
-      appVersion = SGN$8.config.get('appVersion');
-      appSecret = SGN$8.config.get('appSecret');
-      locale = SGN$8.config.get('locale');
+      token = SGN$7.config.get('coreSessionToken');
+      appVersion = SGN$7.config.get('appVersion');
+      appSecret = SGN$7.config.get('appSecret');
+      locale = SGN$7.config.get('locale');
       qs = (ref2 = options.qs) != null ? ref2 : {};
       geo = options.geolocation;
       headers['X-Token'] = token;
 
       if (appSecret != null) {
-        headers['X-Signature'] = SGN$8.CoreKit.session.sign(appSecret, token);
+        headers['X-Signature'] = SGN$7.CoreKit.session.sign(appSecret, token);
       }
 
       if (locale != null) {
@@ -3772,10 +4149,6 @@
 
       if (appVersion != null) {
         qs.api_av = appVersion;
-      }
-
-      if (clientId != null) {
-        qs.client_id = clientId;
       }
 
       if (geo != null) {
@@ -3796,48 +4169,51 @@
         }
       }
 
-      return SGN$8.request({
-        method: options.method,
-        url: SGN$8.config.get('coreUrl') + url,
-        qs: qs,
-        body: options.body,
-        formData: options.formData,
-        headers: headers,
-        json: json,
-        useCookies: false
-      }, function (err, data) {
-        var ref3, responseToken;
-
-        if (err != null) {
-          callback(SGN$8.util.error(new Error('Core request error'), {
-            code: 'CoreRequestError'
-          }));
-        } else {
-          token = SGN$8.config.get('coreSessionToken');
-          responseToken = data.headers['x-token'];
-
-          if (responseToken && token !== responseToken) {
-            SGN$8.CoreKit.session.saveToken(responseToken);
+      if (Object.keys(qs).length) {
+        url += '?' + Object.keys(qs).map(function (k) {
+          if (Array.isArray(k)) {
+            return qs[k].map(function (val) {
+              return "".concat(encodeURIComponent(k), "[]=").concat(encodeURIComponent(val));
+            }).join('&');
           }
 
-          if (data.statusCode >= 200 && data.statusCode < 300 || data.statusCode === 304) {
-            callback(null, data.body);
+          return "".concat(encodeURIComponent(k), "=").concat(encodeURIComponent(qs[k]));
+        }).join('&');
+      }
+
+      req = fetch$2(url, {
+        method: options.method,
+        body: options.body,
+        headers: headers
+      });
+      return req.then(function (response) {
+        return response.json().then(function (json) {
+          var ref3, responseToken;
+          token = SGN$7.config.get('coreSessionToken');
+          responseToken = response.headers['x-token'];
+
+          if (responseToken && token !== responseToken) {
+            SGN$7.CoreKit.session.saveToken(responseToken);
+          }
+
+          if (response.status >= 200 && response.status < 300 || response.status === 304) {
+            callback(null, json);
           } else {
-            if (runs === 0 && data.body != null && ((ref3 = data.body.code) === 1101 || ref3 === 1107 || ref3 === 1108)) {
-              SGN$8.config.set({
+            if (secondTime !== true && ((ref3 = json != null ? json.code : void 0) === 1101 || ref3 === 1107 || ref3 === 1108)) {
+              SGN$7.config.set({
                 coreSessionToken: void 0
               });
 
-              _request(options, callback, ++runs);
+              _request(options, callback, true);
             } else {
-              callback(SGN$8.util.error(new Error('Core API error'), {
+              callback(SGN$7.util.error(new Error('Core API error'), {
                 code: 'CoreAPIError',
-                statusCode: data.statusCode
-              }), data.body);
+                statusCode: response.status
+              }), json);
             }
           }
-        }
-      });
+        });
+      }).catch(callback);
     });
   };
 
@@ -4077,9 +4453,10 @@
   }(commonjsGlobal);
   });
 
-  var SGN$9, callbackQueue, clientCookieStorage, renewed, session, sha256$1;
-  SGN$9 = sgn;
+  var SGN$8, callbackQueue, clientCookieStorage, fetch$3, renewed, session, sha256$1;
+  fetch$3 = browserPonyfill;
   sha256$1 = sha256;
+  SGN$8 = sgn;
   clientCookieStorage = clientCookie;
   callbackQueue = [];
   renewed = false;
@@ -4090,97 +4467,100 @@
         throw new Error('No token provided for saving');
       }
 
-      SGN$9.config.set({
+      SGN$8.config.set({
         coreSessionToken: token
       });
       session.saveCookie();
     },
     saveClientId: function saveClientId(clientId) {
-      SGN$9.config.set({
+      SGN$8.config.set({
         coreSessionClientId: clientId
       });
       session.saveCookie();
     },
     saveCookie: function saveCookie() {
       clientCookieStorage.set('session', {
-        token: SGN$9.config.get('coreSessionToken'),
-        client_id: SGN$9.config.get('coreSessionClientId')
+        token: SGN$8.config.get('coreSessionToken'),
+        client_id: SGN$8.config.get('coreSessionClientId')
       });
     },
     create: function create(callback) {
-      SGN$9.request({
-        method: 'post',
-        url: SGN$9.config.get('coreUrl') + '/v2/sessions',
-        json: true,
-        qs: {
-          api_key: SGN$9.config.get('appKey'),
-          token_ttl: session.ttl
-        }
-      }, function (err, data) {
-        if (err != null) {
-          callback(err);
-        } else if (data.statusCode === 201) {
-          session.saveToken(data.body.token);
-          session.saveClientId(data.body.client_id);
-          callback(err, data.body);
-        } else {
-          callback(new Error('Could not create session'));
-        }
+      var key, req, ttl;
+      key = SGN$8.config.get('appKey');
+      ttl = session.ttl;
+      req = fetch$3(SGN$8.config.get('coreUrl') + "/v2/sessions?api_key=".concat(key, "&token_ttl=").concat(ttl), {
+        method: 'post'
+      });
+      req.then(function (response) {
+        return response.json().then(function (json) {
+          if (response.status === 201) {
+            session.saveToken(json.token);
+            session.saveClientId(json.client_id);
+            callback(null, json);
+          } else {
+            callback(new Error('Could not create session'));
+          }
+        });
+      }).catch(function (err) {
+        callback(err);
       });
     },
     update: function update(callback) {
-      var appSecret, headers, token;
+      var appSecret, headers, req, token;
       headers = {};
-      token = SGN$9.config.get('coreSessionToken');
-      appSecret = SGN$9.config.get('appSecret');
+      token = SGN$8.config.get('coreSessionToken');
+      appSecret = SGN$8.config.get('appSecret');
       headers['X-Token'] = token;
 
       if (appSecret != null) {
         headers['X-Signature'] = session.sign(appSecret, token);
       }
 
-      SGN$9.request({
-        url: SGN$9.config.get('coreUrl') + '/v2/sessions',
-        headers: headers,
-        json: true
-      }, function (err, data) {
-        if (err != null) {
-          callback(err);
-        } else if (data.statusCode === 200) {
-          session.saveToken(data.body.token);
-          session.saveClientId(data.body.client_id);
-          callback(err, data.body);
-        } else {
-          callback(new Error('Could not update session'));
-        }
+      req = fetch$3(SGN$8.config.get('coreUrl') + '/v2/sessions', {
+        method: 'put',
+        headers: headers
+      });
+      req.then(function (response) {
+        return response.json().then(function (json) {
+          if (response.status === 200) {
+            session.saveToken(json.token);
+            session.saveClientId(json.client_id);
+            callback(null, json);
+          } else {
+            callback(new Error('Could not update session'));
+          }
+        });
+      }).catch(function (err) {
+        callback(err);
       });
     },
     renew: function renew(callback) {
-      var appSecret, headers, token;
+      var appSecret, headers, req, token;
       headers = {};
-      token = SGN$9.config.get('coreSessionToken');
-      appSecret = SGN$9.config.get('appSecret');
+      token = SGN$8.config.get('coreSessionToken');
+      appSecret = SGN$8.config.get('appSecret');
       headers['X-Token'] = token;
 
-      if (appSecret != null) {
+      if (appSecret) {
         headers['X-Signature'] = session.sign(appSecret, token);
       }
 
-      SGN$9.request({
+      req = fetch$3(SGN$8.config.get('coreUrl') + '/v2/sessions', {
         method: 'put',
-        url: SGN$9.config.get('coreUrl') + '/v2/sessions',
-        headers: headers,
-        json: true
-      }, function (err, data) {
-        if (err != null) {
-          callback(err);
-        } else if (data.statusCode === 200) {
-          session.saveToken(data.body.token);
-          session.saveClientId(data.body.client_id);
-          callback(err, data.body);
-        } else {
-          callback(new Error('Could not renew session'));
-        }
+        headers: headers
+      });
+      req.then(function (response) {
+        return response.json().then(function (json) {
+          if (response.status === 200) {
+            session.saveToken(json.token);
+            session.saveClientId(json.client_id);
+            callback(null, json);
+          } else {
+            callback(new Error('Could not renew session'));
+          }
+        });
+      }).catch(function (err) {
+        callback(err);
       });
     },
     ensure: function ensure(callback) {
@@ -4197,7 +4577,7 @@
       callbackQueue.push(callback);
 
       if (queueCount === 0) {
-        if (SGN$9.config.get('coreSessionToken') == null) {
+        if (SGN$8.config.get('coreSessionToken') == null) {
           session.create(complete);
         } else if (renewed === false) {
           renewed = true;
@@ -4219,11 +4599,11 @@
   };
   var session_1 = session;
 
-  var request$2, session$1;
-  request$2 = request_1$1;
+  var request$1, session$1;
+  request$1 = request_1$1;
   session$1 = session_1;
   var core$1 = {
-    request: request$2,
+    request: request$1,
     session: session$1
   };
 
@@ -8595,9 +8975,9 @@
 
   });
 
-  var MicroEvent$2, PagedPublicationPageSpread, SGN$b;
+  var MicroEvent$2, PagedPublicationPageSpread, SGN$a;
   MicroEvent$2 = microevent;
-  SGN$b = sgn;
+  SGN$a = sgn;
 
   PagedPublicationPageSpread =
   /*#__PURE__*/
@@ -8676,7 +9056,7 @@
           el.appendChild(pageEl);
           loaderEl.className = 'sgn-pp-page__loader';
           loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
-          SGN$b.util.loadImage(image, function (err, width, height) {
+          SGN$a.util.loadImage(image, function (err, width, height) {
             var isComplete;
 
             if (err == null) {
@@ -8731,7 +9111,7 @@
             return page.id === id;
           });
           image = page.images.large;
-          SGN$b.util.loadImage(image, function (err) {
+          SGN$a.util.loadImage(image, function (err) {
             if (err == null && _this2.el.getAttribute('data-active') === 'true') {
               pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
               pageEl.style.backgroundImage = "url(".concat(image, ")");
@@ -8757,10 +9137,10 @@
   MicroEvent$2.mixin(PagedPublicationPageSpread);
   var pageSpread = PagedPublicationPageSpread;
 
-  var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$c;
+  var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$b;
   MicroEvent$3 = microevent;
   PageSpread = pageSpread;
-  SGN$c = sgn;
+  SGN$b = sgn;
 
   PagedPublicationPageSpreads =
   /*#__PURE__*/
@@ -8809,7 +9189,7 @@
         } else {
           firstPage = pages.shift();
           lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-          midstPageSpreads = SGN$c.util.chunk(pages, 2);
+          midstPageSpreads = SGN$b.util.chunk(pages, 2);
 
           if (firstPage != null) {
             pageSpreads.push([firstPage]);
@@ -8855,11 +9235,11 @@
   MicroEvent$3.mixin(PagedPublicationPageSpreads);
   var pageSpreads = PagedPublicationPageSpreads;
 
-  var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$d, Verso;
+  var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$c, Verso;
   MicroEvent$4 = microevent;
   Verso = verso;
   PageSpreads = pageSpreads;
-  SGN$d = sgn;
+  SGN$c = sgn;
 
   PagedPublicationCore = function () {
     var PagedPublicationCore =
@@ -8898,7 +9278,7 @@
         key: "start",
         value: function start() {
           this.getVerso().start();
-          this.resizeListener = SGN$d.util.throttle(this.resize, this.getOption('resizeDelay'), this);
+          this.resizeListener = SGN$c.util.throttle(this.resize, this.getOption('resizeDelay'), this);
           this.unloadListener = this.unload.bind(this);
           window.addEventListener('resize', this.resizeListener, false);
           window.addEventListener('beforeunload', this.unloadListener, false);
@@ -8949,7 +9329,7 @@
       }, {
         key: "setColor",
         value: function setColor(color) {
-          this.els.root.setAttribute('data-color-brightness', SGN$d.util.getColorBrightness(color));
+          this.els.root.setAttribute('data-color-brightness', SGN$c.util.getColorBrightness(color));
           this.els.root.style.backgroundColor = color;
         }
       }, {
@@ -9547,9 +9927,9 @@
     NUMBER_ONE: 49
   };
 
-  var MicroEvent$6, PagedPublicationControls, SGN$e, keyCodes$1;
+  var MicroEvent$6, PagedPublicationControls, SGN$d, keyCodes$1;
   MicroEvent$6 = microevent;
-  SGN$e = sgn;
+  SGN$d = sgn;
   keyCodes$1 = keyCodes;
 
   PagedPublicationControls =
@@ -9570,7 +9950,7 @@
         nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
         close: el.querySelector('.sgn-pp--close')
       };
-      this.keyDownListener = SGN$e.util.throttle(this.keyDown, 150, this);
+      this.keyDownListener = SGN$d.util.throttle(this.keyDown, 150, this);
 
       if (this.options.keyboard === true) {
         this.els.root.addEventListener('keydown', this.keyDownListener, false);
@@ -9716,6 +10096,10 @@
     }, {
       key: "trackOpened",
       value: function trackOpened(properties) {
+        if (this.eventTracker == null) {
+          return this;
+        }
+
         this.eventTracker.trackPagedPublicationOpened({
           'pp.id': this.id,
           'vt': this.eventTracker.createViewToken(this.id)
@@ -9726,6 +10110,10 @@
       key: "trackPageSpreadDisappeared",
       value: function trackPageSpreadDisappeared(pageNumbers) {
         var _this = this;
+
+        if (this.eventTracker == null) {
+          return this;
+        }
 
         pageNumbers.forEach(function (pageNumber) {
           _this.eventTracker.trackPagedPublicationPageDisappeared({
@@ -9795,9 +10183,9 @@
   MicroEvent$7.mixin(PagedPublicationEventTracking);
   var eventTracking = PagedPublicationEventTracking;
 
-  var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$f, Viewer;
+  var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$e, Viewer;
   MicroEvent$8 = microevent;
-  SGN$f = sgn;
+  SGN$e = sgn;
   Core = core$2;
   Hotspots = hotspots;
   Controls = controls;
@@ -9828,7 +10216,7 @@
         keyboard: this.options.keyboard
       });
       this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
-      this.viewSession = SGN$f.util.uuid();
+      this.viewSession = SGN$e.util.uuid();
       this.hotspots = null;
       this.hotspotQueue = [];
       this.popover = null;
@@ -10059,9 +10447,9 @@
         if (hotspots$$1.length === 1) {
           callback(hotspots$$1[0]);
         } else if (hotspots$$1.length > 1) {
-          this.popover = SGN$f.CoreUIKit.singleChoicePopover({
+          this.popover = SGN$e.CoreUIKit.singleChoicePopover({
             el: this.el,
-            header: SGN$f.translations.t('paged_publication.hotspot_picker.header'),
+            header: SGN$e.translations.t('paged_publication.hotspot_picker.header'),
             x: e.verso.x,
             y: e.verso.y,
             items: hotspots$$1.filter(function (hotspot) {
@@ -10184,8 +10572,8 @@
   MicroEvent$8.mixin(Viewer);
   var viewer = Viewer;
 
-  var Bootstrapper, SGN$g;
-  SGN$g = core;
+  var Bootstrapper, SGN$f;
+  SGN$f = core;
 
   var bootstrapper = Bootstrapper =
   /*#__PURE__*/
@@ -10202,7 +10590,7 @@
     _createClass(Bootstrapper, [{
       key: "createViewer",
       value: function createViewer(data) {
-        return new SGN$g.PagedPublicationKit.Viewer(this.options.el, {
+        return new SGN$f.PagedPublicationKit.Viewer(this.options.el, {
           id: this.options.id,
           ownedBy: data.details.dealer_id,
           color: '#' + data.details.branding.pageflip.color,
@@ -10244,7 +10632,7 @@
       key: "fetch",
       value: function fetch(callback) {
         callback = callback.bind(this);
-        SGN$g.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+        SGN$f.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
           var data;
           data = {
             details: result[0][1],
@@ -10265,21 +10653,21 @@
     }, {
       key: "fetchDetails",
       value: function fetchDetails(callback) {
-        SGN$g.CoreKit.request({
+        SGN$f.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id)
         }, callback);
       }
     }, {
       key: "fetchPages",
       value: function fetchPages(callback) {
-        SGN$g.CoreKit.request({
+        SGN$f.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id, "/pages")
         }, callback);
       }
     }, {
       key: "fetchHotspots",
       value: function fetchHotspots(callback) {
-        SGN$g.CoreKit.request({
+        SGN$f.CoreKit.request({
           url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
         }, callback);
       }
@@ -12383,7 +12771,7 @@
     return Controls;
   }();
 
-  var incito$1 = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported)\n    }\n  }\n}";
+  var incito$1 = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!, $locale: LocaleCode, $time: DateTime) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported, locale: $locale, time: $time)\n    }\n  }\n}";
 
   var incito$2 = /*#__PURE__*/Object.freeze({
     default: incito$1
@@ -12391,9 +12779,9 @@
 
   var require$$3 = ( incito$2 && incito$1 ) || incito$2;
 
-  var Bootstrapper$1, Controls$2, SGN$h, schema, util$2;
+  var Bootstrapper$1, Controls$2, SGN$g, schema, util$2;
   util$2 = util_1;
-  SGN$h = core;
+  SGN$g = core;
   Controls$2 = controls$1;
   schema = require$$3;
 
@@ -12500,13 +12888,13 @@
 
         var data;
         callback = callback.bind(this);
-        data = SGN$h.storage.session.get(this.storageKey);
+        data = SGN$g.storage.session.get(this.storageKey);
 
         if (data != null && data.response != null && data.width === this.maxWidth) {
           return callback(null, data.response);
         }
 
-        SGN$h.GraphKit.request({
+        SGN$g.GraphKit.request({
           query: schema,
           operationName: 'GetIncitoPublication',
           variables: {
@@ -12527,7 +12915,7 @@
             callback(util$2.error(new Error(), 'graph request contained errors'));
           } else {
             callback(null, res);
-            SGN$h.storage.session.set(_this.storageKey, {
+            SGN$g.storage.session.set(_this.storageKey, {
               width: _this.maxWidth,
               response: res
             });
@@ -12543,7 +12931,7 @@
           throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
         }
 
-        viewer = new SGN$h.IncitoPublicationKit.Viewer(this.options.el, {
+        viewer = new SGN$g.IncitoPublicationKit.Viewer(this.options.el, {
           id: this.options.id,
           incito: data.incito,
           eventTracker: this.options.eventTracker
@@ -13203,46 +13591,44 @@
     }
   };
 
-  var SGN$i, appKey, config$2, isBrowser$2, scriptEl, session$2, trackId;
-  isBrowser$2 = util_1.isBrowser;
-  SGN$i = core; // Expose storage backends.
+  var SGN$h, appKey, config$2, isBrowser, scriptEl, session$2, trackId;
+  isBrowser = util_1.isBrowser;
+  SGN$h = core; // Expose storage backends.
 
-  SGN$i.storage = {
+  SGN$h.storage = {
     local: clientLocal,
     session: clientSession,
     cookie: clientCookie
-  }; // Expose request handler.
+  }; // Expose the different kits.
 
-  SGN$i.request = request; // Expose the different kits.
+  SGN$h.AssetsKit = assets;
+  SGN$h.EventsKit = events;
+  SGN$h.GraphKit = graph;
+  SGN$h.CoreKit = core$1;
+  SGN$h.PagedPublicationKit = pagedPublication;
+  SGN$h.IncitoPublicationKit = incitoPublication;
+  SGN$h.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-  SGN$i.AssetsKit = assets;
-  SGN$i.EventsKit = events;
-  SGN$i.GraphKit = graph;
-  SGN$i.CoreKit = core$1;
-  SGN$i.PagedPublicationKit = pagedPublication;
-  SGN$i.IncitoPublicationKit = incitoPublication;
-  SGN$i.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
-
-  session$2 = SGN$i.storage.cookie.get('session');
+  session$2 = SGN$h.storage.cookie.get('session');
 
   if (_typeof(session$2) === 'object') {
-    SGN$i.config.set({
+    SGN$h.config.set({
       coreSessionToken: session$2.token,
       coreSessionClientId: session$2.client_id
     });
   }
 
-  SGN$i.client = function () {
+  SGN$h.client = function () {
     var id;
-    id = SGN$i.storage.local.get('client-id');
+    id = SGN$h.storage.local.get('client-id');
 
     if (id != null ? id.data : void 0) {
       id = id.data;
     }
 
     if (id == null) {
-      id = SGN$i.util.uuid();
-      SGN$i.storage.local.set('client-id', id);
+      id = SGN$h.util.uuid();
+      SGN$h.storage.local.set('client-id', id);
     }
 
     return {
@@ -13251,7 +13637,7 @@
   }(); // Listen for changes in the config.
 
 
-  SGN$i.config.bind('change', function (changedAttributes) {
+  SGN$h.config.bind('change', function (changedAttributes) {
     var eventTracker;
     eventTracker = changedAttributes.eventTracker;
 
@@ -13260,7 +13646,7 @@
     }
   });
 
-  if (isBrowser$2()) {
+  if (isBrowser()) {
     // Autoconfigure the SDK.
     scriptEl = document.getElementById('sgn-sdk');
 
@@ -13274,16 +13660,16 @@
       }
 
       if (trackId != null) {
-        config$2.eventTracker = new SGN$i.EventsKit.Tracker({
+        config$2.eventTracker = new SGN$h.EventsKit.Tracker({
           trackId: trackId
         });
       }
 
-      SGN$i.config.set(config$2);
+      SGN$h.config.set(config$2);
     }
   }
 
-  var coffeescript = SGN$i;
+  var coffeescript = SGN$h;
 
   return coffeescript;
 
