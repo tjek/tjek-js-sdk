@@ -37,12 +37,6 @@ util =
 
         if string then string[1] else undefined
 
-    formatQueryParams: (queryParams = {}) ->
-        Object
-            .keys queryParams
-            .map (key) -> key + '=' + encodeURIComponent(queryParams[key])
-            .join '&'
-
     getRandomNumberBetween: (from, to) ->
         Math.floor(Math.random() * to) + from
 
@@ -264,10 +258,8 @@ util =
             else
                 # Ain't got callback, ain't got promise support; we gotta tell the developer.
                 throw new Error("""To be able to use this asynchronous method you should:
-
 Supply a callback function as argument ##{1+cbParameterIndex}.
 This callback function will be called with the method call response.
-
 Alternatively, when supported, it can return a Promise if no callback function is given.
                 """)
 

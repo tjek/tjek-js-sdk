@@ -1,12 +1,12 @@
-SGN = require '../dist/sgn-sdk.js'
+SGN = require './sdk'
 
 describe 'SGN.translations', ->
-    test 'can translate', ->
+    test 'Can translate', ->
         expect(typeof SGN.translations.t('some_key')).toEqual 'string'
 
         return
 
-    test 'can update translations', ->
+    test 'Can update translations', ->
         expect(SGN.translations.t('non_existing_key')).toEqual ''
 
         SGN.translations.update non_existing_key: 'test'
