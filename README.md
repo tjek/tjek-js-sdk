@@ -65,6 +65,11 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 2.2.11
+
+- Use cross-fetch library for making requests in browsers and node.js
+- Relaxed eventTracker requirement for PagedPublicationKit
+
 ### Version 2.2.8
 
 - Updated progress indicator for IncitoPublicationKit to be more visible and more like the one in PagedPublicationKit
