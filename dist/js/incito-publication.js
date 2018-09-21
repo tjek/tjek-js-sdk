@@ -1,4 +1,10 @@
 (function () {
+    if (SGN.util.getQueryParam('env') === 'staging') {
+        SGN.config.set({
+            graphUrl: 'https://graph.service-staging.shopgun.com'
+        });
+    }
+    
     function IncitoPublication (options) {
         this.options = options || {};
         this.popover = null;
