@@ -67,63 +67,6 @@ window.shopgun = (function () {
 
         els.root.innerHTML = html;
     };
-    var matchSKU = function (str) {
-        var i = 0;
-        var word;
-        var words = [];
-
-        str.replace(/\./g, '').split(' ').forEach(function(word) {
-            word.split(/\(/).forEach(function(part) {
-                var w = part.toLowerCase();
-
-                if (!(w === 'sparer' || w === 'tjek' || w === 'prisen')) {
-                    words.push(part.replace(/\./, ''));
-                }
-            });
-        });
-
-        words.reverse();
-        
-        while (i < words.length) {
-            word = words[i];
-
-            if (word.length >= 6) {
-                if (word.toUpperCase() === word && /[A-Z]/.test(word) && /\d/.test(word)) {
-                    return word;
-                }
-            }
-        
-            i++;
-        }
-
-        i = 0;
-        
-        while (i < words.length) {
-            word = words[i];
-
-            if (word.length >= 6) {
-                if (word.toUpperCase() === word && /^[a-zA-Z]*$/.test(word)) {
-                    return word;
-                }
-            }
-
-            i++;
-        }
-
-        i = 0;
-
-        while (i < words.length) {
-            word = words[i];
-
-            if (word.length >= 6) {
-                if (/^[a-zA-Z0-9]*$/.test(word) && /\d/.test(word)) {
-                    return word;
-                }
-            }
-
-            i++;
-        }
-    };
     var fetchOffers = function (id, callback) {
         var offset = 0;
         var limit = 100;
@@ -193,14 +136,16 @@ window.shopgun = (function () {
                     var oReq = new XMLHttpRequest();
                     var customHotspotsURL = 'https://s3-eu-west-1.amazonaws.com/sgn-clients/elgiganten/hotspots.json?t=' + time;
 
-                    function reqListener() {
-                        var catalogsCustomHotspots = JSON.parse(this.responseText);
-                        var customHotspots = id in catalogsCustomHotspots ? catalogsCustomHotspots[id] : [];
+                    oReq.addEventListener('load', function () {
+                        try {
+                            var catalogsCustomHotspots = JSON.parse(this.responseText);
+                            var customHotspots = id in catalogsCustomHotspots ? catalogsCustomHotspots[id] : [];
 
-                        callback(null, customHotspots)
-                    }
-
-                    oReq.addEventListener('load', reqListener);
+                            callback(null, customHotspots);
+                        } catch (err) {
+                            callback(null, []);
+                        }
+                    });
                     oReq.addEventListener('error', function () {
                         callback(null, []);
                     });
@@ -222,45 +167,25 @@ window.shopgun = (function () {
                 var _fetchOffers = function (callback) {
                     return fetchOffers(id, callback);
                 };
+                var updateQueryStringParameter = function (uri, key, value) {
+                    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+                    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+
+                    if (uri.match(re)) {
+                        return uri.replace(re, '$1' + key + "=" + value + '$2');
+                    } else {
+                        return uri + separator + key + "=" + value;
+                    }
+                };
 
                 viewer.bind('hotspotClicked', function (hotspot) {
-                    if (hotspot.type === 'offer') {
-                        if (hotspot.sku) {
-                            nga({
-                                'eventCategory': 'Publication',
-                                'eventAction': 'Offer Opened',
-                                'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-' + hotspot.sku
-                            });
-                            
-                            window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(hotspot.sku) + '/?intcid=INT_IPAPER_BUTTON', '_blank');
-                        } else {
-                            nga({
-                                'eventCategory': 'Publication',
-                                'eventAction': 'Offer Opened',
-                                'eventLabel': getPublicationRuntimeEventLabel(data.details) + '-unknown'
-                            });
-
-                            if (hotspot.offer.description) {
-                                var url = hotspot.offer.description.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-
-                                if (url && url.length > 0) {
-                                    window.open(url[0], '_blank');
-
-                                    return;
-                                }
-                            }
-
-                            window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(hotspot.offer.heading) + '&searchResultTab=&search=&intcid=INT_IPAPER_BUTTON', '_blank');
-                        }
-                    } else if (hotspot.type === 'url' && hotspot.url) {
-                        nga({
-                            'eventCategory': 'Publication',
-                            'eventAction': 'URL Opened',
-                            'eventLabel': getPublicationRuntimeEventLabel(data.details)
-                        });
-
-                        window.open(hotspot.url, '_blank');
-                    }
+                    nga({
+                        'eventCategory': 'Publication',
+                        'eventAction': 'Offer Opened',
+                        'eventLabel': getPublicationRuntimeEventLabel(data.details)
+                    });
+                    
+                    window.open(updateQueryStringParameter(hotspot.webshop, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
                 });
                 var trackProgress = function (progress) {
                     nga({
@@ -323,21 +248,8 @@ window.shopgun = (function () {
                     var offers = result[1][1];
 
                     if (hotspots && offers) {
-                        hotspots.forEach(function (hotspot) {
-                            for (let i = 0; i < offers.length; i++) {
-                                if (hotspot.type === 'offer' && hotspot.offer.id === offers[i].id) {
-                                    var desc = offers[i].description;
-                                    var sku = matchSKU(desc);
-
-                                    hotspot.offer.description = desc;
-
-                                    if (sku) {
-                                        hotspot.sku = sku.toUpperCase();
-
-                                        break;
-                                    }
-                                }
-                            }
+                        hotspots = hotspots.filter(function (hotspot) {
+                            return hotspot.type === 'offer' && typeof hotspot.webshop === 'string' && hotspot.webshop.length > 0;
                         });
                     }
 
