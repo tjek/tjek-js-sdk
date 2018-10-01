@@ -249,7 +249,7 @@ window.shopgun = (function () {
 
                     if (hotspots && offers) {
                         hotspots = hotspots.filter(function (hotspot) {
-                            return hotspot.type === 'offer' && typeof hotspot.webshop === 'string' && hotspot.webshop.length > 0;
+                            return hotspot.type === 'url' || (hotspot.type === 'offer' && typeof hotspot.webshop === 'string' && hotspot.webshop.length > 0);
                         });
                     }
 
