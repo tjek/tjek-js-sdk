@@ -179,13 +179,17 @@ window.shopgun = (function () {
                 };
 
                 viewer.bind('hotspotClicked', function (hotspot) {
-                    nga({
-                        'eventCategory': 'Publication',
-                        'eventAction': 'Offer Opened',
-                        'eventLabel': getPublicationRuntimeEventLabel(data.details)
-                    });
-                    
-                    window.open(updateQueryStringParameter(hotspot.webshop, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
+                    if (hotspot.type === 'url') {
+                        window.open(updateQueryStringParameter(hotspot.url, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
+                    } else {
+                        nga({
+                            'eventCategory': 'Publication',
+                            'eventAction': 'Offer Opened',
+                            'eventLabel': getPublicationRuntimeEventLabel(data.details)
+                        });
+                        
+                        window.open(updateQueryStringParameter(hotspot.webshop, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
+                    }
                 });
                 var trackProgress = function (progress) {
                     nga({
