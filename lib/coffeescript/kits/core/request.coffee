@@ -15,13 +15,17 @@ request = (options = {}, callback, secondTime) ->
         locale = SGN.config.get 'locale'
         qs = options.qs ? {}
         geo = options.geolocation
-
+        body = options.body
+        
         headers['X-Token'] = token
         headers['X-Signature'] = SGN.CoreKit.session.sign appSecret, token if appSecret?
 
-        if json is true
+        if json
             headers['Content-Type'] = 'application/json'
             headers['Accept'] = 'application/json'
+
+            if body
+                body = JSON.stringify(body)
 
         qs.r_locale = locale if locale?
         qs.api_av = appVersion if appVersion?
@@ -39,10 +43,6 @@ request = (options = {}, callback, secondTime) ->
                 
                 "#{encodeURIComponent(k)}=#{encodeURIComponent(qs[k])}"
             ).join '&'
-
-        body = options.body
-        if body and json
-            body = JSON.stringify(body)
 
         req = fetch url,
             method: options.method
