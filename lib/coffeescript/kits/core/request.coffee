@@ -8,15 +8,24 @@ request = (options = {}, callback, secondTime) ->
 
         url = SGN.config.get('coreUrl') + (options.url ? '')
         headers = options.headers ? {}
+        json = if typeof options.json is 'boolean' then options.json else true
         token = SGN.config.get 'coreSessionToken'
         appVersion = SGN.config.get 'appVersion'
         appSecret = SGN.config.get 'appSecret'
         locale = SGN.config.get 'locale'
         qs = options.qs ? {}
         geo = options.geolocation
-
+        body = options.body
+        
         headers['X-Token'] = token
         headers['X-Signature'] = SGN.CoreKit.session.sign appSecret, token if appSecret?
+
+        if json
+            headers['Content-Type'] = 'application/json'
+            headers['Accept'] = 'application/json'
+
+            if body
+                body = JSON.stringify(body)
 
         qs.r_locale = locale if locale?
         qs.api_av = appVersion if appVersion?
@@ -37,7 +46,7 @@ request = (options = {}, callback, secondTime) ->
 
         req = fetch url,
             method: options.method
-            body: options.body
+            body: body
             headers: headers
         
         req
