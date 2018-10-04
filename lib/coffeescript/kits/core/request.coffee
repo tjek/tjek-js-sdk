@@ -4,7 +4,7 @@ SGN = require '../../sgn'
 
 request = (options = {}, callback, secondTime) ->
     SGN.CoreKit.session.ensure (err) ->
-        return reject(err) if err?
+        return callback(err) if err?
 
         url = SGN.config.get('coreUrl') + (options.url ? '')
         headers = options.headers ? {}
