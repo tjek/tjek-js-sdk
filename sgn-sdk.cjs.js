@@ -1058,24 +1058,35 @@ _request = function request() {
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var secondTime = arguments.length > 2 ? arguments[2] : undefined;
   SGN$7.CoreKit.session.ensure(function (err) {
-    var appSecret, appVersion, geo, headers, locale, qs, ref, ref1, ref2, req, token, url;
+    var appSecret, appVersion, body, geo, headers, json, locale, qs, ref, ref1, ref2, req, token, url;
 
     if (err != null) {
-      return reject(err);
+      return callback(err);
     }
 
     url = SGN$7.config.get('coreUrl') + ((ref = options.url) != null ? ref : '');
     headers = (ref1 = options.headers) != null ? ref1 : {};
+    json = typeof options.json === 'boolean' ? options.json : true;
     token = SGN$7.config.get('coreSessionToken');
     appVersion = SGN$7.config.get('appVersion');
     appSecret = SGN$7.config.get('appSecret');
     locale = SGN$7.config.get('locale');
     qs = (ref2 = options.qs) != null ? ref2 : {};
     geo = options.geolocation;
+    body = options.body;
     headers['X-Token'] = token;
 
     if (appSecret != null) {
       headers['X-Signature'] = SGN$7.CoreKit.session.sign(appSecret, token);
+    }
+
+    if (json) {
+      headers['Content-Type'] = 'application/json';
+      headers['Accept'] = 'application/json';
+
+      if (body) {
+        body = JSON.stringify(body);
+      }
     }
 
     if (locale != null) {
@@ -1118,7 +1129,7 @@ _request = function request() {
 
     req = fetch$2(url, {
       method: options.method,
-      body: options.body,
+      body: body,
       headers: headers
     });
     return req.then(function (response) {
