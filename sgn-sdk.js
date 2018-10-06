@@ -4201,7 +4201,7 @@
         return response.json().then(function (json) {
           var ref3, responseToken;
           token = SGN$7.config.get('coreSessionToken');
-          responseToken = response.headers['x-token'];
+          responseToken = response.headers.get('x-token');
 
           if (responseToken && token !== responseToken) {
             SGN$7.CoreKit.session.saveToken(responseToken);
