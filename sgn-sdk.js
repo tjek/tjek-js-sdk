@@ -12286,23 +12286,25 @@
               return;
             }
 
+            this.el.muted = true;
+            this.el.preload = 'metadata';
+            this.el.setAttribute('playsinline', 'true');
+            this.el.setAttribute('webkit-playsinline', 'true');
+            this.el.setAttribute('data-src', this.attrs.src);
+            this.el.setAttribute('data-mime', this.attrs.mime);
+
             if (this.attrs.autoplay === true) {
-              this.el.setAttribute('autoplay', '');
+              this.el.autoplay = true;
             }
 
             if (this.attrs.loop === true) {
-              this.el.setAttribute('loop', '');
+              this.el.loop = true;
             }
 
             if (this.attrs.controls === true) {
-              this.el.setAttribute('controls', '');
+              this.el.controls = true;
             }
 
-            this.el.setAttribute('muted', 'true');
-            this.el.setAttribute('preload', 'metadata');
-            this.el.setAttribute('playsinline', '');
-            this.el.setAttribute('data-src', this.attrs.src);
-            this.el.setAttribute('data-mime', this.attrs.mime);
             return this;
           }
         }]);
