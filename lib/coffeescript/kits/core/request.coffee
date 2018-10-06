@@ -53,7 +53,7 @@ request = (options = {}, callback, secondTime) ->
             .then (response) ->
                 response.json().then (json) ->
                     token = SGN.config.get 'coreSessionToken'
-                    responseToken = response.headers['x-token']
+                    responseToken = response.headers.get 'x-token'
 
                     SGN.CoreKit.session.saveToken responseToken if responseToken and token isnt responseToken
 
