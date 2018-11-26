@@ -11,6 +11,11 @@
 
             viewer.bind('hotspotClicked', function (hotspot) {
                 console.log('Hotspot clicked', hotspot);
+                
+                // For example, if you want to redirect to a webshop link if one is set on the offer
+                if (hotspot.webshop) {
+                    window.location = hotspot.webshop;
+                }
             });
 
             viewer.bind('hotspotPressed', function (hotspot) {
