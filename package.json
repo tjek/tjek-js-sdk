@@ -13,7 +13,7 @@
     },
     {
       "path": "./dist/sgn-sdk.min.js",
-      "maxSize": "52 kB"
+      "maxSize": "60 kB"
     },
     {
       "path": "./dist/sgn-sdk.cjs.js",
