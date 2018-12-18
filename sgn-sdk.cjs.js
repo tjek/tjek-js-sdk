@@ -7,14 +7,14 @@ require('core-js/modules/es6.regexp.constructor');
 require('core-js/modules/es6.regexp.to-string');
 require('core-js/modules/es6.regexp.replace');
 require('core-js/modules/es6.function.name');
-var require$$0 = _interopDefault(require('microevent'));
 require('core-js/modules/web.dom.iterable');
 require('core-js/modules/es6.array.iterator');
+var microevent = _interopDefault(require('microevent'));
 var mustache = _interopDefault(require('mustache'));
 require('core-js/modules/es6.regexp.split');
+require('core-js/modules/es6.object.assign');
 var crossFetch = _interopDefault(require('cross-fetch'));
 var md5 = _interopDefault(require('md5'));
-require('core-js/modules/es6.object.assign');
 require('core-js/modules/es6.object.keys');
 var sha256 = _interopDefault(require('sha256'));
 require('core-js/modules/es6.array.find');
@@ -410,10 +410,14 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
+function getCjsExportFromNamespace (n) {
+	return n && n.default || n;
+}
+
 var Config,
     MicroEvent,
     indexOf = [].indexOf;
-MicroEvent = require$$0;
+MicroEvent = microevent;
 
 Config = Config = function () {
   var Config =
@@ -894,7 +898,7 @@ try {
 } catch (error) {}
 
 var MicroEvent$1, Pulse;
-MicroEvent$1 = require$$0;
+MicroEvent$1 = microevent;
 
 Pulse =
 /*#__PURE__*/
@@ -1320,7 +1324,7 @@ var core$1 = {
 };
 
 var MicroEvent$2, PagedPublicationPageSpread, SGN$a;
-MicroEvent$2 = require$$0;
+MicroEvent$2 = microevent;
 SGN$a = sgn;
 
 PagedPublicationPageSpread =
@@ -1482,7 +1486,7 @@ MicroEvent$2.mixin(PagedPublicationPageSpread);
 var pageSpread = PagedPublicationPageSpread;
 
 var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$b;
-MicroEvent$3 = require$$0;
+MicroEvent$3 = microevent;
 PageSpread = pageSpread;
 SGN$b = sgn;
 
@@ -1580,7 +1584,7 @@ MicroEvent$3.mixin(PagedPublicationPageSpreads);
 var pageSpreads = PagedPublicationPageSpreads;
 
 var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$c, Verso;
-MicroEvent$4 = require$$0;
+MicroEvent$4 = microevent;
 Verso = versoBrowser;
 PageSpreads = pageSpreads;
 SGN$c = sgn;
@@ -2057,7 +2061,7 @@ MicroEvent$4.mixin(PagedPublicationCore);
 var core$2 = PagedPublicationCore;
 
 var MicroEvent$5, Mustache$1, PagedPublicationHotspots;
-MicroEvent$5 = require$$0;
+MicroEvent$5 = microevent;
 Mustache$1 = mustache;
 
 PagedPublicationHotspots =
@@ -2272,7 +2276,7 @@ var keyCodes = {
 };
 
 var MicroEvent$6, PagedPublicationControls, SGN$d, keyCodes$1;
-MicroEvent$6 = require$$0;
+MicroEvent$6 = microevent;
 SGN$d = sgn;
 keyCodes$1 = keyCodes;
 
@@ -2410,7 +2414,7 @@ MicroEvent$6.mixin(PagedPublicationControls);
 var controls = PagedPublicationControls;
 
 var MicroEvent$7, PagedPublicationEventTracking;
-MicroEvent$7 = require$$0;
+MicroEvent$7 = microevent;
 
 PagedPublicationEventTracking =
 /*#__PURE__*/
@@ -2528,7 +2532,7 @@ MicroEvent$7.mixin(PagedPublicationEventTracking);
 var eventTracking = PagedPublicationEventTracking;
 
 var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$e, Viewer;
-MicroEvent$8 = require$$0;
+MicroEvent$8 = microevent;
 SGN$e = sgn;
 Core = core$2;
 Hotspots = hotspots;
@@ -3027,7 +3031,7 @@ var pagedPublication = {
 
 var Incito, MicroEvent$a, Viewer$1;
 Incito = incitoBrowser;
-MicroEvent$a = require$$0;
+MicroEvent$a = microevent;
 
 Viewer$1 =
 /*#__PURE__*/
@@ -3126,7 +3130,7 @@ var incito$1 = /*#__PURE__*/Object.freeze({
   default: incito
 });
 
-var require$$3 = ( incito$1 && incito ) || incito$1;
+var require$$3 = getCjsExportFromNamespace(incito$1);
 
 var Bootstrapper$1, Controls$2, SGN$g, schema, util$2;
 util$2 = util_1;
@@ -3736,7 +3740,7 @@ function () {
 }();
 
 var Gator, MicroEvent$b, Mustache$2, Popover, keyCodes$2, template;
-MicroEvent$b = require$$0;
+MicroEvent$b = microevent;
 Gator = gator;
 Mustache$2 = mustache;
 keyCodes$2 = keyCodes;
