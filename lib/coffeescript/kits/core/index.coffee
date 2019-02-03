@@ -1,8 +1,2 @@
-SGN = require '../../sgn'
-request = require './request'
-session = require './session'
-
-module.exports =
-    request: request
-
-    session: session
+export { default as request } from './request'
+export { default as session } from './session'

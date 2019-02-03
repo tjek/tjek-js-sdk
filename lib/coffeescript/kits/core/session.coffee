@@ -1,7 +1,8 @@
-fetch = require 'cross-fetch'
-sha256 = require 'sha256'
-SGN = require '../../sgn'
-clientCookieStorage = require '../../storage/client-cookie'
+import fetch from 'cross-fetch'
+import sha256 from 'sha256'
+import SGN from '../../sgn'
+import * as clientCookieStorage from '../../storage/client-cookie'
+
 callbackQueue = []
 renewed = false
 
@@ -151,4 +152,4 @@ session =
     sign: (appSecret, token) ->
         sha256 [appSecret, token].join('')
 
-module.exports = session
+export default session

@@ -1,4 +1,4 @@
-MicroEvent = require 'microevent'
+import MicroEvent from 'microevent'
 
 class Pulse
     constructor: ->
@@ -50,4 +50,4 @@ class Pulse
 
 MicroEvent.mixin Pulse
 
-module.exports = Pulse
+export default Pulse

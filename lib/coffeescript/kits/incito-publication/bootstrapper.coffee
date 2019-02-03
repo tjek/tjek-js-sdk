@@ -1,9 +1,9 @@
-util = require '../../util'
-SGN = require '../../core'
-Controls = require './controls'
-schema = require '../../../graphql/incito.graphql'
+import { error, getDeviceCategory, getPointer, getOrientation } from '../../util'
+import SGN from '../../core'
+import Controls from './controls'
+import schema from '../../../graphql/incito.graphql'
 
-module.exports = class Bootstrapper
+export default class Bootstrapper
     constructor: (@options = {}) ->
         @deviceCategory = @getDeviceCategory()
         @pixelRatio = @getPixelRatio()
@@ -18,16 +18,16 @@ module.exports = class Bootstrapper
         return
     
     getDeviceCategory: ->
-        util.getDeviceCategory()
+        getDeviceCategory()
     
     getPixelRatio: ->
         window.devicePixelRatio or 1
     
     getPointer: ->
-        util.getPointer()
+        getPointer()
     
     getOrientation: ->
-        orientation = util.getOrientation screen.width, screen.height
+        orientation = getOrientation screen.width, screen.height
         orientation = 'horizontal' if orientation is 'quadratic'
 
         orientation
@@ -90,7 +90,7 @@ module.exports = class Bootstrapper
             if err?
                 callback err
             else if res.errors and res.errors.length > 0
-                callback util.error(new Error(), 'graph request contained errors')
+                callback error(new Error(), 'graph request contained errors')
             else
                 callback null, res
 
@@ -104,7 +104,7 @@ module.exports = class Bootstrapper
     
     createViewer: (data) ->
         if not data.incito?
-            throw util.error new Error(), 'you need to supply valid Incito to create a viewer'
+            throw error new Error(), 'you need to supply valid Incito to create a viewer'
 
         viewer = new SGN.IncitoPublicationKit.Viewer @options.el,
             id: @options.id

@@ -1,24 +1,34 @@
-{isBrowser} = require './util'
+import { isBrowser } from './util'
+import SGN from './core'
+import * as storageClientLocal from './storage/client-local'
+import * as storageClientSession from './storage/client-session'
+import * as storageClientCookie from './storage/client-cookie'
 
-SGN = require './core'
+import * as AssetsKit from './kits/assets'
+import * as EventsKit from './kits/events'
+import * as GraphKit from './kits/graph'
+import * as CoreKit from './kits/core'
+import * as PagedPublicationKit from './kits/paged-publication'
+import * as IncitoPublicationKit from './kits/incito-publication'
+import * as CoreUIKit from './kits/core-ui'
 
 # Expose storage backends.
 SGN.storage =
-    local: require './storage/client-local'
-    session: require './storage/client-session'
-    cookie: require './storage/client-cookie'
+    local: storageClientLocal
+    session: storageClientSession
+    cookie: storageClientCookie
 
 # Expose the different kits.
-SGN.AssetsKit = require './kits/assets'
-SGN.EventsKit = require './kits/events'
-SGN.GraphKit = require './kits/graph'
-SGN.CoreKit = require './kits/core'
-SGN.PagedPublicationKit = require './kits/paged-publication'
-SGN.IncitoPublicationKit = require './kits/incito-publication'
-SGN.CoreUIKit = require './kits/core-ui'
+SGN.AssetsKit = AssetsKit
+SGN.EventsKit = EventsKit
+SGN.GraphKit = GraphKit
+SGN.CoreKit = CoreKit
+SGN.PagedPublicationKit = PagedPublicationKit
+SGN.IncitoPublicationKit = IncitoPublicationKit
+SGN.CoreUIKit = CoreUIKit
 
 # Set the core session from the cookie store if possible.
-session = SGN.storage.cookie.get 'session'
+session = storageClientCookie.get 'session'
 
 if typeof session is 'object'
     SGN.config.set
@@ -26,13 +36,13 @@ if typeof session is 'object'
         coreSessionClientId: session.client_id
 
 SGN.client = do ->
-    id = SGN.storage.local.get 'client-id'
+    id = storageClientLocal.get 'client-id'
     id = id.data if id?.data
 
     if not id?
         id = SGN.util.uuid()
         
-        SGN.storage.local.set 'client-id', id
+        storageClientLocal.set 'client-id', id
 
     id: id
 
@@ -55,8 +65,8 @@ if isBrowser()
         config = {}
 
         config.appKey = appKey if appKey?
-        config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
+        config.eventTracker = new EventsKit.Tracker(trackId: trackId) if trackId?
 
         SGN.config.set config
 
-module.exports = SGN
+export default SGN

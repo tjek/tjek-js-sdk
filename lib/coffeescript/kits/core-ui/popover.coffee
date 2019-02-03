@@ -1,7 +1,7 @@
-MicroEvent = require 'microevent'
-Gator = require '../../../../vendor/gator'
-Mustache = require 'mustache'
-keyCodes = require '../../key-codes'
+import MicroEvent from 'microevent'
+import Gator from '../../../../vendor/gator'
+import Mustache from 'mustache'
+import keyCodes from '../../key-codes'
 
 template = """
 <div class="sgn-popover__background" data-close></div>
@@ -144,4 +144,4 @@ class Popover
 
 MicroEvent.mixin Popover
 
-module.exports = Popover
+export default Popover

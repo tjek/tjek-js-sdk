@@ -1,7 +1,8 @@
-fetch = require 'cross-fetch'
-md5 = require 'md5'
-SGN = require '../../sgn'
-clientLocalStorage = require '../../storage/client-local'
+import fetch from 'cross-fetch'
+import md5 from 'md5'
+import SGN from '../../sgn'
+import { error, btoa, throttle, uuid } from '../../util'
+import * as clientLocalStorage from '../../storage/client-local'
 
 getPool = ->
     data = clientLocalStorage.get 'event-tracker-pool'
@@ -13,7 +14,7 @@ getPool = ->
 
 pool = getPool()
 
-module.exports = class Tracker
+export default class Tracker
     defaultOptions:
         trackId: null
         poolLimit: 1000
@@ -33,18 +34,18 @@ module.exports = class Tracker
         return
 
     trackEvent: (type, properties = {}, version = 2) ->
-        throw SGN.util.error(new Error('Event type is required')) if typeof type isnt 'number'
+        throw error(new Error('Event type is required')) if typeof type isnt 'number'
         return if not @trackId?
 
         if SGN.config.get('appKey') is @trackId
             # coffeelint: disable=max_line_length
-            throw SGN.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
+            throw error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
         
         now = new Date().getTime()
         evt = Object.assign {}, properties, {
             '_e': type
             '_v': version
-            '_i': SGN.util.uuid()
+            '_i': uuid()
             '_t': Math.round(new Date().getTime() / 1000)
             '_a': @trackId
         }
@@ -84,7 +85,7 @@ module.exports = class Tracker
     
     createViewToken: (...parts) ->
         str = [SGN.client.id].concat(parts).join ''
-        viewToken = SGN.util.btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
+        viewToken = btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
 
         viewToken
 
@@ -131,7 +132,7 @@ _dispatch = ->
             return
     
     return
-dispatch = SGN.util.throttle _dispatch, 4000
+dispatch = throttle _dispatch, 4000
 
 clientLocalStorage.set 'event-tracker-pool', []
 

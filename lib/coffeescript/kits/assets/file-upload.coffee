@@ -1,6 +1,7 @@
-SGN = require '../../sgn'
+import SGN from '../../sgn'
+import { error } from '../../util'
 
-module.exports = (options = {}, callback, progressCallback) ->
+export default (options = {}, callback, progressCallback) ->
     throw new Error('File is not defined') if not options.file?
 
     url = SGN.config.get 'assetsFileUploadUrl'
@@ -14,7 +15,7 @@ module.exports = (options = {}, callback, progressCallback) ->
         if http.status is 200
             callback null, JSON.parse(http.response)
         else
-            callback SGN.util.error(new Error('Request error'),
+            callback error(new Error('Request error'),
                 code: 'RequestError'
                 statusCode: data.statusCode
             )

@@ -1,9 +1,10 @@
-fetch = require 'cross-fetch'
-SGN = require '../../sgn'
-{promiseCallbackInterop} = require '../../util'
+import fetch from 'cross-fetch'
+import SGN from '../../sgn'
+import session from './session'
+import { promiseCallbackInterop, error } from '../../util'
 
 request = (options = {}, callback, secondTime) ->
-    SGN.CoreKit.session.ensure (err) ->
+    session.ensure (err) ->
         return callback(err) if err?
 
         url = SGN.config.get('coreUrl') + (options.url ? '')
@@ -18,7 +19,7 @@ request = (options = {}, callback, secondTime) ->
         body = options.body
         
         headers['X-Token'] = token
-        headers['X-Signature'] = SGN.CoreKit.session.sign appSecret, token if appSecret?
+        headers['X-Signature'] = session.sign appSecret, token if appSecret?
 
         if json
             headers['Content-Type'] = 'application/json'
@@ -55,7 +56,7 @@ request = (options = {}, callback, secondTime) ->
                     token = SGN.config.get 'coreSessionToken'
                     responseToken = response.headers.get 'x-token'
 
-                    SGN.CoreKit.session.saveToken responseToken if responseToken and token isnt responseToken
+                    session.saveToken responseToken if responseToken and token isnt responseToken
 
                     if response.status >= 200 and response.status < 300 or response.status is 304
                         callback null, json
@@ -65,7 +66,7 @@ request = (options = {}, callback, secondTime) ->
 
                             request options, callback, true
                         else
-                            callback SGN.util.error(new Error('Core API error'),
+                            callback error(new Error('Core API error'),
                                 code: 'CoreAPIError'
                                 statusCode: response.status
                             ), json
@@ -75,4 +76,4 @@ request = (options = {}, callback, secondTime) ->
 
     return
 
-module.exports = promiseCallbackInterop request, 1
+export default promiseCallbackInterop request, 1

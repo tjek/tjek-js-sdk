@@ -1,6 +1,6 @@
-fetch = require 'cross-fetch'
-SGN = require '../../sgn'
-{promiseCallbackInterop} = require '../../util'
+import fetch from 'cross-fetch'
+import SGN from'../../sgn'
+import { promiseCallbackInterop, error, isBrowser, isNode } from '../../util'
 
 parseCookies = (cookies = []) ->
     parsedCookies = {}
@@ -34,20 +34,20 @@ request = (options = {}, callback) ->
             variables: options.variables
 
     # Set cookies manually in node.js.
-    if SGN.util.isNode() and authToken?
+    if isNode() and authToken?
         options.cookies = [
             key: authTokenCookieName
             value: authToken
             url: url
         ]
-    else if SGN.util.isBrowser()
+    else if isBrowser()
         options.credentials = 'include'
 
     fetch(url, options)
         .then (response) ->
             response.json().then (json) ->
                 # Update auth token as it might have changed.
-                if SGN.util.isNode()
+                if isNode()
                     cookies = parseCookies response.headers?['set-cookie']
                     authCookie = cookies[authTokenCookieName]
 
@@ -55,7 +55,7 @@ request = (options = {}, callback) ->
                         SGN.config.set 'authToken', authCookie
 
                 if response.status isnt 200
-                    callback SGN.util.error(new Error('Graph API error'),
+                    callback error(new Error('Graph API error'),
                         code: 'GraphAPIError'
                         statusCode: data.statusCode
                     )
@@ -65,4 +65,4 @@ request = (options = {}, callback) ->
     
     return
 
-module.exports = promiseCallbackInterop request, 1
+export default promiseCallbackInterop request, 1

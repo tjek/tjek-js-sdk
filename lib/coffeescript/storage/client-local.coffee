@@ -1,26 +1,24 @@
-SGN = require '../sgn'
 prefixKey = 'sgn-'
 
-module.exports =
-    key: 'sgn-'
+storage = do ->
+    try
+        storage = window.localStorage
 
-    storage: do ->
-        try
-            storage = window.localStorage
+        storage["#{prefixKey}test-storage"] = 'foobar'
+        delete storage["#{prefixKey}test-storage"]
 
-            storage["#{prefixKey}test-storage"] = 'foobar'
-            delete storage["#{prefixKey}test-storage"]
+        storage
+    catch
+        # Would be nice to have getter/setters on this object to console.warn
+        # when failing to use localStorage.
+        {}
 
-            storage
-        catch
-            {}
+export get = (key) ->
+    try
+        JSON.parse storage["#{prefixKey}#{key}"]
 
-    get: (key) ->
-        try
-            JSON.parse @storage["#{prefixKey}#{key}"]
+export set = (key, value) ->
+    try
+        storage["#{prefixKey}#{key}"] = JSON.stringify value
 
-    set: (key, value) ->
-        try
-            @storage["#{prefixKey}#{key}"] = JSON.stringify value
-
-        @
+    @

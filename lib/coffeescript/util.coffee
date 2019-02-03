@@ -1,266 +1,264 @@
-util =
-    isBrowser: ->
-        typeof window is 'object' and typeof document is 'object'
 
-    isNode: ->
-        typeof process is 'object'
+export isBrowser = ->
+    typeof window is 'object' and typeof document is 'object'
 
-    error: (err, options) ->
-        err.message = err.message or null
+export isNode = ->
+    typeof process is 'object'
 
-        if typeof options is 'string'
-            err.message = options
-        else if typeof options is 'object' and options?
-            for key, value of options
-                err[key] = value
+export error = (err, options) ->
+    err.message = err.message or null
 
-            err.message = options.message if options.message?
-            err.code = options.code or options.name if options.code? or options.message?
-            err.stack = options.stack if options.stack?
+    if typeof options is 'string'
+        err.message = options
+    else if typeof options is 'object' and options?
+        for key, value of options
+            err[key] = value
 
-        err.name = options and options.name or err.name or err.code or 'Error'
-        err.time = new Date()
+        err.message = options.message if options.message?
+        err.code = options.code or options.name if options.code? or options.message?
+        err.stack = options.stack if options.stack?
 
-        err
+    err.name = options and options.name or err.name or err.code or 'Error'
+    err.time = new Date()
 
-    uuid: ->
-        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
-            r = Math.random() * 16 | 0
-            v = if c is 'x' then r else (r & 0x3|0x8)
+    err
 
-            v.toString 16
+export uuid = ->
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
+        r = Math.random() * 16 | 0
+        v = if c is 'x' then r else (r & 0x3|0x8)
 
-    getQueryParam: (field, url) ->
-        href = if url then url else window.location.href
-        reg = new RegExp '[?&]' + field + '=([^&#]*)', 'i'
-        string = reg.exec href
+        v.toString 16
 
-        if string then string[1] else undefined
+export getQueryParam = (field, url) ->
+    href = if url then url else window.location.href
+    reg = new RegExp '[?&]' + field + '=([^&#]*)', 'i'
+    string = reg.exec href
 
-    getRandomNumberBetween: (from, to) ->
-        Math.floor(Math.random() * to) + from
+    if string then string[1] else undefined
 
-    getOS: ->
-        name = null
-        ua = window.navigator.userAgent
+export getRandomNumberBetween = (from, to) ->
+    Math.floor(Math.random() * to) + from
 
-        if ua.indexOf('Windows') > -1
-            name = 'Windows'
-        else if ua.indexOf('Mac') > -1
-            name = 'macOS'
-        else if ua.indexOf('X11') > -1
-            name = 'unix'
-        else if ua.indexOf('Linux') > -1
-            name = 'Linux'
-        else if ua.indexOf('iOS') > -1
-            name = 'iOS'
-        else if ua.indexOf('Android') > -1
-            name = 'Android'
+export getOS = ->
+    name = null
+    ua = window.navigator.userAgent
 
-        name
-    
-    getDeviceCategory: ->
-        deviceCategory = 'desktop'
+    if ua.indexOf('Windows') > -1
+        name = 'Windows'
+    else if ua.indexOf('Mac') > -1
+        name = 'macOS'
+    else if ua.indexOf('X11') > -1
+        name = 'unix'
+    else if ua.indexOf('Linux') > -1
+        name = 'Linux'
+    else if ua.indexOf('iOS') > -1
+        name = 'iOS'
+    else if ua.indexOf('Android') > -1
+        name = 'Android'
 
-        if navigator.platform is 'iPod' or navigator.platform is 'iPhone'
-            deviceCategory = 'mobile'
-        else if navigator.platform is 'iPad'
+    name
+
+export getDeviceCategory = ->
+    deviceCategory = 'desktop'
+
+    if navigator.platform is 'iPod' or navigator.platform is 'iPhone'
+        deviceCategory = 'mobile'
+    else if navigator.platform is 'iPad'
+        deviceCategory = 'tablet'
+    else if navigator.platform is 'Android' or /android/gi.test(navigator.userAgent)
+        if /tablet/gi.test(navigator.userAgent)
             deviceCategory = 'tablet'
-        else if navigator.platform is 'Android' or /android/gi.test(navigator.userAgent)
-            if /tablet/gi.test(navigator.userAgent)
-                deviceCategory = 'tablet'
-            else
-                deviceCategory = 'mobile'
-
-        deviceCategory
-    
-    getPointer: ->
-        pointer = 'fine'
-
-        pointer = 'coarse' if matchMedia('(pointer:coarse)').matches
-
-        pointer
-    
-    getOrientation: (width, height) ->
-        if width is height
-            'quadratic'
-        else if width > height
-            'horizontal'
         else
-            'vertical'
+            deviceCategory = 'mobile'
 
-    getScreenDimensions: ->
-        density = window.devicePixelRatio ? 1
-        logical =
-            width: window.screen.width
-            height: window.screen.height
-        physical =
-            width: Math.round logical.width * density
-            height: Math.round logical.height * density
+    deviceCategory
 
-        density: density
-        logical: logical
-        physical: physical
+export getPointer = ->
+    pointer = 'fine'
 
-    getUtcOffsetSeconds: ->
-        now = new Date()
-        jan1 = new Date now.getFullYear(), 0, 1, 0, 0, 0, 0
-        tmp = jan1.toGMTString()
-        jan2 = new Date tmp.substring(0, tmp.lastIndexOf(' ') - 1)
-        stdTimeOffset = (jan1 - jan2) / 1000
+    pointer = 'coarse' if matchMedia('(pointer:coarse)').matches
 
-        stdTimeOffset
+    pointer
 
-    getUtcDstOffsetSeconds: ->
-        new Date().getTimezoneOffset() * 60 * -1
+export getOrientation = (width, height) ->
+    if width is height
+        'quadratic'
+    else if width > height
+        'horizontal'
+    else
+        'vertical'
 
-    getColorBrightness: (color) ->
-        color = color.replace '#', ''
-        hex = parseInt (hex + '').replace(/[^a-f0-9]/gi, ''), 16
-        rgb = []
-        sum = 0
-        x = 0
+export getScreenDimensions = ->
+    density = window.devicePixelRatio ? 1
+    logical =
+        width: window.screen.width
+        height: window.screen.height
+    physical =
+        width: Math.round logical.width * density
+        height: Math.round logical.height * density
 
-        while x < 3
-            s = parseInt(color.substring(2 * x, 2), 16)
-            rgb[x] = s
+    density: density
+    logical: logical
+    physical: physical
 
-            sum += s if s > 0
+export getUtcOffsetSeconds = ->
+    now = new Date()
+    jan1 = new Date now.getFullYear(), 0, 1, 0, 0, 0, 0
+    tmp = jan1.toGMTString()
+    jan2 = new Date tmp.substring(0, tmp.lastIndexOf(' ') - 1)
+    stdTimeOffset = (jan1 - jan2) / 1000
 
-            ++x
+    stdTimeOffset
 
-        if sum <= 381 then 'dark' else 'light'
+export getUtcDstOffsetSeconds = ->
+    new Date().getTimezoneOffset() * 60 * -1
 
-    btoa: (str) ->
-        if util.isBrowser()
-            btoa str
+export getColorBrightness = (color) ->
+    color = color.replace '#', ''
+    hex = parseInt (hex + '').replace(/[^a-f0-9]/gi, ''), 16
+    rgb = []
+    sum = 0
+    x = 0
+
+    while x < 3
+        s = parseInt(color.substring(2 * x, 2), 16)
+        rgb[x] = s
+
+        sum += s if s > 0
+
+        ++x
+
+    if sum <= 381 then 'dark' else 'light'
+
+export btoa = (str) ->
+    if isBrowser()
+        btoa str
+    else
+        buffer = null
+
+        if str instanceof Buffer
+            buffer = str
         else
-            buffer = null
+            buffer = new Buffer str.toString(), 'binary'
 
-            if str instanceof Buffer
-                buffer = str
-            else
-                buffer = new Buffer str.toString(), 'binary'
+        buffer.toString 'base64'
 
-            buffer.toString 'base64'
+export chunk = (arr, size) ->
+    results = []
 
-    chunk: (arr, size) ->
-        results = []
+    while arr.length
+        results.push arr.splice(0, size)
 
-        while arr.length
-            results.push arr.splice(0, size)
+    results
 
-        results
+export throttle = (fn, threshold = 250, scope) ->
+    last = undefined
+    deferTimer = undefined
 
-    throttle: (fn, threshold = 250, scope) ->
-        last = undefined
-        deferTimer = undefined
+    ->
+        context = scope or @
+        now = new Date().getTime()
+        args = arguments
 
-        ->
-            context = scope or @
-            now = new Date().getTime()
-            args = arguments
+        if last and now < last + threshold
+            clearTimeout deferTimer
 
-            if last and now < last + threshold
-                clearTimeout deferTimer
-
-                deferTimer = setTimeout ->
-                    last = now
-                    
-                    fn.apply context, args
-                
-                    return
-                , threshold
-            else
+            deferTimer = setTimeout ->
                 last = now
+                
                 fn.apply context, args
+            
+                return
+            , threshold
+        else
+            last = now
+            fn.apply context, args
 
-            return
+        return
 
-    loadImage: (src, callback) ->
-        img = new Image()
+export loadImage = (src, callback) ->
+    img = new Image()
 
-        img.onload = -> callback null, img.width, img.height
-        img.onerror = -> callback new Error()
-        img.src = src
+    img.onload = -> callback null, img.width, img.height
+    img.onerror = -> callback new Error()
+    img.src = src
 
-        img
+    img
 
-    distance: (lat1, lng1, lat2, lng2) ->
-        radlat1 = Math.PI * lat1 / 180
-        radlat2 = Math.PI * lat2 / 180
-        theta = lng1 - lng2
-        radtheta = Math.PI * theta / 180
-        dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
-        dist = Math.acos(dist)
-        dist = dist * 180 / Math.PI
-        dist = dist * 60 * 1.1515
-        dist = dist * 1.609344 * 1000
+export distance = (lat1, lng1, lat2, lng2) ->
+    radlat1 = Math.PI * lat1 / 180
+    radlat2 = Math.PI * lat2 / 180
+    theta = lng1 - lng2
+    radtheta = Math.PI * theta / 180
+    dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    dist = dist * 1.609344 * 1000
 
-        dist
+    dist
 
-    async:
-        parallel: (asyncCalls, sharedCallback) ->
-            counter = asyncCalls.length
-            allResults = []
-            k = 0
+export async =
+    parallel: (asyncCalls, sharedCallback) ->
+        counter = asyncCalls.length
+        allResults = []
+        k = 0
 
-            makeCallback = (index) ->
-                ->
-                    results = []
-                    i = 0
+        makeCallback = (index) ->
+            ->
+                results = []
+                i = 0
 
-                    counter--
+                counter--
 
-                    while i < arguments.length
-                        results.push arguments[i]
-                        i++
+                while i < arguments.length
+                    results.push arguments[i]
+                    i++
 
-                    allResults[index] = results
+                allResults[index] = results
 
-                    sharedCallback allResults if counter is 0
+                sharedCallback allResults if counter is 0
 
-                    return
+                return
 
-            while k < asyncCalls.length
-                asyncCalls[k] makeCallback(k)
-                k++
+        while k < asyncCalls.length
+            asyncCalls[k] makeCallback(k)
+            k++
 
-            return
+        return
 
-    # Method for wrapping a function that takes a callback in any position
-    # to return promises if no callback is given in a call.
-    # The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
-    # CoffeeScript optional parameters messes with this function arity detection,
-    # not sure what to do about that, other than always setting cbParameterIndex at callsites.
-    promiseCallbackInterop: (fun, cbParameterIndex = fun.length - 1) ->
-        # This is the function that actually wraps and calls a method to return a promise.
-        makePromise = (fun, cbParameterIndex, parameters) ->
-            new Promise(
-                (resolve, reject) ->
-                    neoCallback = (error, result) ->
-                        if error then reject error else resolve result
+# Method for wrapping a function that takes a callback in any position
+# to return promises if no callback is given in a call.
+# The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
+# CoffeeScript optional parameters messes with this function arity detection,
+# not sure what to do about that, other than always setting cbParameterIndex at callsites.
+export promiseCallbackInterop = (fun, cbParameterIndex = fun.length - 1) ->
+    # This is the function that actually wraps and calls a method to return a promise.
+    makePromise = (fun, cbParameterIndex, parameters) ->
+        new Promise(
+            (resolve, reject) ->
+                neoCallback = (error, result) ->
+                    if error then reject error else resolve result
 
-                    callParameters = []
-                    for i in [0...((Math.max parameters.length, cbParameterIndex) + 1)]
-                        callParameters.push if i is cbParameterIndex then neoCallback else parameters[i]
+                callParameters = []
+                for i in [0...((Math.max parameters.length, cbParameterIndex) + 1)]
+                    callParameters.push if i is cbParameterIndex then neoCallback else parameters[i]
 
-                    fun.apply this, callParameters
-            )
-        # Wrapper function that decides what to do per-call.
-        (...parameters) ->
-            if typeof parameters[cbParameterIndex] is 'function'
-                # Callback given, do a regular old call.
-                fun.apply null, parameters
-            else if typeof Promise is 'function'
-                # No callback given, and we have promise support, use makePromise to wrap the call.
-                makePromise fun, cbParameterIndex, parameters
-            else
-                # Ain't got callback, ain't got promise support; we gotta tell the developer.
-                throw new Error("""To be able to use this asynchronous method you should:
+                fun.apply this, callParameters
+        )
+    # Wrapper function that decides what to do per-call.
+    (...parameters) ->
+        if typeof parameters[cbParameterIndex] is 'function'
+            # Callback given, do a regular old call.
+            fun.apply null, parameters
+        else if typeof Promise is 'function'
+            # No callback given, and we have promise support, use makePromise to wrap the call.
+            makePromise fun, cbParameterIndex, parameters
+        else
+            # Ain't got callback, ain't got promise support; we gotta tell the developer.
+            throw new Error("""To be able to use this asynchronous method you should:
 Supply a callback function as argument ##{1+cbParameterIndex}.
 This callback function will be called with the method call response.
 Alternatively, when supported, it can return a Promise if no callback function is given.
-                """)
-
-module.exports = util
+            """)
