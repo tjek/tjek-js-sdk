@@ -4,7 +4,8 @@ const presets = [
       browsers: ["> 3%", "IE 11"],
       node: 8
     },
-    useBuiltIns: "usage"
+    useBuiltIns: "usage",
+    exclude: ["transform-typeof-symbol"]
   }]
 ];
   
