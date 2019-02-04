@@ -35,15 +35,26 @@ export default class Tracker
             @[key] = options[key] or value
 
         @client = options?.client or createTrackerClient()
+        @eventsTrackUrl = options?.eventsTrackUrl
         @location =
             geohash: null
             time: null
             country: null
         @dispatching = false
+        @hasMadeInitialDispatch = false
 
-        dispatch()
+        if @eventsTrackUrl
+            dispatch(@eventsTrackUrl)
+            @hasMadeInitialDispatch = true
 
         return
+    
+    setEventsTrackUrl: (eventsTrackUrl) ->
+        @eventsTrackUrl = eventsTrackUrl
+
+        if not @hasMadeInitialDispatch
+            dispatch(@eventsTrackUrl)
+            @hasMadeInitialDispatch = true
 
     trackEvent: (type, properties = {}, version = 2) ->
         throw error(new Error('Event type is required')) if typeof type isnt 'number'
@@ -65,7 +76,7 @@ export default class Tracker
         pool.push evt
         pool.shift() while pool.length > @poolLimit
 
-        dispatch()
+        dispatch(@eventsTrackUrl)
 
         @
 
@@ -100,8 +111,8 @@ export default class Tracker
 dispatching = false
 dispatchLimit = 100
 
-ship = (events = []) ->
-    req = fetch SGN.config.get('eventsTrackUrl'),
+ship = (events = [], eventsTrackUrl) ->
+    req = fetch eventsTrackUrl,
         method: 'post'
         timeout: 1000 * 20
         headers:
@@ -110,14 +121,18 @@ ship = (events = []) ->
     
     req.then (response) -> response.json()
 
-_dispatch = ->
+_dispatch = (eventsTrackUrl) ->
+    if not eventsTrackUrl
+        # coffeelint: disable=max_line_length
+        throw error(throw new Error('If you are using the EventsKit Tracker outside the singleton you must manually pass in an `eventsTrackUrl`'))
+
     return if dispatching is true or pool.length is 0
 
     events = pool.slice 0, dispatchLimit
     nacks = 0
     dispatching = true
 
-    ship(events)
+    ship(events, eventsTrackUrl)
         .then (response) ->
             dispatching = false
 
@@ -130,7 +145,7 @@ _dispatch = ->
                 return
 
             # Keep dispatching until the pool size reaches a sane level.
-            dispatch() if pool.length >= dispatchLimit and nacks is 0
+            dispatch(eventsTrackUrl) if pool.length >= dispatchLimit and nacks is 0
 
             return
         .catch (err) ->

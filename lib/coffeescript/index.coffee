@@ -38,16 +38,25 @@ if typeof session is 'object'
 
 # Listen for changes in the config.
 SGN.config.bind 'change', (changedAttributes) ->
-    eventTracker = changedAttributes.eventTracker
+    newEventTracker = changedAttributes.eventTracker
 
-    if eventTracker?
-        appKey = SGN.config.get('appKey')
+    newAppKey = changedAttributes.appKey
+    if (newAppKey or newEventTracker) and
+    (newEventTracker or SGN.config.get('eventTracker'))?.trackId is (newAppKey or SGN.config.get('appKey'))
+        
+        # coffeelint: disable=max_line_length
+        throw error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
 
-        if appKey and eventTracker.trackId and eventTracker.trackId == appKey
-            # coffeelint: disable=max_line_length
-            throw error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
+    if newEventTracker?
+        # default eventsTrackUrl
+        if not newEventTracker.eventsTrackUrl
+            newEventTracker.setEventsTrackUrl(SGN.config.get('eventsTrackUrl'))
+        
+        newEventTracker.trackClientSessionOpened()
 
-        eventTracker.trackClientSessionOpened()
+    newEventsTrackUrl = changedAttributes.eventsTrackUrl
+    if newEventsTrackUrl and SGN.config.get('eventTracker')
+        SGN.config.get('eventTracker').setEventsTrackUrl(newEventsTrackUrl)
 
 
     return
