@@ -1,7 +1,7 @@
 import fetch from 'cross-fetch'
 import md5 from 'md5'
 import SGN from '../../sgn'
-import { error, btoa, throttle, uuid } from '../../util'
+import { error, btoa, throttle, uuid, isBrowser } from '../../util'
 import * as clientLocalStorage from '../../storage/client-local'
 
 createTrackerClient = ->
@@ -48,10 +48,6 @@ export default class Tracker
     trackEvent: (type, properties = {}, version = 2) ->
         throw error(new Error('Event type is required')) if typeof type isnt 'number'
         return if not @trackId?
-
-        if SGN.config.get('appKey') is @trackId
-            # coffeelint: disable=max_line_length
-            throw error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
         
         now = new Date().getTime()
         evt = Object.assign {}, properties, {
@@ -113,6 +109,7 @@ ship = (events = []) ->
         body: JSON.stringify(events: events)
     
     req.then (response) -> response.json()
+
 _dispatch = ->
     return if dispatching is true or pool.length is 0
 

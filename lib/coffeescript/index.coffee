@@ -1,4 +1,4 @@
-import { isBrowser } from './util'
+import { isBrowser, error } from './util'
 import SGN from './core'
 import * as storageClientLocal from './storage/client-local'
 import * as storageClientSession from './storage/client-session'
@@ -41,7 +41,14 @@ SGN.config.bind 'change', (changedAttributes) ->
     eventTracker = changedAttributes.eventTracker
 
     if eventTracker?
+        appKey = SGN.config.get('appKey')
+
+        if appKey and eventTracker.trackId and eventTracker.trackId == appKey
+            # coffeelint: disable=max_line_length
+            throw error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
+
         eventTracker.trackClientSessionOpened()
+
 
     return
 
