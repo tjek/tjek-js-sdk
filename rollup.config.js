@@ -20,19 +20,19 @@ const bundles = [
       jsBrowser: path.join(__dirname, 'dist', 'sgn-sdk.js'),
       jsBrowserMin: path.join(__dirname, 'dist', 'sgn-sdk.min.js')
     }
-  } /*,
-  { 
+  },
+  {
     name: 'SGNTracker',
     input: path.join(__dirname, 'lib', 'coffeescript', 'kits', 'events', 'tracker.coffee'),
     outputs: {
       // Exclusive bundles(external `require`s untouched), for node, webpack etc.
       jsCJS: path.join(__dirname, 'kits', 'events', 'tracker.cjs.js'), // CommonJS
-      jsES: path.join(__dirname, 'kits', 'events', 'tracker.es.js'), // ES Module
+      jsES: path.join(__dirname, 'kits', 'events', 'tracker.mjs'), // ES Module
       // Inclusive bundles(external `require`s resolved), for browsers etc.
       jsBrowser: path.join(__dirname, 'kits', 'events', 'tracker.js'),
       jsBrowserMin: path.join(__dirname, 'kits', 'events', 'tracker.min.js')
     }
-  }*/
+  }
 ];
 
 const getBabelPlugin = () =>
