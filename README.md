@@ -65,6 +65,13 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version NEXT
+
+- 📦 Internal restructure for ES6 modules, this makes the main bundle a little lighter but more importantly lets us do cool things like:
+- 💥 Make SGN.EventsKit.Tracker available as a standalone module, to enjoy this you can `import Tracker from 'shopgun-sdk/kits/events/tracker';`. This will be a first in a more long-term effort to make the SDK useful to those who don't need the whole thing(which sits at a hefty 56kB minified and gzipped!) and are willing to give up the convenience of the primary singleton-based usage.
+
+
+
 ### Version 2.2.11
 
 - Use cross-fetch library for making requests in browsers and node.js
