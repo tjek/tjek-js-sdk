@@ -133,7 +133,7 @@ export getColorBrightness = (color) ->
 
 export btoa = (str) ->
     if isBrowser()
-        btoa str
+        window.btoa str
     else
         buffer = null
 
