@@ -1,6 +1,5 @@
 import fetch from 'cross-fetch'
 import md5 from 'md5'
-import SGN from '../../sgn'
 import { error, btoa, throttle, uuid, isBrowser } from '../../util'
 import * as clientLocalStorage from '../../storage/client-local'
 
