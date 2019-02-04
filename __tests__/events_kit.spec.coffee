@@ -2,9 +2,10 @@ SGN = require './sdk'
 
 describe 'SGN.EventsKit', ->
     test 'Can create a view token', ->
-        tracker = new SGN.EventsKit.Tracker trackId: 'AAABrQ=='
-
-        SGN.client.id = 'selfmade'
+        tracker = new SGN.EventsKit.Tracker
+            trackId: 'AAABrQ=='
+            client:
+                id: 'selfmade'
 
         expect(tracker.createViewToken('test', 1)).toEqual '29g0Lh6ViFc='
         expect(tracker.createViewToken('go', 'go', 2, 'nice', 'øl')).toEqual 'nAu6OWTIWnc='

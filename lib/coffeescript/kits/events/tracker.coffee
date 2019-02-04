@@ -4,6 +4,17 @@ import SGN from '../../sgn'
 import { error, btoa, throttle, uuid } from '../../util'
 import * as clientLocalStorage from '../../storage/client-local'
 
+createTrackerClient = ->
+    id = clientLocalStorage.get 'client-id'
+    id = id.data if id?.data
+
+    if not id?
+        id = uuid()
+        
+        clientLocalStorage.set 'client-id', id
+
+    id: id
+
 getPool = ->
     data = clientLocalStorage.get 'event-tracker-pool'
     data = [] if Array.isArray(data) is false
@@ -23,6 +34,7 @@ export default class Tracker
         for key, value of @defaultOptions
             @[key] = options[key] or value
 
+        @client = options?.client or createTrackerClient()
         @location =
             geohash: null
             time: null
@@ -84,7 +96,7 @@ export default class Tracker
         @trackEvent 5, properties, version
     
     createViewToken: (...parts) ->
-        str = [SGN.client.id].concat(parts).join ''
+        str = [@client.id].concat(parts).join ''
         viewToken = btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
 
         viewToken

@@ -35,16 +35,6 @@ if typeof session is 'object'
         coreSessionToken: session.token
         coreSessionClientId: session.client_id
 
-SGN.client = do ->
-    id = storageClientLocal.get 'client-id'
-    id = id.data if id?.data
-
-    if not id?
-        id = SGN.util.uuid()
-        
-        storageClientLocal.set 'client-id', id
-
-    id: id
 
 # Listen for changes in the config.
 SGN.config.bind 'change', (changedAttributes) ->
