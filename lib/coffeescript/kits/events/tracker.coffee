@@ -1,3 +1,5 @@
+import 'core-js/modules/es6.promise'
+import 'core-js/modules/es6.object.assign'
 import fetch from 'cross-fetch'
 import md5 from 'md5'
 import { error, btoa, throttle, uuid, isBrowser } from '../../util'

@@ -23,6 +23,7 @@ const bundles = [
   },
   {
     name: 'SGNTracker',
+    useBuiltIns: false,
     input: path.join(__dirname, 'lib', 'coffeescript', 'kits', 'events', 'tracker.coffee'),
     outputs: {
       // Exclusive bundles(external `require`s untouched), for node, webpack etc.
@@ -35,14 +36,28 @@ const bundles = [
   }
 ];
 
-const getBabelPlugin = () =>
+const getBabelPlugin = ({ useBuiltIns = 'usage' }) =>
   babel({
+    babelrc: false,
     exclude: ['node_modules/**', '*.graphql'],
-    extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.coffee']
+    extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.coffee'],
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          targets: {
+            browsers: ['> 3%', 'IE 11'],
+            node: 8
+          },
+          useBuiltIns,
+          exclude: ['transform-typeof-symbol']
+        }
+      ]
+    ]
   });
 
 let configs = bundles.reduce(
-  (cfgs, { name, input, outputs }) => [
+  (cfgs, { name, input, outputs, useBuiltIns }) => [
     ...cfgs,
     {
       input,
@@ -62,7 +77,7 @@ let configs = bundles.reduce(
         commonjs({
           extensions: ['.js', '.coffee']
         }),
-        getBabelPlugin()
+        getBabelPlugin({ useBuiltIns })
       ]
     },
     {
@@ -83,7 +98,7 @@ let configs = bundles.reduce(
         commonjs({
           extensions: ['.js', '.coffee']
         }),
-        getBabelPlugin()
+        getBabelPlugin({ useBuiltIns })
       ]
     },
     {
@@ -117,7 +132,7 @@ let configs = bundles.reduce(
         commonjs({
           extensions: ['.js', '.coffee']
         }),
-        getBabelPlugin()
+        getBabelPlugin({ useBuiltIns })
       ]
     },
     {
@@ -148,7 +163,7 @@ let configs = bundles.reduce(
         commonjs({
           extensions: ['.js', '.coffee']
         }),
-        getBabelPlugin(),
+        getBabelPlugin({ useBuiltIns }),
         terser()
       ]
     }
