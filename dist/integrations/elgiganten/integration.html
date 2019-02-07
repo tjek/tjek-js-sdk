@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Elgiganten: Paged Publications</title>
+
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <meta charset="utf-8">
+
+        <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.17.min.css" rel="stylesheet" type="text/css">
+        <link href="style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="publications">
+            <div class="publications__spinner">
+                <div class="publications__bounce1"></div>
+                <div class="publications__bounce2"></div>
+                <div class="publications__bounce3"></div>
+            </div>
+        </div>
+
+        <div id="incito__publication" class="sgn__incito">
+            <div id="incito-publication__nav">
+                <select>
+                    <option value="">Vælg kategori</option>
+                    <option value="pc-tablets">PC og tablets</option>
+                    <option value="gaming">Gaming</option>
+                    <option value="tv-billede">TV og billede</option>
+                    <option value="lyd-hi-fi">Lyd og Hi-Fi</option>
+                    <option value="mobil-gps">Mobil og GPS</option>
+                    <option value="hvidevarer">Hvidevarer</option>
+                    <option value="kokken-bryggers-og-garderobe">Køkken, bryggers og garderobe</option>
+                    <option value="husholdning">Husholdning</option>
+                    <option value="personlig-pleje-skonhed-velvare">Personlig pleje, skønhed og velvære</option>
+                    <option value="smart-home">Smart home</option>
+                    <option value="wearables-sport-og-fitness">Wearables, sport og fitness</option>
+                    <option value="foto-video">Foto og video</option>
+                </select>
+                <a href="#" id="incito-publication__classic">Åbn klassisk PDF</a>
+            </div>
+            <div class="publications__spinner">
+                <div class="publications__bounce1"></div>
+                <div class="publications__bounce2"></div>
+                <div class="publications__bounce3"></div>
+            </div>
+            <div class="sgn-incito__progress"></div>
+        </div>
+
+        <div id="paged-publication__modal" class="sgn__pp" data-layout-absolute="true">
+            <header class="sgn-pp__header sgn__navbar">
+                <section class="sgn-navbar__section">
+                    <a id="paged-publication-modal__close" class="sgn__btn sgn-btn--fab" href="#">
+                        &times;
+                    </a>
+                </section>
+                <section class="sgn-navbar__section"></section>
+            </header>
+
+            <div class="verso">
+                <div class="verso__scroller">
+                    <div class="sgn-pp__pages"></div>
+                </div>
+            </div>
+
+            <div class="sgn-pp__progress">
+                <div class="sgn-pp-progress__bar"></div>
+            </div>
+
+            <div class="sgn-pp__progress-label"></div>
+
+            <a class="sgn-pp__control" href="#" role="button" data-direction="prev">&lsaquo;</a>
+            <a class="sgn-pp__control" href="#" role="button" data-direction="next">&rsaquo;</a>
+
+            <div class="publications__spinner">
+                <div class="publications__bounce1"></div>
+                <div class="publications__bounce2"></div>
+                <div class="publications__bounce3"></div>
+            </div>
+        </div>
+
+        <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.17.min.js" id="sgn-sdk" data-app-key="00jiy8zh8pcorcq4sz208bryny3u76zk" data-track-id="AAACDA=="></script>
+        <script src="script.js"></script>
+    </body>
+</html>
