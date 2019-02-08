@@ -8,6 +8,7 @@ var config = {
     id: SGN.util.getQueryParam('autoopen'),
     businessId: 'c35es'
 };
+var isSmoothScrollSupported = 'scrollBehavior' in document.documentElement.style;
 var noop = function () {};
 var nga = 'dataLayer' in window ? function (ctx) {
     dataLayer.push({
@@ -38,7 +39,8 @@ var els = {
     incito: {
         root: document.querySelector('#incito__publication'),
         categorySwitcher: document.querySelector('#incito-publication__nav select'),
-        classic: document.querySelector('#incito-publication__classic')
+        classic: document.querySelector('#incito-publication__classic'),
+        top: document.querySelector('#incito-publication__top')
     }
 };
 var formatDate = function (dtstr) {
@@ -308,110 +310,134 @@ var closeIncitoPublication = function () {
     }
 };
 
-if (!els.list) {
-    return;
-}
+if (els.list) {
+    els.list.addEventListener('click', function (e) {
+        if (e.target.tagName === 'IMG') {
+            // TODO: Remove.
+            var id = e.target.dataset.id;
+            var incitoId = 'SW5jaXRvUHVibGljYXRpb246MTI3MzgzMTIxNzM5MzA3MzQ0MA=='; //e.target.dataset.incitoId;
 
-els.list.addEventListener('click', function (e) {
-    if (e.target.tagName === 'IMG') {
-        // TODO: Remove.
-        var id = e.target.dataset.id;
-        var incitoId = 'SW5jaXRvUHVibGljYXRpb246MTI3MzgzMTIxNzM5MzA3MzQ0MA=='; //e.target.dataset.incitoId;
-
-        if (incitoId) {
-            openIncitoPublication(incitoId, id);
-        } else {
-            openPublication(id);
+            if (incitoId) {
+                openIncitoPublication(incitoId, id);
+            } else {
+                openPublication(id);
+            }
         }
-    }
-});
+    });
 
-els.incito.classic.addEventListener('click', function (e) {
-    e.preventDefault();
-
-    closeIncitoPublication();
-    openPagedPublication(e.target.dataset.id);
-});
-
-els.incito.categorySwitcher.addEventListener('change', function (e) {
-    var category = e.target.value;
-    var find = function (view, callback) {
-        if (view.role === 'offer' && view.meta && view.meta.ids) {
-            var match;
-
-            for (var i = 0; i < view.meta.ids.length; i++) {
-                var id = view.meta.ids[i];
-
-                if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
-                    match = view;
-
-                    break;
+    fetchPublications(function (err, res) {
+        if (!err) {
+            renderPublications(res);
+    
+            var parts = (config.id || '').split(',');
+    
+            if (parts[0] === 'current' || parts[0] === 'future') {
+                res.sort(function (a, b) {
+                    var aDate = formatDate(a.run_from).getTime();
+                    var bDate = formatDate(b.run_from).getTime();
+    
+                    if (parts[0] === 'current') {
+                        return aDate - bDate;
+                    } else {
+                        return bDate - aDate;
+                    }
+                });
+    
+                if (res[0]) {
+                    openPagedPublication(res[0].id, parseInt(parts[1]));
+                }
+            } else if (parts[0].length > 0) {
+                for (var i = 0; i < res.length; i++) {
+                    if (parts[0] === res[i].id) {
+                        openPagedPublication(res[i].id, parseInt(parts[1]));
+    
+                        break;
+                    }
                 }
             }
-
-            if (match) {
-                return match;
-            }
         }
-        
-        if (view.child_views) {
-            for (var i = 0; i < view.child_views.length; i++) {
-                var match = find(view.child_views[i], callback);
+    });
+}
+
+if (els.incito.classic) {
+    els.incito.classic.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        closeIncitoPublication();
+        openPagedPublication(e.target.dataset.id);
+    });
+}
+
+if (els.incito.top) {
+    els.incito.top.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        if (isSmoothScrollSupported) {
+            document.body.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        } else {
+            window.scrollTo(0, 0);
+        }
+    });
+}
+
+if (els.incito.categorySwitcher) {
+    els.incito.categorySwitcher.addEventListener('change', function (e) {
+        var category = e.target.value;
+        var find = function (view, callback) {
+            if (view.role === 'offer' && view.meta && view.meta.ids) {
+                var match;
+
+                for (var i = 0; i < view.meta.ids.length; i++) {
+                    var id = view.meta.ids[i];
+
+                    if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
+                        match = view;
+
+                        break;
+                    }
+                }
 
                 if (match) {
                     return match;
                 }
             }
-        }
-    };
+            
+            if (view.child_views) {
+                for (var i = 0; i < view.child_views.length; i++) {
+                    var match = find(view.child_views[i], callback);
 
-    if (category && incito) {
-        var view = find(incito.root_view);
+                    if (match) {
+                        return match;
+                    }
+                }
+            }
+        };
 
-        if (view) {
-            console.log(view);
-            var offerEl = els.incito.root.querySelector('.incito__view[data-role=offer][data-id="' + view.id + '"]');
-            var rect = offerEl.getBoundingClientRect();
+        if (category && incito) {
+            var view = find(incito.root_view);
 
-            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 100));
-        } else {
-            alert('Der findes desværre ingen tilbud i den kategori');
-        }
-    }
-});
+            if (view) {
+                var offerEl = els.incito.root.querySelector('.incito__view[data-role=offer][data-id="' + view.id + '"]');
 
-fetchPublications(function (err, res) {
-    if (!err) {
-        renderPublications(res);
-
-        var parts = (config.id || '').split(',');
-
-        if (parts[0] === 'current' || parts[0] === 'future') {
-            res.sort(function (a, b) {
-                var aDate = formatDate(a.run_from).getTime();
-                var bDate = formatDate(b.run_from).getTime();
-
-                if (parts[0] === 'current') {
-                    return aDate - bDate;
+                if (isSmoothScrollSupported) {
+                    offerEl.scrollIntoView({
+                        behavior: 'auto',
+                        block: 'center'
+                    });
                 } else {
-                    return bDate - aDate;
-                }
-            });
+                    var rect = offerEl.getBoundingClientRect();
 
-            if (res[0]) {
-                openPagedPublication(res[0].id, parseInt(parts[1]));
-            }
-        } else if (parts[0].length > 0) {
-            for (var i = 0; i < res.length; i++) {
-                if (parts[0] === res[i].id) {
-                    openPagedPublication(res[i].id, parseInt(parts[1]));
-
-                    break;
+                    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 100));
                 }
+            } else {
+                alert('Der findes desværre ingen tilbud i den kategori');
             }
         }
-    }
-});
+    });
+}
 
 window.shopgun = {
     openActivePublication: openActivePublication
