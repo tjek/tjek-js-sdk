@@ -2,6 +2,7 @@ import 'core-js/modules/es6.promise'
 import 'core-js/modules/es6.object.assign'
 import fetch from 'cross-fetch'
 import md5 from 'md5'
+import { eventsTrackUrl as defaultEventsTrackUrl } from '../../configDefaults'
 import { error, btoa, throttle, uuid, isBrowser } from '../../util'
 import * as clientLocalStorage from '../../storage/client-local'
 
@@ -36,7 +37,7 @@ export default class Tracker
             @[key] = options[key] or value
 
         @client = options?.client or createTrackerClient()
-        @eventsTrackUrl = options?.eventsTrackUrl
+        @eventsTrackUrl = options?.eventsTrackUrl or defaultEventsTrackUrl
         @location =
             geohash: null
             time: null
@@ -125,7 +126,7 @@ ship = (events = [], eventsTrackUrl) ->
 _dispatch = (eventsTrackUrl) ->
     if not eventsTrackUrl
         # coffeelint: disable=max_line_length
-        throw error(throw new Error('If you are using the EventsKit Tracker outside the singleton you must manually pass in an `eventsTrackUrl`'))
+        throw error(new Error('If you are using the EventsKit Tracker outside the singleton you must manually pass in an `eventsTrackUrl`'))
 
     return if dispatching is true or pool.length is 0
 

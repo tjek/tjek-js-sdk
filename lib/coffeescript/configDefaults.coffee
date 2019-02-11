@@ -1,0 +1,6 @@
+export locale = 'en_US'
+export coreUrl = 'https://api.etilbudsavis.dk'
+export graphUrl = 'https://graph.service.shopgun.com'
+export eventsTrackUrl = 'https://events.service.shopgun.com/sync'
+export eventsPulseUrl = 'wss://events.service.shopgun.com/pulse'
+export assetsFileUploadUrl = 'https://assets.service.shopgun.com/upload'
