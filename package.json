@@ -109,7 +109,8 @@
     "rollup-plugin-string": "^2.0.2",
     "serve": "^10.1.1",
     "stylus": "^0.54.5",
+    "terser": "^3.16.1",
     "thenify": "^3.3.0",
-    "webpack": "^4.27.1"
+    "webpack": "^4.29.3"
   }
 }
