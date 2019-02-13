@@ -22,6 +22,10 @@
     {
       "path": "./dist/sgn-sdk.es.js",
       "maxSize": "35 kB"
+    },
+    {
+      "path": "./kits/events/tracker.*js",
+      "maxSize": "20 kB"
     }
   ],
   "scripts": {
