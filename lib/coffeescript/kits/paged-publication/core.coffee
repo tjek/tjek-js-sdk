@@ -1,8 +1,8 @@
-MicroEvent = require 'microevent'
-Verso = require 'verso-browser'
-PageSpreads = require './page-spreads'
-clientLocalStorage = require '../../storage/client-local'
-SGN = require '../../sgn'
+import MicroEvent from 'microevent'
+import Verso from 'verso-browser'
+import PageSpreads from './page-spreads'
+import * as clientLocalStorage from '../../storage/client-local'
+import { throttle, getColorBrightness } from '../../util'
 
 class PagedPublicationCore
     defaults:
@@ -44,7 +44,7 @@ class PagedPublicationCore
     start: ->
         @getVerso().start()
 
-        @resizeListener = SGN.util.throttle @resize, @getOption('resizeDelay'), @
+        @resizeListener = throttle @resize, @getOption('resizeDelay'), @
         @unloadListener = @unload.bind @
 
         window.addEventListener 'resize', @resizeListener, false
@@ -88,7 +88,7 @@ class PagedPublicationCore
         @options[key]
 
     setColor: (color) ->
-        @els.root.setAttribute 'data-color-brightness', SGN.util.getColorBrightness(color)
+        @els.root.setAttribute 'data-color-brightness', getColorBrightness(color)
         @els.root.style.backgroundColor = color
 
         return
@@ -375,4 +375,4 @@ class PagedPublicationCore
 
 MicroEvent.mixin PagedPublicationCore
 
-module.exports = PagedPublicationCore
+export default PagedPublicationCore

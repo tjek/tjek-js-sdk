@@ -1,12 +1,14 @@
-MicroEvent = require 'microevent'
-SGN = require '../../core'
+import MicroEvent from 'microevent'
+import Viewer from './viewer'
+import SGN from '../../core'
+import { async } from '../../util'
 
-module.exports = class Bootstrapper
+export default class Bootstrapper
     constructor: (@options = {}) ->
         return
 
     createViewer: (data) ->
-        new SGN.PagedPublicationKit.Viewer @options.el,
+        new Viewer @options.el,
             id: @options.id
             ownedBy: data.details.dealer_id
             color: '#' + data.details.branding.pageflip.color
@@ -38,7 +40,7 @@ module.exports = class Bootstrapper
     
     fetch: (callback) ->
         callback = callback.bind @
-        SGN.util.async.parallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) ->
+        async.parallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) ->
             data =
                 details: result[0][1]
                 pages: result[1][1]

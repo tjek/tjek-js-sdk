@@ -1,7 +1,7 @@
 import MicroEvent from 'microevent'
 import Gator from '../../../../vendor/gator'
 import Mustache from 'mustache'
-import keyCodes from '../../key-codes'
+import * as keyCodes from '../../key-codes'
 
 template = """
 <div class="sgn-popover__background" data-close></div>

@@ -1,7 +1,9 @@
 import { error, getDeviceCategory, getPointer, getOrientation } from '../../util'
 import SGN from '../../core'
 import Controls from './controls'
+import Viewer from './viewer'
 import schema from '../../../graphql/incito.graphql'
+import * as clientSessionStorage from '../../storage/client-session'
 
 export default class Bootstrapper
     constructor: (@options = {}) ->
@@ -68,7 +70,7 @@ export default class Bootstrapper
 
     fetch: (callback) ->
         callback = callback.bind @
-        data = SGN.storage.session.get @storageKey
+        data = clientSessionStorage.get @storageKey
 
         if data? and data.response? and data.width is @maxWidth
             return callback null, data.response
@@ -94,7 +96,7 @@ export default class Bootstrapper
             else
                 callback null, res
 
-                SGN.storage.session.set @storageKey,
+                clientSessionStorage.set @storageKey,
                     width: @maxWidth
                     response: res
             
@@ -106,7 +108,7 @@ export default class Bootstrapper
         if not data.incito?
             throw error new Error(), 'you need to supply valid Incito to create a viewer'
 
-        viewer = new SGN.IncitoPublicationKit.Viewer @options.el,
+        viewer = new Viewer @options.el,
             id: @options.id
             incito: data.incito
             eventTracker: @options.eventTracker

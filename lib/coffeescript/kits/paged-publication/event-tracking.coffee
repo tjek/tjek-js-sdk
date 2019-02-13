@@ -1,4 +1,4 @@
-MicroEvent = require 'microevent'
+import MicroEvent from 'microevent'
 
 class PagedPublicationEventTracking
     constructor: (@eventTracker, @id) ->
@@ -90,4 +90,4 @@ class PagedPublicationEventTracking
 
 MicroEvent.mixin PagedPublicationEventTracking
 
-module.exports = PagedPublicationEventTracking
+export default PagedPublicationEventTracking

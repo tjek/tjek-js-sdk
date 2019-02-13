@@ -1,9 +1,11 @@
-MicroEvent = require 'microevent'
-SGN = require '../../sgn'
-Core = require './core'
-Hotspots = require './hotspots'
-Controls = require './controls'
-EventTracking = require './event-tracking'
+import MicroEvent from 'microevent'
+import Core from './core'
+import Hotspots from './hotspots'
+import Controls from './controls'
+import EventTracking from './event-tracking'
+import { singleChoicePopover } from '../core-ui'
+import { uuid } from '../../util'
+import * as translations from '../../translations'
 
 class Viewer
     constructor: (@el, @options = {}) ->
@@ -19,7 +21,7 @@ class Viewer
         @_hotspots = new Hotspots()
         @_controls = new Controls @el, keyboard: @options.keyboard
         @_eventTracking = new EventTracking @options.eventTracker, @options.id
-        @viewSession = SGN.util.uuid()
+        @viewSession = uuid()
         @hotspots = null
         @hotspotQueue = []
         @popover = null
@@ -203,9 +205,9 @@ class Viewer
         if hotspots.length is 1
             callback hotspots[0]
         else if hotspots.length > 1
-            @popover = SGN.CoreUIKit.singleChoicePopover
+            @popover = singleChoicePopover
                 el: @el
-                header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+                header: translations.t 'paged_publication.hotspot_picker.header'
                 x: e.verso.x
                 y: e.verso.y
                 items: hotspots
@@ -296,4 +298,4 @@ class Viewer
 
 MicroEvent.mixin Viewer
 
-module.exports = Viewer
+export default Viewer
