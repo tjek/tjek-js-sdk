@@ -41,5 +41,5 @@
         padding 16px 0
         font-size 18px
 
-    @supports (padding-bottom: env(safe-area-inset-bottom))
+    @supports (unquote('max(20px, env(safe-area-inset-bottom))'))
         bottom unquote('max(20px, env(safe-area-inset-bottom))')
