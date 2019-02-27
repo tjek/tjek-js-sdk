@@ -315,7 +315,7 @@ if (els.list) {
         if (e.target.tagName === 'IMG') {
             // TODO: Remove.
             var id = e.target.dataset.id;
-            var incitoId = 'SW5jaXRvUHVibGljYXRpb246MTI3MzgzMTIxNzM5MzA3MzQ0MA=='; //e.target.dataset.incitoId;
+            var incitoId = 'SW5jaXRvUHVibGljYXRpb246MTI4ODMzODE3OTAyMzMxNjE0NA=='; //e.target.dataset.incitoId;
 
             if (incitoId) {
                 openIncitoPublication(incitoId, id);
