@@ -108,6 +108,7 @@ module.exports = class Bootstrapper
 
         viewer = new SGN.IncitoPublicationKit.Viewer @options.el,
             id: @options.id
+            pagedPublicationId: @options.pagedPublicationId
             incito: data.incito
             eventTracker: @options.eventTracker
         controls = new Controls viewer
