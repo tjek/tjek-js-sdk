@@ -1,7 +1,7 @@
 (function () {
     if (SGN.util.getQueryParam('env') === 'staging') {
         SGN.config.set({
-            graphUrl: 'https://graph.service-staging.shopgun.com',
+            graphUrl: 'https://graph.service-staging.shopgun.com'
         });
     }
     SGN.config.set({
