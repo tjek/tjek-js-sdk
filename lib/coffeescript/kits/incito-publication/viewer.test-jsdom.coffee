@@ -7,7 +7,7 @@ dummyIncito = {
 }
 
 describe 'SGN.IncitoPublicationKit.Viewer', ->
-    test 'Track opened', ->
+    test 'Tracks Incito Publication Opened', ->
         fakeEventTracker =
             trackIncitoPublicationOpened: jest.fn(->)
             createViewToken: jest.fn((a) -> a + "-vt")
