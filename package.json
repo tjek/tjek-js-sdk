@@ -28,8 +28,8 @@
     "test": "npm run test:lint && npm run test:ci && npm run test:size",
     "test:lint": "coffeelint lib/coffeescript __tests__",
     "test:ci": "run-s -l -c test:node test:jsdom test:chrome",
-    "test:node": "jest --ci --env=node",
-    "test:jsdom": "jest --ci --env=jsdom",
+    "test:node": "jest --ci -c jest-node.json",
+    "test:jsdom": "jest --ci -c jest-jsdom.json",
     "test:chrome": "jest --ci -c jest-chrome.json",
     "test:size": "bundlesize",
     "build:js": "rollup -c -m --environment NODE_ENV:production",
@@ -41,24 +41,6 @@
     "dev": "run-p -l dev:js dev:css serve",
     "serve": "serve",
     "prepublishOnly": "npm run build"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "coffee",
-      "litcoffee",
-      "coffee.md"
-    ],
-    "transform": {
-      "coffee|litcoffee|coffee.md": "./jest-coffeescript"
-    },
-    "testRegex": "__tests__?/.*\\.(coffee|litcoffee|coffee.md)$",
-    "testPathIgnorePatterns": [
-      "__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
-      "node_modules",
-      "fixtures"
-    ]
   },
   "repository": {
     "type": "git",
