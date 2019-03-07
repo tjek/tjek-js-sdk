@@ -10,7 +10,7 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
     test 'Track opened', ->
         fakeEventTracker =
             trackIncitoPublicationOpened: jest.fn(->)
-            createViewToken: jest.fn((a) -> a)
+            createViewToken: jest.fn((a) -> a + "-vt")
 
         mountPoint = document.createElement("div")
 
@@ -23,7 +23,11 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
 
         viewer.start()
 
-        expect(fakeEventTracker.createViewToken.mock.calls.length).toBe(2)
         expect(fakeEventTracker.trackIncitoPublicationOpened.mock.calls.length).toBe(1)
+        expect(fakeEventTracker.trackIncitoPublicationOpened.mock.calls[0][0]).toEqual({
+            "ip.id": "incito-id",
+            "pp.vt": "paged-id-vt",
+            "vt": "incito-id-vt"
+        })
 
         return
