@@ -81,6 +81,9 @@ module.exports = class Tracker
     
     trackSearched: (properties, version) ->
         @trackEvent 5, properties, version
+
+    trackIncitoPublicationOpened: (properties, version) ->
+        @trackEvent 8, properties, version
     
     createViewToken: (...parts) ->
         str = [SGN.client.id].concat(parts).join ''

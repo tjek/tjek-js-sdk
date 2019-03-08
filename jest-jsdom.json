@@ -1,0 +1,20 @@
+{
+	"testEnvironment": "jsdom",
+	"moduleFileExtensions": [
+		"js",
+		"json",
+		"coffee",
+		"litcoffee",
+		"coffee.md"
+	],
+	"transform": {
+		"coffee|litcoffee|coffee.md": "./jest-coffeescript"
+	},
+	"testRegex": "(/__tests__/.*|(\\.|/)(test|spec|test-jsdom))\\.coffee$",
+	"testPathIgnorePatterns": [
+		"__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
+		"node_modules",
+		"fixtures",
+		"dist"
+	]
+}
