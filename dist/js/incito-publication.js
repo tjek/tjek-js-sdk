@@ -1,10 +1,4 @@
-(function () {
-    if (SGN.util.getQueryParam('env') === 'staging') {
-        SGN.config.set({
-            graphUrl: 'https://graph.service-staging.shopgun.com'
-        });
-    }
-    
+(function () {    
     function IncitoPublication (options) {
         this.options = options || {};
         this.popover = null;
@@ -13,6 +7,7 @@
         this.bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
             el: this.options.el,
             id: this.options.id,
+            pagedPublicationId: this.options.pagedPublicationId,
             eventTracker: this.options.eventTracker
         });
     }
@@ -123,6 +118,7 @@
     var incitoPublication = new IncitoPublication({
         el: el,
         id: SGN.util.getQueryParam('id'),
+        pagedPublicationId: SGN.util.getQueryParam('pagedPublicationId'),
         eventTracker: SGN.config.get('eventTracker')
     });
 
