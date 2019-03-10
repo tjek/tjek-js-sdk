@@ -65,6 +65,12 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 2.3.0
+
+- Introduce support for incito opened event in eventTracker
+- Use new incito opened event in IncitoPublicationKit
+- Add option to IncitoPublicationKit.Viewer to pass in a pagedPublicationId to be included in the incito opened event, this should be used when a user is known to already have seen the Paged Publication version of an Incito Publication.
+
 ### Version 2.2.11
 
 - Use cross-fetch library for making requests in browsers and node.js
