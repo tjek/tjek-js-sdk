@@ -18,8 +18,8 @@ First, you need to [create a ShopGun app](https://business.shopgun.com/developer
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.18.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.18.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.20.min.css" rel="stylesheet" type="text/css">
+<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.2.20.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
 By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://business.shopgun.com/developers/apps).
@@ -71,6 +71,11 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - 💥 Make SGN.EventsKit.Tracker available as a standalone module, to enjoy this you can `import Tracker from 'shopgun-sdk/kits/events/tracker';`. This will be a first in a more long-term effort to make the SDK useful to those who don't need the whole thing(which sits at a hefty 56kB minified and gzipped!) and are willing to give up the convenience of the primary singleton-based usage.
 
 
+### Version 2.3.0
+
+- Introduce support for incito opened event in eventTracker
+- Use new incito opened event in IncitoPublicationKit
+- Add option to IncitoPublicationKit.Viewer to pass in a pagedPublicationId to be included in the incito opened event, this should be used when a user is known to already have seen the Paged Publication version of an Incito Publication.
 
 ### Version 2.2.11
 

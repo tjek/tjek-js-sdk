@@ -110,6 +110,7 @@ export default class Bootstrapper
 
         viewer = new Viewer @options.el,
             id: @options.id
+            pagedPublicationId: @options.pagedPublicationId
             incito: data.incito
             eventTracker: @options.eventTracker
         controls = new Controls viewer
