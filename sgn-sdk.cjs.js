@@ -809,6 +809,11 @@ var tracker = Tracker = function () {
         return this.trackEvent(5, properties, version);
       }
     }, {
+      key: "trackIncitoPublicationOpened",
+      value: function trackIncitoPublicationOpened(properties, version) {
+        return this.trackEvent(8, properties, version);
+      }
+    }, {
       key: "createViewToken",
       value: function createViewToken() {
         var str, viewToken;
@@ -3029,9 +3034,49 @@ var pagedPublication = {
   Bootstrapper: bootstrapper
 };
 
-var Incito, MicroEvent$a, Viewer$1;
-Incito = incitoBrowser;
+var IncitoPublicationEventTracking, MicroEvent$a;
 MicroEvent$a = microevent;
+
+IncitoPublicationEventTracking =
+/*#__PURE__*/
+function () {
+  function IncitoPublicationEventTracking(eventTracker, id, _ref) {
+    var pagedPublicationId = _ref.pagedPublicationId;
+
+    _classCallCheck(this, IncitoPublicationEventTracking);
+
+    this.eventTracker = eventTracker;
+    this.id = id;
+    this.pagedPublicationId = pagedPublicationId;
+    return;
+  }
+
+  _createClass(IncitoPublicationEventTracking, [{
+    key: "trackOpened",
+    value: function trackOpened(properties) {
+      if (this.eventTracker == null) {
+        return this;
+      }
+
+      this.eventTracker.trackIncitoPublicationOpened({
+        'ip.id': this.id,
+        'pp.vt': this.pagedPublicationId ? this.eventTracker.createViewToken(this.pagedPublicationId) : void 0,
+        'vt': this.eventTracker.createViewToken(this.id)
+      });
+      return this;
+    }
+  }]);
+
+  return IncitoPublicationEventTracking;
+}();
+
+MicroEvent$a.mixin(IncitoPublicationEventTracking);
+var eventTracking$1 = IncitoPublicationEventTracking;
+
+var EventTracking$1, Incito, MicroEvent$b, Viewer$1;
+Incito = incitoBrowser;
+MicroEvent$b = microevent;
+EventTracking$1 = eventTracking$1;
 
 Viewer$1 =
 /*#__PURE__*/
@@ -3046,6 +3091,9 @@ function () {
     this.incito = new Incito(this.el, {
       incito: this.options.incito
     });
+    this._eventTracking = new EventTracking$1(this.options.eventTracker, this.options.id, {
+      pagedPublicationId: this.options.pagedPublicationId
+    });
     return;
   }
 
@@ -3054,6 +3102,9 @@ function () {
     value: function start() {
       this.incito.start();
       this.el.classList.add('sgn-incito--started');
+
+      this._eventTracking.trackOpened();
+
       return this;
     }
   }, {
@@ -3066,7 +3117,7 @@ function () {
   return Viewer;
 }();
 
-MicroEvent$a.mixin(Viewer$1);
+MicroEvent$b.mixin(Viewer$1);
 var viewer$1 = Viewer$1;
 
 var Controls$1;
@@ -3100,11 +3151,10 @@ function () {
     value: function scroll() {
       var _this2 = this;
 
-      var docHeight, progress, scrollTop, winHeight;
-      scrollTop = window.pageYOffset;
+      var progress, rect, winHeight;
       winHeight = window.innerHeight;
-      docHeight = document.body.clientHeight;
-      progress = Math.round(scrollTop / (docHeight - winHeight) * 100);
+      rect = this.viewer.el.getBoundingClientRect();
+      progress = Math.min(100, Math.round(Math.abs(rect.top - winHeight) / rect.height * 100));
       clearTimeout(this.scrollTimeout);
       this.scrollTimeout = setTimeout(function () {
         _this2.isScrolling = false;
@@ -3286,6 +3336,7 @@ function () {
 
       viewer = new SGN$g.IncitoPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
+        pagedPublicationId: this.options.pagedPublicationId,
         incito: data.incito,
         eventTracker: this.options.eventTracker
       });
@@ -3739,8 +3790,8 @@ function () {
   return OfferDetails;
 }();
 
-var Gator, MicroEvent$b, Mustache$2, Popover, keyCodes$2, template;
-MicroEvent$b = microevent;
+var Gator, MicroEvent$c, Mustache$2, Popover, keyCodes$2, template;
+MicroEvent$c = microevent;
 Gator = gator;
 Mustache$2 = mustache;
 keyCodes$2 = keyCodes;
@@ -3880,7 +3931,7 @@ function () {
   return Popover;
 }();
 
-MicroEvent$b.mixin(Popover);
+MicroEvent$c.mixin(Popover);
 var popover = Popover;
 
 var Popover$1;
