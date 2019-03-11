@@ -1,0 +1,16 @@
+{
+  "exclude": ["node_modules/**", "*.graphql"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["> 3%", "IE 11"],
+          "node": 8
+        },
+        "modules": "commonjs",
+        "exclude": ["transform-typeof-symbol"]
+      }
+    ]
+  ]
+}

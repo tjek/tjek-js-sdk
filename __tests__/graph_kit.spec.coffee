@@ -1,4 +1,4 @@
-SGN = require './sdk'
+import SGN from './sdk'
 
 describe 'SGN.GraphKit', ->
     test 'Making a request', ->

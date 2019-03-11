@@ -1,20 +1,15 @@
 {
-	"testEnvironment": "node",
-	"moduleFileExtensions": [
-		"js",
-		"json",
-		"coffee",
-		"litcoffee",
-		"coffee.md"
-	],
-	"transform": {
-		"coffee|litcoffee|coffee.md": "./jest-coffeescript"
-	},
-	"testRegex": "(/__tests__/.*|(\\.|/)(test|spec|test-node))\\.coffee$",
-	"testPathIgnorePatterns": [
-		"__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
-		"node_modules",
-		"fixtures",
-		"dist"
-	]
+  "testEnvironment": "node",
+  "moduleFileExtensions": ["js", "json", "coffee", "litcoffee", "coffee.md"],
+  "transform": {
+    "coffee|litcoffee|coffee.md": "./jest-coffeescript"
+  },
+  "setupFiles": ["<rootDir>/jest.init.js"],
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec|test-node))\\.coffee$",
+  "testPathIgnorePatterns": [
+    "__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
+    "node_modules",
+    "fixtures",
+    "dist"
+  ]
 }

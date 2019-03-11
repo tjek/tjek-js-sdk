@@ -1,4 +1,4 @@
-Viewer = require('./viewer')
+import Viewer from './viewer'
 
 dummyIncito = {
     "version": "1.0.0",
