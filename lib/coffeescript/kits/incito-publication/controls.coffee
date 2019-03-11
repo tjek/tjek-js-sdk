@@ -17,10 +17,9 @@ module.exports = class Controls
         return
     
     scroll: ->
-        scrollTop = window.pageYOffset
         winHeight = window.innerHeight
-        docHeight = document.body.clientHeight
-        progress = Math.round scrollTop / (docHeight - winHeight) * 100
+        rect = @viewer.el.getBoundingClientRect()
+        progress = Math.min 100, Math.round(Math.abs(rect.top - winHeight) / rect.height * 100)
 
         clearTimeout @scrollTimeout
         @scrollTimeout = setTimeout =>

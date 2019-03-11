@@ -1,9 +1,4 @@
 (function () {
-// TODO: Remove
-SGN.config.set({
-    graphUrl: 'https://graph.service-staging.shopgun.com'
-});
-
 var config = {
     id: SGN.util.getQueryParam('autoopen'),
     businessId: 'c35es'
@@ -18,6 +13,25 @@ var nga = 'dataLayer' in window ? function (ctx) {
         'shopgunLabel': ctx.eventLabel
     });
 } : noop;
+var isIncitoAllowed = (function () {
+    var percentage = Math.floor(Math.random() * 100) + 0;
+
+    try {
+        var allowed = window.localStorage.getItem('sgn-elgiganten-incito-allowed');
+
+        if (allowed === '1') {
+            return true;
+        } else if (allowed === '0') {
+            return false;
+        }
+    } catch (err) {}
+
+    var allowed = percentage <= 50;
+
+    window.localStorage.setItem('sgn-elgiganten-incito-allowed', allowed ? '1' : '0');
+
+    return allowed;
+})();
 var once = function (fun) {
     var done = false;
 
@@ -39,7 +53,6 @@ var els = {
     incito: {
         root: document.querySelector('#incito__publication'),
         categorySwitcher: document.querySelector('#incito-publication__nav select'),
-        classic: document.querySelector('#incito-publication__classic'),
         top: document.querySelector('#incito-publication__top')
     }
 };
@@ -92,7 +105,7 @@ var openActivePublication = function (pageNumber) {
                 return aDate - bDate;
             });
 
-            openPublication(res[0].id, pageNumber);
+            openPagedPublication(res[0].id, pageNumber);
         }
     });
 };
@@ -266,16 +279,15 @@ var openIncitoPublication = (id, pagedId) => {
         incitoPublicationViewer.destroy();
     }
 
-    if (pagedId) {
-        els.incito.classic.setAttribute('data-id', pagedId);
-        els.incito.classic.style.display = 'inline';
-    } else {
-        els.incito.classic.style.display = 'none';
-    }
+    nga({
+        'eventCategory': 'Incito Publication',
+        'eventAction': 'Opened'
+    });
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
         el: el,
         id: id,
+        pagedPublicationId: pagedId,
         eventTracker: SGN.config.get('eventTracker')
     });
 
@@ -293,34 +305,22 @@ var openIncitoPublication = (id, pagedId) => {
                 
                 var id = this.getAttribute('data-id');
 
-                window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(id));
+                window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(id) + '/');
             });
         }
     });
-};
-var closeIncitoPublication = function () {
-    if (incitoPublicationViewer) {
-        incitoPublicationViewer.destroy();
-
-        incitoPublicationViewer = null;
-
-        els.incito.categorySwitcher.value = '';
-        els.incito.root.style.display = 'none';
-        els.incito.root.classList.remove('sgn-incito--started');
-    }
 };
 
 if (els.list) {
     els.list.addEventListener('click', function (e) {
         if (e.target.tagName === 'IMG') {
-            // TODO: Remove.
             var id = e.target.dataset.id;
-            var incitoId = 'SW5jaXRvUHVibGljYXRpb246MTI4ODMzODE3OTAyMzMxNjE0NA=='; //e.target.dataset.incitoId;
+            var incitoId = e.target.dataset.incitoId;
 
-            if (incitoId) {
+            if (incitoId && isIncitoAllowed) {
                 openIncitoPublication(incitoId, id);
             } else {
-                openPublication(id);
+                openPagedPublication(id);
             }
         }
     });
@@ -359,15 +359,6 @@ if (els.list) {
     });
 }
 
-if (els.incito.classic) {
-    els.incito.classic.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        closeIncitoPublication();
-        openPagedPublication(e.target.dataset.id);
-    });
-}
-
 if (els.incito.top) {
     els.incito.top.addEventListener('click', function (e) {
         e.preventDefault();
@@ -380,47 +371,59 @@ if (els.incito.top) {
         } else {
             window.scrollTo(0, 0);
         }
+
+        nga({
+            'eventCategory': 'Incito Publication',
+            'eventAction': 'Scroll to Top'
+        });
     });
 }
 
 if (els.incito.categorySwitcher) {
     els.incito.categorySwitcher.addEventListener('change', function (e) {
         var category = e.target.value;
-        var find = function (view, callback) {
-            if (view.role === 'offer' && view.meta && view.meta.ids) {
-                var match;
-
+        var sections = {};
+        var likelySection;
+        var find = function (view, sectionId, callback) {
+            if (view.role === 'offer' && view.meta && view.meta.ids && sectionId) {
                 for (var i = 0; i < view.meta.ids.length; i++) {
                     var id = view.meta.ids[i];
 
                     if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
-                        match = view;
+                        if (typeof sections[sectionId] !== 'number') {
+                            sections[sectionId] = 0;
+                        }
+    
+                        sections[sectionId]++;
 
                         break;
                     }
-                }
-
-                if (match) {
-                    return match;
                 }
             }
             
             if (view.child_views) {
                 for (var i = 0; i < view.child_views.length; i++) {
-                    var match = find(view.child_views[i], callback);
+                    var childView = view.child_views[i];
 
-                    if (match) {
-                        return match;
-                    }
+                    find(childView, childView.role === 'section' ? childView.id : sectionId, callback);
                 }
             }
         };
 
         if (category && incito) {
-            var view = find(incito.root_view);
+            find(incito.root_view);
 
-            if (view) {
-                var offerEl = els.incito.root.querySelector('.incito__view[data-role=offer][data-id="' + view.id + '"]');
+            for (var key in sections) {
+                if (!likelySection || (likelySection.count < sections[key] && likelySection.count < 2)) {
+                    likelySection = {
+                        count: sections[key],
+                        id: key
+                    };
+                }
+            }
+
+            if (likelySection) {
+                var offerEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
 
                 if (isSmoothScrollSupported) {
                     offerEl.scrollIntoView({
@@ -436,6 +439,11 @@ if (els.incito.categorySwitcher) {
                 alert('Der findes desværre ingen tilbud i den kategori');
             }
         }
+
+        nga({
+            'eventCategory': 'Incito Publication',
+            'eventAction': 'Category Changed'
+        });
     });
 }
 
