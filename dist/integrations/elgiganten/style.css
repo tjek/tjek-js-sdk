@@ -180,10 +180,6 @@
     display: none;
 }
 
-#incito-publication__classic {
-    margin-left: 10px;
-}
-
 @-webkit-keyframes publications-bouncedelay {
     0%, 80%, 100% { -webkit-transform: scale(0) }
     40% { -webkit-transform: scale(1.0) }
