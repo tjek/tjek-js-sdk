@@ -3,7 +3,6 @@ var config = {
     id: SGN.util.getQueryParam('autoopen'),
     businessId: 'c35es'
 };
-var isSmoothScrollSupported = 'scrollBehavior' in document.documentElement.style;
 var noop = function () {};
 var nga = 'dataLayer' in window ? function (ctx) {
     dataLayer.push({
@@ -76,6 +75,7 @@ var updateQueryStringParameter = function (uri, key, value) {
 var getPublicationRuntimeEventLabel = function (data) {
     return data.run_from.substr(0, 10) + '/' + data.run_till.substr(0, 10);
 };
+var publications;
 var incito;
 var incitoPublicationViewer;
 var fetchPublications = function (callback) {
@@ -309,7 +309,7 @@ var openIncitoPublication = function (id, pagedId) {
 
             var rect = els.incito.root.getBoundingClientRect();
         
-            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
+            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
 
             SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
                 e.preventDefault();
@@ -350,6 +350,8 @@ if (els.list) {
             renderPublications(res);
     
             var parts = (config.id || '').split(',');
+
+            publications = res;
     
             if (parts[0] === 'current' || parts[0] === 'future') {
                 res.sort(function (a, b) {
@@ -385,7 +387,7 @@ if (els.incito.top) {
 
         var rect = els.incito.root.getBoundingClientRect();
         
-        window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
+        window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
 
         nga({
             'eventCategory': 'Incito Publication',
@@ -440,17 +442,9 @@ if (els.incito.categorySwitcher) {
 
             if (likelySection) {
                 var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
+                var rect = sectionEl.getBoundingClientRect();
 
-                if (isSmoothScrollSupported) {
-                    sectionEl.scrollIntoView({
-                        behavior: 'auto',
-                        block: 'start'
-                    });
-                } else {
-                    var rect = sectionEl.getBoundingClientRect();
-
-                    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
-                }
+                window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
             } else {
                 alert('Der findes desværre ingen tilbud i den kategori');
             }
