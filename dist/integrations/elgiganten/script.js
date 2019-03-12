@@ -63,6 +63,16 @@ var formatDate = function (dtstr) {
 
     return new Date(Date.UTC(dtcomps[0], dtcomps[1], dtcomps[2], dtcomps[3], dtcomps[4], dtcomps[5]));
 };
+var updateQueryStringParameter = function (uri, key, value) {
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    } else {
+        return uri + separator + key + "=" + value;
+    }
+};
 var getPublicationRuntimeEventLabel = function (data) {
     return data.run_from.substr(0, 10) + '/' + data.run_till.substr(0, 10);
 };
@@ -162,29 +172,25 @@ var openPagedPublication = function (id, pageNumber) {
                     callback(null, allHotspots);
                 });
             };
-            var updateQueryStringParameter = function (uri, key, value) {
-                var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-                var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-
-                if (uri.match(re)) {
-                    return uri.replace(re, '$1' + key + "=" + value + '$2');
-                } else {
-                    return uri + separator + key + "=" + value;
-                }
-            };
 
             viewer.bind('hotspotClicked', function (hotspot) {
-                if (hotspot.type === 'url') {
-                    window.open(updateQueryStringParameter(hotspot.url, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
-                } else {
+                var url = hotspot.type === 'url' ? hotspot.url : hotspot.webshop;
+
+                url = updateQueryStringParameter(url, 'utm_source', 'elgiganten');
+                url = updateQueryStringParameter(url, 'utm_medium', 'tilbudsavis');
+                url = updateQueryStringParameter(url, 'utm_campaign', 'pdf');
+                url = updateQueryStringParameter(url, 'utm_term', getPublicationRuntimeEventLabel(data.details));
+                url = updateQueryStringParameter(url, 'intcid', 'INT_IPAPER_BUTTON');
+
+                if (hotspot.type === 'offer') {
                     nga({
                         'eventCategory': 'Publication',
                         'eventAction': 'Offer Opened',
                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
                     });
-                    
-                    window.open(updateQueryStringParameter(hotspot.webshop, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
                 }
+
+                window.open(url, '_blank');
             });
             var trackProgress = function (progress) {
                 nga({
@@ -304,8 +310,19 @@ var openIncitoPublication = (id, pagedId) => {
                 e.preventDefault();
                 
                 var id = this.getAttribute('data-id');
+                var url = 'https://www.elgiganten.dk/product/' + encodeURIComponent(id) + '/';
 
-                window.open('https://www.elgiganten.dk/product/' + encodeURIComponent(id) + '/');
+                url = updateQueryStringParameter(url, 'utm_source', 'elgiganten');
+                url = updateQueryStringParameter(url, 'utm_medium', 'tilbudsavis');
+                url = updateQueryStringParameter(url, 'utm_campaign', 'incito');
+
+                nga({
+                    'eventCategory': 'Incito Publication',
+                    'eventAction': 'Offer Opened',
+                    'eventLabel': id
+                });
+                
+                window.open(url, '_blank');
             });
         }
     });
@@ -423,17 +440,17 @@ if (els.incito.categorySwitcher) {
             }
 
             if (likelySection) {
-                var offerEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
+                var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
 
                 if (isSmoothScrollSupported) {
-                    offerEl.scrollIntoView({
+                    sectionEl.scrollIntoView({
                         behavior: 'auto',
                         block: 'center'
                     });
                 } else {
-                    var rect = offerEl.getBoundingClientRect();
+                    var rect = sectionEl.getBoundingClientRect();
 
-                    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 100));
+                    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
                 }
             } else {
                 alert('Der findes desværre ingen tilbud i den kategori');
