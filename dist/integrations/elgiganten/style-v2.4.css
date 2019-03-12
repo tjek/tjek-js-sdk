@@ -159,12 +159,6 @@
     -webkit-transform: scale(1.5) rotate(-135deg);
 }
 
-@media (pointer: coarse) {
-    #incito-publication__top {
-        display: none;
-    }
-}
-
 #incito__publication .incito__view[data-role="offer"] {
     cursor: pointer;
 }
