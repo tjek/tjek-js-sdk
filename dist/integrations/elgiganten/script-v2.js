@@ -14,6 +14,7 @@ var nga = 'dataLayer' in window ? function (ctx) {
     });
 } : noop;
 var isIncitoAllowed = (function () {
+    return false;
     var percentage = Math.floor(Math.random() * 100) + 0;
 
     try {
