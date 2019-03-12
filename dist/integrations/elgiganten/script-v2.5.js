@@ -194,7 +194,7 @@ var openPagedPublication = function (id, pageNumber) {
                     'eventAction': 'Read-through ' + progress + '%',
                     'eventLabel': getPublicationRuntimeEventLabel(data.details)
                 });
-            }
+            };
             var navigationHandlers = {
                 page2: once(function () {
                     nga({
@@ -208,7 +208,7 @@ var openPagedPublication = function (id, pageNumber) {
                 progress60: once(function () { trackProgress(60) }),
                 progress80: once(function () { trackProgress(80) }),
                 progress100: once(function () { trackProgress(100) })
-            }
+            };
 
             if (!(typeof pageNumber === 'number' && pageNumber > 1)) {
                 nga({
@@ -293,7 +293,20 @@ var openIncitoPublication = function (id, pagedId) {
         pagedPublicationId: pagedId,
         eventTracker: SGN.config.get('eventTracker')
     });
-
+    var trackProgress = function (progress) {
+        nga({
+            'eventCategory': 'Incito Publication',
+            'eventAction': 'Read-through ' + progress + '%',
+            'eventLabel': 'dm'
+        });
+    };
+    var navigationHandlers = {
+        progress20: once(function () { trackProgress(20) }),
+        progress40: once(function () { trackProgress(40) }),
+        progress60: once(function () { trackProgress(60) }),
+        progress80: once(function () { trackProgress(80) }),
+        progress100: once(function () { trackProgress(100) })
+    };
     var rect = els.incito.root.getBoundingClientRect();
 
     window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
@@ -306,6 +319,19 @@ var openIncitoPublication = function (id, pagedId) {
             });
 
             incitoPublicationViewer.start();
+            incitoPublicationViewer.bind('progress', function (navEvent) {
+                if (navEvent.progress >= 100) {
+                    navigationHandlers.progress100();
+                } else if (navEvent.progress >= 80) {
+                    navigationHandlers.progress80();
+                } else if (navEvent.progress >= 60) {
+                    navigationHandlers.progress60();
+                } else if (navEvent.progress >= 40) {
+                    navigationHandlers.progress40();
+                } else if (navEvent.progress >= 20) {
+                    navigationHandlers.progress20();
+                }
+            });
 
             var rect = els.incito.root.getBoundingClientRect();
         
