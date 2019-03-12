@@ -36,5 +36,6 @@ module.exports = class Controls
             @isScrolling = true
 
         @progressEl.textContent = "#{progress} %"
+        @viewer.trigger 'progress', progress: progress
 
         return

@@ -137,8 +137,9 @@
     color: #fff;
 }
 
-#incito-publications__nav select {
-    max-width: 200px;
+#incito-publication__nav select {
+    max-width: 200px !important;
+    width: auto !important;
 }
 
 #incito-publication__nav a {
