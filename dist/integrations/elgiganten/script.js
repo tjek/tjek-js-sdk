@@ -445,7 +445,7 @@ if (els.incito.categorySwitcher) {
                 if (isSmoothScrollSupported) {
                     sectionEl.scrollIntoView({
                         behavior: 'auto',
-                        block: 'center'
+                        block: 'start'
                     });
                 } else {
                     var rect = sectionEl.getBoundingClientRect();
