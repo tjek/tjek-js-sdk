@@ -176,10 +176,7 @@ var openPagedPublication = function (id, pageNumber) {
             viewer.bind('hotspotClicked', function (hotspot) {
                 var url = hotspot.type === 'url' ? hotspot.url : hotspot.webshop;
 
-                url = updateQueryStringParameter(url, 'utm_source', 'elgiganten');
-                url = updateQueryStringParameter(url, 'utm_medium', 'pdf-tilbudsavis');
-                url = updateQueryStringParameter(url, 'utm_campaign', 'dm-' + getPublicationRuntimeEventLabel(data.details));
-                url = updateQueryStringParameter(url, 'intcid', 'INT_IPAPER_BUTTON');
+                url = updateQueryStringParameter(url, 'intcid', 'INT_PDF_BUTTON');
 
                 if (hotspot.type === 'offer') {
                     nga({
@@ -320,9 +317,7 @@ var openIncitoPublication = function (id, pagedId) {
                 var id = this.getAttribute('data-id');
                 var url = 'https://www.elgiganten.dk/product/' + encodeURIComponent(id) + '/';
 
-                url = updateQueryStringParameter(url, 'utm_source', 'elgiganten');
-                url = updateQueryStringParameter(url, 'utm_medium', 'incito-tilbudsavis');
-                url = updateQueryStringParameter(url, 'utm_campaign', 'dm');
+                url = updateQueryStringParameter(url, 'intcid', 'INT_INCITO_BUTTON');
 
                 nga({
                     'eventCategory': 'Incito Publication',
