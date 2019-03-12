@@ -14,7 +14,6 @@ var nga = 'dataLayer' in window ? function (ctx) {
     });
 } : noop;
 var isIncitoAllowed = (function () {
-    return false;
     var percentage = Math.floor(Math.random() * 100) + 0;
 
     try {
@@ -178,9 +177,8 @@ var openPagedPublication = function (id, pageNumber) {
                 var url = hotspot.type === 'url' ? hotspot.url : hotspot.webshop;
 
                 url = updateQueryStringParameter(url, 'utm_source', 'elgiganten');
-                url = updateQueryStringParameter(url, 'utm_medium', 'tilbudsavis');
-                url = updateQueryStringParameter(url, 'utm_campaign', 'pdf');
-                url = updateQueryStringParameter(url, 'utm_term', getPublicationRuntimeEventLabel(data.details));
+                url = updateQueryStringParameter(url, 'utm_medium', 'pdf-tilbudsavis');
+                url = updateQueryStringParameter(url, 'utm_campaign', 'dm-' + getPublicationRuntimeEventLabel(data.details));
                 url = updateQueryStringParameter(url, 'intcid', 'INT_IPAPER_BUTTON');
 
                 if (hotspot.type === 'offer') {
@@ -277,7 +275,7 @@ var openPagedPublication = function (id, pageNumber) {
         }
     });
 };
-var openIncitoPublication = (id, pagedId) => {
+var openIncitoPublication = function (id, pagedId) {
     var el = els.incito.root;
 
     el.style.display = 'block';
@@ -288,7 +286,8 @@ var openIncitoPublication = (id, pagedId) => {
 
     nga({
         'eventCategory': 'Incito Publication',
-        'eventAction': 'Opened'
+        'eventAction': 'Opened',
+        'eventLabel': 'dm'
     });
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
@@ -297,6 +296,10 @@ var openIncitoPublication = (id, pagedId) => {
         pagedPublicationId: pagedId,
         eventTracker: SGN.config.get('eventTracker')
     });
+
+    var rect = els.incito.root.getBoundingClientRect();
+
+    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
 
     incitoPublication.fetch(function (err, res) {
         if (!err) {
@@ -307,6 +310,10 @@ var openIncitoPublication = (id, pagedId) => {
 
             incitoPublicationViewer.start();
 
+            var rect = els.incito.root.getBoundingClientRect();
+        
+            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
+
             SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
                 e.preventDefault();
                 
@@ -314,8 +321,8 @@ var openIncitoPublication = (id, pagedId) => {
                 var url = 'https://www.elgiganten.dk/product/' + encodeURIComponent(id) + '/';
 
                 url = updateQueryStringParameter(url, 'utm_source', 'elgiganten');
-                url = updateQueryStringParameter(url, 'utm_medium', 'tilbudsavis');
-                url = updateQueryStringParameter(url, 'utm_campaign', 'incito');
+                url = updateQueryStringParameter(url, 'utm_medium', 'incito-tilbudsavis');
+                url = updateQueryStringParameter(url, 'utm_campaign', 'dm');
 
                 nga({
                     'eventCategory': 'Incito Publication',
@@ -381,18 +388,14 @@ if (els.incito.top) {
     els.incito.top.addEventListener('click', function (e) {
         e.preventDefault();
 
-        if (isSmoothScrollSupported) {
-            document.body.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        } else {
-            window.scrollTo(0, 0);
-        }
+        var rect = els.incito.root.getBoundingClientRect();
+        
+        window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
 
         nga({
             'eventCategory': 'Incito Publication',
-            'eventAction': 'Scroll to Top'
+            'eventAction': 'Scroll to Top',
+            'eventLabel': 'dm'
         });
     });
 }
@@ -460,7 +463,8 @@ if (els.incito.categorySwitcher) {
 
         nga({
             'eventCategory': 'Incito Publication',
-            'eventAction': 'Category Changed'
+            'eventAction': 'Category Changed',
+            'eventLabel': 'dm'
         });
     });
 }
