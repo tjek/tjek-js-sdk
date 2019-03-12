@@ -1,3 +1,7 @@
+.scroll-back {
+    display: none !important;
+}
+
 #publications {
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -107,6 +111,11 @@
     background-color: #003682;
     font-weight: bold;
     padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
@@ -126,6 +135,11 @@
     -ms-flex-align: center;
     align-items: center;
     color: #fff;
+}
+
+#incito-publication__nav select {
+    max-width: 200px !important;
+    width: auto !important;
 }
 
 #incito-publication__nav a {
@@ -159,12 +173,6 @@
     -webkit-transform: scale(1.5) rotate(-135deg);
 }
 
-@media (pointer: coarse) {
-    #incito-publication__top {
-        display: none;
-    }
-}
-
 #incito__publication .incito__view[data-role="offer"] {
     cursor: pointer;
 }
@@ -172,6 +180,10 @@
 #incito__publication .sgn-incito__progress {
     background-color: #003682;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+}
+
+#incito__publication .publications__spinner {
+    padding-top: 100px;
 }
 
 #incito__publication.sgn-incito--started .publications__spinner,
