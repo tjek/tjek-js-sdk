@@ -31,3 +31,5 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
         })
 
         return
+
+    return

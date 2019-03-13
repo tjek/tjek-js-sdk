@@ -12,3 +12,5 @@ describe 'Chrome + Webpack', ->
         inputCode = "var SGN = require('./dist/sgn-sdk.js'); console.log(SGN);"
         bundleCode = await webpackCompiler(inputCode, { mode: 'production' })
         await page.evaluate(bundleCode)
+
+    return
