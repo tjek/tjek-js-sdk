@@ -942,7 +942,6 @@
 }
 .incito__text-view {
   margin: 0;
-  font-family: inherit !important;
   hyphens: auto;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -1030,7 +1029,6 @@
 }
 .incito__text-view {
   margin: 0;
-  font-family: inherit !important;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   -ms-hyphens: auto;

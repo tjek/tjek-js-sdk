@@ -12428,6 +12428,8 @@
 
             if (Array.isArray(this.attrs.font_family) && this.attrs.font_family.length > 0) {
               this.el.style.fontFamily = this.attrs.font_family.join(', ');
+            } else {
+              this.el.style.fontFamily = 'inherit';
             } // Text size.
 
 
