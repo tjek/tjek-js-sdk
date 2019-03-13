@@ -3168,6 +3168,9 @@ function () {
       }
 
       this.progressEl.textContent = "".concat(progress, " %");
+      this.viewer.trigger('progress', {
+        progress: progress
+      });
     }
   }]);
 
