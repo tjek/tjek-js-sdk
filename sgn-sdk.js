@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof rollupNeedsAnOptionToDisableAMDInUMD === 'function' && rollupNeedsAnOptionToDisableAMDInUMD.amd ? rollupNeedsAnOptionToDisableAMDInUMD(factory) :
-  global.SGN = factory();
-}(typeof self !== 'undefined' ? self : this, function () { 'use strict';
+  (global = global || self, global.SGN = factory());
+}(this, function () { 'use strict';
 
   function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -94,7 +94,7 @@
   };
 
   var _core = createCommonjsModule(function (module) {
-  var core = module.exports = { version: '2.6.0' };
+  var core = module.exports = { version: '2.6.5' };
   if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
   });
   var _core_1 = _core.version;
@@ -108,7 +108,7 @@
   })('versions', []).push({
     version: _core.version,
     mode: 'global',
-    copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+    copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
   });
   });
 
@@ -241,14 +241,16 @@
     return hasOwnProperty.call(it, key);
   };
 
+  var _functionToString = _shared('native-function-to-string', Function.toString);
+
   var _redefine = createCommonjsModule(function (module) {
   var SRC = _uid('src');
+
   var TO_STRING = 'toString';
-  var $toString = Function[TO_STRING];
-  var TPL = ('' + $toString).split(TO_STRING);
+  var TPL = ('' + _functionToString).split(TO_STRING);
 
   _core.inspectSource = function (it) {
-    return $toString.call(it);
+    return _functionToString.call(it);
   };
 
   (module.exports = function (O, key, val, safe) {
@@ -268,7 +270,7 @@
     }
   // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
   })(Function.prototype, TO_STRING, function toString() {
-    return typeof this == 'function' && this[SRC] || $toString.call(this);
+    return typeof this == 'function' && this[SRC] || _functionToString.call(this);
   });
   });
 
@@ -1461,12 +1463,12 @@
             break;
           default: // \d\d?
             var n = +ch;
-            if (n === 0) return ch;
+            if (n === 0) return match;
             if (n > m) {
               var f = floor$1(n / 10);
-              if (f === 0) return ch;
+              if (f === 0) return match;
               if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
-              return ch;
+              return match;
             }
             capture = captures[n - 1];
         }
@@ -2983,13 +2985,14 @@
   var $SPLIT = 'split';
   var LENGTH = 'length';
   var LAST_INDEX$1 = 'lastIndex';
+  var MAX_UINT32 = 0xffffffff;
 
-  // eslint-disable-next-line no-empty
-  var SUPPORTS_Y = !!(function () { try { return new RegExp('x', 'y'); } catch (e) {} })();
+  // babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
+  var SUPPORTS_Y = !_fails(function () { });
 
   // @@split logic
   _fixReWks('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
-    var internalSplit = $split;
+    var internalSplit;
     if (
       'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
       'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 ||
@@ -3010,7 +3013,7 @@
                     (separator.unicode ? 'u' : '') +
                     (separator.sticky ? 'y' : '');
         var lastLastIndex = 0;
-        var splitLimit = limit === undefined ? 4294967295 : limit >>> 0;
+        var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
         // Make `global` and avoid `lastIndex` issues by working with a copy
         var separatorCopy = new RegExp(separator.source, flags + 'g');
         var match, lastIndex, lastLength;
@@ -3035,6 +3038,8 @@
       internalSplit = function (separator, limit) {
         return separator === undefined && limit === 0 ? [] : $split.call(this, separator, limit);
       };
+    } else {
+      internalSplit = $split;
     }
 
     return [
@@ -3062,14 +3067,14 @@
 
         var unicodeMatching = rx.unicode;
         var flags = (rx.ignoreCase ? 'i' : '') +
-                      (rx.multiline ? 'm' : '') +
-                      (rx.unicode ? 'u' : '') +
-                      (SUPPORTS_Y ? 'y' : 'g');
+                    (rx.multiline ? 'm' : '') +
+                    (rx.unicode ? 'u' : '') +
+                    (SUPPORTS_Y ? 'y' : 'g');
 
         // ^(? + rx + ) is needed, in combination with some S slicing, to
         // simulate the 'y' flag.
         var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
-        var lim = limit === undefined ? 0xffffffff : limit >>> 0;
+        var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
         if (lim === 0) return [];
         if (S.length === 0) return _regexpExecAbstract(splitter, S) === null ? [S] : [];
         var p = 0;
@@ -3249,7 +3254,7 @@
   _export(_export.S + _export.F, 'Object', { assign: _objectAssign });
 
   var browserPonyfill = createCommonjsModule(function (module, exports) {
-  var __root__ = (function (root) {
+  var __self__ = (function (root) {
   function F() { this.fetch = false; }
   F.prototype = root;
   return new F();
@@ -3782,15 +3787,15 @@
     return exports;
 
   }({}));
-  })(__root__);
-  delete __root__.fetch.polyfill;
-  module.exports = exports = __root__.fetch;
-  exports.fetch = __root__.fetch;
-  exports.Headers = __root__.Headers;
-  exports.Request = __root__.Request;
-  exports.Response = __root__.Response;
-  // Needed for TypeScript consumers without esModuleInterop.
-  exports.default = __root__.fetch;
+  })(__self__);
+  delete __self__.fetch.polyfill;
+  exports = __self__.fetch; // To enable: import fetch from 'cross-fetch'
+  exports.default = __self__.fetch; // For TypeScript consumers without esModuleInterop.
+  exports.fetch = __self__.fetch; // To enable: import {fetch} from 'cross-fetch'
+  exports.Headers = __self__.Headers;
+  exports.Request = __self__.Request;
+  exports.Response = __self__.Response;
+  module.exports = exports;
   });
   var browserPonyfill_1 = browserPonyfill.fetch;
   var browserPonyfill_2 = browserPonyfill.Headers;
