@@ -341,9 +341,13 @@ var openIncitoPublication = function (id, pagedId) {
                 e.preventDefault();
                 
                 var id = this.getAttribute('data-id');
-                var url = 'https://www.elgiganten.dk/product/' + encodeURIComponent(id) + '/';
+                var meta = incitoPublicationViewer.incito.ids[id];
 
-                url = updateQueryStringParameter(url, 'intcid', 'INT_INCITO_BUTTON');
+                if (!meta || !meta['tjek.offer.v1'] || !meta['tjek.offer.v1'].link) {
+                    return;
+                }
+
+                var url = updateQueryStringParameter(meta['tjek.offer.v1'].link, 'intcid', 'INT_INCITO_BUTTON');
 
                 nga({
                     'eventCategory': 'Incito Publication',
