@@ -7,7 +7,7 @@ This SDK works both client-side in your browser but also server-side in a Node.j
 
 ## Creating an App
 
-First, you need to [create a ShopGun app](https://business.shopgun.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
+First, you need to [create a ShopGun app](https://shopgun.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
 
 > We recommend creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed. 
 
@@ -22,7 +22,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.5.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
 ```
 
-By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://business.shopgun.com/developers/apps).
+By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://shopgun.com/developers/apps).
 
 ### In Node.js
 
@@ -94,7 +94,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ### Version 2.2.0
 
-- Changed the event tracker to use the new private event format. This also means you need to update your track identifier, which is now visible in the developer console on business.shopgun.com/developers.
+- Changed the event tracker to use the new private event format. This also means you need to update your track identifier, which is now visible in the developer console on shopgun.com/developers.
 
 ### Version 2.1.0
 
