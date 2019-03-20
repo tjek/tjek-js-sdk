@@ -734,7 +734,7 @@ var tracker = Tracker = function () {
 
         if (SGN$5.config.get('appKey') === this.trackId) {
           // coffeelint: disable=max_line_length
-          throw SGN$5.util.error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'));
+          throw SGN$5.util.error(new Error('Track identifier must not be identical to app key. Go to https://shopgun.com/developers/apps to get a track identifier for your app'));
         }
 
         now = new Date().getTime();
@@ -3183,13 +3183,14 @@ var incito$1 = /*#__PURE__*/Object.freeze({
   default: incito
 });
 
-var require$$3 = getCjsExportFromNamespace(incito$1);
+var require$$4 = getCjsExportFromNamespace(incito$1);
 
-var Bootstrapper$1, Controls$2, SGN$g, schema, util$2;
+var Bootstrapper$1, Controls$2, SGN$g, clientLocalStorage$2, schema, util$2;
 util$2 = util_1;
 SGN$g = core;
 Controls$2 = controls$1;
-schema = require$$3;
+clientLocalStorage$2 = clientLocal;
+schema = require$$4;
 
 var bootstrapper$1 = Bootstrapper$1 =
 /*#__PURE__*/
@@ -3207,6 +3208,7 @@ function () {
     this.time = this.getTime();
     this.locale = this.getLocale();
     this.maxWidth = this.getMaxWidth();
+    this.featureLabels = this.getFeatureLabels();
     this.versionsSupported = ['1.0.0'];
     this.storageKey = "incito-".concat(this.options.id);
     return;
@@ -3288,6 +3290,32 @@ function () {
       }
     }
   }, {
+    key: "getFeatureLabels",
+    value: function getFeatureLabels() {
+      var featureLabels;
+      featureLabels = clientLocalStorage$2.get('incito-feature-labels');
+
+      if (Array.isArray(featureLabels) === false) {
+        featureLabels = [];
+      }
+
+      return featureLabels;
+    }
+  }, {
+    key: "anonymizeFeatureLabels",
+    value: function anonymizeFeatureLabels() {
+      var totalCount;
+      totalCount = this.featureLabels.reduce(function (acc, cur) {
+        return acc + cur.value;
+      }, 0);
+      return this.featureLabels.map(function (featureLabel) {
+        return {
+          key: featureLabel.key,
+          value: featureLabel.value / totalCount
+        };
+      });
+    }
+  }, {
     key: "fetch",
     value: function fetch(callback) {
       var _this = this;
@@ -3312,7 +3340,8 @@ function () {
           time: this.time,
           locale: this.locale,
           maxWidth: this.maxWidth,
-          versionsSupported: this.versionsSupported
+          versionsSupported: this.versionsSupported,
+          featureLabels: this.anonymizeFeatureLabels(this.featureLabels)
         }
       }, function (err, res) {
         if (err != null) {
@@ -3331,7 +3360,7 @@ function () {
   }, {
     key: "createViewer",
     value: function createViewer(data) {
-      var controls, viewer;
+      var controls, self, viewer;
 
       if (data.incito == null) {
         throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
@@ -3344,6 +3373,28 @@ function () {
         eventTracker: this.options.eventTracker
       });
       controls = new Controls$2(viewer);
+      self = this; // Persist clicks on feature labels for later anonymization.
+
+      SGN$g.CoreUIKit.on(viewer.el, 'click', '.incito__view[data-feature-labels]', function () {
+        var featureLabels;
+        featureLabels = this.getAttribute('data-feature-labels').split(',');
+        featureLabels.forEach(function (key) {
+          var match;
+          match = self.featureLabels.find(function (featureLabel) {
+            return featureLabel.key === key;
+          });
+
+          if (match != null) {
+            match.value++;
+          } else {
+            self.featureLabels.push({
+              key: key,
+              value: 1
+            });
+          }
+        });
+        clientLocalStorage$2.set('incito-feature-labels', self.featureLabels);
+      });
       return viewer;
     }
   }]);
