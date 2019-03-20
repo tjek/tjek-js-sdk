@@ -1,6 +1,7 @@
 util = require '../../util'
 SGN = require '../../core'
 Controls = require './controls'
+clientLocalStorage = require '../../storage/client-local'
 schema = require '../../../graphql/incito.graphql'
 
 module.exports = class Bootstrapper
@@ -12,6 +13,7 @@ module.exports = class Bootstrapper
         @time = @getTime()
         @locale = @getLocale()
         @maxWidth = @getMaxWidth()
+        @featureLabels = @getFeatureLabels()
         @versionsSupported = ['1.0.0']
         @storageKey = "incito-#{@options.id}"
 
@@ -65,6 +67,21 @@ module.exports = class Bootstrapper
             Math.min @options.el.offsetWidth, screen.width
         else
             @options.el.offsetWidth
+    
+    getFeatureLabels: ->
+        featureLabels = clientLocalStorage.get 'incito-feature-labels'
+        featureLabels = [] if Array.isArray(featureLabels) is false
+
+        featureLabels
+    
+    anonymizeFeatureLabels: ->
+        totalCount = @featureLabels.reduce (acc, cur) ->
+            acc + cur.value
+        , 0
+
+        @featureLabels.map (featureLabel) ->
+            key: featureLabel.key
+            value: featureLabel.value / totalCount
 
     fetch: (callback) ->
         callback = callback.bind @
@@ -86,6 +103,7 @@ module.exports = class Bootstrapper
                 locale: @locale
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
+                featureLabels: @anonymizeFeatureLabels @featureLabels
         , (err, res) =>
             if err?
                 callback err
@@ -112,5 +130,26 @@ module.exports = class Bootstrapper
             incito: data.incito
             eventTracker: @options.eventTracker
         controls = new Controls viewer
+        self = @
+
+        # Persist clicks on feature labels for later anonymization.
+        SGN.CoreUIKit.on viewer.el, 'click', '.incito__view[data-feature-labels]', ->
+            featureLabels = this.getAttribute('data-feature-labels').split ','
+
+            featureLabels.forEach (key) ->
+                match = self.featureLabels.find (featureLabel) -> featureLabel.key is key
+
+                if match?
+                    match.value++
+                else
+                    self.featureLabels.push
+                        key: key
+                        value: 1
+
+                return
+            
+            clientLocalStorage.set 'incito-feature-labels', self.featureLabels
+            
+            return
 
         viewer
