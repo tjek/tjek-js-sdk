@@ -13,7 +13,7 @@
     },
     {
       "path": "./dist/sgn-sdk.min.js",
-      "maxSize": "60 kB"
+      "maxSize": "65 kB"
     },
     {
       "path": "./dist/sgn-sdk.cjs.js",
@@ -25,7 +25,7 @@
     },
     {
       "path": "./kits/events/tracker.*js",
-      "maxSize": "20 kB"
+      "maxSize": "25 kB"
     }
   ],
   "scripts": {
@@ -60,13 +60,13 @@
     "@babel/polyfill": "^7.2.5",
     "core-js": "^3.0.0",
     "cross-fetch": "^3.0.1",
-    "incito-browser": "1.1.19",
+    "incito-browser": "^1.1.20",
     "md5": "^2.2.1",
     "microevent": "^1.0.0",
     "mustache": "^3.0.1",
     "rollup-plugin-terser": "^4.0.4",
     "sha256": "^0.2.0",
-    "verso-browser": "^1.0.22"
+    "verso-browser": "^1.0.23"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -96,7 +96,6 @@
     "rollup-plugin-string": "^3.0.0",
     "serve": "^10.1.2",
     "stylus": "^0.54.5",
-    "terser": "^3.16.1",
     "thenify": "^3.3.0",
     "webpack": "^4.29.6"
   }

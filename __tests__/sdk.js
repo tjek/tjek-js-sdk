@@ -1,5 +1,5 @@
-if (typeof process === 'object') {
-    module.exports = require('../dist/sgn-sdk.cjs');
+if (typeof process === 'object' && typeof window !== 'object') {
+  module.exports = require('../dist/sgn-sdk.cjs');
 } else {
-    module.exports = require('../dist/sgn-sdk');
+  module.exports = require('../dist/sgn-sdk');
 }
