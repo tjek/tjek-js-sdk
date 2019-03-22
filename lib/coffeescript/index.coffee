@@ -45,7 +45,7 @@ SGN.config.bind 'change', (changedAttributes) ->
     (newEventTracker or SGN.config.get('eventTracker'))?.trackId is (newAppKey or SGN.config.get('appKey'))
         
         # coffeelint: disable=max_line_length
-        throw error(new Error('Track identifier must not be identical to app key. Go to https://business.shopgun.com/developers/apps to get a track identifier for your app'))
+        throw error(new Error('Track identifier must not be identical to app key. Go to https://shopgun.com/developers/apps to get a track identifier for your app'))
 
     if newEventTracker?
         # default eventsTrackUrl

@@ -1,14 +1,8 @@
 (function () {
-// TODO: Remove
-SGN.config.set({
-    graphUrl: 'https://graph.service-staging.shopgun.com'
-});
-
 var config = {
     id: SGN.util.getQueryParam('autoopen'),
     businessId: 'c35es'
 };
-var isSmoothScrollSupported = 'scrollBehavior' in document.documentElement.style;
 var noop = function () {};
 var nga = 'dataLayer' in window ? function (ctx) {
     dataLayer.push({
@@ -18,6 +12,25 @@ var nga = 'dataLayer' in window ? function (ctx) {
         'shopgunLabel': ctx.eventLabel
     });
 } : noop;
+var isIncitoAllowed = (function () {
+    var percentage = Math.floor(Math.random() * 100) + 0;
+
+    try {
+        var allowed = window.localStorage.getItem('sgn-elgiganten-incito-allowed');
+
+        if (allowed === '1') {
+            return true;
+        } else if (allowed === '0') {
+            return false;
+        }
+    } catch (err) {}
+
+    var allowed = percentage <= 50;
+
+    window.localStorage.setItem('sgn-elgiganten-incito-allowed', allowed ? '1' : '0');
+
+    return allowed;
+})();
 var once = function (fun) {
     var done = false;
 
@@ -39,7 +52,6 @@ var els = {
     incito: {
         root: document.querySelector('#incito__publication'),
         categorySwitcher: document.querySelector('#incito-publication__nav select'),
-        classic: document.querySelector('#incito-publication__classic'),
         top: document.querySelector('#incito-publication__top')
     }
 };
@@ -50,9 +62,20 @@ var formatDate = function (dtstr) {
 
     return new Date(Date.UTC(dtcomps[0], dtcomps[1], dtcomps[2], dtcomps[3], dtcomps[4], dtcomps[5]));
 };
+var updateQueryStringParameter = function (uri, key, value) {
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    } else {
+        return uri + separator + key + "=" + value;
+    }
+};
 var getPublicationRuntimeEventLabel = function (data) {
     return data.run_from.substr(0, 10) + '/' + data.run_till.substr(0, 10);
 };
+var publications;
 var incito;
 var incitoPublicationViewer;
 var fetchPublications = function (callback) {
@@ -92,7 +115,7 @@ var openActivePublication = function (pageNumber) {
                 return aDate - bDate;
             });
 
-            openPublication(res[0].id, pageNumber);
+            openPagedPublication(res[0].id, pageNumber);
         }
     });
 };
@@ -149,29 +172,21 @@ var openPagedPublication = function (id, pageNumber) {
                     callback(null, allHotspots);
                 });
             };
-            var updateQueryStringParameter = function (uri, key, value) {
-                var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-                var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-
-                if (uri.match(re)) {
-                    return uri.replace(re, '$1' + key + "=" + value + '$2');
-                } else {
-                    return uri + separator + key + "=" + value;
-                }
-            };
 
             viewer.bind('hotspotClicked', function (hotspot) {
-                if (hotspot.type === 'url') {
-                    window.open(updateQueryStringParameter(hotspot.url, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
-                } else {
+                var url = hotspot.type === 'url' ? hotspot.url : hotspot.webshop;
+
+                url = updateQueryStringParameter(url, 'intcid', 'INT_PDF_BUTTON');
+
+                if (hotspot.type === 'offer') {
                     nga({
                         'eventCategory': 'Publication',
                         'eventAction': 'Offer Opened',
                         'eventLabel': getPublicationRuntimeEventLabel(data.details)
                     });
-                    
-                    window.open(updateQueryStringParameter(hotspot.webshop, 'intcid', 'INT_IPAPER_BUTTON'), '_blank');
                 }
+
+                window.open(url, '_blank');
             });
             var trackProgress = function (progress) {
                 nga({
@@ -179,7 +194,7 @@ var openPagedPublication = function (id, pageNumber) {
                     'eventAction': 'Read-through ' + progress + '%',
                     'eventLabel': getPublicationRuntimeEventLabel(data.details)
                 });
-            }
+            };
             var navigationHandlers = {
                 page2: once(function () {
                     nga({
@@ -193,7 +208,7 @@ var openPagedPublication = function (id, pageNumber) {
                 progress60: once(function () { trackProgress(60) }),
                 progress80: once(function () { trackProgress(80) }),
                 progress100: once(function () { trackProgress(100) })
-            }
+            };
 
             if (!(typeof pageNumber === 'number' && pageNumber > 1)) {
                 nga({
@@ -257,7 +272,7 @@ var openPagedPublication = function (id, pageNumber) {
         }
     });
 };
-var openIncitoPublication = (id, pagedId) => {
+var openIncitoPublication = function (id, pagedId) {
     var el = els.incito.root;
 
     el.style.display = 'block';
@@ -266,18 +281,35 @@ var openIncitoPublication = (id, pagedId) => {
         incitoPublicationViewer.destroy();
     }
 
-    if (pagedId) {
-        els.incito.classic.setAttribute('data-id', pagedId);
-        els.incito.classic.style.display = 'inline';
-    } else {
-        els.incito.classic.style.display = 'none';
-    }
+    nga({
+        'eventCategory': 'Incito Publication',
+        'eventAction': 'Opened',
+        'eventLabel': 'dm'
+    });
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
         el: el,
         id: id,
+        pagedPublicationId: pagedId,
         eventTracker: SGN.config.get('eventTracker')
     });
+    var trackProgress = function (progress) {
+        nga({
+            'eventCategory': 'Incito Publication',
+            'eventAction': 'Read-through ' + progress + '%',
+            'eventLabel': 'dm'
+        });
+    };
+    var navigationHandlers = {
+        progress20: once(function () { trackProgress(20) }),
+        progress40: once(function () { trackProgress(40) }),
+        progress60: once(function () { trackProgress(60) }),
+        progress80: once(function () { trackProgress(80) }),
+        progress100: once(function () { trackProgress(100) })
+    };
+    var rect = els.incito.root.getBoundingClientRect();
+
+    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
 
     incitoPublication.fetch(function (err, res) {
         if (!err) {
@@ -287,40 +319,58 @@ var openIncitoPublication = (id, pagedId) => {
             });
 
             incitoPublicationViewer.start();
+            incitoPublicationViewer.bind('progress', function (navEvent) {
+                if (navEvent.progress >= 100) {
+                    navigationHandlers.progress100();
+                } else if (navEvent.progress >= 80) {
+                    navigationHandlers.progress80();
+                } else if (navEvent.progress >= 60) {
+                    navigationHandlers.progress60();
+                } else if (navEvent.progress >= 40) {
+                    navigationHandlers.progress40();
+                } else if (navEvent.progress >= 20) {
+                    navigationHandlers.progress20();
+                }
+            });
+
+            var rect = els.incito.root.getBoundingClientRect();
+        
+            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
 
             SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
                 e.preventDefault();
                 
                 var id = this.getAttribute('data-id');
+                var meta = incitoPublicationViewer.incito.ids[id];
 
-                window.open('https://www.elgiganten.dk/search?SearchTerm=' + encodeURIComponent(id));
+                if (!meta || !meta['tjek.offer.v1'] || !meta['tjek.offer.v1'].link) {
+                    return;
+                }
+
+                var url = updateQueryStringParameter(meta['tjek.offer.v1'].link, 'intcid', 'INT_INCITO_BUTTON');
+
+                nga({
+                    'eventCategory': 'Incito Publication',
+                    'eventAction': 'Offer Opened',
+                    'eventLabel': id
+                });
+                
+                window.open(url, '_blank');
             });
         }
     });
-};
-var closeIncitoPublication = function () {
-    if (incitoPublicationViewer) {
-        incitoPublicationViewer.destroy();
-
-        incitoPublicationViewer = null;
-
-        els.incito.categorySwitcher.value = '';
-        els.incito.root.style.display = 'none';
-        els.incito.root.classList.remove('sgn-incito--started');
-    }
 };
 
 if (els.list) {
     els.list.addEventListener('click', function (e) {
         if (e.target.tagName === 'IMG') {
-            // TODO: Remove.
             var id = e.target.dataset.id;
-            var incitoId = 'SW5jaXRvUHVibGljYXRpb246MTI4ODMzODE3OTAyMzMxNjE0NA=='; //e.target.dataset.incitoId;
+            var incitoId = e.target.dataset.incitoId;
 
-            if (incitoId) {
+            if (incitoId && isIncitoAllowed) {
                 openIncitoPublication(incitoId, id);
             } else {
-                openPublication(id);
+                openPagedPublication(id);
             }
         }
     });
@@ -330,6 +380,8 @@ if (els.list) {
             renderPublications(res);
     
             var parts = (config.id || '').split(',');
+
+            publications = res;
     
             if (parts[0] === 'current' || parts[0] === 'future') {
                 res.sort(function (a, b) {
@@ -359,83 +411,80 @@ if (els.list) {
     });
 }
 
-if (els.incito.classic) {
-    els.incito.classic.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        closeIncitoPublication();
-        openPagedPublication(e.target.dataset.id);
-    });
-}
-
 if (els.incito.top) {
     els.incito.top.addEventListener('click', function (e) {
         e.preventDefault();
 
-        if (isSmoothScrollSupported) {
-            document.body.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        } else {
-            window.scrollTo(0, 0);
-        }
+        var rect = els.incito.root.getBoundingClientRect();
+        
+        window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
+
+        nga({
+            'eventCategory': 'Incito Publication',
+            'eventAction': 'Scroll to Top',
+            'eventLabel': 'dm'
+        });
     });
 }
 
 if (els.incito.categorySwitcher) {
     els.incito.categorySwitcher.addEventListener('change', function (e) {
         var category = e.target.value;
-        var find = function (view, callback) {
-            if (view.role === 'offer' && view.meta && view.meta.ids) {
-                var match;
-
+        var sections = {};
+        var likelySection;
+        var find = function (view, sectionId, callback) {
+            if (view.role === 'offer' && view.meta && view.meta.ids && sectionId) {
                 for (var i = 0; i < view.meta.ids.length; i++) {
                     var id = view.meta.ids[i];
 
                     if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
-                        match = view;
+                        if (typeof sections[sectionId] !== 'number') {
+                            sections[sectionId] = 0;
+                        }
+    
+                        sections[sectionId]++;
 
                         break;
                     }
-                }
-
-                if (match) {
-                    return match;
                 }
             }
             
             if (view.child_views) {
                 for (var i = 0; i < view.child_views.length; i++) {
-                    var match = find(view.child_views[i], callback);
+                    var childView = view.child_views[i];
 
-                    if (match) {
-                        return match;
-                    }
+                    find(childView, childView.role === 'section' ? childView.id : sectionId, callback);
                 }
             }
         };
 
         if (category && incito) {
-            var view = find(incito.root_view);
+            find(incito.root_view);
 
-            if (view) {
-                var offerEl = els.incito.root.querySelector('.incito__view[data-role=offer][data-id="' + view.id + '"]');
-
-                if (isSmoothScrollSupported) {
-                    offerEl.scrollIntoView({
-                        behavior: 'auto',
-                        block: 'center'
-                    });
-                } else {
-                    var rect = offerEl.getBoundingClientRect();
-
-                    window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 100));
+            for (var key in sections) {
+                if (!likelySection || (likelySection.count < sections[key] && likelySection.count < 2)) {
+                    likelySection = {
+                        count: sections[key],
+                        id: key
+                    };
                 }
+            }
+
+            if (likelySection) {
+                var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
+                var rect = sectionEl.getBoundingClientRect();
+
+                window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
             } else {
                 alert('Der findes desværre ingen tilbud i den kategori');
             }
         }
+
+        nga({
+            'eventCategory': 'Incito Publication',
+            'eventAction': 'Category Changed',
+            'eventLabel': 'dm'
+        });
     });
 }
 
