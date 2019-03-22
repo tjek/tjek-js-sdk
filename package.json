@@ -66,7 +66,7 @@
     "mustache": "^3.0.1",
     "rollup-plugin-terser": "^4.0.4",
     "sha256": "^0.2.0",
-    "verso-browser": "^1.0.23"
+    "verso-browser": "^1.0.24"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
