@@ -65,6 +65,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 2.3.7
+- Update verso-browser and incito-browser
+- Fix an issue where polyfills were missing
+
 ### Version 2.3.0
 
 - Introduce support for incito opened event in eventTracker
