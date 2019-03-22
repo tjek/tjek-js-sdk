@@ -3,6 +3,7 @@ import SGN from '../../core'
 import Controls from './controls'
 import Viewer from './viewer'
 import schema from '../../../graphql/incito.graphql'
+import * as clientLocalStorage from '../../storage/client-local'
 import * as clientSessionStorage from '../../storage/client-session'
 
 export default class Bootstrapper
