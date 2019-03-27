@@ -75,13 +75,22 @@ module.exports = class Bootstrapper
         featureLabels
     
     anonymizeFeatureLabels: ->
-        totalCount = @featureLabels.reduce (acc, cur) ->
-            acc + cur.value
-        , 0
+        count = @featureLabels.length
+        vector = @featureLabels.reduce (acc, cur) ->
+            if !acc[cur]
+                acc[cur] = {
+                    key: cur
+                    value: 0
+                }
+            
+            acc[cur].value++
+            
+            acc
+        , {}
 
-        @featureLabels.map (featureLabel) ->
+        Object.values(vector).map (featureLabel) ->
             key: featureLabel.key
-            value: featureLabel.value / totalCount
+            value: Math.round(featureLabel.value / count * 100) / 100
 
     fetch: (callback) ->
         callback = callback.bind @
@@ -136,17 +145,10 @@ module.exports = class Bootstrapper
         SGN.CoreUIKit.on viewer.el, 'click', '.incito__view[data-feature-labels]', ->
             featureLabels = this.getAttribute('data-feature-labels').split ','
 
-            featureLabels.forEach (key) ->
-                match = self.featureLabels.find (featureLabel) -> featureLabel.key is key
+            self.featureLabels = self.featureLabels.concat featureLabels
 
-                if match?
-                    match.value++
-                else
-                    self.featureLabels.push
-                        key: key
-                        value: 1
-
-                return
+            while self.featureLabels.length > 1000
+                self.featureLabels.shift()
             
             clientLocalStorage.set 'incito-feature-labels', self.featureLabels
             
