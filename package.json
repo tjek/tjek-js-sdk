@@ -9,7 +9,7 @@
   "bundlesize": [
     {
       "path": "./dist/sgn-sdk.js",
-      "maxSize": "400 kB"
+      "maxSize": "200 kB"
     },
     {
       "path": "./dist/sgn-sdk.min.js",
@@ -25,7 +25,7 @@
     },
     {
       "path": "./kits/events/tracker.*js",
-      "maxSize": "25 kB"
+      "maxSize": "30 kB"
     }
   ],
   "scripts": {

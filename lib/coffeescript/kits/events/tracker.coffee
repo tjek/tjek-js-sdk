@@ -1,5 +1,5 @@
-import 'core-js/modules/es.promise'
-import 'core-js/modules/es.object.assign'
+import 'core-js/modules/es6.promise'
+import 'core-js/modules/es6.object.assign'
 import fetch from 'cross-fetch'
 import md5 from 'md5'
 import { eventsTrackUrl as defaultEventsTrackUrl } from '../../configDefaults'
