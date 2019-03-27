@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -32,7 +32,7 @@
     "test:jsdom": "jest --ci -c jest-jsdom.json",
     "test:chrome": "jest --ci -c jest-chrome.json",
     "test:size": "bundlesize",
-    "build:js": "rollup -c -m --environment NODE_ENV:production",
+    "build:js": "rollup -c --no-treeshake -m --environment NODE_ENV:production",
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
     "build:css-min": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
     "build": "run-p -l build:js build:css build:css-min",
@@ -53,15 +53,14 @@
   },
   "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
   "dependencies": {
-    "core-js": "^3.0.0",
+    "core-js": "^2.6.5",
     "cross-fetch": "^3.0.1",
-    "incito-browser": "^1.1.20",
+    "incito-browser": "^1.1.21",
     "md5": "^2.2.1",
     "microevent": "^1.0.0",
     "mustache": "^3.0.1",
-    "rollup-plugin-terser": "^4.0.4",
     "sha256": "^0.2.0",
-    "verso-browser": "^1.0.24"
+    "verso-browser": "^1.0.25"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -89,6 +88,7 @@
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-replace": "^2.1.1",
     "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-terser": "^4.0.4",
     "serve": "^10.1.2",
     "stylus": "^0.54.5",
     "thenify": "^3.3.0",

@@ -9,7 +9,7 @@ This SDK works both client-side in your browser but also server-side in a Node.j
 
 First, you need to [create a ShopGun app](https://shopgun.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
 
-> We recommend creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed. 
+> We recommend creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed.
 
 ## Setup
 
@@ -18,8 +18,17 @@ First, you need to [create a ShopGun app](https://shopgun.com/developers/apps) a
 The SDK makes use of both JavaScript and CSS so you need to load two resources in the browser:
 
 ```html
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.6.min.css" rel="stylesheet" type="text/css">
-<script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.6.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+<link
+  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.6.min.css"
+  rel="stylesheet"
+  type="text/css"
+/>
+<script
+  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.6.min.js"
+  id="sgn-sdk"
+  data-app-key="YOUR_APP_KEY"
+  data-track-id="YOUR_TRACK_ID"
+></script>
 ```
 
 By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://shopgun.com/developers/apps).
@@ -38,8 +47,8 @@ When installed you can require and configure the SDK:
 SGN = require('sgn-sdk');
 
 SGN.config.set({
-    appKey: 'YOUR_APP_KEY',
-    appSecret: 'YOUR_APP_SECRET'
+  appKey: 'YOUR_APP_KEY',
+  appSecret: 'YOUR_APP_SECRET'
 });
 ```
 
@@ -47,8 +56,8 @@ We recommend using environment variables for the config to avoid having secrets 
 
 ```javascript
 SGN.config.set({
-    appKey: process.env.SHOPGUN_APP_KEY,
-    appSecret: process.env.SHOPGUN_APP_SECRET
+  appKey: process.env.SHOPGUN_APP_KEY,
+  appSecret: process.env.SHOPGUN_APP_SECRET
 });
 ```
 
@@ -60,12 +69,17 @@ To provide your users with a viewing experience for PDF's you need to use our Pa
 
 To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
 
-* [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
-* [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
+- [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
+- [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
 
+### Version 2.3.8
+
+- Roll back to core-js 2
+
 ### Version 2.3.7
+
 - Update verso-browser and incito-browser
 - Fix an issue where polyfills were missing
 
@@ -114,8 +128,8 @@ To learn more about integrating the same experience on iOS and Android be sure t
 ### Version 2.0.0
 
 - PagedPublicationKit
-    - Refactored `SGN.PagedPublicationKit.initialize` to `SGN.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer
-    - Made hotspots into a function instead of having a setting called `showHotspots`
+  - Refactored `SGN.PagedPublicationKit.initialize` to `SGN.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer
+  - Made hotspots into a function instead of having a setting called `showHotspots`
 - Introduced IncitoPublicationKit
 - Removed unused files
 - Fixed incorrect positioning of hotspots and hotspot picker in Internet Explorer

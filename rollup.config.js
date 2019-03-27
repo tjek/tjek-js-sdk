@@ -4,7 +4,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 import babel from 'rollup-plugin-babel';
-import {string} from 'rollup-plugin-string';
+import { string } from 'rollup-plugin-string';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
 
@@ -95,9 +95,6 @@ let configs = bundles.reduce(
         amd: {
           define: 'rollupNeedsAnOptionToDisableAMDInUMD'
         }
-      },
-      watch: {
-        include: 'lib/**'
       },
       plugins: [
         json(),
