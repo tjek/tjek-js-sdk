@@ -49,7 +49,7 @@ const getBabelPlugin = ({ useBuiltIns = 'usage' }) =>
             browsers: ['> 3%', 'IE 11'],
             node: 8
           },
-          corejs: useBuiltIns ? 3 : undefined,
+          corejs: useBuiltIns ? 2 : undefined,
           useBuiltIns,
           exclude: ['transform-typeof-symbol']
         }
@@ -111,9 +111,6 @@ let configs = bundles.reduce(
         amd: {
           define: 'rollupNeedsAnOptionToDisableAMDInUMD'
         }
-      },
-      watch: {
-        include: 'lib/**'
       },
       plugins: [
         json(),
