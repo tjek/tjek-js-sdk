@@ -433,9 +433,11 @@ if (els.incito.categorySwitcher) {
         var sections = {};
         var likelySection;
         var find = function (view, sectionId, callback) {
-            if (view.role === 'offer' && view.meta && view.meta.ids && sectionId) {
-                for (var i = 0; i < view.meta.ids.length; i++) {
-                    var id = view.meta.ids[i];
+            var meta = incitoPublicationViewer.incito.ids[id];
+            
+            if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
+                for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
+                    var id = view.meta['tjek.offer.v1'].ids[i];
 
                     if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
                         if (typeof sections[sectionId] !== 'number') {
