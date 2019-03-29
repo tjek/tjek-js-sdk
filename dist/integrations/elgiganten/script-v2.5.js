@@ -13,23 +13,29 @@ var nga = 'dataLayer' in window ? function (ctx) {
     });
 } : noop;
 var isIncitoAllowed = (function () {
-    var percentage = Math.floor(Math.random() * 100) + 0;
+    if (SGN.util.getQueryParam('incito') === '1') {
+        window.localStorage.setItem('sgn-elgiganten-incito-allowed', '1');
 
-    try {
-        var allowed = window.localStorage.getItem('sgn-elgiganten-incito-allowed');
+        return true;
+    } else {
+        var percentage = Math.floor(Math.random() * 100) + 0;
 
-        if (allowed === '1') {
-            return true;
-        } else if (allowed === '0') {
-            return false;
-        }
-    } catch (err) {}
+        try {
+            var allowed = window.localStorage.getItem('sgn-elgiganten-incito-allowed');
 
-    var allowed = percentage <= 50;
+            if (allowed === '1') {
+                return true;
+            } else if (allowed === '0') {
+                return false;
+            }
+        } catch (err) {}
 
-    window.localStorage.setItem('sgn-elgiganten-incito-allowed', allowed ? '1' : '0');
+        var allowed = percentage <= 50;
 
-    return allowed;
+        window.localStorage.setItem('sgn-elgiganten-incito-allowed', allowed ? '1' : '0');
+
+        return allowed;
+    }
 })();
 var once = function (fun) {
     var done = false;
@@ -433,8 +439,6 @@ if (els.incito.categorySwitcher) {
         var sections = {};
         var likelySection;
         var find = function (view, sectionId, callback) {
-            var meta = incitoPublicationViewer.incito.ids[id];
-            
             if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
                 for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
                     var id = view.meta['tjek.offer.v1'].ids[i];
