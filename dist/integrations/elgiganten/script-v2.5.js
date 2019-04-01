@@ -1,6 +1,9 @@
 (function () {
 var config = {
-    id: SGN.util.getQueryParam('autoopen'),
+    publication: {
+        autoopen: SGN.util.getQueryParam('pub_auto_open'),
+        incitoCategory: SGN.util.getQueryParam('pub_incito_category')
+    },
     businessId: 'c35es'
 };
 var noop = function () {};
@@ -253,7 +256,7 @@ var openPagedPublication = function (id, pageNumber) {
         }
     });
 };
-var openIncitoPublication = function (id, pagedId) {
+var openIncitoPublication = function (id, pagedId, category) {
     var el = els.incito.root;
 
     el.style.display = 'block';
@@ -316,7 +319,11 @@ var openIncitoPublication = function (id, pagedId) {
 
             var rect = els.incito.root.getBoundingClientRect();
         
-            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
+            if (category) {
+                scrollToIncitoCategory(category);
+            } else {
+                window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
+            }
 
             SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
                 e.preventDefault();
@@ -341,7 +348,59 @@ var openIncitoPublication = function (id, pagedId) {
         }
     });
 };
+var scrollToIncitoCategory = function (category) {
+    console.log(category);
+    var sections = {};
+    var likelySection;
+    var find = function (view, sectionId, callback) {
+        if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
+            for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
+                var id = view.meta['tjek.offer.v1'].ids[i];
 
+                if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
+                    if (typeof sections[sectionId] !== 'number') {
+                        sections[sectionId] = 0;
+                    }
+
+                    sections[sectionId]++;
+
+                    break;
+                }
+            }
+        }
+        
+        if (view.child_views) {
+            for (var i = 0; i < view.child_views.length; i++) {
+                var childView = view.child_views[i];
+
+                find(childView, childView.role === 'section' ? childView.id : sectionId, callback);
+            }
+        }
+    };
+
+    if (category && incito) {
+        find(incito.root_view);
+
+        for (var key in sections) {
+            if (!likelySection || (likelySection.count < sections[key] && likelySection.count < 2)) {
+                likelySection = {
+                    count: sections[key],
+                    id: key
+                };
+            }
+        }
+
+        if (likelySection) {
+            var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
+            var rect = sectionEl.getBoundingClientRect();
+
+            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
+        } else {
+            alert('Der findes desværre ingen tilbud i den kategori');
+        }
+    }
+};
+ 
 if (els.list) {
     els.list.addEventListener('click', function (e) {
         if (e.target.tagName === 'IMG') {
@@ -359,17 +418,13 @@ if (els.list) {
     fetchPublications(function (err, res) {
         if (!err) {
             renderPublications(res);
-    
-            var parts = (config.id || '').split(',');
 
-            publications = res;
-    
-            if (parts[0] === 'current' || parts[0] === 'future') {
+            if (config.publication.autoopen === 'current' || config.publication.autoopen === 'future') {
                 res.sort(function (a, b) {
                     var aDate = formatDate(a.run_from).getTime();
                     var bDate = formatDate(b.run_from).getTime();
     
-                    if (parts[0] === 'current') {
+                    if (config.publication.autoopen === 'current') {
                         return aDate - bDate;
                     } else {
                         return bDate - aDate;
@@ -377,14 +432,10 @@ if (els.list) {
                 });
     
                 if (res[0]) {
-                    openPagedPublication(res[0].id, parseInt(parts[1]));
-                }
-            } else if (parts[0].length > 0) {
-                for (var i = 0; i < res.length; i++) {
-                    if (parts[0] === res[i].id) {
-                        openPagedPublication(res[i].id, parseInt(parts[1]));
-    
-                        break;
+                    if (res[0].incito_publication_id) {
+                        openIncitoPublication(res[0].incito_publication_id, res[0].id, config.publication.incitoCategory);
+                    } else {
+                        openPagedPublication(res[0].id);
                     }
                 }
             }
@@ -411,55 +462,8 @@ if (els.incito.top) {
 if (els.incito.categorySwitcher) {
     els.incito.categorySwitcher.addEventListener('change', function (e) {
         var category = e.target.value;
-        var sections = {};
-        var likelySection;
-        var find = function (view, sectionId, callback) {
-            if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
-                for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
-                    var id = view.meta['tjek.offer.v1'].ids[i];
 
-                    if (id.provider === 'elgiganten' && id.type === 'category' && id.value === category) {
-                        if (typeof sections[sectionId] !== 'number') {
-                            sections[sectionId] = 0;
-                        }
-    
-                        sections[sectionId]++;
-
-                        break;
-                    }
-                }
-            }
-            
-            if (view.child_views) {
-                for (var i = 0; i < view.child_views.length; i++) {
-                    var childView = view.child_views[i];
-
-                    find(childView, childView.role === 'section' ? childView.id : sectionId, callback);
-                }
-            }
-        };
-
-        if (category && incito) {
-            find(incito.root_view);
-
-            for (var key in sections) {
-                if (!likelySection || (likelySection.count < sections[key] && likelySection.count < 2)) {
-                    likelySection = {
-                        count: sections[key],
-                        id: key
-                    };
-                }
-            }
-
-            if (likelySection) {
-                var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
-                var rect = sectionEl.getBoundingClientRect();
-
-                window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
-            } else {
-                alert('Der findes desværre ingen tilbud i den kategori');
-            }
-        }
+        scrollToIncitoCategory(category);
 
         nga({
             'eventCategory': 'Incito Publication',
