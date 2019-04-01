@@ -12,31 +12,6 @@ var nga = 'dataLayer' in window ? function (ctx) {
         'shopgunLabel': ctx.eventLabel
     });
 } : noop;
-var isIncitoAllowed = (function () {
-    if (SGN.util.getQueryParam('incito') === '1') {
-        window.localStorage.setItem('sgn-elgiganten-incito-allowed', '1');
-
-        return true;
-    } else {
-        var percentage = Math.floor(Math.random() * 100) + 0;
-
-        try {
-            var allowed = window.localStorage.getItem('sgn-elgiganten-incito-allowed');
-
-            if (allowed === '1') {
-                return true;
-            } else if (allowed === '0') {
-                return false;
-            }
-        } catch (err) {}
-
-        var allowed = percentage <= 50;
-
-        window.localStorage.setItem('sgn-elgiganten-incito-allowed', allowed ? '1' : '0');
-
-        return allowed;
-    }
-})();
 var once = function (fun) {
     var done = false;
 
@@ -373,7 +348,7 @@ if (els.list) {
             var id = e.target.dataset.id;
             var incitoId = e.target.dataset.incitoId;
 
-            if (incitoId && isIncitoAllowed) {
+            if (incitoId) {
                 openIncitoPublication(incitoId, id);
             } else {
                 openPagedPublication(id);
