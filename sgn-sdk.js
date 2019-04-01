@@ -15099,6 +15099,7 @@
 
 		        this.el.muted = true;
 		        this.el.preload = 'metadata';
+		        this.el.setAttribute('muted', '');
 		        this.el.setAttribute('playsinline', 'true');
 		        this.el.setAttribute('webkit-playsinline', 'true');
 		        this.el.setAttribute('data-src', this.attrs.src);
