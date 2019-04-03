@@ -38,7 +38,7 @@
     "test:size": "bundlesize",
     "build:js": "rollup -c --no-treeshake -m --environment NODE_ENV:production",
     "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
-    "build:css-min": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
+    "build:css-min": "stylus  --use ./lib/stylus/cli-variables.js --with '{ COMPRESS: true }' lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
     "build": "run-p -l build:js build:css build:css-min",
     "dev:js": "rollup -c -m inline --no-treeshake --environment NODE_ENV:development --watch",
     "dev:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css --sourcemap-inline --watch",
