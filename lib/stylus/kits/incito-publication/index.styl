@@ -1,2 +1,6 @@
-@require 'node_modules/incito-browser/dist/incito.css'
+if COMPRESS is defined and COMPRESS
+  @require 'node_modules/incito-browser/dist/incito.min.css'
+else 
+  @require 'node_modules/incito-browser/dist/incito.css'
+
 @require 'kits/incito-publication/viewer'
