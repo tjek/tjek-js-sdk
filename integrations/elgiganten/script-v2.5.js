@@ -68,6 +68,7 @@ var fetchPublications = function (callback) {
         qs: {
             dealer_id: config.businessId,
             order_by: '-valid_date',
+            types: 'paged,incito',
             offset: 0,
             limit: 4
         }
@@ -349,7 +350,6 @@ var openIncitoPublication = function (id, pagedId, category) {
     });
 };
 var scrollToIncitoCategory = function (category) {
-    console.log(category);
     var sections = {};
     var likelySection;
     var find = function (view, sectionId, callback) {
