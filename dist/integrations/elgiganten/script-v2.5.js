@@ -60,6 +60,7 @@ var getPublicationRuntimeEventLabel = function (data) {
     return data.run_from.substr(0, 10) + '/' + data.run_till.substr(0, 10);
 };
 var publications;
+var activePublication;
 var incito;
 var incitoPublicationViewer;
 var fetchPublications = function (callback) {
@@ -68,6 +69,7 @@ var fetchPublications = function (callback) {
         qs: {
             dealer_id: config.businessId,
             order_by: '-valid_date',
+            types: 'paged,incito',
             offset: 0,
             limit: 4
         }
@@ -82,7 +84,7 @@ var renderPublications = function (publications) {
         var formattedDate = ['Fra ', runFrom.getDate(), '/', runFrom.getMonth() + 1, ' t.o.m. ', runTill.getDate(), '/', runTill.getMonth() + 1].join('');
 
         html += '<div class="publications__item">';
-        html += '<img data-id="' + item.id + '" data-incito-id="' + item.incito_publication_id + '" src="' + item.images.view + '">';
+        html += '<img data-id="' + item.id + '" src="' + item.images.view + '">';
         html += '<div>' + formattedDate + '</div>';
         html += '</div>';
     });
@@ -99,14 +101,14 @@ var openActivePublication = function (pageNumber) {
                 return aDate - bDate;
             });
 
-            openPagedPublication(res[0].id, pageNumber);
+            openPagedPublication(res[0], pageNumber);
         }
     });
 };
-var openPagedPublication = function (id, pageNumber) {
+var openPagedPublication = function (publication, pageNumber) {
     var options = {
         el: els.paged.modal,
-        id: id,
+        id: publication.id,
         eventTracker: SGN.config.get('eventTracker')
     };
 
@@ -120,8 +122,12 @@ var openPagedPublication = function (id, pageNumber) {
 
     var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper(options);
 
-    bootstrapper.fetch(function (err, data) {
+    bootstrapper.fetchPages(function (err, pages) {
         if (!err) {
+            var data = {
+                details: publication,
+                pages: pages
+            };
             var viewer = bootstrapper.createViewer(data);
             var time = new Date().getTime();
             var fetchCustomHotspots = function (callback) {
@@ -256,7 +262,7 @@ var openPagedPublication = function (id, pageNumber) {
         }
     });
 };
-var openIncitoPublication = function (id, pagedId, category) {
+var openIncitoPublication = function (publication, category) {
     var el = els.incito.root;
 
     el.style.display = 'block';
@@ -265,23 +271,25 @@ var openIncitoPublication = function (id, pagedId, category) {
         incitoPublicationViewer.destroy();
     }
 
+    activePublication = publication;
+
     nga({
         'eventCategory': 'Incito Publication',
         'eventAction': 'Opened',
-        'eventLabel': 'dm'
+        'eventLabel': getPublicationRuntimeEventLabel(activePublication)
     });
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
         el: el,
-        id: id,
-        pagedPublicationId: pagedId,
+        id: publication.incito_publication_id,
+        pagedPublicationId: publication.id,
         eventTracker: SGN.config.get('eventTracker')
     });
     var trackProgress = function (progress) {
         nga({
             'eventCategory': 'Incito Publication',
             'eventAction': 'Read-through ' + progress + '%',
-            'eventLabel': 'dm'
+            'eventLabel': getPublicationRuntimeEventLabel(activePublication)
         });
     };
     var navigationHandlers = {
@@ -349,7 +357,6 @@ var openIncitoPublication = function (id, pagedId, category) {
     });
 };
 var scrollToIncitoCategory = function (category) {
-    console.log(category);
     var sections = {};
     var likelySection;
     var find = function (view, sectionId, callback) {
@@ -405,18 +412,30 @@ if (els.list) {
     els.list.addEventListener('click', function (e) {
         if (e.target.tagName === 'IMG') {
             var id = e.target.dataset.id;
-            var incitoId = e.target.dataset.incitoId;
+            var publication;
 
-            if (incitoId) {
-                openIncitoPublication(incitoId, id);
-            } else {
-                openPagedPublication(id);
+            for (var i = 0; i < publications.length; i++) {
+                if (publications[i].id === id) {
+                    publication = publications[i];
+
+                    break;
+                }
+            }
+
+            if (publication) {
+                if (publication.incito_publication_id) {
+                    openIncitoPublication(publication);
+                } else {
+                    openPagedPublication(publication);
+                }
             }
         }
     });
 
     fetchPublications(function (err, res) {
         if (!err) {
+            publications = res;
+
             renderPublications(res);
 
             if (config.publication.autoopen === 'current' || config.publication.autoopen === 'future') {
@@ -433,9 +452,9 @@ if (els.list) {
     
                 if (res[0]) {
                     if (res[0].incito_publication_id) {
-                        openIncitoPublication(res[0].incito_publication_id, res[0].id, config.publication.incitoCategory);
+                        openIncitoPublication(res[0], config.publication.incitoCategory);
                     } else {
-                        openPagedPublication(res[0].id);
+                        openPagedPublication(res[0]);
                     }
                 }
             }
@@ -451,11 +470,13 @@ if (els.incito.top) {
         
         window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
 
-        nga({
-            'eventCategory': 'Incito Publication',
-            'eventAction': 'Scroll to Top',
-            'eventLabel': 'dm'
-        });
+        if (activePublication) {
+            nga({
+                'eventCategory': 'Incito Publication',
+                'eventAction': 'Scroll to Top',
+                'eventLabel': getPublicationRuntimeEventLabel(activePublication)
+            });
+        }
     });
 }
 
@@ -468,7 +489,7 @@ if (els.incito.categorySwitcher) {
         nga({
             'eventCategory': 'Incito Publication',
             'eventAction': 'Category Changed',
-            'eventLabel': 'dm'
+            'eventLabel': category
         });
     });
 }
