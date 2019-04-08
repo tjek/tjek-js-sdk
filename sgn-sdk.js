@@ -13126,2342 +13126,1184 @@
 
 	var incito = createCommonjsModule(function (module, exports) {
 	(function (global, factory) {
-		'object' === 'object' && 'object' !== 'undefined' ? module.exports = factory() :
-		typeof undefined === 'function' && undefined.amd ? undefined(factory) :
-		(global = global || self, global.Incito = factory());
+	  'object' === 'object' && 'object' !== 'undefined' ? module.exports = factory() :
+	  typeof undefined === 'function' && undefined.amd ? undefined(factory) :
+	  (global = global || self, global.Incito = factory());
 	}(commonjsGlobal, function () { 'use strict';
 
-		var commonjsGlobal$1 = typeof window !== 'undefined' ? window : typeof commonjsGlobal !== 'undefined' ? commonjsGlobal : typeof self !== 'undefined' ? self : {};
-
-		function createCommonjsModule(fn, module) {
-			return module = { exports: {} }, fn(module, module.exports), module.exports;
-		}
-
-		var _global = createCommonjsModule(function (module) {
-		// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-		var global = module.exports = typeof window != 'undefined' && window.Math == Math
-		  ? window : typeof self != 'undefined' && self.Math == Math ? self
-		  // eslint-disable-next-line no-new-func
-		  : Function('return this')();
-		if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-		});
-
-		var hasOwnProperty = {}.hasOwnProperty;
-		var _has = function (it, key) {
-		  return hasOwnProperty.call(it, key);
-		};
-
-		var toString = {}.toString;
-
-		var _cof = function (it) {
-		  return toString.call(it).slice(8, -1);
-		};
-
-		var _isObject = function (it) {
-		  return typeof it === 'object' ? it !== null : typeof it === 'function';
-		};
-
-		var _anObject = function (it) {
-		  if (!_isObject(it)) throw TypeError(it + ' is not an object!');
-		  return it;
-		};
-
-		var _aFunction = function (it) {
-		  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
-		  return it;
-		};
-
-		// optional / simple context binding
-
-		var _ctx = function (fn, that, length) {
-		  _aFunction(fn);
-		  if (that === undefined) return fn;
-		  switch (length) {
-		    case 1: return function (a) {
-		      return fn.call(that, a);
-		    };
-		    case 2: return function (a, b) {
-		      return fn.call(that, a, b);
-		    };
-		    case 3: return function (a, b, c) {
-		      return fn.call(that, a, b, c);
-		    };
-		  }
-		  return function (/* ...args */) {
-		    return fn.apply(that, arguments);
-		  };
-		};
-
-		var f = {}.propertyIsEnumerable;
-
-		var _objectPie = {
-			f: f
-		};
-
-		var _propertyDesc = function (bitmap, value) {
-		  return {
-		    enumerable: !(bitmap & 1),
-		    configurable: !(bitmap & 2),
-		    writable: !(bitmap & 4),
-		    value: value
-		  };
-		};
-
-		// fallback for non-array-like ES3 and non-enumerable old V8 strings
-
-		// eslint-disable-next-line no-prototype-builtins
-		var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
-		  return _cof(it) == 'String' ? it.split('') : Object(it);
-		};
-
-		// 7.2.1 RequireObjectCoercible(argument)
-		var _defined = function (it) {
-		  if (it == undefined) throw TypeError("Can't call method on  " + it);
-		  return it;
-		};
-
-		// to indexed object, toObject with fallback for non-array-like ES3 strings
-
-
-		var _toIobject = function (it) {
-		  return _iobject(_defined(it));
-		};
-
-		// 7.1.1 ToPrimitive(input [, PreferredType])
-
-		// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-		// and the second argument - flag - preferred type is a string
-		var _toPrimitive = function (it, S) {
-		  if (!_isObject(it)) return it;
-		  var fn, val;
-		  if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-		  if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
-		  if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-		  throw TypeError("Can't convert object to primitive value");
-		};
-
-		var _fails = function (exec) {
-		  try {
-		    return !!exec();
-		  } catch (e) {
-		    return true;
-		  }
-		};
-
-		// Thank's IE8 for his funny defineProperty
-		var _descriptors = !_fails(function () {
-		  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-		});
-
-		var document$1 = _global.document;
-		// typeof document.createElement is 'object' in old IE
-		var is = _isObject(document$1) && _isObject(document$1.createElement);
-		var _domCreate = function (it) {
-		  return is ? document$1.createElement(it) : {};
-		};
-
-		var _ie8DomDefine = !_descriptors && !_fails(function () {
-		  return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
-		});
-
-		var gOPD = Object.getOwnPropertyDescriptor;
-
-		var f$1 = _descriptors ? gOPD : function getOwnPropertyDescriptor(O, P) {
-		  O = _toIobject(O);
-		  P = _toPrimitive(P, true);
-		  if (_ie8DomDefine) try {
-		    return gOPD(O, P);
-		  } catch (e) { /* empty */ }
-		  if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
-		};
-
-		var _objectGopd = {
-			f: f$1
-		};
-
-		// Works with __proto__ only. Old v8 can't work with null proto objects.
-		/* eslint-disable no-proto */
-
-
-		var check = function (O, proto) {
-		  _anObject(O);
-		  if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
-		};
-		var _setProto = {
-		  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-		    function (test, buggy, set) {
-		      try {
-		        set = _ctx(Function.call, _objectGopd.f(Object.prototype, '__proto__').set, 2);
-		        set(test, []);
-		        buggy = !(test instanceof Array);
-		      } catch (e) { buggy = true; }
-		      return function setPrototypeOf(O, proto) {
-		        check(O, proto);
-		        if (buggy) O.__proto__ = proto;
-		        else set(O, proto);
-		        return O;
-		      };
-		    }({}, false) : undefined),
-		  check: check
-		};
-
-		var setPrototypeOf = _setProto.set;
-		var _inheritIfRequired = function (that, target, C) {
-		  var S = target.constructor;
-		  var P;
-		  if (S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && _isObject(P) && setPrototypeOf) {
-		    setPrototypeOf(that, P);
-		  } return that;
-		};
-
-		// 7.1.4 ToInteger
-		var ceil = Math.ceil;
-		var floor = Math.floor;
-		var _toInteger = function (it) {
-		  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-		};
-
-		// 7.1.15 ToLength
-
-		var min = Math.min;
-		var _toLength = function (it) {
-		  return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-		};
-
-		var max = Math.max;
-		var min$1 = Math.min;
-		var _toAbsoluteIndex = function (index, length) {
-		  index = _toInteger(index);
-		  return index < 0 ? max(index + length, 0) : min$1(index, length);
-		};
-
-		// false -> Array#indexOf
-		// true  -> Array#includes
-
-
-
-		var _arrayIncludes = function (IS_INCLUDES) {
-		  return function ($this, el, fromIndex) {
-		    var O = _toIobject($this);
-		    var length = _toLength(O.length);
-		    var index = _toAbsoluteIndex(fromIndex, length);
-		    var value;
-		    // Array#includes uses SameValueZero equality algorithm
-		    // eslint-disable-next-line no-self-compare
-		    if (IS_INCLUDES && el != el) while (length > index) {
-		      value = O[index++];
-		      // eslint-disable-next-line no-self-compare
-		      if (value != value) return true;
-		    // Array#indexOf ignores holes, Array#includes - not
-		    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
-		      if (O[index] === el) return IS_INCLUDES || index || 0;
-		    } return !IS_INCLUDES && -1;
-		  };
-		};
-
-		var _core = createCommonjsModule(function (module) {
-		var core = module.exports = { version: '2.6.5' };
-		if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-		});
-		var _core_1 = _core.version;
-
-		var _library = false;
-
-		var _shared = createCommonjsModule(function (module) {
-		var SHARED = '__core-js_shared__';
-		var store = _global[SHARED] || (_global[SHARED] = {});
-
-		(module.exports = function (key, value) {
-		  return store[key] || (store[key] = value !== undefined ? value : {});
-		})('versions', []).push({
-		  version: _core.version,
-		  mode: _library ? 'pure' : 'global',
-		  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
-		});
-		});
-
-		var id = 0;
-		var px = Math.random();
-		var _uid = function (key) {
-		  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-		};
-
-		var shared = _shared('keys');
-
-		var _sharedKey = function (key) {
-		  return shared[key] || (shared[key] = _uid(key));
-		};
-
-		var arrayIndexOf = _arrayIncludes(false);
-		var IE_PROTO = _sharedKey('IE_PROTO');
-
-		var _objectKeysInternal = function (object, names) {
-		  var O = _toIobject(object);
-		  var i = 0;
-		  var result = [];
-		  var key;
-		  for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
-		  // Don't enum bug & hidden keys
-		  while (names.length > i) if (_has(O, key = names[i++])) {
-		    ~arrayIndexOf(result, key) || result.push(key);
-		  }
-		  return result;
-		};
-
-		// IE 8- don't enum bug keys
-		var _enumBugKeys = (
-		  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-		).split(',');
-
-		// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-
-		var hiddenKeys = _enumBugKeys.concat('length', 'prototype');
-
-		var f$2 = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-		  return _objectKeysInternal(O, hiddenKeys);
-		};
-
-		var _objectGopn = {
-			f: f$2
-		};
-
-		var dP = Object.defineProperty;
-
-		var f$3 = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-		  _anObject(O);
-		  P = _toPrimitive(P, true);
-		  _anObject(Attributes);
-		  if (_ie8DomDefine) try {
-		    return dP(O, P, Attributes);
-		  } catch (e) { /* empty */ }
-		  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
-		  if ('value' in Attributes) O[P] = Attributes.value;
-		  return O;
-		};
-
-		var _objectDp = {
-			f: f$3
-		};
-
-		var _hide = _descriptors ? function (object, key, value) {
-		  return _objectDp.f(object, key, _propertyDesc(1, value));
-		} : function (object, key, value) {
-		  object[key] = value;
-		  return object;
-		};
-
-		var _functionToString = _shared('native-function-to-string', Function.toString);
-
-		var _redefine = createCommonjsModule(function (module) {
-		var SRC = _uid('src');
-
-		var TO_STRING = 'toString';
-		var TPL = ('' + _functionToString).split(TO_STRING);
-
-		_core.inspectSource = function (it) {
-		  return _functionToString.call(it);
-		};
-
-		(module.exports = function (O, key, val, safe) {
-		  var isFunction = typeof val == 'function';
-		  if (isFunction) _has(val, 'name') || _hide(val, 'name', key);
-		  if (O[key] === val) return;
-		  if (isFunction) _has(val, SRC) || _hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
-		  if (O === _global) {
-		    O[key] = val;
-		  } else if (!safe) {
-		    delete O[key];
-		    _hide(O, key, val);
-		  } else if (O[key]) {
-		    O[key] = val;
-		  } else {
-		    _hide(O, key, val);
-		  }
-		// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-		})(Function.prototype, TO_STRING, function toString() {
-		  return typeof this == 'function' && this[SRC] || _functionToString.call(this);
-		});
-		});
-
-		var PROTOTYPE = 'prototype';
-
-		var $export = function (type, name, source) {
-		  var IS_FORCED = type & $export.F;
-		  var IS_GLOBAL = type & $export.G;
-		  var IS_STATIC = type & $export.S;
-		  var IS_PROTO = type & $export.P;
-		  var IS_BIND = type & $export.B;
-		  var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] || (_global[name] = {}) : (_global[name] || {})[PROTOTYPE];
-		  var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
-		  var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
-		  var key, own, out, exp;
-		  if (IS_GLOBAL) source = name;
-		  for (key in source) {
-		    // contains in native
-		    own = !IS_FORCED && target && target[key] !== undefined;
-		    // export native or passed
-		    out = (own ? target : source)[key];
-		    // bind timers to global for call from export context
-		    exp = IS_BIND && own ? _ctx(out, _global) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
-		    // extend global
-		    if (target) _redefine(target, key, out, type & $export.U);
-		    // export
-		    if (exports[key] != out) _hide(exports, key, exp);
-		    if (IS_PROTO && expProto[key] != out) expProto[key] = out;
-		  }
-		};
-		_global.core = _core;
-		// type bitmap
-		$export.F = 1;   // forced
-		$export.G = 2;   // global
-		$export.S = 4;   // static
-		$export.P = 8;   // proto
-		$export.B = 16;  // bind
-		$export.W = 32;  // wrap
-		$export.U = 64;  // safe
-		$export.R = 128; // real proto method for `library`
-		var _export = $export;
-
-		var _stringWs = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
-		  '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
-
-		var space = '[' + _stringWs + ']';
-		var non = '\u200b\u0085';
-		var ltrim = RegExp('^' + space + space + '*');
-		var rtrim = RegExp(space + space + '*$');
-
-		var exporter = function (KEY, exec, ALIAS) {
-		  var exp = {};
-		  var FORCE = _fails(function () {
-		    return !!_stringWs[KEY]() || non[KEY]() != non;
-		  });
-		  var fn = exp[KEY] = FORCE ? exec(trim) : _stringWs[KEY];
-		  if (ALIAS) exp[ALIAS] = fn;
-		  _export(_export.P + _export.F * FORCE, 'String', exp);
-		};
-
-		// 1 -> String#trimLeft
-		// 2 -> String#trimRight
-		// 3 -> String#trim
-		var trim = exporter.trim = function (string, TYPE) {
-		  string = String(_defined(string));
-		  if (TYPE & 1) string = string.replace(ltrim, '');
-		  if (TYPE & 2) string = string.replace(rtrim, '');
-		  return string;
-		};
-
-		var _stringTrim = exporter;
-
-		// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-
-
-
-		var _objectKeys = Object.keys || function keys(O) {
-		  return _objectKeysInternal(O, _enumBugKeys);
-		};
-
-		var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
-		  _anObject(O);
-		  var keys = _objectKeys(Properties);
-		  var length = keys.length;
-		  var i = 0;
-		  var P;
-		  while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
-		  return O;
-		};
-
-		var document$2 = _global.document;
-		var _html = document$2 && document$2.documentElement;
-
-		// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-
-
-
-		var IE_PROTO$1 = _sharedKey('IE_PROTO');
-		var Empty = function () { /* empty */ };
-		var PROTOTYPE$1 = 'prototype';
-
-		// Create object with fake `null` prototype: use iframe Object with cleared prototype
-		var createDict = function () {
-		  // Thrash, waste and sodomy: IE GC bug
-		  var iframe = _domCreate('iframe');
-		  var i = _enumBugKeys.length;
-		  var lt = '<';
-		  var gt = '>';
-		  var iframeDocument;
-		  iframe.style.display = 'none';
-		  _html.appendChild(iframe);
-		  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-		  // createDict = iframe.contentWindow.Object;
-		  // html.removeChild(iframe);
-		  iframeDocument = iframe.contentWindow.document;
-		  iframeDocument.open();
-		  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-		  iframeDocument.close();
-		  createDict = iframeDocument.F;
-		  while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
-		  return createDict();
-		};
-
-		var _objectCreate = Object.create || function create(O, Properties) {
-		  var result;
-		  if (O !== null) {
-		    Empty[PROTOTYPE$1] = _anObject(O);
-		    result = new Empty();
-		    Empty[PROTOTYPE$1] = null;
-		    // add "__proto__" for Object.getPrototypeOf polyfill
-		    result[IE_PROTO$1] = O;
-		  } else result = createDict();
-		  return Properties === undefined ? result : _objectDps(result, Properties);
-		};
-
-		var gOPN = _objectGopn.f;
-		var gOPD$1 = _objectGopd.f;
-		var dP$1 = _objectDp.f;
-		var $trim = _stringTrim.trim;
-		var NUMBER = 'Number';
-		var $Number = _global[NUMBER];
-		var Base = $Number;
-		var proto = $Number.prototype;
-		// Opera ~12 has broken Object#toString
-		var BROKEN_COF = _cof(_objectCreate(proto)) == NUMBER;
-		var TRIM = 'trim' in String.prototype;
-
-		// 7.1.3 ToNumber(argument)
-		var toNumber = function (argument) {
-		  var it = _toPrimitive(argument, false);
-		  if (typeof it == 'string' && it.length > 2) {
-		    it = TRIM ? it.trim() : $trim(it, 3);
-		    var first = it.charCodeAt(0);
-		    var third, radix, maxCode;
-		    if (first === 43 || first === 45) {
-		      third = it.charCodeAt(2);
-		      if (third === 88 || third === 120) return NaN; // Number('+0x1') should be NaN, old V8 fix
-		    } else if (first === 48) {
-		      switch (it.charCodeAt(1)) {
-		        case 66: case 98: radix = 2; maxCode = 49; break; // fast equal /^0b[01]+$/i
-		        case 79: case 111: radix = 8; maxCode = 55; break; // fast equal /^0o[0-7]+$/i
-		        default: return +it;
-		      }
-		      for (var digits = it.slice(2), i = 0, l = digits.length, code; i < l; i++) {
-		        code = digits.charCodeAt(i);
-		        // parseInt parses a string to a first unavailable symbol
-		        // but ToNumber should return NaN if a string contains unavailable symbols
-		        if (code < 48 || code > maxCode) return NaN;
-		      } return parseInt(digits, radix);
-		    }
-		  } return +it;
-		};
-
-		if (!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')) {
-		  $Number = function Number(value) {
-		    var it = arguments.length < 1 ? 0 : value;
-		    var that = this;
-		    return that instanceof $Number
-		      // check on 1..constructor(foo) case
-		      && (BROKEN_COF ? _fails(function () { proto.valueOf.call(that); }) : _cof(that) != NUMBER)
-		        ? _inheritIfRequired(new Base(toNumber(it)), that, $Number) : toNumber(it);
-		  };
-		  for (var keys = _descriptors ? gOPN(Base) : (
-		    // ES3:
-		    'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' +
-		    // ES6 (in case, if modules with ES6 Number statics required before):
-		    'EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,' +
-		    'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger'
-		  ).split(','), j = 0, key; keys.length > j; j++) {
-		    if (_has(Base, key = keys[j]) && !_has($Number, key)) {
-		      dP$1($Number, key, gOPD$1(Base, key));
-		    }
-		  }
-		  $Number.prototype = proto;
-		  proto.constructor = $Number;
-		  _redefine(_global, NUMBER, $Number);
-		}
-
-		function _classCallCheck(instance, Constructor) {
-		  if (!(instance instanceof Constructor)) {
-		    throw new TypeError("Cannot call a class as a function");
-		  }
-		}
-
-		function _defineProperties(target, props) {
-		  for (var i = 0; i < props.length; i++) {
-		    var descriptor = props[i];
-		    descriptor.enumerable = descriptor.enumerable || false;
-		    descriptor.configurable = true;
-		    if ("value" in descriptor) descriptor.writable = true;
-		    Object.defineProperty(target, descriptor.key, descriptor);
-		  }
-		}
-
-		function _createClass(Constructor, protoProps, staticProps) {
-		  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-		  if (staticProps) _defineProperties(Constructor, staticProps);
-		  return Constructor;
-		}
-
-		function _inherits(subClass, superClass) {
-		  if (typeof superClass !== "function" && superClass !== null) {
-		    throw new TypeError("Super expression must either be null or a function");
-		  }
-
-		  subClass.prototype = Object.create(superClass && superClass.prototype, {
-		    constructor: {
-		      value: subClass,
-		      writable: true,
-		      configurable: true
-		    }
-		  });
-		  if (superClass) _setPrototypeOf(subClass, superClass);
-		}
-
-		function _getPrototypeOf(o) {
-		  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-		    return o.__proto__ || Object.getPrototypeOf(o);
-		  };
-		  return _getPrototypeOf(o);
-		}
-
-		function _setPrototypeOf(o, p) {
-		  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-		    o.__proto__ = p;
-		    return o;
-		  };
-
-		  return _setPrototypeOf(o, p);
-		}
-
-		function _assertThisInitialized(self) {
-		  if (self === void 0) {
-		    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-		  }
-
-		  return self;
-		}
-
-		function _possibleConstructorReturn(self, call) {
-		  if (call && (typeof call === "object" || typeof call === "function")) {
-		    return call;
-		  }
-
-		  return _assertThisInitialized(self);
-		}
-
-		var microevent = createCommonjsModule(function (module) {
-		/**
-		 * MicroEvent - to make any js object an event emitter (server or browser)
-		 * 
-		 * - pure javascript - server compatible, browser compatible
-		 * - dont rely on the browser doms
-		 * - super simple - you get it immediatly, no mistery, no magic involved
-		 *
-		 * - create a MicroEventDebug with goodies to debug
-		 *   - make it safer to use
-		*/
-
-		var MicroEvent	= function(){};
-		MicroEvent.prototype	= {
-			bind	: function(event, fct){
-				this._events = this._events || {};
-				this._events[event] = this._events[event]	|| [];
-				this._events[event].push(fct);
-			},
-			unbind	: function(event, fct){
-				this._events = this._events || {};
-				if( event in this._events === false  )	return;
-				this._events[event].splice(this._events[event].indexOf(fct), 1);
-			},
-			trigger	: function(event /* , args... */){
-				this._events = this._events || {};
-				if( event in this._events === false  )	return;
-				for(var i = 0; i < this._events[event].length; i++){
-					this._events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
-				}
-			}
-		};
-
-		/**
-		 * mixin will delegate all MicroEvent.js function in the destination object
-		 *
-		 * - require('MicroEvent').mixin(Foobar) will make Foobar able to use MicroEvent
-		 *
-		 * @param {Object} the object which will support MicroEvent
-		*/
-		MicroEvent.mixin	= function(destObject){
-			var props	= ['bind', 'unbind', 'trigger'];
-			for(var i = 0; i < props.length; i ++){
-				destObject.prototype[props[i]]	= MicroEvent.prototype[props[i]];
-			}
-		};
-
-		// export in common js
-		if( 'exports' in module){
-			module.exports	= MicroEvent;
-		}
-		});
-
-		// 7.1.13 ToObject(argument)
-
-		var _toObject = function (it) {
-		  return Object(_defined(it));
-		};
-
-		// true  -> String#at
-		// false -> String#codePointAt
-		var _stringAt = function (TO_STRING) {
-		  return function (that, pos) {
-		    var s = String(_defined(that));
-		    var i = _toInteger(pos);
-		    var l = s.length;
-		    var a, b;
-		    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
-		    a = s.charCodeAt(i);
-		    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-		      ? TO_STRING ? s.charAt(i) : a
-		      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-		  };
-		};
-
-		var at = _stringAt(true);
-
-		 // `AdvanceStringIndex` abstract operation
-		// https://tc39.github.io/ecma262/#sec-advancestringindex
-		var _advanceStringIndex = function (S, index, unicode) {
-		  return index + (unicode ? at(S, index).length : 1);
-		};
-
-		var _wks = createCommonjsModule(function (module) {
-		var store = _shared('wks');
-
-		var Symbol = _global.Symbol;
-		var USE_SYMBOL = typeof Symbol == 'function';
-
-		var $exports = module.exports = function (name) {
-		  return store[name] || (store[name] =
-		    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : _uid)('Symbol.' + name));
-		};
-
-		$exports.store = store;
-		});
-
-		// getting tag from 19.1.3.6 Object.prototype.toString()
-
-		var TAG = _wks('toStringTag');
-		// ES3 wrong here
-		var ARG = _cof(function () { return arguments; }()) == 'Arguments';
-
-		// fallback for IE11 Script Access Denied error
-		var tryGet = function (it, key) {
-		  try {
-		    return it[key];
-		  } catch (e) { /* empty */ }
-		};
-
-		var _classof = function (it) {
-		  var O, T, B;
-		  return it === undefined ? 'Undefined' : it === null ? 'Null'
-		    // @@toStringTag case
-		    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-		    // builtinTag case
-		    : ARG ? _cof(O)
-		    // ES3 arguments fallback
-		    : (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-		};
-
-		var builtinExec = RegExp.prototype.exec;
-
-		 // `RegExpExec` abstract operation
-		// https://tc39.github.io/ecma262/#sec-regexpexec
-		var _regexpExecAbstract = function (R, S) {
-		  var exec = R.exec;
-		  if (typeof exec === 'function') {
-		    var result = exec.call(R, S);
-		    if (typeof result !== 'object') {
-		      throw new TypeError('RegExp exec method returned something other than an Object or null');
-		    }
-		    return result;
-		  }
-		  if (_classof(R) !== 'RegExp') {
-		    throw new TypeError('RegExp#exec called on incompatible receiver');
-		  }
-		  return builtinExec.call(R, S);
-		};
-
-		// 21.2.5.3 get RegExp.prototype.flags
-
-		var _flags = function () {
-		  var that = _anObject(this);
-		  var result = '';
-		  if (that.global) result += 'g';
-		  if (that.ignoreCase) result += 'i';
-		  if (that.multiline) result += 'm';
-		  if (that.unicode) result += 'u';
-		  if (that.sticky) result += 'y';
-		  return result;
-		};
-
-		var nativeExec = RegExp.prototype.exec;
-		// This always refers to the native implementation, because the
-		// String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
-		// which loads this file before patching the method.
-		var nativeReplace = String.prototype.replace;
-
-		var patchedExec = nativeExec;
-
-		var LAST_INDEX = 'lastIndex';
-
-		var UPDATES_LAST_INDEX_WRONG = (function () {
-		  var re1 = /a/,
-		      re2 = /b*/g;
-		  nativeExec.call(re1, 'a');
-		  nativeExec.call(re2, 'a');
-		  return re1[LAST_INDEX] !== 0 || re2[LAST_INDEX] !== 0;
-		})();
-
-		// nonparticipating capturing group, copied from es5-shim's String#split patch.
-		var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
-
-		var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED;
-
-		if (PATCH) {
-		  patchedExec = function exec(str) {
-		    var re = this;
-		    var lastIndex, reCopy, match, i;
-
-		    if (NPCG_INCLUDED) {
-		      reCopy = new RegExp('^' + re.source + '$(?!\\s)', _flags.call(re));
-		    }
-		    if (UPDATES_LAST_INDEX_WRONG) lastIndex = re[LAST_INDEX];
-
-		    match = nativeExec.call(re, str);
-
-		    if (UPDATES_LAST_INDEX_WRONG && match) {
-		      re[LAST_INDEX] = re.global ? match.index + match[0].length : lastIndex;
-		    }
-		    if (NPCG_INCLUDED && match && match.length > 1) {
-		      // Fix browsers whose `exec` methods don't consistently return `undefined`
-		      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
-		      // eslint-disable-next-line no-loop-func
-		      nativeReplace.call(match[0], reCopy, function () {
-		        for (i = 1; i < arguments.length - 2; i++) {
-		          if (arguments[i] === undefined) match[i] = undefined;
-		        }
-		      });
-		    }
-
-		    return match;
-		  };
-		}
-
-		var _regexpExec = patchedExec;
-
-		_export({
-		  target: 'RegExp',
-		  proto: true,
-		  forced: _regexpExec !== /./.exec
-		}, {
-		  exec: _regexpExec
-		});
-
-		var SPECIES = _wks('species');
-
-		var REPLACE_SUPPORTS_NAMED_GROUPS = !_fails(function () {
-		  // #replace needs built-in support for named groups.
-		  // #match works fine because it just return the exec results, even if it has
-		  // a "grops" property.
-		  var re = /./;
-		  re.exec = function () {
-		    var result = [];
-		    result.groups = { a: '7' };
-		    return result;
-		  };
-		  return ''.replace(re, '$<a>') !== '7';
-		});
-
-		var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = (function () {
-		  // Chrome 51 has a buggy "split" implementation when RegExp#exec !== nativeExec
-		  var re = /(?:)/;
-		  var originalExec = re.exec;
-		  re.exec = function () { return originalExec.apply(this, arguments); };
-		  var result = 'ab'.split(re);
-		  return result.length === 2 && result[0] === 'a' && result[1] === 'b';
-		})();
-
-		var _fixReWks = function (KEY, length, exec) {
-		  var SYMBOL = _wks(KEY);
-
-		  var DELEGATES_TO_SYMBOL = !_fails(function () {
-		    // String methods call symbol-named RegEp methods
-		    var O = {};
-		    O[SYMBOL] = function () { return 7; };
-		    return ''[KEY](O) != 7;
-		  });
-
-		  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL ? !_fails(function () {
-		    // Symbol-named RegExp methods call .exec
-		    var execCalled = false;
-		    var re = /a/;
-		    re.exec = function () { execCalled = true; return null; };
-		    if (KEY === 'split') {
-		      // RegExp[@@split] doesn't call the regex's exec method, but first creates
-		      // a new one. We need to return the patched regex when creating the new one.
-		      re.constructor = {};
-		      re.constructor[SPECIES] = function () { return re; };
-		    }
-		    re[SYMBOL]('');
-		    return !execCalled;
-		  }) : undefined;
-
-		  if (
-		    !DELEGATES_TO_SYMBOL ||
-		    !DELEGATES_TO_EXEC ||
-		    (KEY === 'replace' && !REPLACE_SUPPORTS_NAMED_GROUPS) ||
-		    (KEY === 'split' && !SPLIT_WORKS_WITH_OVERWRITTEN_EXEC)
-		  ) {
-		    var nativeRegExpMethod = /./[SYMBOL];
-		    var fns = exec(
-		      _defined,
-		      SYMBOL,
-		      ''[KEY],
-		      function maybeCallNative(nativeMethod, regexp, str, arg2, forceStringMethod) {
-		        if (regexp.exec === _regexpExec) {
-		          if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
-		            // The native String method already delegates to @@method (this
-		            // polyfilled function), leasing to infinite recursion.
-		            // We avoid it by directly calling the native @@method method.
-		            return { done: true, value: nativeRegExpMethod.call(regexp, str, arg2) };
-		          }
-		          return { done: true, value: nativeMethod.call(str, regexp, arg2) };
-		        }
-		        return { done: false };
-		      }
-		    );
-		    var strfn = fns[0];
-		    var rxfn = fns[1];
-
-		    _redefine(String.prototype, KEY, strfn);
-		    _hide(RegExp.prototype, SYMBOL, length == 2
-		      // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
-		      // 21.2.5.11 RegExp.prototype[@@split](string, limit)
-		      ? function (string, arg) { return rxfn.call(string, this, arg); }
-		      // 21.2.5.6 RegExp.prototype[@@match](string)
-		      // 21.2.5.9 RegExp.prototype[@@search](string)
-		      : function (string) { return rxfn.call(string, this); }
-		    );
-		  }
-		};
-
-		var max$1 = Math.max;
-		var min$2 = Math.min;
-		var floor$1 = Math.floor;
-		var SUBSTITUTION_SYMBOLS = /\$([$&`']|\d\d?|<[^>]*>)/g;
-		var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&`']|\d\d?)/g;
-
-		var maybeToString = function (it) {
-		  return it === undefined ? it : String(it);
-		};
-
-		// @@replace logic
-		_fixReWks('replace', 2, function (defined, REPLACE, $replace, maybeCallNative) {
-		  return [
-		    // `String.prototype.replace` method
-		    // https://tc39.github.io/ecma262/#sec-string.prototype.replace
-		    function replace(searchValue, replaceValue) {
-		      var O = defined(this);
-		      var fn = searchValue == undefined ? undefined : searchValue[REPLACE];
-		      return fn !== undefined
-		        ? fn.call(searchValue, O, replaceValue)
-		        : $replace.call(String(O), searchValue, replaceValue);
-		    },
-		    // `RegExp.prototype[@@replace]` method
-		    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@replace
-		    function (regexp, replaceValue) {
-		      var res = maybeCallNative($replace, regexp, this, replaceValue);
-		      if (res.done) return res.value;
-
-		      var rx = _anObject(regexp);
-		      var S = String(this);
-		      var functionalReplace = typeof replaceValue === 'function';
-		      if (!functionalReplace) replaceValue = String(replaceValue);
-		      var global = rx.global;
-		      if (global) {
-		        var fullUnicode = rx.unicode;
-		        rx.lastIndex = 0;
-		      }
-		      var results = [];
-		      while (true) {
-		        var result = _regexpExecAbstract(rx, S);
-		        if (result === null) break;
-		        results.push(result);
-		        if (!global) break;
-		        var matchStr = String(result[0]);
-		        if (matchStr === '') rx.lastIndex = _advanceStringIndex(S, _toLength(rx.lastIndex), fullUnicode);
-		      }
-		      var accumulatedResult = '';
-		      var nextSourcePosition = 0;
-		      for (var i = 0; i < results.length; i++) {
-		        result = results[i];
-		        var matched = String(result[0]);
-		        var position = max$1(min$2(_toInteger(result.index), S.length), 0);
-		        var captures = [];
-		        // NOTE: This is equivalent to
-		        //   captures = result.slice(1).map(maybeToString)
-		        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
-		        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
-		        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
-		        for (var j = 1; j < result.length; j++) captures.push(maybeToString(result[j]));
-		        var namedCaptures = result.groups;
-		        if (functionalReplace) {
-		          var replacerArgs = [matched].concat(captures, position, S);
-		          if (namedCaptures !== undefined) replacerArgs.push(namedCaptures);
-		          var replacement = String(replaceValue.apply(undefined, replacerArgs));
-		        } else {
-		          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
-		        }
-		        if (position >= nextSourcePosition) {
-		          accumulatedResult += S.slice(nextSourcePosition, position) + replacement;
-		          nextSourcePosition = position + matched.length;
-		        }
-		      }
-		      return accumulatedResult + S.slice(nextSourcePosition);
-		    }
-		  ];
-
-		    // https://tc39.github.io/ecma262/#sec-getsubstitution
-		  function getSubstitution(matched, str, position, captures, namedCaptures, replacement) {
-		    var tailPos = position + matched.length;
-		    var m = captures.length;
-		    var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
-		    if (namedCaptures !== undefined) {
-		      namedCaptures = _toObject(namedCaptures);
-		      symbols = SUBSTITUTION_SYMBOLS;
-		    }
-		    return $replace.call(replacement, symbols, function (match, ch) {
-		      var capture;
-		      switch (ch.charAt(0)) {
-		        case '$': return '$';
-		        case '&': return matched;
-		        case '`': return str.slice(0, position);
-		        case "'": return str.slice(tailPos);
-		        case '<':
-		          capture = namedCaptures[ch.slice(1, -1)];
-		          break;
-		        default: // \d\d?
-		          var n = +ch;
-		          if (n === 0) return match;
-		          if (n > m) {
-		            var f = floor$1(n / 10);
-		            if (f === 0) return match;
-		            if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
-		            return match;
-		          }
-		          capture = captures[n - 1];
-		      }
-		      return capture === undefined ? '' : capture;
-		    });
-		  }
-		});
-
-		var utils;
-		utils = {
-		  formatUnit: function formatUnit(unit) {
-		    if (unit == null) {
-		      return 0;
-		    } else if (typeof unit === 'number') {
-		      return "".concat(unit, "px");
-		    } else if (typeof unit === 'string') {
-		      return unit.replace('dp', 'px');
-		    } else {
-		      return 0;
-		    }
-		  },
-		  isDefinedStr: function isDefinedStr(value) {
-		    return typeof value === 'string' && value.length > 0;
-		  },
-		  escapeHTML: function escapeHTML() {
-		    var unsafe = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-		    return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-		  },
-		  throttle: function throttle(fn, delay) {
-		    var timer;
-
-		    if (delay === 0) {
-		      return fn;
-		    }
-
-		    timer = false;
-		    return function () {
-		      if (timer) {
-		        return;
-		      }
-
-		      timer = true;
-		      return setTimeout(function () {
-		        timer = false;
-		        fn.apply(void 0, arguments);
-		      }, delay);
-		    };
-		  }
-		};
-		var utils_1 = utils;
-
-		var quot = /"/g;
-		// B.2.3.2.1 CreateHTML(string, tag, attribute, value)
-		var createHTML = function (string, tag, attribute, value) {
-		  var S = String(_defined(string));
-		  var p1 = '<' + tag;
-		  if (attribute !== '') p1 += ' ' + attribute + '="' + String(value).replace(quot, '&quot;') + '"';
-		  return p1 + '>' + S + '</' + tag + '>';
-		};
-		var _stringHtml = function (NAME, exec) {
-		  var O = {};
-		  O[NAME] = exec(createHTML);
-		  _export(_export.P + _export.F * _fails(function () {
-		    var test = ''[NAME]('"');
-		    return test !== test.toLowerCase() || test.split('"').length > 3;
-		  }), 'String', O);
-		};
-
-		// B.2.3.10 String.prototype.link(url)
-		_stringHtml('link', function (createHTML) {
-		  return function link(url) {
-		    return createHTML(this, 'a', 'href', url);
-		  };
-		});
-
-		var View,
-		    utils$1,
-		    indexOf = [].indexOf;
-		utils$1 = utils_1;
-
-		var view = View = function () {
-		  var View =
-		  /*#__PURE__*/
-		  function () {
-		    function View() {
-		      var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-		      _classCallCheck(this, View);
-
-		      this.attrs = attrs;
-		      this.el = this.createElement();
-		      this.setAttributes();
-		      return;
-		    }
-
-		    _createClass(View, [{
-		      key: "render",
-		      value: function render() {
-		        return this;
-		      }
-		    }, {
-		      key: "createElement",
-		      value: function createElement() {
-		        var className, el, ref;
-		        el = document.createElement(this.tagName);
-		        className = (ref = this.className) != null ? ref : '';
-		        el.className = 'incito__view ' + className;
-		        return el;
-		      }
-		    }, {
-		      key: "setAttributes",
-		      value: function setAttributes() {
-		        var _this = this;
-
-		        var featureLabels, ref, ref1, shadow, strokeStyles, transforms; // Identifier.
-
-		        if (utils$1.isDefinedStr(this.attrs.id)) {
-		          this.el.setAttribute('data-id', this.attrs.id);
-		        } // Role.
-
-
-		        if (utils$1.isDefinedStr(this.attrs.role)) {
-		          this.el.setAttribute('data-role', this.attrs.role);
-		        } // Accessibility label.
-
-
-		        if (utils$1.isDefinedStr(this.attrs.accessibility_label)) {
-		          this.el.setAttribute('aria-label', this.attrs.accessibility_label);
-		        } // Accessibility visibility.
-
-
-		        if (this.attrs.accessibility_hidden === true) {
-		          this.el.setAttribute('aria-hidden', true);
-		        } // Feature labels.
-
-
-		        if (Array.isArray(this.attrs.feature_labels)) {
-		          featureLabels = this.attrs.feature_labels.filter(function (featureLabel) {
-		            return /^[a-z_-]{1,14}$/.test(featureLabel);
-		          });
-
-		          if (featureLabels.length) {
-		            this.el.setAttribute('data-feature-labels', featureLabels.join(','));
-		          }
-		        } // Title.
-
-
-		        if (utils$1.isDefinedStr(this.attrs.title)) {
-		          this.el.setAttribute('title', this.attrs.title);
-		        } // Gravity.
-
-
-		        if (utils$1.isDefinedStr(this.attrs.gravity)) {
-		          this.el.setAttribute('data-gravity', this.attrs.gravity);
-		        } // Link.
-
-
-		        if (utils$1.isDefinedStr(this.attrs.link)) {
-		          this.el.setAttribute('data-link', '');
-		          this.el.addEventListener('click', function () {
-		            window.open(_this.attrs.link, '_blank');
-		          }, false);
-		        } // Width.
-
-
-		        if (this.attrs.layout_width === 'match_parent') {
-		          this.el.style.width = '100%';
-		        } else if (this.attrs.layout_width === 'wrap_content') {
-		          this.el.style.display = 'inline-block';
-		        } else if (this.attrs.layout_width != null) {
-		          this.el.style.width = utils$1.formatUnit(this.attrs.layout_width);
-		        } // Height.
-
-
-		        if (this.attrs.layout_height === 'match_parent') {
-		          this.el.style.height = '100%';
-		        } else if (this.attrs.layout_height === 'wrap_content') {
-		          this.el.style.height = 'auto';
-		        } else if (this.attrs.layout_height != null) {
-		          this.el.style.height = utils$1.formatUnit(this.attrs.layout_height);
-		        } // Min width.
-
-
-		        if (this.attrs.min_width != null) {
-		          this.el.style.minWidth = utils$1.formatUnit(this.attrs.min_width);
-		        } // Max width.
-
-
-		        if (this.attrs.max_width != null) {
-		          this.el.style.maxWidth = utils$1.formatUnit(this.attrs.max_width);
-		        } // Min height.
-
-
-		        if (this.attrs.min_height != null) {
-		          this.el.style.minHeight = utils$1.formatUnit(this.attrs.min_height);
-		        } // Max height.
-
-
-		        if (this.attrs.max_height != null) {
-		          this.el.style.maxHeight = utils$1.formatUnit(this.attrs.max_height);
-		        } // Position in relation to parent.
-
-
-		        if (this.attrs.layout_top != null) {
-		          this.el.style.top = utils$1.formatUnit(this.attrs.layout_top);
-		        }
-
-		        if (this.attrs.layout_left != null) {
-		          this.el.style.left = utils$1.formatUnit(this.attrs.layout_left);
-		        }
-
-		        if (this.attrs.layout_right != null) {
-		          this.el.style.right = utils$1.formatUnit(this.attrs.layout_right);
-		        }
-
-		        if (this.attrs.layout_bottom != null) {
-		          this.el.style.bottom = utils$1.formatUnit(this.attrs.layout_bottom);
-		        } // Background.
-
-
-		        if (utils$1.isDefinedStr(this.attrs.background_color)) {
-		          this.el.style.backgroundColor = this.attrs.background_color;
-		        }
-
-		        if (utils$1.isDefinedStr(this.attrs.background_image)) {
-		          this.el.setAttribute('data-src', this.attrs.background_image);
-		          this.lazyload = true;
-		        }
-
-		        if ((ref = this.attrs.background_tile_mode) === 'repeat_x' || ref === 'repeat_y' || ref === 'repeat') {
-		          this.el.style.backgroundRepeat = this.attrs.background_tile_mode.replace('_', '-');
-		        }
-
-		        if (utils$1.isDefinedStr(this.attrs.background_image_position)) {
-		          this.el.style.backgroundPosition = this.attrs.background_image_position.replace('_', ' ');
-		        }
-
-		        if (this.attrs.background_image_scale_type === 'center_crop') {
-		          this.el.style.backgroundSize = 'cover';
-		        } else if (this.attrs.background_image_scale_type === 'center_inside') {
-		          this.el.style.backgroundSize = 'contain';
-		        } // Margin.
-
-
-		        if (this.attrs.layout_margin != null) {
-		          this.el.style.margin = utils$1.formatUnit(this.attrs.layout_margin);
-		        }
-
-		        if (this.attrs.layout_margin_top != null) {
-		          this.el.style.marginTop = utils$1.formatUnit(this.attrs.layout_margin_top);
-		        }
-
-		        if (this.attrs.layout_margin_left != null) {
-		          this.el.style.marginLeft = utils$1.formatUnit(this.attrs.layout_margin_left);
-		        }
-
-		        if (this.attrs.layout_margin_right != null) {
-		          this.el.style.marginRight = utils$1.formatUnit(this.attrs.layout_margin_right);
-		        }
-
-		        if (this.attrs.layout_margin_bottom != null) {
-		          this.el.style.marginBottom = utils$1.formatUnit(this.attrs.layout_margin_bottom);
-		        } // Padding.
-
-
-		        if (this.attrs.padding != null) {
-		          this.el.style.padding = utils$1.formatUnit(this.attrs.padding);
-		        }
-
-		        if (this.attrs.padding_top != null) {
-		          this.el.style.paddingTop = utils$1.formatUnit(this.attrs.padding_top);
-		        }
-
-		        if (this.attrs.padding_left != null) {
-		          this.el.style.paddingLeft = utils$1.formatUnit(this.attrs.padding_left);
-		        }
-
-		        if (this.attrs.padding_right != null) {
-		          this.el.style.paddingRight = utils$1.formatUnit(this.attrs.padding_right);
-		        }
-
-		        if (this.attrs.padding_bottom != null) {
-		          this.el.style.paddingBottom = utils$1.formatUnit(this.attrs.padding_bottom);
-		        } // Corner radius.
-
-
-		        if (this.attrs.corner_radius != null) {
-		          this.el.style.borderRadius = utils$1.formatUnit(this.attrs.corner_radius);
-		        }
-
-		        if (this.attrs.corner_top_left_radius != null) {
-		          this.el.style.borderTopLeftRadius = utils$1.formatUnit(this.attrs.corner_top_left_radius);
-		        }
-
-		        if (this.attrs.corner_top_right_radius != null) {
-		          this.el.style.borderTopRightRadius = utils$1.formatUnit(this.attrs.corner_top_right_radius);
-		        }
-
-		        if (this.attrs.corner_bottom_left_radius != null) {
-		          this.el.style.borderBottomLeftRadius = utils$1.formatUnit(this.attrs.corner_bottom_left_radius);
-		        }
-
-		        if (this.attrs.corner_bottom_right_radius != null) {
-		          this.el.style.borderBottomRightRadius = utils$1.formatUnit(this.attrs.corner_bottom_right_radius);
-		        } // Clip children.
-
-
-		        if (this.attrs.clip_children === false) {
-		          this.el.style.overflow = 'visible';
-		        } // Shadow.
-
-
-		        shadow = this.getShadow();
-
-		        if (shadow != null) {
-		          this.el.style.boxShadow = "".concat(shadow.dx, "px ").concat(shadow.dy, "px ").concat(shadow.radius, "px ").concat(shadow.color);
-		        } // Stroke.
-
-
-		        strokeStyles = ['solid', 'dotted', 'dashed'];
-
-		        if (this.attrs.stroke_width != null) {
-		          this.el.style.borderWidth = utils$1.formatUnit(this.attrs.stroke_width);
-		        }
-
-		        if (this.attrs.stroke_color != null) {
-		          this.el.style.borderColor = this.attrs.stroke_color;
-		        }
-
-		        if (ref1 = this.attrs.stroke_style, indexOf.call(strokeStyles, ref1) >= 0) {
-		          this.el.style.borderStyle = this.attrs.stroke_style;
-		        }
-
-		        if (this.attrs.stroke_top_width != null) {
-		          this.el.style.borderTopWidth = utils$1.formatUnit(this.attrs.stroke_top_width);
-		        }
-
-		        if (this.attrs.stroke_top_color != null) {
-		          this.el.style.borderTopColor = this.attrs.stroke_top_color;
-		        }
-
-		        if (this.attrs.stroke_left_width != null) {
-		          this.el.style.borderLeftWidth = utils$1.formatUnit(this.attrs.stroke_left_width);
-		        }
-
-		        if (this.attrs.stroke_left_color != null) {
-		          this.el.style.borderLeftColor = this.attrs.stroke_left_color;
-		        }
-
-		        if (this.attrs.stroke_right_width != null) {
-		          this.el.style.borderRightWidth = utils$1.formatUnit(this.attrs.stroke_right_width);
-		        }
-
-		        if (this.attrs.stroke_right_color != null) {
-		          this.el.style.borderRightColor = this.attrs.stroke_right_color;
-		        }
-
-		        if (this.attrs.stroke_bottom_width != null) {
-		          this.el.style.borderBottomWidth = utils$1.formatUnit(this.attrs.stroke_bottom_width);
-		        }
-
-		        if (this.attrs.stroke_bottom_color != null) {
-		          this.el.style.borderBottomColor = this.attrs.stroke_bottom_color;
-		        } // Flex.
-
-
-		        if (typeof this.attrs.layout_flex_shrink === 'number') {
-		          this.el.style.flexShrink = this.attrs.layout_flex_shrink;
-		          this.el.style.msFlexShrink = this.attrs.layout_flex_shrink;
-		        }
-
-		        if (typeof this.attrs.layout_flex_grow === 'number') {
-		          this.el.style.flexGrow = this.attrs.layout_flex_grow;
-		          this.el.style.msFlexGrow = this.attrs.layout_flex_grow;
-		        }
-
-		        if (this.attrs.layout_flex_basis != null) {
-		          this.el.style.flexBasis = utils$1.formatUnit(this.attrs.layout_flex_basis);
-		          this.el.style.msFlexBasis = utils$1.formatUnit(this.attrs.layout_flex_basis);
-		        } // Transforms.
-
-
-		        transforms = this.getTransforms();
-
-		        if (transforms.length > 0) {
-		          this.el.style.transform = transforms.join(' ');
-		        } // Transform origin.
-
-
-		        if (Array.isArray(this.attrs.transform_origin) && this.attrs.transform_origin.length === 2) {
-		          this.el.style.transformOrigin = [utils$1.formatUnit(this.attrs.transform_origin[0]), utils$1.formatUnit(this.attrs.transform_origin[1])].join(' ');
-		        }
-		      }
-		    }, {
-		      key: "getTransforms",
-		      value: function getTransforms() {
-		        var transforms, translateX, translateY;
-		        transforms = [];
-		        translateX = utils$1.formatUnit(this.attrs.transform_translate_x);
-		        translateY = utils$1.formatUnit(this.attrs.transform_translate_y);
-
-		        if (translateX !== 0) {
-		          transforms.push("translateX(".concat(translateX, ")"));
-		        }
-
-		        if (translateY !== 0) {
-		          transforms.push("translateY(".concat(translateY, ")"));
-		        }
-
-		        if (typeof this.attrs.transform_rotate === 'number' && this.attrs.transform_rotate !== 0) {
-		          transforms.push("rotate(".concat(this.attrs.transform_rotate, "deg)"));
-		        }
-
-		        if (typeof this.attrs.transform_scale === 'number' && this.attrs.transform_scale !== 1) {
-		          transforms.push("scale(".concat(this.attrs.transform_scale, ")"));
-		        }
-
-		        return transforms;
-		      }
-		    }, {
-		      key: "getShadow",
-		      value: function getShadow() {
-		        var color, dx, dy, radius;
-
-		        if (utils$1.isDefinedStr(this.attrs.shadow_color)) {
-		          dx = typeof this.attrs.shadow_dx === 'number' ? this.attrs.shadow_dx : 0;
-		          dy = typeof this.attrs.shadow_dy === 'number' ? this.attrs.shadow_dy : 0;
-		          radius = typeof this.attrs.shadow_radius === 'number' ? this.attrs.shadow_radius : 0;
-		          color = this.attrs.shadow_color;
-		          return {
-		            dx: dx,
-		            dy: dy,
-		            radius: radius,
-		            color: color
-		          };
-		        }
-		      }
-		    }]);
-
-		    return View;
-		  }();
-		  View.prototype.tagName = 'div';
-		  View.prototype.className = null;
-		  return View;
-		}.call(commonjsGlobal$1);
-
-		var Image, View$1, utils$2;
-		View$1 = view;
-		utils$2 = utils_1;
-
-		var image = Image = function () {
-		  var Image =
-		  /*#__PURE__*/
-		  function (_View) {
-		    _inherits(Image, _View);
-
-		    function Image() {
-		      _classCallCheck(this, Image);
-
-		      return _possibleConstructorReturn(this, _getPrototypeOf(Image).apply(this, arguments));
-		    }
-
-		    _createClass(Image, [{
-		      key: "render",
-		      value: function render() {
-		        if (utils$2.isDefinedStr(this.attrs.src)) {
-		          this.el.setAttribute('data-src', this.attrs.src);
-		        }
-
-		        if (utils$2.isDefinedStr(this.attrs.label)) {
-		          this.el.setAttribute('alt', this.attrs.label);
-		        } else {
-		          this.el.setAttribute('alt', '');
-		        }
-
-		        return this;
-		      }
-		    }]);
-
-		    return Image;
-		  }(View$1);
-		  Image.prototype.tagName = 'img';
-		  Image.prototype.className = 'incito__image-view';
-		  Image.prototype.lazyload = true;
-		  return Image;
-		}.call(commonjsGlobal$1);
-
-		var dP$2 = _objectDp.f;
-		var FProto = Function.prototype;
-		var nameRE = /^\s*function ([^ (]*)/;
-		var NAME = 'name';
-
-		// 19.2.4.2 name
-		NAME in FProto || _descriptors && dP$2(FProto, NAME, {
-		  configurable: true,
-		  get: function () {
-		    try {
-		      return ('' + this).match(nameRE)[1];
-		    } catch (e) {
-		      return '';
-		    }
-		  }
-		});
-
-		// 7.2.8 IsRegExp(argument)
-
-
-		var MATCH = _wks('match');
-		var _isRegexp = function (it) {
-		  var isRegExp;
-		  return _isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : _cof(it) == 'RegExp');
-		};
-
-		// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-
-
-		var SPECIES$1 = _wks('species');
-		var _speciesConstructor = function (O, D) {
-		  var C = _anObject(O).constructor;
-		  var S;
-		  return C === undefined || (S = _anObject(C)[SPECIES$1]) == undefined ? D : _aFunction(S);
-		};
-
-		var $min = Math.min;
-		var $push = [].push;
-		var $SPLIT = 'split';
-		var LENGTH = 'length';
-		var LAST_INDEX$1 = 'lastIndex';
-		var MAX_UINT32 = 0xffffffff;
-
-		// babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
-		var SUPPORTS_Y = !_fails(function () { });
-
-		// @@split logic
-		_fixReWks('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
-		  var internalSplit;
-		  if (
-		    'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
-		    'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 ||
-		    'ab'[$SPLIT](/(?:ab)*/)[LENGTH] != 2 ||
-		    '.'[$SPLIT](/(.?)(.?)/)[LENGTH] != 4 ||
-		    '.'[$SPLIT](/()()/)[LENGTH] > 1 ||
-		    ''[$SPLIT](/.?/)[LENGTH]
-		  ) {
-		    // based on es5-shim implementation, need to rework it
-		    internalSplit = function (separator, limit) {
-		      var string = String(this);
-		      if (separator === undefined && limit === 0) return [];
-		      // If `separator` is not a regex, use native split
-		      if (!_isRegexp(separator)) return $split.call(string, separator, limit);
-		      var output = [];
-		      var flags = (separator.ignoreCase ? 'i' : '') +
-		                  (separator.multiline ? 'm' : '') +
-		                  (separator.unicode ? 'u' : '') +
-		                  (separator.sticky ? 'y' : '');
-		      var lastLastIndex = 0;
-		      var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
-		      // Make `global` and avoid `lastIndex` issues by working with a copy
-		      var separatorCopy = new RegExp(separator.source, flags + 'g');
-		      var match, lastIndex, lastLength;
-		      while (match = _regexpExec.call(separatorCopy, string)) {
-		        lastIndex = separatorCopy[LAST_INDEX$1];
-		        if (lastIndex > lastLastIndex) {
-		          output.push(string.slice(lastLastIndex, match.index));
-		          if (match[LENGTH] > 1 && match.index < string[LENGTH]) $push.apply(output, match.slice(1));
-		          lastLength = match[0][LENGTH];
-		          lastLastIndex = lastIndex;
-		          if (output[LENGTH] >= splitLimit) break;
-		        }
-		        if (separatorCopy[LAST_INDEX$1] === match.index) separatorCopy[LAST_INDEX$1]++; // Avoid an infinite loop
-		      }
-		      if (lastLastIndex === string[LENGTH]) {
-		        if (lastLength || !separatorCopy.test('')) output.push('');
-		      } else output.push(string.slice(lastLastIndex));
-		      return output[LENGTH] > splitLimit ? output.slice(0, splitLimit) : output;
-		    };
-		  // Chakra, V8
-		  } else if ('0'[$SPLIT](undefined, 0)[LENGTH]) {
-		    internalSplit = function (separator, limit) {
-		      return separator === undefined && limit === 0 ? [] : $split.call(this, separator, limit);
-		    };
-		  } else {
-		    internalSplit = $split;
-		  }
-
-		  return [
-		    // `String.prototype.split` method
-		    // https://tc39.github.io/ecma262/#sec-string.prototype.split
-		    function split(separator, limit) {
-		      var O = defined(this);
-		      var splitter = separator == undefined ? undefined : separator[SPLIT];
-		      return splitter !== undefined
-		        ? splitter.call(separator, O, limit)
-		        : internalSplit.call(String(O), separator, limit);
-		    },
-		    // `RegExp.prototype[@@split]` method
-		    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@split
-		    //
-		    // NOTE: This cannot be properly polyfilled in engines that don't support
-		    // the 'y' flag.
-		    function (regexp, limit) {
-		      var res = maybeCallNative(internalSplit, regexp, this, limit, internalSplit !== $split);
-		      if (res.done) return res.value;
-
-		      var rx = _anObject(regexp);
-		      var S = String(this);
-		      var C = _speciesConstructor(rx, RegExp);
-
-		      var unicodeMatching = rx.unicode;
-		      var flags = (rx.ignoreCase ? 'i' : '') +
-		                  (rx.multiline ? 'm' : '') +
-		                  (rx.unicode ? 'u' : '') +
-		                  (SUPPORTS_Y ? 'y' : 'g');
-
-		      // ^(? + rx + ) is needed, in combination with some S slicing, to
-		      // simulate the 'y' flag.
-		      var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
-		      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
-		      if (lim === 0) return [];
-		      if (S.length === 0) return _regexpExecAbstract(splitter, S) === null ? [S] : [];
-		      var p = 0;
-		      var q = 0;
-		      var A = [];
-		      while (q < S.length) {
-		        splitter.lastIndex = SUPPORTS_Y ? q : 0;
-		        var z = _regexpExecAbstract(splitter, SUPPORTS_Y ? S : S.slice(q));
-		        var e;
-		        if (
-		          z === null ||
-		          (e = $min(_toLength(splitter.lastIndex + (SUPPORTS_Y ? 0 : q)), S.length)) === p
-		        ) {
-		          q = _advanceStringIndex(S, q, unicodeMatching);
-		        } else {
-		          A.push(S.slice(p, q));
-		          if (A.length === lim) return A;
-		          for (var i = 1; i <= z.length - 1; i++) {
-		            A.push(z[i]);
-		            if (A.length === lim) return A;
-		          }
-		          q = p = e;
-		        }
-		      }
-		      A.push(S.slice(p));
-		      return A;
-		    }
-		  ];
-		});
-
-		var TextView,
-		    View$2,
-		    utils$3,
-		    indexOf$1 = [].indexOf;
-		View$2 = view;
-		utils$3 = utils_1;
-
-		var text = TextView = function () {
-		  var TextView =
-		  /*#__PURE__*/
-		  function (_View) {
-		    _inherits(TextView, _View);
-
-		    function TextView() {
-		      _classCallCheck(this, TextView);
-
-		      return _possibleConstructorReturn(this, _getPrototypeOf(TextView).apply(this, arguments));
-		    }
-
-		    _createClass(TextView, [{
-		      key: "render",
-		      value: function render() {
-		        var parsedText, text, textShadow, textStyles;
-
-		        if (typeof this.attrs.text !== 'string') {
-		          return this;
-		        }
-
-		        textStyles = (this.attrs.text_style || '').split('|');
-		        text = this.attrs.text;
-
-		        if (Array.isArray(this.attrs.spans) && this.attrs.spans.length > 0) {
-		          parsedText = this.parseSpans(text, this.attrs.spans);
-		          text = parsedText.map(function (item) {
-		            var escapedText, spanName;
-		            escapedText = utils$3.escapeHTML(item.text || '');
-
-		            if (item.span != null && item.span.name === 'link' && item.span.url != null) {
-		              return '<a href="' + encodeURI(item.span.url) + '" rel="external" target="_blank">' + escapedText + '</a>';
-		            } else if (item.span != null && item.span.name != null) {
-		              spanName = item.span.name;
-		              return '<span data-name="' + spanName + '">' + escapedText + '</span>';
-		            } else {
-		              return escapedText;
-		            }
-		          });
-		          text = text.join('');
-		        } else {
-		          text = utils$3.escapeHTML(text);
-		        }
-
-		        if (this.attrs.text_prevent_widow) {
-		          this.el.innerHTML = text.replace(/\&nbsp;([^\s]+)$/, ' $1').replace(/\s([^\s]+)\s*$/, '&nbsp;$1');
-		        } else {
-		          this.el.innerHTML = text;
-		        } // Font family.
-
-
-		        if (Array.isArray(this.attrs.font_family) && this.attrs.font_family.length > 0) {
-		          this.el.style.fontFamily = this.attrs.font_family.join(', ');
-		        } else {
-		          this.el.style.fontFamily = 'inherit';
-		        } // Text size.
-
-
-		        if (this.attrs.text_size != null) {
-		          this.el.style.fontSize = "".concat(this.attrs.text_size, "px");
-		        } // Line height.
-
-
-		        if (this.attrs.line_spacing_multiplier != null) {
-		          this.el.style.lineHeight = this.attrs.line_spacing_multiplier;
-		        } // Text color.
-
-
-		        if (this.attrs.text_color != null) {
-		          this.el.style.color = this.attrs.text_color;
-		        } // Text styles.
-
-
-		        if (indexOf$1.call(textStyles, 'bold') >= 0) {
-		          this.el.style.fontWeight = 'bold';
-		        }
-
-		        if (indexOf$1.call(textStyles, 'italic') >= 0) {
-		          this.el.style.fontStyle = 'italic';
-		        } // Text shadow.
-
-
-		        textShadow = this.getTextShadow();
-
-		        if (textShadow != null) {
-		          this.el.style.textShadow = "".concat(textShadow.dx, "px ").concat(textShadow.dy, "px ").concat(textShadow.radius, "px ").concat(textShadow.color);
-		        } // Text alignment.
-
-
-		        if (this.attrs.text_alignment === 'left') {
-		          this.el.style.textAlign = 'left';
-		        } else if (this.attrs.text_alignment === 'center') {
-		          this.el.style.textAlign = 'center';
-		        } else if (this.attrs.text_alignment === 'right') {
-		          this.el.style.textAlign = 'right';
-		        } // Max lines.
-
-
-		        if (this.attrs.single_line === true || this.attrs.max_lines === 1) {
-		          this.el.setAttribute('data-single-line', true);
-		        } else if (typeof this.attrs.max_lines === 'number') {
-		          this.el.style.display = '-webkit-box';
-		          this.el.style.webkitLineClamp = this.attrs.max_lines;
-		          this.el.style.webkitBoxOrient = 'vertical';
-		        } // All caps.
-
-
-		        if (this.attrs.text_all_caps === true) {
-		          this.el.style.textTransform = 'uppercase';
-		        }
-
-		        return this;
-		      }
-		    }, {
-		      key: "parseSpans",
-		      value: function parseSpans(text) {
-		        var spans = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-		        var result;
-		        result = [];
-
-		        if (spans.length === 0) {
-		          result.push({
-		            text: text
-		          });
-		        } else if (spans[0].start > 0) {
-		          result.push({
-		            text: text.slice(0, spans[0].start)
-		          });
-		        }
-
-		        spans.forEach(function (span, i) {
-		          var endIndex, startIndex;
-		          startIndex = span.start;
-		          endIndex = span.end;
-		          result.push({
-		            text: text.slice(startIndex, endIndex),
-		            span: span
-		          });
-
-		          if (i === spans.length - 1) {
-		            if (endIndex < text.length) {
-		              result.push({
-		                text: text.slice(endIndex, text.length)
-		              });
-		            }
-		          } else if (endIndex < spans[i + 1].start) {
-		            result.push({
-		              text: text.slice(endIndex, spans[i + 1].start)
-		            });
-		          }
-		        });
-		        return result;
-		      }
-		    }, {
-		      key: "getTextShadow",
-		      value: function getTextShadow() {
-		        var color, dx, dy, radius;
-
-		        if (utils$3.isDefinedStr(this.attrs.text_shadow_color)) {
-		          dx = typeof this.attrs.text_shadow_dx === 'number' ? this.attrs.text_shadow_dx : 0;
-		          dy = typeof this.attrs.text_shadow_dy === 'number' ? this.attrs.text_shadow_dy : 0;
-		          radius = typeof this.attrs.text_shadow_radius === 'number' ? this.attrs.text_shadow_radius : 0;
-		          color = this.attrs.text_shadow_color;
-		          return {
-		            dx: dx,
-		            dy: dy,
-		            radius: radius,
-		            color: color
-		          };
-		        }
-		      }
-		    }]);
-
-		    return TextView;
-		  }(View$2);
-		  TextView.prototype.tagName = 'p';
-		  TextView.prototype.className = 'incito__text-view';
-		  return TextView;
-		}.call(commonjsGlobal$1);
-
-		var FlexLayout,
-		    View$3,
-		    allowedHostnames,
-		    utils$4,
-		    indexOf$2 = [].indexOf;
-		View$3 = view;
-		utils$4 = utils_1;
-		allowedHostnames = ['www.youtube.com', 'www.vimeo.com', 'video.twentythree.net'];
-
-		var videoEmbed = FlexLayout = function () {
-		  var FlexLayout =
-		  /*#__PURE__*/
-		  function (_View) {
-		    _inherits(FlexLayout, _View);
-
-		    function FlexLayout() {
-		      _classCallCheck(this, FlexLayout);
-
-		      return _possibleConstructorReturn(this, _getPrototypeOf(FlexLayout).apply(this, arguments));
-		    }
-
-		    _createClass(FlexLayout, [{
-		      key: "render",
-		      value: function render() {
-		        var linkEl, ref, src;
-
-		        if (utils$4.isDefinedStr(this.attrs.src)) {
-		          src = this.attrs.src;
-		          linkEl = document.createElement('a');
-		          linkEl.setAttribute('href', src);
-
-		          if (ref = linkEl.hostname, indexOf$2.call(allowedHostnames, ref) >= 0) {
-		            this.el.setAttribute('data-src', src);
-		            this.lazyload = true;
-		          }
-		        }
-
-		        return this;
-		      }
-		    }]);
-
-		    return FlexLayout;
-		  }(View$3);
-		  FlexLayout.prototype.className = 'incito__video-embed-view';
-		  FlexLayout.prototype.lazyload = false;
-		  return FlexLayout;
-		}.call(commonjsGlobal$1);
-
-		var Video, View$4, utils$5;
-		View$4 = view;
-		utils$5 = utils_1;
-
-		var video = Video = function () {
-		  var Video =
-		  /*#__PURE__*/
-		  function (_View) {
-		    _inherits(Video, _View);
-
-		    function Video() {
-		      _classCallCheck(this, Video);
-
-		      return _possibleConstructorReturn(this, _getPrototypeOf(Video).apply(this, arguments));
-		    }
-
-		    _createClass(Video, [{
-		      key: "render",
-		      value: function render() {
-		        if (!utils$5.isDefinedStr(this.attrs.src)) {
-		          return;
-		        }
-
-		        this.el.muted = true;
-		        this.el.preload = 'metadata';
-		        this.el.setAttribute('muted', '');
-		        this.el.setAttribute('playsinline', 'true');
-		        this.el.setAttribute('webkit-playsinline', 'true');
-		        this.el.setAttribute('data-src', this.attrs.src);
-		        this.el.setAttribute('data-mime', this.attrs.mime);
-
-		        if (this.attrs.autoplay === true) {
-		          this.el.autoplay = true;
-		        }
-
-		        if (this.attrs.loop === true) {
-		          this.el.loop = true;
-		        }
-
-		        if (this.attrs.controls === true) {
-		          this.el.controls = true;
-		        }
-
-		        return this;
-		      }
-		    }]);
-
-		    return Video;
-		  }(View$4);
-		  Video.prototype.className = 'incito__video-view';
-		  Video.prototype.tagName = 'video';
-		  Video.prototype.lazyload = true;
-		  return Video;
-		}.call(commonjsGlobal$1);
-
-		var AbsoluteLayout, View$5;
-		View$5 = view;
-
-		var absoluteLayout = AbsoluteLayout = function () {
-		  var AbsoluteLayout =
-		  /*#__PURE__*/
-		  function (_View) {
-		    _inherits(AbsoluteLayout, _View);
-
-		    function AbsoluteLayout() {
-		      _classCallCheck(this, AbsoluteLayout);
-
-		      return _possibleConstructorReturn(this, _getPrototypeOf(AbsoluteLayout).apply(this, arguments));
-		    }
-
-		    _createClass(AbsoluteLayout, [{
-		      key: "render",
-		      value: function render() {
-		        return this;
-		      }
-		    }]);
-
-		    return AbsoluteLayout;
-		  }(View$5);
-		  AbsoluteLayout.prototype.className = 'incito__absolute-layout-view';
-		  return AbsoluteLayout;
-		}.call(commonjsGlobal$1);
-
-		var FlexLayout$1,
-		    View$6,
-		    alignItemModes,
-		    flexDirectionModes,
-		    flexJustifyModes,
-		    indexOf$3 = [].indexOf;
-		View$6 = view;
-		alignItemModes = ['stretch', 'center', 'flex-start', 'flex-end', 'baseline'];
-		flexJustifyModes = ['flex-start', 'flex-end', 'center', 'space-between', 'space-around'];
-		flexDirectionModes = ['row', 'column'];
-
-		var flexLayout = FlexLayout$1 = function () {
-		  var FlexLayout =
-		  /*#__PURE__*/
-		  function (_View) {
-		    _inherits(FlexLayout, _View);
-
-		    function FlexLayout() {
-		      _classCallCheck(this, FlexLayout);
-
-		      return _possibleConstructorReturn(this, _getPrototypeOf(FlexLayout).apply(this, arguments));
-		    }
-
-		    _createClass(FlexLayout, [{
-		      key: "render",
-		      value: function render() {
-		        var ref, ref1, ref2;
-
-		        if (ref = this.attrs.layout_flex_align_items, indexOf$3.call(alignItemModes, ref) >= 0) {
-		          this.el.style.alignItems = this.attrs.layout_flex_align_items;
-		          this.el.style.msAlignItems = this.attrs.layout_flex_align_items;
-		        }
-
-		        if (ref1 = this.attrs.layout_flex_justify_content, indexOf$3.call(flexJustifyModes, ref1) >= 0) {
-		          this.el.style.justifyContent = this.attrs.layout_flex_justify_content;
-		          this.el.style.msFlexPack = this.attrs.layout_flex_justify_content;
-		        }
-
-		        if (ref2 = this.attrs.layout_flex_direction, indexOf$3.call(flexDirectionModes, ref2) >= 0) {
-		          this.el.style.flexDirection = this.attrs.layout_flex_direction;
-		          this.el.style.msFlexDirection = this.attrs.layout_flex_direction;
-		        }
-
-		        return this;
-		      }
-		    }]);
-
-		    return FlexLayout;
-		  }(View$6);
-		  FlexLayout.prototype.className = 'incito__flex-layout-view';
-		  return FlexLayout;
-		}.call(commonjsGlobal$1);
-
-		var AbsoluteLayout$1, FlexLayout$2, ImageView, Incito, MicroEvent, TextView$1, VideoEmbedView, VideoView, View$7, requestIdleCallback, utils$6, views;
-		MicroEvent = microevent;
-		utils$6 = utils_1;
-		View$7 = view;
-		ImageView = image;
-		TextView$1 = text;
-		VideoEmbedView = videoEmbed;
-		VideoView = video;
-		AbsoluteLayout$1 = absoluteLayout;
-		FlexLayout$2 = flexLayout;
-		views = {
-		  View: View$7,
-		  ImageView: ImageView,
-		  TextView: TextView$1,
-		  VideoEmbedView: VideoEmbedView,
-		  VideoView: VideoView,
-		  AbsoluteLayout: AbsoluteLayout$1,
-		  FlexLayout: FlexLayout$2
-		};
-
-		if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
-		  requestIdleCallback = window.requestIdleCallback;
-		} else {
-		  requestIdleCallback = function requestIdleCallback(cb) {
-		    return setTimeout(function () {
-		      var start;
-		      start = Date.now();
-		      return cb({
-		        didTimeout: false,
-		        timeRemaining: function timeRemaining() {
-		          return Math.max(0, 50 - (Date.now() - start));
-		        }
-		      });
-		    }, 1);
-		  };
-		}
-
-		Incito =
-		/*#__PURE__*/
-		function () {
-		  function Incito(containerEl) {
-		    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-		    _classCallCheck(this, Incito);
-
-		    this.containerEl = containerEl;
-		    this.options = options;
-		    this.el = document.createElement('div');
-		    this.ids = {};
-		    this.incito = this.options.incito || {};
-		    this.views = this.flattenViews([], this.incito.root_view);
-		    this.viewsLength = this.views.length;
-		    this.viewIndex = 0;
-		    this.lazyloadables = [];
-		    this.lazyloader = utils$6.throttle(this.lazyload.bind(this), 150);
-		    this.renderedOutsideOfViewport = false;
-		    return;
-		  }
-
-		  _createClass(Incito, [{
-		    key: "start",
-		    value: function start() {
-		      var _this = this;
-
-		      var _render, triggeredVisiblerendered;
-
-		      triggeredVisiblerendered = false;
-
-		      _render = function render(IdleDeadline) {
-		        _this.render(IdleDeadline);
-
-		        if (_this.renderedOutsideOfViewport) {
-		          _this.lazyload(0);
-		        }
-
-		        if (_this.renderedOutsideOfViewport && !triggeredVisiblerendered) {
-		          _this.trigger('visibleRendered');
-
-		          triggeredVisiblerendered = true;
-		        }
-
-		        if (_this.viewIndex < _this.viewsLength - 1) {
-		          requestIdleCallback(_render);
-		        } else {
-		          _this.trigger('allrendered');
-		        }
-		      };
-
-		      this.el.className = 'incito';
-
-		      if (this.incito.locale != null) {
-		        this.el.setAttribute('lang', this.incito.locale);
-		      }
-
-		      this.loadFonts(this.incito.font_assets);
-		      this.applyTheme(this.incito.theme);
-		      this.containerEl.appendChild(this.el);
-
-		      _render({
-		        timeRemaining: function timeRemaining() {
-		          return Number.MAX_VALUE;
-		        }
-		      });
-
-		      window.addEventListener('scroll', this.lazyloader, false);
-		      window.addEventListener('resize', this.lazyloader, false);
-		      return this;
-		    }
-		  }, {
-		    key: "destroy",
-		    value: function destroy() {
-		      this.containerEl.removeChild(this.el);
-		      window.removeEventListener('scroll', this.lazyloader, false);
-		      window.removeEventListener('resize', this.lazyloader, false);
-		      this.trigger('destroyed');
-		    }
-		  }, {
-		    key: "render",
-		    value: function render(IdleDeadline) {
-		      var attrs, i, item, match, ref, view;
-		      i = this.viewIndex;
-
-		      while (IdleDeadline.timeRemaining() > 0 && i < this.viewsLength - 1) {
-		        item = this.views[i];
-		        attrs = item.attrs;
-		        match = (ref = views[attrs.view_name]) != null ? ref : View$7;
-		        view = new match(attrs).render();
-
-		        if (attrs.id != null && typeof attrs.meta === 'object') {
-		          this.ids[attrs.id] = attrs.meta;
-		        }
-
-		        if (view.lazyload === true) {
-		          this.lazyloadables.push(view.el);
-		        }
-
-		        item.view = view;
-
-		        if (item.parent != null && item.parent.view != null) {
-		          item.parent.view.el.appendChild(view.el);
-		        } else {
-		          this.el.appendChild(view.el);
-		        }
-
-		        if (!this.renderedOutsideOfViewport && !this.isInsideViewport(this.views[i].view.el)) {
-		          this.renderedOutsideOfViewport = true;
-		          break;
-		        }
-
-		        i++;
-		      }
-
-		      this.viewIndex = i;
-		    }
-		  }, {
-		    key: "applyTheme",
-		    value: function applyTheme() {
-		      var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-		      if (Array.isArray(theme.font_family)) {
-		        this.el.style.fontFamily = theme.font_family.join(', ');
-		      }
-
-		      if (utils$6.isDefinedStr(theme.background_color)) {
-		        this.el.style.backgroundColor = theme.background_color;
-		      }
-
-		      if (utils$6.isDefinedStr(theme.text_color)) {
-		        this.el.style.color = theme.text_color;
-		      }
-
-		      if (typeof theme.line_spacing_multiplier === 'number') {
-		        this.el.style.lineHeight = theme.line_spacing_multiplier;
-		      }
-		    }
-		  }, {
-		    key: "flattenViews",
-		    value: function flattenViews(views, attrs, parent) {
-		      var _this2 = this;
-
-		      var item;
-		      item = {
-		        attrs: attrs,
-		        view: null,
-		        parent: parent
-		      };
-		      views.push(item);
-
-		      if (Array.isArray(attrs.child_views)) {
-		        attrs.child_views.forEach(function (childAttrs) {
-		          return _this2.flattenViews(views, childAttrs, item);
-		        });
-		      }
-
-		      return views;
-		    }
-		  }, {
-		    key: "loadFonts",
-		    value: function loadFonts() {
-		      var fontAssets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-		      var font, key, ref, ref1, styleEl, text, urls, value;
-
-		      if ('FontFace' in window) {
-		        for (key in fontAssets) {
-		          value = fontAssets[key];
-		          urls = value.src.map(function (src) {
-		            return "url(".concat(src[1], ")");
-		          }).join(', ');
-		          font = new FontFace(key, urls, {
-		            style: (ref = value.style) != null ? ref : 'normal',
-		            weight: (ref1 = value.weight) != null ? ref1 : 'normal',
-		            display: 'swap'
-		          });
-		          document.fonts.add(font);
-		          font.load();
-		        }
-		      } else {
-		        styleEl = document.createElement('style');
-
-		        for (key in fontAssets) {
-		          value = fontAssets[key];
-		          urls = value.src.map(function (src) {
-		            return "url('".concat(src[1], "') format('").concat(src[0], "')");
-		          }).join(', ');
-		          text = "@font-face {\n    font-family: '".concat(key, "';\n    font-display: swap;\n    src: ").concat(urls, ";\n}");
-		          styleEl.appendChild(document.createTextNode(text));
-		        }
-
-		        document.head.appendChild(styleEl);
-		      }
-		    }
-		  }, {
-		    key: "isInsideViewport",
-		    value: function isInsideViewport(el, threshold) {
-		      var rect, windowHeight;
-		      windowHeight = window.innerHeight;
-		      threshold = threshold != null ? threshold : windowHeight;
-		      rect = el.getBoundingClientRect();
-		      return rect.top <= windowHeight + threshold && rect.top + rect.height >= -threshold;
-		    }
-		  }, {
-		    key: "lazyload",
-		    value: function lazyload(threshold) {
-		      var _this3 = this;
-
-		      this.lazyloadables = this.lazyloadables.filter(function (el) {
-		        if (_this3.isInsideViewport(el, threshold)) {
-		          _this3.revealElement(el);
-
-		          return false;
-		        } else {
-		          return true;
-		        }
-		      });
-		    }
-		  }, {
-		    key: "revealElement",
-		    value: function revealElement(el) {
-		      var iframeEl, sourceEl, src;
-		      src = el.getAttribute('data-src');
-
-		      if (el.tagName.toLowerCase() === 'img') {
-		        el.addEventListener('load', function () {
-		          el.className += ' incito--loaded';
-		        });
-		        el.setAttribute('src', src);
-		      } else if (el.tagName.toLowerCase() === 'video') {
-		        sourceEl = document.createElement('source');
-		        sourceEl.setAttribute('src', src);
-		        sourceEl.setAttribute('type', el.getAttribute('data-mime'));
-		        el.appendChild(sourceEl);
-		      } else if (/incito__video-embed-view/gi.test(el.className)) {
-		        iframeEl = document.createElement('iframe');
-		        iframeEl.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
-		        iframeEl.setAttribute('src', src);
-		        el.appendChild(iframeEl);
-		      } else {
-		        el.style.backgroundImage = "url(".concat(src, ")");
-		      }
-		    }
-		  }]);
-
-		  return Incito;
-		}();
-
-		MicroEvent.mixin(Incito);
-		var incito = Incito;
-
-		return incito;
+	  function _classCallCheck(instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	      throw new TypeError("Cannot call a class as a function");
+	    }
+	  }
+
+	  function _defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	      Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }
+
+	  function _createClass(Constructor, protoProps, staticProps) {
+	    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) _defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  }
+
+	  function _inherits(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	      throw new TypeError("Super expression must either be null or a function");
+	    }
+
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	      constructor: {
+	        value: subClass,
+	        writable: true,
+	        configurable: true
+	      }
+	    });
+	    if (superClass) _setPrototypeOf(subClass, superClass);
+	  }
+
+	  function _getPrototypeOf(o) {
+	    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+	      return o.__proto__ || Object.getPrototypeOf(o);
+	    };
+	    return _getPrototypeOf(o);
+	  }
+
+	  function _setPrototypeOf(o, p) {
+	    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+	      o.__proto__ = p;
+	      return o;
+	    };
+
+	    return _setPrototypeOf(o, p);
+	  }
+
+	  function _assertThisInitialized(self) {
+	    if (self === void 0) {
+	      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	    }
+
+	    return self;
+	  }
+
+	  function _possibleConstructorReturn(self, call) {
+	    if (call && (typeof call === "object" || typeof call === "function")) {
+	      return call;
+	    }
+
+	    return _assertThisInitialized(self);
+	  }
+
+	  var formatUnit = function formatUnit(unit) {
+	    if (unit == null) {
+	      return 0;
+	    } else if (typeof unit === 'number') {
+	      return "".concat(unit, "px");
+	    } else if (typeof unit === 'string') {
+	      return unit.replace('dp', 'px');
+	    } else {
+	      return 0;
+	    }
+	  };
+	  var isDefinedStr = function isDefinedStr(value) {
+	    return typeof value === 'string' && value.length > 0;
+	  };
+	  var escapeHTML = function escapeHTML() {
+	    var unsafe = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	    return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+	  };
+	  var throttle = function throttle(fn, delay) {
+	    var timer;
+
+	    if (delay === 0) {
+	      return fn;
+	    }
+
+	    timer = false;
+	    return function () {
+	      if (timer) {
+	        return;
+	      }
+
+	      timer = true;
+	      return setTimeout(function () {
+	        timer = false;
+	        fn.apply(void 0, arguments);
+	      }, delay);
+	    };
+	  };
+
+	  var View,
+	      indexOf = [].indexOf;
+	  var View$1 = View = function () {
+	    var View =
+	    /*#__PURE__*/
+	    function () {
+	      function View() {
+	        var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	        _classCallCheck(this, View);
+
+	        this.attrs = attrs;
+	        this.el = this.createElement();
+	        this.setAttributes();
+	        return;
+	      }
+
+	      _createClass(View, [{
+	        key: "render",
+	        value: function render() {
+	          return this;
+	        }
+	      }, {
+	        key: "createElement",
+	        value: function createElement() {
+	          var className, el, ref;
+	          el = document.createElement(this.tagName);
+	          className = (ref = this.className) != null ? ref : '';
+	          el.className = 'incito__view ' + className;
+	          return el;
+	        }
+	      }, {
+	        key: "setAttributes",
+	        value: function setAttributes() {
+	          var _this = this;
+
+	          var featureLabels, ref, ref1, shadow, strokeStyles, transforms; // Identifier.
+
+	          if (isDefinedStr(this.attrs.id)) {
+	            this.el.setAttribute('data-id', this.attrs.id);
+	          } // Role.
+
+
+	          if (isDefinedStr(this.attrs.role)) {
+	            this.el.setAttribute('data-role', this.attrs.role);
+	          } // Accessibility label.
+
+
+	          if (isDefinedStr(this.attrs.accessibility_label)) {
+	            this.el.setAttribute('aria-label', this.attrs.accessibility_label);
+	          } // Accessibility visibility.
+
+
+	          if (this.attrs.accessibility_hidden === true) {
+	            this.el.setAttribute('aria-hidden', true);
+	          } // Feature labels.
+
+
+	          if (Array.isArray(this.attrs.feature_labels)) {
+	            featureLabels = this.attrs.feature_labels.filter(function (featureLabel) {
+	              return /^[a-z_-]{1,14}$/.test(featureLabel);
+	            });
+
+	            if (featureLabels.length) {
+	              this.el.setAttribute('data-feature-labels', featureLabels.join(','));
+	            }
+	          } // Title.
+
+
+	          if (isDefinedStr(this.attrs.title)) {
+	            this.el.setAttribute('title', this.attrs.title);
+	          } // Gravity.
+
+
+	          if (isDefinedStr(this.attrs.gravity)) {
+	            this.el.setAttribute('data-gravity', this.attrs.gravity);
+	          } // Link.
+
+
+	          if (isDefinedStr(this.attrs.link)) {
+	            this.el.setAttribute('data-link', '');
+	            this.el.addEventListener('click', function () {
+	              window.open(_this.attrs.link, '_blank');
+	            }, false);
+	          } // Width.
+
+
+	          if (this.attrs.layout_width === 'match_parent') {
+	            this.el.style.width = '100%';
+	          } else if (this.attrs.layout_width === 'wrap_content') {
+	            this.el.style.display = 'inline-block';
+	          } else if (this.attrs.layout_width != null) {
+	            this.el.style.width = formatUnit(this.attrs.layout_width);
+	          } // Height.
+
+
+	          if (this.attrs.layout_height === 'match_parent') {
+	            this.el.style.height = '100%';
+	          } else if (this.attrs.layout_height === 'wrap_content') {
+	            this.el.style.height = 'auto';
+	          } else if (this.attrs.layout_height != null) {
+	            this.el.style.height = formatUnit(this.attrs.layout_height);
+	          } // Min width.
+
+
+	          if (this.attrs.min_width != null) {
+	            this.el.style.minWidth = formatUnit(this.attrs.min_width);
+	          } // Max width.
+
+
+	          if (this.attrs.max_width != null) {
+	            this.el.style.maxWidth = formatUnit(this.attrs.max_width);
+	          } // Min height.
+
+
+	          if (this.attrs.min_height != null) {
+	            this.el.style.minHeight = formatUnit(this.attrs.min_height);
+	          } // Max height.
+
+
+	          if (this.attrs.max_height != null) {
+	            this.el.style.maxHeight = formatUnit(this.attrs.max_height);
+	          } // Position in relation to parent.
+
+
+	          if (this.attrs.layout_top != null) {
+	            this.el.style.top = formatUnit(this.attrs.layout_top);
+	          }
+
+	          if (this.attrs.layout_left != null) {
+	            this.el.style.left = formatUnit(this.attrs.layout_left);
+	          }
+
+	          if (this.attrs.layout_right != null) {
+	            this.el.style.right = formatUnit(this.attrs.layout_right);
+	          }
+
+	          if (this.attrs.layout_bottom != null) {
+	            this.el.style.bottom = formatUnit(this.attrs.layout_bottom);
+	          } // Background.
+
+
+	          if (isDefinedStr(this.attrs.background_color)) {
+	            this.el.style.backgroundColor = this.attrs.background_color;
+	          }
+
+	          if (isDefinedStr(this.attrs.background_image)) {
+	            this.el.setAttribute('data-src', this.attrs.background_image);
+	            this.lazyload = true;
+	          }
+
+	          if ((ref = this.attrs.background_tile_mode) === 'repeat_x' || ref === 'repeat_y' || ref === 'repeat') {
+	            this.el.style.backgroundRepeat = this.attrs.background_tile_mode.replace('_', '-');
+	          }
+
+	          if (isDefinedStr(this.attrs.background_image_position)) {
+	            this.el.style.backgroundPosition = this.attrs.background_image_position.replace('_', ' ');
+	          }
+
+	          if (this.attrs.background_image_scale_type === 'center_crop') {
+	            this.el.style.backgroundSize = 'cover';
+	          } else if (this.attrs.background_image_scale_type === 'center_inside') {
+	            this.el.style.backgroundSize = 'contain';
+	          } // Margin.
+
+
+	          if (this.attrs.layout_margin != null) {
+	            this.el.style.margin = formatUnit(this.attrs.layout_margin);
+	          }
+
+	          if (this.attrs.layout_margin_top != null) {
+	            this.el.style.marginTop = formatUnit(this.attrs.layout_margin_top);
+	          }
+
+	          if (this.attrs.layout_margin_left != null) {
+	            this.el.style.marginLeft = formatUnit(this.attrs.layout_margin_left);
+	          }
+
+	          if (this.attrs.layout_margin_right != null) {
+	            this.el.style.marginRight = formatUnit(this.attrs.layout_margin_right);
+	          }
+
+	          if (this.attrs.layout_margin_bottom != null) {
+	            this.el.style.marginBottom = formatUnit(this.attrs.layout_margin_bottom);
+	          } // Padding.
+
+
+	          if (this.attrs.padding != null) {
+	            this.el.style.padding = formatUnit(this.attrs.padding);
+	          }
+
+	          if (this.attrs.padding_top != null) {
+	            this.el.style.paddingTop = formatUnit(this.attrs.padding_top);
+	          }
+
+	          if (this.attrs.padding_left != null) {
+	            this.el.style.paddingLeft = formatUnit(this.attrs.padding_left);
+	          }
+
+	          if (this.attrs.padding_right != null) {
+	            this.el.style.paddingRight = formatUnit(this.attrs.padding_right);
+	          }
+
+	          if (this.attrs.padding_bottom != null) {
+	            this.el.style.paddingBottom = formatUnit(this.attrs.padding_bottom);
+	          } // Corner radius.
+
+
+	          if (this.attrs.corner_radius != null) {
+	            this.el.style.borderRadius = formatUnit(this.attrs.corner_radius);
+	          }
+
+	          if (this.attrs.corner_top_left_radius != null) {
+	            this.el.style.borderTopLeftRadius = formatUnit(this.attrs.corner_top_left_radius);
+	          }
+
+	          if (this.attrs.corner_top_right_radius != null) {
+	            this.el.style.borderTopRightRadius = formatUnit(this.attrs.corner_top_right_radius);
+	          }
+
+	          if (this.attrs.corner_bottom_left_radius != null) {
+	            this.el.style.borderBottomLeftRadius = formatUnit(this.attrs.corner_bottom_left_radius);
+	          }
+
+	          if (this.attrs.corner_bottom_right_radius != null) {
+	            this.el.style.borderBottomRightRadius = formatUnit(this.attrs.corner_bottom_right_radius);
+	          } // Clip children.
+
+
+	          if (this.attrs.clip_children === false) {
+	            this.el.style.overflow = 'visible';
+	          } // Shadow.
+
+
+	          shadow = this.getShadow();
+
+	          if (shadow != null) {
+	            this.el.style.boxShadow = "".concat(shadow.dx, "px ").concat(shadow.dy, "px ").concat(shadow.radius, "px ").concat(shadow.color);
+	          } // Stroke.
+
+
+	          strokeStyles = ['solid', 'dotted', 'dashed'];
+
+	          if (this.attrs.stroke_width != null) {
+	            this.el.style.borderWidth = formatUnit(this.attrs.stroke_width);
+	          }
+
+	          if (this.attrs.stroke_color != null) {
+	            this.el.style.borderColor = this.attrs.stroke_color;
+	          }
+
+	          if (ref1 = this.attrs.stroke_style, indexOf.call(strokeStyles, ref1) >= 0) {
+	            this.el.style.borderStyle = this.attrs.stroke_style;
+	          }
+
+	          if (this.attrs.stroke_top_width != null) {
+	            this.el.style.borderTopWidth = formatUnit(this.attrs.stroke_top_width);
+	          }
+
+	          if (this.attrs.stroke_top_color != null) {
+	            this.el.style.borderTopColor = this.attrs.stroke_top_color;
+	          }
+
+	          if (this.attrs.stroke_left_width != null) {
+	            this.el.style.borderLeftWidth = formatUnit(this.attrs.stroke_left_width);
+	          }
+
+	          if (this.attrs.stroke_left_color != null) {
+	            this.el.style.borderLeftColor = this.attrs.stroke_left_color;
+	          }
+
+	          if (this.attrs.stroke_right_width != null) {
+	            this.el.style.borderRightWidth = formatUnit(this.attrs.stroke_right_width);
+	          }
+
+	          if (this.attrs.stroke_right_color != null) {
+	            this.el.style.borderRightColor = this.attrs.stroke_right_color;
+	          }
+
+	          if (this.attrs.stroke_bottom_width != null) {
+	            this.el.style.borderBottomWidth = formatUnit(this.attrs.stroke_bottom_width);
+	          }
+
+	          if (this.attrs.stroke_bottom_color != null) {
+	            this.el.style.borderBottomColor = this.attrs.stroke_bottom_color;
+	          } // Flex.
+
+
+	          if (typeof this.attrs.layout_flex_shrink === 'number') {
+	            this.el.style.flexShrink = this.attrs.layout_flex_shrink;
+	            this.el.style.msFlexShrink = this.attrs.layout_flex_shrink;
+	          }
+
+	          if (typeof this.attrs.layout_flex_grow === 'number') {
+	            this.el.style.flexGrow = this.attrs.layout_flex_grow;
+	            this.el.style.msFlexGrow = this.attrs.layout_flex_grow;
+	          }
+
+	          if (this.attrs.layout_flex_basis != null) {
+	            this.el.style.flexBasis = formatUnit(this.attrs.layout_flex_basis);
+	            this.el.style.msFlexBasis = formatUnit(this.attrs.layout_flex_basis);
+	          } // Transforms.
+
+
+	          transforms = this.getTransforms();
+
+	          if (transforms.length > 0) {
+	            this.el.style.transform = transforms.join(' ');
+	          } // Transform origin.
+
+
+	          if (Array.isArray(this.attrs.transform_origin) && this.attrs.transform_origin.length === 2) {
+	            this.el.style.transformOrigin = [formatUnit(this.attrs.transform_origin[0]), formatUnit(this.attrs.transform_origin[1])].join(' ');
+	          }
+	        }
+	      }, {
+	        key: "getTransforms",
+	        value: function getTransforms() {
+	          var transforms, translateX, translateY;
+	          transforms = [];
+	          translateX = formatUnit(this.attrs.transform_translate_x);
+	          translateY = formatUnit(this.attrs.transform_translate_y);
+
+	          if (translateX !== 0) {
+	            transforms.push("translateX(".concat(translateX, ")"));
+	          }
+
+	          if (translateY !== 0) {
+	            transforms.push("translateY(".concat(translateY, ")"));
+	          }
+
+	          if (typeof this.attrs.transform_rotate === 'number' && this.attrs.transform_rotate !== 0) {
+	            transforms.push("rotate(".concat(this.attrs.transform_rotate, "deg)"));
+	          }
+
+	          if (typeof this.attrs.transform_scale === 'number' && this.attrs.transform_scale !== 1) {
+	            transforms.push("scale(".concat(this.attrs.transform_scale, ")"));
+	          }
+
+	          return transforms;
+	        }
+	      }, {
+	        key: "getShadow",
+	        value: function getShadow() {
+	          var color, dx, dy, radius;
+
+	          if (isDefinedStr(this.attrs.shadow_color)) {
+	            dx = typeof this.attrs.shadow_dx === 'number' ? this.attrs.shadow_dx : 0;
+	            dy = typeof this.attrs.shadow_dy === 'number' ? this.attrs.shadow_dy : 0;
+	            radius = typeof this.attrs.shadow_radius === 'number' ? this.attrs.shadow_radius : 0;
+	            color = this.attrs.shadow_color;
+	            return {
+	              dx: dx,
+	              dy: dy,
+	              radius: radius,
+	              color: color
+	            };
+	          }
+	        }
+	      }]);
+
+	      return View;
+	    }();
+	    View.prototype.tagName = 'div';
+	    View.prototype.className = null;
+	    return View;
+	  }.call(undefined);
+
+	  var Image;
+	  var image = Image = function () {
+	    var Image =
+	    /*#__PURE__*/
+	    function (_View) {
+	      _inherits(Image, _View);
+
+	      function Image() {
+	        _classCallCheck(this, Image);
+
+	        return _possibleConstructorReturn(this, _getPrototypeOf(Image).apply(this, arguments));
+	      }
+
+	      _createClass(Image, [{
+	        key: "render",
+	        value: function render() {
+	          if (isDefinedStr(this.attrs.src)) {
+	            this.el.setAttribute('data-src', this.attrs.src);
+	          }
+
+	          if (isDefinedStr(this.attrs.label)) {
+	            this.el.setAttribute('alt', this.attrs.label);
+	          } else {
+	            this.el.setAttribute('alt', '');
+	          }
+
+	          return this;
+	        }
+	      }]);
+
+	      return Image;
+	    }(View$1);
+	    Image.prototype.tagName = 'img';
+	    Image.prototype.className = 'incito__image-view';
+	    Image.prototype.lazyload = true;
+	    return Image;
+	  }.call(undefined);
+
+	  var TextView,
+	      indexOf$1 = [].indexOf;
+	  var text = TextView = function () {
+	    var TextView =
+	    /*#__PURE__*/
+	    function (_View) {
+	      _inherits(TextView, _View);
+
+	      function TextView() {
+	        _classCallCheck(this, TextView);
+
+	        return _possibleConstructorReturn(this, _getPrototypeOf(TextView).apply(this, arguments));
+	      }
+
+	      _createClass(TextView, [{
+	        key: "render",
+	        value: function render() {
+	          var parsedText, text, textShadow, textStyles;
+
+	          if (typeof this.attrs.text !== 'string') {
+	            return this;
+	          }
+
+	          textStyles = (this.attrs.text_style || '').split('|');
+	          text = this.attrs.text;
+
+	          if (Array.isArray(this.attrs.spans) && this.attrs.spans.length > 0) {
+	            parsedText = this.parseSpans(text, this.attrs.spans);
+	            text = parsedText.map(function (item) {
+	              var escapedText, spanName;
+	              escapedText = escapeHTML(item.text || '');
+
+	              if (item.span != null && item.span.name === 'link' && item.span.url != null) {
+	                return '<a href="' + encodeURI(item.span.url) + '" rel="external" target="_blank">' + escapedText + '</a>';
+	              } else if (item.span != null && item.span.name != null) {
+	                spanName = item.span.name;
+	                return '<span data-name="' + spanName + '">' + escapedText + '</span>';
+	              } else {
+	                return escapedText;
+	              }
+	            });
+	            text = text.join('');
+	          } else {
+	            text = escapeHTML(text);
+	          }
+
+	          if (this.attrs.text_prevent_widow) {
+	            this.el.innerHTML = text.replace(/\&nbsp;([^\s]+)$/, ' $1').replace(/\s([^\s]+)\s*$/, '&nbsp;$1');
+	          } else {
+	            this.el.innerHTML = text;
+	          } // Font family.
+
+
+	          if (Array.isArray(this.attrs.font_family) && this.attrs.font_family.length > 0) {
+	            this.el.style.fontFamily = this.attrs.font_family.join(', ');
+	          } else {
+	            this.el.style.fontFamily = 'inherit';
+	          } // Text size.
+
+
+	          if (this.attrs.text_size != null) {
+	            this.el.style.fontSize = "".concat(this.attrs.text_size, "px");
+	          } // Line height.
+
+
+	          if (this.attrs.line_spacing_multiplier != null) {
+	            this.el.style.lineHeight = this.attrs.line_spacing_multiplier;
+	          } // Text color.
+
+
+	          if (this.attrs.text_color != null) {
+	            this.el.style.color = this.attrs.text_color;
+	          } // Text styles.
+
+
+	          if (indexOf$1.call(textStyles, 'bold') >= 0) {
+	            this.el.style.fontWeight = 'bold';
+	          }
+
+	          if (indexOf$1.call(textStyles, 'italic') >= 0) {
+	            this.el.style.fontStyle = 'italic';
+	          } // Text shadow.
+
+
+	          textShadow = this.getTextShadow();
+
+	          if (textShadow != null) {
+	            this.el.style.textShadow = "".concat(textShadow.dx, "px ").concat(textShadow.dy, "px ").concat(textShadow.radius, "px ").concat(textShadow.color);
+	          } // Text alignment.
+
+
+	          if (this.attrs.text_alignment === 'left') {
+	            this.el.style.textAlign = 'left';
+	          } else if (this.attrs.text_alignment === 'center') {
+	            this.el.style.textAlign = 'center';
+	          } else if (this.attrs.text_alignment === 'right') {
+	            this.el.style.textAlign = 'right';
+	          } // Max lines.
+
+
+	          if (this.attrs.single_line === true || this.attrs.max_lines === 1) {
+	            this.el.setAttribute('data-single-line', true);
+	          } else if (typeof this.attrs.max_lines === 'number') {
+	            this.el.style.display = '-webkit-box';
+	            this.el.style.webkitLineClamp = this.attrs.max_lines;
+	            this.el.style.webkitBoxOrient = 'vertical';
+	          } // All caps.
+
+
+	          if (this.attrs.text_all_caps === true) {
+	            this.el.style.textTransform = 'uppercase';
+	          }
+
+	          return this;
+	        }
+	      }, {
+	        key: "parseSpans",
+	        value: function parseSpans(text) {
+	          var spans = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+	          var result;
+	          result = [];
+
+	          if (spans.length === 0) {
+	            result.push({
+	              text: text
+	            });
+	          } else if (spans[0].start > 0) {
+	            result.push({
+	              text: text.slice(0, spans[0].start)
+	            });
+	          }
+
+	          spans.forEach(function (span, i) {
+	            var endIndex, startIndex;
+	            startIndex = span.start;
+	            endIndex = span.end;
+	            result.push({
+	              text: text.slice(startIndex, endIndex),
+	              span: span
+	            });
+
+	            if (i === spans.length - 1) {
+	              if (endIndex < text.length) {
+	                result.push({
+	                  text: text.slice(endIndex, text.length)
+	                });
+	              }
+	            } else if (endIndex < spans[i + 1].start) {
+	              result.push({
+	                text: text.slice(endIndex, spans[i + 1].start)
+	              });
+	            }
+	          });
+	          return result;
+	        }
+	      }, {
+	        key: "getTextShadow",
+	        value: function getTextShadow() {
+	          var color, dx, dy, radius;
+
+	          if (isDefinedStr(this.attrs.text_shadow_color)) {
+	            dx = typeof this.attrs.text_shadow_dx === 'number' ? this.attrs.text_shadow_dx : 0;
+	            dy = typeof this.attrs.text_shadow_dy === 'number' ? this.attrs.text_shadow_dy : 0;
+	            radius = typeof this.attrs.text_shadow_radius === 'number' ? this.attrs.text_shadow_radius : 0;
+	            color = this.attrs.text_shadow_color;
+	            return {
+	              dx: dx,
+	              dy: dy,
+	              radius: radius,
+	              color: color
+	            };
+	          }
+	        }
+	      }]);
+
+	      return TextView;
+	    }(View$1);
+	    TextView.prototype.tagName = 'p';
+	    TextView.prototype.className = 'incito__text-view';
+	    return TextView;
+	  }.call(undefined);
+
+	  var FlexLayout,
+	      allowedHostnames,
+	      indexOf$2 = [].indexOf;
+	  allowedHostnames = ['www.youtube.com', 'www.vimeo.com', 'video.twentythree.net'];
+	  var videoEmbed = FlexLayout = function () {
+	    var FlexLayout =
+	    /*#__PURE__*/
+	    function (_View) {
+	      _inherits(FlexLayout, _View);
+
+	      function FlexLayout() {
+	        _classCallCheck(this, FlexLayout);
+
+	        return _possibleConstructorReturn(this, _getPrototypeOf(FlexLayout).apply(this, arguments));
+	      }
+
+	      _createClass(FlexLayout, [{
+	        key: "render",
+	        value: function render() {
+	          var linkEl, ref, src;
+
+	          if (isDefinedStr(this.attrs.src)) {
+	            src = this.attrs.src;
+	            linkEl = document.createElement('a');
+	            linkEl.setAttribute('href', src);
+
+	            if (ref = linkEl.hostname, indexOf$2.call(allowedHostnames, ref) >= 0) {
+	              this.el.setAttribute('data-src', src);
+	              this.lazyload = true;
+	            }
+	          }
+
+	          return this;
+	        }
+	      }]);
+
+	      return FlexLayout;
+	    }(View$1);
+	    FlexLayout.prototype.className = 'incito__video-embed-view';
+	    FlexLayout.prototype.lazyload = false;
+	    return FlexLayout;
+	  }.call(undefined);
+
+	  var Video;
+	  var video = Video = function () {
+	    var Video =
+	    /*#__PURE__*/
+	    function (_View) {
+	      _inherits(Video, _View);
+
+	      function Video() {
+	        _classCallCheck(this, Video);
+
+	        return _possibleConstructorReturn(this, _getPrototypeOf(Video).apply(this, arguments));
+	      }
+
+	      _createClass(Video, [{
+	        key: "render",
+	        value: function render() {
+	          if (!isDefinedStr(this.attrs.src)) {
+	            return;
+	          }
+
+	          this.el.muted = true;
+	          this.el.preload = 'metadata';
+	          this.el.setAttribute('muted', '');
+	          this.el.setAttribute('playsinline', 'true');
+	          this.el.setAttribute('webkit-playsinline', 'true');
+	          this.el.setAttribute('data-src', this.attrs.src);
+	          this.el.setAttribute('data-mime', this.attrs.mime);
+
+	          if (this.attrs.autoplay === true) {
+	            this.el.autoplay = true;
+	          }
+
+	          if (this.attrs.loop === true) {
+	            this.el.loop = true;
+	          }
+
+	          if (this.attrs.controls === true) {
+	            this.el.controls = true;
+	          }
+
+	          return this;
+	        }
+	      }]);
+
+	      return Video;
+	    }(View$1);
+	    Video.prototype.className = 'incito__video-view';
+	    Video.prototype.tagName = 'video';
+	    Video.prototype.lazyload = true;
+	    return Video;
+	  }.call(undefined);
+
+	  var AbsoluteLayout;
+	  var absoluteLayout = AbsoluteLayout = function () {
+	    var AbsoluteLayout =
+	    /*#__PURE__*/
+	    function (_View) {
+	      _inherits(AbsoluteLayout, _View);
+
+	      function AbsoluteLayout() {
+	        _classCallCheck(this, AbsoluteLayout);
+
+	        return _possibleConstructorReturn(this, _getPrototypeOf(AbsoluteLayout).apply(this, arguments));
+	      }
+
+	      return AbsoluteLayout;
+	    }(View$1);
+	    AbsoluteLayout.prototype.className = 'incito__absolute-layout-view';
+	    return AbsoluteLayout;
+	  }.call(undefined);
+
+	  var FlexLayout$1,
+	      alignItemModes,
+	      flexDirectionModes,
+	      flexJustifyModes,
+	      indexOf$3 = [].indexOf;
+	  alignItemModes = ['stretch', 'center', 'flex-start', 'flex-end', 'baseline'];
+	  flexJustifyModes = ['flex-start', 'flex-end', 'center', 'space-between', 'space-around'];
+	  flexDirectionModes = ['row', 'column'];
+	  var flexLayout = FlexLayout$1 = function () {
+	    var FlexLayout =
+	    /*#__PURE__*/
+	    function (_View) {
+	      _inherits(FlexLayout, _View);
+
+	      function FlexLayout() {
+	        _classCallCheck(this, FlexLayout);
+
+	        return _possibleConstructorReturn(this, _getPrototypeOf(FlexLayout).apply(this, arguments));
+	      }
+
+	      _createClass(FlexLayout, [{
+	        key: "render",
+	        value: function render() {
+	          var ref, ref1, ref2;
+
+	          if (ref = this.attrs.layout_flex_align_items, indexOf$3.call(alignItemModes, ref) >= 0) {
+	            this.el.style.alignItems = this.attrs.layout_flex_align_items;
+	            this.el.style.msAlignItems = this.attrs.layout_flex_align_items;
+	          }
+
+	          if (ref1 = this.attrs.layout_flex_justify_content, indexOf$3.call(flexJustifyModes, ref1) >= 0) {
+	            this.el.style.justifyContent = this.attrs.layout_flex_justify_content;
+	            this.el.style.msFlexPack = this.attrs.layout_flex_justify_content;
+	          }
+
+	          if (ref2 = this.attrs.layout_flex_direction, indexOf$3.call(flexDirectionModes, ref2) >= 0) {
+	            this.el.style.flexDirection = this.attrs.layout_flex_direction;
+	            this.el.style.msFlexDirection = this.attrs.layout_flex_direction;
+	          }
+
+	          return this;
+	        }
+	      }]);
+
+	      return FlexLayout;
+	    }(View$1);
+	    FlexLayout.prototype.className = 'incito__flex-layout-view';
+	    return FlexLayout;
+	  }.call(undefined);
+
+
+
+	  var views = /*#__PURE__*/Object.freeze({
+	    View: View$1,
+	    ImageView: image,
+	    TextView: text,
+	    VideoEmbedView: videoEmbed,
+	    VideoView: video,
+	    AbsoluteLayout: absoluteLayout,
+	    FlexLayout: flexLayout
+	  });
+
+	  var Incito, _flattenViews, isInsideViewport, loadFonts, requestIdleCallback, revealElement, syncIdleCallback;
+
+	  if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+	    requestIdleCallback = window.requestIdleCallback;
+	  } else {
+	    requestIdleCallback = function requestIdleCallback(cb) {
+	      return setTimeout(function () {
+	        var start;
+	        start = Date.now();
+	        return cb({
+	          didTimeout: false,
+	          timeRemaining: function timeRemaining() {
+	            return Math.max(0, 50 - (Date.now() - start));
+	          }
+	        });
+	      }, 1);
+	    };
+	  } // like requestIdleCallback but effectively synchronous
+	  // as we give infinite time to run
+
+
+	  syncIdleCallback = function syncIdleCallback(cb) {
+	    cb({
+	      timeRemaining: function timeRemaining() {
+	        return Number.MAX_VALUE;
+	      },
+	      didTimeout: false
+	    });
+	  };
+
+	  var incito = Incito =
+	  /*#__PURE__*/
+	  function () {
+	    function Incito(containerEl, _ref) {
+	      var _ref$incito = _ref.incito,
+	          incito = _ref$incito === void 0 ? {} : _ref$incito,
+	          _ref$renderLaziness = _ref.renderLaziness,
+	          renderLaziness = _ref$renderLaziness === void 0 ? 1 : _ref$renderLaziness;
+
+	      _classCallCheck(this, Incito);
+
+	      // 0: All synchronous. 1: Visible synchronous, rest lazy. 2: All lazy.
+	      this.containerEl = containerEl;
+	      this.incito = incito;
+	      this.renderLaziness = renderLaziness;
+	      this.el = document.createElement('div');
+	      this.ids = {};
+	      this.views = _flattenViews([], this.incito.root_view);
+	      this.viewsLength = this.views.length;
+	      this.viewIndex = 0;
+	      this.lazyloadables = [];
+	      this.lazyloader = throttle(this.lazyload.bind(this), 150);
+	      this.renderedOutsideOfViewport = false;
+	      this._events = {};
+	      return;
+	    }
+
+	    _createClass(Incito, [{
+	      key: "bind",
+	      value: function bind(event, fn) {
+	        this._events[event] = this._events[event] || [];
+	        return this._events[event].push(fn);
+	      }
+	    }, {
+	      key: "unbind",
+	      value: function unbind(event, fn) {
+	        if (this._events[event]) {
+	          return this._events[event].splice(this._events[event].indexOf(fn), 1);
+	        }
+	      }
+	    }, {
+	      key: "trigger",
+	      value: function trigger(event) {
+	        if (this._events[event]) {
+	          return this._events[event].map(function (e) {
+	            return e.apply(this, Array.prototype.slice.call(arguments, 1));
+	          });
+	        }
+	      }
+	    }, {
+	      key: "start",
+	      value: function start() {
+	        var _this = this;
+
+	        var _render, triggeredVisibleRendered;
+
+	        triggeredVisibleRendered = false;
+
+	        _render = function render(IdleDeadline) {
+	          _this.render(IdleDeadline);
+
+	          if (_this.viewIndex < _this.viewsLength - 1) {
+	            _this.renderCallbackHandle = requestIdleCallback(_render);
+	          } else {
+	            // make sure visibleRendered gets triggered even
+	            // if renderedOutsideOfViewport wasn't
+	            _this.renderedOutsideOfViewport = true;
+
+	            _this.trigger('allRendered');
+	          }
+
+	          if (_this.renderedOutsideOfViewport && !triggeredVisibleRendered) {
+	            _this.trigger('visibleRendered');
+
+	            triggeredVisibleRendered = true;
+	          }
+
+	          if (_this.renderedOutsideOfViewport) {
+	            _this.lazyload(0);
+	          }
+	        };
+
+	        this.el.className = 'incito';
+
+	        if (this.incito.locale != null) {
+	          this.el.setAttribute('lang', this.incito.locale);
+	        }
+
+	        loadFonts(this.incito.font_assets);
+	        this.applyTheme(this.incito.theme);
+	        this.containerEl.appendChild(this.el); // do first render synchronously unless we're very lazy
+
+	        if (this.renderLaziness === 2) {
+	          this.renderCallbackHandle = requestIdleCallback(_render);
+	        } else {
+	          syncIdleCallback(_render);
+	        }
+
+	        window.addEventListener('scroll', this.lazyloader, false);
+	        window.addEventListener('resize', this.lazyloader, false);
+	        return this;
+	      }
+	    }, {
+	      key: "destroy",
+	      value: function destroy() {
+	        cancelIdleCallback(this.renderCallbackHandle);
+	        this.containerEl.removeChild(this.el);
+	        window.removeEventListener('scroll', this.lazyloader, false);
+	        window.removeEventListener('resize', this.lazyloader, false);
+	        this.trigger('destroyed');
+	      }
+	    }, {
+	      key: "render",
+	      value: function render(IdleDeadline) {
+	        var attrs, item, match, ref, view;
+
+	        while (IdleDeadline.timeRemaining() > 0 && this.viewIndex < this.viewsLength - 1) {
+	          item = this.views[this.viewIndex];
+	          attrs = item.attrs;
+	          match = (ref = views[attrs.view_name]) != null ? ref : View$1;
+	          view = new match(attrs).render();
+
+	          if (attrs.id != null && typeof attrs.meta === 'object') {
+	            this.ids[attrs.id] = attrs.meta;
+	          }
+
+	          if (view.lazyload === true) {
+	            this.lazyloadables.push(view.el);
+	          }
+
+	          item.view = view;
+
+	          if (item.parent != null && item.parent.view != null) {
+	            item.parent.view.el.appendChild(view.el);
+	          } else {
+	            this.el.appendChild(view.el);
+	          }
+
+	          this.viewIndex++; // check if we rendered something out of the viewport for the first time and yield.
+	          // the check is expensive so it's faster to only check every few iterations, the downside is that
+	          // we might overrender a tiny bit but it comes out to faster than checking every iteration.
+
+	          if (this.renderLaziness && !(this.viewIndex % 20) && !this.renderedOutsideOfViewport && !isInsideViewport(view.el)) {
+	            this.renderedOutsideOfViewport = true;
+	            break;
+	          }
+	        }
+	      }
+	    }, {
+	      key: "applyTheme",
+	      value: function applyTheme() {
+	        var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	        if (Array.isArray(theme.font_family)) {
+	          this.el.style.fontFamily = theme.font_family.join(', ');
+	        }
+
+	        if (isDefinedStr(theme.background_color)) {
+	          this.el.style.backgroundColor = theme.background_color;
+	        }
+
+	        if (isDefinedStr(theme.text_color)) {
+	          this.el.style.color = theme.text_color;
+	        }
+
+	        if (typeof theme.line_spacing_multiplier === 'number') {
+	          this.el.style.lineHeight = theme.line_spacing_multiplier;
+	        }
+	      }
+	    }, {
+	      key: "lazyload",
+	      value: function lazyload(threshold) {
+	        this.lazyloadables = this.lazyloadables.filter(function (el) {
+	          if (isInsideViewport(el, threshold)) {
+	            revealElement(el);
+	            return false;
+	          } else {
+	            return true;
+	          }
+	        });
+	      }
+	    }]);
+
+	    return Incito;
+	  }();
+
+	  _flattenViews = function flattenViews(views, attrs, parent) {
+	    var item;
+	    item = {
+	      attrs: attrs,
+	      view: null,
+	      parent: parent
+	    };
+	    views.push(item);
+
+	    if (Array.isArray(attrs.child_views)) {
+	      attrs.child_views.forEach(function (childAttrs) {
+	        return _flattenViews(views, childAttrs, item);
+	      });
+	    }
+
+	    return views;
+	  };
+
+	  loadFonts = function loadFonts() {
+	    var fontAssets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	    var font, key, ref, ref1, styleEl, text, urls, value;
+
+	    if ('FontFace' in window) {
+	      for (key in fontAssets) {
+	        value = fontAssets[key];
+	        urls = value.src.map(function (src) {
+	          return "url(".concat(src[1], ")");
+	        }).join(', ');
+	        font = new FontFace(key, urls, {
+	          style: (ref = value.style) != null ? ref : 'normal',
+	          weight: (ref1 = value.weight) != null ? ref1 : 'normal',
+	          display: 'swap'
+	        });
+	        document.fonts.add(font);
+	        font.load();
+	      }
+	    } else {
+	      styleEl = document.createElement('style');
+
+	      for (key in fontAssets) {
+	        value = fontAssets[key];
+	        urls = value.src.map(function (src) {
+	          return "url('".concat(src[1], "') format('").concat(src[0], "')");
+	        }).join(', ');
+	        text = "@font-face {\n    font-family: '".concat(key, "';\n    font-display: swap;\n    src: ").concat(urls, ";\n}");
+	        styleEl.appendChild(document.createTextNode(text));
+	      }
+
+	      document.head.appendChild(styleEl);
+	    }
+	  };
+
+	  isInsideViewport = function isInsideViewport(el, threshold) {
+	    var rect, windowHeight;
+	    windowHeight = window.innerHeight;
+	    threshold = threshold != null ? threshold : windowHeight;
+	    rect = el.getBoundingClientRect();
+	    return rect.top <= windowHeight + threshold && rect.top + rect.height >= -threshold;
+	  };
+
+	  revealElement = function revealElement(el) {
+	    var iframeEl, sourceEl, src;
+	    src = el.getAttribute('data-src');
+
+	    if (el.tagName.toLowerCase() === 'img') {
+	      el.addEventListener('load', function () {
+	        el.className += ' incito--loaded';
+	      });
+	      el.setAttribute('src', src);
+	    } else if (el.tagName.toLowerCase() === 'video') {
+	      sourceEl = document.createElement('source');
+	      sourceEl.setAttribute('src', src);
+	      sourceEl.setAttribute('type', el.getAttribute('data-mime'));
+	      el.appendChild(sourceEl);
+	    } else if (/incito__video-embed-view/gi.test(el.className)) {
+	      iframeEl = document.createElement('iframe');
+	      iframeEl.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
+	      iframeEl.setAttribute('src', src);
+	      el.appendChild(iframeEl);
+	    } else {
+	      el.style.backgroundImage = "url(".concat(src, ")");
+	    }
+	  };
+
+	  return incito;
 
 	}));
 
