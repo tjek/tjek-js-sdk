@@ -4512,44 +4512,51 @@ Incito = incitoBrowser;
 MicroEvent$b = microevent;
 EventTracking$1 = eventTracking$1;
 
-Viewer$1 =
-/*#__PURE__*/
-function () {
-  function Viewer(el) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+Viewer$1 = function () {
+  var Viewer =
+  /*#__PURE__*/
+  function () {
+    function Viewer(el) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    _classCallCheck(this, Viewer);
+      _classCallCheck(this, Viewer);
 
-    this.el = el;
-    this.options = options;
-    this.incito = new Incito(this.el, {
-      incito: this.options.incito
-    });
-    this._eventTracking = new EventTracking$1(this.options.eventTracker, this.options.id, {
-      pagedPublicationId: this.options.pagedPublicationId
-    });
-    return;
-  }
-
-  _createClass(Viewer, [{
-    key: "start",
-    value: function start() {
-      this.incito.start();
-      this.el.classList.add('sgn-incito--started');
-
-      this._eventTracking.trackOpened();
-
-      return this;
+      this.el = el;
+      this.options = options;
+      this.incito = new Incito(this.el, {
+        incito: this.options.incito,
+        renderLaziness: this.options.renderLaziness
+      });
+      this._eventTracking = new EventTracking$1(this.options.eventTracker, this.options.id, {
+        pagedPublicationId: this.options.pagedPublicationId
+      });
+      return;
     }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.incito.destroy();
-    }
-  }]);
 
+    _createClass(Viewer, [{
+      key: "start",
+      value: function start() {
+        this.incito.start();
+        this.el.classList.add('sgn-incito--started');
+
+        this._eventTracking.trackOpened();
+
+        return this;
+      }
+    }, {
+      key: "destroy",
+      value: function destroy() {
+        this.incito.destroy();
+      }
+    }]);
+
+    return Viewer;
+  }();
+
+  ;
+  Viewer.Incito = Incito;
   return Viewer;
-}();
+}.call(commonjsGlobal);
 
 MicroEvent$b.mixin(Viewer$1);
 var viewer$1 = Viewer$1;
