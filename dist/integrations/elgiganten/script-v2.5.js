@@ -389,7 +389,7 @@ var scrollToIncitoCategory = function (category) {
         find(incito.root_view);
 
         for (var key in sections) {
-            if (!likelySection || (likelySection.count < sections[key] && likelySection.count < 2)) {
+            if (!likelySection || likelySection.count < sections[key]) {
                 likelySection = {
                     count: sections[key],
                     id: key
