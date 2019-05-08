@@ -395,6 +395,10 @@ var scrollToIncitoCategory = function (category) {
                     id: key
                 };
             }
+
+            if (likelySection.count >= 5) {
+                break;
+            }
         }
 
         if (likelySection) {
