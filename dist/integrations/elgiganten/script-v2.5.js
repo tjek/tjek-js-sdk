@@ -358,6 +358,7 @@ var openIncitoPublication = function (publication, category) {
 };
 var scrollToIncitoCategory = function (category) {
     var sections = {};
+    var sectionCount = 0;
     var likelySection;
     var find = function (view, sectionId, callback) {
         if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
@@ -396,7 +397,9 @@ var scrollToIncitoCategory = function (category) {
                 };
             }
 
-            if (likelySection.count >= 5) {
+            sectionCount++;
+
+            if (likelySection.count >= 2 && sectionCount > 0) {
                 break;
             }
         }
