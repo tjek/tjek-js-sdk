@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.13.min.css"
+  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.14.min.css"
   rel="stylesheet"
   type="text/css"
 />
 <script
-  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.13.min.js"
+  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-2.3.14.min.js"
   id="sgn-sdk"
   data-app-key="YOUR_APP_KEY"
   data-track-id="YOUR_TRACK_ID"
@@ -73,6 +73,11 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+### Version 2.3.16
+- Fix broken PagedPublicationViewer startup
+
+### Version 2.3.15
+- Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
 
 ### Version NEXT
 

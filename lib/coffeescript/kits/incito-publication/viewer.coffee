@@ -3,9 +3,12 @@ import MicroEvent from 'microevent'
 import EventTracking from './event-tracking'
 
 class Viewer
+    @Incito: Incito
+
     constructor: (@el, @options = {}) ->
         @incito = new Incito @el,
             incito: @options.incito
+            renderLaziness: @options.renderLaziness
         @_eventTracking = new EventTracking @options.eventTracker, @options.id,
             pagedPublicationId: @options.pagedPublicationId
 
