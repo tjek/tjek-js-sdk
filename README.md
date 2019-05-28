@@ -73,6 +73,9 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+### Version 2.3.16
+- Fix broken PagedPublicationViewer startup
+
 ### Version 2.3.15
 - Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
 
