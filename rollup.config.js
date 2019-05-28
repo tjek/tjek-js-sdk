@@ -106,8 +106,7 @@ let configs = bundles.reduce(
         }),
         coffeescript(),
         resolve({
-          jsnext: true,
-          main: true,
+          mainFields: ['jsnext:main', 'main'],
           browser: true,
           preferBuiltins: true
         }),
@@ -137,8 +136,7 @@ let configs = bundles.reduce(
         }),
         coffeescript(),
         resolve({
-          jsnext: true,
-          main: true,
+          mainFields: ['jsnext:main', 'main'],
           browser: true,
           preferBuiltins: true
         }),
