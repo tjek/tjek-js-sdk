@@ -42,7 +42,10 @@ class PagedPublicationCore
         return
 
     start: ->
-        @getVerso().start()
+        verso = @getVerso()
+        verso.start()
+    
+        verso.pageSpreads.forEach @overridePageSpreadContentRect.bind(@)
 
         @resizeListener = SGN.util.throttle @resize, @getOption('resizeDelay'), @
         @unloadListener = @unload.bind @
@@ -53,7 +56,7 @@ class PagedPublicationCore
         @els.root.setAttribute 'data-started', ''
         @els.root.setAttribute 'tabindex', '-1'
         @els.root.focus()
-
+        
         return
 
     destroy: ->
@@ -95,8 +98,6 @@ class PagedPublicationCore
 
     createVerso: ->
         verso = new Verso @els.verso, pageId: @pageId
-
-        verso.pageSpreads.forEach @overridePageSpreadContentRect.bind(@)
 
         verso.bind 'beforeNavigation', @beforeNavigation.bind(@)
         verso.bind 'afterNavigation', @afterNavigation.bind(@)
