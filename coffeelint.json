@@ -9,5 +9,9 @@
         "value": 120,
         "level": "error",
         "limitComments": true
+    },
+    "no_implicit_braces": {
+        "name": "no_implicit_braces",
+        "level": "ignore"
     }
 }
