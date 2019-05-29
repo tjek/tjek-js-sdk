@@ -65,7 +65,7 @@
     "microevent": "^1.0.0",
     "mustache": "^3.0.1",
     "sha256": "^0.2.0",
-    "verso-browser": "^1.0.27"
+    "verso-browser": "^1.0.29"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

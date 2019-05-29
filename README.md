@@ -73,6 +73,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+### Version 2.3.17
+- Make sure PagedPublicationViewer controls are destroy()'ed properly with the viewer, event handlers and all
+- Internal removal of some extraneous function binding *Breaking Change:* If you relied on `this` in bootstrapper.fetch() callback, it no longer refers to the bootstrapper instance. 
+
 ### Version 2.3.16
 - Fix broken PagedPublicationViewer startup
 

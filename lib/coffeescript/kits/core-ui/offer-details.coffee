@@ -6,8 +6,6 @@ export default class OfferDetails
         @el.setAttribute 'tabindex', -1
         @el.appendChild @options.contentEl
 
-        @resizeListener = @resize.bind @
-
         @position()
 
         return
@@ -24,12 +22,12 @@ export default class OfferDetails
     show: ->
         @el.className += ' in'
 
-        window.addEventListener 'resize', @resizeListener, false
+        window.addEventListener 'resize', @resize, false
 
         @
     
     destroy: ->
-        window.removeEventListener 'resize', @resizeListener
+        window.removeEventListener 'resize', @resize, false
 
         @el.parentNode.removeChild @el
 
@@ -47,7 +45,7 @@ export default class OfferDetails
 
         return
     
-    resize: ->
+    resize: =>
         @position()
 
         return

@@ -13,23 +13,26 @@ class PagedPublicationControls
             nextControl: el.querySelector '.sgn-pp__control[data-direction=next]'
             close: el.querySelector '.sgn-pp--close'
 
-        @keyDownListener = throttle @keyDown, 150, @
+        @keyDownHandler = throttle @keyDown, 150
+        @els.root.addEventListener 'keydown', @keyDownHandler, false if @options.keyboard is true
+        @els.prevControl.addEventListener 'mousedown', @prevClicked, false if @els.prevControl?
+        @els.nextControl.addEventListener 'mousedown', @nextClicked, false if @els.nextControl?
+        @els.close.addEventListener 'mousedown', @closeClicked, false if @els.close?
 
-        @els.root.addEventListener 'keydown', @keyDownListener, false if @options.keyboard is true
-        @els.prevControl.addEventListener 'mousedown', @prevClicked.bind(@), false if @els.prevControl?
-        @els.nextControl.addEventListener 'mousedown', @nextClicked.bind(@), false if @els.nextControl?
-        @els.close.addEventListener 'mousedown', @closeClicked.bind(@), false if @els.close?
-
-        @bind 'beforeNavigation', @beforeNavigation.bind(@)
-
-        return
-
-    destroy: ->
-        @els.root.removeEventListener 'keydown', @keyDownListener
+        @bind 'beforeNavigation', @beforeNavigation
+        @bind 'destroyed', @destroy
 
         return
 
-    beforeNavigation: (e) ->
+    destroy: =>
+        @els.root.removeEventListener 'keydown', @keyDownHandler, false if @options.keyboard is true
+        @els.prevControl.removeEventListener 'mousedown', @prevClicked, false if @els.prevControl?
+        @els.nextControl.removeEventListener 'mousedown', @nextClicked, false if @els.nextControl?
+        @els.close.removeEventListener 'mousedown', @closeClicked, false if @els.close?
+
+        return
+
+    beforeNavigation: (e) =>
         showProgress = typeof e.progressLabel is 'string' and e.progressLabel.length > 0
         visibilityClassName = 'sgn-pp--hidden'
 
@@ -62,28 +65,28 @@ class PagedPublicationControls
 
         return
 
-    prevClicked: (e) ->
+    prevClicked: (e) =>
         e.preventDefault()
 
         @trigger 'prev'
 
         return
 
-    nextClicked: (e) ->
+    nextClicked: (e) =>
         e.preventDefault()
 
         @trigger 'next'
 
         return
     
-    closeClicked: (e) ->
+    closeClicked: (e) =>
         e.preventDefault()
 
         @trigger 'close'
 
         return
 
-    keyDown: (e) ->
+    keyDown: (e) =>
         keyCode = e.keyCode
 
         if keyCodes.ARROW_LEFT is keyCode

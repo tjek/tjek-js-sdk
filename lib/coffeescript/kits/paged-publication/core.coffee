@@ -47,11 +47,10 @@ class PagedPublicationCore
     
         verso.pageSpreads.forEach @overridePageSpreadContentRect.bind(@)
 
-        @resizeListener = throttle @resize, @getOption('resizeDelay'), @
-        @unloadListener = @unload.bind @
+        @resizeListener = throttle @resize, @getOption('resizeDelay')
 
         window.addEventListener 'resize', @resizeListener, false
-        window.addEventListener 'beforeunload', @unloadListener, false
+        window.addEventListener 'beforeunload', @unload, false
 
         @els.root.setAttribute 'data-started', ''
         @els.root.setAttribute 'tabindex', '-1'
@@ -76,7 +75,7 @@ class PagedPublicationCore
         verso.destroy()
 
         window.removeEventListener 'resize', @resizeListener, false
-        window.removeEventListener 'beforeunload', @unloadListener, false
+        window.removeEventListener 'beforeunload', @unload, false
 
         return
 
@@ -99,17 +98,17 @@ class PagedPublicationCore
     createVerso: ->
         verso = new Verso @els.verso, pageId: @pageId
 
-        verso.bind 'beforeNavigation', @beforeNavigation.bind(@)
-        verso.bind 'afterNavigation', @afterNavigation.bind(@)
-        verso.bind 'attemptedNavigation', @attemptedNavigation.bind(@)
-        verso.bind 'clicked', @clicked.bind(@)
-        verso.bind 'doubleClicked', @doubleClicked.bind(@)
-        verso.bind 'pressed', @pressed.bind(@)
-        verso.bind 'contextmenu', @contextmenu.bind(@)
-        verso.bind 'panStart', @panStart.bind(@)
-        verso.bind 'panEnd', @panEnd.bind(@)
-        verso.bind 'zoomedIn', @zoomedIn.bind(@)
-        verso.bind 'zoomedOut', @zoomedOut.bind(@)
+        verso.bind 'beforeNavigation', @beforeNavigation
+        verso.bind 'afterNavigation', @afterNavigation
+        verso.bind 'attemptedNavigation', @attemptedNavigation
+        verso.bind 'clicked', @clicked
+        verso.bind 'doubleClicked', @doubleClicked
+        verso.bind 'pressed', @pressed
+        verso.bind 'contextmenu', @contextmenu
+        verso.bind 'panStart', @panStart
+        verso.bind 'panEnd', @panEnd
+        verso.bind 'zoomedIn', @zoomedIn
+        verso.bind 'zoomedOut', @zoomedOut
 
         verso
 
@@ -186,7 +185,7 @@ class PagedPublicationCore
 
         return
 
-    beforeNavigation: (e) ->
+    beforeNavigation: (e) =>
         position = e.newPosition
         theVerso = @getVerso()
         versoPageSpread = theVerso.getPageSpreadFromPosition position
@@ -212,7 +211,7 @@ class PagedPublicationCore
 
         return
 
-    afterNavigation: (e) ->
+    afterNavigation: (e) =>
         position = e.newPosition
         theVerso = @getVerso()
         versoPageSpread = theVerso.getPageSpreadFromPosition position
@@ -231,12 +230,12 @@ class PagedPublicationCore
 
         return
 
-    attemptedNavigation: (e) ->
+    attemptedNavigation: (e) =>
         @trigger 'attemptedNavigation', verso: e
 
         return
 
-    clicked: (e) ->
+    clicked: (e) =>
         if e.isInsideContent
             pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
@@ -245,7 +244,7 @@ class PagedPublicationCore
 
         return
 
-    doubleClicked: (e) ->
+    doubleClicked: (e) =>
         if e.isInsideContent
             pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
@@ -254,7 +253,7 @@ class PagedPublicationCore
 
         return
 
-    pressed: (e) ->
+    pressed: (e) =>
         if e.isInsideContent
             pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
@@ -263,7 +262,7 @@ class PagedPublicationCore
 
         return
 
-    contextmenu: (e) ->
+    contextmenu: (e) =>
         if e.isInsideContent
             pageId = e.pageEl.getAttribute 'data-id'
             page = @findPage pageId
@@ -272,19 +271,19 @@ class PagedPublicationCore
 
         return
 
-    panStart: ->
+    panStart: =>
         @resetIdleTimer()
         @trigger 'panStart', scale: @getVerso().transform.scale
 
         return
 
-    panEnd: ->
+    panEnd: =>
         @startIdleTimer()
         @trigger 'panEnd'
 
         return
 
-    zoomedIn: (e) ->
+    zoomedIn: (e) =>
         position = e.position
         versoPageSpread = @getVerso().getPageSpreadFromPosition position
         pageSpread = @pageSpreads.get versoPageSpread.getId()
@@ -296,7 +295,7 @@ class PagedPublicationCore
 
         return
 
-    zoomedOut: (e) ->
+    zoomedOut: (e) =>
         position = e.position
         versoPageSpread = @getVerso().getPageSpreadFromPosition position
         pageSpread = @pageSpreads.get versoPageSpread.getId()
@@ -359,7 +358,7 @@ class PagedPublicationCore
         if pageSpread.getType() is 'page'
             pageSpread.getContentRect = => @getContentRect pageSpread
 
-    resize: ->
+    resize: =>
         pageMode = @getPageMode()
 
         if not @getOption('pageMode')? and pageMode isnt @pageMode
@@ -369,7 +368,7 @@ class PagedPublicationCore
 
         return
 
-    unload: ->
+    unload: =>
         @trigger 'disappeared'
 
         return

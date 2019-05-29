@@ -17,19 +17,19 @@ class Pulse
     connect: ->
         connection = new WebSocket SGN.config.get('eventsPulseUrl')
 
-        connection.onopen = @onOpen.bind @
-        connection.onmessage = @onMessage.bind @
-        connection.onerror = @onError.bind @
-        connection.onclose = @onClose.bind @
+        connection.onopen = @onOpen
+        connection.onmessage = @onMessage
+        connection.onerror = @onError
+        connection.onclose = @onClose
 
         connection
 
-    onOpen: ->
+    onOpen: =>
         @trigger 'open'
 
         return
 
-    onMessage: (e) ->
+    onMessage: (e) =>
         try
             @trigger 'event', JSON.parse(e.data)
 
@@ -38,7 +38,7 @@ class Pulse
     onError: ->
         return
 
-    onClose: ->
+    onClose: =>
         if @destroyed is false
             setTimeout =>
                 @connection = @connect()

@@ -1,22 +1,21 @@
 export default class Controls
     constructor: (@viewer) ->
         @progressEl = @viewer.el.querySelector '.sgn-incito__progress'
-        @scrollListener = @scroll.bind @
         @isScrolling = false
 
         if @progressEl?
             @progressEl.textContent = "0 %"
 
-            window.addEventListener 'scroll', @scrollListener, false
+            window.addEventListener 'scroll', @scroll, false
 
             @viewer.bind 'destroyed', =>
-                window.removeEventListener 'scroll', @scrollListener
+                window.removeEventListener 'scroll', @scroll, false
 
                 return
 
         return
     
-    scroll: ->
+    scroll: =>
         winHeight = window.innerHeight
         rect = @viewer.el.getBoundingClientRect()
         progress = Math.min 100, Math.round(Math.abs(rect.top - winHeight) / rect.height * 100)

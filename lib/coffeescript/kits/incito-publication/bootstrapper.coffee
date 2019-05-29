@@ -95,7 +95,6 @@ export default class Bootstrapper
             value: Math.round(featureLabel.value / count * 100) / 100
 
     fetch: (callback) ->
-        callback = callback.bind @
         data = clientSessionStorage.get @storageKey
 
         if data? and data.response? and data.width is @maxWidth
