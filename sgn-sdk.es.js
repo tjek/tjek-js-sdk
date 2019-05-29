@@ -431,7 +431,7 @@ function _jsx(type, props, key, children) {
 function _asyncIterator(iterable) {
   var method;
 
-  if (typeof Symbol === "function") {
+  if (typeof Symbol !== "undefined") {
     if (Symbol.asyncIterator) {
       method = iterable[Symbol.asyncIterator];
       if (method != null) return method.call(iterable);
@@ -1785,14 +1785,14 @@ function _wrapRegExp(re, groups) {
   return _wrapRegExp.apply(this, arguments);
 }
 
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function commonjsRequire () {
 	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
 }
 
 function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 }
 
 function createCommonjsModule(fn, module) {
@@ -1800,7 +1800,7 @@ function createCommonjsModule(fn, module) {
 }
 
 function getCjsExportFromNamespace (n) {
-	return n && n.default || n;
+	return n && n['default'] || n;
 }
 
 var Config,
@@ -2324,6 +2324,9 @@ function () {
   function Pulse() {
     _classCallCheck(this, Pulse);
 
+    this.onOpen = this.onOpen.bind(this);
+    this.onMessage = this.onMessage.bind(this);
+    this.onClose = this.onClose.bind(this);
     this.destroyed = false;
     this.connection = this.connect();
     return;
@@ -2341,10 +2344,10 @@ function () {
     value: function connect() {
       var connection;
       connection = new WebSocket(SGN.config.get('eventsPulseUrl'));
-      connection.onopen = this.onOpen.bind(this);
-      connection.onmessage = this.onMessage.bind(this);
-      connection.onerror = this.onError.bind(this);
-      connection.onclose = this.onClose.bind(this);
+      connection.onopen = this.onOpen;
+      connection.onmessage = this.onMessage;
+      connection.onerror = this.onError;
+      connection.onclose = this.onClose;
       return connection;
     }
   }, {
@@ -3023,6 +3026,19 @@ PagedPublicationCore = function () {
 
       _classCallCheck(this, PagedPublicationCore);
 
+      this.beforeNavigation = this.beforeNavigation.bind(this);
+      this.afterNavigation = this.afterNavigation.bind(this);
+      this.attemptedNavigation = this.attemptedNavigation.bind(this);
+      this.clicked = this.clicked.bind(this);
+      this.doubleClicked = this.doubleClicked.bind(this);
+      this.pressed = this.pressed.bind(this);
+      this.contextmenu = this.contextmenu.bind(this);
+      this.panStart = this.panStart.bind(this);
+      this.panEnd = this.panEnd.bind(this);
+      this.zoomedIn = this.zoomedIn.bind(this);
+      this.zoomedOut = this.zoomedOut.bind(this);
+      this.resize = this.resize.bind(this);
+      this.unload = this.unload.bind(this);
       this.options = this.makeOptions(options, this.defaults);
       this.pageId = this.getOption('pageId');
       this.els = {
@@ -3050,11 +3066,13 @@ PagedPublicationCore = function () {
     _createClass(PagedPublicationCore, [{
       key: "start",
       value: function start() {
-        this.getVerso().start();
-        this.resizeListener = SGN$c.util.throttle(this.resize, this.getOption('resizeDelay'), this);
-        this.unloadListener = this.unload.bind(this);
+        var verso;
+        verso = this.getVerso();
+        verso.start();
+        verso.pageSpreads.forEach(this.overridePageSpreadContentRect.bind(this));
+        this.resizeListener = SGN$c.util.throttle(this.resize, this.getOption('resizeDelay'));
         window.addEventListener('resize', this.resizeListener, false);
-        window.addEventListener('beforeunload', this.unloadListener, false);
+        window.addEventListener('beforeunload', this.unload, false);
         this.els.root.setAttribute('data-started', '');
         this.els.root.setAttribute('tabindex', '-1');
         this.els.root.focus();
@@ -3079,7 +3097,7 @@ PagedPublicationCore = function () {
 
         verso.destroy();
         window.removeEventListener('resize', this.resizeListener, false);
-        window.removeEventListener('beforeunload', this.unloadListener, false);
+        window.removeEventListener('beforeunload', this.unload, false);
       }
     }, {
       key: "makeOptions",
@@ -3112,18 +3130,17 @@ PagedPublicationCore = function () {
         verso = new Verso(this.els.verso, {
           pageId: this.pageId
         });
-        verso.pageSpreads.forEach(this.overridePageSpreadContentRect.bind(this));
-        verso.bind('beforeNavigation', this.beforeNavigation.bind(this));
-        verso.bind('afterNavigation', this.afterNavigation.bind(this));
-        verso.bind('attemptedNavigation', this.attemptedNavigation.bind(this));
-        verso.bind('clicked', this.clicked.bind(this));
-        verso.bind('doubleClicked', this.doubleClicked.bind(this));
-        verso.bind('pressed', this.pressed.bind(this));
-        verso.bind('contextmenu', this.contextmenu.bind(this));
-        verso.bind('panStart', this.panStart.bind(this));
-        verso.bind('panEnd', this.panEnd.bind(this));
-        verso.bind('zoomedIn', this.zoomedIn.bind(this));
-        verso.bind('zoomedOut', this.zoomedOut.bind(this));
+        verso.bind('beforeNavigation', this.beforeNavigation);
+        verso.bind('afterNavigation', this.afterNavigation);
+        verso.bind('attemptedNavigation', this.attemptedNavigation);
+        verso.bind('clicked', this.clicked);
+        verso.bind('doubleClicked', this.doubleClicked);
+        verso.bind('pressed', this.pressed);
+        verso.bind('contextmenu', this.contextmenu);
+        verso.bind('panStart', this.panStart);
+        verso.bind('panEnd', this.panEnd);
+        verso.bind('zoomedIn', this.zoomedIn);
+        verso.bind('zoomedOut', this.zoomedOut);
         return verso;
       }
     }, {
@@ -3720,6 +3737,12 @@ function () {
 
     _classCallCheck(this, PagedPublicationControls);
 
+    this.destroy = this.destroy.bind(this);
+    this.beforeNavigation = this.beforeNavigation.bind(this);
+    this.prevClicked = this.prevClicked.bind(this);
+    this.nextClicked = this.nextClicked.bind(this);
+    this.closeClicked = this.closeClicked.bind(this);
+    this.keyDown = this.keyDown.bind(this);
     this.options = options;
     this.els = {
       root: el,
@@ -3730,32 +3753,47 @@ function () {
       nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
       close: el.querySelector('.sgn-pp--close')
     };
-    this.keyDownListener = SGN$d.util.throttle(this.keyDown, 150, this);
+    this.keyDownHandler = SGN$d.util.throttle(this.keyDown, 150, this);
 
     if (this.options.keyboard === true) {
-      this.els.root.addEventListener('keydown', this.keyDownListener, false);
+      this.els.root.addEventListener('keydown', this.keyDownHandler, false);
     }
 
     if (this.els.prevControl != null) {
-      this.els.prevControl.addEventListener('mousedown', this.prevClicked.bind(this), false);
+      this.els.prevControl.addEventListener('mousedown', this.prevClicked, false);
     }
 
     if (this.els.nextControl != null) {
-      this.els.nextControl.addEventListener('mousedown', this.nextClicked.bind(this), false);
+      this.els.nextControl.addEventListener('mousedown', this.nextClicked, false);
     }
 
     if (this.els.close != null) {
-      this.els.close.addEventListener('mousedown', this.closeClicked.bind(this), false);
+      this.els.close.addEventListener('mousedown', this.closeClicked, false);
     }
 
-    this.bind('beforeNavigation', this.beforeNavigation.bind(this));
+    this.bind('beforeNavigation', this.beforeNavigation);
+    this.bind('destroyed', this.destroy);
     return;
   }
 
   _createClass(PagedPublicationControls, [{
     key: "destroy",
     value: function destroy() {
-      this.els.root.removeEventListener('keydown', this.keyDownListener);
+      if (this.options.keyboard === true) {
+        this.els.root.removeEventListener('keydown', this.keyDownHandler, false);
+      }
+
+      if (this.els.prevControl != null) {
+        this.els.prevControl.removeEventListener('mousedown', this.prevClicked, false);
+      }
+
+      if (this.els.nextControl != null) {
+        this.els.nextControl.removeEventListener('mousedown', this.nextClicked, false);
+      }
+
+      if (this.els.close != null) {
+        this.els.close.removeEventListener('mousedown', this.closeClicked, false);
+      }
     }
   }, {
     key: "beforeNavigation",
@@ -4364,6 +4402,9 @@ function () {
 
     _classCallCheck(this, Bootstrapper);
 
+    this.fetchDetails = this.fetchDetails.bind(this);
+    this.fetchPages = this.fetchPages.bind(this);
+    this.fetchHotspots = this.fetchHotspots.bind(this);
     this.options = options;
     return;
   }
@@ -4412,8 +4453,7 @@ function () {
   }, {
     key: "fetch",
     value: function fetch(callback) {
-      callback = callback.bind(this);
-      SGN$f.util.async.parallel([this.fetchDetails.bind(this), this.fetchPages.bind(this)], function (result) {
+      SGN$f.util.async.parallel([this.fetchDetails, this.fetchPages], function (result) {
         var data;
         data = {
           details: result[0][1],
@@ -4567,16 +4607,16 @@ function () {
 
     _classCallCheck(this, Controls);
 
+    this.scroll = this.scroll.bind(this);
     this.viewer = viewer;
     this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
-    this.scrollListener = this.scroll.bind(this);
     this.isScrolling = false;
 
     if (this.progressEl != null) {
       this.progressEl.textContent = "0 %";
-      window.addEventListener('scroll', this.scrollListener, false);
+      window.addEventListener('scroll', this.scroll, false);
       this.viewer.bind('destroyed', function () {
-        window.removeEventListener('scroll', _this.scrollListener);
+        window.removeEventListener('scroll', _this.scroll, false);
       });
     }
 
@@ -4617,7 +4657,7 @@ function () {
 var incito = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!, $locale: LocaleCode, $time: DateTime, $featureLabels: [IncitoFeatureLabelInput!]) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported, locale: $locale, time: $time, featureLabels: $featureLabels)\n    }\n  }\n}";
 
 var incito$1 = /*#__PURE__*/Object.freeze({
-    default: incito
+    'default': incito
 });
 
 var require$$4 = getCjsExportFromNamespace(incito$1);
@@ -4767,7 +4807,6 @@ function () {
       var _this = this;
 
       var data;
-      callback = callback.bind(this);
       data = SGN$g.storage.session.get(this.storageKey);
 
       if (data != null && data.response != null && data.width === this.maxWidth) {
@@ -5230,12 +5269,12 @@ function () {
 
     _classCallCheck(this, OfferDetails);
 
+    this.resize = this.resize.bind(this);
     this.options = options;
     this.el = document.createElement('div');
     this.el.className = 'sgn-offer-details';
     this.el.setAttribute('tabindex', -1);
     this.el.appendChild(this.options.contentEl);
-    this.resizeListener = this.resize.bind(this);
     this.position();
     return;
   }
@@ -5252,13 +5291,13 @@ function () {
     key: "show",
     value: function show() {
       this.el.className += ' in';
-      window.addEventListener('resize', this.resizeListener, false);
+      window.addEventListener('resize', this.resize, false);
       return this;
     }
   }, {
     key: "destroy",
     value: function destroy() {
-      window.removeEventListener('resize', this.resizeListener);
+      window.removeEventListener('resize', this.resize, false);
       this.el.parentNode.removeChild(this.el);
     }
   }, {
@@ -5298,18 +5337,19 @@ function () {
 
     _classCallCheck(this, Popover);
 
+    this.keyUp = this.keyUp.bind(this);
+    this.resize = this.resize.bind(this);
+    this.scroll = this.scroll.bind(this);
     this.options = options;
     this.el = document.createElement('div');
     this.backgroundEl = document.createElement('div');
-    this.resizeListener = this.resize.bind(this);
-    this.scrollListener = this.scroll.bind(this);
     return;
   }
 
   _createClass(Popover, [{
     key: "render",
     value: function render() {
-      var header, ref, ref1, trigger, view, width;
+      var header, ref, ref1, view, width;
       width = (ref = this.options.width) != null ? ref : 100;
       header = this.options.header;
 
@@ -5317,7 +5357,6 @@ function () {
         template = this.options.template;
       }
 
-      trigger = this.trigger.bind(this);
       view = {
         header: header,
         singleChoiceItems: (ref1 = this.options.singleChoiceItems) != null ? ref1.map(function (item, i) {
@@ -5338,8 +5377,8 @@ function () {
     key: "destroy",
     value: function destroy() {
       Gator(this.el).off();
-      window.removeEventListener('resize', this.resizeListener);
-      window.removeEventListener('scroll', this.scrollListener);
+      window.removeEventListener('resize', this.resize, false);
+      window.removeEventListener('scroll', this.scroll, false);
 
       if (this.el.parentNode != null) {
         this.el.parentNode.removeChild(this.el);
@@ -5382,7 +5421,7 @@ function () {
 
       var trigger;
       trigger = this.trigger.bind(this);
-      this.el.addEventListener('keyup', this.keyUp.bind(this));
+      this.el.addEventListener('keyup', this.keyUp);
       Gator(this.el).on('click', '[data-index]', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -5399,8 +5438,8 @@ function () {
       Gator(this.el).on('click', '.sgn-popover__menu', function (e) {
         e.stopPropagation();
       });
-      window.addEventListener('resize', this.resizeListener, false);
-      window.addEventListener('scroll', this.scrollListener, false);
+      window.addEventListener('resize', this.resize, false);
+      window.addEventListener('scroll', this.scroll, false);
     }
   }, {
     key: "keyUp",
