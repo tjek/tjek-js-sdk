@@ -73,6 +73,9 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+### Version ?.?.?
+- Make sure PagedPublicationViewer controls are destroy()'ed properly with the viewer, event handlers and all
+
 ### Version 2.3.16
 - Fix broken PagedPublicationViewer startup
 
