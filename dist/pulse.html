@@ -92,21 +92,18 @@
 
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
-                        var center = new google.maps.LatLng({ lat: coords.lat, lng: coords.lon });
+                        var center = new google.maps.LatLng({lat: coords.lat, lng: coords.lon});
 
                         if (map.getBounds().contains(center)) {
-                            var overlay = new google.maps.Circle({
-                                center: center,
-                                fillColor: getRandomColor(),
-                                fillOpacity: 1,
-                                strokeWeight: 0,
-                                radius: 5000,
+                            var overlay = new google.maps.Marker({
+                                position: center,
+                                animation: google.maps.Animation.DROP,
                                 map: map
                             });
 
                             overlays.push(overlay);
 
-                            while (overlays.length > 100) {
+                            while (overlays.length > 800) {
                                 var overlay = overlays.shift();
                                 
                                 google.maps.event.clearListeners(overlay, 'click_handler_name');
