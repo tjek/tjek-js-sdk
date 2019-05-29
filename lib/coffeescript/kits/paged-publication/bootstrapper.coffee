@@ -37,8 +37,7 @@ module.exports = class Bootstrapper
         return
     
     fetch: (callback) ->
-        callback = callback.bind @
-        SGN.util.async.parallel [@fetchDetails.bind(@), @fetchPages.bind(@)], (result) ->
+        SGN.util.async.parallel [@fetchDetails, @fetchPages], (result) ->
             data =
                 details: result[0][1]
                 pages: result[1][1]
@@ -56,21 +55,21 @@ module.exports = class Bootstrapper
         
         return
 
-    fetchDetails: (callback) ->
+    fetchDetails: (callback) =>
         SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}"
         , callback
 
         return
 
-    fetchPages: (callback) ->
+    fetchPages: (callback) =>
         SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}/pages"
         , callback
 
         return
 
-    fetchHotspots: (callback) ->
+    fetchHotspots: (callback) =>
         SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}/hotspots"
         , callback
