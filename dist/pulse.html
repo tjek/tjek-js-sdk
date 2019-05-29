@@ -92,7 +92,14 @@
 
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
-                        var center = new google.maps.LatLng({lat: coords.lat, lng: coords.lon});
+                        // Noise added to counteract grid-ness from geohash precision
+                        // https://en.wikipedia.org/wiki/Geohash#Number_of_geohash_characters_and_precision_in_km
+                        var verticalNoise = (Math.random() - 0.5) * 0.087;
+                        var horizontalNoise = (Math.random() - 0.5) * 0.18;
+                        var center = new google.maps.LatLng({
+                            lat: coords.lat + verticalNoise,
+                            lng: coords.lon + horizontalNoise,
+                        });
 
                         if (map.getBounds().contains(center)) {
                             var overlay = new google.maps.Marker({
