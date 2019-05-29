@@ -28,8 +28,6 @@ class Popover
     constructor: (@options = {}) ->
         @el = document.createElement 'div'
         @backgroundEl = document.createElement 'div'
-        @resizeListener = @resize.bind @
-        @scrollListener = @scroll.bind @
 
         return
 
@@ -37,7 +35,6 @@ class Popover
         width = @options.width ? 100
         header = @options.header
         template = @options.template if @options.template?
-        trigger = @trigger.bind @
         view =
             header: header
             singleChoiceItems: @options.singleChoiceItems?.map (item, i) ->
@@ -56,8 +53,8 @@ class Popover
     destroy: ->
         Gator(@el).off()
 
-        window.removeEventListener 'resize', @resizeListener
-        window.removeEventListener 'scroll', @scrollListener
+        window.removeEventListener 'resize', @resize, false
+        window.removeEventListener 'scroll', @scroll, false
 
         if @el.parentNode?
             @el.parentNode.removeChild @el
@@ -99,7 +96,7 @@ class Popover
     addEventListeners: ->
         trigger = @trigger.bind @
 
-        @el.addEventListener 'keyup', @keyUp.bind(@)
+        @el.addEventListener 'keyup', @keyUp
 
         Gator(@el).on 'click', '[data-index]', (e) ->
             e.preventDefault()
@@ -122,22 +119,22 @@ class Popover
 
             return
 
-        window.addEventListener 'resize', @resizeListener, false
-        window.addEventListener 'scroll', @scrollListener, false
+        window.addEventListener 'resize', @resize, false
+        window.addEventListener 'scroll', @scroll, false
 
         return
 
-    keyUp: (e) ->
+    keyUp: (e) =>
         @destroy() if e.keyCode is keyCodes.ESC
         
         return
 
-    resize: ->
+    resize: =>
         @destroy()
 
         return
 
-    scroll: ->
+    scroll: =>
         @destroy()
 
         return
