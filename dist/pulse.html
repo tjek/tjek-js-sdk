@@ -25,25 +25,44 @@
                 z-index: 1;
             }
 
-            #query {
+            #queries {
                 position: absolute;
-                top: 10px;
                 left: 10px;
-                right: 10px;
-                text-align: center;
-                z-index: 3;
-                font-weight: bold;
-                font-size: 100px;
-                letter-spacing: -1px;
-                text-shadow: 0 1px #000;
+                bottom: 30px;
+                width: 30vw;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                z-index: 1337;
+                display: flex;
+                flex-direction: column-reverse;
+                justify-content: flex-start;
+            }
+            @keyframes newQuery {
+                to {
+                    filter: blur(0.001px);
+                }
+            }
+            #queries > li {
+                font-size: 4em;
+                text-shadow: 1px 1px #000;
+                line-height: 1.3;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                max-width: 100%;
+                animation: newQuery 300ms normal forwards ease-in-out;
+            }
+            #queries > li:nth-of-type(1) {
+                filter: blur(20px);
+                font-size: 8em;
+                letter-spacing: -1px;
+                text-shadow: 1px 3px #000;
             }
         </style>
     </head>
     <body>
-        <div id="query"></div>
+        <ul id="queries"></ul>
         <div id="map"></div>
 
         <script>
@@ -61,12 +80,12 @@
             function initialize () {
                 var els = {
                     map: document.getElementById('map'),
-                    query: document.getElementById('query')
+                    queries: document.getElementById('queries')
                 };
                 var map = new google.maps.Map(els.map, {
                     zoom: 7,
                     disableDefaultUI: true,
-                    center: { lat: 58.5, lng: 11 },
+                    center: { lat: 57.9, lng: 9 },
                     styles: [{
                         elementType: 'labels.text',
                         stylers: [{
@@ -83,9 +102,18 @@
                         stylers: [{
                             visibility: 'off'
                         }]
+                    }, {
+                        featureType: 'administrative.province',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
                     }]
                 });
-
+                function easeInOut(t){
+                    return t > 0.5 ? 4*Math.pow((t-1),3)+1 : 4*Math.pow(t,3);
+                }
+                var fadeOutDuration = 400000;
+                var fadeOutStep = 200;
                 google.maps.event.addListenerOnce(map, 'idle', function () {
                     var pulse = new SGN.EventsKit.Pulse();
                     var overlays = [];
@@ -94,8 +122,8 @@
                         var coords = Geohash.decode(e.geohash);
                         // Noise added to counteract grid-ness from geohash precision
                         // https://en.wikipedia.org/wiki/Geohash#Number_of_geohash_characters_and_precision_in_km
-                        var verticalNoise = (Math.random() - 0.5) * 0.087;
-                        var horizontalNoise = (Math.random() - 0.5) * 0.18;
+                        var verticalNoise = (Math.random() - 0.5) * 0.087 * 2;
+                        var horizontalNoise = (Math.random() - 0.5) * 0.18 * 2;
                         var center = new google.maps.LatLng({
                             lat: coords.lat + verticalNoise,
                             lng: coords.lon + horizontalNoise,
@@ -105,14 +133,22 @@
                             var overlay = new google.maps.Marker({
                                 position: center,
                                 animation: google.maps.Animation.DROP,
-                                map: map
+                                map: map,
+                                opacity: 1
                             });
 
                             overlays.push(overlay);
+                            overlay.intervalTime = fadeOutDuration;
+                            overlay.fadeOutInterval = setInterval(function() {
+                                overlay.intervalTime = overlay.intervalTime - fadeOutStep;
+                                var newOpacity = easeInOut(overlay.intervalTime / fadeOutDuration);
+                                overlay.setOpacity(newOpacity);
+                                if (newOpacity <= 0) clearInterval(overlay.fadeOutInterval);
+                            }, fadeOutStep);
 
-                            while (overlays.length > 800) {
+                            while (overlays.length > 400) {
                                 var overlay = overlays.shift();
-                                
+                                if ('fadeOutInterval' in overlay) clearInterval(overlay.fadeOutInterval);
                                 google.maps.event.clearListeners(overlay, 'click_handler_name');
                                 google.maps.event.clearListeners(overlay, 'drag_handler_name');
                                 
@@ -121,8 +157,13 @@
                             }
 
                             if (e.type === 'searched') {
-                                els.query.textContent = e.attributes.query.toLowerCase().trim();
-                                els.query.style.color = getRandomColor();
+                                var queryElement = document.createElement("li");
+                                queryElement.textContent = e.attributes.query.toLowerCase().trim();
+                                queryElement.style.color = getRandomColor();
+                                els.queries.prepend(queryElement)
+                                if (els.queries.childNodes.length > 40) {
+                                    els.queries.removeChild(els.queries.lastChild);
+                                }
                             }
                         }
                     });
