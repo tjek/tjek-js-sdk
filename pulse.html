@@ -39,8 +39,11 @@
                 justify-content: flex-start;
             }
             @keyframes newQuery {
-                to {
-                    filter: blur(0.001px);
+                99% {
+                    filter: blur(0px);
+                }
+                100% {
+                    filter: none;
                 }
             }
             #queries > li {
@@ -158,7 +161,7 @@
                                 queryElement.textContent = e.attributes.query.toLowerCase().trim();
                                 queryElement.style.color = getRandomColor();
                                 els.queries.prepend(queryElement)
-                                if (els.queries.childNodes.length > 40) {
+                                if (els.queries.childNodes.length > 11) {
                                     els.queries.removeChild(els.queries.lastChild);
                                 }
                             }
