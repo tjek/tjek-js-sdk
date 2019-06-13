@@ -4411,8 +4411,8 @@ function () {
 
   _createClass(Bootstrapper, [{
     key: "createViewer",
-    value: function createViewer(data) {
-      return new SGN$f.PagedPublicationKit.Viewer(this.options.el, {
+    value: function createViewer(data, viewerOptions) {
+      return new SGN$f.PagedPublicationKit.Viewer(this.options.el, _objectSpread({
         id: this.options.id,
         ownedBy: data.details.dealer_id,
         color: '#' + data.details.branding.pageflip.color,
@@ -4421,7 +4421,7 @@ function () {
         pageId: this.options.pageId,
         eventTracker: this.options.eventTracker,
         pages: this.transformPages(data.pages)
-      });
+      }, viewerOptions));
     }
   }, {
     key: "transformPages",
