@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "2.3.18",
+  "version": "2.3.19",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",

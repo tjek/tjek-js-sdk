@@ -74,7 +74,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
-### Version NEXT
+### Version 2.3.19
 
 - PagedPublicationKit: Let options be passed to Viewer when calling createViewer, like so: `bootstrapper.createViewer(data, { pageSpreadMaxZoomScale: 1 });`
 
