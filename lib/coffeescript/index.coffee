@@ -41,6 +41,10 @@ SGN.config.bind 'change', (changedAttributes) ->
     eventTracker = changedAttributes.eventTracker
 
     if eventTracker?
+        # TODO: avoid letting these build up in the eventTracker pool
+        # this happens in a scenario where the event server is unreachable
+        # and the page is refreshed, adding another trackClientSessionOpened
+        # event to the pool
         eventTracker.trackClientSessionOpened()
 
     return
