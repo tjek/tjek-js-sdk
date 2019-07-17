@@ -7,8 +7,8 @@ export default class Bootstrapper
     constructor: (@options = {}) ->
         return
 
-    createViewer: (data) ->
-        new Viewer @options.el,
+    createViewer: (data, viewerOptions) ->
+        new Viewer @options.el, {
             id: @options.id
             ownedBy: data.details.dealer_id
             color: '#' + data.details.branding.pageflip.color
@@ -17,6 +17,8 @@ export default class Bootstrapper
             pageId: @options.pageId
             eventTracker: @options.eventTracker
             pages: @transformPages data.pages
+            ...viewerOptions
+        }
 
     transformPages: (pages) ->
         pages.map (page, i) ->

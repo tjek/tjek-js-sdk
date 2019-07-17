@@ -126,6 +126,7 @@ ship = (events = [], eventsTrackUrl) ->
     
     req.then (response) -> response.json()
 
+dispatchRetryInterval = null
 _dispatch = (eventsTrackUrl) ->
     if not eventsTrackUrl
         # coffeelint: disable=max_line_length
@@ -140,6 +141,9 @@ _dispatch = (eventsTrackUrl) ->
     ship(events, eventsTrackUrl)
         .then (response) ->
             dispatching = false
+            if dispatchRetryInterval
+                clearInterval dispatchRetryInterval
+                dispatchRetryInterval = null
 
             response.events.forEach (resEvent) ->
                 if resEvent.status is 'validation_error' or resEvent.status is 'ack'
@@ -155,8 +159,12 @@ _dispatch = (eventsTrackUrl) ->
             return
         .catch (err) ->
             dispatching = false
+            # Try dispatching again in 20 seconds, if we aren't already trying
+            if not dispatchRetryInterval
+                # coffeelint: disable=max_line_length
+                console.warn "We're gonna keep trying, but there was an error while dispatching events:", err
 
-            throw err
+                dispatchRetryInterval = setInterval dispatch, 20000
 
             return
     
