@@ -158,7 +158,7 @@ module.exports = class Bootstrapper
     
     createViewer: (data) ->
         if not data.incito?
-            throw util.error new Error(), 'you need to supply valid Incito to create a viewer'
+            throw util.error new Error(), 'You need to supply valid Incito to create a viewer'
 
         viewer = new SGN.IncitoPublicationKit.Viewer @options.el,
             id: @options.id
