@@ -281,8 +281,7 @@ var openIncitoPublication = function (publication, category) {
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
         el: el,
-        id: publication.incito_publication_id,
-        pagedPublicationId: publication.id,
+        id: publication.id,
         eventTracker: SGN.config.get('eventTracker')
     });
     var trackProgress = function (progress) {
@@ -305,10 +304,8 @@ var openIncitoPublication = function (publication, category) {
 
     incitoPublication.fetch(function (err, res) {
         if (!err) {
-            incito = res.data.node.incito;
-            incitoPublicationViewer = incitoPublication.createViewer({
-                incito: incito
-            });
+            incito = res.incito;
+            incitoPublicationViewer = incitoPublication.createViewer(res);
 
             incitoPublicationViewer.start();
             incitoPublicationViewer.bind('progress', function (navEvent) {
@@ -387,31 +384,42 @@ var scrollToIncitoCategory = function (category) {
     };
 
     if (category && incito) {
-        find(incito.root_view);
+        if (category === 'apple') {
+            likelySection = {
+                id: 'apple'
+            };
+        } else {
+            find(incito.root_view);
 
-        for (var key in sections) {
-            if (!likelySection || likelySection.count < sections[key]) {
-                likelySection = {
-                    count: sections[key],
-                    id: key
-                };
-            }
+            for (var key in sections) {
+                if (!likelySection || likelySection.count < sections[key]) {
+                    likelySection = {
+                        count: sections[key],
+                        id: key
+                    };
+                }
 
-            sectionCount++;
+                sectionCount++;
 
-            if (likelySection.count >= 3 && sectionCount > 0) {
-                break;
+                if (likelySection.count >= 3 && sectionCount > 0) {
+                    break;
+                }
             }
         }
 
         if (likelySection) {
             var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
-            var rect = sectionEl.getBoundingClientRect();
 
-            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
-        } else {
-            alert('Der findes desværre ingen tilbud i den kategori');
+            if (sectionEl) {
+                var rect = sectionEl.getBoundingClientRect();
+
+                window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
+
+                return;
+            }
         }
+        
+        alert('Der findes desværre ingen tilbud i den kategori');
     }
 };
  
@@ -488,6 +496,29 @@ if (els.incito.top) {
 }
 
 if (els.incito.categorySwitcher) {
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+    var showApple = false;
+
+    if (year === 2019) {
+        if (month === 7 && day >= 29) {
+            showApple = true;
+        } else if (month === 8 && day <= 25) {
+            showApple = true;
+        }
+    }
+
+    if (showApple) {
+        var appleOptionEl = document.createElement('option');
+
+        appleOptionEl.value = 'apple';
+        appleOptionEl.textContent = 'Apple';
+
+        els.incito.categorySwitcher.appendChild(appleOptionEl);
+    }
+
     els.incito.categorySwitcher.addEventListener('change', function (e) {
         var category = e.target.value;
 

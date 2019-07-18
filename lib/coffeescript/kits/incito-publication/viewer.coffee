@@ -9,16 +9,13 @@ class Viewer
         @incito = new Incito @el,
             incito: @options.incito
             renderLaziness: @options.renderLaziness
-        @_eventTracking = new EventTracking @options.eventTracker, @options.id,
-            pagedPublicationId: @options.pagedPublicationId
+        @_eventTracking = new EventTracking @options.eventTracker, @options.details
 
         return
     
     start: ->
         @incito.start()
-
         @el.classList.add 'sgn-incito--started'
-
         @_eventTracking.trackOpened()
 
         @

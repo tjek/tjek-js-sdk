@@ -15,18 +15,18 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
         mountPoint = document.createElement("div")
 
         viewer = new Viewer mountPoint,
-            id: 'incito-id'
-            pagedPublicationId: 'paged-id'
+            details:
+                id: 'incito-id'
+                types: ['paged', 'incito']
             incito: dummyIncito
             eventTracker: fakeEventTracker
-
 
         viewer.start()
 
         expect(fakeEventTracker.trackIncitoPublicationOpened.mock.calls.length).toBe(1)
         expect(fakeEventTracker.trackIncitoPublicationOpened.mock.calls[0][0]).toEqual({
             "ip.id": "incito-id",
-            "pp.vt": "paged-id-vt",
+            "ip.paged": true,
             "vt": "incito-id-vt"
         })
 
