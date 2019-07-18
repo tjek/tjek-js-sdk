@@ -74,7 +74,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
-### Version 2.4.0
+### Version 3.0.0
 
 - *BREAKING INCITO CHANGE* Now, you need to supply the identifier of the publication rather than the Incito identifier. Plus, we've added a new event to measure how many times Incito's are opened. Anonymously.
 
