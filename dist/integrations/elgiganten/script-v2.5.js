@@ -281,8 +281,7 @@ var openIncitoPublication = function (publication, category) {
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
         el: el,
-        id: publication.incito_publication_id,
-        pagedPublicationId: publication.id,
+        id: publication.id,
         eventTracker: SGN.config.get('eventTracker')
     });
     var trackProgress = function (progress) {
@@ -305,10 +304,8 @@ var openIncitoPublication = function (publication, category) {
 
     incitoPublication.fetch(function (err, res) {
         if (!err) {
-            incito = res.data.node.incito;
-            incitoPublicationViewer = incitoPublication.createViewer({
-                incito: incito
-            });
+            incito = res.incito;
+            incitoPublicationViewer = incitoPublication.createViewer(res);
 
             incitoPublicationViewer.start();
             incitoPublicationViewer.bind('progress', function (navEvent) {
