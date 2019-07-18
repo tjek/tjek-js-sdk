@@ -93,16 +93,49 @@ module.exports = class Bootstrapper
             value: Math.round(featureLabel.value / count * 100) / 100
 
     fetch: (callback) ->
-        data = SGN.storage.session.get @storageKey
+        @fetchDetails @options.id, (err, details) =>
+            console.log details
+            if err?
+                callback err
+            else
+                data = SGN.storage.session.get @storageKey
 
-        if data? and data.response? and data.width is @maxWidth
-            return callback null, data.response
+                if data? and data.incito? and data.width is @maxWidth
+                    return callback null,
+                        details: details
+                        incito: data.incito
 
+                @fetchIncito details.incito_publication_id, (err1, incito) =>
+                    if err1?
+                        callback err1
+                    else
+                        SGN.storage.session.set @storageKey,
+                            width: @maxWidth
+                            incito: incito
+
+                        callback null,
+                            details: details
+                            incito: incito
+                    
+                    return
+            
+            return
+        
+        return
+
+    fetchDetails: (id, callback) =>
+        SGN.CoreKit.request
+            url: "/v2/catalogs/#{@options.id}"
+        , callback
+
+        return
+
+    fetchIncito: (id, callback) ->
         SGN.GraphKit.request
             query: schema
             operationName: 'GetIncitoPublication'
             variables:
-                id: @options.id
+                id: id
                 deviceCategory: 'DEVICE_CATEGORY_' + @deviceCategory.toUpperCase()
                 pixelRatio: @pixelRatio
                 pointer: 'POINTER_' + @pointer.toUpperCase()
@@ -116,13 +149,9 @@ module.exports = class Bootstrapper
             if err?
                 callback err
             else if res.errors and res.errors.length > 0
-                callback util.error(new Error(), 'graph request contained errors')
+                callback util.error(new Error(), 'Graph request contained errors')
             else
-                callback null, res
-
-                SGN.storage.session.set @storageKey,
-                    width: @maxWidth
-                    response: res
+                callback null, res.data.node.incito
             
             return
 
@@ -134,7 +163,7 @@ module.exports = class Bootstrapper
 
         viewer = new SGN.IncitoPublicationKit.Viewer @options.el,
             id: @options.id
-            pagedPublicationId: @options.pagedPublicationId
+            details: data.details
             incito: data.incito
             eventTracker: @options.eventTracker
         controls = new Controls viewer

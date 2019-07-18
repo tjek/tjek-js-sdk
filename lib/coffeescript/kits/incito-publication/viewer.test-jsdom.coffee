@@ -16,7 +16,8 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
 
         viewer = new Viewer mountPoint,
             id: 'incito-id'
-            pagedPublicationId: 'paged-id'
+            details:
+                types: ['paged', 'incito']
             incito: dummyIncito
             eventTracker: fakeEventTracker
 
@@ -26,7 +27,7 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
         expect(fakeEventTracker.trackIncitoPublicationOpened.mock.calls.length).toBe(1)
         expect(fakeEventTracker.trackIncitoPublicationOpened.mock.calls[0][0]).toEqual({
             "ip.id": "incito-id",
-            "pp.vt": "paged-id-vt",
+            "ip.paged": true,
             "vt": "incito-id-vt"
         })
 
