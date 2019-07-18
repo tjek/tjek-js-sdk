@@ -15,12 +15,11 @@ describe 'SGN.IncitoPublicationKit.Viewer', ->
         mountPoint = document.createElement("div")
 
         viewer = new Viewer mountPoint,
-            id: 'incito-id'
             details:
+                id: 'incito-id'
                 types: ['paged', 'incito']
             incito: dummyIncito
             eventTracker: fakeEventTracker
-
 
         viewer.start()
 
