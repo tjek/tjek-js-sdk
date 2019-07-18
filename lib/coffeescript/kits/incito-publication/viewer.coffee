@@ -15,9 +15,7 @@ class Viewer
     
     start: ->
         @incito.start()
-
         @el.classList.add 'sgn-incito--started'
-
         @_eventTracking.trackOpened()
 
         @
