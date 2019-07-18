@@ -2078,7 +2078,7 @@ var assets = {
 };
 var assets_1 = assets.fileUpload;
 
-var SGN$5, Tracker, _dispatch, clientLocalStorage, dispatch, dispatchLimit, dispatching, fetch, getPool, md5, pool, ship;
+var SGN$5, Tracker, _dispatch, clientLocalStorage, dispatch, dispatchLimit, dispatchRetryInterval, dispatching, fetch, getPool, md5, pool, ship;
 
 fetch = crossFetch;
 md5 = md5$1;
@@ -2222,7 +2222,7 @@ var tracker = Tracker = function () {
     }, {
       key: "trackIncitoPublicationOpened",
       value: function trackIncitoPublicationOpened(properties, version) {
-        return this.trackEvent(8, properties, version);
+        return this.trackEvent(11, properties, version);
       }
     }, {
       key: "createViewToken",
@@ -2273,6 +2273,8 @@ ship = function ship() {
   });
 };
 
+dispatchRetryInterval = null;
+
 _dispatch = function _dispatch() {
   var events, nacks;
 
@@ -2285,6 +2287,12 @@ _dispatch = function _dispatch() {
   dispatching = true;
   ship(events).then(function (response) {
     dispatching = false;
+
+    if (dispatchRetryInterval) {
+      clearInterval(dispatchRetryInterval);
+      dispatchRetryInterval = null;
+    }
+
     response.events.forEach(function (resEvent) {
       if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
         pool = pool.filter(function (poolEvent) {
@@ -2300,8 +2308,13 @@ _dispatch = function _dispatch() {
       dispatch();
     }
   }).catch(function (err) {
-    dispatching = false;
-    throw err;
+    dispatching = false; // Try dispatching again in 20 seconds, if we aren't already trying
+
+    if (!dispatchRetryInterval) {
+      // coffeelint: disable=max_line_length
+      console.warn("We're gonna keep trying, but there was an error while dispatching events:", err);
+      dispatchRetryInterval = setInterval(dispatch, 20000);
+    }
   });
 };
 
@@ -4510,14 +4523,11 @@ MicroEvent$a = microevent;
 IncitoPublicationEventTracking =
 /*#__PURE__*/
 function () {
-  function IncitoPublicationEventTracking(eventTracker, id, _ref) {
-    var pagedPublicationId = _ref.pagedPublicationId;
-
+  function IncitoPublicationEventTracking(eventTracker, details) {
     _classCallCheck(this, IncitoPublicationEventTracking);
 
     this.eventTracker = eventTracker;
-    this.id = id;
-    this.pagedPublicationId = pagedPublicationId;
+    this.details = details;
     return;
   }
 
@@ -4529,9 +4539,9 @@ function () {
       }
 
       this.eventTracker.trackIncitoPublicationOpened({
-        'ip.id': this.id,
-        'pp.vt': this.pagedPublicationId ? this.eventTracker.createViewToken(this.pagedPublicationId) : void 0,
-        'vt': this.eventTracker.createViewToken(this.id)
+        'ip.paged': this.details.types.indexOf('paged') > -1,
+        'ip.id': this.details.id,
+        'vt': this.eventTracker.createViewToken(this.details.id)
       });
       return this;
     }
@@ -4563,9 +4573,7 @@ Viewer$1 = function () {
         incito: this.options.incito,
         renderLaziness: this.options.renderLaziness
       });
-      this._eventTracking = new EventTracking$1(this.options.eventTracker, this.options.id, {
-        pagedPublicationId: this.options.pagedPublicationId
-      });
+      this._eventTracking = new EventTracking$1(this.options.eventTracker, this.options.details);
       return;
     }
 
@@ -4677,6 +4685,7 @@ function () {
 
     _classCallCheck(this, Bootstrapper);
 
+    this.fetchDetails = this.fetchDetails.bind(this);
     this.options = options;
     this.deviceCategory = this.getDeviceCategory();
     this.pixelRatio = this.getPixelRatio();
@@ -4806,18 +4815,53 @@ function () {
     value: function fetch(callback) {
       var _this = this;
 
-      var data;
-      data = SGN$g.storage.session.get(this.storageKey);
+      this.fetchDetails(this.options.id, function (err, details) {
+        var data;
 
-      if (data != null && data.response != null && data.width === this.maxWidth) {
-        return callback(null, data.response);
-      }
+        if (err != null) {
+          callback(err);
+        } else {
+          data = SGN$g.storage.session.get(_this.storageKey);
 
+          if (data != null && data.incito != null && data.width === _this.maxWidth) {
+            return callback(null, {
+              details: details,
+              incito: data.incito
+            });
+          }
+
+          _this.fetchIncito(details.incito_publication_id, function (err1, incito) {
+            if (err1 != null) {
+              callback(err1);
+            } else {
+              SGN$g.storage.session.set(_this.storageKey, {
+                width: _this.maxWidth,
+                incito: incito
+              });
+              callback(null, {
+                details: details,
+                incito: incito
+              });
+            }
+          });
+        }
+      });
+    }
+  }, {
+    key: "fetchDetails",
+    value: function fetchDetails(id, callback) {
+      SGN$g.CoreKit.request({
+        url: "/v2/catalogs/".concat(this.options.id)
+      }, callback);
+    }
+  }, {
+    key: "fetchIncito",
+    value: function fetchIncito(id, callback) {
       SGN$g.GraphKit.request({
         query: schema,
         operationName: 'GetIncitoPublication',
         variables: {
-          id: this.options.id,
+          id: id,
           deviceCategory: 'DEVICE_CATEGORY_' + this.deviceCategory.toUpperCase(),
           pixelRatio: this.pixelRatio,
           pointer: 'POINTER_' + this.pointer.toUpperCase(),
@@ -4832,13 +4876,9 @@ function () {
         if (err != null) {
           callback(err);
         } else if (res.errors && res.errors.length > 0) {
-          callback(util$2.error(new Error(), 'graph request contained errors'));
+          callback(util$2.error(new Error(), 'Graph request contained errors'));
         } else {
-          callback(null, res);
-          SGN$g.storage.session.set(_this.storageKey, {
-            width: _this.maxWidth,
-            response: res
-          });
+          callback(null, res.data.node.incito);
         }
       });
     }
@@ -4848,12 +4888,12 @@ function () {
       var controls, self, viewer;
 
       if (data.incito == null) {
-        throw util$2.error(new Error(), 'you need to supply valid Incito to create a viewer');
+        throw util$2.error(new Error(), 'You need to supply valid Incito to create a viewer');
       }
 
       viewer = new SGN$g.IncitoPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
-        pagedPublicationId: this.options.pagedPublicationId,
+        details: data.details,
         incito: data.incito,
         eventTracker: this.options.eventTracker
       });
@@ -5573,6 +5613,10 @@ SGN$h.config.bind('change', function (changedAttributes) {
   eventTracker = changedAttributes.eventTracker;
 
   if (eventTracker != null) {
+    // TODO: avoid letting these build up in the eventTracker pool
+    // this happens in a scenario where the event server is unreachable
+    // and the page is refreshed, adding another trackClientSessionOpened
+    // event to the pool
     eventTracker.trackClientSessionOpened();
   }
 });
