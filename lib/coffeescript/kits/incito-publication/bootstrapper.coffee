@@ -94,7 +94,6 @@ module.exports = class Bootstrapper
 
     fetch: (callback) ->
         @fetchDetails @options.id, (err, details) =>
-            console.log details
             if err?
                 callback err
             else
