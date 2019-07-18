@@ -145,7 +145,7 @@ module.exports = class Bootstrapper
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
                 featureLabels: @anonymizeFeatureLabels @featureLabels
-        , (err, res) =>
+        , (err, res) ->
             if err?
                 callback err
             else if res.errors and res.errors.length > 0
