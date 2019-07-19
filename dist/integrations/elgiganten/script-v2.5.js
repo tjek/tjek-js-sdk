@@ -357,6 +357,21 @@ var scrollToIncitoCategory = function (category) {
     var sections = {};
     var sectionCount = 0;
     var likelySection;
+    var mappings = {
+        'pc-tablets': ['bb-offers-533'],
+        'gaming': ['bb-offers-550', 'bb-offers-551', 'bb-offers-552'],
+        'tv-billede': [],
+        'lyd-hi-fi': [],
+        'mobil-gps': [],
+        'hvidevarer': [],
+        'kokken-bryggers-og-garderobe': [],
+        'husholdning': [],
+        'personlig-pleje-skonhed-og-velvare': [],
+        'smart-home': [],
+        'wearables-sport-og-fitness': [],
+        'foto-video': [],
+        'apple': ['apple']
+    };
     var find = function (view, sectionId, callback) {
         if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
             for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
@@ -384,26 +399,27 @@ var scrollToIncitoCategory = function (category) {
     };
 
     if (category && incito) {
-        if (category === 'apple') {
-            likelySection = {
-                id: 'apple'
-            };
-        } else {
-            find(incito.root_view);
+        find(incito.root_view);
 
-            for (var key in sections) {
-                if (!likelySection || likelySection.count < sections[key]) {
-                    likelySection = {
-                        count: sections[key],
-                        id: key
-                    };
-                }
+        for (var key in sections) {
+            if (mappings[category] && mappings[category].indexOf(key) > -1) {
+                likelySection = {
+                    count: sections[key],
+                    id: key
+                };
 
-                sectionCount++;
+                break;
+            } else if (!likelySection || likelySection.count < sections[key]) {
+                likelySection = {
+                    count: sections[key],
+                    id: key
+                };
+            }
 
-                if (likelySection.count >= 3 && sectionCount > 0) {
-                    break;
-                }
+            sectionCount++;
+
+            if (likelySection.count >= 3 && sectionCount > 0) {
+                break;
             }
         }
 
