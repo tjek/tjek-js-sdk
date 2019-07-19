@@ -95,16 +95,48 @@ export default class Bootstrapper
             value: Math.round(featureLabel.value / count * 100) / 100
 
     fetch: (callback) ->
-        data = clientSessionStorage.get @storageKey
+        @fetchDetails @options.id, (err, details) =>
+            if err?
+                callback err
+            else
+                data = clientSessionStorage.get @storageKey
 
-        if data? and data.response? and data.width is @maxWidth
-            return callback null, data.response
+                if data? and data.incito? and data.width is @maxWidth
+                    return callback null,
+                        details: details
+                        incito: data.incito
 
+                @fetchIncito details.incito_publication_id, (err1, incito) =>
+                    if err1?
+                        callback err1
+                    else
+                        SGN.storage.session.set @storageKey,
+                            width: @maxWidth
+                            incito: incito
+
+                        callback null,
+                            details: details
+                            incito: incito
+                    
+                    return
+            
+            return
+        
+        return
+
+    fetchDetails: (id, callback) =>
+        SGN.CoreKit.request
+            url: "/v2/catalogs/#{@options.id}"
+        , callback
+
+        return
+
+    fetchIncito: (id, callback) ->
         SGN.GraphKit.request
             query: schema
             operationName: 'GetIncitoPublication'
             variables:
-                id: @options.id
+                id: id
                 deviceCategory: 'DEVICE_CATEGORY_' + @deviceCategory.toUpperCase()
                 pixelRatio: @pixelRatio
                 pointer: 'POINTER_' + @pointer.toUpperCase()
@@ -114,17 +146,13 @@ export default class Bootstrapper
                 maxWidth: @maxWidth
                 versionsSupported: @versionsSupported
                 featureLabels: @anonymizeFeatureLabels @featureLabels
-        , (err, res) =>
+        , (err, res) ->
             if err?
                 callback err
             else if res.errors and res.errors.length > 0
-                callback error(new Error(), 'graph request contained errors')
+                callback util.error(new Error(), 'Graph request contained errors')
             else
-                callback null, res
-
-                clientSessionStorage.set @storageKey,
-                    width: @maxWidth
-                    response: res
+                callback null, res.data.node.incito
             
             return
 
@@ -132,11 +160,11 @@ export default class Bootstrapper
     
     createViewer: (data) ->
         if not data.incito?
-            throw error new Error(), 'you need to supply valid Incito to create a viewer'
+            throw error new Error(), 'You need to supply valid Incito to create a viewer'
 
         viewer = new Viewer @options.el,
             id: @options.id
-            pagedPublicationId: @options.pagedPublicationId
+            details: data.details
             incito: data.incito
             eventTracker: @options.eventTracker
         controls = new Controls viewer

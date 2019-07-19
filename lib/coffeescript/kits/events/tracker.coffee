@@ -105,7 +105,7 @@ export default class Tracker
         @trackEvent 5, properties, version
 
     trackIncitoPublicationOpened: (properties, version) ->
-        @trackEvent 8, properties, version
+        @trackEvent 11, properties, version
     
     createViewToken: (...parts) ->
         str = [@client.id].concat(parts).join ''

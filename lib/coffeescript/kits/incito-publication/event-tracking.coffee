@@ -1,18 +1,16 @@
 import MicroEvent from 'microevent'
 
 class IncitoPublicationEventTracking
-    constructor: (@eventTracker, @id, {
-        @pagedPublicationId
-    }) ->
+    constructor: (@eventTracker, @details) ->
         return
 
     trackOpened: (properties) ->
         return @ if not @eventTracker?
 
         @eventTracker.trackIncitoPublicationOpened
-            'ip.id': @id
-            'pp.vt': @eventTracker.createViewToken(@pagedPublicationId) if @pagedPublicationId
-            'vt': @eventTracker.createViewToken(@id)
+            'ip.paged': @details.types.indexOf('paged') > -1
+            'ip.id': @details.id
+            'vt': @eventTracker.createViewToken(@details.id)
 
         @
 

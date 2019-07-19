@@ -281,8 +281,7 @@ var openIncitoPublication = function (publication, category) {
 
     var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
         el: el,
-        id: publication.incito_publication_id,
-        pagedPublicationId: publication.id,
+        id: publication.id,
         eventTracker: SGN.config.get('eventTracker')
     });
     var trackProgress = function (progress) {
@@ -305,10 +304,8 @@ var openIncitoPublication = function (publication, category) {
 
     incitoPublication.fetch(function (err, res) {
         if (!err) {
-            incito = res.data.node.incito;
-            incitoPublicationViewer = incitoPublication.createViewer({
-                incito: incito
-            });
+            incito = res.incito;
+            incitoPublicationViewer = incitoPublication.createViewer(res);
 
             incitoPublicationViewer.start();
             incitoPublicationViewer.bind('progress', function (navEvent) {
@@ -360,6 +357,21 @@ var scrollToIncitoCategory = function (category) {
     var sections = {};
     var sectionCount = 0;
     var likelySection;
+    var mappings = {
+        'pc-tablets': ['bb-offers-533'],
+        'gaming': ['bb-offers-550', 'bb-offers-551', 'bb-offers-552'],
+        'tv-billede': [],
+        'lyd-hi-fi': [],
+        'mobil-gps': [],
+        'hvidevarer': [],
+        'kokken-bryggers-og-garderobe': [],
+        'husholdning': [],
+        'personlig-pleje-skonhed-og-velvare': [],
+        'smart-home': [],
+        'wearables-sport-og-fitness': [],
+        'foto-video': [],
+        'apple': ['apple']
+    };
     var find = function (view, sectionId, callback) {
         if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
             for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
@@ -390,7 +402,14 @@ var scrollToIncitoCategory = function (category) {
         find(incito.root_view);
 
         for (var key in sections) {
-            if (!likelySection || likelySection.count < sections[key]) {
+            if (mappings[category] && mappings[category].indexOf(key) > -1) {
+                likelySection = {
+                    count: sections[key],
+                    id: key
+                };
+
+                break;
+            } else if (!likelySection || likelySection.count < sections[key]) {
                 likelySection = {
                     count: sections[key],
                     id: key
@@ -406,12 +425,17 @@ var scrollToIncitoCategory = function (category) {
 
         if (likelySection) {
             var sectionEl = els.incito.root.querySelector('.incito__view[data-role=section][data-id="' + likelySection.id + '"]');
-            var rect = sectionEl.getBoundingClientRect();
 
-            window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
-        } else {
-            alert('Der findes desværre ingen tilbud i den kategori');
+            if (sectionEl) {
+                var rect = sectionEl.getBoundingClientRect();
+
+                window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset - 40));
+
+                return;
+            }
         }
+        
+        alert('Der findes desværre ingen tilbud i den kategori');
     }
 };
  
@@ -488,6 +512,29 @@ if (els.incito.top) {
 }
 
 if (els.incito.categorySwitcher) {
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+    var showApple = false;
+
+    if (year === 2019) {
+        if (month === 7 && day >= 29) {
+            showApple = true;
+        } else if (month === 8 && day <= 25) {
+            showApple = true;
+        }
+    }
+
+    if (showApple) {
+        var appleOptionEl = document.createElement('option');
+
+        appleOptionEl.value = 'apple';
+        appleOptionEl.textContent = 'Apple';
+
+        els.incito.categorySwitcher.appendChild(appleOptionEl);
+    }
+
     els.incito.categorySwitcher.addEventListener('change', function (e) {
         var category = e.target.value;
 

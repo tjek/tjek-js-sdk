@@ -7,7 +7,6 @@
         this.bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
             el: this.options.el,
             id: this.options.id,
-            pagedPublicationId: this.options.pagedPublicationId,
             eventTracker: this.options.eventTracker
         });
     }
@@ -19,8 +18,7 @@
             if (err) {
                 callback(err);
             } else {
-                var incito = res.data.node.incito;
-                var viewer = self.createViewer(incito);
+                var viewer = self.createViewer(res);
 
                 viewer.start();
 
@@ -63,10 +61,8 @@
         });
     };
 
-    IncitoPublication.prototype.createViewer = function (incito) {
-        return this.bootstrapper.createViewer({
-            incito: incito
-        });
+    IncitoPublication.prototype.createViewer = function (data) {
+        return this.bootstrapper.createViewer(data);
     };
 
     IncitoPublication.prototype.pickProduct = function (e, callback) {
@@ -118,7 +114,6 @@
     var incitoPublication = new IncitoPublication({
         el: el,
         id: SGN.util.getQueryParam('id'),
-        pagedPublicationId: SGN.util.getQueryParam('pagedPublicationId'),
         eventTracker: SGN.config.get('eventTracker')
     });
 
