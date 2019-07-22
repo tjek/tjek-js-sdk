@@ -110,7 +110,7 @@ export default class Bootstrapper
                     if err1?
                         callback err1
                     else
-                        SGN.storage.session.set @storageKey,
+                        clientSessionStorage.set @storageKey,
                             width: @maxWidth
                             incito: incito
 
