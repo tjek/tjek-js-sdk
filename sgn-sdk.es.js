@@ -4696,7 +4696,6 @@ function () {
     this.maxWidth = this.getMaxWidth();
     this.featureLabels = this.getFeatureLabels();
     this.versionsSupported = ['1.0.0'];
-    this.storageKey = "incito-".concat(this.options.id);
     return;
   }
 
@@ -4816,28 +4815,13 @@ function () {
       var _this = this;
 
       this.fetchDetails(this.options.id, function (err, details) {
-        var data;
-
         if (err != null) {
           callback(err);
         } else {
-          data = SGN$g.storage.session.get(_this.storageKey);
-
-          if (data != null && data.incito != null && data.width === _this.maxWidth) {
-            return callback(null, {
-              details: details,
-              incito: data.incito
-            });
-          }
-
-          _this.fetchIncito(details.incito_publication_id, function (err1, incito) {
+          _this.fetchCachedIncito(details.incito_publication_id, function (err1, incito) {
             if (err1 != null) {
               callback(err1);
             } else {
-              SGN$g.storage.session.set(_this.storageKey, {
-                width: _this.maxWidth,
-                incito: incito
-              });
               callback(null, {
                 details: details,
                 incito: incito
@@ -4853,6 +4837,31 @@ function () {
       SGN$g.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
+    }
+  }, {
+    key: "fetchCachedIncito",
+    value: function fetchCachedIncito(id, callback) {
+      var _this2 = this;
+
+      var data, storageKey;
+      storageKey = "incito-".concat(id);
+      data = SGN$g.storage.session.get(storageKey);
+
+      if (data != null && data.incito != null && data.width === this.maxWidth) {
+        return callback(null, data.incito);
+      }
+
+      return this.fetchIncito(id, function (err1, incito) {
+        if (err1 != null) {
+          callback(err1);
+        } else {
+          SGN$g.storage.session.set(storageKey, {
+            width: _this2.maxWidth,
+            incito: incito
+          });
+          callback(null, incito);
+        }
+      });
     }
   }, {
     key: "fetchIncito",
