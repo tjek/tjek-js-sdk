@@ -417,10 +417,6 @@ var scrollToIncitoCategory = function (category) {
             }
 
             sectionCount++;
-
-            if (likelySection.count >= 3 && sectionCount > 0) {
-                break;
-            }
         }
 
         if (likelySection) {
