@@ -132,7 +132,7 @@ module.exports = class Bootstrapper
                     width: @maxWidth
                     incito: incito
 
-                callback null, incito 
+                callback null, incito
             
             return
 
