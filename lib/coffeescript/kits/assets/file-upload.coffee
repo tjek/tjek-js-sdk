@@ -17,7 +17,7 @@ export default (options = {}, callback, progressCallback) ->
         else
             callback error(new Error('Request error'),
                 code: 'RequestError'
-                statusCode: data.statusCode
+                statusCode: http.status
             )
         
         return

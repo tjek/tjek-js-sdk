@@ -32,7 +32,6 @@ class Popover
         return
 
     render: ->
-        width = @options.width ? 100
         header = @options.header
         template = @options.template if @options.template?
         view =

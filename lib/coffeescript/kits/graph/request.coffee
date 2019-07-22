@@ -20,7 +20,6 @@ parseCookies = (cookies = []) ->
 request = (options = {}, callback) ->
     url = SGN.config.get 'graphUrl'
     timeout = 1000 * 12
-    appKey = SGN.config.get 'appKey'
     authToken = SGN.config.get 'authToken'
     authTokenCookieName = 'shopgun-auth-token'
     options =
@@ -57,7 +56,7 @@ request = (options = {}, callback) ->
                 if response.status isnt 200
                     callback error(new Error('Graph API error'),
                         code: 'GraphAPIError'
-                        statusCode: data.statusCode
+                        statusCode: response.status
                     )
                 else
                     callback null, json

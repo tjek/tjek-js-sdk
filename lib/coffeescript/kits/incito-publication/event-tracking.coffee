@@ -4,7 +4,7 @@ class IncitoPublicationEventTracking
     constructor: (@eventTracker, @details) ->
         return
 
-    trackOpened: (properties) ->
+    trackOpened: ->
         return @ if not @eventTracker?
 
         @eventTracker.trackIncitoPublicationOpened

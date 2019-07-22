@@ -14,7 +14,7 @@ export get = (key) ->
             value = ct.substring(name.length, ct.length) if ct.indexOf(name) is 0
 
         value = JSON.parse value
-    catch err
+    catch _err
         value = {}
 
     value
@@ -30,6 +30,6 @@ export set = (key, value) ->
         date.setTime date.getTime() + days * 24 * 60 * 60 * 1000
 
         document.cookie = "#{prefixKey}#{key}=#{str};expires=#{date.toUTCString()};path=/"
-    catch err
+    catch _err
 
     return

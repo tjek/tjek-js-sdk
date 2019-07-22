@@ -1,7 +1,6 @@
 import MicroEvent from 'microevent'
 import Verso from 'verso-browser'
 import PageSpreads from './page-spreads'
-import * as clientLocalStorage from '../../storage/client-local'
 import { throttle, getColorBrightness } from '../../util'
 
 class PagedPublicationCore
@@ -82,7 +81,7 @@ class PagedPublicationCore
     makeOptions: (options, defaults) ->
         opts = {}
 
-        opts[key] = options[key] ? defaults[key] for key, value of options
+        opts[key] = options[key] ? defaults[key] for key of options
 
         opts
 

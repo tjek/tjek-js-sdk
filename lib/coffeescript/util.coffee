@@ -26,7 +26,7 @@ export error = (err, options) ->
 export uuid = ->
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
         r = Math.random() * 16 | 0
-        v = if c is 'x' then r else (r & 0x3|0x8)
+        v = if c is 'x' then r else (r & 0x3 | 0x8)
 
         v.toString 16
 
@@ -235,7 +235,7 @@ export async =
 # not sure what to do about that, other than always setting cbParameterIndex at callsites.
 export promiseCallbackInterop = (fun, cbParameterIndex = fun.length - 1) ->
     # This is the function that actually wraps and calls a method to return a promise.
-    makePromise = (fun, cbParameterIndex, parameters) ->
+    makePromise = (parameters) ->
         new Promise(
             (resolve, reject) ->
                 neoCallback = (error, result) ->
@@ -254,7 +254,7 @@ export promiseCallbackInterop = (fun, cbParameterIndex = fun.length - 1) ->
             fun.apply null, parameters
         else if typeof Promise is 'function'
             # No callback given, and we have promise support, use makePromise to wrap the call.
-            makePromise fun, cbParameterIndex, parameters
+            makePromise parameters
         else
             # Ain't got callback, ain't got promise support; we gotta tell the developer.
             throw new Error("""To be able to use this asynchronous method you should:

@@ -20,7 +20,7 @@ class PagedPublicationEventTracking
 
         return
 
-    trackOpened: (properties) ->
+    trackOpened: ->
         return @ if not @eventTracker?
 
         @eventTracker.trackPagedPublicationOpened

@@ -13,5 +13,27 @@
     "no_implicit_braces": {
         "name": "no_implicit_braces",
         "level": "ignore"
+    },
+    "check_scope": {
+        "module": "coffeescope2",
+        "level": "warn",
+        "environments": ["es5", "node", "browser", "jest"],
+        "globals": {
+            "page": true,
+            "__dirname": true,
+            "default": true,
+            "Promise": true
+        },
+        "overwrite": false,
+        "shadow": true,
+        "shadow_builtins": false,
+        "shadow_exceptions": ["err", "error", "next"],
+        "undefined": true,
+        "hoist_local": true,
+        "hoist_parent": true,
+        "unused_variables": true,
+        "unused_arguments": true,
+        "unused_classes": false,
+        "unused_exceptions": ["_.+"]
     }
 }

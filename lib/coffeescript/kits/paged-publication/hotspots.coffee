@@ -23,7 +23,7 @@ class PagedPublicationHotspots
 
         hotspotEl.parentNode.removeChild hotspotEl for hotspotEl in hotspotEls
 
-        for id, hotspot of data.hotspots
+        for _id, hotspot of data.hotspots
             position = @getPosition data.pages, data.ratio, hotspot
             el = @renderHotspot hotspot, position, contentRect, boundingRect
             
@@ -71,7 +71,7 @@ class PagedPublicationHotspots
                 x = coords[0]
                 y = coords[1]
 
-                x +=1 if pages[1] and pageNumbers[1] is +pageNumber
+                x += 1 if pages[1] and pageNumbers[1] is +pageNumber
                 x /= pages.length
 
                 if not minX?
@@ -130,7 +130,7 @@ class PagedPublicationHotspots
 
         return
 
-    resized: (e) ->
+    resized: ->
         data = @getCache @currentPageSpreadId
 
         @renderHotspots data if data?

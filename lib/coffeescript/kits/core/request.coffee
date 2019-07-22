@@ -52,16 +52,16 @@ request = (options = {}, callback, secondTime) ->
         
         req
             .then (response) ->
-                response.json().then (json) ->
+                response.json().then (data) ->
                     token = SGN.config.get 'coreSessionToken'
                     responseToken = response.headers.get 'x-token'
 
                     session.saveToken responseToken if responseToken and token isnt responseToken
 
                     if response.status >= 200 and response.status < 300 or response.status is 304
-                        callback null, json
+                        callback null, data
                     else
-                        if secondTime isnt true and json?.code in [1101, 1107, 1108]
+                        if secondTime isnt true and data?.code in [1101, 1107, 1108]
                             SGN.config.set coreSessionToken: undefined
 
                             request options, callback, true
@@ -69,7 +69,7 @@ request = (options = {}, callback, secondTime) ->
                             callback error(new Error('Core API error'),
                                 code: 'CoreAPIError'
                                 statusCode: response.status
-                            ), json
+                            ), data
                     
                     return
             .catch callback

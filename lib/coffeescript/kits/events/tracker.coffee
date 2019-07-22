@@ -3,7 +3,7 @@ import 'core-js/modules/es6.object.assign'
 import fetch from 'cross-fetch'
 import md5 from 'md5'
 import { eventsTrackUrl as defaultEventsTrackUrl } from '../../configDefaults'
-import { error, btoa, throttle, uuid, isBrowser } from '../../util'
+import { error, btoa, throttle, uuid } from '../../util'
 import * as clientLocalStorage from '../../storage/client-local'
 
 createTrackerClient = ->
@@ -61,8 +61,7 @@ export default class Tracker
     trackEvent: (type, properties = {}, version = 2) ->
         throw error(new Error('Event type is required')) if typeof type isnt 'number'
         return if not @trackId?
-        
-        now = new Date().getTime()
+
         evt = Object.assign {}, properties, {
             '_e': type
             '_v': version
@@ -109,7 +108,7 @@ export default class Tracker
     
     createViewToken: (...parts) ->
         str = [@client.id].concat(parts).join ''
-        viewToken = btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0,8))
+        viewToken = btoa String.fromCharCode.apply(null, (md5(str, {asBytes: true})).slice(0, 8))
 
         viewToken
 
@@ -174,7 +173,7 @@ dispatch = throttle _dispatch, 4000
 clientLocalStorage.set 'event-tracker-pool', []
 
 try
-    window.addEventListener 'beforeunload', (e) ->
+    window.addEventListener 'beforeunload', ->
         pool = pool.concat getPool()
 
         clientLocalStorage.set 'event-tracker-pool', pool

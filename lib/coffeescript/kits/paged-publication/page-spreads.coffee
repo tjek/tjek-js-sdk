@@ -37,12 +37,12 @@ class PagedPublicationPageSpreads
             midstPageSpreads.forEach (midstPages) -> pageSpreads.push midstPages.map (page) -> page
             pageSpreads.push [lastPage] if lastPage?
 
-        @collection = pageSpreads.map (pages, i) =>
+        @collection = pageSpreads.map (pageSpreadPages, i) =>
             id = "#{pageMode}-#{i}"
             pageSpread = new PageSpread
                 width: width
                 maxZoomScale: maxZoomScale
-                pages: pages
+                pages: pageSpreadPages
                 id: id
 
             pageSpread.bind 'pageLoaded', (e) => @trigger 'pageLoaded', e

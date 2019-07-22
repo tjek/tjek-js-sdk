@@ -1,4 +1,3 @@
-import MicroEvent from 'microevent'
 import Viewer from './viewer'
 import SGN from '../../core'
 import { async } from '../../util'

@@ -112,7 +112,7 @@ export default class Bootstrapper
         
         return
 
-    fetchDetails: (id, callback) =>
+    fetchDetails: (_id, callback) =>
         SGN.CoreKit.request
             url: "/v2/catalogs/#{@options.id}"
         , callback

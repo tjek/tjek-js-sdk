@@ -81,7 +81,7 @@ class PagedPublicationPageSpread
 
         @
 
-    clearContents: (pageSpread, versoPageSpread) ->
+    clearContents: ->
         @el.innerHTML = ''
         @contentsRendered = false
 
@@ -93,8 +93,7 @@ class PagedPublicationPageSpread
 
         pageEls.forEach (pageEl) =>
             id = pageEl.getAttribute 'data-id'
-            page = pages.find (page) -> page.id is id
-            image = page.images.large
+            image = pages.find((page) -> page.id is id).images.large
 
             loadImage image, (err) =>
                 if not err? and @el.getAttribute('data-active') is 'true'

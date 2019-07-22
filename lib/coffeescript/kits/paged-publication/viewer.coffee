@@ -216,8 +216,8 @@ class Viewer
                         id: hotspot.id
                         title: hotspot.offer.heading
                         subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
-            , (e) =>
-                callback @hotspots[e.id]
+            , (choiceEvent) =>
+                callback @hotspots[choiceEvent.id]
 
                 return
         

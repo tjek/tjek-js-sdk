@@ -1,3 +1,4 @@
+import SGN from '../../core'
 import MicroEvent from 'microevent'
 
 class Pulse

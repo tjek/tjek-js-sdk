@@ -75,6 +75,7 @@
     "aws-sdk": "^2.464.0",
     "bundlesize": "^0.17.2",
     "coffeelint": "^2.1.0",
+    "coffeescope2": "^0.5.1",
     "coffeescript": "^2.4.1",
     "gh-pages": "^2.0.1",
     "jest": "^24.8.0",
