@@ -157,7 +157,7 @@ export default class Bootstrapper
             if err?
                 callback err
             else if res.errors and res.errors.length > 0
-                callback util.error(new Error(), 'Graph request contained errors')
+                callback error(new Error(), 'Graph request contained errors')
             else
                 callback null, res.data.node.incito
             
@@ -174,7 +174,7 @@ export default class Bootstrapper
             details: data.details
             incito: data.incito
             eventTracker: @options.eventTracker
-        controls = new Controls viewer
+        new Controls viewer
         self = @
 
         # Persist clicks on feature labels for later anonymization.
