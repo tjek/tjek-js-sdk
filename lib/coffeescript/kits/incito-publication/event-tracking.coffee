@@ -5,7 +5,7 @@ class IncitoPublicationEventTracking
         return
 
     trackOpened: ->
-        return @ if not @eventTracker?
+        return @ if not @eventTracker? or not @details?
 
         @eventTracker.trackIncitoPublicationOpened
             'ip.paged': @details.types.indexOf('paged') > -1
