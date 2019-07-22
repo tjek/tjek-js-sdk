@@ -44,7 +44,7 @@
     "dev:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css --sourcemap-inline --watch",
     "dev": "run-p -l dev:js dev:css serve",
     "serve": "serve",
-    "prepublishOnly": "npm run test && npm run build"
+    "prepublishOnly": "npm run build && npm run test"
   },
   "repository": {
     "type": "git",
