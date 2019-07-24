@@ -15,7 +15,6 @@ module.exports = class Bootstrapper
         @maxWidth = @getMaxWidth()
         @featureLabels = @getFeatureLabels()
         @versionsSupported = ['1.0.0']
-        @storageKey = "incito-#{@options.id}"
 
         return
     
@@ -97,21 +96,10 @@ module.exports = class Bootstrapper
             if err?
                 callback err
             else
-                data = SGN.storage.session.get @storageKey
-
-                if data? and data.incito? and data.width is @maxWidth
-                    return callback null,
-                        details: details
-                        incito: data.incito
-
-                @fetchIncito details.incito_publication_id, (err1, incito) =>
+                @fetchCachedIncito details.incito_publication_id, (err1, incito) ->
                     if err1?
                         callback err1
                     else
-                        SGN.storage.session.set @storageKey,
-                            width: @maxWidth
-                            incito: incito
-
                         callback null,
                             details: details
                             incito: incito
@@ -128,6 +116,25 @@ module.exports = class Bootstrapper
         , callback
 
         return
+    
+    fetchCachedIncito: (id, callback) ->
+        storageKey = "incito-#{id}"
+        data = SGN.storage.session.get storageKey
+
+        if data? and data.incito? and data.width is @maxWidth
+            return callback null, data.incito
+
+        @fetchIncito id, (err1, incito) =>
+            if err1?
+                callback err1
+            else
+                SGN.storage.session.set storageKey,
+                    width: @maxWidth
+                    incito: incito
+
+                callback null, incito
+            
+            return
 
     fetchIncito: (id, callback) ->
         SGN.GraphKit.request
