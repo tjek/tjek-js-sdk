@@ -281,8 +281,7 @@
     
         var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
             el: el,
-            id: publication.incito_publication_id,
-            pagedPublicationId: publication.id,
+            id: publication.id,
             eventTracker: SGN.config.get('eventTracker')
         });
         var trackProgress = function (progress) {
@@ -305,10 +304,8 @@
     
         incitoPublication.fetch(function (err, res) {
             if (!err) {
-                incito = res.data.node.incito;
-                incitoPublicationViewer = incitoPublication.createViewer({
-                    incito: incito
-                });
+                incito = res.incito;
+                incitoPublicationViewer = incitoPublication.createViewer(res);
     
                 incitoPublicationViewer.start();
                 incitoPublicationViewer.bind('progress', function (navEvent) {
@@ -511,6 +508,29 @@
     }
     
     if (els.incito.categorySwitcher) {
+        var date = new Date();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var year = date.getFullYear();
+        var showApple = false;
+    
+        if (year === 2019) {
+            if (month === 7 && day >= 29) {
+                showApple = true;
+            } else if (month === 8 && day <= 25) {
+                showApple = true;
+            }
+        }
+    
+        if (showApple) {
+            var appleOptionEl = document.createElement('option');
+    
+            appleOptionEl.value = 'apple';
+            appleOptionEl.textContent = 'Apple';
+    
+            els.incito.categorySwitcher.appendChild(appleOptionEl);
+        }
+    
         els.incito.categorySwitcher.addEventListener('change', function (e) {
             var category = e.target.value;
     
