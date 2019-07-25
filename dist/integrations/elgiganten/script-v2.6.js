@@ -515,7 +515,7 @@
         var showApple = false;
     
         if (year === 2019) {
-            if (month === 7 && day >= 29) {
+            if (month === 7 && day >= 26) {
                 showApple = true;
             } else if (month === 8 && day <= 25) {
                 showApple = true;
