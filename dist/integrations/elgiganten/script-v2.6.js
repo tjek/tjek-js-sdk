@@ -302,10 +302,13 @@
     
         window.scrollTo(0, Math.max(0, rect.top + window.pageYOffset));
     
-        incitoPublication.fetch(function (err, res) {
+        incitoPublication.fetchCachedIncito(publication.incito_publication_id, function (err, res) {
             if (!err) {
-                incito = res.incito;
-                incitoPublicationViewer = incitoPublication.createViewer(res);
+                incito = res;
+                incitoPublicationViewer = incitoPublication.createViewer({
+                    details: publication,
+                    incito: incito
+                });
     
                 incitoPublicationViewer.start();
                 incitoPublicationViewer.bind('progress', function (navEvent) {
