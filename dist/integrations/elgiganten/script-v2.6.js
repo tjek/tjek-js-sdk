@@ -375,7 +375,12 @@
             'foto-video': [],
             'apple': ['apple']
         };
+        var actualSections = {};
         var find = function (view, sectionId, callback) {
+            if (view.role === 'section') {
+                actualSections[view.id] = true;
+            }
+
             if (view.role === 'offer' && view.meta && view.meta['tjek.offer.v1'].ids && sectionId) {
                 for (var i = 0; i < view.meta['tjek.offer.v1'].ids.length; i++) {
                     var id = view.meta['tjek.offer.v1'].ids[i];
@@ -403,23 +408,29 @@
     
         if (category && incito) {
             find(incito.root_view);
-    
-            for (var key in sections) {
+
+            for (var key in actualSections) {
                 if (mappings[category] && mappings[category].indexOf(key) > -1) {
                     likelySection = {
-                        count: sections[key],
+                        count: 1,
                         id: key
                     };
     
                     break;
-                } else if (!likelySection || likelySection.count < sections[key]) {
-                    likelySection = {
-                        count: sections[key],
-                        id: key
-                    };
                 }
-    
-                sectionCount++;
+            }
+
+            if (!likelySection) {
+                for (var key in sections) {
+                    if (!likelySection || likelySection.count < sections[key]) {
+                        likelySection = {
+                            count: sections[key],
+                            id: key
+                        };
+                    }
+        
+                    sectionCount++;
+                }
             }
     
             if (likelySection) {
