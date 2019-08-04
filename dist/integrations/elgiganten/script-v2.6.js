@@ -541,8 +541,10 @@
     
             appleOptionEl.value = 'apple';
             appleOptionEl.textContent = 'Apple';
-    
-            els.incito.categorySwitcher.appendChild(appleOptionEl);
+
+            var secondEl = els.incito.categorySwitcher.childNodes[1];
+
+            secondEl.parentNode.insertBefore(appleOptionEl, secondEl.nextSibling);
         }
     
         els.incito.categorySwitcher.addEventListener('change', function (e) {
