@@ -4538,7 +4538,7 @@ function () {
   _createClass(IncitoPublicationEventTracking, [{
     key: "trackOpened",
     value: function trackOpened(properties) {
-      if (this.eventTracker == null) {
+      if (this.eventTracker == null || this.details == null) {
         return this;
       }
 
