@@ -4794,7 +4794,10 @@
 
 	var browserPonyfill = createCommonjsModule(function (module, exports) {
 	var __self__ = (function (root) {
-	function F() { this.fetch = false; }
+	function F() {
+	this.fetch = false;
+	this.DOMException = root.DOMException;
+	}
 	F.prototype = root;
 	return new F();
 	})(typeof self !== 'undefined' ? self : commonjsGlobal);
