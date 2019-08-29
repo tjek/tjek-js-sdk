@@ -370,7 +370,7 @@
             'kokken-bryggers-og-garderobe': [],
             'husholdning': [],
             'personlig-pleje-skonhed-og-velvare': [],
-            'smart-home': [],
+            'smart-home': ['smart', 'bb-offers-278'],
             'wearables-sport-og-fitness': [],
             'foto-video': [],
             'apple': ['apple']
