@@ -74,9 +74,39 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version NEXT
+
+- PagedPublicationKit: Add a new optional createViewer option `pickHotspot`, which is called when the user presses an intersection of several hotspots. API example:
+
+```javascript
+var viewer = bootstrapper.createViewer(data, {
+  pickHotspot: function(
+    // array of hotspots
+    hotspots,
+    // event that contains some metadata about the clicked page, viewer and click position
+    // viewerEvent.verso.x and viewerEvent.verso.y are useful for positioning a picker relative to the viewer
+    viewerEvent,
+    // reference to the viewer DOM mounting point, useful for inserting a picker and positioning relatively inside of
+    viewerElement,
+    // you can use callback(hotspot) to emit a regular clicked/pressed/contextmenu event with a chosen hotspot
+    callback
+  ) {
+    // Example: just always pick the first hotspot and callback to regular 'hotspot*' event behavior
+    callback(hotspots[0]);
+
+    // you can optionally return a clean-up function that will be called when
+    // a picker should be closed, so you can clean up after yourself.
+    // This clean-up function is called once on a subsequent pickHotspot call.
+    return function() {
+      console.log('clean up');
+    };
+  }
+});
+```
+
 ### Version 3.0.0
 
-- *BREAKING INCITO CHANGE* Now, you need to supply the identifier of the publication rather than the Incito identifier. Plus, we've added a new event to measure how many times Incito's are opened. Anonymously.
+- _BREAKING INCITO CHANGE_ Now, you need to supply the identifier of the publication rather than the Incito identifier. Plus, we've added a new event to measure how many times Incito's are opened. Anonymously.
 
 ### Version 2.3.19
 
