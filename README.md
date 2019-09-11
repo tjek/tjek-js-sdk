@@ -74,7 +74,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
-### Version NEXT
+### Version 3.1.0
 
 - PagedPublicationKit: Add a new optional createViewer option `pickHotspot`, which is called when the user presses an intersection of several hotspots. This replaces the default picker popover element. API example:
 
