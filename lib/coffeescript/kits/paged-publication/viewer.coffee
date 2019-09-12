@@ -9,9 +9,9 @@ import * as translations from '../../translations'
 
 
 defaultPickHotspot = (hotspots, e, el, callback) ->
-    popover = SGN.CoreUIKit.singleChoicePopover
+    popover = singleChoicePopover
         el: el
-        header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+        header: translations.t 'paged_publication.hotspot_picker.header'
         x: e.verso.x
         y: e.verso.y
         items: hotspots
