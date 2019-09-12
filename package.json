@@ -1,6 +1,6 @@
 {
   "name": "shopgun-sdk",
-  "version": "3.1.0-beta.12",
+  "version": "3.2.0-beta.12",
   "description": "ShopGun SDK for JavaScript.",
   "main": "dist/sgn-sdk.cjs.js",
   "browser": "dist/sgn-sdk.js",
@@ -59,8 +59,8 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "core-js": "^2.6.5",
-    "cross-fetch": "^3.0.3",
-    "incito-browser": "^1.1.31",
+    "cross-fetch": "^3.0.4",
+    "incito-browser": "^1.1.32",
     "md5": "^2.2.1",
     "microevent": "^1.0.0",
     "mustache": "^3.0.1",

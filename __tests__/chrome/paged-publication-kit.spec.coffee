@@ -1,6 +1,6 @@
 path = require 'path'
 
-describe 'Chrome: Paged Publication', ->
+describe.skip 'Chrome: Paged Publication', ->
     beforeAll ->
         await page.goto "file:#{path.join __dirname, '..', '..', 'dist', 'paged-publication.html'}"
 

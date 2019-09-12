@@ -7,6 +7,24 @@ import { singleChoicePopover } from '../core-ui'
 import { uuid } from '../../util'
 import * as translations from '../../translations'
 
+
+defaultPickHotspot = (hotspots, e, el, callback) ->
+    popover = SGN.CoreUIKit.singleChoicePopover
+        el: el
+        header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+        x: e.verso.x
+        y: e.verso.y
+        items: hotspots
+            .filter (hotspot) -> hotspot.type is 'offer'
+            .map (hotspot) ->
+                id: hotspot.id
+                title: hotspot.offer.heading
+                subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+    , (picked) ->
+        callback hotspots.find((hotspot) -> hotspot.id == picked.id)
+    
+    return popover.destroy
+
 class Viewer
     constructor: (@el, @options = {}) ->
         @_core = new Core @el,
@@ -196,7 +214,7 @@ class Viewer
         return if not @hotspots?
 
         if @popover?
-            @popover.destroy()
+            @popover?.destroy?()
             @popover = null
         
         hotspots = e.verso.overlayEls.map (overlayEl) =>
@@ -205,21 +223,8 @@ class Viewer
         if hotspots.length is 1
             callback hotspots[0]
         else if hotspots.length > 1
-            @popover = singleChoicePopover
-                el: @el
-                header: translations.t 'paged_publication.hotspot_picker.header'
-                x: e.verso.x
-                y: e.verso.y
-                items: hotspots
-                    .filter (hotspot) -> hotspot.type is 'offer'
-                    .map (hotspot) ->
-                        id: hotspot.id
-                        title: hotspot.offer.heading
-                        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
-            , (choiceEvent) =>
-                callback @hotspots[choiceEvent.id]
-
-                return
+            @popover =
+                destroy: (@options.pickHotspot || defaultPickHotspot)(hotspots, e, @el, callback)
         
         return
 
@@ -268,7 +273,7 @@ class Viewer
         return
     
     beforeNavigation: ->
-        @popover.destroy() if @popover?
+        @popover?.destroy?()
 
         return
     
