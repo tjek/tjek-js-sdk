@@ -4837,8 +4837,6 @@ function () {
         if (err != null) {
           callback(err);
         } else {
-          details.incito_publication_id = 'SW5jaXRvUHVibGljYXRpb246MTM2NjkxMjQzMjI2Njg3OTE3NA==';
-
           _this.fetchIncito(details.incito_publication_id, function (err1, incito) {
             if (err1 != null) {
               callback(err1);
