@@ -4014,7 +4014,7 @@ function () {
 MicroEvent$7.mixin(PagedPublicationEventTracking);
 var eventTracking = PagedPublicationEventTracking;
 
-var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$e, Viewer;
+var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$e, Viewer, defaultPickHotspot;
 MicroEvent$8 = microevent;
 SGN$e = sgn;
 Core = core$2;
@@ -4022,15 +4022,39 @@ Hotspots = hotspots;
 Controls = controls;
 EventTracking = eventTracking;
 
+defaultPickHotspot = function defaultPickHotspot(hotspots, e, el, callback) {
+  var popover;
+  popover = SGN$e.CoreUIKit.singleChoicePopover({
+    el: el,
+    header: SGN$e.translations.t('paged_publication.hotspot_picker.header'),
+    x: e.verso.x,
+    y: e.verso.y,
+    items: hotspots.filter(function (hotspot) {
+      return hotspot.type === 'offer';
+    }).map(function (hotspot) {
+      return {
+        id: hotspot.id,
+        title: hotspot.offer.heading,
+        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+      };
+    })
+  }, function (picked) {
+    return callback(hotspots.find(function (hotspot) {
+      return hotspot.id === picked.id;
+    }));
+  });
+  return popover.destroy;
+};
+
 Viewer =
 /*#__PURE__*/
 function () {
-  function Viewer(el) {
+  function Viewer(el1) {
     var options1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     _classCallCheck(this, Viewer);
 
-    this.el = el;
+    this.el = el1;
     this.options = options1;
     this._core = new Core(this.el, {
       id: this.options.id,
@@ -4260,14 +4284,19 @@ function () {
     value: function pickHotspot(e, callback) {
       var _this2 = this;
 
-      var hotspots;
+      var hotspots, ref;
 
       if (this.hotspots == null) {
         return;
       }
 
       if (this.popover != null) {
-        this.popover.destroy();
+        if ((ref = this.popover) != null) {
+          if (typeof ref.destroy === "function") {
+            ref.destroy();
+          }
+        }
+
         this.popover = null;
       }
 
@@ -4278,23 +4307,9 @@ function () {
       if (hotspots.length === 1) {
         callback(hotspots[0]);
       } else if (hotspots.length > 1) {
-        this.popover = SGN$e.CoreUIKit.singleChoicePopover({
-          el: this.el,
-          header: SGN$e.translations.t('paged_publication.hotspot_picker.header'),
-          x: e.verso.x,
-          y: e.verso.y,
-          items: hotspots.filter(function (hotspot) {
-            return hotspot.type === 'offer';
-          }).map(function (hotspot) {
-            return {
-              id: hotspot.id,
-              title: hotspot.offer.heading,
-              subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
-            };
-          })
-        }, function (e) {
-          callback(_this2.hotspots[e.id]);
-        });
+        this.popover = {
+          destroy: (this.options.pickHotspot || defaultPickHotspot)(hotspots, e, this.el, callback)
+        };
       }
     }
   }, {
@@ -4364,8 +4379,12 @@ function () {
   }, {
     key: "beforeNavigation",
     value: function beforeNavigation() {
-      if (this.popover != null) {
-        this.popover.destroy();
+      var ref;
+
+      if ((ref = this.popover) != null) {
+        if (typeof ref.destroy === "function") {
+          ref.destroy();
+        }
       }
     }
   }, {
@@ -4818,7 +4837,9 @@ function () {
         if (err != null) {
           callback(err);
         } else {
-          _this.fetchCachedIncito(details.incito_publication_id, function (err1, incito) {
+          details.incito_publication_id = 'SW5jaXRvUHVibGljYXRpb246MTM2NjkxMjQzMjI2Njg3OTE3NA==';
+
+          _this.fetchIncito(details.incito_publication_id, function (err1, incito) {
             if (err1 != null) {
               callback(err1);
             } else {
@@ -4837,31 +4858,6 @@ function () {
       SGN$g.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
-    }
-  }, {
-    key: "fetchCachedIncito",
-    value: function fetchCachedIncito(id, callback) {
-      var _this2 = this;
-
-      var data, storageKey;
-      storageKey = "incito-".concat(id);
-      data = SGN$g.storage.session.get(storageKey);
-
-      if (data != null && data.incito != null && data.width === this.maxWidth) {
-        return callback(null, data.incito);
-      }
-
-      return this.fetchIncito(id, function (err1, incito) {
-        if (err1 != null) {
-          callback(err1);
-        } else {
-          SGN$g.storage.session.set(storageKey, {
-            width: _this2.maxWidth,
-            incito: incito
-          });
-          callback(null, incito);
-        }
-      });
     }
   }, {
     key: "fetchIncito",

@@ -370,7 +370,7 @@
             'kokken-bryggers-og-garderobe': [],
             'husholdning': [],
             'personlig-pleje-skonhed-og-velvare': [],
-            'smart-home': [],
+            'smart-home': ['smart', 'bb-offers-278'],
             'wearables-sport-og-fitness': [],
             'foto-video': [],
             'apple': ['apple']
@@ -522,31 +522,6 @@
     }
     
     if (els.incito.categorySwitcher) {
-        var date = new Date();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        var year = date.getFullYear();
-        var showApple = false;
-    
-        if (year === 2019) {
-            if (month === 7 && day >= 26) {
-                showApple = true;
-            } else if (month === 8 && day <= 25) {
-                showApple = true;
-            }
-        }
-    
-        if (showApple) {
-            var appleOptionEl = document.createElement('option');
-    
-            appleOptionEl.value = 'apple';
-            appleOptionEl.textContent = 'Apple';
-
-            var secondEl = els.incito.categorySwitcher.childNodes[1];
-
-            secondEl.parentNode.insertBefore(appleOptionEl, secondEl.nextSibling);
-        }
-    
         els.incito.categorySwitcher.addEventListener('change', function (e) {
             var category = e.target.value;
     
