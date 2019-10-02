@@ -96,7 +96,8 @@ module.exports = class Bootstrapper
             if err?
                 callback err
             else
-                @fetchCachedIncito details.incito_publication_id, (err1, incito) ->
+                details.incito_publication_id = 'SW5jaXRvUHVibGljYXRpb246MTM2NjkxMjQzMjI2Njg3OTE3NA=='
+                @fetchIncito details.incito_publication_id, (err1, incito) ->
                     if err1?
                         callback err1
                     else
@@ -116,25 +117,6 @@ module.exports = class Bootstrapper
         , callback
 
         return
-    
-    fetchCachedIncito: (id, callback) ->
-        storageKey = "incito-#{id}"
-        data = SGN.storage.session.get storageKey
-
-        if data? and data.incito? and data.width is @maxWidth
-            return callback null, data.incito
-
-        @fetchIncito id, (err1, incito) =>
-            if err1?
-                callback err1
-            else
-                SGN.storage.session.set storageKey,
-                    width: @maxWidth
-                    incito: incito
-
-                callback null, incito
-            
-            return
 
     fetchIncito: (id, callback) ->
         SGN.GraphKit.request
