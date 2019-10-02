@@ -96,7 +96,6 @@ module.exports = class Bootstrapper
             if err?
                 callback err
             else
-                details.incito_publication_id = 'SW5jaXRvUHVibGljYXRpb246MTM2NjkxMjQzMjI2Njg3OTE3NA=='
                 @fetchIncito details.incito_publication_id, (err1, incito) ->
                     if err1?
                         callback err1
