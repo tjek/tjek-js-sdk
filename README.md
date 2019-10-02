@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.0.3.min.css"
+  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.1.1.min.css"
   rel="stylesheet"
   type="text/css"
 />
 <script
-  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.0.3.min.js"
+  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.1.1.min.js"
   id="sgn-sdk"
   data-app-key="YOUR_APP_KEY"
   data-track-id="YOUR_TRACK_ID"
@@ -73,6 +73,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+
+### Version 3.1.1
+
+- IncitoPublicationKit: Removed sessionStorage caching due to excessive JSON.parse JSON.stringify operations, which slows down the browser
 
 ### Version 3.1.0
 
