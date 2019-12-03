@@ -108,6 +108,10 @@ var viewer = bootstrapper.createViewer(data, {
 });
 ```
 
+### Version N.E.X.T
+
+- Let CoreUIKit OfferDetails grow beyond the width of its anchor, with respect to on-screen position.
+
 ### Version 3.0.0
 
 - _BREAKING INCITO CHANGE_ Now, you need to supply the identifier of the publication rather than the Incito identifier. Plus, we've added a new event to measure how many times Incito's are opened. Anonymously.
