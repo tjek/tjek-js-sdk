@@ -76,7 +76,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ### Version 3.1.1
 
-- IncitoPublicationKit: Removed sessionStorage caching due to excessive JSON.parse JSON.stringify operations, which slows down the browser
+- IncitoPublicationKit: Removed sessionStorage caching due to excessive JSON.parse JSON.stringify operations, which slows down the browser.
 
 ### Version 3.1.0
 
