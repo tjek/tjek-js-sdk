@@ -156,11 +156,11 @@
                     var pulse = new SGN.EventsKit.Pulse();
                     var searchEl;
 
-                    setInterval(function () {
-                        var center = centers[Math.floor(Math.random() * centers.length)];
+                    // setInterval(function () {
+                    //     var center = centers[Math.floor(Math.random() * centers.length)];
 
-                        map.setCenter(center);
-                    }, 20000);
+                    //     map.setCenter(center);
+                    // }, 20000);
 
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
