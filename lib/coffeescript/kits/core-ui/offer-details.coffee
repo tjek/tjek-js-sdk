@@ -1,5 +1,5 @@
 module.exports = class OfferDetails
-    constructor: ({ @minWidth = 300, @maxWidth = "100vw", @anchorEl, @contentEl }) ->
+    constructor: ({@minWidth = 300, @maxWidth = '100vw', @anchorEl, @contentEl}) ->
         @elInner = document.createElement 'div'
         @elInner.className = 'sgn-offer-details-inner'
 
