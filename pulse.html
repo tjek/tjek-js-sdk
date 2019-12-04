@@ -28,12 +28,11 @@
             .query {
                 position: fixed;
                 z-index: 2;
-                font-size: 4em;
-                text-shadow: 1px 1px #000;
-                line-height: 1.3;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                font-size: 40px;
+                line-height: 40px;
+                color: #ffffff;
+                padding: 0 4px;
+                border-radius: 10px;
             }
         </style>
     </head>
@@ -156,19 +155,13 @@
                     var pulse = new SGN.EventsKit.Pulse();
                     var searchEl;
 
-                    setInterval(function () {
-                        var center = centers[Math.floor(Math.random() * centers.length)];
-
-                        map.setCenter(center);
-                    }, 20000);
-
                     pulse.bind('event', function (e) {
                         var coords = Geohash.decode(e.geohash);
                         var verticalNoise = (Math.random() - 0.5) * 0.087 * 2;
                         var horizontalNoise = (Math.random() - 0.5) * 0.18 * 2;
                         var center = new google.maps.LatLng({
                             lat: coords.lat + verticalNoise,
-                            lng: coords.lon + horizontalNoise,
+                            lng: coords.lon + horizontalNoise
                         });
                         var overlay = new google.maps.Circle({
                             strokeWeight: 0,
@@ -194,14 +187,12 @@
 
                             searchEl = document.createElement('div');
                             
-                            var top = Math.min(0.9, Math.random());
-                            var left = Math.min(0.9, Math.random());
-
-                            console.log(top, left);
+                            var top = Math.min(0.7, Math.random());
+                            var left = Math.min(0.7, Math.random());
 
                             searchEl.className = 'query';
                             searchEl.textContent = e.attributes.query.toLowerCase().trim();
-                            searchEl.style.color = getRandomColor();
+                            searchEl.style.backgroundColor = getRandomColor();
                             searchEl.style.top = (top * 100) + '%';
                             searchEl.style.left = (left * 100) + '%';
 
