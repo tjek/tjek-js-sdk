@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.0.3.min.css"
+  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.1.2.min.css"
   rel="stylesheet"
   type="text/css"
 />
 <script
-  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.0.3.min.js"
+  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.1.2.min.js"
   id="sgn-sdk"
   data-app-key="YOUR_APP_KEY"
   data-track-id="YOUR_TRACK_ID"
@@ -74,6 +74,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 3.1.1
+
+- IncitoPublicationKit: Removed sessionStorage caching due to excessive JSON.parse JSON.stringify operations, which slows down the browser.
+
 ### Version 3.1.0
 
 - PagedPublicationKit: Add a new optional createViewer option `pickHotspot`, which is called when the user presses an intersection of several hotspots. This replaces the default picker popover element. API example:
@@ -103,6 +107,10 @@ var viewer = bootstrapper.createViewer(data, {
   }
 });
 ```
+
+### Version N.E.X.T
+
+- Let CoreUIKit OfferDetails grow beyond the width of its anchor, with respect to on-screen position.
 
 ### Version 3.0.0
 

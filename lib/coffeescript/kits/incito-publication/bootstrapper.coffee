@@ -98,7 +98,7 @@ export default class Bootstrapper
             if err?
                 callback err
             else
-                @fetchCachedIncito details.incito_publication_id, (err1, incito) ->
+                @fetchIncito details.incito_publication_id, (err1, incito) ->
                     if err1?
                         callback err1
                     else
@@ -118,25 +118,6 @@ export default class Bootstrapper
         , callback
 
         return
-    
-    fetchCachedIncito: (id, callback) ->
-        storageKey = "incito-#{id}"
-        data = clientSessionStorage.get storageKey
-
-        if data? and data.incito? and data.width is @maxWidth
-            return callback null, data.incito
-
-        @fetchIncito id, (err1, incito) =>
-            if err1?
-                callback err1
-            else
-                clientSessionStorage.set storageKey,
-                    width: @maxWidth
-                    incito: incito
-
-                callback null, incito
-            
-            return
 
     fetchIncito: (id, callback) ->
         SGN.GraphKit.request

@@ -1,10 +1,11 @@
 .sgn-offer-details
-    absolute top left
+    absolute top
     z-index 10
     background-color #fff
     border-left 4px solid rgba(#000, 0.8)
     border-right 4px solid rgba(#000, 0.8)
     border-bottom 4px solid rgba(#000, 0.8)
+    border-top 4px solid rgba(#000, 0.8)
     border-radius bottom left 10px
     border-radius bottom right 10px
     padding 10px
@@ -14,6 +15,12 @@
     outline 0
     box-sizing border-box
 
+    & > &-inner 
+        background #fff
+        height 4px
+        top -4px
+        position absolute
+    
     &.in
         opacity 1
         transform translateY(0px) scale(1)
