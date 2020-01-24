@@ -2210,11 +2210,6 @@ var tracker = Tracker = function () {
         return this.trackEvent(3, properties, version);
       }
     }, {
-      key: "trackClientSessionOpened",
-      value: function trackClientSessionOpened(properties, version) {
-        return this.trackEvent(4, properties, version);
-      }
-    }, {
       key: "trackSearched",
       value: function trackSearched(properties, version) {
         return this.trackEvent(5, properties, version);
@@ -5307,17 +5302,28 @@ var OfferDetails;
 var offerDetails = OfferDetails =
 /*#__PURE__*/
 function () {
-  function OfferDetails() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  function OfferDetails(_ref) {
+    var _ref$minWidth = _ref.minWidth,
+        minWidth = _ref$minWidth === void 0 ? 300 : _ref$minWidth,
+        _ref$maxWidth = _ref.maxWidth,
+        maxWidth = _ref$maxWidth === void 0 ? '100vw' : _ref$maxWidth,
+        anchorEl = _ref.anchorEl,
+        contentEl = _ref.contentEl;
 
     _classCallCheck(this, OfferDetails);
 
     this.resize = this.resize.bind(this);
-    this.options = options;
+    this.minWidth = minWidth;
+    this.maxWidth = maxWidth;
+    this.anchorEl = anchorEl;
+    this.contentEl = contentEl;
+    this.elInner = document.createElement('div');
+    this.elInner.className = 'sgn-offer-details-inner';
     this.el = document.createElement('div');
     this.el.className = 'sgn-offer-details';
     this.el.setAttribute('tabindex', -1);
-    this.el.appendChild(this.options.contentEl);
+    this.el.appendChild(this.elInner);
+    this.el.appendChild(this.contentEl);
     this.position();
     return;
   }
@@ -5346,14 +5352,31 @@ function () {
   }, {
     key: "position",
     value: function position() {
-      var left, rect, top, width;
-      rect = this.options.anchorEl.getBoundingClientRect();
-      top = window.pageYOffset + rect.top + this.options.anchorEl.offsetHeight;
+      var left, rect, right, rightAligned, top, width;
+      rect = this.anchorEl.getBoundingClientRect();
+      top = window.pageYOffset + rect.top + this.anchorEl.offsetHeight;
       left = window.pageXOffset + rect.left;
-      width = this.options.anchorEl.offsetWidth;
+      width = this.anchorEl.offsetWidth;
       this.el.style.top = top + 'px';
-      this.el.style.left = left + 'px';
-      this.el.style.width = width + 'px';
+      rightAligned = rect.left >= window.outerWidth / 2;
+      left = window.pageXOffset + rect.left;
+      right = window.pageXOffset + (window.outerWidth - rect.right);
+
+      if (rightAligned) {
+        this.el.style.left = 'auto';
+        this.el.style.right = right + 'px';
+        this.elInner.style.left = 'auto';
+        this.elInner.style.right = 0;
+      } else {
+        this.el.style.left = left + 'px';
+        this.el.style.right = 'auto';
+        this.elInner.style.left = 0;
+        this.elInner.style.right = 'auto';
+      }
+
+      this.el.style.minWidth = typeof this.minWidth === 'number' ? Math.max(width, this.minWidth) + 'px' : this.minWidth;
+      this.el.style.maxWidth = this.maxWidth;
+      this.elInner.style.width = width - 8 + 'px';
     }
   }, {
     key: "resize",
@@ -5608,21 +5631,7 @@ SGN$h.client = function () {
   return {
     id: id
   };
-}(); // Listen for changes in the config.
-
-
-SGN$h.config.bind('change', function (changedAttributes) {
-  var eventTracker;
-  eventTracker = changedAttributes.eventTracker;
-
-  if (eventTracker != null) {
-    // TODO: avoid letting these build up in the eventTracker pool
-    // this happens in a scenario where the event server is unreachable
-    // and the page is refreshed, adding another trackClientSessionOpened
-    // event to the pool
-    eventTracker.trackClientSessionOpened();
-  }
-});
+}();
 
 if (isBrowser()) {
   // Autoconfigure the SDK.
