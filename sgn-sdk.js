@@ -13357,6 +13357,10 @@
 
 	          if (indexOf$1.call(textStyles, 'italic') >= 0) {
 	            this.el.style.fontStyle = 'italic';
+	          }
+
+	          if (Array.isArray(this.attrs.text_decoration_line)) {
+	            this.el.style.textDecorationLine = this.attrs.text_decoration_line.join(' ');
 	          } // Text shadow.
 
 
