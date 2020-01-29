@@ -97,9 +97,6 @@ export default class Tracker
     trackOfferOpened: (properties, version) ->
         @trackEvent 3, properties, version
     
-    trackClientSessionOpened: (properties, version) ->
-        @trackEvent 4, properties, version
-    
     trackSearched: (properties, version) ->
         @trackEvent 5, properties, version
 

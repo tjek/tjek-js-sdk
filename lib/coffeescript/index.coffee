@@ -51,12 +51,6 @@ SGN.config.bind 'change', (changedAttributes) ->
         # default eventsTrackUrl
         if not newEventTracker.eventsTrackUrl
             newEventTracker.setEventsTrackUrl(SGN.config.get('eventsTrackUrl'))
-        
-        # TODO: avoid letting these build up in the eventTracker pool
-        # this happens in a scenario where the event server is unreachable
-        # and the page is refreshed, adding another trackClientSessionOpened
-        # event to the pool
-        newEventTracker.trackClientSessionOpened()
 
     newEventsTrackUrl = changedAttributes.eventsTrackUrl
     if newEventsTrackUrl and SGN.config.get('eventTracker')
