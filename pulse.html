@@ -24,16 +24,6 @@
                 bottom: 0;
                 z-index: 1;
             }
-            
-            .query {
-                position: fixed;
-                z-index: 2;
-                font-size: 40px;
-                line-height: 40px;
-                color: #ffffff;
-                padding: 0 4px;
-                border-radius: 10px;
-            }
         </style>
     </head>
     <body>
@@ -53,19 +43,12 @@
 
             function initialize () {
                 var els = {
-                    map: document.getElementById('map'),
-                    queries: document.getElementById('queries')
+                    map: document.getElementById('map')
                 };
-                var centers = [
-                    { lat: 55.676097, lng: 12.568337 }, // Copenhagen, DK
-                    { lat: 59.913869, lng: 10.752245 }, // Oslo, NO
-                    { lat: 58.159912, lng: 8.018206 }, // Kristiansand, NO
-                    { lat: 59.329323, lng: 18.068581 } // Stockholm, SE
-                ];
                 var map = new google.maps.Map(els.map, {
                     zoom: 8,
                     disableDefaultUI: true,
-                    center: centers[0],
+                    center: { lat: 55.676097, lng: 12.568337 },
                     styles: [{
                         elementType: 'labels.text',
                         stylers: [{visibility: 'off'}]
@@ -150,56 +133,75 @@
                         stylers: [{color: '#17263c'}]
                     }]
                 });
+                var addEvent = function (evt) {
+                    var coords = Geohash.decode(evt.geohash);
+                    var verticalNoise = (Math.random() - 0.5) * 0.087 * 2;
+                    var horizontalNoise = (Math.random() - 0.5) * 0.18 * 2;
+                    var center = new google.maps.LatLng({
+                        lat: coords.lat + verticalNoise,
+                        lng: coords.lon + horizontalNoise
+                    });
+                    var overlay = new google.maps.Circle({
+                        strokeWeight: 0,
+                        fillColor: getRandomColor(),
+                        fillOpacity: 0.8,
+                        map: map,
+                        center: center,
+                        radius: 4000
+                    });
 
-                google.maps.event.addListenerOnce(map, 'idle', function () {
-                    var pulse = new SGN.EventsKit.Pulse();
-                    var searchEl;
+                    setTimeout(function () {
+                        google.maps.event.clearListeners(overlay, 'click_handler_name');
+                        google.maps.event.clearListeners(overlay, 'drag_handler_name');
+                        
+                        overlay.setRadius(0);
+                        overlay.setMap(null);
+                    }, 3000);
+                };
+                var buffer = [];
+                var lastTimestamp;
+                var randNumber = function (from, to) {
+                    return Math.floor(Math.random() * to) + from;
+                };
+                var fetchEvents = function () {
+                    fetch('https://wolf-api.tjek.com/pulse')
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            if (data.events.length) {
+                                data.events.forEach(function (evt) {
+                                    if (!lastTimestamp || evt.timestamp_ms > lastTimestamp) {
+                                        buffer.push(evt);
+                                    }
+                                });
 
-                    pulse.bind('event', function (e) {
-                        var coords = Geohash.decode(e.geohash);
-                        var verticalNoise = (Math.random() - 0.5) * 0.087 * 2;
-                        var horizontalNoise = (Math.random() - 0.5) * 0.18 * 2;
-                        var center = new google.maps.LatLng({
-                            lat: coords.lat + verticalNoise,
-                            lng: coords.lon + horizontalNoise
-                        });
-                        var overlay = new google.maps.Circle({
-                            strokeWeight: 0,
-                            fillColor: getRandomColor(),
-                            fillOpacity: 0.8,
-                            map: map,
-                            center: center,
-                            radius: 4000
-                        });
-
-                        setTimeout(function () {
-                            google.maps.event.clearListeners(overlay, 'click_handler_name');
-                            google.maps.event.clearListeners(overlay, 'drag_handler_name');
-                            
-                            overlay.setRadius(0);
-                            overlay.setMap(null);
-                        }, 2500);
-
-                        if (e.type === 'searched') {
-                            if (searchEl) {
-                                searchEl.parentNode.removeChild(searchEl);
+                                lastTimestamp = data.events[0].timestamp_ms;
                             }
 
-                            searchEl = document.createElement('div');
-                            
-                            var top = Math.min(0.7, Math.random());
-                            var left = Math.min(0.7, Math.random());
+                            setTimeout(function () {
+                                fetchEvents();
+                            }, 2000);
+                        });
+                };
+                var draw = function () {
+                    if (buffer.length) {
+                        var evt = buffer.shift();
 
-                            searchEl.className = 'query';
-                            searchEl.textContent = e.attributes.query.toLowerCase().trim();
-                            searchEl.style.backgroundColor = getRandomColor();
-                            searchEl.style.top = (top * 100) + '%';
-                            searchEl.style.left = (left * 100) + '%';
+                        addEvent(evt);
+                    }
 
-                            document.body.appendChild(searchEl);
-                        }
-                    });
-                });
+                    while (buffer.length > 2000) {
+                        buffer.pop();
+                    }
+
+                    setTimeout(function () {
+                        draw();
+                    }, randNumber(2, 40));
+                };
+
+                fetchEvents();
+                draw();
             }
         </script>
         <script src="js/latlon-geohash.js"></script>
