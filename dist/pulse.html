@@ -178,7 +178,8 @@
 
                                 lastTimestamp = data.events[0].timestamp_ms;
                             }
-
+                        })
+                        .finally(function () {
                             setTimeout(function () {
                                 fetchEvents();
                             }, 2000);
