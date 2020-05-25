@@ -9,7 +9,6 @@ SGN.storage =
     cookie: require './storage/client-cookie'
 
 # Expose the different kits.
-SGN.AssetsKit = require './kits/assets'
 SGN.EventsKit = require './kits/events'
 SGN.GraphKit = require './kits/graph'
 SGN.CoreKit = require './kits/core'

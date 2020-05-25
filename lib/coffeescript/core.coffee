@@ -6,11 +6,8 @@ config = new Config()
 # Set default values.
 config.set
     locale: 'en_US'
-    coreUrl: 'https://api.etilbudsavis.dk'
-    graphUrl: 'https://graph.service.shopgun.com'
-    eventsTrackUrl: 'https://events.service.shopgun.com/sync'
-    eventsPulseUrl: 'wss://events.service.shopgun.com/pulse'
-    assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
+    coreUrl: 'https://squid-api.tjek.com'
+    eventsTrackUrl: 'https://wolf-api.tjek.com/sync'
 
 module.exports =
     config: config

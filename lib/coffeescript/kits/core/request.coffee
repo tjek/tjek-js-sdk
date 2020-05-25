@@ -10,6 +10,7 @@ request = (options = {}, callback, secondTime) ->
         headers = options.headers ? {}
         json = if typeof options.json is 'boolean' then options.json else true
         token = SGN.config.get 'coreSessionToken'
+        appKey = SGN.config.get 'appKey'
         appVersion = SGN.config.get 'appVersion'
         appSecret = SGN.config.get 'appSecret'
         locale = SGN.config.get 'locale'
@@ -17,6 +18,7 @@ request = (options = {}, callback, secondTime) ->
         geo = options.geolocation
         body = options.body
         
+        headers['X-Api-Key'] = appKey
         headers['X-Token'] = token
         headers['X-Signature'] = SGN.CoreKit.session.sign appSecret, token if appSecret?
 
