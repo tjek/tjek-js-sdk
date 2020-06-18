@@ -160,7 +160,9 @@ _dispatch = (eventsTrackUrl) ->
                 # coffeelint: disable=max_line_length
                 console.warn "We're gonna keep trying, but there was an error while dispatching events:", err
 
-                dispatchRetryInterval = setInterval dispatch, 20000
+                dispatchRetryInterval = setInterval ->
+                    dispatch eventsTrackUrl
+                , 20000
 
             return
     
