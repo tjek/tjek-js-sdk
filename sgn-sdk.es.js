@@ -367,6 +367,8 @@ util = {
 var util_1 = util;
 
 function _typeof(obj) {
+  "@babel/helpers - typeof";
+
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {
       return typeof obj;
@@ -384,7 +386,7 @@ var REACT_ELEMENT_TYPE;
 
 function _jsx(type, props, key, children) {
   if (!REACT_ELEMENT_TYPE) {
-    REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol.for && Symbol.for("react.element") || 0xeac7;
+    REACT_ELEMENT_TYPE = typeof Symbol === "function" && Symbol["for"] && Symbol["for"]("react.element") || 0xeac7;
   }
 
   var defaultProps = type && type.defaultProps;
@@ -394,16 +396,6 @@ function _jsx(type, props, key, children) {
     props = {
       children: void 0
     };
-  }
-
-  if (props && defaultProps) {
-    for (var propName in defaultProps) {
-      if (props[propName] === void 0) {
-        props[propName] = defaultProps[propName];
-      }
-    }
-  } else if (!props) {
-    props = defaultProps || {};
   }
 
   if (childrenLength === 1) {
@@ -416,6 +408,16 @@ function _jsx(type, props, key, children) {
     }
 
     props.children = childArray;
+  }
+
+  if (props && defaultProps) {
+    for (var propName in defaultProps) {
+      if (props[propName] === void 0) {
+        props[propName] = defaultProps[propName];
+      }
+    }
+  } else if (!props) {
+    props = defaultProps || {};
   }
 
   return {
@@ -479,7 +481,7 @@ function _AsyncGenerator(gen) {
       var wrappedAwait = value instanceof _AwaitValue;
       Promise.resolve(wrappedAwait ? value.wrapped : value).then(function (arg) {
         if (wrappedAwait) {
-          resume("next", arg);
+          resume(key === "return" ? "return" : "next", arg);
           return;
         }
 
@@ -602,6 +604,11 @@ function _asyncGeneratorDelegate(inner, awaitWrap) {
 
   if (typeof inner.return === "function") {
     iter.return = function (value) {
+      if (waiting) {
+        waiting = false;
+        return value;
+      }
+
       return pump("return", value);
     };
   }
@@ -740,7 +747,7 @@ function _extends() {
 
 function _objectSpread(target) {
   for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
+    var source = arguments[i] != null ? Object(arguments[i]) : {};
     var ownKeys = Object.keys(source);
 
     if (typeof Object.getOwnPropertySymbols === 'function') {
@@ -752,6 +759,40 @@ function _objectSpread(target) {
     ownKeys.forEach(function (key) {
       _defineProperty(target, key, source[key]);
     });
+  }
+
+  return target;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
   }
 
   return target;
@@ -794,7 +835,7 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
-function isNativeReflectConstruct() {
+function _isNativeReflectConstruct() {
   if (typeof Reflect === "undefined" || !Reflect.construct) return false;
   if (Reflect.construct.sham) return false;
   if (typeof Proxy === "function") return true;
@@ -808,7 +849,7 @@ function isNativeReflectConstruct() {
 }
 
 function _construct(Parent, args, Class) {
-  if (isNativeReflectConstruct()) {
+  if (_isNativeReflectConstruct()) {
     _construct = Reflect.construct;
   } else {
     _construct = function _construct(Parent, args, Class) {
@@ -864,7 +905,7 @@ function _wrapNativeSuper(Class) {
 
 function _instanceof(left, right) {
   if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
-    return right[Symbol.hasInstance](left);
+    return !!right[Symbol.hasInstance](left);
   } else {
     return left instanceof right;
   }
@@ -876,29 +917,56 @@ function _interopRequireDefault(obj) {
   };
 }
 
+function _getRequireWildcardCache() {
+  if (typeof WeakMap !== "function") return null;
+  var cache = new WeakMap();
+
+  _getRequireWildcardCache = function () {
+    return cache;
+  };
+
+  return cache;
+}
+
 function _interopRequireWildcard(obj) {
   if (obj && obj.__esModule) {
     return obj;
-  } else {
-    var newObj = {};
+  }
 
-    if (obj != null) {
-      for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
+  if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
+    return {
+      default: obj
+    };
+  }
 
-          if (desc.get || desc.set) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
-        }
+  var cache = _getRequireWildcardCache();
+
+  if (cache && cache.has(obj)) {
+    return cache.get(obj);
+  }
+
+  var newObj = {};
+  var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+
+  for (var key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+
+      if (desc && (desc.get || desc.set)) {
+        Object.defineProperty(newObj, key, desc);
+      } else {
+        newObj[key] = obj[key];
       }
     }
-
-    newObj.default = obj;
-    return newObj;
   }
+
+  newObj.default = obj;
+
+  if (cache) {
+    cache.set(obj, newObj);
+  }
+
+  return newObj;
 }
 
 function _newArrowCheck(innerThis, boundThis) {
@@ -961,6 +1029,25 @@ function _possibleConstructorReturn(self, call) {
   }
 
   return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
 }
 
 function _superPropBase(object, property) {
@@ -1064,14 +1151,6 @@ function _taggedTemplateLiteralLoose(strings, raw) {
   return strings;
 }
 
-function _temporalRef(val, name) {
-  if (val === _temporalUndefined) {
-    throw new ReferenceError(name + " is not defined - temporal dead zone");
-  } else {
-    return val;
-  }
-}
-
 function _readOnlyError(name) {
   throw new Error("\"" + name + "\" is read-only");
 }
@@ -1080,41 +1159,55 @@ function _classNameTDZError(name) {
   throw new Error("Class \"" + name + "\" cannot be referenced in computed property keys.");
 }
 
-var _temporalUndefined = {};
+function _temporalUndefined() {}
+
+function _tdz(name) {
+  throw new ReferenceError(name + " is not defined - temporal dead zone");
+}
+
+function _temporalRef(val, name) {
+  return val === _temporalUndefined ? _tdz(name) : val;
+}
 
 function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
 
 function _slicedToArrayLoose(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimitLoose(arr, i) || _nonIterableRest();
+  return _arrayWithHoles(arr) || _iterableToArrayLimitLoose(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
 
 function _toArray(arr) {
-  return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest();
+  return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
 }
 
 function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
 
 function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
 }
 
+function _maybeArrayLike(next, arr, i) {
+  if (arr && !Array.isArray(arr) && typeof arr.length === "number") {
+    var len = arr.length;
+    return _arrayLikeToArray(arr, i !== void 0 && i < len ? i : len);
+  }
+
+  return next(arr, i);
+}
+
 function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
   var _arr = [];
   var _n = true;
   var _d = false;
@@ -1141,6 +1234,7 @@ function _iterableToArrayLimit(arr, i) {
 }
 
 function _iterableToArrayLimitLoose(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
   var _arr = [];
 
   for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
@@ -1152,12 +1246,111 @@ function _iterableToArrayLimitLoose(arr, i) {
   return _arr;
 }
 
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
 function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _createForOfIteratorHelper(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+
+      var F = function () {};
+
+      return {
+        s: F,
+        n: function () {
+          if (i >= o.length) return {
+            done: true
+          };
+          return {
+            done: false,
+            value: o[i++]
+          };
+        },
+        e: function (e) {
+          throw e;
+        },
+        f: F
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  var normalCompletion = true,
+      didErr = false,
+      err;
+  return {
+    s: function () {
+      it = o[Symbol.iterator]();
+    },
+    n: function () {
+      var step = it.next();
+      normalCompletion = step.done;
+      return step;
+    },
+    e: function (e) {
+      didErr = true;
+      err = e;
+    },
+    f: function () {
+      try {
+        if (!normalCompletion && it.return != null) it.return();
+      } finally {
+        if (didErr) throw err;
+      }
+    }
+  };
+}
+
+function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
 }
 
 function _skipFirstGeneratorNext(fn) {
@@ -1188,7 +1381,7 @@ function _toPropertyKey(arg) {
 }
 
 function _initializerWarningHelper(descriptor, context) {
-  throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and set to use loose mode. ' + 'To use proposal-class-properties in spec mode with decorators, wait for ' + 'the next major version of decorators in stage 2.');
+  throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.');
 }
 
 function _initializerDefineProperty(target, property, descriptor, context) {
@@ -1245,11 +1438,11 @@ function _classPrivateFieldLooseBase(receiver, privateKey) {
 }
 
 function _classPrivateFieldGet(receiver, privateMap) {
-  if (!privateMap.has(receiver)) {
+  var descriptor = privateMap.get(receiver);
+
+  if (!descriptor) {
     throw new TypeError("attempted to get private field on non-instance");
   }
-
-  var descriptor = privateMap.get(receiver);
 
   if (descriptor.get) {
     return descriptor.get.call(receiver);
@@ -1259,11 +1452,11 @@ function _classPrivateFieldGet(receiver, privateMap) {
 }
 
 function _classPrivateFieldSet(receiver, privateMap, value) {
-  if (!privateMap.has(receiver)) {
+  var descriptor = privateMap.get(receiver);
+
+  if (!descriptor) {
     throw new TypeError("attempted to set private field on non-instance");
   }
-
-  var descriptor = privateMap.get(receiver);
 
   if (descriptor.set) {
     descriptor.set.call(receiver, value);
@@ -1278,9 +1471,40 @@ function _classPrivateFieldSet(receiver, privateMap, value) {
   return value;
 }
 
+function _classPrivateFieldDestructureSet(receiver, privateMap) {
+  if (!privateMap.has(receiver)) {
+    throw new TypeError("attempted to set private field on non-instance");
+  }
+
+  var descriptor = privateMap.get(receiver);
+
+  if (descriptor.set) {
+    if (!("__destrObj" in descriptor)) {
+      descriptor.__destrObj = {
+        set value(v) {
+          descriptor.set.call(receiver, v);
+        }
+
+      };
+    }
+
+    return descriptor.__destrObj;
+  } else {
+    if (!descriptor.writable) {
+      throw new TypeError("attempted to set read only private field");
+    }
+
+    return descriptor;
+  }
+}
+
 function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
   if (receiver !== classConstructor) {
     throw new TypeError("Private static access of wrong provenance");
+  }
+
+  if (descriptor.get) {
+    return descriptor.get.call(receiver);
   }
 
   return descriptor.value;
@@ -1291,11 +1515,16 @@ function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor,
     throw new TypeError("Private static access of wrong provenance");
   }
 
-  if (!descriptor.writable) {
-    throw new TypeError("attempted to set read only private field");
+  if (descriptor.set) {
+    descriptor.set.call(receiver, value);
+  } else {
+    if (!descriptor.writable) {
+      throw new TypeError("attempted to set read only private field");
+    }
+
+    descriptor.value = value;
   }
 
-  descriptor.value = value;
   return value;
 }
 
@@ -1722,7 +1951,7 @@ function _classPrivateMethodSet() {
 
 function _wrapRegExp(re, groups) {
   _wrapRegExp = function (re, groups) {
-    return new BabelRegExp(re, groups);
+    return new BabelRegExp(re, undefined, groups);
   };
 
   var _RegExp = _wrapNativeSuper(RegExp);
@@ -1731,10 +1960,10 @@ function _wrapRegExp(re, groups) {
 
   var _groups = new WeakMap();
 
-  function BabelRegExp(re, groups) {
-    var _this = _RegExp.call(this, re);
+  function BabelRegExp(re, flags, groups) {
+    var _this = _RegExp.call(this, re, flags);
 
-    _groups.set(_this, groups);
+    _groups.set(_this, groups || _groups.get(re));
 
     return _this;
   }
@@ -1809,9 +2038,7 @@ var Config,
 MicroEvent = microevent;
 
 Config = Config = function () {
-  var Config =
-  /*#__PURE__*/
-  function () {
+  var Config = /*#__PURE__*/function () {
     function Config() {
       _classCallCheck(this, Config);
 
@@ -1848,7 +2075,7 @@ Config = Config = function () {
   }();
 
   ;
-  Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'graphUrl', 'eventsTrackUrl', 'eventsPulseUrl', 'assetsFileUploadUrl'];
+  Config.prototype.keys = ['appVersion', 'appKey', 'appSecret', 'authToken', 'eventTracker', 'locale', 'coreSessionToken', 'coreSessionClientId', 'coreUrl', 'eventsTrackUrl'];
   return Config;
 }.call(commonjsGlobal);
 
@@ -1887,11 +2114,8 @@ config$1 = new Config$1(); // Set default values.
 
 config$1.set({
   locale: 'en_US',
-  coreUrl: 'https://api.etilbudsavis.dk',
-  graphUrl: 'https://graph.service.shopgun.com',
-  eventsTrackUrl: 'https://events.service.shopgun.com/sync',
-  eventsPulseUrl: 'wss://events.service.shopgun.com/pulse',
-  assetsFileUploadUrl: 'https://assets.service.shopgun.com/upload'
+  coreUrl: 'https://squid-api.tjek.com',
+  eventsTrackUrl: 'https://wolf-api.tjek.com/sync'
 });
 var core = {
   config: config$1,
@@ -1904,8 +2128,8 @@ var core_3 = core.util;
 
 var sgn = core;
 
-var SGN$1, prefixKey;
-SGN$1 = sgn;
+var SGN, prefixKey;
+SGN = sgn;
 prefixKey = 'sgn-';
 var clientLocal = {
   key: 'sgn-',
@@ -1939,8 +2163,8 @@ var clientLocal_2 = clientLocal.storage;
 var clientLocal_3 = clientLocal.get;
 var clientLocal_4 = clientLocal.set;
 
-var SGN$2, prefixKey$1;
-SGN$2 = sgn;
+var SGN$1, prefixKey$1;
+SGN$1 = sgn;
 prefixKey$1 = 'sgn-';
 var clientSession = {
   key: 'sgn-',
@@ -1974,14 +2198,14 @@ var clientSession_2 = clientSession.storage;
 var clientSession_3 = clientSession.get;
 var clientSession_4 = clientSession.set;
 
-var SGN$3, prefixKey$2;
-SGN$3 = sgn;
+var SGN$2, prefixKey$2;
+SGN$2 = sgn;
 prefixKey$2 = 'sgn-';
 var clientCookie = {
   get: function get(key) {
     var c, ca, ct, err, i, len, name, value;
 
-    if (SGN$3.util.isNode()) {
+    if (SGN$2.util.isNode()) {
       return;
     }
 
@@ -2009,7 +2233,7 @@ var clientCookie = {
   set: function set(key, value) {
     var date, days, err, str;
 
-    if (SGN$3.util.isNode()) {
+    if (SGN$2.util.isNode()) {
       return;
     }
 
@@ -2027,62 +2251,11 @@ var clientCookie = {
 var clientCookie_1 = clientCookie.get;
 var clientCookie_2 = clientCookie.set;
 
-var SGN$4;
-SGN$4 = sgn;
-
-var fileUpload = function fileUpload() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments.length > 1 ? arguments[1] : undefined;
-  var progressCallback = arguments.length > 2 ? arguments[2] : undefined;
-  var formData, http, timeout, url;
-
-  if (options.file == null) {
-    throw new Error('File is not defined');
-  }
-
-  url = SGN$4.config.get('assetsFileUploadUrl');
-  timeout = 1000 * 60 * 60;
-  formData = new FormData();
-  http = new XMLHttpRequest();
-  formData.append('file', options.file);
-
-  http.onload = function () {
-    if (http.status === 200) {
-      callback(null, JSON.parse(http.response));
-    } else {
-      callback(SGN$4.util.error(new Error('Request error'), {
-        code: 'RequestError',
-        statusCode: data.statusCode
-      }));
-    }
-  };
-
-  http.upload.onprogress = function (e) {
-    if (typeof progressCallback === 'function' && e.lengthComputable) {
-      progressCallback({
-        progress: e.loaded / e.total,
-        loaded: e.loaded,
-        total: e.total
-      });
-    }
-  };
-
-  http.open('post', url);
-  http.timeout = timeout;
-  http.setRequestHeader('Accept', 'application/json');
-  http.send(formData);
-};
-
-var assets = {
-  fileUpload: fileUpload
-};
-var assets_1 = assets.fileUpload;
-
-var SGN$5, Tracker, _dispatch, clientLocalStorage, dispatch, dispatchLimit, dispatchRetryInterval, dispatching, fetch, getPool, md5, pool, ship;
+var SGN$3, Tracker, _dispatch, clientLocalStorage, dispatch, dispatchLimit, dispatchRetryInterval, dispatching, fetch, getPool, md5, pool, ship;
 
 fetch = crossFetch;
 md5 = md5$1;
-SGN$5 = sgn;
+SGN$3 = sgn;
 clientLocalStorage = clientLocal;
 
 getPool = function getPool() {
@@ -2102,9 +2275,7 @@ getPool = function getPool() {
 pool = getPool();
 
 var tracker = Tracker = function () {
-  var Tracker =
-  /*#__PURE__*/
-  function () {
+  var Tracker = /*#__PURE__*/function () {
     function Tracker() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -2136,23 +2307,23 @@ var tracker = Tracker = function () {
         var evt, now;
 
         if (typeof type !== 'number') {
-          throw SGN$5.util.error(new Error('Event type is required'));
+          throw SGN$3.util.error(new Error('Event type is required'));
         }
 
         if (this.trackId == null) {
           return;
         }
 
-        if (SGN$5.config.get('appKey') === this.trackId) {
+        if (SGN$3.config.get('appKey') === this.trackId) {
           // coffeelint: disable=max_line_length
-          throw SGN$5.util.error(new Error('Track identifier must not be identical to app key. Go to https://shopgun.com/developers/apps to get a track identifier for your app'));
+          throw SGN$3.util.error(new Error('Track identifier must not be identical to app key. Go to https://shopgun.com/developers/apps to get a track identifier for your app'));
         }
 
         now = new Date().getTime();
         evt = Object.assign({}, properties, {
           '_e': type,
           '_v': version,
-          '_i': SGN$5.util.uuid(),
+          '_i': SGN$3.util.uuid(),
           '_t': Math.round(new Date().getTime() / 1000),
           '_a': this.trackId
         });
@@ -2228,8 +2399,8 @@ var tracker = Tracker = function () {
           parts[_key] = arguments[_key];
         }
 
-        str = [SGN$5.client.id].concat(parts).join('');
-        viewToken = SGN$5.util.btoa(String.fromCharCode.apply(null, md5(str, {
+        str = [SGN$3.client.id].concat(parts).join('');
+        viewToken = SGN$3.util.btoa(String.fromCharCode.apply(null, md5(str, {
           asBytes: true
         }).slice(0, 8)));
         return viewToken;
@@ -2253,7 +2424,7 @@ dispatchLimit = 100;
 ship = function ship() {
   var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var req;
-  req = fetch(SGN$5.config.get('eventsTrackUrl'), {
+  req = fetch(SGN$3.config.get('eventsTrackUrl'), {
     method: 'post',
     timeout: 1000 * 20,
     headers: {
@@ -2313,7 +2484,7 @@ _dispatch = function _dispatch() {
   });
 };
 
-dispatch = SGN$5.util.throttle(_dispatch, 4000);
+dispatch = SGN$3.util.throttle(_dispatch, 4000);
 clientLocalStorage.set('event-tracker-pool', []);
 
 try {
@@ -2323,197 +2494,44 @@ try {
   }, false);
 } catch (error) {}
 
-var MicroEvent$1, Pulse;
-MicroEvent$1 = microevent;
-
-Pulse =
-/*#__PURE__*/
-function () {
-  function Pulse() {
-    _classCallCheck(this, Pulse);
-
-    this.onOpen = this.onOpen.bind(this);
-    this.onMessage = this.onMessage.bind(this);
-    this.onClose = this.onClose.bind(this);
-    this.destroyed = false;
-    this.connection = this.connect();
-    return;
-  }
-
-  _createClass(Pulse, [{
-    key: "destroy",
-    value: function destroy() {
-      this.destroyed = true;
-      this.connection.close();
-      return this;
-    }
-  }, {
-    key: "connect",
-    value: function connect() {
-      var connection;
-      connection = new WebSocket(SGN.config.get('eventsPulseUrl'));
-      connection.onopen = this.onOpen;
-      connection.onmessage = this.onMessage;
-      connection.onerror = this.onError;
-      connection.onclose = this.onClose;
-      return connection;
-    }
-  }, {
-    key: "onOpen",
-    value: function onOpen() {
-      this.trigger('open');
-    }
-  }, {
-    key: "onMessage",
-    value: function onMessage(e) {
-      try {
-        this.trigger('event', JSON.parse(e.data));
-      } catch (error) {}
-    }
-  }, {
-    key: "onError",
-    value: function onError() {}
-  }, {
-    key: "onClose",
-    value: function onClose() {
-      var _this = this;
-
-      if (this.destroyed === false) {
-        setTimeout(function () {
-          _this.connection = _this.connect();
-        }, 2000);
-      }
-    }
-  }]);
-
-  return Pulse;
-}();
-
-MicroEvent$1.mixin(Pulse);
-var pulse = Pulse;
-
 var events = {
-  Tracker: tracker,
-  Pulse: pulse
+  Tracker: tracker
 };
 var events_1 = events.Tracker;
-var events_2 = events.Pulse;
 
-var SGN$6, fetch$1, parseCookies, promiseCallbackInterop, request;
+var SGN$4, fetch$1, promiseCallbackInterop, _request;
+
 fetch$1 = crossFetch;
-SGN$6 = sgn;
+SGN$4 = sgn;
 promiseCallbackInterop = util_1.promiseCallbackInterop;
-
-parseCookies = function parseCookies() {
-  var cookies = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var parsedCookies;
-  parsedCookies = {};
-  cookies.map(function (cookie) {
-    var key, keyValuePair, parts, value;
-    parts = cookie.split('; ');
-    keyValuePair = parts[0].split('=');
-    key = keyValuePair[0];
-    value = keyValuePair[1];
-    parsedCookies[key] = value;
-  });
-  return parsedCookies;
-};
-
-request = function request() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments.length > 1 ? arguments[1] : undefined;
-  var appKey, authToken, authTokenCookieName, timeout, url;
-  url = SGN$6.config.get('graphUrl');
-  timeout = 1000 * 12;
-  appKey = SGN$6.config.get('appKey');
-  authToken = SGN$6.config.get('authToken');
-  authTokenCookieName = 'shopgun-auth-token';
-  options = {
-    method: 'post',
-    timeout: timeout,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: JSON.stringify({
-      query: options.query,
-      operationName: options.operationName,
-      variables: options.variables
-    })
-  }; // Set cookies manually in node.js.
-
-  if (SGN$6.util.isNode() && authToken != null) {
-    options.cookies = [{
-      key: authTokenCookieName,
-      value: authToken,
-      url: url
-    }];
-  } else if (SGN$6.util.isBrowser()) {
-    options.credentials = 'include';
-  }
-
-  fetch$1(url, options).then(function (response) {
-    return response.json().then(function (json) {
-      var authCookie, cookies, ref; // Update auth token as it might have changed.
-
-      if (SGN$6.util.isNode()) {
-        cookies = parseCookies((ref = response.headers) != null ? ref['set-cookie'] : void 0);
-        authCookie = cookies[authTokenCookieName];
-
-        if (SGN$6.config.get('authToken') !== authCookie) {
-          SGN$6.config.set('authToken', authCookie);
-        }
-      }
-
-      if (response.status !== 200) {
-        return callback(SGN$6.util.error(new Error('Graph API error'), {
-          code: 'GraphAPIError',
-          statusCode: data.statusCode
-        }));
-      } else {
-        return callback(null, json);
-      }
-    });
-  }).catch(callback);
-};
-
-var request_1 = promiseCallbackInterop(request, 1);
-
-var graph = {
-  request: request_1
-};
-var graph_1 = graph.request;
-
-var SGN$7, fetch$2, promiseCallbackInterop$1, _request;
-
-fetch$2 = crossFetch;
-SGN$7 = sgn;
-promiseCallbackInterop$1 = util_1.promiseCallbackInterop;
 
 _request = function request() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var callback = arguments.length > 1 ? arguments[1] : undefined;
   var secondTime = arguments.length > 2 ? arguments[2] : undefined;
-  SGN$7.CoreKit.session.ensure(function (err) {
-    var appSecret, appVersion, body, geo, headers, json, locale, qs, ref, ref1, ref2, req, token, url;
+  SGN$4.CoreKit.session.ensure(function (err) {
+    var appKey, appSecret, appVersion, body, geo, headers, json, locale, qs, ref, ref1, ref2, req, token, url;
 
     if (err != null) {
       return callback(err);
     }
 
-    url = SGN$7.config.get('coreUrl') + ((ref = options.url) != null ? ref : '');
+    url = SGN$4.config.get('coreUrl') + ((ref = options.url) != null ? ref : '');
     headers = (ref1 = options.headers) != null ? ref1 : {};
     json = typeof options.json === 'boolean' ? options.json : true;
-    token = SGN$7.config.get('coreSessionToken');
-    appVersion = SGN$7.config.get('appVersion');
-    appSecret = SGN$7.config.get('appSecret');
-    locale = SGN$7.config.get('locale');
+    token = SGN$4.config.get('coreSessionToken');
+    appKey = SGN$4.config.get('appKey');
+    appVersion = SGN$4.config.get('appVersion');
+    appSecret = SGN$4.config.get('appSecret');
+    locale = SGN$4.config.get('locale');
     qs = (ref2 = options.qs) != null ? ref2 : {};
     geo = options.geolocation;
     body = options.body;
+    headers['X-Api-Key'] = appKey;
     headers['X-Token'] = token;
 
     if (appSecret != null) {
-      headers['X-Signature'] = SGN$7.CoreKit.session.sign(appSecret, token);
+      headers['X-Signature'] = SGN$4.CoreKit.session.sign(appSecret, token);
     }
 
     if (json) {
@@ -2563,7 +2581,7 @@ _request = function request() {
       }).join('&');
     }
 
-    req = fetch$2(url, {
+    req = fetch$1(url, {
       method: options.method,
       body: body,
       headers: headers
@@ -2571,24 +2589,24 @@ _request = function request() {
     return req.then(function (response) {
       return response.json().then(function (json) {
         var ref3, responseToken;
-        token = SGN$7.config.get('coreSessionToken');
+        token = SGN$4.config.get('coreSessionToken');
         responseToken = response.headers.get('x-token');
 
         if (responseToken && token !== responseToken) {
-          SGN$7.CoreKit.session.saveToken(responseToken);
+          SGN$4.CoreKit.session.saveToken(responseToken);
         }
 
         if (response.status >= 200 && response.status < 300 || response.status === 304) {
           callback(null, json);
         } else {
           if (secondTime !== true && ((ref3 = json != null ? json.code : void 0) === 1101 || ref3 === 1107 || ref3 === 1108)) {
-            SGN$7.config.set({
+            SGN$4.config.set({
               coreSessionToken: void 0
             });
 
             _request(options, callback, true);
           } else {
-            callback(SGN$7.util.error(new Error('Core API error'), {
+            callback(SGN$4.util.error(new Error('Core API error'), {
               code: 'CoreAPIError',
               statusCode: response.status
             }), json);
@@ -2599,12 +2617,12 @@ _request = function request() {
   });
 };
 
-var request_1$1 = promiseCallbackInterop$1(_request, 1);
+var request_1 = promiseCallbackInterop(_request, 1);
 
-var SGN$8, callbackQueue, clientCookieStorage, fetch$3, renewed, session, sha256;
-fetch$3 = crossFetch;
+var SGN$5, callbackQueue, clientCookieStorage, fetch$2, renewed, session, sha256;
+fetch$2 = crossFetch;
 sha256 = sha256$1;
-SGN$8 = sgn;
+SGN$5 = sgn;
 clientCookieStorage = clientCookie;
 callbackQueue = [];
 renewed = false;
@@ -2615,28 +2633,28 @@ session = {
       throw new Error('No token provided for saving');
     }
 
-    SGN$8.config.set({
+    SGN$5.config.set({
       coreSessionToken: token
     });
     session.saveCookie();
   },
   saveClientId: function saveClientId(clientId) {
-    SGN$8.config.set({
+    SGN$5.config.set({
       coreSessionClientId: clientId
     });
     session.saveCookie();
   },
   saveCookie: function saveCookie() {
     clientCookieStorage.set('session', {
-      token: SGN$8.config.get('coreSessionToken'),
-      client_id: SGN$8.config.get('coreSessionClientId')
+      token: SGN$5.config.get('coreSessionToken'),
+      client_id: SGN$5.config.get('coreSessionClientId')
     });
   },
   create: function create(callback) {
     var key, req, ttl;
-    key = SGN$8.config.get('appKey');
+    key = SGN$5.config.get('appKey');
     ttl = session.ttl;
-    req = fetch$3(SGN$8.config.get('coreUrl') + "/v2/sessions?api_key=".concat(key, "&token_ttl=").concat(ttl), {
+    req = fetch$2(SGN$5.config.get('coreUrl') + "/v2/sessions?api_key=".concat(key, "&token_ttl=").concat(ttl), {
       method: 'post'
     });
     req.then(function (response) {
@@ -2656,15 +2674,15 @@ session = {
   update: function update(callback) {
     var appSecret, headers, req, token;
     headers = {};
-    token = SGN$8.config.get('coreSessionToken');
-    appSecret = SGN$8.config.get('appSecret');
+    token = SGN$5.config.get('coreSessionToken');
+    appSecret = SGN$5.config.get('appSecret');
     headers['X-Token'] = token;
 
     if (appSecret != null) {
       headers['X-Signature'] = session.sign(appSecret, token);
     }
 
-    req = fetch$3(SGN$8.config.get('coreUrl') + '/v2/sessions', {
+    req = fetch$2(SGN$5.config.get('coreUrl') + '/v2/sessions', {
       method: 'put',
       headers: headers
     });
@@ -2685,15 +2703,15 @@ session = {
   renew: function renew(callback) {
     var appSecret, headers, req, token;
     headers = {};
-    token = SGN$8.config.get('coreSessionToken');
-    appSecret = SGN$8.config.get('appSecret');
+    token = SGN$5.config.get('coreSessionToken');
+    appSecret = SGN$5.config.get('appSecret');
     headers['X-Token'] = token;
 
     if (appSecret) {
       headers['X-Signature'] = session.sign(appSecret, token);
     }
 
-    req = fetch$3(SGN$8.config.get('coreUrl') + '/v2/sessions', {
+    req = fetch$2(SGN$5.config.get('coreUrl') + '/v2/sessions', {
       method: 'put',
       headers: headers
     });
@@ -2725,7 +2743,7 @@ session = {
     callbackQueue.push(callback);
 
     if (queueCount === 0) {
-      if (SGN$8.config.get('coreSessionToken') == null) {
+      if (SGN$5.config.get('coreSessionToken') == null) {
         session.create(complete);
       } else if (renewed === false) {
         renewed = true;
@@ -2747,24 +2765,22 @@ session = {
 };
 var session_1 = session;
 
-var SGN$9, request$1, session$1;
-SGN$9 = sgn;
-request$1 = request_1$1;
+var SGN$6, request, session$1;
+SGN$6 = sgn;
+request = request_1;
 session$1 = session_1;
 var core$1 = {
-  request: request$1,
+  request: request,
   session: session$1
 };
 var core_1$1 = core$1.request;
 var core_2$1 = core$1.session;
 
-var MicroEvent$2, PagedPublicationPageSpread, SGN$a;
-MicroEvent$2 = microevent;
-SGN$a = sgn;
+var MicroEvent$1, PagedPublicationPageSpread, SGN$7;
+MicroEvent$1 = microevent;
+SGN$7 = sgn;
 
-PagedPublicationPageSpread =
-/*#__PURE__*/
-function () {
+PagedPublicationPageSpread = /*#__PURE__*/function () {
   function PagedPublicationPageSpread() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -2839,7 +2855,7 @@ function () {
         el.appendChild(pageEl);
         loaderEl.className = 'sgn-pp-page__loader';
         loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
-        SGN$a.util.loadImage(image, function (err, width, height) {
+        SGN$7.util.loadImage(image, function (err, width, height) {
           var isComplete;
 
           if (err == null) {
@@ -2894,7 +2910,7 @@ function () {
           return page.id === id;
         });
         image = page.images.large;
-        SGN$a.util.loadImage(image, function (err) {
+        SGN$7.util.loadImage(image, function (err) {
           if (err == null && _this2.el.getAttribute('data-active') === 'true') {
             pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
             pageEl.style.backgroundImage = "url(".concat(image, ")");
@@ -2917,17 +2933,15 @@ function () {
   return PagedPublicationPageSpread;
 }();
 
-MicroEvent$2.mixin(PagedPublicationPageSpread);
+MicroEvent$1.mixin(PagedPublicationPageSpread);
 var pageSpread = PagedPublicationPageSpread;
 
-var MicroEvent$3, PageSpread, PagedPublicationPageSpreads, SGN$b;
-MicroEvent$3 = microevent;
+var MicroEvent$2, PageSpread, PagedPublicationPageSpreads, SGN$8;
+MicroEvent$2 = microevent;
 PageSpread = pageSpread;
-SGN$b = sgn;
+SGN$8 = sgn;
 
-PagedPublicationPageSpreads =
-/*#__PURE__*/
-function () {
+PagedPublicationPageSpreads = /*#__PURE__*/function () {
   function PagedPublicationPageSpreads(options) {
     _classCallCheck(this, PagedPublicationPageSpreads);
 
@@ -2972,7 +2986,7 @@ function () {
       } else {
         firstPage = pages.shift();
         lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-        midstPageSpreads = SGN$b.util.chunk(pages, 2);
+        midstPageSpreads = SGN$8.util.chunk(pages, 2);
 
         if (firstPage != null) {
           pageSpreads.push([firstPage]);
@@ -3015,20 +3029,18 @@ function () {
   return PagedPublicationPageSpreads;
 }();
 
-MicroEvent$3.mixin(PagedPublicationPageSpreads);
+MicroEvent$2.mixin(PagedPublicationPageSpreads);
 var pageSpreads = PagedPublicationPageSpreads;
 
-var MicroEvent$4, PageSpreads, PagedPublicationCore, SGN$c, Verso, clientLocalStorage$1;
-MicroEvent$4 = microevent;
+var MicroEvent$3, PageSpreads, PagedPublicationCore, SGN$9, Verso, clientLocalStorage$1;
+MicroEvent$3 = microevent;
 Verso = versoBrowser;
 PageSpreads = pageSpreads;
 clientLocalStorage$1 = clientLocal;
-SGN$c = sgn;
+SGN$9 = sgn;
 
 PagedPublicationCore = function () {
-  var PagedPublicationCore =
-  /*#__PURE__*/
-  function () {
+  var PagedPublicationCore = /*#__PURE__*/function () {
     function PagedPublicationCore(el) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -3078,7 +3090,7 @@ PagedPublicationCore = function () {
         verso = this.getVerso();
         verso.start();
         verso.pageSpreads.forEach(this.overridePageSpreadContentRect.bind(this));
-        this.resizeListener = SGN$c.util.throttle(this.resize, this.getOption('resizeDelay'));
+        this.resizeListener = SGN$9.util.throttle(this.resize, this.getOption('resizeDelay'));
         window.addEventListener('resize', this.resizeListener, false);
         window.addEventListener('beforeunload', this.unload, false);
         this.els.root.setAttribute('data-started', '');
@@ -3128,7 +3140,7 @@ PagedPublicationCore = function () {
     }, {
       key: "setColor",
       value: function setColor(color) {
-        this.els.root.setAttribute('data-color-brightness', SGN$c.util.getColorBrightness(color));
+        this.els.root.setAttribute('data-color-brightness', SGN$9.util.getColorBrightness(color));
         this.els.root.style.backgroundColor = color;
       }
     }, {
@@ -3509,16 +3521,14 @@ PagedPublicationCore = function () {
   return PagedPublicationCore;
 }.call(commonjsGlobal);
 
-MicroEvent$4.mixin(PagedPublicationCore);
+MicroEvent$3.mixin(PagedPublicationCore);
 var core$2 = PagedPublicationCore;
 
-var MicroEvent$5, Mustache$1, PagedPublicationHotspots;
-MicroEvent$5 = microevent;
+var MicroEvent$4, Mustache$1, PagedPublicationHotspots;
+MicroEvent$4 = microevent;
 Mustache$1 = mustache;
 
-PagedPublicationHotspots =
-/*#__PURE__*/
-function () {
+PagedPublicationHotspots = /*#__PURE__*/function () {
   function PagedPublicationHotspots() {
     _classCallCheck(this, PagedPublicationHotspots);
 
@@ -3716,7 +3726,7 @@ function () {
   return PagedPublicationHotspots;
 }();
 
-MicroEvent$5.mixin(PagedPublicationHotspots);
+MicroEvent$4.mixin(PagedPublicationHotspots);
 var hotspots = PagedPublicationHotspots;
 
 var keyCodes = {
@@ -3732,14 +3742,12 @@ var keyCodes_3 = keyCodes.ARROW_LEFT;
 var keyCodes_4 = keyCodes.SPACE;
 var keyCodes_5 = keyCodes.NUMBER_ONE;
 
-var MicroEvent$6, PagedPublicationControls, SGN$d, keyCodes$1;
-MicroEvent$6 = microevent;
-SGN$d = sgn;
+var MicroEvent$5, PagedPublicationControls, SGN$a, keyCodes$1;
+MicroEvent$5 = microevent;
+SGN$a = sgn;
 keyCodes$1 = keyCodes;
 
-PagedPublicationControls =
-/*#__PURE__*/
-function () {
+PagedPublicationControls = /*#__PURE__*/function () {
   function PagedPublicationControls(el) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -3761,7 +3769,7 @@ function () {
       nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
       close: el.querySelector('.sgn-pp--close')
     };
-    this.keyDownHandler = SGN$d.util.throttle(this.keyDown, 150, this);
+    this.keyDownHandler = SGN$a.util.throttle(this.keyDown, 150, this);
 
     if (this.options.keyboard === true) {
       this.els.root.addEventListener('keydown', this.keyDownHandler, false);
@@ -3888,15 +3896,13 @@ function () {
   return PagedPublicationControls;
 }();
 
-MicroEvent$6.mixin(PagedPublicationControls);
+MicroEvent$5.mixin(PagedPublicationControls);
 var controls = PagedPublicationControls;
 
-var MicroEvent$7, PagedPublicationEventTracking;
-MicroEvent$7 = microevent;
+var MicroEvent$6, PagedPublicationEventTracking;
+MicroEvent$6 = microevent;
 
-PagedPublicationEventTracking =
-/*#__PURE__*/
-function () {
+PagedPublicationEventTracking = /*#__PURE__*/function () {
   function PagedPublicationEventTracking(eventTracker, id) {
     _classCallCheck(this, PagedPublicationEventTracking);
 
@@ -4006,12 +4012,12 @@ function () {
   return PagedPublicationEventTracking;
 }();
 
-MicroEvent$7.mixin(PagedPublicationEventTracking);
+MicroEvent$6.mixin(PagedPublicationEventTracking);
 var eventTracking = PagedPublicationEventTracking;
 
-var Controls, Core, EventTracking, Hotspots, MicroEvent$8, SGN$e, Viewer, defaultPickHotspot;
-MicroEvent$8 = microevent;
-SGN$e = sgn;
+var Controls, Core, EventTracking, Hotspots, MicroEvent$7, SGN$b, Viewer, defaultPickHotspot;
+MicroEvent$7 = microevent;
+SGN$b = sgn;
 Core = core$2;
 Hotspots = hotspots;
 Controls = controls;
@@ -4019,9 +4025,9 @@ EventTracking = eventTracking;
 
 defaultPickHotspot = function defaultPickHotspot(hotspots, e, el, callback) {
   var popover;
-  popover = SGN$e.CoreUIKit.singleChoicePopover({
+  popover = SGN$b.CoreUIKit.singleChoicePopover({
     el: el,
-    header: SGN$e.translations.t('paged_publication.hotspot_picker.header'),
+    header: SGN$b.translations.t('paged_publication.hotspot_picker.header'),
     x: e.verso.x,
     y: e.verso.y,
     items: hotspots.filter(function (hotspot) {
@@ -4041,9 +4047,7 @@ defaultPickHotspot = function defaultPickHotspot(hotspots, e, el, callback) {
   return popover.destroy;
 };
 
-Viewer =
-/*#__PURE__*/
-function () {
+Viewer = /*#__PURE__*/function () {
   function Viewer(el1) {
     var options1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -4066,7 +4070,7 @@ function () {
       keyboard: this.options.keyboard
     });
     this._eventTracking = new EventTracking(this.options.eventTracker, this.options.id);
-    this.viewSession = SGN$e.util.uuid();
+    this.viewSession = SGN$b.util.uuid();
     this.hotspots = null;
     this.hotspotQueue = [];
     this.popover = null;
@@ -4414,16 +4418,14 @@ function () {
   return Viewer;
 }();
 
-MicroEvent$8.mixin(Viewer);
+MicroEvent$7.mixin(Viewer);
 var viewer = Viewer;
 
-var Bootstrapper, MicroEvent$9, SGN$f;
-MicroEvent$9 = microevent;
-SGN$f = core;
+var Bootstrapper, MicroEvent$8, SGN$c;
+MicroEvent$8 = microevent;
+SGN$c = core;
 
-var bootstrapper = Bootstrapper =
-/*#__PURE__*/
-function () {
+var bootstrapper = Bootstrapper = /*#__PURE__*/function () {
   function Bootstrapper() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -4439,7 +4441,7 @@ function () {
   _createClass(Bootstrapper, [{
     key: "createViewer",
     value: function createViewer(data, viewerOptions) {
-      return new SGN$f.PagedPublicationKit.Viewer(this.options.el, _objectSpread({
+      return new SGN$c.PagedPublicationKit.Viewer(this.options.el, _objectSpread2({
         id: this.options.id,
         ownedBy: data.details.dealer_id,
         color: '#' + data.details.branding.pageflip.color,
@@ -4480,7 +4482,7 @@ function () {
   }, {
     key: "fetch",
     value: function fetch(callback) {
-      SGN$f.util.async.parallel([this.fetchDetails, this.fetchPages], function (result) {
+      SGN$c.util.async.parallel([this.fetchDetails, this.fetchPages], function (result) {
         var data;
         data = {
           details: result[0][1],
@@ -4501,21 +4503,21 @@ function () {
   }, {
     key: "fetchDetails",
     value: function fetchDetails(callback) {
-      SGN$f.CoreKit.request({
+      SGN$c.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
     }
   }, {
     key: "fetchPages",
     value: function fetchPages(callback) {
-      SGN$f.CoreKit.request({
+      SGN$c.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/pages")
       }, callback);
     }
   }, {
     key: "fetchHotspots",
     value: function fetchHotspots(callback) {
-      SGN$f.CoreKit.request({
+      SGN$c.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id, "/hotspots")
       }, callback);
     }
@@ -4531,12 +4533,10 @@ var pagedPublication = {
 var pagedPublication_1 = pagedPublication.Viewer;
 var pagedPublication_2 = pagedPublication.Bootstrapper;
 
-var IncitoPublicationEventTracking, MicroEvent$a;
-MicroEvent$a = microevent;
+var IncitoPublicationEventTracking, MicroEvent$9;
+MicroEvent$9 = microevent;
 
-IncitoPublicationEventTracking =
-/*#__PURE__*/
-function () {
+IncitoPublicationEventTracking = /*#__PURE__*/function () {
   function IncitoPublicationEventTracking(eventTracker, details) {
     _classCallCheck(this, IncitoPublicationEventTracking);
 
@@ -4564,18 +4564,16 @@ function () {
   return IncitoPublicationEventTracking;
 }();
 
-MicroEvent$a.mixin(IncitoPublicationEventTracking);
+MicroEvent$9.mixin(IncitoPublicationEventTracking);
 var eventTracking$1 = IncitoPublicationEventTracking;
 
-var EventTracking$1, Incito, MicroEvent$b, Viewer$1;
+var EventTracking$1, Incito, MicroEvent$a, Viewer$1;
 Incito = incitoBrowser;
-MicroEvent$b = microevent;
+MicroEvent$a = microevent;
 EventTracking$1 = eventTracking$1;
 
 Viewer$1 = function () {
-  var Viewer =
-  /*#__PURE__*/
-  function () {
+  var Viewer = /*#__PURE__*/function () {
     function Viewer(el) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -4616,14 +4614,12 @@ Viewer$1 = function () {
   return Viewer;
 }.call(commonjsGlobal);
 
-MicroEvent$b.mixin(Viewer$1);
+MicroEvent$a.mixin(Viewer$1);
 var viewer$1 = Viewer$1;
 
 var Controls$1;
 
-var controls$1 = Controls$1 =
-/*#__PURE__*/
-function () {
+var controls$1 = Controls$1 = /*#__PURE__*/function () {
   function Controls(viewer) {
     var _this = this;
 
@@ -4676,24 +4672,14 @@ function () {
   return Controls;
 }();
 
-var incito = "query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!, $locale: LocaleCode, $time: DateTime, $featureLabels: [IncitoFeatureLabelInput!]) {\n  node(id: $id) {\n    ... on IncitoPublication {\n      id\n      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported, locale: $locale, time: $time, featureLabels: $featureLabels)\n    }\n  }\n}";
-
-var incito$1 = /*#__PURE__*/Object.freeze({
-    'default': incito
-});
-
-var require$$4 = getCjsExportFromNamespace(incito$1);
-
-var Bootstrapper$1, Controls$2, SGN$g, clientLocalStorage$2, schema, util$2;
+var Bootstrapper$1, Controls$2, SGN$d, clientLocalStorage$2, fetch$3, util$2;
+fetch$3 = crossFetch;
 util$2 = util_1;
-SGN$g = core;
+SGN$d = core;
 Controls$2 = controls$1;
 clientLocalStorage$2 = clientLocal;
-schema = require$$4;
 
-var bootstrapper$1 = Bootstrapper$1 =
-/*#__PURE__*/
-function () {
+var bootstrapper$1 = Bootstrapper$1 = /*#__PURE__*/function () {
   function Bootstrapper() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -4848,36 +4834,40 @@ function () {
   }, {
     key: "fetchDetails",
     value: function fetchDetails(id, callback) {
-      SGN$g.CoreKit.request({
+      SGN$d.CoreKit.request({
         url: "/v2/catalogs/".concat(this.options.id)
       }, callback);
     }
   }, {
     key: "fetchIncito",
     value: function fetchIncito(id, callback) {
-      SGN$g.GraphKit.request({
-        query: schema,
-        operationName: 'GetIncitoPublication',
-        variables: {
+      var res;
+      res = fetch$3(SGN$d.config.get('coreUrl') + '/v4/rpc/generate_incito_from_publication', {
+        method: 'post',
+        headers: {
+          'X-Api-Key': SGN$d.config.get('appKey'),
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
           id: id,
-          deviceCategory: 'DEVICE_CATEGORY_' + this.deviceCategory.toUpperCase(),
-          pixelRatio: this.pixelRatio,
-          pointer: 'POINTER_' + this.pointer.toUpperCase(),
-          orientation: 'ORIENTATION_' + this.orientation.toUpperCase(),
+          device_category: this.deviceCategory,
+          pointer: this.pointer,
+          orientation: this.orientation,
+          pixel_ratio: this.pixelRatio,
+          max_width: this.maxWidth,
+          versions_supported: this.versionsSupported,
+          locale_code: this.locale,
           time: this.time,
-          locale: this.locale,
-          maxWidth: this.maxWidth,
-          versionsSupported: this.versionsSupported,
-          featureLabels: this.anonymizeFeatureLabels(this.featureLabels)
-        }
-      }, function (err, res) {
-        if (err != null) {
-          callback(err);
-        } else if (res.errors && res.errors.length > 0) {
-          callback(util$2.error(new Error(), 'Graph request contained errors'));
-        } else {
-          callback(null, res.data.node.incito);
-        }
+          feature_labels: this.anonymizeFeatureLabels(this.featureLabels)
+        })
+      });
+      res.then(function (response) {
+        return response.json();
+      }).then(function (incito) {
+        callback(null, incito);
+      }).catch(function (err) {
+        callback(err);
       });
     }
   }, {
@@ -4889,7 +4879,7 @@ function () {
         throw util$2.error(new Error(), 'You need to supply valid Incito to create a viewer');
       }
 
-      viewer = new SGN$g.IncitoPublicationKit.Viewer(this.options.el, {
+      viewer = new SGN$d.IncitoPublicationKit.Viewer(this.options.el, {
         id: this.options.id,
         details: data.details,
         incito: data.incito,
@@ -4898,7 +4888,7 @@ function () {
       controls = new Controls$2(viewer);
       self = this; // Persist clicks on feature labels for later anonymization.
 
-      SGN$g.CoreUIKit.on(viewer.el, 'click', '.incito__view[data-feature-labels]', function () {
+      SGN$d.CoreUIKit.on(viewer.el, 'click', '.incito__view[data-feature-labels]', function () {
         var featureLabels;
         featureLabels = this.getAttribute('data-feature-labels').split(',');
         self.featureLabels = self.featureLabels.concat(featureLabels);
@@ -5299,9 +5289,7 @@ var gator = createCommonjsModule(function (module) {
 
 var OfferDetails;
 
-var offerDetails = OfferDetails =
-/*#__PURE__*/
-function () {
+var offerDetails = OfferDetails = /*#__PURE__*/function () {
   function OfferDetails(_ref) {
     var _ref$minWidth = _ref.minWidth,
         minWidth = _ref$minWidth === void 0 ? 300 : _ref$minWidth,
@@ -5388,16 +5376,14 @@ function () {
   return OfferDetails;
 }();
 
-var Gator, MicroEvent$c, Mustache$2, Popover, keyCodes$2, template;
-MicroEvent$c = microevent;
+var Gator, MicroEvent$b, Mustache$2, Popover, keyCodes$2, template;
+MicroEvent$b = microevent;
 Gator = gator;
 Mustache$2 = mustache;
 keyCodes$2 = keyCodes;
 template = "<div class=\"sgn-popover__background\" data-close></div>\n<div class=\"sgn-popover__menu\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#singleChoiceItems}}\n                <li data-index=\"{{index}}\">\n                    <p class=\"sgn-popover-item__title\">{{item.title}}</p>\n                    {{#item.subtitle}}\n                        <p class=\"sgn-popover-item__subtitle\">{{item.subtitle}}</p>\n                    {{/item.subtitle}}\n                </li>\n            {{/singleChoiceItems}}\n        </ul>\n    </div>\n</div>";
 
-Popover =
-/*#__PURE__*/
-function () {
+Popover = /*#__PURE__*/function () {
   function Popover() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -5529,7 +5515,7 @@ function () {
   return Popover;
 }();
 
-MicroEvent$c.mixin(Popover);
+MicroEvent$b.mixin(Popover);
 var popover = Popover;
 
 var Popover$1;
@@ -5588,44 +5574,42 @@ var coreUi_3 = coreUi.singleChoicePopover;
 var coreUi_4 = coreUi.on;
 var coreUi_5 = coreUi.off;
 
-var SGN$h, appKey, config$2, isBrowser, scriptEl, session$2, trackId;
+var SGN$e, appKey, config$2, isBrowser, scriptEl, session$2, trackId;
 isBrowser = util_1.isBrowser;
-SGN$h = core; // Expose storage backends.
+SGN$e = core; // Expose storage backends.
 
-SGN$h.storage = {
+SGN$e.storage = {
   local: clientLocal,
   session: clientSession,
   cookie: clientCookie
 }; // Expose the different kits.
 
-SGN$h.AssetsKit = assets;
-SGN$h.EventsKit = events;
-SGN$h.GraphKit = graph;
-SGN$h.CoreKit = core$1;
-SGN$h.PagedPublicationKit = pagedPublication;
-SGN$h.IncitoPublicationKit = incitoPublication;
-SGN$h.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
+SGN$e.EventsKit = events;
+SGN$e.CoreKit = core$1;
+SGN$e.PagedPublicationKit = pagedPublication;
+SGN$e.IncitoPublicationKit = incitoPublication;
+SGN$e.CoreUIKit = coreUi; // Set the core session from the cookie store if possible.
 
-session$2 = SGN$h.storage.cookie.get('session');
+session$2 = SGN$e.storage.cookie.get('session');
 
 if (typeof session$2 === 'object') {
-  SGN$h.config.set({
+  SGN$e.config.set({
     coreSessionToken: session$2.token,
     coreSessionClientId: session$2.client_id
   });
 }
 
-SGN$h.client = function () {
+SGN$e.client = function () {
   var id;
-  id = SGN$h.storage.local.get('client-id');
+  id = SGN$e.storage.local.get('client-id');
 
   if (id != null ? id.data : void 0) {
     id = id.data;
   }
 
   if (id == null) {
-    id = SGN$h.util.uuid();
-    SGN$h.storage.local.set('client-id', id);
+    id = SGN$e.util.uuid();
+    SGN$e.storage.local.set('client-id', id);
   }
 
   return {
@@ -5647,16 +5631,16 @@ if (isBrowser()) {
     }
 
     if (trackId != null) {
-      config$2.eventTracker = new SGN$h.EventsKit.Tracker({
+      config$2.eventTracker = new SGN$e.EventsKit.Tracker({
         trackId: trackId
       });
     }
 
-    SGN$h.config.set(config$2);
+    SGN$e.config.set(config$2);
   }
 }
 
-var coffeescript = SGN$h;
+var coffeescript = SGN$e;
 
 export default coffeescript;
 //# sourceMappingURL=sgn-sdk.es.js.map
