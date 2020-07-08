@@ -1,8 +1,0 @@
-query GetIncitoPublication($id: ID!, $deviceCategory: DeviceCategory!, $orientation: Orientation!, $pixelRatio: Float!, $pointer: Pointer!, $maxWidth: Int!, $versionsSupported: [String!]!, $locale: LocaleCode, $time: DateTime, $featureLabels: [IncitoFeatureLabelInput!]) {
-  node(id: $id) {
-    ... on IncitoPublication {
-      id
-      incito(deviceCategory: $deviceCategory, orientation: $orientation, pixelRatio: $pixelRatio, pointer: $pointer, maxWidth: $maxWidth, versionsSupported: $versionsSupported, locale: $locale, time: $time, featureLabels: $featureLabels)
-    }
-  }
-}
