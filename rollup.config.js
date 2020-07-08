@@ -4,7 +4,6 @@ import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 import babel from 'rollup-plugin-babel';
-import { string } from 'rollup-plugin-string';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
 
@@ -37,7 +36,7 @@ const bundles = [
 
 const getBabelPlugin = () =>
   babel({
-    exclude: ['node_modules/**', '*.graphql'],
+    exclude: ['node_modules/**'],
     extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.coffee']
   });
 
@@ -54,9 +53,6 @@ let configs = bundles.reduce(
         json(),
         replace({
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
         }),
         coffeescript(),
         commonjs({
@@ -75,9 +71,6 @@ let configs = bundles.reduce(
         json(),
         replace({
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
         }),
         coffeescript(),
         commonjs({
@@ -100,9 +93,6 @@ let configs = bundles.reduce(
         json(),
         replace({
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
         }),
         coffeescript(),
         resolve({
@@ -130,9 +120,6 @@ let configs = bundles.reduce(
         json(),
         replace({
           'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
         }),
         coffeescript(),
         resolve({
