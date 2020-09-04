@@ -1,0 +1,31 @@
+#incito__details {
+    background: black;
+    display: none;
+    position: absolute;
+    max-height: 100px;
+    z-index: 1;
+    box-shadow: 3px 3px 3px 3px #00000000;
+    border-width: 0px 4px 4px 4px;
+    border-style: solid;
+    border-color: black;
+    padding: 1px 7px 1px 7px;
+}
+
+.incito__details__title {
+    font-size: 17;
+    padding: 3px 0;
+    color: white;
+}
+
+.incito__details__description {
+    font-size: 13;
+    padding: 3px 0;
+    color: #ffffffba;
+}
+
+.incito__details__button {
+    font-family: consolas;
+    padding: 3px 0;
+    text-decoration: none;
+    color: rgb(255, 85, 0);
+}
