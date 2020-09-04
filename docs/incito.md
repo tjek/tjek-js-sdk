@@ -22,7 +22,7 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
 
 1. **Compile JS found in `npm`:**
 
-    In case you include our code and compile/minify wiht your application code, you will need an extra step that will configure the SDK with your app key and track id:
+    In case you include our code and compile/minify with your application code, you will need an extra step that will configure the SDK with your app key and track id:
 
     ```JS
     const shopgunAppConfig = {
