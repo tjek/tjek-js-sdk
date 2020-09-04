@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Incitos are generated via code utlizing [Shopgun SDK](https://www.npmjs.com/package/shopgun-sdk). In short, the integration code consists of two major steps:
+Incitos are generated via code utilizing [Shopgun SDK](https://www.npmjs.com/package/shopgun-sdk). In short, the integration code consists of two major steps:
 
 - Fetch catalog model/payload to display from our API
 - Generate Incito (view) under specified HTML element
 - Handle Incito interactivity
 
-_**Note:** Our implementationg does **not** generate `<iframe>` elements making integation way easier for web developers. This, of course, presents challenges that are discussed bellow._
+_**Note:** Our implementation does **not** generate `<iframe>` elements making integration way easier for web developers. This, of course, presents challenges that are discussed bellow._
 
 ---
 
@@ -43,7 +43,7 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
     <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
     ```
 
-    You may use our distribution or choose to host the code yourself. Should you choose to use our distrubution remember to point to the latest working version.
+    You may use our distribution or choose to host the code yourself. Should you choose to use our distribution remember to point to the latest working version.
 
 ### **(2)** Fetch catalog
 
@@ -73,9 +73,9 @@ const catalogs = await SGN.CoreKit.request({
 });
 ```
 
-### **(3)** Generate Incito bootstraper
+### **(3)** Generate Incito bootstrapper
 
-Given the catalog payload from the previous step, and an HTML node that is going to act as the root of the Incito view, next up is generating an Incito bootstraper:
+Given the catalog payload from the previous step, and an HTML node that is going to act as the root of the Incito view, next up is generating an Incito bootstrapper:
 
 ```JS
 const incitoRootElement = document.querySelector('#incito__publication');
@@ -129,7 +129,7 @@ In this, optional, step, a number of enchantments are presented:
 
 1. CSS issues:
 
-    One of the most common issues due to the nature of the Incito view is CSS properties bleeding into the Incito view. It is adviced to compare the Incito view in our CMS/Studio and compare it to your integration to find such errors.
+    One of the most common issues due to the nature of the Incito view is CSS properties bleeding into the Incito view. It is advised to compare the Incito view in our CMS/Studio and compare it to your integration to find such errors.
 
 ## Examples
 
