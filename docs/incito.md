@@ -14,7 +14,7 @@ _**Note:** Our implementationg does **not** generate `<iframe>` elements making 
 
 ## Quick guide
 
-In this section the steps required to display an Incito from start to finish are presented. The more visual types may check the examples under the [examples](./examples/) folder.
+In this section the steps required to display an Incito from start to finish are presented. The more visual types may check the examples under the [examples](./incito_examples/) folder.
 
 ### **(1)** Include Shopgun SDK
 
@@ -133,7 +133,7 @@ In this, optional, step, a number of enchantments are presented:
 
 ## Examples
 
-Under [the examples folder](./examples/) are two HTML files ([index.html](./examples/index.html) & [index-pro.html](./examples/index-pro.html)) that reference two different Javascript files ([incito-sample.js](./examples/js/incito-sample.js) & [incito.js](./examples/js/incito.js)) respectively.
+Under [the examples folder](./incito_examples/) are two HTML files ([index.html](./incito_examples/index.html) & [index-pro.html](./incito_examples/index-pro.html)) that reference two different Javascript files ([incito-sample.js](./incito_examples/js/incito-sample.js) & [incito.js](.incito_/examples/js/incito.js)) respectively.
 
 **NOTE:** Both HTML and JS files require some configuration before they can work; There are TODOs inside them asking you to fill in your information (`app-id`, `track-id`, `business-id` & `catalog-id`).
 
