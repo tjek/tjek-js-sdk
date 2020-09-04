@@ -131,6 +131,8 @@ In this, optional, step, a number of enchantments are presented:
 
     One of the most common issues due to the nature of the Incito view is CSS properties bleeding into the Incito view. It is advised to compare the Incito view in our CMS/Studio and compare it to your integration to find such errors.
 
+---
+
 ## Examples
 
 Under [the examples folder](./incito_examples/) are two HTML files ([index.html](./incito_examples/index.html) & [index-pro.html](./incito_examples/index-pro.html)) that reference two different Javascript files ([incito-sample.js](./incito_examples/js/incito-sample.js) & [incito.js](./incito_examples/js/incito.js)) respectively.
