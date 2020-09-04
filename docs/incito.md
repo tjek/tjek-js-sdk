@@ -133,7 +133,7 @@ In this, optional, step, a number of enchantments are presented:
 
 ## Examples
 
-Under [the examples folder](./incito_examples/) are two HTML files ([index.html](./incito_examples/index.html) & [index-pro.html](./incito_examples/index-pro.html)) that reference two different Javascript files ([incito-sample.js](./incito_examples/js/incito-sample.js) & [incito.js](.incito_/examples/js/incito.js)) respectively.
+Under [the examples folder](./incito_examples/) are two HTML files ([index.html](./incito_examples/index.html) & [index-pro.html](./incito_examples/index-pro.html)) that reference two different Javascript files ([incito-sample.js](./incito_examples/js/incito-sample.js) & [incito.js](./incito_examples/js/incito.js)) respectively.
 
 **NOTE:** Both HTML and JS files require some configuration before they can work; There are TODOs inside them asking you to fill in your information (`app-id`, `track-id`, `business-id` & `catalog-id`).
 
