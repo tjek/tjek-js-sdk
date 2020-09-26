@@ -127,43 +127,43 @@ var viewer = bootstrapper.createViewer(data, {
 
 ### Version 2.3.16
 
-- Fix broken PagedPublicationViewer startup
+- Fix broken PagedPublicationViewer startup.
 
 ### Version 2.3.15
 
-- Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
+- Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997.
 
 ### Version 2.3.8
 
-- Roll back to core-js 2
+- Roll back to core-js 2.
 
 ### Version 2.3.7
 
-- Update verso-browser and incito-browser
-- Fix an issue where polyfills were missing
+- Update verso-browser and incito-browser.
+- Fix an issue where polyfills were missing.
 
 ### Version 2.3.0
 
-- Introduce support for incito opened event in eventTracker
-- Use new incito opened event in IncitoPublicationKit
+- Introduce support for incito opened event in eventTracker.
+- Use new incito opened event in IncitoPublicationKit.
 - Add option to IncitoPublicationKit.Viewer to pass in a pagedPublicationId to be included in the incito opened event, this should be used when a user is known to already have seen the Paged Publication version of an Incito Publication.
 
 ### Version 2.2.11
 
-- Use cross-fetch library for making requests in browsers and node.js
-- Relaxed eventTracker requirement for PagedPublicationKit
+- Use cross-fetch library for making requests in browsers and node.js.
+- Relaxed eventTracker requirement for PagedPublicationKit.
 
 ### Version 2.2.8
 
-- Updated progress indicator for IncitoPublicationKit to be more visible and more like the one in PagedPublicationKit
+- Updated progress indicator for IncitoPublicationKit to be more visible and more like the one in PagedPublicationKit.
 
 ### Version 2.2.5
 
-- Set async to true for requests
+- Set async to true for requests.
 
 ### Version 2.2.4
 
-- Added ability to use EventsKit tracker in a node.js context
+- Added ability to use EventsKit tracker in a node.js context.
 
 ### Version 2.2.3
 
@@ -176,20 +176,20 @@ var viewer = bootstrapper.createViewer(data, {
 ### Version 2.1.0
 
 - Updated Incito library. Now, it's up to you to add event delegation to Incito rather than binding e.g. `view_clicked` to the Incito viewer. This gives you way more flexibility
-- Split JS and CSS into separate files for Incito Publication demo
+- Split JS and CSS into separate files for Incito Publication demo.
 - Removed `util.isElementInViewport`
 
 ### Version 2.0.9
 
 - Added `margins` parameter for `util.isElementInViewport`
-- Updated Incito library
+- Updated Incito library.
 
 ### Version 2.0.0
 
 - PagedPublicationKit
-  - Refactored `SGN.PagedPublicationKit.initialize` to `SGN.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer
+  - Refactored `SGN.PagedPublicationKit.initialize` to `SGN.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer.
   - Made hotspots into a function instead of having a setting called `showHotspots`
-- Introduced IncitoPublicationKit
-- Removed unused files
-- Fixed incorrect positioning of hotspots and hotspot picker in Internet Explorer
-- Added CoreUIKit to core UI components such as a popover
+- Introduced IncitoPublicationKit.
+- Removed unused files.
+- Fixed incorrect positioning of hotspots and hotspot picker in Internet Explorer.
+- Added CoreUIKit to core UI components such as a popover.
