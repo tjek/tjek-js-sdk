@@ -40,8 +40,17 @@ class PagedPublicationPageSpread
         pageCount = pages.length
         imageLoads = 0
 
+        maxPageWidth = el.clientWidth * (window.devicePixelRatio or 1)
+        if @options.pageMode is "double"
+            maxPageWidth = maxPageWidth / 2
+
+        useLargeImage = maxPageWidth > 700
+
         pages.forEach (page, i) =>
             image = page.images.medium
+            if useLargeImage
+                image = page.images.large
+
             pageEl = document.createElement 'div'
             loaderEl = document.createElement 'div'
 
