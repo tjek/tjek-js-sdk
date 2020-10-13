@@ -4,9 +4,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 import babel from 'rollup-plugin-babel';
-import { string } from 'rollup-plugin-string';
 import replace from 'rollup-plugin-replace';
-import json from 'rollup-plugin-json';
 
 const bundles = [
   {
@@ -18,8 +16,8 @@ const bundles = [
       jsES: path.join(__dirname, 'dist', 'sgn-sdk.es.js'), // ES Module
       // Inclusive bundles(external `require`s resolved), for browsers etc.
       jsBrowser: path.join(__dirname, 'dist', 'sgn-sdk.js'),
-      jsBrowserMin: path.join(__dirname, 'dist', 'sgn-sdk.min.js')
-    }
+      jsBrowserMin: path.join(__dirname, 'dist', 'sgn-sdk.min.js'),
+    },
   },
   {
     name: 'SGNTracker',
@@ -31,15 +29,15 @@ const bundles = [
       jsES: path.join(__dirname, 'kits', 'events', 'tracker.mjs'), // ES Module
       // Inclusive bundles(external `require`s resolved), for browsers etc.
       jsBrowser: path.join(__dirname, 'kits', 'events', 'tracker.js'),
-      jsBrowserMin: path.join(__dirname, 'kits', 'events', 'tracker.min.js')
-    }
-  }
+      jsBrowserMin: path.join(__dirname, 'kits', 'events', 'tracker.min.js'),
+    },
+  },
 ];
 
 const getBabelPlugin = ({ useBuiltIns = 'usage' }) =>
   babel({
     babelrc: false,
-    exclude: ['node_modules/**', '*.graphql'],
+    exclude: ['node_modules/**'],
     extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.coffee'],
     presets: [
       [
@@ -47,14 +45,14 @@ const getBabelPlugin = ({ useBuiltIns = 'usage' }) =>
         {
           targets: {
             browsers: ['> 3%', 'IE 11'],
-            node: 8
+            node: 8,
           },
           corejs: useBuiltIns ? 2 : undefined,
           useBuiltIns,
-          exclude: ['transform-typeof-symbol']
-        }
-      ]
-    ]
+          exclude: ['transform-typeof-symbol'],
+        },
+      ],
+    ],
   });
 
 let configs = bundles.reduce(
@@ -64,43 +62,35 @@ let configs = bundles.reduce(
       input,
       output: {
         file: outputs.jsCJS,
-        format: 'cjs'
+        format: 'cjs',
       },
       plugins: [
-        json(),
         replace({
-          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         }),
         coffeescript(),
         commonjs({
-          extensions: ['.js', '.coffee']
+          extensions: ['.js', '.coffee'],
         }),
-        getBabelPlugin({ useBuiltIns })
-      ]
+        getBabelPlugin({ useBuiltIns }),
+      ],
     },
     {
       input,
       output: {
         file: outputs.jsES,
-        format: 'es'
+        format: 'es',
       },
       plugins: [
-        json(),
         replace({
-          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         }),
         coffeescript(),
         commonjs({
-          extensions: ['.js', '.coffee']
+          extensions: ['.js', '.coffee'],
         }),
-        getBabelPlugin({ useBuiltIns })
-      ]
+        getBabelPlugin({ useBuiltIns }),
+      ],
     },
     {
       input,
@@ -109,28 +99,24 @@ let configs = bundles.reduce(
         format: 'umd',
         name: 'SGN',
         amd: {
-          define: 'rollupNeedsAnOptionToDisableAMDInUMD'
-        }
+          define: 'rollupNeedsAnOptionToDisableAMDInUMD',
+        },
       },
       plugins: [
-        json(),
         replace({
-          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         }),
         coffeescript(),
         resolve({
           mainFields: ['jsnext:main', 'main'],
           browser: true,
-          preferBuiltins: true
+          preferBuiltins: true,
         }),
         commonjs({
-          extensions: ['.js', '.coffee']
+          extensions: ['.js', '.coffee'],
         }),
-        getBabelPlugin({ useBuiltIns })
-      ]
+        getBabelPlugin({ useBuiltIns }),
+      ],
     },
     {
       input,
@@ -139,30 +125,26 @@ let configs = bundles.reduce(
         format: 'umd',
         name,
         amd: {
-          define: 'rollupNeedsAnOptionToDisableAMDInUMD'
-        }
+          define: 'rollupNeedsAnOptionToDisableAMDInUMD',
+        },
       },
       plugins: [
-        json(),
         replace({
-          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        string({
-          include: 'lib/graphql/*'
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         }),
         coffeescript(),
         resolve({
           mainFields: ['jsnext:main', 'main'],
           browser: true,
-          preferBuiltins: true
+          preferBuiltins: true,
         }),
         commonjs({
-          extensions: ['.js', '.coffee']
+          extensions: ['.js', '.coffee'],
         }),
         getBabelPlugin({ useBuiltIns }),
-        terser()
-      ]
-    }
+        terser(),
+      ],
+    },
   ],
   []
 );

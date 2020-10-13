@@ -4,9 +4,7 @@ import * as storageClientLocal from './storage/client-local'
 import * as storageClientSession from './storage/client-session'
 import * as storageClientCookie from './storage/client-cookie'
 
-import * as AssetsKit from './kits/assets'
 import * as EventsKit from './kits/events'
-import * as GraphKit from './kits/graph'
 import * as CoreKit from './kits/core'
 import * as PagedPublicationKit from './kits/paged-publication'
 import * as IncitoPublicationKit from './kits/incito-publication'
@@ -19,9 +17,7 @@ SGN.storage =
     cookie: storageClientCookie
 
 # Expose the different kits.
-SGN.AssetsKit = AssetsKit
 SGN.EventsKit = EventsKit
-SGN.GraphKit = GraphKit
 SGN.CoreKit = CoreKit
 SGN.PagedPublicationKit = PagedPublicationKit
 SGN.IncitoPublicationKit = IncitoPublicationKit

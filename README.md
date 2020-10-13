@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.1.4.min.css"
+  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.css"
   rel="stylesheet"
   type="text/css"
 />
 <script
-  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.1.4.min.js"
+  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js"
   id="sgn-sdk"
   data-app-key="YOUR_APP_KEY"
   data-track-id="YOUR_TRACK_ID"
@@ -73,6 +73,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 - [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+
+### Version 3.3.1
+
+- PagedPublicationKit: Will now use zoom-size images for pages prior to zooming in, when the physical pixel width of the page would be presented as over 700 pixels wide.
 
 ### Version 3.1.1
 

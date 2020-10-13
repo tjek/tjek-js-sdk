@@ -2,9 +2,7 @@ import { error, getDeviceCategory, getPointer, getOrientation } from '../../util
 import SGN from '../../core'
 import Controls from './controls'
 import Viewer from './viewer'
-import schema from '../../../graphql/incito.graphql'
 import * as clientLocalStorage from '../../storage/client-local'
-import * as clientSessionStorage from '../../storage/client-session'
 
 export default class Bootstrapper
     constructor: (@options = {}) ->
@@ -120,29 +118,35 @@ export default class Bootstrapper
         return
 
     fetchIncito: (id, callback) ->
-        SGN.GraphKit.request
-            query: schema
-            operationName: 'GetIncitoPublication'
-            variables:
+        res = fetch SGN.config.get('coreUrl') + '/v4/rpc/generate_incito_from_publication',
+            method: 'post'
+            headers:
+                'X-Api-Key': SGN.config.get 'appKey'
+                'Content-Type': 'application/json'
+                'Accept': 'application/json'
+            body: JSON.stringify
                 id: id
-                deviceCategory: 'DEVICE_CATEGORY_' + @deviceCategory.toUpperCase()
-                pixelRatio: @pixelRatio
-                pointer: 'POINTER_' + @pointer.toUpperCase()
-                orientation: 'ORIENTATION_' + @orientation.toUpperCase()
+                device_category: @deviceCategory
+                pointer: @pointer
+                orientation: @orientation
+                pixel_ratio: @pixelRatio
+                max_width: @maxWidth
+                versions_supported: @versionsSupported
+                locale_code: @locale
                 time: @time
-                locale: @locale
-                maxWidth: @maxWidth
-                versionsSupported: @versionsSupported
-                featureLabels: @anonymizeFeatureLabels @featureLabels
-        , (err, res) ->
-            if err?
+                feature_labels: @anonymizeFeatureLabels @featureLabels
+        
+        res
+            .then (response) ->
+                response.json()
+            .then (incito) ->
+                callback null, incito
+
+                return
+            .catch (err) ->
                 callback err
-            else if res.errors and res.errors.length > 0
-                callback error(new Error(), 'Graph request contained errors')
-            else
-                callback null, res.data.node.incito
-            
-            return
+
+                return
 
         return
     

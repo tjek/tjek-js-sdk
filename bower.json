@@ -8,8 +8,7 @@
   "description": "ShopGun SDK for JavaScript.",
   "keywords": [
     "shopgun",
-    "shopping",
-    "graphql"
+    "shopping"
   ],
   "license": "MIT",
   "ignore": [

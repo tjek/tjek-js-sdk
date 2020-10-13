@@ -11,10 +11,7 @@ Config = class Config
         'coreSessionToken',
         'coreSessionClientId',
         'coreUrl',
-        'graphUrl',
-        'eventsTrackUrl',
-        'eventsPulseUrl',
-        'assetsFileUploadUrl'
+        'eventsTrackUrl'
     ]
 
     constructor: ->
