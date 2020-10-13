@@ -41,6 +41,7 @@ class PagedPublicationPageSpreads
             id = "#{pageMode}-#{i}"
             pageSpread = new PageSpread
                 width: width
+                pageMode: pageMode
                 maxZoomScale: maxZoomScale
                 pages: pages
                 id: id
