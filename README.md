@@ -74,6 +74,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 3.3.3
+
+- IncitoPublicationKit: Updated `incito-browser` to 1.1.37 
+
 ### Version 3.3.1
 
 - PagedPublicationKit: Will now use zoom-size images for pages prior to zooming in, when the physical pixel width of the page would be presented as over 700 pixels wide.
