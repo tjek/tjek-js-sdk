@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.css"
+  href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.3.min.css"
   rel="stylesheet"
   type="text/css"
 />
 <script
-  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js"
+  src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.3.min.js"
   id="sgn-sdk"
   data-app-key="YOUR_APP_KEY"
   data-track-id="YOUR_TRACK_ID"
