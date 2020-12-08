@@ -16,6 +16,7 @@ function putObject (options) {
         ContentType: options.contentType
     }, function (err) {
         if (err) {
+            console.error(err);
             console.log('Could not upload ' + options.key);
         } else {
             console.log('Uploaded ' + options.key);
