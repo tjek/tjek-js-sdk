@@ -29,9 +29,15 @@
                 top: document.querySelector('#incito-publication__top'),
                 details: {
                     root: document.querySelector('#incito__details'),
-                    title: document.querySelector('#incito__details > .incito__details__title'),
-                    description: document.querySelector('#incito__details > .incito__details__description'),
-                    button: document.querySelector('#incito__details > .incito__details__button')
+                    title: document.querySelector(
+                        '#incito__details > .incito__details__title'
+                    ),
+                    description: document.querySelector(
+                        '#incito__details > .incito__details__description'
+                    ),
+                    button: document.querySelector(
+                        '#incito__details > .incito__details__button'
+                    )
                 }
             }
         };
@@ -50,7 +56,7 @@
                 console.error(err);
             }
         });
-    }
+    };
 
     var incitoPublicationViewer;
     /**
@@ -61,14 +67,16 @@
     var catalogId = 'YOUR_CATALOG_ID';
     var dealerId = 'YOUR_BUSINESS_ID';
     var fetchPublication = function (callback) {
-        SGN.CoreKit.request({
-            url: '/v2/catalogs/' + catalogId,
-            qs: {
-                dealer_id: dealerId
-            }
-        }, callback);
+        SGN.CoreKit.request(
+            {
+                url: '/v2/catalogs/' + catalogId,
+                qs: {
+                    dealer_id: dealerId
+                }
+            },
+            callback
+        );
     };
-
 
     /**
      * Use to visualize Incito scrolling progress
@@ -76,7 +84,7 @@
      * @param {progress [0-100]} progress
      */
     var trackViewProgress = function (progress) {
-        console.info("loading progress " + Math.ceil(progress) + "%");
+        console.info('loading progress ' + Math.ceil(progress) + '%');
     };
 
     /**
@@ -102,36 +110,45 @@
         trackViewProgress(0);
 
         // Fetch Incito payload
-        incitoPublication.fetchIncito(publication.incito_publication_id, function (err, incito) {
-            if (!err) {
-                // Generate Incito viewer
-                incitoPublicationViewer = incitoPublication.createViewer({
-                    details: publication,
-                    incito: incito
-                });
+        incitoPublication.fetchIncito(
+            publication.incito_publication_id,
+            function (err, incito) {
+                if (!err) {
+                    // Generate Incito viewer
+                    incitoPublicationViewer = incitoPublication.createViewer({
+                        details: publication,
+                        incito: incito
+                    });
 
-                // Bind progress event
-                incitoPublicationViewer.bind('progress', function (navEvent) {
-                    trackViewProgress(navEvent.progress);
-                });
+                    // Bind progress event
+                    incitoPublicationViewer.bind(
+                        'progress',
+                        function (navEvent) {
+                            trackViewProgress(navEvent.progress);
+                        }
+                    );
 
-                incitoPublicationViewer.start();
+                    incitoPublicationViewer.start();
 
-                // Bind clicks on offers
-                var lastClickedOffer = false;
-                SGN.CoreUIKit.on(incitoRootElement, 'click', '.incito__view[data-role="offer"]', function (e) {
-                    e.preventDefault();
+                    // Bind clicks on offers
+                    var lastClickedOffer = false;
+                    SGN.CoreUIKit.on(
+                        incitoRootElement,
+                        'click',
+                        '.incito__view[data-role="offer"]',
+                        function (e) {
+                            e.preventDefault();
 
-                    var id = this.getAttribute('data-id');
+                            var id = this.getAttribute('data-id');
 
-                    // Get metadata on offer
-                    var meta = incitoPublicationViewer.incito.ids[id];
+                            // Get metadata on offer
+                            var meta = incitoPublicationViewer.incito.ids[id];
 
-                    if (!meta['tjek.offer.v1']) {
-                        return; // No metadata for offer
-                    }
+                            if (!meta['tjek.offer.v1']) {
+                                return; // No metadata for offer
+                            }
 
-                    /*
+                            /*
                         The `meta` object can be customised to include any information on the offer you are clicking
                         By default, it has the following structure:
                         {
@@ -154,59 +171,95 @@
                         Below there are two examples, showcasing opening a link to an offer in a new tab and displaying a detail view under it
                      */
 
-                    meta = meta['tjek.offer.v1'];
-                    var details = elements.incito.details;
+                            meta = meta['tjek.offer.v1'];
+                            var details = elements.incito.details;
 
-                    // Example A: Update a detail view and attach it under the offer view
-                    // NOTE: There are some CSS issues here and the detail view is hidden cross-section
-                    if (lastClickedOffer == this && details.root.style.display != 'none') {
-                        details.root.style.display = 'none';
-                    } else {
-                        lastClickedOffer = this;
-                        details.title.innerHTML = meta.title;
-                        details.description.innerHTML = meta.description || 'Placeholder description of the product(s)';
-                        details.button.href = meta.ids[0].value;
-                        details.root.style.display = 'block';
-                        this.parentNode.insertBefore(details.root, this.nextSibling);
+                            // Example A: Update a detail view and attach it under the offer view
+                            // NOTE: There are some CSS issues here and the detail view is hidden cross-section
+                            if (
+                                lastClickedOffer == this &&
+                                details.root.style.display != 'none'
+                            ) {
+                                details.root.style.display = 'none';
+                            } else {
+                                lastClickedOffer = this;
+                                details.title.innerHTML = meta.title;
+                                details.description.innerHTML =
+                                    meta.description ||
+                                    'Placeholder description of the product(s)';
+                                details.button.href = meta.ids[0].value;
+                                details.root.style.display = 'block';
+                                this.parentNode.insertBefore(
+                                    details.root,
+                                    this.nextSibling
+                                );
 
-                        elements.incito.root.insertBefore(details.root, null);
-                        details.root.style.width = (Number(this.style.width.replace('px', '')) - 22) + "px"; // Subtract border + padding
-                        details.root.style.left = "calc(" + [this.style.left, this.parentNode.offsetLeft + "px"].join(' + ') + ")";
-                        details.root.style.top = "calc(" + [this.style.top, this.style.height, this.parentNode.offsetTop + "px"].join(' + ') + ")";
-                    }
+                                elements.incito.root.insertBefore(
+                                    details.root,
+                                    null
+                                );
+                                details.root.style.width =
+                                    Number(this.style.width.replace('px', '')) -
+                                    22 +
+                                    'px'; // Subtract border + padding
+                                details.root.style.left =
+                                    'calc(' +
+                                    [
+                                        this.style.left,
+                                        this.parentNode.offsetLeft + 'px'
+                                    ].join(' + ') +
+                                    ')';
+                                details.root.style.top =
+                                    'calc(' +
+                                    [
+                                        this.style.top,
+                                        this.style.height,
+                                        this.parentNode.offsetTop + 'px'
+                                    ].join(' + ') +
+                                    ')';
+                            }
 
-                    // Another example would be to NOT set a detail view and just open a new link like so:
-                    // window.open(meta.ids[0].value, '_blank');
-                });
-                setTimeout(function() {
-                    var selectorA = '.incito__view[data-role="offer"] > div > div.incito__view.incito__flex-layout-view > div:first-child > p:last-child';
-                    var selectorB = '.incito__view[data-role="offer"] > div > div > p:last-child';
-                    var selector = [selectorA, selectorB].join(', ');
-                    learnMoreButtons = $('.incito__view[data-role="offer"] > div > div.incito__view.incito__flex-layout-view > div:first-child > p:last-child');
-                    learnMoreButtons = $(selector);
-                    learnMoreButtons.each(function () {
-                        var btn = $(this);
-                        // Something to filter our false positives
-                        if (!/\D/.test(btn.text()) && btn.text().length === 7) {
-                            btn.text('L\u00C6R MERE');
-                            btn.css('background-color', 'black');
-                            btn.css('color', '#FFFFFF');
-                            btn.css('padding', '2px');
+                            // Another example would be to NOT set a detail view and just open a new link like so:
+                            // window.open(meta.ids[0].value, '_blank');
                         }
-                    });
-                }, 1000);
+                    );
+                    setTimeout(function () {
+                        var selectorA =
+                            '.incito__view[data-role="offer"] > div > div.incito__view.incito__flex-layout-view > div:first-child > p:last-child';
+                        var selectorB =
+                            '.incito__view[data-role="offer"] > div > div > p:last-child';
+                        var selector = [selectorA, selectorB].join(', ');
+                        learnMoreButtons = $(
+                            '.incito__view[data-role="offer"] > div > div.incito__view.incito__flex-layout-view > div:first-child > p:last-child'
+                        );
+                        learnMoreButtons = $(selector);
+                        learnMoreButtons.each(function () {
+                            var btn = $(this);
+                            // Something to filter our false positives
+                            if (
+                                !/\D/.test(btn.text()) &&
+                                btn.text().length === 7
+                            ) {
+                                btn.text('L\u00C6R MERE');
+                                btn.css('background-color', 'black');
+                                btn.css('color', '#FFFFFF');
+                                btn.css('padding', '2px');
+                            }
+                        });
+                    }, 1000);
 
-                for (var i = 0; i < learnMoreButtons.length; i++) {
-                    if (/\D/.test(learnMoreButtons[i].innerHTML)) {
+                    for (var i = 0; i < learnMoreButtons.length; i++) {
+                        if (/\D/.test(learnMoreButtons[i].innerHTML)) {
+                        }
                     }
+                } else {
+                    console.error('Error loading incito:');
+                    console.error(err);
                 }
-        } else {
-                console.error('Error loading incito:');
-                console.error(err);
             }
-        });
+        );
     };
 
     // Expose loadIncito
-    window.shopgun = { loadIncito };
+    window.shopgun = {loadIncito};
 })();
