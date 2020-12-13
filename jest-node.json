@@ -1,20 +1,11 @@
 {
-	"testEnvironment": "node",
-	"moduleFileExtensions": [
-		"js",
-		"json",
-		"coffee",
-		"litcoffee",
-		"coffee.md"
-	],
-	"transform": {
-		"coffee|litcoffee|coffee.md": "./jest-coffeescript"
-	},
-	"testRegex": "(/__tests__/.*|(\\.|/)(test|spec|test-node))\\.coffee$",
-	"testPathIgnorePatterns": [
-		"__tests__?/chrome/.*\\.(coffee|litcoffee|coffee.md)$",
-		"node_modules",
-		"fixtures",
-		"dist"
-	]
+    "testEnvironment": "node",
+    "moduleFileExtensions": ["js", "json"],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec|test-node))\\.js$",
+    "testPathIgnorePatterns": [
+        "__tests__?/chrome/.*\\.(js)$",
+        "node_modules",
+        "fixtures",
+        "dist"
+    ]
 }

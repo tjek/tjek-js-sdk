@@ -7,21 +7,24 @@ var bucket = 'sgn-js-sdk';
 
 AWS.config.credentials = credentials;
 
-function putObject (options) {
-    new AWS.S3().putObject({
-        Bucket: bucket,
-        Key: options.key,
-        Body: fs.readFileSync(options.bodyPath).toString(),
-        ACL: 'public-read',
-        ContentType: options.contentType
-    }, function (err) {
-        if (err) {
-            console.error(err);
-            console.log('Could not upload ' + options.key);
-        } else {
-            console.log('Uploaded ' + options.key);
+function putObject(options) {
+    new AWS.S3().putObject(
+        {
+            Bucket: bucket,
+            Key: options.key,
+            Body: fs.readFileSync(options.bodyPath).toString(),
+            ACL: 'public-read',
+            ContentType: options.contentType
+        },
+        (err) => {
+            if (err) {
+                console.error(err);
+                console.log('Could not upload ' + options.key);
+            } else {
+                console.log('Uploaded ' + options.key);
+            }
         }
-    });
+    );
 }
 
 putObject({
