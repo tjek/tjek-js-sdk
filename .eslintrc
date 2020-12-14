@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "jest": true,
+        "node": true,
+        "es6": true
+    },
+    "globals": {
+        "page": true
+    },
+    "extends": ["eslint:recommended", "prettier"],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 12
+    },
+    "rules": {
+        "no-empty": ["error", {"allowEmptyCatch": true}]
+    }
+}

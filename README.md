@@ -74,6 +74,11 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 3.4.0
+* Internal refactor to vanilla JS
+
+  No breaking changes anticipated but a minor version bump to avoid automagic patches, just in case.
+
 ### Version 3.3.3
 
 - IncitoPublicationKit: Updated `incito-browser` to 1.1.37 

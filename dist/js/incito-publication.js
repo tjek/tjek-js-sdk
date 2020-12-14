@@ -1,5 +1,5 @@
-(function () {    
-    function IncitoPublication (options) {
+(function () {
+    function IncitoPublication(options) {
         this.options = options || {};
         this.popover = null;
         this.detailsId = null;
@@ -47,7 +47,7 @@
         var diff = elementY - startingY;
         var start;
 
-        window.requestAnimationFrame(function step (timestamp) {
+        window.requestAnimationFrame(function step(timestamp) {
             if (!start) start = timestamp;
 
             var time = timestamp - start;
@@ -69,17 +69,22 @@
         this.closeDetails();
         this.closePopover();
 
-        this.popover = SGN.CoreUIKit.singleChoicePopover({
-            el: document.body,
-            header: SGN.translations.t('incito_publication.product_picker.header'),
-            x: e.originalEvent.clientX,
-            y: e.originalEvent.clientY,
-            items: e.meta.products.map(function (product) {
-                return {
-                    title: product.title
-                };
-            })
-        }, callback);
+        this.popover = SGN.CoreUIKit.singleChoicePopover(
+            {
+                el: document.body,
+                header: SGN.translations.t(
+                    'incito_publication.product_picker.header'
+                ),
+                x: e.originalEvent.clientX,
+                y: e.originalEvent.clientY,
+                items: e.meta.products.map(function (product) {
+                    return {
+                        title: product.title
+                    };
+                })
+            },
+            callback
+        );
     };
 
     IncitoPublication.prototype.showOffer = function (ctx) {
@@ -106,7 +111,13 @@
         var threshold = this.details.el.offsetHeight;
 
         if (rect.height + rect.top > window.innerHeight - threshold) {
-            this.scrollTo(rect.top + window.pageYOffset - (window.innerHeight - rect.height) + threshold, 300);
+            this.scrollTo(
+                rect.top +
+                    window.pageYOffset -
+                    (window.innerHeight - rect.height) +
+                    threshold,
+                300
+            );
         }
     };
 
@@ -121,51 +132,66 @@
         if (err) {
             return;
         }
-        
-        SGN.CoreUIKit.on(el, 'click', '.incito__view[data-role="offer"]', function (e) {
-            e.preventDefault();
-            
-            var id = this.getAttribute('data-id');
-            var meta = viewer.incito.ids[id];
 
-            if (!meta) {
-                return;
+        SGN.CoreUIKit.on(
+            el,
+            'click',
+            '.incito__view[data-role="offer"]',
+            function (e) {
+                e.preventDefault();
+
+                var id = this.getAttribute('data-id');
+                var meta = viewer.incito.ids[id];
+
+                if (!meta) {
+                    return;
+                }
+
+                incitoPublication.showOffer({
+                    originalEvent: e,
+                    id: id,
+                    meta: meta,
+                    el: this
+                });
             }
+        );
 
-            incitoPublication.showOffer({
-                originalEvent: e,
-                id: id,
-                meta: meta,
-                el: this
-            });
-        });
-    
-        SGN.CoreUIKit.on(el, 'contextmenu', '.incito__view[data-role="offer"]', function (e) {
-            var id = this.getAttribute('data-id');
-            var meta = viewer.incito.ids[id];
+        SGN.CoreUIKit.on(
+            el,
+            'contextmenu',
+            '.incito__view[data-role="offer"]',
+            function (e) {
+                var id = this.getAttribute('data-id');
+                var meta = viewer.incito.ids[id];
 
-            if (!meta || !Array.isArray(meta.products)) {
+                if (!meta || !Array.isArray(meta.products)) {
+                    return false;
+                }
+
+                incitoPublication.pickProduct(
+                    {
+                        originalEvent: e,
+                        id: id,
+                        meta: meta,
+                        el: this
+                    },
+                    function (product) {
+                        console.log('product selected', product);
+                    }
+                );
+
                 return false;
             }
-
-            incitoPublication.pickProduct({
-                originalEvent: e,
-                id: id,
-                meta: meta,
-                el: this
-            }, function (product) {
-                console.log('product selected', product);
-            });
-    
-            return false;
-        });
+        );
 
         var viewId = SGN.util.getQueryParam('view_id');
-        var viewEl = viewId && el.querySelector('.incito__view[data-id="' + viewId + '"]');
+        var viewEl =
+            viewId &&
+            el.querySelector('.incito__view[data-id="' + viewId + '"]');
 
         if (viewEl) {
             setTimeout(function () {
-				var rect = viewEl.getBoundingClientRect();
+                var rect = viewEl.getBoundingClientRect();
 
                 window.scrollTo(0, rect.top + window.pageYOffset);
             }, 0);
