@@ -17,7 +17,7 @@ const bundles = [
         name: 'TjekEventsKit',
         pkg: {
             outputFolder: path.join(__dirname, 'kits', 'events'),
-            baseContents: {name: '@tjek/events', version: '0.0.0-alpha.0'}
+            baseContents: {name: '@tjek/events', version: '0.0.0-alpha.1'}
         },
         input: path.join(__dirname, 'lib', 'kits', 'events', 'index.js'),
         output: path.join(__dirname, 'kits', 'events', 'index')
@@ -61,14 +61,14 @@ let configs = bundles.reduce(
                 getBabelPlugin(),
                 pkg &&
                     generatePackageJson({
+                        ...pkg,
                         baseContents: {
                             main: path.join('index') + '.cjs.js',
                             browser: path.join('index') + '.js',
                             module: path.join('index') + '.es.js',
                             'jsnext:main': path.join('index') + '.es.js',
                             ...pkg.baseContents
-                        },
-                        ...pkg
+                        }
                     })
             ]
         },
