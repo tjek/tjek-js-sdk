@@ -1,4 +1,4 @@
-const SGN = require('../__tests_utils__/sdk');
+const SGN = require('../');
 
 describe('SGN.translations', () => {
     test('Can translate', () => {
