@@ -5,33 +5,35 @@ import path from 'path';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
+import generatePackageJson from 'rollup-plugin-generate-package-json';
 
 const bundles = [
     {
         name: 'SGN',
         input: path.join(__dirname, 'lib', 'index.js'),
-        outputs: {
-            // Exclusive bundles(external `require`s untouched), for node, webpack etc.
-            jsCJS: path.join(__dirname, 'dist', 'sgn-sdk.cjs.js'), // CommonJS
-            jsES: path.join(__dirname, 'dist', 'sgn-sdk.es.js'), // ES Module
-            // Inclusive bundles(external `require`s resolved), for browsers etc.
-            jsBrowser: path.join(__dirname, 'dist', 'sgn-sdk.js'),
-            jsBrowserMin: path.join(__dirname, 'dist', 'sgn-sdk.min.js')
-        }
-    } /*,
-  { 
-    name: 'SGNTracker',
-    input: path.join(__dirname, 'lib', 'kits', 'events', 'tracker.js'),
-    outputs: {
-      // Exclusive bundles(external `require`s untouched), for node, webpack etc.
-      jsCJS: path.join(__dirname, 'kits', 'events', 'tracker.cjs.js'), // CommonJS
-      jsES: path.join(__dirname, 'kits', 'events', 'tracker.es.js'), // ES Module
-      // Inclusive bundles(external `require`s resolved), for browsers etc.
-      jsBrowser: path.join(__dirname, 'kits', 'events', 'tracker.js'),
-      jsBrowserMin: path.join(__dirname, 'kits', 'events', 'tracker.min.js')
+        output: path.join(__dirname, 'dist', 'sgn-sdk')
+    },
+    {
+        name: 'TjekEventsKit',
+        pkg: {
+            outputFolder: path.join(__dirname, 'kits', 'events'),
+            baseContents: {name: '@tjek/events', version: '0.0.0-alpha.0'}
+        },
+        input: path.join(__dirname, 'lib', 'kits', 'events', 'index.js'),
+        output: path.join(__dirname, 'kits', 'events', 'index')
     }
-  }*/
-];
+].map((bundle) => ({
+    ...bundle,
+    output: undefined,
+    outputs: {
+        // Exclusive bundles(external `require`s untouched), for node, webpack etc.
+        jsCJS: `${bundle.output}.cjs.js`, // CommonJS
+        jsES: `${bundle.output}.es.js`, // ES Module
+        // Inclusive bundles(external `require`s resolved), for browsers etc.
+        jsBrowser: `${bundle.output}.js`,
+        jsBrowserMin: `${bundle.output}.min.js`
+    }
+}));
 
 const getBabelPlugin = () =>
     babel({
@@ -40,7 +42,7 @@ const getBabelPlugin = () =>
     });
 
 let configs = bundles.reduce(
-    (cfgs, {name, input, outputs}) => [
+    (cfgs, {name, input, outputs, pkg}) => [
         ...cfgs,
         {
             input,
@@ -56,7 +58,18 @@ let configs = bundles.reduce(
                 commonjs({
                     extensions: ['.js']
                 }),
-                getBabelPlugin()
+                getBabelPlugin(),
+                pkg &&
+                    generatePackageJson({
+                        baseContents: {
+                            main: path.join('index') + '.cjs.js',
+                            browser: path.join('index') + '.js',
+                            module: path.join('index') + '.es.js',
+                            'jsnext:main': path.join('index') + '.es.js',
+                            ...pkg.baseContents
+                        },
+                        ...pkg
+                    })
             ]
         },
         {
@@ -135,7 +148,7 @@ let configs = bundles.reduce(
 
 // Only output unminified browser bundle in development mode
 if (process.env.NODE_ENV === 'development') {
-    configs = [configs[2]];
+    configs = [configs[2], configs[6]];
 }
 
 export default configs;
