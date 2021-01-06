@@ -14,7 +14,8 @@ module.exports = {
         {
             displayName: 'Chrome',
             preset: 'jest-puppeteer-preset',
-            testRegex: '((\\.|/)(test-chrome))\\.js$'
+            testRegex: '((\\.|/)(test-chrome))\\.js$',
+            testTimeout: 30000
         }
     ]
 };
