@@ -1,4 +1,6 @@
 const path = require('path');
+const {setDefaultOptions} = require('expect-puppeteer');
+setDefaultOptions({timeout: 2000});
 
 const PPPath = `file:${path.join(
     __dirname,
@@ -9,7 +11,6 @@ const PPPath = `file:${path.join(
 )}`;
 const getPPPage = async () => {
     const page = await browser.newPage();
-    page.setDefaultTimeout(2000);
     await page.goto(PPPath);
     return page;
 };
