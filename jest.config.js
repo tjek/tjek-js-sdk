@@ -1,5 +1,6 @@
 module.exports = {
     testPathIgnorePatterns: ['node_modules'],
+    testTimeout: 30000,
     projects: [
         {
             displayName: 'Node',
@@ -14,8 +15,7 @@ module.exports = {
         {
             displayName: 'Chrome',
             preset: 'jest-puppeteer-preset',
-            testRegex: '((\\.|/)(test-chrome))\\.js$',
-            testTimeout: 30000
+            testRegex: '((\\.|/)(test-chrome))\\.js$'
         }
     ]
 };
