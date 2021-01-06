@@ -1,11 +1,10 @@
-import commonjs from 'rollup-plugin-commonjs';
-import resolve from 'rollup-plugin-node-resolve';
-import {terser} from 'rollup-plugin-terser';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import path from 'path';
-import babel from 'rollup-plugin-babel';
-import replace from 'rollup-plugin-replace';
-import json from 'rollup-plugin-json';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
+import {terser} from 'rollup-plugin-terser';
 
 const bundles = [
     {
@@ -38,8 +37,21 @@ const bundles = [
 const getBabelPlugin = () =>
     babel({
         exclude: ['node_modules/**'],
-        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs']
+        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs'],
+        babelHelpers: 'runtime'
     });
+
+const external = [
+    /@babel\/runtime/,
+    /core-js/,
+    'cross-fetch',
+    'md5',
+    'sha256',
+    'microevent',
+    'mustache',
+    'incito-browser',
+    'verso-browser'
+];
 
 let configs = bundles.reduce(
     (cfgs, {name, input, outputs, pkg}) => [
@@ -48,10 +60,11 @@ let configs = bundles.reduce(
             input,
             output: {
                 file: outputs.jsCJS,
-                format: 'cjs'
+                format: 'cjs',
+                exports: 'auto'
             },
+            external,
             plugins: [
-                json(),
                 replace({
                     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
                 }),
@@ -76,10 +89,11 @@ let configs = bundles.reduce(
             input,
             output: {
                 file: outputs.jsES,
-                format: 'es'
+                format: 'es',
+                exports: 'auto'
             },
+            external,
             plugins: [
-                json(),
                 replace({
                     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
                 }),
@@ -100,7 +114,6 @@ let configs = bundles.reduce(
                 }
             },
             plugins: [
-                json(),
                 replace({
                     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
                 }),
@@ -126,7 +139,6 @@ let configs = bundles.reduce(
                 }
             },
             plugins: [
-                json(),
                 replace({
                     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
                 }),
