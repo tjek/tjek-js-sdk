@@ -4,18 +4,16 @@ const each = require('jest-each').default;
 jest.setTimeout(30000); // this could take a while
 
 function buildMatrix(options, index = 0, results = [], current = []) {
-    var vals = options[index];
-
-    for (var i = 0; i < vals.length; i++) {
-        current[index] = vals[i];
-
-        if (index + 1 < options.length)
+    options[index].forEach((val) => {
+        current[index] = val;
+        if (index + 1 < options.length) {
             buildMatrix(options, index + 1, results, current);
-        else results.push([...current]);
-    }
+        } else results.push([...current]);
+    });
 
     return results;
 }
+
 each(
     buildMatrix([
         ['./', './kits/events'],

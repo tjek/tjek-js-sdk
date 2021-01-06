@@ -1,6 +1,6 @@
 const path = require('path');
 
-describe.skip('Chrome: Paged Publication', function () {
+describe('Chrome: Paged Publication', function () {
     beforeAll(
         async () =>
             await page.goto(
