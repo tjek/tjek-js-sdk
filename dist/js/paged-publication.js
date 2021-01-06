@@ -37,7 +37,7 @@
                     }
                 });
             } else {
-                console.log(err);
+                console.error(err);
             }
         });
     };
