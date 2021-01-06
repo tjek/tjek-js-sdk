@@ -6,6 +6,7 @@
         "es6": true
     },
     "globals": {
+        "browser": true,
         "page": true
     },
     "extends": ["eslint:recommended", "prettier"],
