@@ -9,19 +9,19 @@
     "bundlesize": [
         {
             "path": "./dist/sgn-sdk.js",
-            "maxSize": "400 kB"
+            "maxSize": "150 kB"
         },
         {
             "path": "./dist/sgn-sdk.min.js",
-            "maxSize": "65 kB"
+            "maxSize": "70 kB"
         },
         {
             "path": "./dist/sgn-sdk.cjs.js",
-            "maxSize": "35 kB"
+            "maxSize": "30 kB"
         },
         {
             "path": "./dist/sgn-sdk.es.js",
-            "maxSize": "35 kB"
+            "maxSize": "30 kB"
         },
         {
             "path": "./kits/events/index.js",
@@ -29,15 +29,15 @@
         },
         {
             "path": "./kits/events/index.min.js",
-            "maxSize": "20 kB"
+            "maxSize": "25 kB"
         },
         {
             "path": "./kits/events/index.cjs.js",
-            "maxSize": "15 kB"
+            "maxSize": "10 kB"
         },
         {
             "path": "./kits/events/index.es.js",
-            "maxSize": "15 kB"
+            "maxSize": "10 kB"
         }
     ],
     "scripts": {
