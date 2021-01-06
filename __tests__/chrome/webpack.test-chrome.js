@@ -1,5 +1,6 @@
 const webpackCompiler = require('../../__tests_utils__/webpack-compiler');
 const each = require('jest-each').default;
+page.setDefaultTimeout(2000);
 
 function buildMatrix(options, index = 0, results = [], current = []) {
     options[index].forEach((val) => {

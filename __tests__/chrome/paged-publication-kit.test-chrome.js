@@ -1,4 +1,5 @@
 const path = require('path');
+page.setDefaultTimeout(2000);
 
 const PPPath = `file:${path.join(
     __dirname,
