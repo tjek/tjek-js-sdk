@@ -1,6 +1,0 @@
-{
-    "preset": "jest-puppeteer-preset",
-    "moduleFileExtensions": ["js", "json"],
-    "testRegex": "/__tests__/chrome/.*$",
-    "testPathIgnorePatterns": ["node_modules", "fixtures"]
-}
