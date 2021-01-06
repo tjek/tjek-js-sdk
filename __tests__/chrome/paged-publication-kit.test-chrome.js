@@ -1,14 +1,7 @@
-const path = require('path');
 const {setDefaultOptions} = require('expect-puppeteer');
 setDefaultOptions({timeout: 2000});
 
-const PPPath = `file:${path.join(
-    __dirname,
-    '..',
-    '..',
-    'dist',
-    'paged-publication.html'
-)}`;
+const PPPath = `file:${__dirname}/../../examples/paged-publication.html`;
 
 describe('Chrome: Paged Publication', () => {
     let page;
