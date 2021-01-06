@@ -1,7 +1,7 @@
 require('expect-puppeteer').setDefaultOptions({timeout: 2000});
 const fetch = require('cross-fetch');
 
-const PPPath = `file:${__dirname}/../../dist/incito-publication.html`;
+const PPPath = `file:${__dirname}/../../examples/incito-publication.html`;
 
 describe('Chrome: Incito Publication', () => {
     let id, page;
