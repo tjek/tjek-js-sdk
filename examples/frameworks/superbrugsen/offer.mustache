@@ -1,0 +1,20 @@
+{{#labels.length}}
+    <div class="sgn-offer-details__labels">
+        {{#labels}}
+            <img src="{{src}}" title="{{title}}">
+        {{/labels}}
+    </div>
+{{/labels.length}}
+{{#title}}
+    <p class="sgn-offer-details__title">{{title}}</p>
+{{/title}}
+{{#description}}
+    <p class="sgn-offer-details__desc">{{description}}</p>
+{{/description}}
+{{#products}}
+    <div class="sgn-offer-details__product">
+        <button class="sgn-btn sgn-btn--primary">
+            <strong>+</strong>
+        </button><span>{{title}}</span>
+    </div>
+{{/products}}
