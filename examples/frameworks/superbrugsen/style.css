@@ -1,0 +1,110 @@
+.sgn-offer-details__labels {
+    margin-bottom: 10px;
+}
+
+.sgn-offer-details__labels img {
+    display: inline-block;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.sgn-offer-details__title {
+    margin: 0 0 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sgn-offer-details__desc {
+    margin: 0 0 10px;
+    white-space: pre-wrap;
+}
+
+.sgn-offer-details__add {
+    float: right;
+}
+
+.sgn-offer-details__product {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.sgn-offer-details__product .sgn-btn {
+    margin-right: 10px;
+}
+
+.sgn-offer-details__product span {
+    vertical-align: middle;
+}
+
+.sgn-offer-details__product:last-child {
+    margin-bottom: 0;
+}
+
+.sgn-btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 3px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+}
+
+.sgn-btn:focus,
+.sgn-btn:active:focus,
+.sgn-btn.active:focus,
+.sgn-btn.focus,
+.sgn-btn:active.focus,
+.sgn-btn.active.focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.sgn-btn:hover,
+.sgn-btn:focus,
+.sgn-btn.focus {
+    color: #333333;
+    text-decoration: none;
+}
+
+.sgn-btn:active,
+.sgn-btn.active {
+    outline: 0;
+    background-image: none;
+}
+
+.sgn-btn--primary {
+    color: #ffffff;
+    background-color: #82b745;
+}
+
+.sgn-btn--primary:focus,
+.sgn-btn--primary.focus {
+    color: #ffffff;
+    background-color: #85bb47;
+}
+
+.sgn-btn--primary:hover {
+    color: #ffffff;
+    background-color: #85bb47;
+}
+
+.sgn-btn--primary:active,
+.sgn-btn--primary.active {
+    color: #ffffff;
+}

@@ -1,0 +1,49 @@
+iframe {
+    border: 0;
+}
+
+.container a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.section--air {
+    margin-bottom: 70px;
+}
+
+.page .container {
+    padding-top: 100px;
+}
+
+#intro .timeline {
+    margin-top: 30px;
+    max-width: 600px;
+}
+
+#outro .video-responsive {
+    margin-bottom: 20px;
+}
+
+.btn.btn-primary,
+.btn.btn-primary:hover {
+    background: #000;
+    border-color: #000;
+}
+
+@media (max-width: 600px) {
+    #outro .container {
+        padding-top: 50px;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    h4 {
+        font-size: 2rem;
+    }
+}
