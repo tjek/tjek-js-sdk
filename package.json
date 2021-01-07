@@ -49,7 +49,7 @@
         "build:css-min": "stylus  --use ./lib/stylus/cli-variables.js --with '{ COMPRESS: true }' lib/stylus/sgn.styl -o dist/shopgun-sdk/sgn-sdk.min.css --include-css -m -c",
         "build": "run-p -l build:js build:css build:css-min",
         "dev:js": "rollup -c -m inline --no-treeshake --environment NODE_ENV:development --watch",
-        "dev:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css --sourcemap-inline --watch",
+        "dev:css": "stylus lib/stylus/sgn.styl -o dist/shopgun-sdk/sgn-sdk.css --include-css --sourcemap-inline --watch",
         "dev": "run-p -l dev:js dev:css serve",
         "serve": "serve",
         "prepublishOnly": "npm run test && npm run build",
