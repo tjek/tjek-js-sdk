@@ -16,7 +16,7 @@ function buildMatrix(options, index = 0, results = [], current = []) {
 
 each(
     buildMatrix([
-        ['./', './kits/events'],
+        ['./dist/shopgun-sdk', './dist/kits/events'],
         ['development', 'production'],
         ['require', 'import']
     ])

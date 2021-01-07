@@ -5,32 +5,39 @@ import replace from '@rollup/plugin-replace';
 import path from 'path';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
 import {terser} from 'rollup-plugin-terser';
+import {version} from './package.json';
+
+const libDir = path.join(__dirname, 'lib');
+const distDir = path.join(__dirname, 'dist');
 
 const bundles = [
     {
         name: 'SGN',
-        input: path.join(__dirname, 'lib', 'index.js'),
-        output: path.join(__dirname, 'dist', 'sgn-sdk')
+        fileName: 'sgn-sdk',
+        pkg: {
+            outputFolder: path.join(distDir, 'shopgun-sdk'),
+            baseContents: {name: 'shopgun-sdk'}
+        },
+        input: path.join(libDir, 'sgn-sdk.js'),
+        output: path.join(distDir, 'shopgun-sdk')
     },
     {
         name: 'TjekEventsKit',
-        pkg: {
-            outputFolder: path.join(__dirname, 'kits', 'events'),
-            baseContents: {name: '@tjek/events', version: '0.0.0-alpha.1'}
-        },
-        input: path.join(__dirname, 'lib', 'kits', 'events', 'index.js'),
-        output: path.join(__dirname, 'kits', 'events', 'index')
+        fileName: 'index',
+        pkg: {outputFolder: path.join(distDir, 'kits', 'events')},
+        input: path.join(libDir, 'kits', 'events', 'index.js'),
+        output: path.join(distDir, 'kits', 'events')
     }
 ].map((bundle) => ({
     ...bundle,
     output: undefined,
     outputs: {
         // Exclusive bundles(external `require`s untouched), for node, webpack etc.
-        jsCJS: `${bundle.output}.cjs.js`, // CommonJS
-        jsES: `${bundle.output}.es.js`, // ES Module
+        jsCJS: `${bundle.output}/${bundle.fileName}.cjs.js`, // CommonJS
+        jsES: `${bundle.output}/${bundle.fileName}.es.js`, // ES Module
         // Inclusive bundles(external `require`s resolved), for browsers etc.
-        jsBrowser: `${bundle.output}.js`,
-        jsBrowserMin: `${bundle.output}.min.js`
+        jsBrowser: `${bundle.output}/${bundle.fileName}.js`,
+        jsBrowserMin: `${bundle.output}/${bundle.fileName}.min.js`
     }
 }));
 
@@ -54,7 +61,7 @@ const external = [
 ];
 
 let configs = bundles.reduce(
-    (cfgs, {name, input, outputs, pkg}) => [
+    (cfgs, {name, fileName = 'index', input, outputs, pkg}) => [
         ...cfgs,
         {
             input,
@@ -76,10 +83,11 @@ let configs = bundles.reduce(
                     generatePackageJson({
                         ...pkg,
                         baseContents: {
-                            main: path.join('index') + '.cjs.js',
-                            browser: path.join('index') + '.js',
-                            module: path.join('index') + '.es.js',
-                            'jsnext:main': path.join('index') + '.es.js',
+                            version,
+                            main: fileName + '.cjs.js',
+                            browser: fileName + '.js',
+                            module: fileName + '.es.js',
+                            'jsnext:main': fileName + '.es.js',
                             ...pkg.baseContents
                         }
                     })
@@ -108,7 +116,7 @@ let configs = bundles.reduce(
             output: {
                 file: outputs.jsBrowser,
                 format: 'umd',
-                name: 'SGN',
+                name,
                 amd: {
                     define: 'rollupNeedsAnOptionToDisableAMDInUMD'
                 }
