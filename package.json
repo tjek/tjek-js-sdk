@@ -1,42 +1,41 @@
 {
-    "name": "shopgun-sdk",
     "version": "3.4.0",
     "description": "ShopGun SDK for JavaScript.",
-    "main": "dist/sgn-sdk.cjs.js",
-    "browser": "dist/sgn-sdk.js",
-    "module": "dist/sgn-sdk.es.js",
-    "jsnext:main": "dist/sgn-sdk.es.js",
+    "main": "dist/shopgun-sdk/sgn-sdk.cjs.js",
+    "browser": "dist/shopgun-sdk/sgn-sdk.js",
+    "module": "dist/shopgun-sdk/sgn-sdk.es.js",
+    "jsnext:main": "dist/shopgun-sdk/sgn-sdk.es.js",
     "bundlesize": [
         {
-            "path": "./dist/sgn-sdk.js",
+            "path": "./dist/shopgun-sdk/sgn-sdk.js",
             "maxSize": "150 kB"
         },
         {
-            "path": "./dist/sgn-sdk.min.js",
+            "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
             "maxSize": "70 kB"
         },
         {
-            "path": "./dist/sgn-sdk.cjs.js",
+            "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
             "maxSize": "30 kB"
         },
         {
-            "path": "./dist/sgn-sdk.es.js",
+            "path": "./dist/shopgun-sdk/sgn-sdk.es.js",
             "maxSize": "30 kB"
         },
         {
-            "path": "./kits/events/index.js",
+            "path": "./dist/kits/events/index.js",
             "maxSize": "45 kB"
         },
         {
-            "path": "./kits/events/index.min.js",
+            "path": "./dist/kits/events/index.min.js",
             "maxSize": "25 kB"
         },
         {
-            "path": "./kits/events/index.cjs.js",
+            "path": "./dist/kits/events/index.cjs.js",
             "maxSize": "10 kB"
         },
         {
-            "path": "./kits/events/index.es.js",
+            "path": "./dist/kits/events/index.es.js",
             "maxSize": "10 kB"
         }
     ],
@@ -46,8 +45,8 @@
         "test:ci": "jest --verbose",
         "test:size": "bundlesize",
         "build:js": "rollup -c --no-treeshake -m --environment NODE_ENV:production",
-        "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
-        "build:css-min": "stylus  --use ./lib/stylus/cli-variables.js --with '{ COMPRESS: true }' lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
+        "build:css": "stylus lib/stylus/sgn.styl -o dist/shopgun-sdk/sgn-sdk.css --include-css -m",
+        "build:css-min": "stylus  --use ./lib/stylus/cli-variables.js --with '{ COMPRESS: true }' lib/stylus/sgn.styl -o dist/shopgun-sdk/sgn-sdk.min.css --include-css -m -c",
         "build": "run-p -l build:js build:css build:css-min",
         "dev:js": "rollup -c -m inline --no-treeshake --environment NODE_ENV:development --watch",
         "dev:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css --sourcemap-inline --watch",
