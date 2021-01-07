@@ -42,8 +42,3 @@ putObject({
     bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css'),
     contentType: 'text/css'
 });
-putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.css.map',
-    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css.map'),
-    contentType: 'application/json'
-});
