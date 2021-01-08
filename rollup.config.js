@@ -3,7 +3,6 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import CleanCSS from 'clean-css';
-import {promises as fs} from 'fs';
 import {EOL} from 'os';
 import path from 'path';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
@@ -13,47 +12,56 @@ import stylus from 'stylus';
 import {version} from './package.json';
 
 const stylusPlugin = ({
-    include = ['**/*.styl', '**/*.stylus'],
+    include = ['**/*.styl', '**/*.stylus', '**/*.css'],
     exclude,
     compiler,
     raw,
     minified,
     cleanCSSOptions,
-    filter = createFilter(include, exclude),
-    compiledCache = {}
+    filter = createFilter(include, exclude)
 } = {}) => ({
     name: 'rollup-plugin-stylus-compiler',
-    resolveId: (importee) => compiledCache[importee] && importee,
-    load: (id) => compiledCache[id],
-    async transform(code, id) {
-        if (!filter(id)) return;
-        if (raw || minified) {
-            const style = stylus(code, compiler)
-                .set('filename', path.relative(process.cwd(), id))
-                .set('paths', [process.cwd()]);
-
-            // cache the compiled content
-            compiledCache[id] = await new Promise((y, n) =>
-                style.render((e, c) => (e ? n(e) : y(c)))
+    resolveId: (id) => (filter(id) ? id : null),
+    load: (id) => (filter(id) ? id : null),
+    transform: (id) => (filter(id) ? '' : null),
+    async generateBundle(_, bundle) {
+        for (const file of Object.values(bundle)) {
+            const fileName = file.fileName.slice(
+                0,
+                -path.extname(file.fileName).length
             );
-        }
+            const stylusCode = Object.keys(file.modules)
+                .filter((id) => filter(id))
+                .map((id) => `@require '${id}'`)
+                .join(EOL);
+            if (!stylusCode) return;
+            const cssCode = await new Promise((y, n) =>
+                stylus(
+                    `@require 'node_modules/nib/index.styl'${EOL}${stylusCode}`,
+                    compiler
+                )
+                    .set('paths', [process.cwd()])
+                    .render((e, c) => (e ? n(e) : y(c)))
+            );
 
-        return '';
-    },
-    async generateBundle({file}) {
-        file = file.slice(0, -path.extname(file).length);
+            if (raw)
+                await this.emitFile({
+                    type: 'asset',
+                    fileName: fileName + '.css',
+                    source: cssCode
+                });
 
-        // combine all css code, join with platform line break
-        const cssCode = Object.values(compiledCache).join(EOL);
-
-        if (raw) await fs.writeFile(file + '.css', cssCode);
-
-        if (minified) {
-            const {styles} = await new CleanCSS({
-                ...cleanCSSOptions,
-                returnPromise: true
-            }).minify(cssCode);
-            await fs.writeFile(file + '.min.css', styles);
+            if (minified) {
+                const {styles} = await new CleanCSS({
+                    ...cleanCSSOptions,
+                    returnPromise: true
+                }).minify(cssCode);
+                await this.emitFile({
+                    type: 'asset',
+                    fileName: fileName + '.min.css',
+                    source: styles
+                });
+            }
         }
     }
 });
