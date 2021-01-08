@@ -1,5 +1,6 @@
 const webpackCompiler = require('../../__tests_utils__/webpack-compiler');
 const each = require('jest-each').default;
+const glob = require('glob');
 const {setDefaultOptions} = require('expect-puppeteer');
 setDefaultOptions({timeout: 2000});
 
@@ -14,9 +15,11 @@ function buildMatrix(options, index = 0, results = [], current = []) {
     return results;
 }
 
+const packages = glob.sync('./dist/**/*/package.json');
+
 each(
     buildMatrix([
-        ['./dist/shopgun-sdk', './dist/kits/events'],
+        packages.map((path) => path.replace('/package.json', '')),
         ['development', 'production'],
         ['require', 'import']
     ])
@@ -25,5 +28,6 @@ each(
         pkg === 'import'
             ? `import A from '${path}'; console.log(A)`
             : `const A = require('${path}'); console.log(A)`;
+
     await page.evaluate(await webpackCompiler(code, {mode}));
 });
