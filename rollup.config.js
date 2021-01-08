@@ -153,7 +153,7 @@ let configs = bundles
                             browser: fileName + '.js',
                             module: fileName + '.es.js',
                             'jsnext:main': fileName + '.es.js',
-                            ...pkg?.baseContents
+                            ...(pkg && pkg.baseContents)
                         }
                     })
                 ]
