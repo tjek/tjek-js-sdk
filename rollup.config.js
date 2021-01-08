@@ -75,30 +75,20 @@ const bundles = [
         fileName: 'sgn-sdk',
         pkg: {
             outputFolder: path.join(distDir, 'shopgun-sdk'),
-            baseContents: {name: 'shopgun-sdk'}
+            baseContents: {version, name: 'shopgun-sdk'}
         },
         input: path.join(libDir, 'sgn-sdk.js'),
         output: path.join(distDir, 'shopgun-sdk')
     },
     {
-        name: 'TjekEventsKit',
-        fileName: 'index',
-        pkg: {outputFolder: path.join(distDir, 'kits', 'events')},
         input: path.join(libDir, 'kits', 'events', 'index.js'),
-        output: path.join(distDir, 'kits', 'events')
+        output: path.join(distDir, 'tjek-sdk', 'events')
+    },
+    {
+        input: path.join(libDir, 'kits', 'events', 'index.js'),
+        output: path.join(distDir, 'tjek-sdk', 'events', 'tracker')
     }
-].map((bundle) => ({
-    ...bundle,
-    output: undefined,
-    outputs: {
-        // Exclusive bundles(external `require`s untouched), for node, webpack etc.
-        jsCJS: `${bundle.output}/${bundle.fileName}.cjs.js`, // CommonJS
-        jsES: `${bundle.output}/${bundle.fileName}.es.js`, // ES Module
-        // Inclusive bundles(external `require`s resolved), for browsers etc.
-        jsBrowser: `${bundle.output}/${bundle.fileName}.js`,
-        jsBrowserMin: `${bundle.output}/${bundle.fileName}.min.js`
-    }
-}));
+];
 
 const getBabelPlugin = () =>
     babel({
@@ -119,129 +109,120 @@ const external = [
     'verso-browser'
 ];
 
-let configs = bundles.reduce(
-    (cfgs, {name, fileName = 'index', input, outputs, pkg}) => [
-        ...cfgs,
-        {
-            input,
-            output: {
-                file: outputs.jsCJS,
-                format: 'cjs',
-                exports: 'auto'
-            },
-            external,
-            plugins: [
-                stylusPlugin(),
-                replace({
-                    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-                }),
-                commonjs({
-                    extensions: ['.js']
-                }),
-                getBabelPlugin(),
-                pkg &&
+let configs = bundles
+    .map(({fileName = 'index', ...bundle}) => ({
+        ...bundle,
+        fileName,
+        outputs: {
+            // Exclusive bundles(external `require`s untouched), for node, webpack etc.
+            jsCJS: `${bundle.output}/${fileName}.cjs.js`, // CommonJS
+            jsES: `${bundle.output}/${fileName}.es.js`, // ES Module
+            // Inclusive bundles(external `require`s resolved), for browsers etc.
+            jsBrowser: `${bundle.output}/${fileName}.js`,
+            jsBrowserMin: `${bundle.output}/${fileName}.min.js`
+        }
+    }))
+    .reduce(
+        (cfgs, {name, fileName = 'index', input, output, outputs, pkg}) => [
+            ...cfgs,
+            {
+                input,
+                output: [
+                    {file: outputs.jsCJS, format: 'cjs', exports: 'auto'},
+                    {file: outputs.jsES, format: 'es', exports: 'auto'}
+                ],
+                external,
+                plugins: [
+                    stylusPlugin(),
+                    replace({
+                        'process.env.NODE_ENV': JSON.stringify(
+                            process.env.NODE_ENV
+                        )
+                    }),
+                    commonjs({extensions: ['.js']}),
+                    getBabelPlugin(),
                     generatePackageJson({
+                        outputFolder: output,
                         ...pkg,
                         baseContents: {
-                            version,
                             main: fileName + '.cjs.js',
                             browser: fileName + '.js',
                             module: fileName + '.es.js',
                             'jsnext:main': fileName + '.es.js',
-                            ...pkg.baseContents
+                            ...pkg?.baseContents
                         }
                     })
-            ]
-        },
-        {
-            input,
-            output: {
-                file: outputs.jsES,
-                format: 'es',
-                exports: 'auto'
+                ]
             },
-            external,
-            plugins: [
-                stylusPlugin(),
-                replace({
-                    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-                }),
-                commonjs({
-                    extensions: ['.js']
-                }),
-                getBabelPlugin()
-            ]
-        },
-        {
-            input,
-            output: {
-                file: outputs.jsBrowser,
-                format: 'umd',
-                name,
-                amd: {
-                    define: 'rollupNeedsAnOptionToDisableAMDInUMD'
-                }
-            },
-            plugins: [
-                stylusPlugin({
-                    raw: true,
-                    minified: process.env.NODE_ENV === 'production',
-                    compiler: {
-                        'include css': true,
-                        sourcemap: {
-                            inline: process.env.NODE_ENV === 'development',
-                            comment: process.env.NODE_ENV !== 'production'
+            name && {
+                input,
+                output: {
+                    file: outputs.jsBrowser,
+                    format: 'umd',
+                    name,
+                    amd: {define: 'rollupNeedsAnOptionToDisableAMDInUMD'}
+                },
+                plugins: [
+                    stylusPlugin({
+                        raw: true,
+                        minified: process.env.NODE_ENV === 'production',
+                        compiler: {
+                            'include css': true,
+                            sourcemap: {
+                                inline: process.env.NODE_ENV === 'development',
+                                comment: process.env.NODE_ENV !== 'production'
+                            }
                         }
-                    }
-                }),
-                replace({
-                    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-                }),
-                resolve({
-                    mainFields: ['jsnext:main', 'main'],
-                    browser: true,
-                    preferBuiltins: true
-                }),
-                commonjs({
-                    extensions: ['.js']
-                }),
-                getBabelPlugin()
-            ]
-        },
-        {
-            input,
-            output: {
-                file: outputs.jsBrowserMin,
-                format: 'umd',
-                name,
-                amd: {
-                    define: 'rollupNeedsAnOptionToDisableAMDInUMD'
-                }
+                    }),
+                    replace({
+                        'process.env.NODE_ENV': JSON.stringify(
+                            process.env.NODE_ENV
+                        )
+                    }),
+                    resolve({
+                        mainFields: ['jsnext:main', 'main'],
+                        browser: true,
+                        preferBuiltins: true
+                    }),
+                    commonjs({extensions: ['.js']}),
+                    getBabelPlugin()
+                ]
             },
-            plugins: [
-                stylusPlugin(),
-                replace({
-                    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-                }),
-                resolve({
-                    mainFields: ['jsnext:main', 'main'],
-                    browser: true,
-                    preferBuiltins: true
-                }),
-                commonjs({
-                    extensions: ['.js']
-                }),
-                getBabelPlugin(),
-                terser()
-            ]
-        }
-    ],
-    []
-);
+            name && {
+                input,
+                output: {
+                    file: outputs.jsBrowserMin,
+                    format: 'umd',
+                    name,
+                    amd: {define: 'rollupNeedsAnOptionToDisableAMDInUMD'}
+                },
+                plugins: [
+                    stylusPlugin(),
+                    replace({
+                        'process.env.NODE_ENV': JSON.stringify(
+                            process.env.NODE_ENV
+                        )
+                    }),
+                    resolve({
+                        mainFields: ['jsnext:main', 'main'],
+                        browser: true,
+                        preferBuiltins: true
+                    }),
+                    commonjs({
+                        extensions: ['.js']
+                    }),
+                    getBabelPlugin(),
+                    terser()
+                ]
+            }
+        ],
+        []
+    )
+    .filter(Boolean);
 
 // Only output unminified browser bundle in development mode
 if (process.env.NODE_ENV === 'development') {
-    configs = [configs[2], configs[6]];
+    configs = [configs[2]];
 }
 
 export default configs;
