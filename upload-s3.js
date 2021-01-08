@@ -29,16 +29,16 @@ function putObject(options) {
 
 putObject({
     key: 'sgn-sdk-' + pkg.version + '.min.js',
-    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.js'),
+    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js'),
     contentType: 'application/javascript'
 });
 putObject({
     key: 'sgn-sdk-' + pkg.version + '.min.js.map',
-    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.js.map'),
+    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js.map'),
     contentType: 'application/json'
 });
 putObject({
     key: 'sgn-sdk-' + pkg.version + '.min.css',
-    bodyPath: path.join(__dirname, 'dist', 'sgn-sdk.min.css'),
+    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.css'),
     contentType: 'text/css'
 });
