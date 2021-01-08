@@ -226,7 +226,7 @@ let configs = bundles
 
 // Only output unminified browser bundle in development mode
 if (process.env.NODE_ENV === 'development') {
-    configs = [configs[2], configs[4]];
+    configs = [configs[1], configs[4]];
 }
 
 export default configs;
