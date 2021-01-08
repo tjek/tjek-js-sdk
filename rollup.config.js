@@ -73,12 +73,16 @@ const bundles = [
     {
         name: 'SGN',
         fileName: 'sgn-sdk',
-        pkg: {
-            outputFolder: path.join(distDir, 'shopgun-sdk'),
-            baseContents: {version, name: 'shopgun-sdk'}
-        },
+        pkg: {baseContents: {version, name: 'shopgun-sdk'}},
         input: path.join(libDir, 'sgn-sdk.js'),
         output: path.join(distDir, 'shopgun-sdk')
+    },
+    {
+        name: 'Incito',
+        fileName: 'incito',
+        pkg: {baseContents: {version, name: 'incito-browser'}},
+        input: path.join(libDir, 'incito-browser', 'incito.js'),
+        output: path.join(distDir, 'incito-browser')
     },
     {
         input: path.join(libDir, 'kits', 'events', 'index.js'),
@@ -222,7 +226,7 @@ let configs = bundles
 
 // Only output unminified browser bundle in development mode
 if (process.env.NODE_ENV === 'development') {
-    configs = [configs[2]];
+    configs = [configs[2], configs[4]];
 }
 
 export default configs;
