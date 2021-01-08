@@ -1,5 +1,5 @@
 const {setDefaultOptions} = require('expect-puppeteer');
-setDefaultOptions({timeout: 2000});
+setDefaultOptions({timeout: 4000});
 
 const PPPath = `file:${__dirname}/../../examples/paged-publication.html`;
 

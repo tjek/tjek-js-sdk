@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Incito</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../../dist/incito-browser/incito.css">
+        <style>
+            body {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src=https://cdn.jsdelivr.net/npm/promise-polyfill@8.1/dist/polyfill.min.js></script>
+        <script src=https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0/dist/fetch.umd.min.js></script>
+        <script src="../../dist/incito-browser/incito.js"></script>
+        <script>
+            fetch('./example.json')
+                .then(function (res) {
+                    return res.json();
+                })
+                .then(function (data) {
+                    var incito = new Incito(document.getElementById('container'), {
+                        incito: data
+                    });
+
+                    incito.bind('allRendered', function () {
+                        console.timeEnd('start -> all rendered');
+                    });
+
+                    console.time('start -> all rendered');
+                    
+                    incito.bind('visibleRendered', function () {
+                        console.timeEnd('start -> visible rendered');
+                    });
+                    
+                    console.time('start -> visible rendered');
+                    
+                    incito.start();
+                });
+        </script>
+    </body>
+</html>
