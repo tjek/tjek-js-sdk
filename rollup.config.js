@@ -85,6 +85,13 @@ const bundles = [
         output: path.join(distDir, 'incito-browser')
     },
     {
+        name: 'Verso',
+        fileName: 'verso',
+        pkg: {baseContents: {version, name: 'verso-browser'}},
+        input: path.join(libDir, 'verso-browser', 'verso.js'),
+        output: path.join(distDir, 'verso-browser')
+    },
+    {
         input: path.join(libDir, 'kits', 'events', 'index.js'),
         output: path.join(distDir, 'tjek-sdk', 'events')
     },
@@ -226,7 +233,7 @@ let configs = bundles
 
 // Only output unminified browser bundle in development mode
 if (process.env.NODE_ENV === 'development') {
-    configs = [configs[1], configs[4]];
+    configs = [configs[1], configs[4],configs[7]];
 }
 
 export default configs;

@@ -1,0 +1,20 @@
+.verso
+    position relative
+    outline 0
+    box-sizing border-box
+    overflow hidden
+
+    &[data-pinching="true"]
+        .verso__page-spread:not([data-active="true"])
+            visibility hidden
+
+    *,
+    *:before,
+    *:after
+        box-sizing inherit
+
+.verso__scroller
+    absolute top left
+    right 0
+    bottom 0
+    transform-origin 0 0

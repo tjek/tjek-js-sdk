@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <title>Verso: Example 1</title>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../../dist/verso-browser/verso.css"
+        />
+        <style>
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            body {
+                color: white;
+                font-family: system, -apple-system, 'San Francisco',
+                    '.SFNSDisplay-Regular', 'Segoe UI', Segoe, 'Segoe WP',
+                    'Helvetica Neue', helvetica, 'Lucida Grande', arial,
+                    sans-serif;
+                font-size: 20px;
+            }
+
+            .verso {
+                height: 100%;
+                background-color: #34495e;
+            }
+
+            .verso__page {
+                text-align: center;
+                padding-top: 100px;
+            }
+
+            #spread1 {
+                background: #3498db;
+            }
+            #spread2 {
+                background: #e74c3c;
+            }
+            #spread3 {
+                background: #f39c12;
+            }
+            #spread4 {
+                background: #2ecc71;
+            }
+
+            #spread4 .verso__overlay {
+                top: 10%;
+                left: 10%;
+                width: 30%;
+                height: 30%;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="verso">
+            <div class="verso__scroller">
+                <div
+                    id="spread0"
+                    class="verso__page-spread verso--scrollable"
+                    data-id="intro"
+                    data-width="80"
+                >
+                    <div style="height: 200vh">intro</div>
+                </div>
+
+                <div
+                    id="spread1"
+                    class="verso__page-spread"
+                    data-type="page"
+                    data-width="100"
+                    data-page-ids="1"
+                    data-max-zoom-scale="2"
+                >
+                    <div class="verso__page">page 1</div>
+                </div>
+
+                <div
+                    id="spread2"
+                    class="verso__page-spread"
+                    data-type="page"
+                    data-width="100"
+                    data-page-ids="2,3"
+                    data-max-zoom-scale="2"
+                >
+                    <div class="verso__page verso-page--verso">page 2</div>
+                    <div class="verso__page verso-page--recto">page 3</div>
+                </div>
+
+                <div
+                    id="spread3"
+                    class="verso__page-spread"
+                    data-type="page"
+                    data-width="100"
+                    data-page-ids="4,5"
+                    data-max-zoom-scale="2"
+                >
+                    <div class="verso__page verso-page--verso">page 4</div>
+                    <div class="verso__page verso-page--recto">page 5</div>
+                </div>
+
+                <div
+                    id="spread4"
+                    class="verso__page-spread"
+                    data-type="page"
+                    data-width="100"
+                    data-page-ids="6"
+                    data-max-zoom-scale="2"
+                >
+                    <div class="verso__page">page 6 with overlay</div>
+                    <div class="verso__overlay"></div>
+                </div>
+
+                <div
+                    id="spread5"
+                    class="verso__page-spread"
+                    data-id="outro"
+                    data-width="80"
+                >
+                    outro
+                </div>
+            </div>
+        </div>
+
+        <script src="../../dist/verso-browser/verso.js"></script>
+        <script>
+            // Point Verso to the right element.
+            var verso = new Verso(document.querySelector('.verso'));
+            var events = [
+                'beforeNavigation',
+                'afterNavigation',
+                'attemptedNavigation',
+                'clicked',
+                'doubleClicked',
+                'pressed',
+                'contextmenu',
+                'doubleContextmenu',
+                'zoomedIn',
+                'zoomedOut',
+                'panStart',
+                'panEnd'
+            ];
+
+            // Listen to events coming from Verso and act accordingly.
+            events.forEach(function (eventType) {
+                verso.bind(eventType, function (e) {
+                    console.log(eventType, e);
+                });
+            });
+
+            // Fire it up.
+            verso.start();
+            setTimeout(function () {
+                verso.destroy();
+                setTimeout(function () {
+                    verso.start();
+                }, 200);
+            }, 200);
+
+            // Add some simple keyboard interactions.
+            document.addEventListener('keydown', function (e) {
+                if (e.keyCode === 39 || e.keyCode === 32) {
+                    verso.next();
+                } else if (e.keyCode === 37) {
+                    verso.prev();
+                }
+            });
+        </script>
+    </body>
+</html>
