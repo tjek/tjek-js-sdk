@@ -16,26 +16,18 @@
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
-            "maxSize": "30 kB"
+            "maxSize": "75 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.es.js",
-            "maxSize": "30 kB"
+            "maxSize": "75 kB"
         },
         {
-            "path": "./dist/kits/events/index.js",
-            "maxSize": "45 kB"
-        },
-        {
-            "path": "./dist/kits/events/index.min.js",
-            "maxSize": "25 kB"
-        },
-        {
-            "path": "./dist/kits/events/index.cjs.js",
+            "path": "./dist/tjek-sdk/events/index.cjs.js",
             "maxSize": "10 kB"
         },
         {
-            "path": "./dist/kits/events/index.es.js",
+            "path": "./dist/tjek-sdk/events/index.es.js",
             "maxSize": "10 kB"
         }
     ],
