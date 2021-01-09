@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it can generate html with jsdom 1`] = `
+"<div class=\\"verso\\">
+            <div class=\\"verso__scroller\\" style=\\"transition: none; transform: translateX(0%) translateY(0) scale(1);\\">
+                <div class=\\"verso__page-spread\\" data-id=\\"page1\\" data-width=\\"80\\" data-active=\\"true\\" style=\\"left: 0%; display: block;\\">
+                    <div class=\\"verso__page\\">page1</div>
+                </div>
+                <div class=\\"verso__page-spread\\" data-id=\\"page2\\" data-width=\\"100\\" style=\\"left: 80%; display: block;\\">
+                    <div class=\\"verso__page\\">page2</div>
+                </div>
+                <div class=\\"verso__page-spread\\" data-id=\\"page3\\" data-width=\\"80\\">
+                    <div class=\\"verso__page\\">page3</div>
+                </div>
+            </div>
+        </div>"
+`;
+
+exports[`it can generate html with jsdom 2`] = `
+"<div class=\\"verso\\">
+            <div class=\\"verso__scroller\\" style=\\"transition: none; transform: translateX(-160%) translateY(0) scale(1);\\">
+                <div class=\\"verso__page-spread\\" data-id=\\"page1\\" data-width=\\"80\\" data-active=\\"false\\" style=\\"left: 0%; display: none;\\">
+                    <div class=\\"verso__page\\">page1</div>
+                </div>
+                <div class=\\"verso__page-spread\\" data-id=\\"page2\\" data-width=\\"100\\" style=\\"left: 80%; display: block;\\">
+                    <div class=\\"verso__page\\">page2</div>
+                </div>
+                <div class=\\"verso__page-spread\\" data-id=\\"page3\\" data-width=\\"80\\" data-active=\\"true\\" style=\\"left: 180%; display: block;\\">
+                    <div class=\\"verso__page\\">page3</div>
+                </div>
+            </div>
+        </div>"
+`;
+
+exports[`it can generate html with jsdom 3`] = `
+"<div class=\\"verso\\">
+            <div class=\\"verso__scroller\\" style=\\"transition: none; transform: translateX(-80%) translateY(0) scale(1);\\">
+                <div class=\\"verso__page-spread\\" data-id=\\"page1\\" data-width=\\"80\\" data-active=\\"false\\" style=\\"left: 0%; display: block;\\">
+                    <div class=\\"verso__page\\">page1</div>
+                </div>
+                <div class=\\"verso__page-spread\\" data-id=\\"page2\\" data-width=\\"100\\" style=\\"left: 80%; display: block;\\" data-active=\\"true\\">
+                    <div class=\\"verso__page\\">page2</div>
+                </div>
+                <div class=\\"verso__page-spread\\" data-id=\\"page3\\" data-width=\\"80\\" data-active=\\"false\\" style=\\"left: 180%; display: block;\\">
+                    <div class=\\"verso__page\\">page3</div>
+                </div>
+            </div>
+        </div>"
+`;
