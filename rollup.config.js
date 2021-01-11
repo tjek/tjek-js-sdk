@@ -92,11 +92,17 @@ const bundles = [
         output: path.join(distDir, 'verso-browser')
     },
     {
+        name: 'Tjek',
+        pkg: {baseContents: {version, name: '@tjek/sdk', sideEffects: true}},
+        input: path.join(libDir, 'tjek-sdk.js'),
+        output: path.join(distDir, 'tjek-sdk')
+    },
+    {
         input: path.join(libDir, 'kits', 'events', 'index.js'),
         output: path.join(distDir, 'tjek-sdk', 'events')
     },
     {
-        input: path.join(libDir, 'kits', 'events', 'index.js'),
+        input: path.join(libDir, 'kits', 'events', 'tracker.js'),
         output: path.join(distDir, 'tjek-sdk', 'events', 'tracker')
     }
 ];
@@ -104,7 +110,6 @@ const bundles = [
 const getBabelPlugin = () =>
     babel({
         exclude: ['node_modules/**'],
-        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs'],
         babelHelpers: 'runtime'
     });
 
@@ -231,9 +236,17 @@ let configs = bundles
     )
     .filter(Boolean);
 
-// Only output unminified browser bundle in development mode
+// Only output unminified browser packages in development mode
 if (process.env.NODE_ENV === 'development') {
-    configs = [configs[1], configs[4],configs[7]];
+    configs = bundles
+        .filter((bundle) => bundle.pkg)
+        .map((bundle) =>
+            configs.find(
+                (config) =>
+                    bundle.input === config.input &&
+                    config.output.format === 'umd'
+            )
+        );
 }
 
 export default configs;
