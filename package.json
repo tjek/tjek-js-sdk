@@ -22,6 +22,38 @@
             "maxSize": "75 kB"
         },
         {
+            "path": "./dist/incito-browser/incito.js",
+            "maxSize": "40 kB"
+        },
+        {
+            "path": "./dist/incito-browser/incito.min.js",
+            "maxSize": "20 kB"
+        },
+        {
+            "path": "./dist/incito-browser/incito.cjs.js",
+            "maxSize": "10 kB"
+        },
+        {
+            "path": "./dist/incito-browser/incito.es.js",
+            "maxSize": "10 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.js",
+            "maxSize": "60 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.min.js",
+            "maxSize": "30 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.cjs.js",
+            "maxSize": "30 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.es.js",
+            "maxSize": "30 kB"
+        },
+        {
             "path": "./dist/tjek-sdk/events/index.cjs.js",
             "maxSize": "10 kB"
         },
