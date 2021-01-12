@@ -1,5 +1,4 @@
 {
-    "version": "3.4.0",
     "description": "ShopGun SDK for JavaScript.",
     "main": "dist/shopgun-sdk/sgn-sdk.cjs.js",
     "browser": "dist/shopgun-sdk/sgn-sdk.js",
@@ -101,5 +100,8 @@
         "stylus": "^0.54.8",
         "thenify": "^3.3.1",
         "webpack": "^5.11.1"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
