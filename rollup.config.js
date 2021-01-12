@@ -10,61 +10,6 @@ import {terser} from 'rollup-plugin-terser';
 import {createFilter} from 'rollup-pluginutils';
 import stylus from 'stylus';
 
-const stylusPlugin = ({
-    include = ['**/*.styl', '**/*.stylus', '**/*.css'],
-    exclude,
-    compiler,
-    raw,
-    minified,
-    cleanCSSOptions,
-    filter = createFilter(include, exclude)
-} = {}) => ({
-    name: 'rollup-plugin-stylus-compiler',
-    resolveId: (id) => (filter(id) ? id : null),
-    load: (id) => (filter(id) ? id : null),
-    transform: (id) => (filter(id) ? '' : null),
-    async generateBundle(_, bundle) {
-        for (const file of Object.values(bundle)) {
-            const fileName = file.fileName.slice(
-                0,
-                -path.extname(file.fileName).length
-            );
-            const stylusCode = Object.keys(file.modules)
-                .filter((id) => filter(id))
-                .map((id) => `@require '${id}'`)
-                .join(EOL);
-            if (!stylusCode) return;
-            const cssCode = await new Promise((y, n) =>
-                stylus(
-                    `@require 'node_modules/nib/index.styl'${EOL}${stylusCode}`,
-                    compiler
-                )
-                    .set('paths', [process.cwd()])
-                    .render((e, c) => (e ? n(e) : y(c)))
-            );
-
-            if (raw)
-                await this.emitFile({
-                    type: 'asset',
-                    fileName: fileName + '.css',
-                    source: cssCode
-                });
-
-            if (minified) {
-                const {styles} = await new CleanCSS({
-                    ...cleanCSSOptions,
-                    returnPromise: true
-                }).minify(cssCode);
-                await this.emitFile({
-                    type: 'asset',
-                    fileName: fileName + '.min.css',
-                    source: styles
-                });
-            }
-        }
-    }
-});
-
 const libDir = path.join(__dirname, 'lib');
 const distDir = path.join(__dirname, 'dist');
 
@@ -269,3 +214,60 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default configs;
+
+function stylusPlugin({
+    include = ['**/*.styl', '**/*.stylus', '**/*.css'],
+    exclude,
+    compiler,
+    raw,
+    minified,
+    cleanCSSOptions,
+    filter = createFilter(include, exclude)
+} = {}) {
+    return {
+        name: 'rollup-plugin-stylus-compiler',
+        resolveId: (id) => (filter(id) ? id : null),
+        load: (id) => (filter(id) ? id : null),
+        transform: (id) => (filter(id) ? '' : null),
+        async generateBundle(_, bundle) {
+            for (const file of Object.values(bundle)) {
+                const fileName = file.fileName.slice(
+                    0,
+                    -path.extname(file.fileName).length
+                );
+                const stylusCode = Object.keys(file.modules)
+                    .filter((id) => filter(id))
+                    .map((id) => `@require '${id}'`)
+                    .join(EOL);
+                if (!stylusCode) return;
+                const cssCode = await new Promise((y, n) =>
+                    stylus(
+                        `@require 'node_modules/nib/index.styl'${EOL}${stylusCode}`,
+                        compiler
+                    )
+                        .set('paths', [process.cwd()])
+                        .render((e, c) => (e ? n(e) : y(c)))
+                );
+
+                if (raw)
+                    await this.emitFile({
+                        type: 'asset',
+                        fileName: fileName + '.css',
+                        source: cssCode
+                    });
+
+                if (minified) {
+                    const {styles} = await new CleanCSS({
+                        ...cleanCSSOptions,
+                        returnPromise: true
+                    }).minify(cssCode);
+                    await this.emitFile({
+                        type: 'asset',
+                        fileName: fileName + '.min.css',
+                        source: styles
+                    });
+                }
+            }
+        }
+    };
+}
