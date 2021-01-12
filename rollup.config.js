@@ -9,7 +9,6 @@ import generatePackageJson from 'rollup-plugin-generate-package-json';
 import {terser} from 'rollup-plugin-terser';
 import {createFilter} from 'rollup-pluginutils';
 import stylus from 'stylus';
-import {version} from './package.json';
 
 const stylusPlugin = ({
     include = ['**/*.styl', '**/*.stylus', '**/*.css'],
@@ -183,7 +182,6 @@ let configs = bundles
                         ...pkg,
                         baseContents: {
                             main: fileName + '.cjs.js',
-                            browser: fileName + '.js',
                             module: fileName + '.es.js',
                             'jsnext:main': fileName + '.es.js',
                             ...(pkg && pkg.baseContents)
