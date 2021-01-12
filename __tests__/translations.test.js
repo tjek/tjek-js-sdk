@@ -3,6 +3,7 @@ const SGN = require('../');
 describe('SGN.translations', () => {
     test('Can translate', () => {
         expect(typeof SGN.translations.t('some_key')).toEqual('string');
+        expect(typeof SGN.translations.t('some_key')).toEqual('string');
     });
 
     test('Can update translations', () => {
