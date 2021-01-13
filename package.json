@@ -22,6 +22,38 @@
             "maxSize": "75 kB"
         },
         {
+            "path": "./dist/incito-browser/incito.js",
+            "maxSize": "40 kB"
+        },
+        {
+            "path": "./dist/incito-browser/incito.min.js",
+            "maxSize": "20 kB"
+        },
+        {
+            "path": "./dist/incito-browser/incito.cjs.js",
+            "maxSize": "10 kB"
+        },
+        {
+            "path": "./dist/incito-browser/incito.es.js",
+            "maxSize": "10 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.js",
+            "maxSize": "60 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.min.js",
+            "maxSize": "30 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.cjs.js",
+            "maxSize": "30 kB"
+        },
+        {
+            "path": "./dist/verso-browser/verso.es.js",
+            "maxSize": "30 kB"
+        },
+        {
             "path": "./dist/tjek-sdk/events/index.cjs.js",
             "maxSize": "10 kB"
         },
@@ -31,15 +63,17 @@
         }
     ],
     "scripts": {
+        "clean":"rimraf -r dist",
         "test": "npm run test:lint && npm run test:ci && npm run test:size",
         "test:lint": "eslint lib __tests__",
-        "test:ci": "jest --verbose",
+        "test:ci": "jest",
         "test:size": "bundlesize",
         "build": "rollup -c --no-treeshake -m --environment NODE_ENV:production",
         "dev:js": "rollup -c -m inline --no-treeshake --environment NODE_ENV:development --watch",
         "dev": "run-p -l dev:js serve",
         "serve": "serve",
-        "prepublishOnly": "npm run test && npm run build",
+        "prepublish": "npm run clean && npm run build && npm run test",
+        "publish": "GOOD=1 node publish-npm.js",
         "publish-pages": "gh-pages -d examples -e examples && gh-pages -d dist -e dist"
     },
     "repository": {
@@ -74,31 +108,41 @@
         "@rollup/plugin-node-resolve": "^11.0.1",
         "@rollup/plugin-replace": "^2.3.4",
         "app-root-path": "^3.0.0",
-        "aws-sdk": "^2.822.0",
+        "aws-sdk": "^2.826.0",
         "bundlesize": "^0.18.0",
+        "chalk": "^4.1.0",
         "clean-css": "^4.2.3",
+        "diff": "^5.0.0",
         "eslint": "^7.17.0",
         "eslint-config-prettier": "^7.1.0",
+        "file-type": "^16.1.0",
         "gh-pages": "^3.1.0",
         "glob": "^7.1.6",
+        "inquirer": "^7.3.3",
+        "isbinaryfile": "^4.0.6",
         "jest": "^26.6.3",
         "jest-cli": "^26.6.3",
         "jest-each": "^26.6.2",
         "jest-puppeteer-preset": "^4.4.0",
         "jest-test-matrix": "^1.2.0",
+        "libnpm": "^3.0.1",
         "memfs": "^3.2.0",
         "memory-fs": "^0.5.0",
         "nib": "^1.1.2",
         "npm-run-all": "^4.1.5",
+        "ora": "^5.2.0",
         "process": "^0.11.10",
         "puppeteer": "^5.5.0",
+        "recursive-readdir": "^2.2.2",
         "rollup": "^2.36.1",
         "rollup-plugin-generate-package-json": "^3.2.0",
         "rollup-plugin-terser": "^7.0.2",
         "rollup-pluginutils": "^2.8.2",
         "serve": "^11.3.2",
         "stylus": "^0.54.8",
+        "tar": "^6.1.0",
         "thenify": "^3.3.1",
+        "tmp-promise": "^3.0.2",
         "webpack": "^5.11.1"
     },
     "publishConfig": {
