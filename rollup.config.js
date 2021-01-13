@@ -13,52 +13,32 @@ import stylus from 'stylus';
 const libDir = path.join(__dirname, 'lib');
 const distDir = path.join(__dirname, 'dist');
 
+const version = '0.0.0-unreleased.0';
 const bundles = [
     {
         name: 'SGN',
         fileName: 'sgn-sdk',
-        pkg: {
-            baseContents: {
-                version: '3.4.0',
-                name: 'shopgun-sdk'
-            }
-        },
+        pkg: {baseContents: {version, name: 'shopgun-sdk'}},
         input: path.join(libDir, 'sgn-sdk.js'),
         output: path.join(distDir, 'shopgun-sdk')
     },
     {
         name: 'Incito',
         fileName: 'incito',
-        pkg: {
-            baseContents: {
-                version: '1.2.0',
-                name: 'incito-browser'
-            }
-        },
+        pkg: {baseContents: {version, name: 'incito-browser'}},
         input: path.join(libDir, 'incito-browser', 'incito.js'),
         output: path.join(distDir, 'incito-browser')
     },
     {
         name: 'Verso',
         fileName: 'verso',
-        pkg: {
-            baseContents: {
-                version: '1.1.0',
-                name: 'verso-browser'
-            }
-        },
+        pkg: {baseContents: {version, name: 'verso-browser'}},
         input: path.join(libDir, 'verso-browser', 'verso.js'),
         output: path.join(distDir, 'verso-browser')
     },
     {
         name: 'Tjek',
-        pkg: {
-            baseContents: {
-                version: '0.0.0-beta.0',
-                name: '@tjek/sdk',
-                sideEffects: true
-            }
-        },
+        pkg: {baseContents: {version, name: '@tjek/sdk'}},
         input: path.join(libDir, 'tjek-sdk.js'),
         output: path.join(distDir, 'tjek-sdk')
     },
