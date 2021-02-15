@@ -1,0 +1,16 @@
+{
+  "main": "sgn-sdk.cjs.js",
+  "module": "sgn-sdk.es.js",
+  "jsnext:main": "sgn-sdk.es.js",
+  "version": "0.0.0-unreleased.0",
+  "name": "shopgun-sdk",
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.12.5",
+    "core-js": "^3.8.2",
+    "cross-fetch": "^3.0.6",
+    "md5": "^2.3.0",
+    "microevent": "^1.0.0",
+    "mustache": "^4.1.0",
+    "sha256": "^0.2.0"
+  }
+}

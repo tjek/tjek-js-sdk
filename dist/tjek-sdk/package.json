@@ -1,0 +1,13 @@
+{
+  "main": "index.cjs.js",
+  "module": "index.es.js",
+  "jsnext:main": "index.es.js",
+  "version": "0.0.0-unreleased.0",
+  "name": "@tjek/sdk",
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.12.5",
+    "core-js": "^3.8.2",
+    "cross-fetch": "^3.0.6",
+    "md5": "^2.3.0"
+  }
+}

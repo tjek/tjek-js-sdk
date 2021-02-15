@@ -1,0 +1,11 @@
+{
+  "main": "verso.cjs.js",
+  "module": "verso.es.js",
+  "jsnext:main": "verso.es.js",
+  "version": "0.0.0-unreleased.0",
+  "name": "verso-browser",
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.12.5",
+    "core-js": "^3.8.2"
+  }
+}

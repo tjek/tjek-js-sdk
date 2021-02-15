@@ -1,0 +1,11 @@
+{
+  "main": "index.cjs.js",
+  "module": "index.es.js",
+  "jsnext:main": "index.es.js",
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.12.5",
+    "core-js": "^3.8.2",
+    "cross-fetch": "^3.0.6",
+    "md5": "^2.3.0"
+  }
+}
