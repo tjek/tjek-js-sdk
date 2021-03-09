@@ -5,6 +5,7 @@ import replace from '@rollup/plugin-replace';
 import CleanCSS from 'clean-css';
 import {EOL} from 'os';
 import path from 'path';
+import copy from 'rollup-plugin-copy';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
 import {terser} from 'rollup-plugin-terser';
 import {createFilter} from 'rollup-pluginutils';
@@ -53,10 +54,7 @@ const bundles = [
 ];
 
 const getBabelPlugin = () =>
-    babel({
-        exclude: ['node_modules/**'],
-        babelHelpers: 'runtime'
-    });
+    babel({exclude: ['node_modules/**'], babelHelpers: 'runtime'});
 
 const external = [
     /@babel\/runtime/,
@@ -98,7 +96,8 @@ let configs = bundles
                     replace({
                         'process.env.NODE_ENV': JSON.stringify(
                             process.env.NODE_ENV
-                        )
+                        ),
+                        preventAssignment: true
                     }),
                     commonjs({extensions: ['.js']}),
                     getBabelPlugin(),
@@ -111,7 +110,8 @@ let configs = bundles
                             'jsnext:main': fileName + '.es.js',
                             ...(pkg && pkg.baseContents)
                         }
-                    })
+                    }),
+                    copy({targets: [{src: 'README.md', dest: output}]})
                 ]
             },
             name && {
@@ -137,7 +137,8 @@ let configs = bundles
                     replace({
                         'process.env.NODE_ENV': JSON.stringify(
                             process.env.NODE_ENV
-                        )
+                        ),
+                        preventAssignment: true
                     }),
                     resolve({
                         mainFields: ['jsnext:main', 'main'],
@@ -161,7 +162,8 @@ let configs = bundles
                     replace({
                         'process.env.NODE_ENV': JSON.stringify(
                             process.env.NODE_ENV
-                        )
+                        ),
+                        preventAssignment: true
                     }),
                     resolve({
                         mainFields: ['jsnext:main', 'main'],
