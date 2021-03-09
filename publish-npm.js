@@ -392,6 +392,21 @@ async function publish() {
 
         process.chdir(cwd);
     }
+
+    const {uploadS3} = await prompt([
+        {
+            type: 'confirm',
+            name: 'uploadS3',
+            message: 'Would you like to upload sgn-sdk to S3? (Requires auth)',
+            default: false
+        }
+    ]);
+
+    if (uploadS3) {
+        const s3Ind = ora(`Uploading to S3`).start();
+        console.log(await run('node', ['./upload-s3.js']));
+        s3Ind.succeed(`Uploaded to S3`);
+    }
 }
 
 publish().catch((e) => {
