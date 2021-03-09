@@ -74,6 +74,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 3.5.0
+* Update the `incito-browser` libary with new `HTMLView` that adds support for a more complex view component through the use of a style property for valid css style-attributes.
+
+
 ### Version 3.4.0
 * Internal refactor to vanilla JS
 
