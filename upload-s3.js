@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 var fs = require('fs');
 var path = require('path');
-var pkg = require('./package');
+var pkg = require('./dist/shopgun-sdk/package.json');
 var credentials = new AWS.SharedIniFileCredentials({profile: 'shopgun-js-sdk'});
 var bucket = 'sgn-js-sdk';
 
