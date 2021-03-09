@@ -311,7 +311,7 @@ async function publish() {
     const answers2 = await prompt(
         answers.packagesToPublish.map((packageJsonPath) => {
             const [pkg] = packageDiffs[packageJsonPath];
-            const version = semver.parse(pkg.version || '0.0.0');
+            const version = pkg.version || '0.0.0';
             const pre = tag === 'beta';
             return {
                 type: 'list',
