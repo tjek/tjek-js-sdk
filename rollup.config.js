@@ -61,7 +61,6 @@ const external = [
     /core-js/,
     'cross-fetch',
     'md5',
-    'sha256',
     'microevent',
     'mustache',
     'incito-browser',
