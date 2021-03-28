@@ -41,23 +41,4 @@ describe('Chrome: SGN singleton behavior', () => {
 
         expect(srcTrackId).toMatch(cfgTrackId);
     });
-    it('Initially no core session token', async () => {
-        const coreSessionToken = await page.evaluate(() =>
-            window.SGN.config.get('coreSessionToken')
-        );
-        expect(coreSessionToken).toBeUndefined();
-    });
-    it('Core session token is configured after core request', async () => {
-        const coreSessionToken = await page.evaluate(() =>
-            window.SGN.config.get('coreSessionToken')
-        );
-        expect(coreSessionToken).toBeUndefined();
-        await page.evaluate(() =>
-            window.SGN.CoreKit.request({url: '/v2/regions'})
-        );
-        const coreSessionToken2 = await page.evaluate(() =>
-            window.SGN.config.get('coreSessionToken')
-        );
-        expect(coreSessionToken2).toBeTruthy();
-    });
 });
