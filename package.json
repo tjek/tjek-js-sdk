@@ -100,7 +100,6 @@
         "md5": "^2.3.0",
         "microevent": "^1.0.0",
         "mustache": "^4.1.0",
-        "sha256": "^0.2.0",
         "verso-browser": "^1.1.0"
     },
     "devDependencies": {
