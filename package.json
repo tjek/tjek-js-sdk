@@ -80,7 +80,13 @@
         "type": "git",
         "url": "git+https://github.com/shopgun/shopgun-js-sdk.git"
     },
-    "author": "Morten Bo Rønsholdt <mr@shopgun.com> (https://shopgun.com/)",
+    "author": "Morten Bo Rønsholdt <mr@tjek.com> (https://tjek.com)",
+    "contributors": [
+        {
+            "name": "Jonas Klarstrup",
+            "email": "jk@tjek.com"
+        }
+    ],
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/shopgun/shopgun-js-sdk/issues"
@@ -94,7 +100,6 @@
         "md5": "^2.3.0",
         "microevent": "^1.0.0",
         "mustache": "^4.1.0",
-        "sha256": "^0.2.0",
         "verso-browser": "^1.1.0"
     },
     "devDependencies": {

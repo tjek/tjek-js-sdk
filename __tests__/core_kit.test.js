@@ -1,10 +1,8 @@
 const SGN = require('../');
 const appKey = '00j4o5wpwptl84fuubdig2s6ej5uyna8';
-const appSecret = '00j4o5wpwppwtw4ojzn3rey7ujgy79nn';
 
 SGN.config.set({
-    appKey,
-    appSecret
+    appKey
 });
 
 describe('SGN.CoreKit', () => {

@@ -6,13 +6,6 @@
         .sgn-incito__progress
             display inline-block
 
-    &.sgn-incito--started
-        &:not(.sgn-incito--scrolling) .sgn-incito__progress
-            transition opacity ease 1s
-
-        &.sgn-incito--scrolling .sgn-incito__progress
-            opacity 1
-
 .sgn-incito__progress
     box-sizing border-box
     position fixed
@@ -21,7 +14,6 @@
     display none
     z-index 2
     background-color #000
-    opacity 0.5
     color #fff
     width 100px
     margin-left -50px
