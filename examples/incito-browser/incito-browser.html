@@ -25,10 +25,6 @@
                         incito: data
                     });
 
-                    incito.bind('allRendered', function () {
-                        console.timeEnd('start -> all rendered');
-                    });
-
                     console.time('start -> all rendered');
                     
                     incito.bind('visibleRendered', function () {

@@ -16,12 +16,6 @@ describe('Chrome: SGN singleton behavior', () => {
         page.on('error', (err) => console.log('Error:', err.toString()));
         await page.goto(sgnPath);
     });
-    it('Default configuration', async () => {
-        const cfgLocale = await page.evaluate(() =>
-            window.SGN.config.get('locale')
-        );
-        expect(cfgLocale).toMatch('en_US');
-    });
     it('Magic API key config from script tag', async () => {
         const srcAppKey = await page.evaluate(
             () => document.querySelector('[data-app-key]').dataset.appKey
@@ -40,24 +34,5 @@ describe('Chrome: SGN singleton behavior', () => {
         );
 
         expect(srcTrackId).toMatch(cfgTrackId);
-    });
-    it('Initially no core session token', async () => {
-        const coreSessionToken = await page.evaluate(() =>
-            window.SGN.config.get('coreSessionToken')
-        );
-        expect(coreSessionToken).toBeUndefined();
-    });
-    it('Core session token is configured after core request', async () => {
-        const coreSessionToken = await page.evaluate(() =>
-            window.SGN.config.get('coreSessionToken')
-        );
-        expect(coreSessionToken).toBeUndefined();
-        await page.evaluate(() =>
-            window.SGN.CoreKit.request({url: '/v2/regions'})
-        );
-        const coreSessionToken2 = await page.evaluate(() =>
-            window.SGN.config.get('coreSessionToken')
-        );
-        expect(coreSessionToken2).toBeTruthy();
     });
 });
