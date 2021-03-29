@@ -16,12 +16,6 @@ describe('Chrome: SGN singleton behavior', () => {
         page.on('error', (err) => console.log('Error:', err.toString()));
         await page.goto(sgnPath);
     });
-    it('Default configuration', async () => {
-        const cfgLocale = await page.evaluate(() =>
-            window.SGN.config.get('locale')
-        );
-        expect(cfgLocale).toMatch('en_US');
-    });
     it('Magic API key config from script tag', async () => {
         const srcAppKey = await page.evaluate(
             () => document.querySelector('[data-app-key]').dataset.appKey
