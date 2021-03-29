@@ -1,38 +1,38 @@
-import 'core-js/modules/es.number.constructor.js';
-import 'core-js/modules/es.regexp.exec.js';
-import 'core-js/modules/es.string.split.js';
-import _setTimeout from '@babel/runtime-corejs3/core-js-stable/set-timeout';
-import _Array$from2 from '@babel/runtime-corejs3/core-js-stable/array/from';
-import _bindInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/bind';
-import _forEachInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/for-each';
-import _indexOfInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/index-of';
-import _spliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/splice';
 import _classCallCheck from '@babel/runtime-corejs3/helpers/classCallCheck';
 import _createClass from '@babel/runtime-corejs3/helpers/createClass';
-import _concatInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/concat';
+import 'core-js/modules/es.string.split.js';
+import 'core-js/modules/es.regexp.exec.js';
+import 'core-js/modules/es.number.constructor.js';
+import _spliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/splice';
+import _indexOfInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/index-of';
+import _forEachInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/for-each';
+import _bindInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/bind';
+import _Array$from2 from '@babel/runtime-corejs3/core-js-stable/array/from';
+import _setTimeout from '@babel/runtime-corejs3/core-js-stable/set-timeout';
 import _defineProperty from '@babel/runtime-corejs3/helpers/defineProperty';
-import _Object$defineProperty from '@babel/runtime-corejs3/core-js-stable/object/define-property';
-import _Object$defineProperties from '@babel/runtime-corejs3/core-js-stable/object/define-properties';
-import _Object$getOwnPropertyDescriptors from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors';
-import _Object$getOwnPropertyDescriptor from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor';
-import _Object$getOwnPropertySymbols from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols';
+import _concatInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/concat';
 import _Object$keys from '@babel/runtime-corejs3/core-js-stable/object/keys';
-import 'core-js/modules/es.array.join.js';
-import 'core-js/modules/es.string.replace.js';
-import _Object$entries from '@babel/runtime-corejs3/core-js-stable/object/entries';
-import _reduceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/reduce';
-import _filterInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/filter';
-import _findIndexInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find-index';
+import _Object$getOwnPropertySymbols from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols';
+import _Object$getOwnPropertyDescriptor from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor';
+import _Object$getOwnPropertyDescriptors from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors';
+import _Object$defineProperties from '@babel/runtime-corejs3/core-js-stable/object/define-properties';
+import _Object$defineProperty from '@babel/runtime-corejs3/core-js-stable/object/define-property';
 import _slicedToArray from '@babel/runtime-corejs3/helpers/slicedToArray';
-import _mapInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/map';
-import _findInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find';
-import _sortInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/sort';
-import _sliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/slice';
-import _trimInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/trim';
-import _Object$assign from '@babel/runtime-corejs3/core-js-stable/object/assign';
-import _Object$create from '@babel/runtime-corejs3/core-js-stable/object/create';
-import _Array$isArray from '@babel/runtime-corejs3/core-js-stable/array/is-array';
+import 'core-js/modules/es.string.replace.js';
+import 'core-js/modules/es.array.join.js';
 import _Date$now from '@babel/runtime-corejs3/core-js-stable/date/now';
+import _Array$isArray from '@babel/runtime-corejs3/core-js-stable/array/is-array';
+import _Object$create from '@babel/runtime-corejs3/core-js-stable/object/create';
+import _Object$assign from '@babel/runtime-corejs3/core-js-stable/object/assign';
+import _trimInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/trim';
+import _sliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/slice';
+import _sortInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/sort';
+import _findInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find';
+import _mapInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/map';
+import _findIndexInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find-index';
+import _filterInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/filter';
+import _reduceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/reduce';
+import _Object$entries from '@babel/runtime-corejs3/core-js-stable/object/entries';
 
 var Animation = /*#__PURE__*/function () {
   function Animation(el) {
@@ -276,7 +276,6 @@ var PageSpread = /*#__PURE__*/function () {
 function ownKeys(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); if (enumerableOnly) symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { var _context20; _forEachInstanceProperty(_context20 = ownKeys(Object(source), true)).call(_context20, function (key) { _defineProperty(target, key, source[key]); }); } else if (_Object$getOwnPropertyDescriptors) { _Object$defineProperties(target, _Object$getOwnPropertyDescriptors(source)); } else { var _context21; _forEachInstanceProperty(_context21 = ownKeys(Object(source))).call(_context21, function (key) { _Object$defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
 var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
 
 var TEST_ELEMENT = function TEST_ELEMENT() {

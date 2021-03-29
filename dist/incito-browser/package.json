@@ -5,7 +5,8 @@
   "version": "0.0.0-unreleased.0",
   "name": "incito-browser",
   "dependencies": {
-    "@babel/runtime-corejs3": "^7.12.5",
-    "core-js": "^3.8.2"
+    "@babel/runtime-corejs3": "^7.13.10",
+    "core-js": "^3.9.1",
+    "microevent": "^1.0.0"
   }
 }

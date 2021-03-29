@@ -1,73 +1,73 @@
 'use strict';
 
-require('core-js/modules/es.number.constructor.js');
-require('core-js/modules/es.regexp.exec.js');
-require('core-js/modules/es.string.split.js');
-var _setTimeout = require('@babel/runtime-corejs3/core-js-stable/set-timeout');
-var _Array$from2 = require('@babel/runtime-corejs3/core-js-stable/array/from');
-var _bindInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/bind');
-var _forEachInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/for-each');
-var _indexOfInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/index-of');
-var _spliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/splice');
 var _classCallCheck = require('@babel/runtime-corejs3/helpers/classCallCheck');
 var _createClass = require('@babel/runtime-corejs3/helpers/createClass');
-var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
+require('core-js/modules/es.string.split.js');
+require('core-js/modules/es.regexp.exec.js');
+require('core-js/modules/es.number.constructor.js');
+var _spliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/splice');
+var _indexOfInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/index-of');
+var _forEachInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/for-each');
+var _bindInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/bind');
+var _Array$from2 = require('@babel/runtime-corejs3/core-js-stable/array/from');
+var _setTimeout = require('@babel/runtime-corejs3/core-js-stable/set-timeout');
 var _defineProperty = require('@babel/runtime-corejs3/helpers/defineProperty');
-var _Object$defineProperty = require('@babel/runtime-corejs3/core-js-stable/object/define-property');
-var _Object$defineProperties = require('@babel/runtime-corejs3/core-js-stable/object/define-properties');
-var _Object$getOwnPropertyDescriptors = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors');
-var _Object$getOwnPropertyDescriptor = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor');
-var _Object$getOwnPropertySymbols = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols');
+var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
 var _Object$keys = require('@babel/runtime-corejs3/core-js-stable/object/keys');
-require('core-js/modules/es.array.join.js');
-require('core-js/modules/es.string.replace.js');
-var _Object$entries = require('@babel/runtime-corejs3/core-js-stable/object/entries');
-var _reduceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/reduce');
-var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
-var _findIndexInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find-index');
+var _Object$getOwnPropertySymbols = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols');
+var _Object$getOwnPropertyDescriptor = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor');
+var _Object$getOwnPropertyDescriptors = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors');
+var _Object$defineProperties = require('@babel/runtime-corejs3/core-js-stable/object/define-properties');
+var _Object$defineProperty = require('@babel/runtime-corejs3/core-js-stable/object/define-property');
 var _slicedToArray = require('@babel/runtime-corejs3/helpers/slicedToArray');
-var _mapInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/map');
-var _findInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find');
-var _sortInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/sort');
-var _sliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/slice');
-var _trimInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/trim');
-var _Object$assign = require('@babel/runtime-corejs3/core-js-stable/object/assign');
-var _Object$create = require('@babel/runtime-corejs3/core-js-stable/object/create');
-var _Array$isArray = require('@babel/runtime-corejs3/core-js-stable/array/is-array');
+require('core-js/modules/es.string.replace.js');
+require('core-js/modules/es.array.join.js');
 var _Date$now = require('@babel/runtime-corejs3/core-js-stable/date/now');
+var _Array$isArray = require('@babel/runtime-corejs3/core-js-stable/array/is-array');
+var _Object$create = require('@babel/runtime-corejs3/core-js-stable/object/create');
+var _Object$assign = require('@babel/runtime-corejs3/core-js-stable/object/assign');
+var _trimInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/trim');
+var _sliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/slice');
+var _sortInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/sort');
+var _findInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find');
+var _mapInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/map');
+var _findIndexInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find-index');
+var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
+var _reduceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/reduce');
+var _Object$entries = require('@babel/runtime-corejs3/core-js-stable/object/entries');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var _setTimeout__default = /*#__PURE__*/_interopDefaultLegacy(_setTimeout);
-var _Array$from2__default = /*#__PURE__*/_interopDefaultLegacy(_Array$from2);
-var _bindInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_bindInstanceProperty);
-var _forEachInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_forEachInstanceProperty);
-var _indexOfInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_indexOfInstanceProperty);
-var _spliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_spliceInstanceProperty);
 var _classCallCheck__default = /*#__PURE__*/_interopDefaultLegacy(_classCallCheck);
 var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
-var _concatInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_concatInstanceProperty);
+var _spliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_spliceInstanceProperty);
+var _indexOfInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_indexOfInstanceProperty);
+var _forEachInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_forEachInstanceProperty);
+var _bindInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_bindInstanceProperty);
+var _Array$from2__default = /*#__PURE__*/_interopDefaultLegacy(_Array$from2);
+var _setTimeout__default = /*#__PURE__*/_interopDefaultLegacy(_setTimeout);
 var _defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_defineProperty);
-var _Object$defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_Object$defineProperty);
-var _Object$defineProperties__default = /*#__PURE__*/_interopDefaultLegacy(_Object$defineProperties);
-var _Object$getOwnPropertyDescriptors__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertyDescriptors);
-var _Object$getOwnPropertyDescriptor__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertyDescriptor);
-var _Object$getOwnPropertySymbols__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertySymbols);
+var _concatInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_concatInstanceProperty);
 var _Object$keys__default = /*#__PURE__*/_interopDefaultLegacy(_Object$keys);
-var _Object$entries__default = /*#__PURE__*/_interopDefaultLegacy(_Object$entries);
-var _reduceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_reduceInstanceProperty);
-var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
-var _findIndexInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findIndexInstanceProperty);
+var _Object$getOwnPropertySymbols__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertySymbols);
+var _Object$getOwnPropertyDescriptor__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertyDescriptor);
+var _Object$getOwnPropertyDescriptors__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertyDescriptors);
+var _Object$defineProperties__default = /*#__PURE__*/_interopDefaultLegacy(_Object$defineProperties);
+var _Object$defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_Object$defineProperty);
 var _slicedToArray__default = /*#__PURE__*/_interopDefaultLegacy(_slicedToArray);
-var _mapInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_mapInstanceProperty);
-var _findInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findInstanceProperty);
-var _sortInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sortInstanceProperty);
-var _sliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sliceInstanceProperty);
-var _trimInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_trimInstanceProperty);
-var _Object$assign__default = /*#__PURE__*/_interopDefaultLegacy(_Object$assign);
-var _Object$create__default = /*#__PURE__*/_interopDefaultLegacy(_Object$create);
-var _Array$isArray__default = /*#__PURE__*/_interopDefaultLegacy(_Array$isArray);
 var _Date$now__default = /*#__PURE__*/_interopDefaultLegacy(_Date$now);
+var _Array$isArray__default = /*#__PURE__*/_interopDefaultLegacy(_Array$isArray);
+var _Object$create__default = /*#__PURE__*/_interopDefaultLegacy(_Object$create);
+var _Object$assign__default = /*#__PURE__*/_interopDefaultLegacy(_Object$assign);
+var _trimInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_trimInstanceProperty);
+var _sliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sliceInstanceProperty);
+var _sortInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sortInstanceProperty);
+var _findInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findInstanceProperty);
+var _mapInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_mapInstanceProperty);
+var _findIndexInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findIndexInstanceProperty);
+var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
+var _reduceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_reduceInstanceProperty);
+var _Object$entries__default = /*#__PURE__*/_interopDefaultLegacy(_Object$entries);
 
 var Animation = /*#__PURE__*/function () {
   function Animation(el) {
@@ -311,7 +311,6 @@ var PageSpread = /*#__PURE__*/function () {
 function ownKeys(object, enumerableOnly) { var keys = _Object$keys__default['default'](object); if (_Object$getOwnPropertySymbols__default['default']) { var symbols = _Object$getOwnPropertySymbols__default['default'](object); if (enumerableOnly) symbols = _filterInstanceProperty__default['default'](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default['default'](object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { var _context20; _forEachInstanceProperty__default['default'](_context20 = ownKeys(Object(source), true)).call(_context20, function (key) { _defineProperty__default['default'](target, key, source[key]); }); } else if (_Object$getOwnPropertyDescriptors__default['default']) { _Object$defineProperties__default['default'](target, _Object$getOwnPropertyDescriptors__default['default'](source)); } else { var _context21; _forEachInstanceProperty__default['default'](_context21 = ownKeys(Object(source))).call(_context21, function (key) { _Object$defineProperty__default['default'](target, key, _Object$getOwnPropertyDescriptor__default['default'](source, key)); }); } } return target; }
-
 var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
 
 var TEST_ELEMENT = function TEST_ELEMENT() {
