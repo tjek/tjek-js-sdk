@@ -72,6 +72,13 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 4.0.0
+
+-   Updated the `incito-browser` library with new and speedy rendering + added `HTMLEmbedView`
+-   Removed sessions from `CoreKit`
+-   Removed some unused config settings such as `locale` and `appSecret`
+-   Removed unused code
+
 ### Version 3.5.0
 
 -   Update the `incito-browser` libary with new `HTMLView` that adds support for a more complex view component through the use of a style property for valid css style-attributes.
