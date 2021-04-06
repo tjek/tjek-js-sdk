@@ -21,9 +21,4 @@ describe('Chrome: Incito Publication', () => {
     it('Viewer mounts', async () => {
         await expect(page).toMatchElement('.incito__view');
     });
-    it('Offer details opens on offer view click', async () => {
-        await expect(page).not.toMatchElement('.sgn-offer-details');
-        await expect(page).toClick('[data-role="offer"]');
-        await expect(page).toMatchElement('.sgn-offer-details');
-    });
 });
