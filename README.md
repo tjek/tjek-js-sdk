@@ -26,7 +26,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 <script
     src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.4.0.min.js"
     id="sgn-sdk"
-    data-app-key="YOUR_APP_KEY"
+    data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
 ></script>
 ```

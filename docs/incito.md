@@ -26,7 +26,7 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
 
     ```JS
     const shopgunAppConfig = {
-        apiKey: 'YOUR_APP_KEY',
+        apiKey: 'YOUR_API_KEY',
         eventTracker: new SGN.EventsKit.Tracker(trackId: 'YOUR_TRACK_ID')
     };
 
@@ -40,7 +40,7 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
     ```HTML
     <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.css" rel='stylesheet' />
 
-    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js" id="sgn-sdk" data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js" id="sgn-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
     ```
 
     You may use our distribution or choose to host the code yourself. Should you choose to use our distribution remember to point to the latest working version.
