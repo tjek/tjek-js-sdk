@@ -26,7 +26,7 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
 
     ```JS
     const shopgunAppConfig = {
-        appKey: 'YOUR_APP_KEY',
+        apiKey: 'YOUR_APP_KEY',
         eventTracker: new SGN.EventsKit.Tracker(trackId: 'YOUR_TRACK_ID')
     };
 

@@ -47,7 +47,7 @@ When installed you can require and configure the SDK:
 SGN = require('sgn-sdk');
 
 SGN.config.set({
-    appKey: 'YOUR_APP_KEY'
+    apiKey: 'YOUR_API_KEY'
 });
 ```
 
@@ -55,7 +55,7 @@ We recommend using environment variables for the config to avoid having secrets 
 
 ```javascript
 SGN.config.set({
-    appKey: process.env.SHOPGUN_APP_KEY
+    apiKey: process.env.SHOPGUN_API_KEY
 });
 ```
 
