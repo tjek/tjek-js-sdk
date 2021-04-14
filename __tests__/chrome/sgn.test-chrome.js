@@ -18,7 +18,7 @@ describe('Chrome: SGN singleton behavior', () => {
     });
     it('Magic API key config from script tag', async () => {
         const srcAppKey = await page.evaluate(
-            () => document.querySelector('[data-app-key]').dataset.appKey
+            () => document.querySelector('[data-api-key]').dataset.apiKey
         );
         const cfgAppKey = await page.evaluate(() =>
             window.SGN.config.get('appKey')

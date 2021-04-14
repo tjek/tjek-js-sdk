@@ -26,7 +26,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 <script
     src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.4.0.min.js"
     id="sgn-sdk"
-    data-app-key="YOUR_APP_KEY"
+    data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
 ></script>
 ```
@@ -47,7 +47,7 @@ When installed you can require and configure the SDK:
 SGN = require('sgn-sdk');
 
 SGN.config.set({
-    appKey: 'YOUR_APP_KEY'
+    apiKey: 'YOUR_API_KEY'
 });
 ```
 
@@ -55,7 +55,7 @@ We recommend using environment variables for the config to avoid having secrets 
 
 ```javascript
 SGN.config.set({
-    appKey: process.env.SHOPGUN_APP_KEY
+    apiKey: process.env.SHOPGUN_API_KEY
 });
 ```
 
