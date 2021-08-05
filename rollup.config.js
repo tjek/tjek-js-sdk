@@ -207,9 +207,11 @@ function stylusPlugin({
 } = {}) {
     return {
         name: 'rollup-plugin-stylus-compiler',
-        resolveId: (id) => (filter(id) ? id : null),
+        resolveId: (id) =>
+            filter(id) ? {id, moduleSideEffects: 'no-treeshake'} : null,
         load: (id) => (filter(id) ? id : null),
-        transform: (id) => (filter(id) ? '' : null),
+        transform: (id) =>
+            filter(id) ? {code: '', moduleSideEffects: 'no-treeshake'} : null,
         async generateBundle(_, bundle) {
             for (const file of Object.values(bundle)) {
                 const fileName = file.fileName.slice(
