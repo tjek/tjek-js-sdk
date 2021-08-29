@@ -23,11 +23,11 @@
         },
         {
             "path": "./dist/incito-browser/incito.js",
-            "maxSize": "40 kB"
+            "maxSize": "60 kB"
         },
         {
             "path": "./dist/incito-browser/incito.min.js",
-            "maxSize": "20 kB"
+            "maxSize": "30 kB"
         },
         {
             "path": "./dist/incito-browser/incito.cjs.js",
