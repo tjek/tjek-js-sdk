@@ -19,69 +19,44 @@
         ],
         "background_color": "#ffffff",
         "text_color": "#000000",
-        "line_spacing_multiplier": 1.4
+        "line_spacing_multiplier": 1.4,
+        "style": ".incito__incito-embed-view { width: 500px; height: 500px; border: 1px solid red; }"
     },
     "locale": "da_DK",
     "root_view": {
         "child_views": [{
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/2inner.json",
-            "method": "post",
-            "body": {
-                "nice": 1
-            },
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }, {
-            "view_name": "IncitoEmbedVideo",
-            "src": "/examples/incito-browser/inner.json",
-            "layout_width": 500,
-            "layout_height": 500
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
         }]
     }
 }
