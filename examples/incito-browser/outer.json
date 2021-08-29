@@ -1,0 +1,87 @@
+{
+    "id": "PRvgF9NV",
+    "version": "1.0.0",
+    "theme": {
+        "font_family": [
+            "HelveticaNeue-CondensedBold",
+            "HelveticaNeueBoldCondensed",
+            "HelveticaNeue-Bold-Condensed",
+            "Helvetica Neue Bold Condensed",
+            "HelveticaNeue",
+            "Helvetica Neue",
+            "TeXGyreHerosCnBold",
+            "Helvetica",
+            "Tahoma",
+            "Geneva",
+            "Arial Narrow",
+            "Arial",
+            "sans-serif"
+        ],
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "line_spacing_multiplier": 1.4
+    },
+    "locale": "da_DK",
+    "root_view": {
+        "child_views": [{
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/2inner.json",
+            "method": "post",
+            "body": {
+                "nice": 1
+            },
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }, {
+            "view_name": "IncitoEmbedVideo",
+            "src": "/examples/incito-browser/inner.json",
+            "layout_width": 500,
+            "layout_height": 500
+        }]
+    }
+}
