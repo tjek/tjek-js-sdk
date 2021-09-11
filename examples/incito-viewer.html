@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Incito Viewer</title>
+
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, viewport-fit=cover"
+        />
+        <meta charset="utf-8" />
+
+        <link
+            href="../dist/shopgun-sdk/sgn-sdk.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <style>
+            body {
+                margin: 0;
+                font-size: 16px;
+                line-height: 1.4;
+                overflow-x: hidden;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                    Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+                    'Segoe UI Emoji', 'Segoe UI Symbol';
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sgn__incito"></div>
+
+        <script
+            src="../dist/shopgun-sdk/sgn-sdk.js"
+            id="sgn-sdk"
+            data-api-key="00j4o5wpwptl84fuubdig2s6ej5uyna8"
+            data-track-id="AAABrQ=="
+        ></script>
+        <script>
+            var el = document.querySelector('.sgn__incito');
+
+            fetch('/examples/incito-browser/outer.json').then((res) => {
+                return res.json();
+            }).then((incito) => {
+                const viewer = new SGN.IncitoPublicationKit.Viewer.Incito(el, {
+                    incito: incito
+                });
+
+                viewer.start();
+            });
+        </script>
+    </body>
+</html>
