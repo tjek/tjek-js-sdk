@@ -78,7 +78,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/tjek/tjek-js-sdk.git"
+        "url": "git+https://github.com/shopgun/tjek-js-sdk.git"
     },
     "author": "Morten Bo Rønsholdt <mr@tjek.com> (https://tjek.com)",
     "contributors": [
@@ -89,9 +89,9 @@
     ],
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/tjek/tjek-js-sdk/issues"
+        "url": "https://github.com/shopgun/tjek-js-sdk/issues"
     },
-    "homepage": "https://github.com/tjek/tjek-js-sdk#readme",
+    "homepage": "https://github.com/shopgun/tjek-js-sdk#readme",
     "dependencies": {
         "@babel/runtime": "^7.13.10",
         "@babel/runtime-corejs3": "^7.13.10",

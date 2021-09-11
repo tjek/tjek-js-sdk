@@ -31,7 +31,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 ></script>
 ```
 
-By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://tjek.com/developers/apps).
+By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://etilbudsavis.dk/developers/apps).
 
 ### In Node.js
 
@@ -67,8 +67,8 @@ To provide your users with a viewing experience for PDF's you need to use our Pa
 
 To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
 
--   [Tjek iOS SDK](https://github.com/tjek/tjek-ios-sdk)
--   [Tjek Android SDK](https://github.com/tjek/tjek-android-sdk)
+-   [Tjek iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
+-   [Tjek Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
 
@@ -154,7 +154,7 @@ var viewer = bootstrapper.createViewer(data, {
 
 ### Version 2.3.15
 
--   Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/tjek/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
+-   Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
 
 ### Version 2.3.8
 
