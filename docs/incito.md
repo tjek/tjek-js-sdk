@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Incitos are generated via code utilizing [Shopgun SDK](https://www.npmjs.com/package/shopgun-sdk). In short, the integration code consists of two major steps:
+Incitos are generated via code utilizing [Tjek SDK](https://www.npmjs.com/package/tjek-sdk). In short, the integration code consists of two major steps:
 
 - Fetch catalog model/payload to display from our API
 - Generate Incito (view) under specified HTML element
@@ -16,7 +16,7 @@ _**Note:** Our implementation does **not** generate `<iframe>` elements making i
 
 In this section the steps required to display an Incito from start to finish are presented. The more visual types may check the examples under the [examples](./incito_examples/) folder.
 
-### **(1)** Include Shopgun SDK
+### **(1)** Include Tjek SDK
 
 You may choose to either include the project from `npm` _or_ use our CloudFront distribution.
 
@@ -25,12 +25,12 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
     In case you include our code and compile/minify with your application code, you will need an extra step that will configure the SDK with your app key and track id:
 
     ```JS
-    const shopgunAppConfig = {
+    const tjekAppConfig = {
         apiKey: 'YOUR_API_KEY',
-        eventTracker: new SGN.EventsKit.Tracker(trackId: 'YOUR_TRACK_ID')
+        eventTracker: new Tjek.EventsKit.Tracker(trackId: 'YOUR_TRACK_ID')
     };
 
-    SGN.config.set(shopgunAppConfig);
+    Tjek.config.set(tjekAppConfig);
     ```
 
 2. **Include using `<link>` & `<script>`**
@@ -38,9 +38,9 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
     If you include our code from separate nodes you may want to include your app key & track id as seen below. The example below uses our CloudFront distribution where all the versions are hosted:
 
     ```HTML
-    <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.css" rel='stylesheet' />
+    <link href="https://d21oefkcnoen8i.cloudfront.net/tjek-sdk-3.3.0.min.css" rel='stylesheet' />
 
-    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js" id="sgn-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+    <script src="https://d21oefkcnoen8i.cloudfront.net/tjek-sdk-3.3.0.min.js" id="tjek-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
     ```
 
     You may use our distribution or choose to host the code yourself. Should you choose to use our distribution remember to point to the latest working version.
@@ -52,7 +52,7 @@ This step is using the API to fetch the catalog to be displayed. This is normall
 You may either directly fetch a specific catalog like so:
 
 ```JS
-const catalog = await SGN.CoreKit.request({
+const catalog = await Tjek.CoreKit.request({
     url: '/v2/catalogs/CATALOG_ID',
     qs: {dealer_id: 'DEALER_ID'}
 });
@@ -61,7 +61,7 @@ const catalog = await SGN.CoreKit.request({
 Another option is to fetch the latest catalogs and choose using your logic, or just get the first element which will be the latest catalog, *meaning the catalog that is valid from the latest date, and secondary created the latest.*
 
 ```JS
-const catalogs = await SGN.CoreKit.request({
+const catalogs = await Tjek.CoreKit.request({
     url: '/v2/catalogs',
     qs: {
         dealer_id: 'DEALER_ID',
@@ -79,10 +79,10 @@ Given the catalog payload from the previous step, and an HTML node that is going
 
 ```JS
 const incitoRootElement = document.querySelector('#incito__publication');
-const incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
+const incitoPublication = new Tjek.IncitoPublicationKit.Bootstrapper({
     el: incitoRootElement,
     id: catalog.id,
-    eventTracker: SGN.config.get('eventTracker')
+    eventTracker: Tjek.config.get('eventTracker')
 });
 ```
 
@@ -115,7 +115,7 @@ In this, optional, step, a number of enchantments are presented:
 
     ```JS
     // Listen to click events on offer nodes under incitoRootElement
-    SGN.CoreUIKit.on(incitoRootElement, 'click', '.incito__view[data-role="offer"]', (e) => {
+    Tjek.CoreUIKit.on(incitoRootElement, 'click', '.incito__view[data-role="offer"]', (e) => {
         e.preventDefault();
 
         const id = this.getAttribute('data-id'); // Get offer ID

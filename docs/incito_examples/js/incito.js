@@ -3,7 +3,7 @@
         NOTE: Enable this code block to fetch from **staging** environment
         Feel free to remove the whole function call when working on production
 
-    SGN.config.set({
+    Tjek.config.set({
         coreUrl: 'https://squid-api.tjek-staging.com'
     });
 	*/
@@ -67,7 +67,7 @@
     var catalogId = 'YOUR_CATALOG_ID';
     var dealerId = 'YOUR_BUSINESS_ID';
     var fetchPublication = function (callback) {
-        SGN.CoreKit.request(
+        Tjek.CoreKit.request(
             {
                 url: '/v2/catalogs/' + catalogId,
                 qs: {
@@ -80,7 +80,7 @@
 
     /**
      * Use to visualize Incito scrolling progress
-     * NOTE: The Incito viewer will search for .sgn-incito__progress by default and update its value
+     * NOTE: The Incito viewer will search for .tjek-incito__progress by default and update its value
      * @param {progress [0-100]} progress
      */
     var trackViewProgress = function (progress) {
@@ -101,10 +101,10 @@
         }
 
         // Generate Incito bootstraper
-        var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
+        var incitoPublication = new Tjek.IncitoPublicationKit.Bootstrapper({
             el: incitoRootElement,
             id: publication.id,
-            eventTracker: SGN.config.get('eventTracker')
+            eventTracker: Tjek.config.get('eventTracker')
         });
 
         trackViewProgress(0);
@@ -132,7 +132,7 @@
 
                     // Bind clicks on offers
                     var lastClickedOffer = false;
-                    SGN.CoreUIKit.on(
+                    Tjek.CoreUIKit.on(
                         incitoRootElement,
                         'click',
                         '.incito__view[data-role="offer"]',
@@ -261,5 +261,5 @@
     };
 
     // Expose loadIncito
-    window.shopgun = {loadIncito};
+    window.tjek = {loadIncito};
 })();

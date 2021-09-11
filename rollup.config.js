@@ -17,13 +17,6 @@ const distDir = path.join(__dirname, 'dist');
 const version = '0.0.0-unreleased.0';
 const bundles = [
     {
-        name: 'SGN',
-        fileName: 'sgn-sdk',
-        pkg: {baseContents: {version, name: 'shopgun-sdk'}},
-        input: path.join(libDir, 'sgn-sdk.js'),
-        output: path.join(distDir, 'shopgun-sdk')
-    },
-    {
         name: 'Incito',
         fileName: 'incito',
         pkg: {baseContents: {version, name: 'incito-browser'}},

@@ -9,8 +9,8 @@ describe('Chrome: Paged Publication', () => {
         page = await browser.newPage();
         await page.goto(PPPath);
     });
-    it('Should display "Make your PDF alive with ShopGun." text on page', async () => {
-        await expect(page).toMatch('Make your PDF alive with ShopGun.');
+    it('Should display "Make your PDF alive with Tjek." text on page', async () => {
+        await expect(page).toMatch('Make your PDF alive with Tjek.');
     });
 
     it('Should load with the intro active', async () => {
@@ -19,7 +19,7 @@ describe('Chrome: Paged Publication', () => {
 
     it('Should go to next page when clicking the next page thingie', async () => {
         await expect(page).toMatchElement('#intro[data-active="true"]');
-        await expect(page).toClick('.sgn-pp__control[data-direction="next"]');
+        await expect(page).toClick('.tjek-pp__control[data-direction="next"]');
         await expect(page).not.toMatchElement('#intro[data-active="true"]');
         await expect(page).toMatchElement(
             '[data-active="true"][data-id="double-0"]'

@@ -1,9 +1,9 @@
 var AWS = require('aws-sdk');
 var fs = require('fs');
 var path = require('path');
-var pkg = require('./dist/shopgun-sdk/package.json');
-var credentials = new AWS.SharedIniFileCredentials({profile: 'shopgun-js-sdk'});
-var bucket = 'sgn-js-sdk';
+var pkg = require('./dist/tjek-sdk/package.json');
+var credentials = new AWS.SharedIniFileCredentials({profile: 'tjek-js-sdk'});
+var bucket = 'tjek-js-sdk';
 
 AWS.config.credentials = credentials;
 
@@ -28,17 +28,17 @@ function putObject(options) {
 }
 
 putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.js',
-    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js'),
+    key: 'tjek-sdk-' + pkg.version + '.min.js',
+    bodyPath: path.join(__dirname, 'dist', 'tjek-sdk', 'tjek-sdk.min.js'),
     contentType: 'application/javascript'
 });
 putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.js.map',
-    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js.map'),
+    key: 'tjek-sdk-' + pkg.version + '.min.js.map',
+    bodyPath: path.join(__dirname, 'dist', 'tjek-sdk', 'tjek-sdk.min.js.map'),
     contentType: 'application/json'
 });
 putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.css',
-    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.css'),
+    key: 'tjek-sdk-' + pkg.version + '.min.css',
+    bodyPath: path.join(__dirname, 'dist', 'tjek-sdk', 'tjek-sdk.min.css'),
     contentType: 'text/css'
 });

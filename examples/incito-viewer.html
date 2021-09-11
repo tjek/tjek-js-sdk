@@ -10,7 +10,7 @@
         <meta charset="utf-8" />
 
         <link
-            href="../dist/shopgun-sdk/sgn-sdk.css"
+            href="../dist/tjek-sdk/index.css"
             rel="stylesheet"
             type="text/css"
         />
@@ -27,21 +27,21 @@
         </style>
     </head>
     <body>
-        <div class="sgn__incito"></div>
+        <div class="tjek__incito"></div>
 
         <script
-            src="../dist/shopgun-sdk/sgn-sdk.js"
-            id="sgn-sdk"
+            src="../dist/tjek-sdk/index.js"
+            id="tjek-sdk"
             data-api-key="00j4o5wpwptl84fuubdig2s6ej5uyna8"
             data-track-id="AAABrQ=="
         ></script>
         <script>
-            var el = document.querySelector('.sgn__incito');
+            var el = document.querySelector('.tjek__incito');
 
             fetch('/examples/incito-browser/outer.json').then((res) => {
                 return res.json();
             }).then((incito) => {
-                const viewer = new SGN.IncitoPublicationKit.Viewer.Incito(el, {
+                const viewer = new Tjek.IncitoPublicationKit.Viewer.Incito(el, {
                     incito: incito
                 });
 

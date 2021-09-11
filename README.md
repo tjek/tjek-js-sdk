@@ -1,13 +1,13 @@
-# ShopGun JavaScript SDK
+# Tjek JavaScript SDK
 
-[![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=develop)](https://travis-ci.org/shopgun/shopgun-js-sdk)
-[![npm version](https://badge.fury.io/js/shopgun-sdk.svg)](https://badge.fury.io/js/shopgun-sdk)
+[![Build Status](https://travis-ci.org/tjek/tjek-js-sdk.svg?branch=develop)](https://travis-ci.org/tjek/tjek-js-sdk)
+[![npm version](https://badge.fury.io/js/tjek-sdk.svg)](https://badge.fury.io/js/tjek-sdk)
 
 This SDK works both client-side in your browser but also server-side in a Node.js environment.
 
 ## Creating an App
 
-First, you need to [create a ShopGun app](https://shopgun.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
+First, you need to [create a Tjek app](https://tjek.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
 
 > We recommend creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed.
 
@@ -19,34 +19,34 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.0.0.min.css"
+    href="https://d21oefkcnoen8i.cloudfront.net/tjek-sdk-4.0.0.min.css"
     rel="stylesheet"
     type="text/css"
 />
 <script
-    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.0.0.min.js"
-    id="sgn-sdk"
+    src="https://d21oefkcnoen8i.cloudfront.net/tjek-sdk-4.0.0.min.js"
+    id="tjek-sdk"
     data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
 ></script>
 ```
 
-By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://shopgun.com/developers/apps).
+By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://tjek.com/developers/apps).
 
 ### In Node.js
 
 We recommend you use npm to install the SDK. To install, simply type the following into a terminal window:
 
 ```
-npm install shopgun-sdk
+npm install tjek-sdk
 ```
 
 When installed you can require and configure the SDK:
 
 ```javascript
-SGN = require('sgn-sdk');
+Tjek = require('tjek-sdk');
 
-SGN.config.set({
+Tjek.config.set({
     apiKey: 'YOUR_API_KEY'
 });
 ```
@@ -54,21 +54,21 @@ SGN.config.set({
 We recommend using environment variables for the config to avoid having secrets in your code base:
 
 ```javascript
-SGN.config.set({
-    apiKey: process.env.SHOPGUN_API_KEY
+Tjek.config.set({
+    apiKey: process.env.TJEK_API_KEY
 });
 ```
 
 ## Paged Publications
 
-To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](https://shopgun.github.io/shopgun-js-sdk/examples/paged-publication.html) that shows how it can work.
+To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](https://tjek.github.io/tjek-js-sdk/examples/paged-publication.html) that shows how it can work.
 
 ## More Platforms
 
 To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
 
--   [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
--   [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
+-   [Tjek iOS SDK](https://github.com/tjek/tjek-ios-sdk)
+-   [Tjek Android SDK](https://github.com/tjek/tjek-android-sdk)
 
 ## Changelog
 
@@ -154,7 +154,7 @@ var viewer = bootstrapper.createViewer(data, {
 
 ### Version 2.3.15
 
--   Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
+-   Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/tjek/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
 
 ### Version 2.3.8
 
@@ -190,11 +190,11 @@ var viewer = bootstrapper.createViewer(data, {
 
 ### Version 2.2.3
 
--   Added promise return values to `SGN.CoreKit.request` and `SGN.CoreKit.request` calls without callback, when supported.
+-   Added promise return values to `Tjek.CoreKit.request` and `Tjek.CoreKit.request` calls without callback, when supported.
 
 ### Version 2.2.0
 
--   Changed the event tracker to use the new private event format. This also means you need to update your track identifier, which is now visible in the developer console on shopgun.com/developers.
+-   Changed the event tracker to use the new private event format. This also means you need to update your track identifier, which is now visible in the developer console on tjek.com/developers.
 
 ### Version 2.1.0
 
@@ -210,7 +210,7 @@ var viewer = bootstrapper.createViewer(data, {
 ### Version 2.0.0
 
 -   PagedPublicationKit
-    -   Refactored `SGN.PagedPublicationKit.initialize` to `SGN.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer
+    -   Refactored `Tjek.PagedPublicationKit.initialize` to `Tjek.PagedPublication.Bootstrapper` to split fetching and rendering of the viewer
     -   Made hotspots into a function instead of having a setting called `showHotspots`
 -   Introduced IncitoPublicationKit
 -   Removed unused files

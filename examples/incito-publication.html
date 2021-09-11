@@ -10,7 +10,7 @@
         <meta charset="utf-8" />
 
         <link
-            href="../dist/shopgun-sdk/sgn-sdk.css"
+            href="../dist/tjek-sdk/index.css"
             rel="stylesheet"
             type="text/css"
         />
@@ -31,22 +31,22 @@
         </style>
     </head>
     <body>
-        <div class="sgn__incito">
-            <div class="sgn-incito__progress"></div>
+        <div class="tjek__incito">
+            <div class="tjek-incito__progress"></div>
         </div>
 
         <script
-            src="../dist/shopgun-sdk/sgn-sdk.js"
-            id="sgn-sdk"
+            src="../dist/tjek-sdk/index.js"
+            id="tjek-sdk"
             data-api-key="00j4o5wpwptl84fuubdig2s6ej5uyna8"
             data-track-id="AAABrQ=="
         ></script>
         <script>
-            var el = document.querySelector('.sgn__incito');
-            var bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
+            var el = document.querySelector('.tjek__incito');
+            var bootstrapper = new Tjek.IncitoPublicationKit.Bootstrapper({
                 el: el,
-                id: SGN.util.getQueryParam('id'),
-                eventTracker: SGN.config.get('eventTracker')
+                id: Tjek.util.getQueryParam('id'),
+                eventTracker: Tjek.config.get('eventTracker')
             });
 
             this.bootstrapper.fetch(function (error, res) {
@@ -59,7 +59,7 @@
 
                 var viewer = bootstrapper.createViewer(res);
 
-                SGN.CoreUIKit.on(
+                Tjek.CoreUIKit.on(
                     el,
                     'click',
                     '.incito__view[data-role="offer"]',
@@ -73,7 +73,7 @@
                     }
                 );
 
-                var viewId = SGN.util.getQueryParam('view_id');
+                var viewId = Tjek.util.getQueryParam('view_id');
                 var viewEl =
                     viewId &&
                     el.querySelector('.incito__view[data-id="' + viewId + '"]');

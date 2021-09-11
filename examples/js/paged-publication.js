@@ -1,11 +1,11 @@
 (function () {
-    var id = SGN.util.getQueryParam('id');
+    var id = Tjek.util.getQueryParam('id');
     var options = {
-        el: document.querySelector('.sgn__pp'),
-        eventTracker: SGN.config.get('eventTracker')
+        el: document.querySelector('.tjek__pp'),
+        eventTracker: Tjek.config.get('eventTracker')
     };
     var start = function () {
-        var bootstrapper = new SGN.PagedPublicationKit.Bootstrapper(options);
+        var bootstrapper = new Tjek.PagedPublicationKit.Bootstrapper(options);
 
         bootstrapper.fetch(function (err, data) {
             if (!err) {
@@ -47,7 +47,7 @@
 
         start();
     } else {
-        SGN.CoreKit.request(
+        Tjek.CoreKit.request(
             {
                 url: '/v2/catalogs',
                 qs: {

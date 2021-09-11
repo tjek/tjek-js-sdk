@@ -16,7 +16,7 @@ describe('Chrome: Incito Publication', () => {
         await page.goto(`${PPPath}?id=${id}`);
     });
     it('Example html loads', async () => {
-        await expect(page).toMatchElement('.sgn__incito');
+        await expect(page).toMatchElement('.tjek__incito');
     });
     it('Viewer mounts', async () => {
         await expect(page).toMatchElement('.incito__view');

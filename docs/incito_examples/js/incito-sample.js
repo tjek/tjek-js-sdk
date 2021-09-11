@@ -21,7 +21,7 @@
 
     var incitoPublicationViewer;
     var fetchPublications = function (callback) {
-        SGN.CoreKit.request(
+        Tjek.CoreKit.request(
             {
                 url: '/v2/catalogs',
                 qs: {
@@ -37,7 +37,7 @@
     };
 
     var openIncitoPublication = function (publication, incitoRootElement) {
-        var incitoPublication = new SGN.IncitoPublicationKit.Bootstrapper({
+        var incitoPublication = new Tjek.IncitoPublicationKit.Bootstrapper({
             el: incitoRootElement,
             id: publication.id
         });
@@ -71,5 +71,5 @@
         );
     };
 
-    window.shopgun = {loadIncito: loadIncito};
+    window.tjek = {loadIncito: loadIncito};
 })();

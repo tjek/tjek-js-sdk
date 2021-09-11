@@ -397,7 +397,7 @@ async function publish() {
         {
             type: 'confirm',
             name: 'uploadS3',
-            message: 'Would you like to upload sgn-sdk to S3? (Requires auth)',
+            message: 'Would you like to upload tjek-sdk to S3? (Requires auth)',
             default: false
         }
     ]);

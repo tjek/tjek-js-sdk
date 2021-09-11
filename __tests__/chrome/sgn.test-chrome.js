@@ -1,9 +1,9 @@
 require('expect-puppeteer')?.setDefaultOptions({timeout: 2000});
 const path = require('path');
 
-const sgnPath = `file:${path.join(__dirname, './sgn.test-chrome.html')}`;
+const sgnPath = `file:${path.join(__dirname, './tjek.test-chrome.html')}`;
 
-describe('Chrome: SGN singleton behavior', () => {
+describe('Chrome: Tjek singleton behavior', () => {
     let page;
     beforeEach(async () => {
         page = await browser.newPage();
@@ -21,7 +21,7 @@ describe('Chrome: SGN singleton behavior', () => {
             () => document.querySelector('[data-api-key]').dataset.apiKey
         );
         const cfgAppKey = await page.evaluate(() =>
-            window.SGN.config.get('appKey')
+            window.Tjek.config.get('appKey')
         );
         expect(srcAppKey).toMatch(cfgAppKey);
     });
@@ -30,7 +30,7 @@ describe('Chrome: SGN singleton behavior', () => {
             () => document.querySelector('[data-track-id]').dataset.trackId
         );
         const cfgTrackId = await page.evaluate(
-            () => window.SGN.config.get('eventTracker').trackId
+            () => window.Tjek.config.get('eventTracker').trackId
         );
 
         expect(srcTrackId).toMatch(cfgTrackId);

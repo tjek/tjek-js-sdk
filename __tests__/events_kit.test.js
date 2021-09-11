@@ -1,8 +1,8 @@
-const SGN = require('../');
+const Tjek = require('../');
 
-describe('SGN.EventsKit', () => {
+describe('Tjek.EventsKit', () => {
     test('Can create a view token', () => {
-        const tracker = new SGN.EventsKit.Tracker({
+        const tracker = new Tjek.EventsKit.Tracker({
             trackId: 'AAABrQ==',
             client: {id: 'selfmade'}
         });
@@ -16,7 +16,7 @@ describe('SGN.EventsKit', () => {
 
     test('Can dispatch', () => {
         const id = '3395WdY';
-        const tracker = new SGN.EventsKit.Tracker({trackId: 'AAABrQ=='});
+        const tracker = new Tjek.EventsKit.Tracker({trackId: 'AAABrQ=='});
 
         tracker.trackPagedPublicationOpened({
             'pp.id': id,
