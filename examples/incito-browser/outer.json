@@ -1,0 +1,62 @@
+{
+    "id": "PRvgF9NV",
+    "version": "1.0.0",
+    "theme": {
+        "font_family": [
+            "HelveticaNeue-CondensedBold",
+            "HelveticaNeueBoldCondensed",
+            "HelveticaNeue-Bold-Condensed",
+            "Helvetica Neue Bold Condensed",
+            "HelveticaNeue",
+            "Helvetica Neue",
+            "TeXGyreHerosCnBold",
+            "Helvetica",
+            "Tahoma",
+            "Geneva",
+            "Arial Narrow",
+            "Arial",
+            "sans-serif"
+        ],
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "line_spacing_multiplier": 1.4,
+        "style": ".incito__incito-embed-view { width: 500px; height: 500px; border: 1px solid red; }"
+    },
+    "locale": "da_DK",
+    "root_view": {
+        "child_views": [{
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }, {
+            "view_name": "IncitoEmbedView",
+            "src": "/examples/incito-browser/inner.json"
+        }]
+    }
+}
