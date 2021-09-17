@@ -44,7 +44,7 @@ npm install shopgun-sdk
 When installed you can require and configure the SDK:
 
 ```javascript
-SGN = require('sgn-sdk');
+SGN = require('shopgun-sdk');
 
 SGN.config.set({
     apiKey: 'YOUR_API_KEY'
