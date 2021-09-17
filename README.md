@@ -72,9 +72,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
-### Version N.X.T
-
+### Version 4.0.1
+-   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js
 -   Update dependencies
+-   Fix Incito `data-link` behavior.
 
 ### Version 4.0.0
 
