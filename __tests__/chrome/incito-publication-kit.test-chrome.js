@@ -19,6 +19,6 @@ describe('Chrome: Incito Publication', () => {
         await expect(page).toMatchElement('.sgn__incito');
     });
     it('Viewer mounts', async () => {
-        await expect(page).toMatchElement('.incito__view');
-    });
+        await expect(page).toMatchElement('.incito__view', {timeout: 10000});
+    }, 10000);
 });
