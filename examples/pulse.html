@@ -112,8 +112,8 @@
 
                     buffer.push(overlay);
 
-                    while (buffer.length > 1000) {
-                        var removed = buffer.pop();
+                    while (buffer.length > 500) {
+                        var removed = buffer.shift();
                         
                         google.maps.event.clearListeners(
                             removed,
