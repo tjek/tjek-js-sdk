@@ -36,7 +36,6 @@
 
         <script>
             var es = new EventSource('https://wolf-api.tjek.com/pulse');
-            var buffer = [];
             var styles = [
                 {
                     featureType: 'transit',
@@ -110,23 +109,19 @@
                         radius: 7000
                     });
 
-                    buffer.push(overlay);
-
-                    while (buffer.length > 500) {
-                        var removed = buffer.shift();
-                        
+                    setTimeout(function () {
                         google.maps.event.clearListeners(
-                            removed,
+                            overlay,
                             'click_handler_name'
                         );
                         google.maps.event.clearListeners(
-                            removed,
+                            overlay,
                             'drag_handler_name'
                         );
 
-                        removed.setRadius(0);
-                        removed.setMap(null);
-                    }
+                        overlay.setRadius(0);
+                        overlay.setMap(null);
+                    }, 10000);
                 };
             }
         </script>
