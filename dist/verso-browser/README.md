@@ -19,14 +19,14 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.4.0.min.css"
+    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.0.0.min.css"
     rel="stylesheet"
     type="text/css"
 />
 <script
-    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.4.0.min.js"
+    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.0.0.min.js"
     id="sgn-sdk"
-    data-app-key="YOUR_APP_KEY"
+    data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
 ></script>
 ```
@@ -47,7 +47,7 @@ When installed you can require and configure the SDK:
 SGN = require('sgn-sdk');
 
 SGN.config.set({
-    appKey: 'YOUR_APP_KEY'
+    apiKey: 'YOUR_API_KEY'
 });
 ```
 
@@ -55,7 +55,7 @@ We recommend using environment variables for the config to avoid having secrets 
 
 ```javascript
 SGN.config.set({
-    appKey: process.env.SHOPGUN_APP_KEY
+    apiKey: process.env.SHOPGUN_API_KEY
 });
 ```
 
@@ -71,6 +71,11 @@ To learn more about integrating the same experience on iOS and Android be sure t
 -   [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
 ## Changelog
+
+### Version 4.0.1
+-   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js
+-   Update dependencies
+-   Fix Incito `data-link` behavior.
 
 ### Version 4.0.0
 

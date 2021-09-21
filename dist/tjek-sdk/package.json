@@ -1,13 +1,13 @@
 {
-  "main": "incito.cjs.js",
-  "module": "incito.es.js",
-  "jsnext:main": "incito.es.js",
+  "main": "index.cjs.js",
+  "module": "index.es.js",
+  "jsnext:main": "index.es.js",
   "version": "0.0.0-unreleased.0",
-  "name": "incito-browser",
+  "name": "@tjek/sdk",
   "dependencies": {
     "@babel/runtime-corejs3": "^7.15.4",
     "core-js": "^3.17.3",
     "cross-fetch": "^3.1.4",
-    "microevent": "^1.0.0"
+    "md5": "^2.3.0"
   }
 }

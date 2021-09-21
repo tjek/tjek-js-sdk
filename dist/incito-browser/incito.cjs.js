@@ -8,20 +8,30 @@ var _inherits = require('@babel/runtime-corejs3/helpers/inherits');
 var _possibleConstructorReturn = require('@babel/runtime-corejs3/helpers/possibleConstructorReturn');
 var _getPrototypeOf = require('@babel/runtime-corejs3/helpers/getPrototypeOf');
 require('core-js/modules/es.array.join.js');
+require('core-js/modules/es.string.link.js');
 require('core-js/modules/es.string.split.js');
 require('core-js/modules/es.regexp.exec.js');
 require('core-js/modules/es.function.name.js');
 require('core-js/modules/es.string.replace.js');
-require('core-js/modules/es.string.link.js');
 var _Array$isArray = require('@babel/runtime-corejs3/core-js-stable/array/is-array');
+var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
+var _indexOfInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/index-of');
 var _forEachInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/for-each');
 var _mapInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/map');
 var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
-var _indexOfInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/index-of');
 var _trimInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/trim');
-var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
+var _JSON$stringify = require('@babel/runtime-corejs3/core-js-stable/json/stringify');
 var MicroEvent = require('microevent');
+var fetch = require('cross-fetch');
 var _sliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/slice');
+require('@babel/runtime-corejs3/core-js-stable/instance/last-index-of');
+require('@babel/runtime-corejs3/core-js-stable/parse-int');
+require('@babel/runtime-corejs3/core-js-stable/instance/splice');
+require('@babel/runtime-corejs3/core-js-stable/set-timeout');
+require('@babel/runtime-corejs3/core-js-stable/promise');
+require('core-js/modules/es.object.to-string.js');
+require('core-js/modules/es.regexp.to-string.js');
+require('core-js/modules/es.regexp.constructor.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -33,13 +43,15 @@ var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
 var _possibleConstructorReturn__default = /*#__PURE__*/_interopDefaultLegacy(_possibleConstructorReturn);
 var _getPrototypeOf__default = /*#__PURE__*/_interopDefaultLegacy(_getPrototypeOf);
 var _Array$isArray__default = /*#__PURE__*/_interopDefaultLegacy(_Array$isArray);
+var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
+var _indexOfInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_indexOfInstanceProperty);
 var _forEachInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_forEachInstanceProperty);
 var _mapInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_mapInstanceProperty);
 var _concatInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_concatInstanceProperty);
-var _indexOfInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_indexOfInstanceProperty);
 var _trimInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_trimInstanceProperty);
-var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
+var _JSON$stringify__default = /*#__PURE__*/_interopDefaultLegacy(_JSON$stringify);
 var MicroEvent__default = /*#__PURE__*/_interopDefaultLegacy(MicroEvent);
+var fetch__default = /*#__PURE__*/_interopDefaultLegacy(fetch);
 var _sliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sliceInstanceProperty);
 
 var formatUnit = function formatUnit(unit) {
@@ -177,6 +189,17 @@ var loadFonts = function loadFonts() {
   document.head.appendChild(styleEl);
 };
 
+function closest(el, s) {
+  var matches = Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+
+  do {
+    if (matches.call(el, s)) return el;
+    el = el.parentElement || el.parentNode;
+  } while (el !== null && el.nodeType === 1);
+
+  return null;
+}
+
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf__default['default'](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default['default'](this).constructor; result = _Reflect$construct__default['default'](Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default['default'](this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct__default['default']) return false; if (_Reflect$construct__default['default'].sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct__default['default'](Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -198,27 +221,29 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     _this.containerEl = containerEl;
     _this.incito = incito;
     _this.el = document.createElement('div');
-    _this.imageCount = 0;
-    _this.preloadImageCount = 20;
     _this.ids = {};
     _this.sections = [];
-    _this.shouldLazyload = 'IntersectionObserver' in window;
+    _this.canLazyload = 'IntersectionObserver' in window;
+
+    _this.render();
+
     return _this;
   }
 
   _createClass__default['default'](Incito, [{
-    key: "start",
-    value: function start() {
-      var _this2 = this;
-
-      loadFonts(this.incito.font_assets);
-      var html = this.renderHtml();
+    key: "render",
+    value: function render() {
       var theme = this.incito.theme || {};
+      loadFonts(this.incito.font_assets);
       this.el.dataset.readme = 'Incito by Tjek (https://incito.io)';
       this.el.className = 'incito';
 
       if (_Array$isArray__default['default'](theme.font_family)) {
-        this.el.style.fontFamily = theme.font_family.join(', ');
+        var _context;
+
+        this.el.style.fontFamily = _filterInstanceProperty__default['default'](_context = theme.font_family).call(_context, function (v, i, a) {
+          return _indexOfInstanceProperty__default['default'](a).call(a, v) === i;
+        }).join(', ');
       }
 
       if (isDefinedStr(theme.background_color)) {
@@ -227,6 +252,12 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
 
       if (isDefinedStr(theme.text_color)) {
         this.el.style.color = theme.text_color;
+      }
+
+      if (isDefinedStr(theme.style)) {
+        this.styleEl = document.createElement('style');
+        this.styleEl.innerText = theme.style;
+        document.head.appendChild(this.styleEl);
       }
 
       if (typeof theme.line_spacing_multiplier === 'number') {
@@ -238,73 +269,141 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         this.el.setAttribute('lang', this.incito.locale);
       }
 
-      this.el.innerHTML = html;
+      this.el.innerHTML = this.renderHtml(this.incito.root_view);
+      this.containerEl.appendChild(this.el);
+
+      if (this.canLazyload) {
+        this.enableLazyloading();
+      }
+    }
+  }, {
+    key: "start",
+    value: function start() {
       this.el.addEventListener('click', function (e) {
-        var link = e.target.getAttribute('data-link');
+        var el = closest(e.target, '.incito__view [data-link]');
+        var link = el ? el.dataset.link : null;
 
         if (isDefinedStr(link)) {
           window.open(link, '_blank');
         }
       });
-      this.containerEl.appendChild(this.el);
 
-      if (this.shouldLazyload) {
-        var _context;
-
-        this.lazyloader = new IntersectionObserver(function (entries) {
-          _forEachInstanceProperty__default['default'](entries).call(entries, function (entry) {
-            if (entry.isIntersecting) {
-              _this2.loadEl(entry.target);
-
-              _this2.lazyloader.unobserve(entry.target);
-            }
-          });
-        }, {
-          rootMargin: '500px'
-        });
-
-        _forEachInstanceProperty__default['default'](_context = this.el.querySelectorAll('.incito--lazy')).call(_context, function (lazyEl) {
-          _this2.lazyloader.observe(lazyEl);
-        });
+      if (this.canLazyload) {
+        this.observeElements(this.el);
       }
+
+      this.trigger('started');
     }
   }, {
     key: "destroy",
     value: function destroy() {
-      if (this.lazyloader) {
-        this.lazyloader.disconnect();
+      if (this.lazyObserver) {
+        this.lazyObserver.disconnect();
+      }
+
+      if (this.videoObserver) {
+        this.videoObserver.disconnect();
       }
 
       this.containerEl.removeChild(this.el);
+
+      if (this.styleEl) {
+        this.styleEl.parentNode.removeChild(this.styleEl);
+      }
+
       this.trigger('destroyed');
+    }
+  }, {
+    key: "observeElements",
+    value: function observeElements(el) {
+      var _context2,
+          _this2 = this,
+          _context3;
+
+      _forEachInstanceProperty__default['default'](_context2 = el.querySelectorAll('.incito--lazy')).call(_context2, function (el) {
+        _this2.lazyObserver.observe(el);
+      });
+
+      _forEachInstanceProperty__default['default'](_context3 = el.querySelectorAll('.incito__video-view[data-autoplay=true]')).call(_context3, function (el) {
+        _this2.videoObserver.observe(el);
+      });
     }
   }, {
     key: "loadEl",
     value: function loadEl(el) {
-      if (el.dataset.bg) {
+      var _this3 = this;
+
+      if (el.tagName.toLowerCase() === 'video' && !el.dataset.isLazyloaded) {
+        var sourceEl = document.createElement('source');
+        sourceEl.setAttribute('src', el.dataset.src);
+        sourceEl.setAttribute('type', el.dataset.mime);
+        el.appendChild(sourceEl);
+        el.load();
+        el.dataset.isLazyloaded = true;
+      } else if (el.classList.contains('incito__incito-embed-view')) {
+        var url = el.dataset.src;
+        var method = el.dataset.method;
+        var body = el.dataset.body;
+        fetch__default['default'](url, {
+          method: method || 'get',
+          body: body ? JSON.parse(unescape(body)) : null
+        }).then(function (res) {
+          if (res.status === 200) {
+            return res.json();
+          }
+        }).then(function (res) {
+          el.innerHTML = _this3.renderHtml(res);
+
+          _this3.observeElements(el);
+        });
+      } else if (el.dataset.bg) {
         el.style.backgroundImage = "url(".concat(el.dataset.bg, ")");
       } else if (el.dataset.src) {
         el.src = el.dataset.src;
       }
+    }
+  }, {
+    key: "enableLazyloading",
+    value: function enableLazyloading() {
+      var _this4 = this;
 
-      if (el.tagName.toLowerCase() === 'video') {
-        var _context2;
+      this.lazyObserver = new IntersectionObserver(function (entries) {
+        _forEachInstanceProperty__default['default'](entries).call(entries, function (entry) {
+          if (entry.isIntersecting) {
+            _this4.loadEl(entry.target);
 
-        if (el.getAttribute('data-controls')) {
-          el.setAttribute('controls', 'true');
-        }
-
-        _forEachInstanceProperty__default['default'](_context2 = el.querySelectorAll('[data-src]')).call(_context2, function (sourceEl) {
-          sourceEl.setAttribute('src', sourceEl.dataset.src);
+            _this4.lazyObserver.unobserve(entry.target);
+          }
         });
+      }, {
+        rootMargin: '500px 0px'
+      });
+      this.videoObserver = new IntersectionObserver(function (entries) {
+        _forEachInstanceProperty__default['default'](entries).call(entries, function (entry) {
+          if (entry.isIntersecting) {
+            var autoplayState = entry.target.dataset.autoplayState;
 
-        el.load();
-      }
+            _this4.loadEl(entry.target);
+
+            _this4.lazyObserver.unobserve(entry.target);
+
+            if (!autoplayState || autoplayState === 'paused') {
+              entry.target.dataset.autoplayState = 'playing';
+              entry.target.play();
+            }
+          } else if (!entry.target.paused) {
+            entry.target.dataset.autoplayState = 'paused';
+            entry.target.pause();
+          }
+        });
+      }, {
+        threshold: 0.25
+      });
     }
   }, {
     key: "renderView",
     value: function renderView(view) {
-      var _context13;
+      var _context12;
 
       var tagName = 'div';
       var contents;
@@ -326,16 +425,16 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
             var escapedText = escapeHTML(item.text || '');
 
             if (((_item$span = item.span) === null || _item$span === void 0 ? void 0 : _item$span.name) === 'link' && item.span.url != null) {
-              var _context3;
+              var _context4;
 
-              return _concatInstanceProperty__default['default'](_context3 = "<a href=\"".concat(encodeURI(item.span.url), "\" rel=\"external\" target=\"_blank\">")).call(_context3, escapedText, "</a>");
+              return _concatInstanceProperty__default['default'](_context4 = "<a href=\"".concat(encodeURI(item.span.url), "\" rel=\"external\" target=\"_blank\">")).call(_context4, escapedText, "</a>");
             }
 
             if (((_item$span2 = item.span) === null || _item$span2 === void 0 ? void 0 : _item$span2.name) != null) {
-              var _context4;
+              var _context5;
 
               var spanName = item.span.name;
-              return _concatInstanceProperty__default['default'](_context4 = "<span data-name=\"".concat(spanName, "\">")).call(_context4, escapedText, "</span>");
+              return _concatInstanceProperty__default['default'](_context5 = "<span data-name=\"".concat(spanName, "\">")).call(_context5, escapedText, "</span>");
             }
 
             return escapedText;
@@ -384,9 +483,9 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         if (isDefinedStr(view.text_shadow)) {
           styles['text-shadow'] = view.text_shadow;
         } else if (textShadow != null) {
-          var _context5, _context6, _context7;
+          var _context6, _context7, _context8;
 
-          styles['text-shadow'] = _concatInstanceProperty__default['default'](_context5 = _concatInstanceProperty__default['default'](_context6 = _concatInstanceProperty__default['default'](_context7 = "".concat(textShadow.dx, "px ")).call(_context7, textShadow.dy, "px ")).call(_context6, textShadow.radius, "px ")).call(_context5, textShadow.color);
+          styles['text-shadow'] = _concatInstanceProperty__default['default'](_context6 = _concatInstanceProperty__default['default'](_context7 = _concatInstanceProperty__default['default'](_context8 = "".concat(textShadow.dx, "px ")).call(_context8, textShadow.dy, "px ")).call(_context7, textShadow.radius, "px ")).call(_context6, textShadow.color);
         }
 
         if (view.text_alignment === 'left') {
@@ -401,8 +500,8 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
           attrs['data-single-line'] = true;
         } else if (typeof view.max_lines === 'number') {
           styles.display = '-webkit-box';
-          styles['webkit-line-clamp'] = view.max_lines;
-          styles['webkit-box-orient'] = 'vertical';
+          styles['-webkit-line-clamp'] = view.max_lines;
+          styles['-webkit-box-orient'] = 'vertical';
         }
 
         if (view.text_all_caps === true) {
@@ -414,14 +513,12 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         attrs.onerror = "this.style.display='none'";
 
         if (isDefinedStr(view.src)) {
-          if (this.imageCount >= this.preloadImageCount && this.shouldLazyload) {
+          if (this.canLazyload) {
             classNames.push('incito--lazy');
             attrs['data-src'] = view.src;
           } else {
             attrs.src = view.src;
           }
-
-          this.imageCount++;
         }
 
         if (isDefinedStr(view.label)) {
@@ -430,38 +527,39 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
       } else if (view.view_name === 'VideoView') {
         tagName = 'video';
         classNames.push('incito__video-view');
-        attrs['muted'] = true;
-        attrs.preload = 'metadata';
-        attrs.playsinline = true;
-        attrs['webkit-playsinline'] = true;
+        attrs.muted = '';
+        attrs.playsinline = '';
+        attrs.preload = 'none';
+        attrs.poster = 'noposter';
 
-        if (view.autoplay === true) {
-          attrs['autoplay'] = true;
-        }
+        if (this.canLazyload) {
+          attrs['data-src'] = view.src;
+          attrs['data-mime'] = view.mime;
 
-        if (view.loop === true) {
-          attrs['loop'] = true;
-        }
+          if (view.autoplay === true) {
+            attrs['data-autoplay'] = true;
+          }
 
-        if (view.controls === true) {
-          attrs['data-controls'] = true;
-        }
+          if (view.controls === true) {
+            attrs['controls'] = '';
+          }
 
-        if (this.shouldLazyload) {
-          var _context8;
-
-          classNames.push('incito--lazy');
-          contents = _concatInstanceProperty__default['default'](_context8 = "<source type=\"".concat(view.mime, "\" data-src=\"")).call(_context8, view.src, "\"/>");
+          if (view.loop === true) {
+            attrs['loop'] = '';
+          }
         } else {
-          var _context9;
+          attrs.src = view.src;
+          attrs.controls = '';
+        }
 
-          contents = _concatInstanceProperty__default['default'](_context9 = "<source type=\"".concat(view.mime, "\" src=\"")).call(_context9, view.src, "\"/>");
+        if (this.canLazyload) {
+          classNames.push('incito--lazy');
         }
       } else if (view.view_name === 'HTMLView') {
         if (isDefinedStr(view.style)) {
-          var _context10, _context11;
+          var _context9, _context10;
 
-          _forEachInstanceProperty__default['default'](_context10 = _trimInstanceProperty__default['default'](_context11 = view.style).call(_context11).split(';')).call(_context10, function (style) {
+          _forEachInstanceProperty__default['default'](_context9 = _trimInstanceProperty__default['default'](_context10 = view.style).call(_context10).split(';')).call(_context9, function (style) {
             var _style$trim$split = _trimInstanceProperty__default['default'](style).call(style).split(':'),
                 _style$trim$split2 = _slicedToArray__default['default'](_style$trim$split, 2),
                 key = _style$trim$split2[0],
@@ -476,11 +574,26 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         attrs.sandbox = 'allow-scripts allow-same-origin';
         attrs.allowfullscreen = '';
 
-        if (this.shouldLazyload) {
+        if (this.canLazyload) {
           classNames.push('incito--lazy');
           attrs['data-src'] = view.src;
         } else {
           attrs.src = view.src;
+        }
+      } else if (view.view_name === 'IncitoEmbedView') {
+        classNames.push('incito__incito-embed-view');
+
+        if (this.canLazyload) {
+          classNames.push('incito--lazy');
+          attrs['data-src'] = view.src;
+
+          if (view.method === 'get' || view.method === 'post') {
+            attrs['data-method'] = view.method;
+          }
+
+          if (view.body) {
+            attrs['data-body'] = escape(_JSON$stringify__default['default'](view.body));
+          }
         }
       } else if (view.view_name === 'AbsoluteLayout') {
         classNames.push('incito__absolute-layout-view');
@@ -524,9 +637,9 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
       }
 
       if (_Array$isArray__default['default'](view.feature_labels)) {
-        var _context12;
+        var _context11;
 
-        var featureLabels = _filterInstanceProperty__default['default'](_context12 = view.feature_labels).call(_context12, function (featureLabel) {
+        var featureLabels = _filterInstanceProperty__default['default'](_context11 = view.feature_labels).call(_context11, function (featureLabel) {
           return /^[a-z_-]{1,14}$/.test(featureLabel);
         });
 
@@ -600,17 +713,15 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
       }
 
       if (isDefinedStr(view.background_image)) {
-        if (this.imageCount >= this.preloadImageCount && this.shouldLazyload) {
+        if (this.canLazyload) {
           classNames.push('incito--lazy');
           attrs['data-bg'] = view.background_image;
         } else {
           styles['background-image'] = "url(".concat(view.background_image, ")");
         }
-
-        this.imageCount++;
       }
 
-      if (_indexOfInstanceProperty__default['default'](_context13 = ['repeat_x', 'repeat_y', 'repeat']).call(_context13, view.background_tile_mode) !== -1) {
+      if (_indexOfInstanceProperty__default['default'](_context12 = ['repeat_x', 'repeat_y', 'repeat']).call(_context12, view.background_tile_mode) !== -1) {
         styles['background-repeat'] = view.background_tile_mode.replace('_', '-');
       }
 
@@ -692,9 +803,9 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
       var shadow = getShadow(view);
 
       if (shadow != null) {
-        var _context14, _context15, _context16;
+        var _context13, _context14, _context15;
 
-        styles['box-shadow'] = _concatInstanceProperty__default['default'](_context14 = _concatInstanceProperty__default['default'](_context15 = _concatInstanceProperty__default['default'](_context16 = "".concat(shadow.dx, "px ")).call(_context16, shadow.dy, "px ")).call(_context15, shadow.radius, "px ")).call(_context14, shadow.color);
+        styles['box-shadow'] = _concatInstanceProperty__default['default'](_context13 = _concatInstanceProperty__default['default'](_context14 = _concatInstanceProperty__default['default'](_context15 = "".concat(shadow.dx, "px ")).call(_context15, shadow.dy, "px ")).call(_context14, shadow.radius, "px ")).call(_context13, shadow.color);
       }
 
       var strokeStyles = ['solid', 'dotted', 'dashed'];
@@ -779,26 +890,26 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     }
   }, {
     key: "renderHtml",
-    value: function renderHtml() {
-      var _this3 = this;
+    value: function renderHtml(rootView) {
+      var _this5 = this;
 
       var html = '';
 
       var iter = function iter(view) {
         try {
-          var _this3$renderView = _this3.renderView(view),
-              tagName = _this3$renderView.tagName,
-              contents = _this3$renderView.contents,
-              classNames = _this3$renderView.classNames,
-              styles = _this3$renderView.styles,
-              attrs = _this3$renderView.attrs;
+          var _this5$renderView = _this5.renderView(view),
+              tagName = _this5$renderView.tagName,
+              contents = _this5$renderView.contents,
+              classNames = _this5$renderView.classNames,
+              styles = _this5$renderView.styles,
+              attrs = _this5$renderView.attrs;
 
           if (view.id != null && typeof view.meta === 'object') {
-            _this3.ids[view.id] = view.meta;
+            _this5.ids[view.id] = view.meta;
           }
 
           if (view.role === 'section') {
-            _this3.sections.push({
+            _this5.sections.push({
               id: view.id,
               meta: view.meta
             });
@@ -808,36 +919,36 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
           html += " class=\"".concat(classNames.join(' '), "\"");
 
           for (var key in attrs) {
-            var _context17;
+            var _context16;
 
             var value = attrs[key];
-            html += _concatInstanceProperty__default['default'](_context17 = " ".concat(key, "=\"")).call(_context17, value, "\"");
+            html += _concatInstanceProperty__default['default'](_context16 = " ".concat(key, "=\"")).call(_context16, value, "\"");
           }
 
           html += ' style="';
 
           for (var _key in styles) {
-            var _context18;
+            var _context17;
 
             var _value = styles[_key];
-            html += _concatInstanceProperty__default['default'](_context18 = "".concat(_key, ":")).call(_context18, _value, "; ");
+            html += _concatInstanceProperty__default['default'](_context17 = "".concat(_key, ":")).call(_context17, _value, "; ");
           }
 
           html += '"';
 
           for (var _key2 in attrs) {
-            var _context19;
+            var _context18;
 
             var _value2 = attrs[_key2];
-            html += _concatInstanceProperty__default['default'](_context19 = " ".concat(_key2, "=\"")).call(_context19, _value2, "\"");
+            html += _concatInstanceProperty__default['default'](_context18 = " ".concat(_key2, "=\"")).call(_context18, _value2, "\"");
           }
 
           html += '>';
 
           if (_Array$isArray__default['default'](view.child_views)) {
-            var _context20;
+            var _context19;
 
-            _forEachInstanceProperty__default['default'](_context20 = view.child_views).call(_context20, function (childView) {
+            _forEachInstanceProperty__default['default'](_context19 = view.child_views).call(_context19, function (childView) {
               iter(childView);
             });
           }
@@ -850,7 +961,7 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         } catch (error) {}
       };
 
-      iter(this.incito.root_view);
+      iter(rootView);
       return html;
     }
   }]);

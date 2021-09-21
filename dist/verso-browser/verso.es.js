@@ -270,8 +270,6 @@ var PageSpread = /*#__PURE__*/function () {
  *
  * Copyright (c) 2016 Jorik Tangelder;
  * Licensed under the MIT license */
-//(function(window, document, exportName, undefined) {
-'use strict';
 
 function ownKeys(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); if (enumerableOnly) symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
