@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Pulse: Real-time activity on ShopGun</title>
+        <title>Pulse: Snippet of real-time activity in the Tjek shopping apps</title>
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, user-scalable=no"
@@ -35,6 +35,43 @@
         <div id="map"></div>
 
         <script>
+            var es = new EventSource('https://wolf-api.tjek.com/pulse');
+            var styles = [
+                {
+                    featureType: 'transit',
+                    stylers: [{visibility: 'off'}]
+                },
+                {
+                    featureType: 'road',
+                    elementType: 'labels',
+                    stylers: [{visibility: 'off'}]
+                },
+                {
+                    featureType: 'administrative',
+                    elementType: 'labels',
+                    stylers: [{visibility: 'off'}]
+                },
+                {
+                    elementType: 'geometry',
+                    stylers: [{color: '#f9f9f9'}]
+                },
+                {
+                    featureType: 'poi.park',
+                    elementType: 'geometry',
+                    stylers: [{color: '#88A501'}]
+                },
+                {
+                    featureType: 'administrative.province',
+                    elementType: 'geometry.stroke',
+                    stylers: [{color: '#8AA31B'}]
+                },
+                {
+                    featureType: 'water',
+                    elementType: 'geometry',
+                    stylers: [{color: '#ffffff'}]
+                }
+            ];
+
             function getRandomColor() {
                 var letters = '0123456789ABCDEF';
                 var color = '#';
@@ -47,122 +84,16 @@
             }
 
             function initialize() {
-                var els = {
-                    map: document.getElementById('map')
-                };
-                var map = new google.maps.Map(els.map, {
+                var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 7,
                     disableDefaultUI: true,
-                    center: {lat: 57.6964985, lng: 10.4281756},
-                    styles: [
-                        {
-                            elementType: 'labels.text',
-                            stylers: [{visibility: 'off'}]
-                        },
-                        {
-                            featureType: 'transit',
-                            stylers: [{visibility: 'off'}]
-                        },
-                        {
-                            featureType: 'road',
-                            elementType: 'labels',
-                            stylers: [{visibility: 'off'}]
-                        },
-                        {
-                            featureType: 'administrative.province',
-                            stylers: [{visibility: 'off'}]
-                        },
-                        {
-                            elementType: 'geometry',
-                            stylers: [{color: '#242f3e'}]
-                        },
-                        {
-                            elementType: 'labels.text.stroke',
-                            stylers: [{color: '#242f3e'}]
-                        },
-                        {
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#746855'}]
-                        },
-                        {
-                            featureType: 'administrative.locality',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#d59563'}]
-                        },
-                        {
-                            featureType: 'poi',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#d59563'}]
-                        },
-                        {
-                            featureType: 'poi.park',
-                            elementType: 'geometry',
-                            stylers: [{color: '#263c3f'}]
-                        },
-                        {
-                            featureType: 'poi.park',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#6b9a76'}]
-                        },
-                        {
-                            featureType: 'road',
-                            elementType: 'geometry',
-                            stylers: [{color: '#38414e'}]
-                        },
-                        {
-                            featureType: 'road',
-                            elementType: 'geometry.stroke',
-                            stylers: [{color: '#212a37'}]
-                        },
-                        {
-                            featureType: 'road',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#9ca5b3'}]
-                        },
-                        {
-                            featureType: 'road.highway',
-                            elementType: 'geometry',
-                            stylers: [{color: '#746855'}]
-                        },
-                        {
-                            featureType: 'road.highway',
-                            elementType: 'geometry.stroke',
-                            stylers: [{color: '#1f2835'}]
-                        },
-                        {
-                            featureType: 'road.highway',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#f3d19c'}]
-                        },
-                        {
-                            featureType: 'transit',
-                            elementType: 'geometry',
-                            stylers: [{color: '#2f3948'}]
-                        },
-                        {
-                            featureType: 'transit.station',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#d59563'}]
-                        },
-                        {
-                            featureType: 'water',
-                            elementType: 'geometry',
-                            stylers: [{color: '#17263c'}]
-                        },
-                        {
-                            featureType: 'water',
-                            elementType: 'labels.text.fill',
-                            stylers: [{color: '#515c6d'}]
-                        },
-                        {
-                            featureType: 'water',
-                            elementType: 'labels.text.stroke',
-                            stylers: [{color: '#17263c'}]
-                        }
-                    ]
+                    center: {lat: 58, lng: 12},
+                    styles: styles
                 });
-                var addEvent = function (evt) {
-                    var coords = Geohash.decode(evt.geohash);
+
+                es.onmessage = function (evt) {
+                    var geohash = JSON.parse(evt.data);
+                    var coords = Geohash.decode(geohash);
                     var verticalNoise = (Math.random() - 0.5) * 0.087 * 2;
                     var horizontalNoise = (Math.random() - 0.5) * 0.18 * 2;
                     var center = new google.maps.LatLng({
@@ -175,7 +106,7 @@
                         fillOpacity: 0.8,
                         map: map,
                         center: center,
-                        radius: 4000
+                        radius: 7000
                     });
 
                     setTimeout(function () {
@@ -190,56 +121,8 @@
 
                         overlay.setRadius(0);
                         overlay.setMap(null);
-                    }, 3000);
+                    }, 10000);
                 };
-                var buffer = [];
-                var lastTimestamp;
-                var randNumber = function (from, to) {
-                    return Math.floor(Math.random() * to) + from;
-                };
-                var fetchEvents = function () {
-                    fetch('https://wolf-api.tjek.com/pulse')
-                        .then(function (response) {
-                            return response.json();
-                        })
-                        .then(function (data) {
-                            if (data.events.length) {
-                                data.events.forEach(function (evt) {
-                                    if (
-                                        !lastTimestamp ||
-                                        evt.timestamp_ms > lastTimestamp
-                                    ) {
-                                        buffer.push(evt);
-                                    }
-                                });
-
-                                lastTimestamp = data.events[0].timestamp_ms;
-                            }
-                        })
-                        .finally(function () {
-                            setTimeout(function () {
-                                fetchEvents();
-                            }, 2000);
-                        });
-                };
-                var draw = function () {
-                    if (buffer.length) {
-                        var evt = buffer.shift();
-
-                        addEvent(evt);
-                    }
-
-                    while (buffer.length > 2000) {
-                        buffer.pop();
-                    }
-
-                    setTimeout(function () {
-                        draw();
-                    }, randNumber(2, 40));
-                };
-
-                fetchEvents();
-                draw();
             }
         </script>
         <script src="js/latlon-geohash.js"></script>

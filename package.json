@@ -7,11 +7,11 @@
     "bundlesize": [
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.js",
-            "maxSize": "150 kB"
+            "maxSize": "160 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
-            "maxSize": "75 kB"
+            "maxSize": "80 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
@@ -23,11 +23,11 @@
         },
         {
             "path": "./dist/incito-browser/incito.js",
-            "maxSize": "40 kB"
+            "maxSize": "60 kB"
         },
         {
             "path": "./dist/incito-browser/incito.min.js",
-            "maxSize": "20 kB"
+            "maxSize": "30 kB"
         },
         {
             "path": "./dist/incito-browser/incito.cjs.js",
@@ -39,7 +39,7 @@
         },
         {
             "path": "./dist/verso-browser/verso.js",
-            "maxSize": "60 kB"
+            "maxSize": "65 kB"
         },
         {
             "path": "./dist/verso-browser/verso.min.js",
@@ -68,8 +68,8 @@
         "test:lint": "eslint lib __tests__",
         "test:ci": "jest",
         "test:size": "bundlesize",
-        "build": "rollup -c --no-treeshake -m --environment NODE_ENV:production",
-        "dev:js": "rollup -c -m inline --no-treeshake --environment NODE_ENV:development --watch",
+        "build": "rollup -c -m --environment NODE_ENV:production",
+        "dev:js": "rollup -c -m inline --environment NODE_ENV:development --watch",
         "dev": "run-p -l dev:js serve",
         "serve": "serve",
         "prepublish": "npm run clean && npm run build && npm run test",
@@ -93,63 +93,62 @@
     },
     "homepage": "https://github.com/shopgun/shopgun-js-sdk#readme",
     "dependencies": {
-        "@babel/runtime": "^7.13.10",
-        "@babel/runtime-corejs3": "^7.13.10",
-        "core-js": "^3.9.1",
-        "cross-fetch": "^3.0.6",
+        "@babel/runtime": "^7.15.4",
+        "@babel/runtime-corejs3": "^7.15.4",
+        "core-js": "^3.17.3",
+        "cross-fetch": "^3.1.4",
         "md5": "^2.3.0",
         "microevent": "^1.0.0",
-        "mustache": "^4.1.0",
-        "verso-browser": "^1.1.0"
+        "mustache": "^4.2.0"
     },
     "devDependencies": {
-        "@babel/core": "^7.13.10",
-        "@babel/eslint-parser": "^7.13.10",
-        "@babel/plugin-external-helpers": "^7.12.13",
-        "@babel/plugin-transform-runtime": "^7.13.10",
-        "@babel/preset-env": "^7.13.10",
+        "@babel/core": "^7.15.5",
+        "@babel/eslint-parser": "^7.15.4",
+        "@babel/plugin-external-helpers": "^7.14.5",
+        "@babel/plugin-transform-runtime": "^7.15.0",
+        "@babel/preset-env": "^7.15.6",
         "@rollup/plugin-babel": "^5.3.0",
-        "@rollup/plugin-commonjs": "^17.1.0",
-        "@rollup/plugin-node-resolve": "^11.2.0",
-        "@rollup/plugin-replace": "^2.4.1",
+        "@rollup/plugin-commonjs": "^20.0.0",
+        "@rollup/plugin-node-resolve": "^13.0.4",
+        "@rollup/plugin-replace": "^3.0.0",
         "app-root-path": "^3.0.0",
-        "aws-sdk": "^2.859.0",
+        "aws-sdk": "^2.987.0",
         "bundlesize": "^0.18.0",
-        "chalk": "^4.1.0",
-        "clean-css": "^5.1.1",
+        "chalk": "^4.1.2",
+        "clean-css": "^5.1.5",
         "diff": "^5.0.0",
-        "eslint": "^7.21.0",
-        "eslint-config-prettier": "^8.1.0",
-        "file-type": "^16.3.0",
-        "gh-pages": "^3.1.0",
-        "glob": "^7.1.6",
-        "inquirer": "^8.0.0",
-        "isbinaryfile": "^4.0.6",
-        "jest": "^26.6.3",
-        "jest-cli": "^26.6.3",
-        "jest-each": "^26.6.2",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "file-type": "^16.5.3",
+        "gh-pages": "^3.2.3",
+        "glob": "^7.1.7",
+        "inquirer": "^8.1.2",
+        "isbinaryfile": "^4.0.8",
+        "jest": "^27.2.0",
+        "jest-cli": "^27.2.0",
+        "jest-each": "^27.2.0",
         "jest-puppeteer-preset": "^4.4.0",
         "jest-test-matrix": "^1.2.0",
         "libnpm": "^3.0.1",
-        "memfs": "^3.2.0",
+        "memfs": "^3.2.4",
         "memory-fs": "^0.5.0",
         "nib": "^1.1.2",
         "npm-run-all": "^4.1.5",
-        "ora": "^5.3.0",
+        "ora": "^5.4.1",
         "process": "^0.11.10",
         "puppeteer": "^8.0.0",
         "recursive-readdir": "^2.2.2",
-        "rollup": "^2.41.0",
+        "rollup": "^2.56.3",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-generate-package-json": "^3.2.0",
         "rollup-plugin-terser": "^7.0.2",
         "rollup-pluginutils": "^2.8.2",
-        "serve": "^11.3.2",
-        "stylus": "^0.54.8",
-        "tar": "^6.1.0",
+        "serve": "^12.0.1",
+        "stylus": "^0.55.0",
+        "tar": "^6.1.11",
         "thenify": "^3.3.1",
         "tmp-promise": "^3.0.2",
-        "webpack": "^5.24.4"
+        "webpack": "^5.52.1"
     },
     "publishConfig": {
         "access": "public"

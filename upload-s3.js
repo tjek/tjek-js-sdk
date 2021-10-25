@@ -27,18 +27,41 @@ function putObject(options) {
     );
 }
 
-putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.js',
-    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js'),
-    contentType: 'application/javascript'
-});
-putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.js.map',
-    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js.map'),
-    contentType: 'application/json'
-});
-putObject({
-    key: 'sgn-sdk-' + pkg.version + '.min.css',
-    bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.css'),
-    contentType: 'text/css'
-});
+function putVersion(version) {
+    putObject({
+        key: 'sgn-sdk-' + version + '.min.js',
+        bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.min.js'),
+        contentType: 'application/javascript'
+    });
+    putObject({
+        key: 'sgn-sdk-' + version + '.min.js.map',
+        bodyPath: path.join(
+            __dirname,
+            'dist',
+            'shopgun-sdk',
+            'sgn-sdk.min.js.map'
+        ),
+        contentType: 'application/json'
+    });
+    putObject({
+        key: 'sgn-sdk-' + version + '.min.css',
+        bodyPath: path.join(
+            __dirname,
+            'dist',
+            'shopgun-sdk',
+            'sgn-sdk.min.css'
+        ),
+        contentType: 'text/css'
+    });
+}
+
+const versionRE = /(\d)\.(\d)\.(\d)/;
+
+// Exact version
+putVersion(pkg.version);
+// Patch mask
+putVersion(pkg.version.replace(versionRE, (_, maj, min) => `${maj}.${min}.x`));
+// Minor mask
+putVersion(pkg.version.replace(versionRE, (_, maj) => `${maj}.x.x`));
+// Major mask (Regex replacement still used here to support -beta type suffixes)
+putVersion(pkg.version.replace(versionRE, 'x.x.x'));

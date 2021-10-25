@@ -1,0 +1,4 @@
+{
+    "view_name": "ImageView",
+    "src": "https://seadragon-api.tjek.com/resize?type=jpeg&url=s3%3A%2F%2Fraven-production%2Fmedia%2Fcatalogs%2Fda_DK%2Fw9Q-06NT%2Foffers%2F9353089.jpg&width=600&sign=EDSJ9xzm8XQWXcQlP8GetY2CWJEPFVGSiUqzloVqOEc"
+}
