@@ -72,6 +72,10 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ## Changelog
 
+### Version 4.0.2
+
+-   Change `incito-browser` hyphenation behavior to `manual` to prevent incorrect line-breaks
+
 ### Version 4.0.0
 
 -   Updated the `incito-browser` library with new and speedy rendering + added `HTMLEmbedView`
