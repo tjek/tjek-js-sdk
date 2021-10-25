@@ -74,7 +74,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 
 ### Version 4.0.2
 
--   Change `incito-browser` hyphenation behavior to `manual` to prevent incorrect line-breaks
+-   Remove `incito-browser` hyphenation behavior to prevent line-breaks in offer details
 
 ### Version 4.0.1
 -   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js
