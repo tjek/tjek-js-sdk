@@ -2,7 +2,10 @@
     var dealerId = document
         .querySelector('script[data-dealer-id]')
         .getAttribute('data-dealer-id');
-    var id = SGN.util.getQueryParam('id');
+    var catalogId = document
+        .querySelector('script[data-catalog-id]')
+        ?.getAttribute('data-catalog-id');
+
     var pageNum = SGN.util.getQueryParam('page') || 1;
 
     var options = {
@@ -59,8 +62,8 @@
         });
     };
 
-    if (id) {
-        options.id = id;
+    if (catalogId) {
+        options.id = catalogId;
 
         start();
     } else {
