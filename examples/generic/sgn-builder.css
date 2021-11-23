@@ -33,8 +33,8 @@ body {
     z-index: 9;
     position: absolute;
     background: #fff;
-    border-radius: 6px;
-    padding: 10px 0px 10px 10px;
+    /* border-radius: 6px;
+    padding: 10px 0px 10px 10px; */
 }
 .sgn-offers-ol {
     height: 250px;
@@ -91,12 +91,12 @@ body {
     z-index: 9;
     position: absolute;
     background: #fff;
-    border-radius: 6px;
-    padding: 10px 0px 10px 10px;
+    /* border-radius: 6px;
+    padding: 10px 0px 10px 10px; */
 }
 .sgn-cart-ol {
-    height: 250px;
-    width: 400px;
+    height: 350px;
+    width: 600px;
     overflow-y: scroll;
     list-style-type: none;
     padding: 10px;
@@ -105,6 +105,8 @@ body {
 .sgn-cart-ol .sgn-cart-li .sgn-cart-li-flex-container {
     display: flex;
     border-bottom: 1px solid #eee;
+    height: 40px;
+    align-items: center;
 }
 
 .sgn-cart-ol .sgn-cart-li .sgn-cart-li-flex-container .sgn-cart-li-div-img {
@@ -118,8 +120,78 @@ body {
     text-overflow: ellipsis;
 }
 
-.hidden {
+.sgn-pages-dd {
+    display: block;
+    z-index: 9;
+    position: absolute;
+    background: #eee;
+    /* border-radius: 6px;
+    padding: 10px 0px 10px 10px; */
+}
+.sgn-pages-popup {
+    background: #eee !important;
+}
+.sgn-pages-ol {
+    display: flex;
+    height: 350px;
+    flex-wrap: wrap;
+    width: 600px;
+    overflow-y: scroll;
+    list-style-type: none;
+    padding: 10px;
+}
+.sgn-pages-ol .sgn-page-li {
+    width: 30%;
+    text-align: center;
+    background: #fff;
+    margin: 1%;
+    padding: 20px 0;
+}
+
+.sgn-pages-ol .sgn-pages-img-container img {
+    height: 150px;
+    width: 120px;
+}
+
+.sgn-block-hidden {
     display: none;
+}
+
+.sgn-block-show {
+    display: block;
+}
+
+.sgn-blocker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    content: ' ';
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.sgn-scroll-contents {
+    position: absolute;
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px 0px 10px 10px;
+}
+
+.sgn-popup-contents {
+    position: fixed;
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px 0px 10px 10px;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -70%);
+}
+
+.sgn-truncate-elipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 @media (max-width: 600px) {
