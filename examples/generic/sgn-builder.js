@@ -283,8 +283,8 @@ function showCartList(e) {
             <span>List</span>
             <ol class="sgn-cart-ol"></ol>
             <div>
-                <button class="sgn-cart-clear-cookie">Remove All</button>
-                <button class="sgn-cart-print" onclick="printCart()">Print</button>
+                <button class="sgn-cart-clear-cookie sgn-hide-print">Remove All</button>
+                <button class="sgn-cart-print sgn-hide-print" onclick="printCart()">Print</button>
             </div>
         </div>
         `;
@@ -310,7 +310,7 @@ function showCartList(e) {
                                         <span>${offer.heading}</span>
                                     </div>
                                 </div>
-                                <div class="sgn-cart-li-div-btn">
+                                <div class="sgn-cart-li-div-btn sgn-hide-print">
                                     <div>
                                         <button class="sgn-cart-remove-btn" data-cart-offer-index="${index}">Remove</button>
                                     </div>
@@ -417,38 +417,20 @@ function startSgn(options) {
 }
 
 function printCart() {
-    var sgnCookie = getCookie('sgncart');
-    sgnCookie = JSON.parse(sgnCookie);
-
-    var printContainer = document.createElement('div');
-    var printOl = document.createElement('ol');
-    printOl.className = 'sgn-print-ol';
-    printContainer.appendChild(printOl);
-
-    var cartHtml = '';
-
-    if (sgnCookie.length > 0) {
-        sgnCookie.forEach(function (offer, index) {
-            cartHtml += `
-                <li class="sgn-cart-li">
-                    <div class="sgn-cart-li-flex-container">
-                        <div class="sgn-cart-li-div-text">
-                            <div class="sgn-truncate-elipsis">
-                                <span>${offer.heading}</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            `;
-        });
-    }
-
-    printOl.innerHTML = cartHtml;
-
-    var originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContainer.innerHTML;
     window.print();
-    document.body.innerHTML = originalContents;
+
+    // var cartPopup = document.querySelector('.sgn-cart-popup');
+    // var win = window.open('', '', 'fullscreen=yes');
+    // win.document.write('<html>');
+    // win.document.write('<body>');
+    // win.document.write(cartPopup.innerHTML);
+    // win.document.write('</body></html>');
+    // win.document.close();
+    // win.focus();
+    // win.print();
+    // win.close();
+
+    // return true;
 }
 
 function setCookie(cname, cvalue, exdays) {

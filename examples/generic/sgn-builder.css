@@ -210,3 +210,25 @@ body {
 
 @media (max-width: 600px) {
 }
+
+@media print {
+    .sgn-hide-print {
+        display: none !important;
+    }
+    .sgn-popup-contents {
+        top: 28vh;
+        transform: translate(-50%, -50%);
+    }
+    .sgn-cart-ol {
+        height: auto;
+        overflow-y: hidden;
+    }
+
+    .sgn-truncate-elipsis {
+        text-overflow: unset;
+        white-space: normal;
+    }
+    .sgn-cart-li-flex-container {
+        height: auto;
+    }
+}
