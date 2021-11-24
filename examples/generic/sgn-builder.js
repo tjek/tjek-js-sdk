@@ -279,10 +279,13 @@ function showCartList(e) {
 
     var cartHtml = `
         <div class="sgn-blocker" onclick="hideBlock(\'sgn-cart-dd\')"></div>
-        <div class="sgn-popup-contents">
+        <div class="sgn-popup-contents sgn-cart-popup">
             <span>List</span>
             <ol class="sgn-cart-ol"></ol>
-            <div><input type="button" value="Remove All" class="sgn-cart-clear-cookie"/></div>
+            <div>
+                <button class="sgn-cart-clear-cookie">Remove All</button>
+                <button class="sgn-cart-print" onclick="printCart()">Print</button>
+            </div>
         </div>
         `;
     cartScrollElement.innerHTML += cartHtml;
@@ -309,7 +312,7 @@ function showCartList(e) {
                                 </div>
                                 <div class="sgn-cart-li-div-btn">
                                     <div>
-                                        <input type="button" value="Remove" class="sgn-cart-remove-btn" data-cart-offer-index="${index}">
+                                        <button class="sgn-cart-remove-btn" data-cart-offer-index="${index}">Remove</button>
                                     </div>
                                 </div>
                             </div>
@@ -411,6 +414,41 @@ function startSgn(options) {
             console.error(err);
         }
     });
+}
+
+function printCart() {
+    var sgnCookie = getCookie('sgncart');
+    sgnCookie = JSON.parse(sgnCookie);
+
+    var printContainer = document.createElement('div');
+    var printOl = document.createElement('ol');
+    printOl.className = 'sgn-print-ol';
+    printContainer.appendChild(printOl);
+
+    var cartHtml = '';
+
+    if (sgnCookie.length > 0) {
+        sgnCookie.forEach(function (offer, index) {
+            cartHtml += `
+                <li class="sgn-cart-li">
+                    <div class="sgn-cart-li-flex-container">
+                        <div class="sgn-cart-li-div-text">
+                            <div class="sgn-truncate-elipsis">
+                                <span>${offer.heading}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+        });
+    }
+
+    printOl.innerHTML = cartHtml;
+
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContainer.innerHTML;
+    window.print();
+    document.body.innerHTML = originalContents;
 }
 
 function setCookie(cname, cvalue, exdays) {

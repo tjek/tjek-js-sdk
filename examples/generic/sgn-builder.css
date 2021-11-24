@@ -27,7 +27,52 @@ body {
     padding: 6px 12px;
     border: 1px solid transparent;
     min-width: 70px;
+    cursor: pointer;
 }
+
+.sgn-block-hidden {
+    display: none;
+}
+
+.sgn-block-show {
+    display: block;
+}
+
+.sgn-blocker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    content: ' ';
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.sgn-scroll-contents {
+    position: absolute;
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px 0px 10px 10px;
+}
+
+.sgn-popup-contents {
+    position: fixed;
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px 0px 10px 10px;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -70%);
+}
+
+.sgn-popup-contents button {
+    background: gray;
+    border: none;
+    text-align: center;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
 .sgn-offers-dd {
     display: block;
     z-index: 9;
@@ -109,15 +154,19 @@ body {
     align-items: center;
 }
 
-.sgn-cart-ol .sgn-cart-li .sgn-cart-li-flex-container .sgn-cart-li-div-img {
-    flex: 25%;
-}
-
 .sgn-cart-ol .sgn-cart-li .sgn-cart-li-flex-container .sgn-cart-li-div-text {
     flex: 75%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.sgn-cart-ol .sgn-cart-li .sgn-cart-li-flex-container button {
+    background: gray;
+    border: none;
+    text-align: center;
+    margin: 4px 2px;
+    cursor: pointer;
 }
 
 .sgn-pages-dd {
@@ -129,7 +178,7 @@ body {
     padding: 10px 0px 10px 10px; */
 }
 .sgn-pages-popup {
-    background: #eee !important;
+    background: #eee;
 }
 .sgn-pages-ol {
     display: flex;
@@ -151,41 +200,6 @@ body {
 .sgn-pages-ol .sgn-pages-img-container img {
     height: 150px;
     width: 120px;
-}
-
-.sgn-block-hidden {
-    display: none;
-}
-
-.sgn-block-show {
-    display: block;
-}
-
-.sgn-blocker {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    content: ' ';
-    background: rgba(0, 0, 0, 0.2);
-}
-
-.sgn-scroll-contents {
-    position: absolute;
-    background: #fff;
-    border-radius: 6px;
-    padding: 10px 0px 10px 10px;
-}
-
-.sgn-popup-contents {
-    position: fixed;
-    background: #fff;
-    border-radius: 6px;
-    padding: 10px 0px 10px 10px;
-    top: 50vh;
-    left: 50vw;
-    transform: translate(-50%, -70%);
 }
 
 .sgn-truncate-elipsis {
