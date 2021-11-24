@@ -16,7 +16,8 @@ var options = {
 var els = {
     offerListBtn: document.querySelector('.sgn__offer-list'),
     cartListBtn: document.querySelector('.sgn__offer-cart'),
-    pageListBtn: document.querySelector('.sgn__offer-pages')
+    pageListBtn: document.querySelector('.sgn__offer-pages'),
+    downloadBtn: document.querySelector('.sgn__offer-download')
 };
 
 var sgnData = {};
@@ -60,6 +61,11 @@ var sgnData = {};
     if (els.pageListBtn) {
         els.pageListBtn.addEventListener('click', showPageList);
     }
+
+    // Download PDF
+    if (els.downloadBtn) {
+        els.downloadBtn.addEventListener('click', downloadPdf);
+    }
 })();
 
 function insertAfter(referenceNode, newNode) {
@@ -78,6 +84,19 @@ function hideBlock(className = '') {
         var element = document.querySelector('.' + className);
         element.parentNode.removeChild(element);
     }
+}
+
+function downloadPdf() {
+    SGN.CoreKit.request(
+        {
+            url: '/v2/catalogs/' + catalogId + '/download'
+        },
+        function (err, catalog) {
+            if (!err && catalog.pdf_url) {
+                window.open(catalog.pdf_url, '_blank').focus();
+            }
+        }
+    );
 }
 
 function showPageList(e) {
