@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Complete Paged Publication</title>
+
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta charset="utf-8" />
+
+        <link
+            href="../../dist/shopgun-sdk/sgn-sdk.css?t=3"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <!-- <link
+            rel="stylesheet"
+            type="text/css"
+            href="sgn-builder.css"
+        /> -->
+    </head>
+    <body>
+        
+        <!-- The Header element of the paged publication -->
+        <div class="sgn__header">
+            <div class="sgn__nav">
+                <button class="sgn__offer-list">Offers</button>
+                <button class="sgn__offer-cart">List</button>
+                <button class="sgn__offer-pages">Pages</button>
+                <button class="sgn__offer-download">Download</button>
+            </div>
+        </div>
+
+        <!-- The main element of the paged publication -->
+        <div class="sgn__pp" data-layout-absolute="true">
+            <!-- The required horizontal page scroller -->
+            <div class="verso">
+                <div class="verso__scroller">
+                    <!-- You can add custom page spreads before and after the actual pages.  -->
+
+
+                    <!-- The required placeholder element for the actual pages -->
+                    <div class="sgn-pp__pages"></div>
+
+                </div>
+            </div>
+
+            <!-- The optional progress bar -->
+            <div class="sgn-pp__progress">
+                <div class="sgn-pp-progress__bar"></div>
+            </div>
+
+            <!-- The optional progress label -->
+            <div class="sgn-pp__progress-label"></div>
+
+            <!-- The optional navigation buttons for going backwards and forwards -->
+            <a
+                class="sgn-pp__control"
+                href="#"
+                role="button"
+                data-direction="prev"
+                >&lsaquo;</a
+            >
+            <a
+                class="sgn-pp__control"
+                href="#"
+                role="button"
+                data-direction="next"
+                >&rsaquo;</a
+            >
+        </div>
+
+        <script
+            src="../../dist/shopgun-sdk/sgn-sdk.js?t=3"
+            id="sgn-sdk"
+            data-api-key="GL0wU8"
+            data-track-id="2N2Gib"
+            data-dealer-id="11deC"
+            data-catalog-id="z173jDqO"
+            data-controller="view-publication"
+        ></script>
+        <!-- <script src="sgn-builder.js" data-dealer-id="11deC" data-catalog-id="z173jDqO"></script> -->
+        <!-- <script src="sgn-builder.js" data-dealer-id="98b7e" data-catalog-id="k17Ijq0X"></script> -->
+    </body>
+</html>
