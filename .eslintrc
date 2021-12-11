@@ -10,6 +10,7 @@
         "page": true
     },
     "extends": ["eslint:recommended", "prettier"],
+    "plugins": ["playwright"],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
         "sourceType": "module",

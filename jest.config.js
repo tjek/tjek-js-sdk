@@ -16,11 +16,12 @@ module.exports = {
             testRegex: '((\\.|/)(test|test-jsdom))\\.js$',
             moduleNameMapper: {
                 '\\.(css|styl)$': '<rootDir>/__tests_utils__/style-mock.js'
-            }
+            },
         },
         {
             displayName: 'Chrome',
-            preset: 'jest-puppeteer-preset',
+            preset: 'jest-playwright-preset',
+            setupFilesAfterEnv: ['expect-playwright'],
             testRegex: '((\\.|/)(test-chrome))\\.js$',
             moduleNameMapper: {
                 '\\.(css|styl)$': '<rootDir>/__tests_utils__/style-mock.js'
