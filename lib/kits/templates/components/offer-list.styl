@@ -1,17 +1,17 @@
-.sgn-scroll-contents 
+.sgn-scroll-contents
     position absolute
     background #ffffff
     border-radius 6px
     padding 10px 0px 10px 10px
 
-.sgn-offers-dd 
+.sgn-offers-dd
     display block
     z-index 9
     position absolute
     background #fff
     right 515px
 
-.sgn-offers-ol 
+.sgn-offers-ol
     height 250px
     width 400px
     overflow-y scroll
@@ -19,26 +19,30 @@
     padding 10px
     color #000000
 
-.sgn-offers-li-flex-container 
-    display flex
+.sgn-offers-li-flex-container
     border-bottom 1px solid #eee
     height 70px
 
-.sgn-offers-li-div-img 
-    flex 20%
-    padding 5px
+    &:last-child
+            clear both
 
-    > img 
+.sgn-offers-li-div-img
+    padding 5px
+    width 20%
+    float left
+
+    > img
         object-fit cover
         width 60px
         height 60px
 
-.sgn-offers-li-div-text 
-    flex 80%
+.sgn-offers-li-div-text
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
+    width 76%
+    float left
 
-.sgn-offers-text-heading 
+.sgn-offers-text-heading
     color #8aa31b
     font-weight bold
