@@ -1,4 +1,3 @@
-require('expect-puppeteer')?.setDefaultOptions({timeout: 2000});
 const path = require('path');
 
 const sgnPath = `file:${path.join(__dirname, './sgn.test-chrome.html')}`;
