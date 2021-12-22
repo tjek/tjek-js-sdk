@@ -1,13 +1,11 @@
 .sgn-pages-popup
-    position fixed
+    position relative
     background #fff
     border-radius 6px
     padding 10px 0px 10px 10px
-    top 40vh
-    left 50vw
-    width: 90%;
-    max-width: 800px;
-    transform translate(-50%, -50%)
+    width 90%
+    max-width 800px
+    margin auto
 
 .sgn-pages-popup
     color #000000
@@ -33,8 +31,9 @@
         width 120px
 
 @media (max-width: 1094px)
-    .sgn-pages-popup
-        top 50vh
-
     .sgn-page-li
         width 48%
+
+@media (max-height 790px)
+    .sgn-pages-ol
+        height 400px

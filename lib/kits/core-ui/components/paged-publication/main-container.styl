@@ -9,6 +9,7 @@
 
 .sgn__header
     position absolute
+    font-family sans-serif
     z-index 99
     height 50px
     margin auto
@@ -39,20 +40,25 @@
     display none
     width 90%
     max-width 400px
-    background rgba(0,0,0,.2)
-    color #ffffff
+    background-color #e6e6e6
+    color #6b6b6b
     list-style-type none
     padding 10px
     border-radius 6px
     margin-top 5px
+    font-size 13px
 
     > li
-        border-bottom 1px solid rgba(255,255,255,.2)
+        border-bottom 1px solid rgba(255,255,255,.6)
         padding 8px
         cursor pointer
 
         &:hover
-            background-color rgba(0,0,0,.3)
+            background-color rgba(0,0,0,.5)
+            color #ffffff
+
+        &:last-child
+            border-bottom 0
 
 .sgn-clearfix
     clear both
