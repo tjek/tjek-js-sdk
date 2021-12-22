@@ -61,8 +61,19 @@
     text-align right
 
 @media print
+    .sgn__pp
+        overflow-y visible
+        position relative!important
+        z-index 9
+
+    .sgn__header
+        overflow-y visible
+        position relative
+
     .sgn-hide-print
         display none
 
     .sgn-shopping-ol
         overflow-y visible
+        height 100%
+        position relative
