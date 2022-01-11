@@ -1,0 +1,78 @@
+.sgn-menu-popup
+    position relative
+    background rgb(28, 28, 30)
+    color #F3F3F9
+    border-radius 12px
+    padding 10px
+    width 90%
+    max-width 666px
+    min-height 200px
+    margin auto
+    box-shadow rgb(0 0 0 / 70%) 0px 20px 55px, rgb(0 0 0 / 30%) 0px 0px 1px
+
+.sgn-menu-popup-labels
+    margin 10px 0px
+    line-height 1.5
+
+.sgn-menu-download
+    text-align right
+
+    &:hover
+        cursor pointer
+
+    > span
+        background-color #2c2c2e
+        padding 4px 10px
+        font-size 12px
+        border-radius 6px
+
+.sgn-menu-label
+    font-weight 600
+    font-size 18px
+
+.sgn-menu-till
+    font-weight 400
+    font-size 16px
+    vertical-align baseline
+    border-radius 0.25em
+    color rgb(40, 175, 76)
+
+.sgn-menu-tab
+    overflow hidden
+    color #F3F3F9
+    font-size 12px
+    border-radius 8px
+    align-items center
+    background-color rgba(139, 140, 143, 0.1)
+
+
+.sgn-menu-tab-btn
+    background-color transparent
+    color #F3F3F9
+    font-size 12px
+    float left
+    border none
+    outline none
+    cursor pointer
+    padding 8px 3px
+    transition .3s
+    width 50%
+
+    &:hover
+        background-color rgb(44, 44, 46)
+
+
+.sgn-menu-tab-btn-active
+    background-color rgb(44, 44, 46)
+
+
+/* Style the tab content */
+.sgn-menu-tab-content
+    display none
+
+    a
+        text-decoration none
+        color #F3F3F9
+
+.sgn-menu-tab-content-active
+    display block
