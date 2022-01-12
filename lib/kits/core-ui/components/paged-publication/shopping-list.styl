@@ -1,64 +1,90 @@
 .sgn-shopping-popup
     position relative
-    background #fff
-    border-radius 6px
-    padding 10px 0px 10px 10px
-    color #000000
-    margin auto
+    background #F3F3F9
+    color #202020
+    border-radius 12px
+    padding 10px
     width 90%
-    max-width 800px
+    max-width 666px
+    margin auto
+    box-shadow rgba(0, 0, 0, 0.7) 0px 20px 55px, rgba(0, 0, 0, 0.3) 0px 0px 1px
 
-    > button
-        background gray
-        border none
-        text-align center
-        margin 4px 2px
-        cursor pointer
+    button
+        background-color #d3d3d3
+        padding 4px 10px
+        font-size 12px
+        border-radius 6px
+        border 0
+        min-width 70px
+        transition .2s
+
+        &:hover
+            opacity 0.8
+            cursor pointer
 
 .sgn-shopping-dd
     display block
     z-index 9
     position absolute
-    background #fff
+    background #F3F3F9
 
 .sgn-shopping-ol
-    height 350px
+    height 450px
     overflow-y scroll
     list-style-type none
     padding 10px
-    color #000000
+    color #202020
 
 .sgn-shopping-li-flex-container
     border-bottom 1px solid #eee
     padding 10px
     align-items center
     
-    &:last-child
+    &last-child
             clear both
-
-    > button
-        background gray
-        border none
-        text-align center
-        margin 4px 2px
-        cursor pointer
 
 .sgn-popup-header
     border-bottom 1px solid #eee
     padding 10px
-
+    font-weight 600
+    font-size 18px
 
 .sgn-shopping-li-div-text
+    font-size 16px
+    line-height 1.6
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
     float left
-    width 76%
+    width 86%
+
+.sgn-shopping-li-div-text-description
+    color rgb(139, 140, 143)
+    font-size 12px
+
 
 .sgn-shopping-li-div-btn
     float left
-    width 20%
+    width 14%
     text-align right
+
+.sgn__theme-dark
+    .sgn-shopping-popup
+        background #1c1c1e
+        color #f3f3f9
+
+        button
+            color #F3F3F9
+            background-color #2c2c2e
+
+    .sgn-popup-header
+        border-bottom 1px solid rgba(0, 0, 0, 0.1)
+
+    .sgn-shopping-ol
+        color #f3f3f9
+
+    .sgn-shopping-li-flex-container
+        border-bottom 1px solid rgba(0, 0, 0, 0.1)
 
 @media print
     .sgn__pp
@@ -73,10 +99,15 @@
     .sgn-hide-print
         display none
 
+    .sgn-shopping-popup
+        box-shadow none
+        color #000000!important
+
     .sgn-shopping-ol
         overflow visible
         height 100%
         position relative
+        color #000000!important
     
     .sgn-shopping-li-div-text
         width 100%

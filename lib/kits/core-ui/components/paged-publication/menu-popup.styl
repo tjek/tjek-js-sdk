@@ -17,14 +17,17 @@
 .sgn-menu-download
     text-align right
 
-    &:hover
-        cursor pointer
-
-    > span
+    > button
         background-color #d3d3d3
         padding 4px 10px
         font-size 12px
         border-radius 6px
+        border 0
+        transition .2s
+        
+        &:hover
+            opacity 0.8
+            cursor pointer
 
 .sgn-menu-label
     font-weight 600
@@ -83,7 +86,8 @@
         box-shadow rgba(0, 0, 0, 0.7) 0px 20px 55px, rgba(0, 0, 0, 0.3) 0px 0px 1px
 
     .sgn-menu-download
-        > span
+        > button
+            color #F3F3F9
             background-color #2c2c2e
 
     .sgn-menu-tab
