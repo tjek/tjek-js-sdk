@@ -1,14 +1,14 @@
 .sgn-menu-popup
     position relative
-    background rgb(28, 28, 30)
-    color #F3F3F9
+    background #F3F3F9
+    color #202020
     border-radius 12px
     padding 10px
     width 90%
     max-width 666px
     min-height 200px
     margin auto
-    box-shadow rgb(0 0 0 / 70%) 0px 20px 55px, rgb(0 0 0 / 30%) 0px 0px 1px
+    box-shadow rgba(0, 0, 0, 0.7) 0px 20px 55px, rgba(0, 0, 0, 0.3) 0px 0px 1px
 
 .sgn-menu-popup-labels
     margin 10px 0px
@@ -21,7 +21,7 @@
         cursor pointer
 
     > span
-        background-color #2c2c2e
+        background-color #d3d3d3
         padding 4px 10px
         font-size 12px
         border-radius 6px
@@ -38,17 +38,17 @@
     color rgb(40, 175, 76)
 
 .sgn-menu-tab
+    color #202020
+    background-color rgba(139, 140, 143, 0.1)
     overflow hidden
-    color #F3F3F9
     font-size 12px
     border-radius 8px
     align-items center
-    background-color rgba(139, 140, 143, 0.1)
 
 
 .sgn-menu-tab-btn
     background-color transparent
-    color #F3F3F9
+    color #202020
     font-size 12px
     float left
     border none
@@ -59,20 +59,48 @@
     width 50%
 
     &:hover
-        background-color rgb(44, 44, 46)
-
+        font-weight 600
+        background-color #d3d3d3
 
 .sgn-menu-tab-btn-active
-    background-color rgb(44, 44, 46)
+    font-weight 600
+    background-color #d3d3d3
 
-
-/* Style the tab content */
 .sgn-menu-tab-content
     display none
 
     a
         text-decoration none
-        color #F3F3F9
+        color #202020
 
 .sgn-menu-tab-content-active
     display block
+
+.sgn__theme-dark
+    .sgn-menu-popup
+        background rgb(28, 28, 30)
+        color #F3F3F9
+        box-shadow rgba(0, 0, 0, 0.7) 0px 20px 55px, rgba(0, 0, 0, 0.3) 0px 0px 1px
+
+    .sgn-menu-download
+        > span
+            background-color #2c2c2e
+
+    .sgn-menu-tab
+        color #F3F3F9
+        background-color rgba(139, 140, 143, 0.1)
+    
+    .sgn-menu-tab-btn
+        background-color transparent
+        color #F3F3F9
+
+        &:hover
+            background-color rgb(44, 44, 46)
+    
+    .sgn-menu-tab-btn-active
+        background-color rgb(44, 44, 46)
+
+    .sgn-menu-tab-content
+        a
+            color #F3F3F9
+
