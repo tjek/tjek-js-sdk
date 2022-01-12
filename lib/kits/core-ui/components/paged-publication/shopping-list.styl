@@ -35,6 +35,10 @@
     padding 10px
     color #202020
 
+    > li
+        &:hover
+            cursor pointer
+
 .sgn-shopping-li-flex-container
     border-bottom 1px solid #eee
     padding 10px
@@ -55,18 +59,11 @@
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
-    float left
-    width 86%
 
-.sgn-shopping-li-div-text-description
-    color rgb(139, 140, 143)
-    font-size 12px
-
-
-.sgn-shopping-li-div-btn
-    float left
-    width 14%
-    text-align right
+.sgn-shopping-li-ticked
+    .sgn-shopping-li-div-text
+        text-decoration line-through
+        color rgb(139, 140, 143)
 
 .sgn__theme-dark
     .sgn-shopping-popup
@@ -111,3 +108,4 @@
     
     .sgn-shopping-li-div-text
         width 100%
+        white-space normal
