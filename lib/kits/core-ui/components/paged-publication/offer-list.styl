@@ -10,14 +10,14 @@
 
 .sgn-offers-search-text
     border-radius 4px
-    padding 6px 12px
     margin 0px
     background-color #d3d3d3
     color #202020
     line-height 1.42857
     resize vertical
     border 1px solid rgba(255, 255, 255, 0.15)
-    width 96%
+    width 99%
+    height 32px
 
 .sgn-offers-li
     width 31%
@@ -26,12 +26,14 @@
     margin-bottom 12px
     float left
 
+.sgn-offers-li:nth-child(3n+1)
+    clear left
+
 .sgn-offers-li-flex-container
     text-decoration none
     padding 12px
     box-shadow rgba(0, 0, 0, .3) 0px 0px 10px
     border-radius 10px
-    height: 246px;
 
 .sgn-offers-li-div-img
     background-color rgb(204, 204, 204)
@@ -105,7 +107,20 @@
     .sgn-offers-li-div-text
         color #F3F3F9
 
+@media (max-width 450px)
+    .sgn-offers-li
+        width 48%
+
+    .sgn-offers-li:nth-child(3n+1)
+        clear none
+
+    .sgn-offers-li:nth-child(2n+1)
+        clear left
+
+@media (max-height 900px)
+    .sgn-offers-ol
+        height 500px
 
 @media (max-height 790px)
     .sgn-offers-ol
-        height 400px
+        height 360px
