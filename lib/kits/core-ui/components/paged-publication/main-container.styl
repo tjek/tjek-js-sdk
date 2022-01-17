@@ -9,12 +9,15 @@
 
 .sgn__header
     position absolute
+    display none
     font-family sans-serif
     z-index 99
     height 80px
     margin auto
     width 100%
     text-align center
+    animation-duration .4s
+    animation-iteration-count 1
 
     > .sgn__nav-logo
         padding 10px
@@ -68,11 +71,23 @@
     animation-name sgn-animate-bounce
     animation-timing-function ease
 
+
+.sgn-animate-header
+    display block
+    animation-name sgn-animate-header
+    animation-timing-function ease
+
 @keyframes sgn-animate-bounce
     0%
         transform translateY(0)
     50%
         transform translateY(-8px)
+    100%
+        transform translateY(0)
+
+@keyframes sgn-animate-header
+    0%
+        transform translateY(-100px)
     100%
         transform translateY(0)
 
