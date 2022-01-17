@@ -14,18 +14,19 @@
     height 80px
     margin auto
     width 100%
+    text-align center
 
     > .sgn__nav-logo
         padding 10px
 
     > .sgn__nav
         position relative
-        width 160px
+        display inline-block
         height 66px
         background-color transparent
-        margin auto
         margin-top 8px
         border-radius 12px
+        padding 0 16px
         overflow hidden
         background-color rgba(0,0,0, .1)
         box-shadow rgba(0, 0, 0,  0.4) 0px 5px 16px, rgba(0, 0, 0, 0.2) 0px 0px 1px
@@ -39,16 +40,18 @@
             border-radius 4px
             padding 18px 12px
             border 1px solid transparent
-            min-width 70px
             cursor pointer
 
             > svg
                 width 25px
 
+            .sgn-header-icon-svg-close
+                width 18px
+
             .sgn__offer-shopping-counter
                 display block
                 position absolute
-                margin-left 30px
+                margin-left 20px
                 margin-top -32px
                 padding 1px
                 background #f3f3f9
