@@ -1,4 +1,5 @@
 export default {
+    locale_code: 'da-DK',
     paged_publication_viewer_shopping_list_label: 'Indkøbsliste',
     paged_publication_viewer_clear_list_button: 'Ryd liste',
     paged_publication_viewer_delete_crossed_out_button:
@@ -8,6 +9,5 @@ export default {
     paged_publication_viewer_pages_button: 'Sider',
     paged_publication_viewer_offers_button: 'Tilbud',
     paged_publication_viewer_search_text: 'Søg',
-    paged_publication_viewer_currency_prefix: '',
-    paged_publication_viewer_currency_suffix: 'kr.'
+    paged_publication_viewer_currency: 'DKK'
 };
