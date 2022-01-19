@@ -8,6 +8,6 @@ export default {
     paged_publication_viewer_pages_button: 'Sider',
     paged_publication_viewer_offers_button: 'Tilbud',
     paged_publication_viewer_search_text: 'Søg',
-    paged_publication_viewer_currency_prefix: '$',
-    paged_publication_viewer_currency_suffix: ''
+    paged_publication_viewer_currency_prefix: '',
+    paged_publication_viewer_currency_suffix: 'kr.'
 };
