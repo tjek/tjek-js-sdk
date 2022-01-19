@@ -1,14 +1,13 @@
 export default {
-    pagedPublication: {
-        downloadButton: 'Download',
-        pagesButton: 'Pages',
-        offersButton: 'Offers',
-        shoppingListLabel: 'Shopping List',
-        clearListButton: 'Clear list',
-        printButton: 'Print',
-        searchText: 'Search',
-        deleteCrossedOutItemsButton: 'Delete crossed out items',
-        currencyPrefix: '$',
-        currencySuffix: ''
-    }
+    paged_publication_viewer_shopping_list_label: 'Shopping List',
+    paged_publication_viewer_clear_list_button: 'Clear list',
+    paged_publication_viewer_delete_crossed_out_button:
+        'Delete crossed out items',
+    paged_publication_viewer_print_button: 'Print',
+    paged_publication_viewer_download_button: 'Download Now',
+    paged_publication_viewer_pages_button: 'Pages',
+    paged_publication_viewer_offers_button: 'Offers',
+    paged_publication_viewer_search_text: 'Search',
+    paged_publication_viewer_currency_prefix: '$',
+    paged_publication_viewer_currency_suffix: ''
 };
