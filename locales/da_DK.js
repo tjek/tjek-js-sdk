@@ -6,6 +6,7 @@ export default {
         'Slet overstregede elementer',
     paged_publication_viewer_print_button: 'Print',
     paged_publication_viewer_download_button: 'Hent',
+    paged_publication_viewer_until_label: 'Til og med',
     paged_publication_viewer_pages_button: 'Sider',
     paged_publication_viewer_offers_button: 'Tilbud',
     paged_publication_viewer_search_text: 'Søg',

@@ -5,7 +5,8 @@ export default {
     paged_publication_viewer_delete_crossed_out_button:
         'Delete crossed out items',
     paged_publication_viewer_print_button: 'Print',
-    paged_publication_viewer_download_button: 'Download Now',
+    paged_publication_viewer_download_button: 'Download',
+    paged_publication_viewer_until_label: 'Until',
     paged_publication_viewer_pages_button: 'Pages',
     paged_publication_viewer_offers_button: 'Offers',
     paged_publication_viewer_search_text: 'Search',
