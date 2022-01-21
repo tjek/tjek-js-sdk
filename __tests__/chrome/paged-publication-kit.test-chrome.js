@@ -10,6 +10,8 @@ describe('Chrome: Paged Publication', () => {
     it('Should display "Make your PDF alive with ShopGun." text on page', async () => {
         const page = await newIncognitoPage(PPPath);
 
+        await new Promise((r) => setTimeout(r, 300));
+
         expect(
             await page.$eval('body', (el) =>
                 /Make your PDF alive with ShopGun./.test(el.innerText)

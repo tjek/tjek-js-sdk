@@ -38,9 +38,9 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
     If you include our code from separate nodes you may want to include your app key & track id as seen below. The example below uses our CloudFront distribution where all the versions are hosted:
 
     ```HTML
-    <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.css" rel='stylesheet' />
+    <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css" rel='stylesheet' />
 
-    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-3.3.0.min.js" id="sgn-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js" id="sgn-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
     ```
 
     You may use our distribution or choose to host the code yourself. Should you choose to use our distribution remember to point to the latest working version.
