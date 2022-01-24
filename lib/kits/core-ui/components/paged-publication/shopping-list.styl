@@ -112,13 +112,26 @@
         overflow visible
         position relative!important
         z-index 9
+        visibility hidden
+        height auto
 
     .sgn__header
         overflow visible
         position relative
+        visibility hidden
+        height auto
+
+    body *
+        visibility hidden
+        height 0
+
+    .sgn-show-print-section *
+        visibility visible
+        height auto
 
     .sgn-hide-print
-        display none
+        display none!important
+        visibility hidden!important
 
     .sgn-shopping-popup
         box-shadow none
