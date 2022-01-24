@@ -1,26 +1,51 @@
 .sgn__publications
+    font-family -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", "Helvetica Neue", Arial, sans-serif
+    font-size 14px
     max-width 1024px
     margin auto
+    color #202020
+
+.sgn-publications-ul
+    display grid
+    grid-template-columns repeat(auto-fill, minmax(200px, 1fr))
+    gap 24px 36px
+    margin-top 0px
+    margin-bottom 0px
+    padding 0px
+    list-style none
+
+.sgn-publications-li
+    position relative
 
 .publications__item
-    text-align center
-    margin-top 20px
-    float left
-    width 50%
-    transition transform ease 300ms
-    
+    box-shadow rgba(0, 0, 0, .4) 0px 0px 10px
+    border-radius 10px
+    padding 8px
+    transition transform ease 200ms
+
     &:hover
-        transform scale(1.1)
+        cursor pointer
+        transform scale(1.02)
+
+.sgn-publications-li-div-img
+    width 100%
+    padding-top 122%
+    position relative
+    border-radius 10px
+    background rgba(151, 149, 146, 0.5)
+    overflow hidden
+    margin-bottom 10px
 
     > img
-        display block
-        max-width 300px
-        min-height 50px
-        cursor pointer
-        margin 0 auto 10px
-        border 1px solid #eee
-        border-radius 3px
-
-@media (max-width: 700px)
-    .publications__item
+        object-fit cover
+        object-position center top
         width 100%
+        height 100%
+        position absolute
+        inset 0px
+
+.sgn-publications-li-heading
+    font-weight 600
+
+.sgn-publications-li-date
+    font-size 12px
