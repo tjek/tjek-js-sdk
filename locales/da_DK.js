@@ -1,7 +1,7 @@
 export default {
-    locale_code: 'da-DK',
+    locale_code: 'da_DK',
     paged_publication_viewer_shopping_list_label: 'Indkøbsliste',
-    paged_publication_viewer_clear_list_button: 'Ryd liste',
+    paged_publication_viewer_shopping_list_clear_button: 'Ryd indkøbsliste',
     paged_publication_viewer_delete_crossed_out_button:
         'Slet overstregede elementer',
     paged_publication_viewer_print_button: 'Print',

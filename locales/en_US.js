@@ -1,7 +1,7 @@
 export default {
-    locale_code: 'en-US',
+    locale_code: 'en_US',
     paged_publication_viewer_shopping_list_label: 'Shopping List',
-    paged_publication_viewer_clear_list_button: 'Clear list',
+    paged_publication_viewer_shopping_list_clear_button: 'Clear list',
     paged_publication_viewer_delete_crossed_out_button:
         'Delete crossed out items',
     paged_publication_viewer_print_button: 'Print',
