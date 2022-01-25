@@ -1,4 +1,4 @@
-.sgn-offers-ol
+.sgn-offers-list-items-container
     height 650px
     overflow-y scroll
     list-style-type none
@@ -17,17 +17,17 @@
     box-sizing border-box
     padding 8px
 
-.sgn-offers-li
+.sgn-offers-list-item-container
     width 31%
     text-align center
     margin 1%
     margin-bottom 12px
     float left
 
-.sgn-offers-li:nth-child(3n+1)
+.sgn-offers-list-item-container:nth-child(3n+1)
     clear left
 
-.sgn-offers-li-flex-container
+.sgn-offers-content-container
     text-decoration none
     padding 12px
     box-shadow rgba(0, 0, 0, .3) 0px 0px 10px
@@ -36,7 +36,7 @@
     &:hover
         cursor pointer
 
-.sgn-offers-li-div-img
+.sgn-offers-content-img
     background-color rgb(204, 204, 204)
     background-size cover
     background-position center center
@@ -56,14 +56,14 @@
         position absolute
         inset 0px
 
-.sgn-offers-li-div-text
+.sgn-offers-content-text
     white-space nowrap
     overflow hidden
     color #202020
     padding 4px 0px 0px 0px
     text-align left
 
-.sgn-offers-li-heading
+.sgn-offers-content-heading
     font-weight 600
     line-height 1.2
     white-space nowrap
@@ -71,12 +71,12 @@
     text-overflow ellipsis
     max-width 300px
 
-.sgn-offers-li-description
+.sgn-offers-content-description
     font-size 0.9em
     opacity 0.6
     color inherit
 
-.sgn-offers-li-price
+.sgn-offers-content-price
     font-variant-numeric tabular-nums
     color rgb(40, 175, 76)
     font-size 0.9em
@@ -87,29 +87,29 @@
         color rgb(243, 243, 249)
         border 2px solid rgba(0, 0, 0, 0.15)
     
-    .sgn-offers-li-flex-container
+    .sgn-offers-content-container
         box-shadow rgba(243, 243, 249, .15) 0px 0px 10px
     
-    .sgn-offers-li-div-img
+    .sgn-offers-content-img
         background-color rgb(204, 204, 204)
     
-    .sgn-offers-li-div-text
+    .sgn-offers-content-text
         color #F3F3F9
 
 @media (max-width 450px)
-    .sgn-offers-li
+    .sgn-offers-list-item-container
         width 48%
 
-    .sgn-offers-li:nth-child(3n+1)
+    .sgn-offers-list-item-container:nth-child(3n+1)
         clear none
 
-    .sgn-offers-li:nth-child(2n+1)
+    .sgn-offers-list-item-container:nth-child(2n+1)
         clear left
 
 @media (max-height 900px)
-    .sgn-offers-ol
+    .sgn-offers-list-items-container
         height 500px
 
 @media (max-height 790px)
-    .sgn-offers-ol
+    .sgn-offers-list-items-container
         height 360px

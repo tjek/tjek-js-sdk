@@ -46,7 +46,7 @@
     position absolute
     background #F3F3F9
 
-.sgn-shopping-ol
+.sgn-shopping-list-items-container
     height 450px
     overflow-y scroll
     list-style-type none
@@ -57,11 +57,11 @@
         &:hover
             cursor pointer
 
-    .sgn-shopping-li-crossed
+    .sgn-shopping-list-item-container-crossed
         text-align center
         padding-top 15px
 
-.sgn-shopping-li-flex-container
+.sgn-shopping-list-content-container
     border-bottom 1px solid #d5d5d5
     padding 10px
     align-items center
@@ -72,15 +72,15 @@
     font-weight 600
     font-size 18px
 
-.sgn-shopping-li-div-text
+.sgn-shopping-list-content
     font-size 16px
     line-height 1.6
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
 
-.sgn-shopping-li-ticked
-    .sgn-shopping-li-div-text
+.sgn-shopping-list-item-container-ticked
+    .sgn-shopping-list-content
         text-decoration line-through
         color rgb(139, 140, 143)
 
@@ -96,15 +96,15 @@
     .sgn-popup-header
         border-bottom 1px solid rgba(0, 0, 0, 0.1)
 
-    .sgn-shopping-ol
+    .sgn-shopping-list-items-container
         color #f3f3f9
 
-    .sgn-shopping-li-flex-container
+    .sgn-shopping-list-content-container
         border-bottom 1px solid rgba(255, 255, 255, 0.1)
 
 
 @media (max-height 790px)
-    .sgn-shopping-ol
+    .sgn-shopping-list-items-container
         height 400px
 
 @media print
@@ -137,12 +137,12 @@
         box-shadow none
         color #000000!important
 
-    .sgn-shopping-ol
+    .sgn-shopping-list-items-container
         overflow visible
         height 100%
         position relative
         color #000000!important
     
-    .sgn-shopping-li-div-text
+    .sgn-shopping-list-content
         width 100%
         white-space normal
