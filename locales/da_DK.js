@@ -3,7 +3,7 @@ export default {
     paged_publication_viewer_shopping_list_label: 'Indkøbsliste',
     paged_publication_viewer_shopping_list_clear_button: 'Ryd indkøbsliste',
     paged_publication_viewer_delete_crossed_out_button:
-        'Slet overstregede elementer',
+        'Slet overstregede varer',
     paged_publication_viewer_print_button: 'Print',
     paged_publication_viewer_download_button: 'Hent',
     paged_publication_viewer_until_label: 'Til og med',
