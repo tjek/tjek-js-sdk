@@ -117,7 +117,6 @@ Below is another example which will render the list of active publications. It w
     data-business-id="YOUR_BUSINESS_ID"
     data-component="list-paged-publications"
     data-component-list-paged-publications-container="#list-publications"
-    data-component-list-paged-publications-order-by="newest"
 ></script>
 ```
 
