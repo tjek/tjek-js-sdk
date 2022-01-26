@@ -130,6 +130,7 @@ Aside from the required data- attributes, the SDK still support a few more data 
 | data-component                                     | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`list-paged-publications` To render the list of active publications. |
 | data-component-paged-publication-container         | `#custom_container_id` <br/> `.custom_container_class`                                                                                                     |
 | data-component-list-paged-publications-order-by    | `newest` (default) <br/>`latest`                                                                                                                           |
+| data-component-publication-id                      | `{publication_id}` : To render specific publication                                                                                                        |
 | data-locale-code                                   | `en_US` (default) <br/>`da_DK`                                                                                                                             |
 | data-component-theme                               | `light` (default)<br/> `dark`                                                                                                                              |
 | data-publication-id-query-param                    | `id` (default) : The page publication viewer can accept query param to display a certain publication. This is to override the default `id` param           |
