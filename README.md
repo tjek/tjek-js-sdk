@@ -70,6 +70,74 @@ To learn more about integrating the same experience on iOS and Android be sure t
 -   [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
 -   [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
+## Core UI
+
+To minimize the effort needed in setting this up, we've created some built-in (customizable) templates to list and view your publications.
+
+### Setup
+
+The setup is almost the same from above, you need to include the CSS and Javascript libraries. However, instead of creating an extra script to render the publication viewer, you only need to add a container and a few more required data-\* attributes to render the template. Eg:
+
+```html
+<link
+    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+
+<div id="paged-publication"></div>
+
+<script
+    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    id="sgn-sdk"
+    data-api-key="YOUR_API_KEY"
+    data-track-id="YOUR_TRACK_ID"
+    data-business-id="YOUR_BUSINESS_ID"
+    data-component="paged-publication-viewer"
+    data-component-paged-publication-container="#paged-publication"
+></script>
+```
+
+Below is another example which will render the list of active publications. It will also render the publication viewer upon clicking on a certain publication:
+
+```html
+<link
+    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+
+<div id="list-publications"></div>
+
+<script
+    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    id="sgn-sdk"
+    data-api-key="YOUR_API_KEY"
+    data-track-id="YOUR_TRACK_ID"
+    data-business-id="YOUR_BUSINESS_ID"
+    data-component="list-paged-publications"
+    data-component-list-paged-publications-container="#list-publications"
+    data-component-list-paged-publications-order-by="newest"
+></script>
+```
+
+### Available data attributes
+
+Aside from the required data- attributes, the SDK still support a few more data for customizations
+
+| Attribute                                          | Value                                                                                                                                                      |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data-business-id                                   | Business ID                                                                                                                                                |
+| data-component                                     | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`list-paged-publications` To render the list of active publications. |
+| data-component-paged-publication-container         | `#custom_container_id` <br/> `.custom_container_class`                                                                                                     |
+| data-component-list-paged-publications-order-by    | `newest` (default) <br/>`latest`                                                                                                                           |
+| data-locale-code                                   | `en_US` (default) <br/>`da_DK`                                                                                                                             |
+| data-component-theme                               | `light` (default)<br/> `dark`                                                                                                                              |
+| data-publication-id-query-param                    | `id` (default) : The page publication viewer can accept query param to display a certain publication. This is to override the default `id` param           |
+| data-publication-page-query-param                  | `page` (default) : The page publication viewer can accept query param to initially load a certain page. This is to override the default `page` param       |
+| data-component-paged-publication-remove-components | `classnames_to_be_removed_separated_by_comma` : To disable a certain component <br> eg: `sgn__offer-shopping`                                              |
+| data-translation-keys--{key}                       | `{key}` : Any value that will replace the default value per key from the locale files                                                                      |
+
 ## Changelog
 
 ### Version 4.0.2
@@ -78,6 +146,7 @@ To learn more about integrating the same experience on iOS and Android be sure t
 -   Update dependencies
 
 ### Version 4.0.1
+
 -   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js
 -   Update dependencies
 -   Fix Incito `data-link` behavior.
