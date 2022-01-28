@@ -10,5 +10,6 @@ export default {
     paged_publication_viewer_pages_button: 'Pages',
     paged_publication_viewer_offers_button: 'Offers',
     paged_publication_viewer_search_text: 'Search',
-    paged_publication_viewer_currency: 'USD'
+    paged_publication_viewer_currency: 'USD',
+    paged_publication_viewer_hotspot_picker_header: 'Which offer did you mean?'
 };
