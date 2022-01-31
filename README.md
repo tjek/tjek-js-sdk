@@ -115,8 +115,8 @@ Below is another example which will render the list of active publications. It w
     data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
     data-business-id="YOUR_BUSINESS_ID"
-    data-component="list-paged-publications"
-    data-component-list-paged-publications-container="#list-publications"
+    data-component="list-publications"
+    data-component-list-publications-container="#list-publications"
 ></script>
 ```
 
@@ -124,19 +124,20 @@ Below is another example which will render the list of active publications. It w
 
 Aside from the required data- attributes, the SDK still support a few more data for customizations
 
-| Attribute                                          | Value                                                                                                                                                      |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data-business-id                                   | Business ID                                                                                                                                                |
-| data-component                                     | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`list-paged-publications` To render the list of active publications. |
-| data-component-paged-publication-container         | `#custom_container_id` <br/> `.custom_container_class`                                                                                                     |
-| data-component-list-paged-publications-order-by    | `newest` (default) <br/>`latest`                                                                                                                           |
-| data-component-publication-id                      | `{publication_id}` : To render specific publication                                                                                                        |
-| data-locale-code                                   | `en_US` (default) <br/>`da_DK`                                                                                                                             |
-| data-component-theme                               | `light` (default)<br/> `dark`                                                                                                                              |
-| data-publication-id-query-param                    | `id` (default) : The page publication viewer can accept query param to display a certain publication. This is to override the default `id` param           |
-| data-publication-page-query-param                  | `page` (default) : The page publication viewer can accept query param to initially load a certain page. This is to override the default `page` param       |
-| data-component-paged-publication-remove-components | `classnames_to_be_removed_separated_by_comma` : To disable a certain component <br> eg: `sgn__offer-shopping`                                              |
-| data-translation-keys--{key}                       | `{key}` : Any value that will replace the default value per key from the locale files                                                                      |
+| Attribute                                          | Value                                                                                                                                                |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data-business-id                                   | Business ID                                                                                                                                          |
+| data-component                                     | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`list-publications` To render the list of active publications. |
+| data-component-list-publications-container         | `#custom_container_id` <br/> `.custom_container_class`                                                                                               |
+| data-component-paged-publication-container         | `#custom_container_id` <br/> `.custom_container_class`                                                                                               |
+| data-component-list-publications-order-by          | `newest` (default) <br/>`oldest`                                                                                                                     |
+| data-component-publication-id                      | `{publication_id}` : To render specific publication                                                                                                  |
+| data-locale-code                                   | `en_US` (default) <br/>`da_DK`                                                                                                                       |
+| data-component-theme                               | `light` (default)<br/> `dark`                                                                                                                        |
+| data-publication-id-query-param                    | `id` (default) : The page publication viewer can accept query param to display a certain publication. This is to override the default `id` param     |
+| data-publication-page-query-param                  | `page` (default) : The page publication viewer can accept query param to initially load a certain page. This is to override the default `page` param |
+| data-component-paged-publication-remove-components | `classnames_to_be_removed_separated_by_comma` : To disable a certain component <br> eg: `sgn__offer-shopping`                                        |
+| data-translation-keys--{key}                       | `{key}` : Any value that will replace the default value per key from the locale files                                                                |
 
 ## Changelog
 
