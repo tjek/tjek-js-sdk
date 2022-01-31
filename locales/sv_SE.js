@@ -6,7 +6,7 @@ export default {
         'Ta bort överstrukna objekt',
     paged_publication_viewer_print_button: 'Skriva ut',
     paged_publication_viewer_download_button: 'Ladda ner',
-    paged_publication_viewer_until_label: 'Fram tills',
+    paged_publication_viewer_until_label: 'Till slut',
     paged_publication_viewer_pages_button: 'Sidor',
     paged_publication_viewer_offers_button: 'Erbjudanden',
     paged_publication_viewer_search_text: 'Sök',

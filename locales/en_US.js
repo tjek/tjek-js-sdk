@@ -6,7 +6,7 @@ export default {
         'Delete crossed out items',
     paged_publication_viewer_print_button: 'Print',
     paged_publication_viewer_download_button: 'Download',
-    paged_publication_viewer_until_label: 'Until',
+    paged_publication_viewer_until_label: 'Through',
     paged_publication_viewer_pages_button: 'Pages',
     paged_publication_viewer_offers_button: 'Offers',
     paged_publication_viewer_search_text: 'Search',
