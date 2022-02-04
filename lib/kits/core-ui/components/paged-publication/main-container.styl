@@ -1,12 +1,13 @@
 .sgn__pp
-    position relative
-    color #000
-    overflow hidden
-    outline 0
-    font-family sans-serif
+    &[data-component-template="true"]
+        font-family sans-serif
 
-.verso__scroller
-    top 80px
+        .verso__scroller
+            top 80px
+
+    &[data-component-template-disable-header="true"]
+        .verso__scroller
+            top 0
 
 .sgn__header
     position absolute
@@ -40,7 +41,7 @@
                 height 8px
 
         > button
-            color #F3F3F9
+            color inherit
             background-color transparent
             display inline-block
             vertical-align middle
