@@ -95,6 +95,7 @@ The setup is almost the same from above, you need to include the CSS and Javascr
     data-business-id="YOUR_BUSINESS_ID"
     data-component="paged-publication-viewer"
     data-component-paged-publication-container="#paged-publication"
+    defer
 ></script>
 ```
 
@@ -117,6 +118,7 @@ Below is another example which will render the list of active publications. It w
     data-business-id="YOUR_BUSINESS_ID"
     data-component="list-publications"
     data-component-list-publications-container="#list-publications"
+    defer
 ></script>
 ```
 
