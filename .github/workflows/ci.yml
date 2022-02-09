@@ -20,6 +20,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-
       - run: npm install --ignore-scripts
+      - run: npx playwright install --with-deps
       - run: npm run build
       - run: npm run test:lint
       - run: npm run test:ci
