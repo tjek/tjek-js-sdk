@@ -1,12 +1,13 @@
 .sgn__pp
-    position relative
-    color #000
-    overflow hidden
-    outline 0
-    font-family sans-serif
+    &[data-component-template="true"]
+        font-family sans-serif
 
-.verso__scroller
-    top 80px
+        .verso__scroller
+            top 80px
+
+    &[data-component-template-disable-header="true"]
+        .verso__scroller
+            top 0
 
 .sgn__header
     position absolute
@@ -33,8 +34,14 @@
         box-shadow rgba(0, 0, 0,  0.4) 0px 5px 16px, rgba(0, 0, 0, 0.2) 0px 0px 1px
         text-align center
 
+        .sgn-pp__progress
+            height 8px
+
+            .sgn-pp-progress__bar
+                height 8px
+
         > button
-            color #F3F3F9
+            color inherit
             background-color transparent
             display inline-block
             vertical-align middle
@@ -92,7 +99,7 @@
 .sgn-clearfix
     clear both
 
-.sgn-blocker
+.sgn-modal-container
     position fixed
     top 0
     left 0
@@ -100,3 +107,11 @@
     right 0
     content ' '
     background rgba(0, 0, 0, 0.1)
+
+.sgn-blocker
+    position fixed
+    top 0
+    left 0
+    bottom 0
+    right 0
+    content ' '
