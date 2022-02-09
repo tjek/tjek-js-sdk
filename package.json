@@ -39,7 +39,7 @@
         },
         {
             "path": "./dist/verso-browser/verso.js",
-            "maxSize": "70 kB"
+            "maxSize": "75 kB"
         },
         {
             "path": "./dist/verso-browser/verso.min.js",
@@ -47,7 +47,7 @@
         },
         {
             "path": "./dist/verso-browser/verso.cjs.js",
-            "maxSize": "25 kB"
+            "maxSize": "30 kB"
         },
         {
             "path": "./dist/verso-browser/verso.es.js",
