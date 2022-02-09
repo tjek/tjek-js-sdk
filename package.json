@@ -72,7 +72,7 @@
         "dev:js": "rollup -c -m inline --environment NODE_ENV:development --watch",
         "dev": "run-p -l dev:js serve",
         "serve": "serve",
-        "prepublish": "npm run clean && npm run build && npm run test",
+        "prepublishOnly": "npm run clean && npm run build && npm run test",
         "publish": "GOOD=1 node publish-npm.js",
         "publish-pages": "gh-pages -d examples -e examples && gh-pages -d dist -e dist"
     },
