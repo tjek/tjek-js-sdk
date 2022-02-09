@@ -50,11 +50,7 @@
             });
 
             this.bootstrapper.fetch(function (error, res) {
-                if (error) {
-                    console.log(error);
-                    
-                    return;
-                }
+                if (error) return console.error(error);
 
                 var viewer = bootstrapper.createViewer(res);
 
