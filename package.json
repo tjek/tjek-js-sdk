@@ -11,15 +11,15 @@
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
-            "maxSize": "90 kB"
+            "maxSize": "95 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
-            "maxSize": "75 kB"
+            "maxSize": "70 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.es.js",
-            "maxSize": "75 kB"
+            "maxSize": "70 kB"
         },
         {
             "path": "./dist/incito-browser/incito.js",
