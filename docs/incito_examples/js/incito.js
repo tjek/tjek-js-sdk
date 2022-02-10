@@ -139,7 +139,7 @@
                         function (e) {
                             e.preventDefault();
 
-                            var id = this.getAttribute('data-id');
+                            var id = this.dataset.id;
 
                             // Get metadata on offer
                             var meta = incitoPublicationViewer.incito.ids[id];

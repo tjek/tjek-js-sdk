@@ -61,7 +61,7 @@
                     function (e) {
                         e.preventDefault();
 
-                        var id = this.getAttribute('data-id');
+                        var id = this.dataset.id;
                         var meta = viewer.incito.ids[id];
 
                         alert('Offer was clicked');
