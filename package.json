@@ -55,11 +55,11 @@
         },
         {
             "path": "./dist/tjek-sdk/index.cjs.js",
-            "maxSize": "5 kB"
+            "maxSize": "45 kB"
         },
         {
             "path": "./dist/tjek-sdk/index.es.js",
-            "maxSize": "5 kB"
+            "maxSize": "45 kB"
         }
     ],
     "scripts": {
