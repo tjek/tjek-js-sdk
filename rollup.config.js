@@ -62,9 +62,7 @@ const external = [
     'cross-fetch',
     'md5',
     'microevent',
-    'mustache',
-    'incito-browser',
-    'verso-browser'
+    'mustache'
 ];
 
 let configs = bundles
