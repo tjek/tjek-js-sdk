@@ -42,14 +42,6 @@ const bundles = [
         pkg: {baseContents: {version, name: '@tjek/sdk'}},
         input: path.join(libDir, 'tjek-sdk.js'),
         output: path.join(distDir, 'tjek-sdk')
-    },
-    {
-        input: path.join(libDir, 'kits', 'events', 'index.js'),
-        output: path.join(distDir, 'tjek-sdk', 'events')
-    },
-    {
-        input: path.join(libDir, 'kits', 'events', 'tracker.js'),
-        output: path.join(distDir, 'tjek-sdk', 'events', 'tracker')
     }
 ];
 
