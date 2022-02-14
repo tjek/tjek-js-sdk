@@ -39,7 +39,7 @@ const bundles = [
     },
     {
         name: 'Tjek',
-        pkg: {baseContents: {version, name: '@tjek/sdk'}},
+        pkg: {baseContents: {version, name: '@tjek/sdk', sideEffects: false}},
         input: path.join(libDir, 'tjek-sdk.js'),
         output: path.join(distDir, 'tjek-sdk')
     }

@@ -253,7 +253,7 @@ async function publish() {
             npmPkg = await libnpm.manifest(`${pkg.name}@${tag}`);
         } catch {}
         const diffObj = await npmDiff(packageJsonPath, tag);
-        printDiffPackage(diffObj);
+
         packageDiffs[packageJsonPath] = [
             npmPkg || {...pkg, version: undefined},
             diffObj,
