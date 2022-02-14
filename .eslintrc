@@ -20,6 +20,7 @@
         "no-empty": ["error", {"allowEmptyCatch": true}],
         "object-shorthand": "warn",
         "no-useless-rename": "warn",
-        "no-var": "warn"
+        "no-var": "warn",
+        "prefer-const": "warn"
     }
 }
