@@ -8,8 +8,8 @@ const chalk = require('chalk');
 const path = require('path');
 const {prompt} = require('inquirer');
 const {spawn} = require('child_process');
-var {isBinaryFile} = require('isbinaryfile');
-var jsdiff = require('diff');
+const {isBinaryFile} = require('isbinaryfile');
+const jsdiff = require('diff');
 const ora = require('ora');
 const libnpm = require('libnpm');
 
@@ -79,9 +79,9 @@ async function getFiles(filesPath) {
         files.map(async (filePath) => [filePath, await fs.readFile(filePath)])
     );
     const obj = {};
-    for (let [fullPath, buf] of results) {
-        var relPath = path.relative(filesPath, fullPath);
-        var isBin = await isBinary(buf);
+    for (const [fullPath, buf] of results) {
+        const relPath = path.relative(filesPath, fullPath);
+        const isBin = await isBinary(buf);
 
         obj[relPath] = {
             relPath,
@@ -108,14 +108,24 @@ async function diff(oldPath, newPath) {
         await Promise.all(
             keys.map(async (key) => {
                 await new Promise((y) => setTimeout(y, 1));
-                var oldFile = oldFiles[key] || {};
-                var newFile = newFiles[key] || {};
+                const oldFile = oldFiles[key] || {};
+                const newFile = newFiles[key] || {};
+                if (oldFile.contents)
+                    oldFile.contents = oldFile.contents.replaceAll(
+                        / {2}"version": "(.+)",\n/gi,
+                        ''
+                    );
+                if (newFile.contents)
+                    newFile.contents = newFile.contents.replaceAll(
+                        / {2}"version": "(.+)",\n/gi,
+                        ''
+                    );
 
                 // Files are straight up equal.
                 if (oldFile.contents === newFile.contents) return [key, null];
 
                 // Start with assumption that there's no binary diff.
-                var binDiff = false;
+                let binDiff = false;
 
                 // 1+ file is binary.
                 if (oldFile.isBinary || newFile.isBinary) {
@@ -197,7 +207,7 @@ async function npmDiff(packageJsonPath, tag) {
     return diffObj;
 }
 
-var DIFF_HEADER_LINES = 4;
+const DIFF_HEADER_LINES = 4;
 const colorDiff = (diff = '') =>
     diff
         .split('\n')
@@ -243,6 +253,7 @@ async function publish() {
             npmPkg = await libnpm.manifest(`${pkg.name}@${tag}`);
         } catch {}
         const diffObj = await npmDiff(packageJsonPath, tag);
+        printDiffPackage(diffObj);
         packageDiffs[packageJsonPath] = [
             npmPkg || {...pkg, version: undefined},
             diffObj,
@@ -374,12 +385,12 @@ async function publish() {
             };
         })
     );
-    const targetVersions = Object.entries(
-        answers2['']
-    ).map(([packageJsonPath, {json: version}]) => [
-        '.' + packageJsonPath + '.json',
-        version
-    ]);
+    const targetVersions = Object.entries(answers2['']).map(
+        ([packageJsonPath, {json: version}]) => [
+            '.' + packageJsonPath + '.json',
+            version
+        ]
+    );
     const cwd = process.cwd();
     for (const [packageJsonPath, version] of targetVersions) {
         process.chdir(packageJsonPath.replace('/package.json', ''));

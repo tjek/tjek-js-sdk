@@ -42,14 +42,6 @@ const bundles = [
         pkg: {baseContents: {version, name: '@tjek/sdk'}},
         input: path.join(libDir, 'tjek-sdk.js'),
         output: path.join(distDir, 'tjek-sdk')
-    },
-    {
-        input: path.join(libDir, 'kits', 'events', 'index.js'),
-        output: path.join(distDir, 'tjek-sdk', 'events')
-    },
-    {
-        input: path.join(libDir, 'kits', 'events', 'tracker.js'),
-        output: path.join(distDir, 'tjek-sdk', 'events', 'tracker')
     }
 ];
 
@@ -62,9 +54,7 @@ const external = [
     'cross-fetch',
     'md5',
     'microevent',
-    'mustache',
-    'incito-browser',
-    'verso-browser'
+    'mustache'
 ];
 
 let configs = bundles

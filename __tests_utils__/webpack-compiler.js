@@ -16,64 +16,40 @@ const root = require('app-root-path');
  * or import statements will fail. When that happens, our wrapper
  * functions will then check fs for the requested file.
  */
-const statOrig = memFs.stat.bind(memFs);
-const readFileOrig = memFs.readFile.bind(memFs);
-memFs.stat = (_path, cb) => {
-    statOrig(_path, (err, result) => {
-        if (err) {
-            return fs.stat(_path, cb);
-        } else {
-            return cb(err, result);
-        }
-    });
-};
-memFs.readFile = (path, cb) => {
-    readFileOrig(path, (err, result) => {
-        if (err) {
-            return fs.readFile(path, cb);
-        } else {
-            return cb(err, result);
-        }
-    });
-};
+const stat = memFs.stat.bind(memFs);
+const readFile = memFs.readFile.bind(memFs);
+memFs.stat = (path, cb) =>
+    stat(path, (err, res) => (err ? fs.stat(path, cb) : cb(err, res)));
 
+memFs.readFile = (path, cb) =>
+    readFile(path, (err, res) => (err ? fs.readFile(path, cb) : cb(err, res)));
+
+const filename = 'file.js';
 module.exports = async function compile(code, config = {}) {
     // Setup webpack
     //create a directory structure in MemoryFS that matches
     //the real filesystem
     const rootDir = root.toString();
+    if (!memFs.existsSync(rootDir)) memFs.mkdirpSync(rootDir);
+
+    const entry = path.join(rootDir, filename);
     //write code snippet to memoryfs
-    const outputName = `file.js`;
-    const entry = path.join(rootDir, outputName);
-    const rootExists = memFs.existsSync(rootDir);
-    if (!rootExists) {
-        memFs.mkdirpSync(rootDir);
-    }
     memFs.writeFileSync(entry, code);
     //point webpack to memoryfs for the entry file
     const compiler = webpack({
         entry,
         ...config,
-        output: {filename: outputName, ...config.output}
+        output: {filename, ...config.output}
     });
     compiler.run = thenify(compiler.run);
 
-    //direct webpack to use memoryfs for file input
-    compiler.inputFileSystem = memFs;
+    //direct webpack to use memoryfs
+    compiler.inputFileSystem = compiler.outputFileSystem = memFs;
 
-    //direct webpack to output to memoryfs rather than to disk
-    compiler.outputFileSystem = memFs;
-    const stats = await compiler.run();
-    //remove entry from memory. we're done with it
-    memFs.unlinkSync(entry);
-    const errors = stats.compilation.errors;
-    if (errors?.length > 0) {
-        //if there are errors, throw the first one
-        throw errors[0];
-    }
+    const errors = (await compiler.run()).compilation.errors;
+    //if there are errors, throw the first one
+    if (errors?.length) throw errors[0];
+
     //retrieve the output of the compilation
-    const res = memFs
-        .readFileSync(path.join(rootDir, 'dist', outputName))
-        .toString();
-    return res;
+    return memFs.readFileSync(path.join(rootDir, 'dist', filename), 'utf8');
 };

@@ -54,12 +54,12 @@
             "maxSize": "25 kB"
         },
         {
-            "path": "./dist/tjek-sdk/events/index.cjs.js",
-            "maxSize": "5 kB"
+            "path": "./dist/tjek-sdk/index.cjs.js",
+            "maxSize": "45 kB"
         },
         {
-            "path": "./dist/tjek-sdk/events/index.es.js",
-            "maxSize": "5 kB"
+            "path": "./dist/tjek-sdk/index.es.js",
+            "maxSize": "45 kB"
         }
     ],
     "scripts": {
