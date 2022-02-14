@@ -33,16 +33,10 @@ function _bind(events, selector, callback, remove) {
             // if there is no event type specified then remove all events
             // example: Gator(element).off()
             if (!type) {
-                for (const handleType in handlersBySelectorByType) {
-                    if (
-                        Object.prototype.hasOwnProperty.call(
-                            handlersBySelectorByType,
-                            handleType
-                        )
-                    ) {
-                        handlersBySelectorByType[handleType] = {};
-                    }
-                }
+                Object.keys(handlersBySelectorByType).forEach((handleType) => {
+                    handlersBySelectorByType[handleType] = {};
+                });
+
                 return;
             }
 
@@ -94,29 +88,25 @@ function _bind(events, selector, callback, remove) {
 
                     // find all events that match
                     _level = 0;
-                    for (const handlerSelector in handlersBySelector) {
-                        if (
-                            target instanceof HTMLElement &&
-                            Object.prototype.hasOwnProperty.call(
-                                handlersBySelector,
-                                handlerSelector
-                            )
-                        ) {
-                            const match = _matchesSelector(
-                                target,
-                                handlerSelector,
-                                instances[id].element
-                            );
+                    Object.keys(handlersBySelector).forEach(
+                        (handlerSelector) => {
+                            if (target instanceof HTMLElement) {
+                                const match = _matchesSelector(
+                                    target,
+                                    handlerSelector,
+                                    instances[id].element
+                                );
 
-                            if (match) {
-                                _level++;
-                                handlersBySelector[handlerSelector].match =
-                                    match;
-                                matches[_level] =
-                                    handlersBySelector[handlerSelector];
+                                if (match) {
+                                    _level++;
+                                    handlersBySelector[handlerSelector].match =
+                                        match;
+                                    matches[_level] =
+                                        handlersBySelector[handlerSelector];
+                                }
                             }
                         }
-                    }
+                    );
 
                     // stopPropagation() fails to set cancelBubble to true in Webkit
                     // @see http://code.google.com/p/chromium/issues/detail?id=162270
