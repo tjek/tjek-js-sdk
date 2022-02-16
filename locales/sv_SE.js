@@ -12,5 +12,6 @@ export default {
     paged_publication_viewer_search_text: 'Sök',
     paged_publication_viewer_currency: 'SEK',
     paged_publication_viewer_hotspot_picker_header:
-        'Vilket erbjudande menade du?'
+        'Vilket erbjudande menade du?',
+    incito_publication_viewer_overview_button: 'Översikt'
 };

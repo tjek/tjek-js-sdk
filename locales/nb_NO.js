@@ -11,5 +11,6 @@ export default {
     paged_publication_viewer_offers_button: 'Tilbud',
     paged_publication_viewer_search_text: 'Søk',
     paged_publication_viewer_currency: 'NOK',
-    paged_publication_viewer_hotspot_picker_header: 'Hvilket tilbud mente du?'
+    paged_publication_viewer_hotspot_picker_header: 'Hvilket tilbud mente du?',
+    incito_publication_viewer_overview_button: 'oversikt'
 };
