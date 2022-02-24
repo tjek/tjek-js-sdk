@@ -1,5 +1,6 @@
 .sgn__header
     position absolute
+    display none
     font-family sans-serif
     z-index 99
     height 80px
@@ -60,6 +61,31 @@
                 line-height 1.5
                 animation-duration .4s
                 animation-iteration-count 1
+
+        .sgn-incito__scroll-progress
+            width 100%
+            height 14px
+            background-color rgba(0,0,0, 0.1)
+            position absolute
+            line-height 1.3
+            margin-top -16px
+            margin-left -16px
+
+            .sgn-incito__scroll-progress-bar
+                height: 100%
+                background-color rgba(0,0,0, 0.1)
+                transition transform 0.2s ease 0s
+                will-change transform
+                transform-origin 0px 0px
+                transform scaleX(0)
+            
+            .sgn-incito__scroll-progress-label
+                margin auto
+                margin-top -14px
+                width 100%
+                font-size 11px
+                text-align center
+                position absolute
 
 .sgn-animate-bounce
     animation-name sgn-animate-bounce
