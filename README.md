@@ -88,6 +88,7 @@ The setup is almost the same from above, you need to include the CSS and Javascr
 <div id="paged-publication"></div>
 
 <script
+    data-readme="API's and SDK's by Tjek (https://tjek.com)"
     src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
     id="sgn-sdk"
     data-api-key="YOUR_API_KEY"
@@ -111,6 +112,7 @@ Below is another example which will render the list of active publications. It w
 <div id="list-publications"></div>
 
 <script
+    data-readme="API's and SDK's by Tjek (https://tjek.com)"
     src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
     id="sgn-sdk"
     data-api-key="YOUR_API_KEY"
@@ -129,7 +131,7 @@ Aside from the required data- attributes, the SDK still support a few more data 
 | Attribute                                              | Value                                                                                                                                                                                                                                                                                                                               |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | data-business-id                                       | Business ID                                                                                                                                                                                                                                                                                                                         |
-| data-component                                         | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`list-publications` To render the list of active publications.                                                                                                                                                                                |
+| data-component                                         | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`incito-publication-viewer` : To render incito publication viewer<br/>`list-publications` : To render the list of active publications.                                                                                                        |
 | data-component-list-publications-container             | `#custom_container_id` <br/> `.custom_container_class`                                                                                                                                                                                                                                                                              |
 | data-component-publication-container                   | `#custom_container_id` <br/> `.custom_container_class`                                                                                                                                                                                                                                                                              |
 | data-component-list-publications-order-by              | `newest` (default) <br/>`oldest`                                                                                                                                                                                                                                                                                                    |
