@@ -5,9 +5,13 @@
         .verso__scroller
             top 80px
 
-    &[data-component-template-disable-header="true"]
-        .verso__scroller
-            top 0
+        &[data-component-template-disable-header="true"]
+            .verso__scroller
+                top 0
+
+        &[data-zoomed-in="true"]
+            .sgn__nav-content
+                padding 8px 14px
 
 .sgn-clearfix
     clear both
