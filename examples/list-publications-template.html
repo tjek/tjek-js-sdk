@@ -41,5 +41,28 @@
             data-translation-keys--publication-viewer-download-button="Download Now"
             defer
         ></script>
+
+        <!--   Sample event listener on Incito offer      
+        <script>
+            window.addEventListener('tjek-incito-publication-view-clicked', (e)=> {
+                console.log(e.detail) // {view_id: '45302035570', publication_id: 'K6x40dWM'}
+
+                SGN.CoreKit.request(
+                    {
+                        url: '/v4/rpc/get_offer_from_incito_publication_view',
+                        method: 'post',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            view_id: e.detail.view_id,
+                            publication_id: e.detail.publication_id
+                        })
+                    },
+                    function (err, res) {
+                        console.log('res:', res) // {offer: {...}}
+                    }
+                );
+            })
+        </script> 
+        -->
     </body>
 </html>
