@@ -45,9 +45,9 @@
         <!--   Sample event listener on Incito offer
         <script>
             window.addEventListener('tjek-incito-publication-view-clicked', async (e)=> {
-                console.log(e.detail) // {view_id: '45302035570', publication_id: 'K6x40dWM', fetchOffer: ƒ}
+                console.log(e.detail) // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: ƒ}
 
-                var offer = await e.detail.fetchOffer() // Or pass a callback eg: await e.detail.offer(callback)
+                var offer = await e.detail.fetchOffer() // Or pass a callback eg: e.detail.fetchOffer(callback)
 
                 console.log(offer) // {offer: {...}}
             })
