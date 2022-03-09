@@ -44,15 +44,13 @@
 
         <!--   Sample event listener on Incito offer
         <script>
-            window.addEventListener('tjek-incito-publication-view-clicked', async (e)=> {
-                console.log(e.detail) // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: ƒ}
-
-                var offer = await e.detail.fetchOffer() // Or pass a callback eg: e.detail.fetchOffer(callback)
-
-                console.log(offer) // {offer: {...}}
-            })
+            window.addEventListener(
+                'tjek-incito-publication-view-clicked',
+                (e) => {
+                    console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', offer:{...}}
+                }
+            );
         </script>
         -->
-        
     </body>
 </html>
