@@ -1,5 +1,8 @@
 
 
+.sgn-incito-publication--open
+    overflow hidden
+
 .sgn_loader-container
     position fixed
     background rgba(0, 0, 0, .3)
@@ -30,7 +33,9 @@
         position absolute
         top 0
         left 0
-        right 0            
+        right 0         
+        height 100%
+        overflow-y auto
 
         .incito
             padding-top 80px
@@ -44,7 +49,6 @@
         .incito__view
             &[data-role="offer"]
                 cursor pointer
-
 
     &[data-component-template-disable-header="true"]
         .incito
