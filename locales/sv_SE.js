@@ -11,5 +11,6 @@ export default {
     publication_viewer_search_text: 'Sök',
     publication_viewer_currency: 'SEK',
     publication_viewer_hotspot_picker_header: 'Vilket erbjudande menade du?',
-    publication_viewer_overview_button: 'Översikt'
+    publication_viewer_overview_button: 'Översikt',
+    publication_viewer_close_label: 'Close'
 };

@@ -11,5 +11,6 @@ export default {
     publication_viewer_search_text: 'Search',
     publication_viewer_currency: 'USD',
     publication_viewer_hotspot_picker_header: 'Which offer did you mean?',
-    publication_viewer_overview_button: 'Overview'
+    publication_viewer_overview_button: 'Overview',
+    publication_viewer_close_label: 'Close'
 };

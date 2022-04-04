@@ -23,27 +23,30 @@
         color inherit
 
         .sgn__nav-content
-            padding 8px 14px 2px
+            padding 8px 8px 2px
 
             > button
                 color inherit
                 background-color transparent
                 display inline-block
                 vertical-align middle
-                padding 2px 14px
+                padding 2px
                 border 0
                 cursor pointer
+                width 50px
 
                 > svg
                     width 25px
-
-                .sgn-header-icon-svg-close
-                    width 18px
+                    height 25px
+                
+                .sgn__nav-label
+                    display none
+                    font-size 10px
 
                 .sgn__offer-shopping-list-counter
                     display block
                     position absolute
-                    margin-left 20px
+                    margin-left 30px
                     margin-top -34px
                     padding 1px
                     background #f3f3f9
@@ -54,8 +57,18 @@
                     width 17px
                     height 17px
                     line-height 1.5
-                    animation-duration .3s
+                    animation-duration .25s
                     animation-iteration-count 1
+            
+            &[data-show-labels="true"]
+                    > button
+                        width 66px
+
+                    .sgn__offer-shopping-list-counter
+                        margin-left 40px
+
+                    .sgn__nav-label
+                        display block
 
         .sgn-pp__progress
             height 16px
@@ -117,7 +130,7 @@
     0%
         transform translateY(0)
     50%
-        transform translateY(-6px)
+        transform translateY(-4px)
     100%
         transform translateY(0)
 
