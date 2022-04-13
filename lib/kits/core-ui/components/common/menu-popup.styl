@@ -124,6 +124,7 @@
     content ' '
     background rgba(0, 0, 0, 0.1)
     z-index 99
+    animation fadeIn .3s
 
 .sgn-blocker
     position fixed
@@ -132,3 +133,9 @@
     bottom 0
     right 0
     content ' '
+
+@keyframes fadeIn 
+  0%
+    opacity 0
+  100%
+    opacity 1
