@@ -25,20 +25,28 @@
 
         .sgn-pp__control
             &[data-direction="first"]
-                font-size 50px
+                font-size 36px
                 left 50%
                 top 30px
-                transform translateX(-152px)
+                transform translateX(-146px)
                 width auto
                 z-index 99
 
             &[data-direction="last"]
-                font-size 50px
+                font-size 36px
                 right 50%
                 top 30px
-                transform translateX(152px)
+                transform translateX(146px)
                 width auto
                 z-index 99
+
+@media (max-aspect-ratio 5/4)
+    .sgn-pp__control
+        &[data-direction="first"]
+            display none
+
+        &[data-direction="last"]
+            display none
 
 .sgn-clearfix
     clear both
