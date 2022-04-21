@@ -31,30 +31,26 @@
 
         .sgn-pp__control
             cursor pointer
-            
+            transition opacity ease .3s
+            font-size 60px
+
+            &[data-direction="prev"]
+                left 50px
+
+            &[data-direction="next"]
+                right 50px
+
             &[data-direction="first"]
-                font-size 36px
-                left 50%
-                top 30px
-                transform translateX(-146px)
-                width auto
-                z-index 99
+                left 8px
 
             &[data-direction="last"]
-                font-size 36px
-                right 50%
-                top 30px
-                transform translateX(146px)
-                width auto
-                z-index 99
+                right 8px
 
-@media (max-aspect-ratio 5/4)
-    .sgn-pp__control
-        &[data-direction="first"]
-            display none
 
-        &[data-direction="last"]
-            display none
+
+        @media (max-aspect-ratio 5/4)
+            .sgn-pp__control
+                display none
 
 .sgn-clearfix
     clear both

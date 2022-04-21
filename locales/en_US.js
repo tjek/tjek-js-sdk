@@ -12,5 +12,7 @@ export default {
     publication_viewer_currency: 'USD',
     publication_viewer_hotspot_picker_header: 'Which offer did you mean?',
     publication_viewer_overview_button: 'Overview',
-    publication_viewer_close_label: 'Close'
+    publication_viewer_close_label: 'Close',
+    publication_viewer_add_to_shopping_list: 'Add to Shopping List',
+    publication_viewer_visit_webshop_link: 'Visit Webshop Link'
 };
