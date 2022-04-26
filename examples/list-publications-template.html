@@ -26,8 +26,11 @@
             id="sgn-sdk"
             data-api-key="GL0wU8"
             data-track-id="2N2Gib"
-            data-business-id="0c200g"
+            data-business-id="11deC"
             data-component="list-publications"
+            data-component-publication-display-url-params="hash"
+            data-publication-hash="publication"
+            data-component-publications-list-item-click-behavior="open_publication_viewer"
             data-component-list-publications-container="#list-publications"
             data-component-publications-viewer-preferred-type="incito"
             data-component-publication-disable-shopping-list="false"
@@ -42,15 +45,24 @@
             defer
         ></script>
 
-        <!--   Sample event listener on Incito offer
+        <!--   Sample event listener on Incito offer -->
         <script>
             window.addEventListener(
                 'tjek-incito-publication-view-clicked',
                 (e) => {
-                    console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', offer:{...}}
+                    console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: f}
                 }
             );
         </script>
-        -->
+
+        <!--   Sample event listener on Incito offer -->
+        <script>
+            window.addEventListener(
+                'tjek-publication-list-item-clicked',
+                (e) => {
+                    console.log('e.detail', e.detail); // {publication}
+                }
+            );
+        </script>
     </body>
 </html>
