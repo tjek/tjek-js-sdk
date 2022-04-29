@@ -3,7 +3,13 @@
 
 .sgn__pp
     &[data-component-template="true"]
-        font-family sans-serif
+        font-family inherit
+
+        button
+            font-family inherit
+
+        input
+            font-family inherit
 
         .verso__scroller
             top 80px
@@ -22,6 +28,29 @@
         &[data-zoomed-in="true"]
             .sgn__nav-content
                 padding 8px 14px
+
+        .sgn-pp__control
+            cursor pointer
+            transition opacity ease .3s
+            font-size 60px
+
+            &[data-direction="prev"]
+                left 50px
+
+            &[data-direction="next"]
+                right 50px
+
+            &[data-direction="first"]
+                left 8px
+
+            &[data-direction="last"]
+                right 8px
+
+
+
+        @media (max-aspect-ratio 5/4)
+            .sgn-pp__control
+                display none
 
 .sgn-clearfix
     clear both

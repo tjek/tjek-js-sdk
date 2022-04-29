@@ -123,7 +123,12 @@
     right 0
     content ' '
     background rgba(0, 0, 0, 0.1)
-    z-index 1
+    z-index 99
+    animation fadeIn .3s
+
+.sgn-modal-container-on-destroy
+    opacity 0
+    animation fadeOut .3s
 
 .sgn-blocker
     position fixed
@@ -132,3 +137,15 @@
     bottom 0
     right 0
     content ' '
+
+@keyframes fadeIn 
+  0%
+    opacity 0
+  100%
+    opacity 1
+
+@keyframes fadeOut
+  0%
+    opacity 1
+  100%
+    opacity 0

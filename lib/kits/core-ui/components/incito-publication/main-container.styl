@@ -28,7 +28,7 @@
 
 .sgn__incito
     &[data-component-template="true"]
-        font-family sans-serif
+        font-family inherit
         position fixed
         top 0
         left 0
@@ -36,6 +36,12 @@
         bottom 0
         overflow-y auto
         z-index 99
+
+        button
+            font-family inherit
+
+        input
+            font-family inherit
 
         .incito
             padding-top 80px
@@ -52,3 +58,26 @@
     &[data-component-template-disable-header="true"]
         .incito
             padding-top 0
+
+        .sgn-incito__scroll-progress
+            position -webkit-sticky
+            position sticky
+            top calc(100% - 4px)
+            margin-bottom -4px
+            width 100%
+            z-index 99
+            text-align center
+            color #ffffff
+
+        .sgn-incito__scroll-progress-text
+            display block
+            top -34px
+            background rgba(0,0,0,0.3)
+            left 50%
+            width auto
+            padding 6px 18px
+            font-size 14px
+            border-radius 6px
+            font-weight bold
+            letter-spacing -1px
+            line-height 1
