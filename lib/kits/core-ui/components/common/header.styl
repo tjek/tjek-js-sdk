@@ -1,7 +1,6 @@
 .sgn__header
     position absolute
     display none
-    font-family sans-serif
     z-index 99
     height 80px
     margin auto
@@ -23,27 +22,30 @@
         color inherit
 
         .sgn__nav-content
-            padding 8px 14px 2px
+            padding 8px 8px 2px
 
             > button
                 color inherit
                 background-color transparent
                 display inline-block
                 vertical-align middle
-                padding 2px 14px
+                padding 2px
                 border 0
                 cursor pointer
+                width 50px
 
                 > svg
                     width 25px
-
-                .sgn-header-icon-svg-close
-                    width 18px
+                    height 25px
+                
+                .sgn__nav-label
+                    display none
+                    font-size 10px
 
                 .sgn__offer-shopping-list-counter
                     display block
                     position absolute
-                    margin-left 20px
+                    margin-left 30px
                     margin-top -34px
                     padding 1px
                     background #f3f3f9
@@ -54,8 +56,18 @@
                     width 17px
                     height 17px
                     line-height 1.5
-                    animation-duration .3s
+                    animation-duration .25s
                     animation-iteration-count 1
+            
+            &[data-show-labels="true"]
+                    > button
+                        width 66px
+
+                    .sgn__offer-shopping-list-counter
+                        margin-left 40px
+
+                    .sgn__nav-label
+                        display block
 
         .sgn-pp__progress
             height 16px
@@ -79,29 +91,29 @@
                 animation none !important
                 color inherit
 
-        .sgn-incito__scroll-progress
-            width 100%
-            height 16px
-            background-color rgba(0,0,0, 0.1)
-            position relative
-            line-height 1.4
+.sgn-incito__scroll-progress
+    width 100%
+    height 16px
+    background-color rgba(0,0,0, 0.1)
+    position relative
+    line-height 1.4
 
-            .sgn-incito__scroll-progress-bar
-                height 100%
-                background-color rgba(0,0,0, 0.2)
-                transition transform 0.2s ease 0s
-                transform-origin 0px 0px
-                transform scaleX(0)
-            
-            .sgn-incito__scroll-progress-text
-                margin auto
-                width 100%
-                height 100%
-                font-size 11px
-                text-align center
-                position absolute
-                transform translateX(-50%)
-                top 1px
+    .sgn-incito__scroll-progress-bar
+        height 100%
+        background-color rgba(0,0,0, 0.2)
+        transition transform 0.2s ease 0s
+        transform-origin 0px 0px
+        transform scaleX(0)
+
+    .sgn-incito__scroll-progress-text
+        margin auto
+        width 100%
+        height 100%
+        font-size 11px
+        text-align center
+        position absolute
+        transform translateX(-50%)
+        top 1px
 
 .sgn-animate-bounce
     animation-name sgn-animate-bounce
@@ -117,7 +129,7 @@
     0%
         transform translateY(0)
     50%
-        transform translateY(-6px)
+        transform translateY(-4px)
     100%
         transform translateY(0)
 

@@ -11,5 +11,8 @@ export default {
     publication_viewer_search_text: 'Søg',
     publication_viewer_currency: 'DKK',
     publication_viewer_hotspot_picker_header: 'Hvilket tilbud mente du?',
-    publication_viewer_overview_button: 'Oversigt'
+    publication_viewer_overview_button: 'Oversigt',
+    publication_viewer_close_label: 'Tilbage',
+    publication_viewer_add_to_shopping_list: 'Tilføj til indkøbsliste',
+    publication_viewer_visit_webshop_link: 'Besøg webshoplink'
 };

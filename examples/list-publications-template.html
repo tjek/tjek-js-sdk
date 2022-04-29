@@ -7,10 +7,16 @@
         <meta charset="utf-8" />
 
         <link
-            href="../dist/shopgun-sdk/sgn-sdk.css?t=3"
+            href="/dist/shopgun-sdk/sgn-sdk.css"
             rel="stylesheet"
             type="text/css"
         />
+
+        <style>
+            body {
+                font-family: arial;
+            }
+        </style>
     </head>
     <body>
         <div id="list-publications"></div>
@@ -22,12 +28,13 @@
 
         <script
             data-readme="API's and SDK's by Tjek (https://tjek.com)"
-            src="../dist/shopgun-sdk/sgn-sdk.js?t=3"
+            src="/dist/shopgun-sdk/sgn-sdk.js"
             id="sgn-sdk"
             data-api-key="GL0wU8"
             data-track-id="2N2Gib"
             data-business-id="11deC"
             data-component="list-publications"
+            data-locale-code="da_DK"
             data-component-publication-display-url-params="hash"
             data-publication-hash="publication"
             data-component-publications-list-item-click-behavior="open_publication_viewer"
@@ -39,8 +46,8 @@
             data-component-publication-disable-download="false"
             data-component-publication-disable-header="false"
             data-component-publication-disable-global-scrollbar="false"
-            data-component-publication-viewer-offer-click-behavior="shopping_list"
-            data-translation-keys--publication-viewer-shopping-list-label="Shopping List"
+            data-component-publication-show-header-labels="true"
+            data-component-publication-viewer-offer-click-behavior="overview_modal"
             data-translation-keys--publication-viewer-download-button="Download Now"
             defer
         ></script>
