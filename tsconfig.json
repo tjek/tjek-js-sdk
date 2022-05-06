@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+        "strictNullChecks": true
+    },
+    "include": ["lib/**/*.ts", "lib/**/*.js", "global.d.ts"],
+    "exclude": ["node_modules", "dist", "__tests__", "**/*.test-jsdom.js"]
+}

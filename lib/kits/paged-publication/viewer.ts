@@ -1,10 +1,13 @@
 import MicroEvent from 'microevent';
 import * as translations from '../../translations';
+import Verso from '../../verso-browser/verso';
 import singleChoicePopover from '../core-ui/single-choice-popover';
+import {Tracker} from '../events';
 import Controls from './controls';
 import Core from './core';
 import EventTracking from './event-tracking';
 import Hotspots from './hotspots';
+import {Page} from './page-spreads';
 import './viewer.styl';
 
 function defaultPickHotspot(hotspots, e, el, callback) {
@@ -32,13 +35,34 @@ function defaultPickHotspot(hotspots, e, el, callback) {
 
     return popover.destroy;
 }
-
+export interface ViewerInit {
+    id: string;
+    ownedBy: unknown;
+    pages?: Page[];
+    pageSpreadWidth?: number;
+    pageSpreadMaxZoomScale?: number;
+    pageId: unknown;
+    idleDelay?: number;
+    resizeDelay?: number;
+    color?: string;
+    eventTracker: Tracker;
+    keyboard: boolean;
+    hotspotRatio: unknown;
+    pickHotspot?: typeof defaultPickHotspot;
+}
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
-    hotspots = null;
-    hotspotQueue = [];
-    popover = null;
-    constructor(el, options = {}) {
+    hotspots: Record<string, {type: string; id: string; locations}> | null =
+        null;
+    hotspotQueue: {id: unknown; pages: Page[]}[] = [];
+    popover: null | {destroy: () => void} = null;
+    el: HTMLElement;
+    _core: Core;
+    _controls: Controls;
+    _eventTracking: EventTracking;
+    options: ViewerInit;
+    // @ts-expect-error
+    constructor(el: HTMLElement, options: ViewerInit = {}) {
         super();
         this.el = el;
         this.options = options;
@@ -169,31 +193,31 @@ class Viewer extends MicroEvent {
     navigateToPageId(pageId, options) {
         const verso = this._core.getVerso();
 
-        const newPosition = verso.getPageSpreadPositionFromPageId(pageId);
+        const newPosition = verso.getPageSpreadPositionFromPageId(pageId)!;
         verso.navigateTo(newPosition, options);
 
         return this;
     }
 
-    first = (options) => {
+    first = (options: Parameters<Verso['first']>[0]) => {
         this._core.getVerso().first(options);
 
         return this;
     };
 
-    prev = (options) => {
+    prev = (options: Parameters<Verso['prev']>[0]) => {
         this._core.getVerso().prev(options);
 
         return this;
     };
 
-    next = (options) => {
+    next = (options: Parameters<Verso['next']>[0]) => {
         this._core.getVerso().next(options);
 
         return this;
     };
 
-    last = (options) => {
+    last = (options: Parameters<Verso['last']>[0]) => {
         this._core.getVerso().last(options);
 
         return this;
@@ -208,7 +232,7 @@ class Viewer extends MicroEvent {
         }
 
         const hotspots = e.verso.overlayEls.map(
-            (overlayEl) => this.hotspots[overlayEl.dataset.id]
+            (overlayEl) => this.hotspots![overlayEl.dataset.id]
         );
 
         if (hotspots.length === 1) {
@@ -229,7 +253,7 @@ class Viewer extends MicroEvent {
         if (!this.hotspots) return;
 
         this.hotspotQueue = this.hotspotQueue.filter((hotspotRequest) => {
-            const hotspots = {};
+            const hotspots: typeof this.hotspots = {};
             for (const hotspotId in this.hotspots) {
                 if (hotspots[hotspotId]) continue;
 

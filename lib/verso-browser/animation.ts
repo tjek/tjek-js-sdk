@@ -1,12 +1,26 @@
 export default class Animation {
     run = 0;
-    constructor(el) {
+    el: HTMLElement;
+    constructor(el: HTMLElement) {
         this.el = el;
     }
 
     animate(
-        {x = 0, y = 0, scale = 1, easing = 'ease-out', duration = 0} = {},
-        callback
+        // @ts-expect-error
+        {
+            x = 0,
+            y = 0,
+            scale = 1,
+            easing = 'ease-out',
+            duration = 0
+        }: {
+            x: string | number;
+            y?: string | number;
+            scale?: number;
+            easing?: string;
+            duration?: number;
+        } = {},
+        callback?: () => void
     ) {
         const run = ++this.run;
         const transform = `translateX(${x}) translateY(${y}) scale(${scale})`;

@@ -26,7 +26,7 @@ const createTrackerClient = () => {
 
     return {id};
 };
-
+type TrackerClient = {id: string};
 function getPool() {
     const data = clientLocalStorage.get('event-tracker-pool');
 
@@ -43,6 +43,10 @@ let pool;
 class Tracker {
     hasMadeInitialDispatch = false;
     location = {geohash: null, time: null, country: null};
+    trackId = null;
+    poolLimit = 1000;
+    client: TrackerClient;
+    eventsTrackUrl: string;
     constructor(options) {
         if (!pool) {
             pool = getPool();
@@ -52,10 +56,8 @@ class Tracker {
                 window.addEventListener('beforeunload', unloadHandler, false);
             }
         }
-
-        for (const key in this.defaultOptions) {
-            this[key] = options?.[key] || this.defaultOptions[key];
-        }
+        this.trackId = options?.trackId || this.trackId;
+        this.poolLimit = options?.poolLimit || this.poolLimit;
 
         this.client = options?.client || createTrackerClient();
         this.eventsTrackUrl = options?.eventsTrackUrl || defaultEventsTrackUrl;
@@ -65,14 +67,18 @@ class Tracker {
             this.hasMadeInitialDispatch = true;
         }
     }
-    setEventsTrackUrl(eventsTrackUrl) {
+    setEventsTrackUrl(eventsTrackUrl: string) {
         this.eventsTrackUrl = eventsTrackUrl;
         if (!this.hasMadeInitialDispatch) {
             dispatch(this.eventsTrackUrl);
             this.hasMadeInitialDispatch = true;
         }
     }
-    trackEvent(type, properties, version = 2) {
+    trackEvent(
+        type: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
+        properties: Record<string, string | number>,
+        version = 2
+    ) {
         if (typeof type !== 'number')
             throw error(new Error('Event type is required'));
 
@@ -106,23 +112,23 @@ class Tracker {
         return this;
     }
 
-    trackPagedPublicationOpened(properties, version) {
+    trackPagedPublicationOpened(properties, version?: number) {
         return this.trackEvent(1, properties, version);
     }
 
-    trackPagedPublicationPageDisappeared(properties, version) {
+    trackPagedPublicationPageDisappeared(properties, version?: number) {
         return this.trackEvent(2, properties, version);
     }
 
-    trackOfferOpened(properties, version) {
+    trackOfferOpened(properties, version?: number) {
         return this.trackEvent(3, properties, version);
     }
 
-    trackSearched(properties, version) {
+    trackSearched(properties, version?: number) {
         return this.trackEvent(5, properties, version);
     }
 
-    trackIncitoPublicationOpened(properties, version) {
+    trackIncitoPublicationOpened(properties, version?: number) {
         return this.trackEvent(11, properties, version);
     }
 
@@ -137,17 +143,14 @@ class Tracker {
         );
     }
 }
-Tracker.prototype.defaultOptions = {
-    trackId: null,
-    poolLimit: 1000
-};
+
 export default Tracker;
 
 let dispatching = false;
 const dispatchLimit = 100;
 
-let dispatchRetryInterval = null;
-const dispatch = throttle(async (eventsTrackUrl) => {
+let dispatchRetryInterval: NodeJS.Timeout | null | void = null;
+const dispatch = throttle(async (eventsTrackUrl: string) => {
     if (!pool) {
         console.warn('Tracker: dispatch called with no active event pool.');
         return;
@@ -162,7 +165,6 @@ const dispatch = throttle(async (eventsTrackUrl) => {
     try {
         const response = await fetch(eventsTrackUrl, {
             method: 'post',
-            timeout: 1000 * 20,
             headers: {'Content-Type': 'application/json; charset=utf-8'},
             body: JSON.stringify({events})
         });

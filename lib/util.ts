@@ -5,8 +5,17 @@ export const isBrowser = () =>
 
 export const isNode = () => typeof process === 'object';
 
-export function error(err, options) {
-    err.message = err.message || null;
+export function error(
+    err: Error & {code?: string; time?: Date; statusCode?: number},
+    options?: {
+        message?: string;
+        code?: string;
+        name?: string;
+        stack?: string;
+        statusCode?: number;
+    }
+) {
+    err.message = err.message;
 
     if (typeof options === 'string') {
         err.message = options;
@@ -19,6 +28,8 @@ export function error(err, options) {
             err.code = options.code || options.name;
         }
         if (options.stack) err.stack = options.stack;
+
+        if (options.statusCode) err.statusCode = options.statusCode;
     }
 
     err.name = options?.name || err.name || err.code || 'Error';
@@ -34,9 +45,13 @@ export function getQueryParam(field, url) {
     return string ? string[1] : undefined;
 }
 
-export function throttle(fn, threshold = 250, scope) {
-    let last;
-    let deferTimer;
+export function throttle<F extends (...args) => void>(
+    fn: F,
+    threshold = 250,
+    scope?: Object
+): F {
+    let last: number | undefined;
+    let deferTimer: NodeJS.Timeout;
 
     return function () {
         const context = scope || this;
@@ -55,11 +70,23 @@ export function throttle(fn, threshold = 250, scope) {
             last = now;
             fn.apply(context, args);
         }
-    };
+    } as F;
 }
 
-export const on = (el, events, selector, callback) =>
+export const on = (
+    el: HTMLElement,
+    events: string | string[],
+    selector: string,
+    callback: () => void
+) =>
+    //@ts-expect-error
     Gator(el).on(events, selector, callback);
 
-export const off = (el, events, selector, callback) =>
+export const off = (
+    el: HTMLElement,
+    events: string | string[],
+    selector: string,
+    callback: () => void
+) =>
+    //@ts-expect-error
     Gator(el).off(events, selector, callback);

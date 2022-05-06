@@ -1,9 +1,13 @@
 import MicroEvent from 'microevent';
+import Tracker from '../events/tracker';
+import PagedPublicationPageSpread from './page-spread';
 
 class PagedPublicationEventTracking extends MicroEvent {
     hidden = true;
-    pageSpread = null;
-    constructor(eventTracker, id) {
+    pageSpread: null | PagedPublicationPageSpread = null;
+    eventTracker: Tracker;
+    id: string;
+    constructor(eventTracker: Tracker, id: string) {
         super();
         this.eventTracker = eventTracker;
         this.id = id;
@@ -32,7 +36,7 @@ class PagedPublicationEventTracking extends MicroEvent {
         return this;
     }
 
-    trackPageSpreadDisappeared(pageNumbers) {
+    trackPageSpreadDisappeared(pageNumbers: number[]) {
         if (!this.eventTracker) return this;
 
         pageNumbers.forEach((pageNumber) => {
@@ -70,7 +74,7 @@ class PagedPublicationEventTracking extends MicroEvent {
         if (e.scale === 1) this.pageSpreadDisappeared();
     };
 
-    pageSpreadAppeared(pageSpread) {
+    pageSpreadAppeared(pageSpread: PagedPublicationPageSpread) {
         if (pageSpread && this.hidden) {
             this.pageSpread = pageSpread;
             this.hidden = false;

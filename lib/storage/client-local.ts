@@ -1,6 +1,6 @@
 const prefixKey = 'sgn-';
 
-let storage;
+let storage: Storage;
 function ensureStorage() {
     if (storage) return;
 
@@ -10,7 +10,7 @@ function ensureStorage() {
         storage[prefixKey + 'test-storage'] = 'foobar';
         delete storage[prefixKey + 'test-storage'];
     } catch (error) {
-        storage = {};
+        storage = {} as Storage;
     }
 }
 
@@ -22,7 +22,7 @@ export function get(key) {
     } catch (error) {}
 }
 
-export function set(key, value) {
+export function set(key: string, value: any) {
     ensureStorage();
 
     try {
@@ -30,13 +30,13 @@ export function set(key, value) {
     } catch (error) {}
 }
 
-export function remove(key) {
+export function remove(key: string) {
     ensureStorage();
 
     delete storage[prefixKey + key];
 }
 
-export function setWithEvent(key, value, eventName) {
+export function setWithEvent(key: string, value: any, eventName: string) {
     try {
         set(key, value);
 

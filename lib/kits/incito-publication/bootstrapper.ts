@@ -1,6 +1,9 @@
+import {IIncito} from '../../incito-browser/types';
 import * as clientLocalStorage from '../../storage/client-local';
 import {error, on} from '../../util';
+import {V2Catalog} from '../core';
 import request from '../core/request';
+import {Tracker} from '../events';
 import Controls from './controls';
 import Viewer from './viewer';
 
@@ -22,16 +25,18 @@ function getDeviceCategory() {
     return 'desktop';
 }
 function getLocale() {
-    const localeChain = [];
+    const localeChain: string[] = [];
 
     if (Array.isArray(navigator.languages) && navigator.languages.length > 0) {
         localeChain.push(...navigator.languages);
     } else if (typeof navigator.language === 'string' && navigator.language) {
         localeChain.push(navigator.language);
     } else if (
-        typeof navigator.browserLanguage === 'string' &&
+        // @ts-expect-error
+        typeof navigator.browserLanguage === 'string' && // @ts-expect-error
         navigator.browserLanguage
     ) {
+        // @ts-expect-error
         localeChain.push(navigator.browserLanguage);
     }
 
@@ -46,6 +51,13 @@ function getLocale() {
     });
 }
 
+interface BootstrapperInit {
+    el: HTMLElement;
+    id: string;
+    apiKey: string;
+    coreUrl: string;
+    eventTracker: Tracker;
+}
 export default class Bootstrapper {
     deviceCategory = getDeviceCategory();
     pixelRatio = window.devicePixelRatio || 1;
@@ -55,7 +67,10 @@ export default class Bootstrapper {
     locale = getLocale();
     featureLabels = this.getFeatureLabels();
     versionsSupported = ['1.0.0'];
-    constructor(options = {}) {
+    options: BootstrapperInit;
+    maxWidth: number;
+    // @ts-expect-error
+    constructor(options: BootstrapperInit = {}) {
         this.options = options;
         this.maxWidth =
             Math.abs(window.orientation) === 90
@@ -79,7 +94,7 @@ export default class Bootstrapper {
             return acc;
         }, {});
 
-        return Object.values(vector).map((featureLabel) => ({
+        return Object.values(vector).map((featureLabel: any) => ({
             key: featureLabel.key,
             value: Math.round((featureLabel.value / count) * 100) / 100
         }));
@@ -106,8 +121,11 @@ export default class Bootstrapper {
         }
     }
 
-    fetchDetails = (id, callback) =>
-        request(
+    fetchDetails = (
+        id: string,
+        callback?: (error: Error | null, result?: V2Catalog) => void
+    ) =>
+        request<V2Catalog>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
@@ -116,8 +134,11 @@ export default class Bootstrapper {
             callback
         );
 
-    fetchIncito = (id, callback) =>
-        request(
+    fetchIncito = (
+        id: string,
+        callback?: (error: Error | null, result?: IIncito) => void
+    ) =>
+        request<IIncito>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
@@ -135,6 +156,7 @@ export default class Bootstrapper {
                     locale_code: this.locale,
                     time: this.time,
                     feature_labels: this.anonymizeFeatureLabels(
+                        // @ts-expect-error
                         this.featureLabels
                     )
                 })

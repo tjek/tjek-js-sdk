@@ -1,10 +1,33 @@
 import './page_spread.styl';
 
+type Complete<T> = {
+    [P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>>
+        ? T[P]
+        : T[P] | undefined;
+};
+
+interface PageSpreadInit {
+    id?: string;
+    type?: string;
+    pageIds: string[];
+    width: number;
+    left: number;
+    maxZoomScale: number;
+}
 export default class PageSpread {
     visibility = 'gone';
     positioned = false;
     active = false;
-    constructor(el, options = {}) {
+    el: HTMLElement;
+    options: PageSpreadInit;
+    id?: string;
+    type?: string;
+    pageIds: string[];
+    width: number;
+    left: number;
+    maxZoomScale: number;
+    // @ts-expect-error
+    constructor(el: HTMLElement, options: PageSpreadInit = {}) {
         this.el = el;
         this.options = options;
         this.id = this.options.id;
@@ -31,11 +54,11 @@ export default class PageSpread {
     }
 
     getOverlayEls() {
-        return this.getEl().querySelectorAll('.verso__overlay');
+        return this.getEl().querySelectorAll<HTMLElement>('.verso__overlay');
     }
 
     getPageEls() {
-        return this.getEl().querySelectorAll('.verso__page');
+        return this.getEl().querySelectorAll<HTMLElement>('.verso__page');
     }
 
     getRect() {
@@ -43,7 +66,14 @@ export default class PageSpread {
     }
 
     getContentRect() {
-        const rect = {
+        const rect: {
+            top: null | number;
+            left: null | number;
+            right: null | number;
+            bottom: null | number;
+            width: null | number;
+            height: null | number;
+        } = {
             top: null,
             left: null,
             right: null,
@@ -57,16 +87,16 @@ export default class PageSpread {
             const pageEl = pageEls[idx];
             const pageRect = pageEl.getBoundingClientRect();
 
-            if (pageRect.top < rect.top || rect.top == null) {
+            if (rect.top == null || pageRect.top < rect.top) {
                 rect.top = pageRect.top;
             }
-            if (pageRect.left < rect.left || rect.left == null) {
+            if (rect.left == null || pageRect.left < rect.left) {
                 rect.left = pageRect.left;
             }
-            if (pageRect.right > rect.right || rect.right == null) {
+            if (rect.right == null || pageRect.right > rect.right) {
                 rect.right = pageRect.right;
             }
-            if (pageRect.bottom > rect.bottom || rect.bottom == null) {
+            if (rect.bottom == null || pageRect.bottom > rect.bottom) {
                 rect.bottom = pageRect.bottom;
             }
         }
@@ -78,7 +108,14 @@ export default class PageSpread {
         rect.width = rect.right - rect.left;
         rect.height = rect.bottom - rect.top;
 
-        return rect;
+        return rect as {
+            top: number;
+            left: number;
+            right: number;
+            bottom: number;
+            width: number;
+            height: number;
+        };
     }
 
     getId() {
@@ -132,11 +169,13 @@ export default class PageSpread {
 
     activate() {
         this.active = true;
+        // @ts-expect-error
         this.getEl().dataset.active = this.active;
     }
 
     deactivate() {
         this.active = false;
+        // @ts-expect-error
         this.getEl().dataset.active = this.active;
     }
 }

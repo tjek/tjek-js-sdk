@@ -2,6 +2,7 @@ import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
 import CleanCSS from 'clean-css';
 import {EOL} from 'os';
 import path from 'path';
@@ -20,41 +21,45 @@ const bundles = [
         name: 'SGN',
         fileName: 'sgn-sdk',
         pkg: {baseContents: {version, name: 'shopgun-sdk'}},
-        input: path.join(libDir, 'sgn-sdk.js'),
+        input: path.join(libDir, 'sgn-sdk.ts'),
         output: path.join(distDir, 'shopgun-sdk')
     },
     {
         name: 'Incito',
         fileName: 'incito',
         pkg: {baseContents: {version, name: 'incito-browser'}},
-        input: path.join(libDir, 'incito-browser', 'incito.js'),
+        input: path.join(libDir, 'incito-browser', 'incito.ts'),
         output: path.join(distDir, 'incito-browser')
     },
     {
         name: 'Verso',
         fileName: 'verso',
         pkg: {baseContents: {version, name: 'verso-browser'}},
-        input: path.join(libDir, 'verso-browser', 'verso.js'),
+        input: path.join(libDir, 'verso-browser', 'verso.ts'),
         output: path.join(distDir, 'verso-browser')
     },
     {
         name: 'Tjek',
         pkg: {baseContents: {version, name: '@tjek/sdk', sideEffects: false}},
-        input: path.join(libDir, 'tjek-sdk.js'),
+        input: path.join(libDir, 'tjek-sdk.ts'),
         output: path.join(distDir, 'tjek-sdk')
     },
     {
-        input: path.join(libDir, 'kits', 'events', 'index.js'),
+        input: path.join(libDir, 'kits', 'events', 'index.ts'),
         output: path.join(distDir, 'tjek-sdk', 'events')
     },
     {
-        input: path.join(libDir, 'kits', 'events', 'tracker.js'),
+        input: path.join(libDir, 'kits', 'events', 'tracker.ts'),
         output: path.join(distDir, 'tjek-sdk', 'events', 'tracker')
     }
 ];
 
 const getBabelPlugin = () =>
-    babel({exclude: ['node_modules/**'], babelHelpers: 'runtime'});
+    babel({
+        exclude: ['node_modules/**'],
+        extensions: ['.js', '.ts'],
+        babelHelpers: 'runtime'
+    });
 
 const external = [
     /@babel\/runtime/,
@@ -96,7 +101,8 @@ let configs = bundles
                         ),
                         preventAssignment: true
                     }),
-                    commonjs({extensions: ['.js']}),
+                    typescript(),
+                    commonjs({extensions: ['.ts', '.js']}),
                     getBabelPlugin(),
                     generatePackageJson({
                         outputFolder: output,
@@ -142,7 +148,8 @@ let configs = bundles
                         browser: true,
                         preferBuiltins: true
                     }),
-                    commonjs({extensions: ['.js']}),
+                    commonjs({extensions: ['.js', '.ts']}),
+                    typescript(),
                     getBabelPlugin()
                 ]
             },
@@ -168,8 +175,9 @@ let configs = bundles
                         preferBuiltins: true
                     }),
                     commonjs({
-                        extensions: ['.js']
+                        extensions: ['.ts', '.js']
                     }),
+                    typescript(),
                     getBabelPlugin(),
                     terser()
                 ]

@@ -1,11 +1,15 @@
 import MicroEvent from 'microevent';
 import Mustache from 'mustache';
+import PageSpread from '../../verso-browser/page_spread';
+import {V2Hotspot} from '../core';
+import PagedPublicationPageSpread from './page-spread';
+import {Page} from './page-spreads';
 
-function getPosition(pages, ratio, hotspot) {
-    let minX = null;
-    let minY = null;
-    let maxX = null;
-    let maxY = null;
+function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
+    let minX: number | null = null;
+    let minY: number | null = null;
+    let maxX: number | null = null;
+    let maxY: number | null = null;
     const pageNumbers = pages.map((page) => page.pageNumber);
 
     for (const pageNumber in hotspot.locations) {
@@ -21,22 +25,22 @@ function getPosition(pages, ratio, hotspot) {
                 minY = maxY = y;
             }
 
-            if (x < minX) minX = x;
+            if (x < minX!) minX = x;
 
-            if (x > maxX) maxX = x;
+            if (x > maxX!) maxX = x;
 
-            if (y < minY) minY = y;
+            if (y < minY!) minY = y;
 
-            if (y > maxY) maxY = y;
+            if (y > maxY!) maxY = y;
         });
     }
 
-    const width = maxX - minX;
-    const height = maxY - minY;
+    const width = maxX! - minX!;
+    const height = maxY! - minY!;
 
     return {
-        top: (minY / ratio) * 100,
-        left: minX * 100,
+        top: (minY! / ratio) * 100,
+        left: minX! * 100,
         width: width * 100,
         height: (height / ratio) * 100
     };
@@ -83,7 +87,19 @@ class PagedPublicationHotspots extends MicroEvent {
         this.bind('resized', this.resized);
     }
 
-    renderHotspots({versoPageSpread, pageSpread, hotspots, pages, ratio}) {
+    renderHotspots({
+        versoPageSpread,
+        pageSpread,
+        hotspots,
+        pages,
+        ratio
+    }: {
+        versoPageSpread: PageSpread;
+        pageSpread: PagedPublicationPageSpread;
+        hotspots: V2Hotspot[];
+        pages: Page[];
+        ratio: number;
+    }) {
         const contentRect = versoPageSpread.getContentRect();
         const pageSpreadEl = pageSpread.getEl();
         const boundingRect = pageSpreadEl.getBoundingClientRect();
@@ -91,7 +107,7 @@ class PagedPublicationHotspots extends MicroEvent {
         pageSpreadEl
             .querySelectorAll('.sgn-pp__hotspot')
             .forEach((hotspotEl) => {
-                hotspotEl.parentNode.removeChild(hotspotEl);
+                hotspotEl.parentNode!.removeChild(hotspotEl);
             });
 
         const frag = document.createDocumentFragment();

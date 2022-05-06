@@ -1,13 +1,17 @@
-const _getMatcher = (element) =>
+const _getMatcher = (element: Element) =>
     element.matches ||
-    element.webkitMatchesSelector ||
-    element.mozMatchesSelector ||
-    element.msMatchesSelector ||
+    element.webkitMatchesSelector || // @ts-expect-error
+    element.mozMatchesSelector || // @ts-expect-error
+    element.msMatchesSelector || // @ts-expect-error
     element.oMatchesSelector ||
     Function.prototype;
 
 let _level = 0;
-function _matchesSelector(element, selector, boundElement) {
+function _matchesSelector(
+    element: HTMLElement,
+    selector: string,
+    boundElement: HTMLElement
+) {
     if (element === boundElement) return;
 
     if (_getMatcher(element).call(element, selector)) return element;
@@ -18,7 +22,13 @@ function _matchesSelector(element, selector, boundElement) {
     }
 }
 const handlersBySelectorByTypeByInstance = {};
-function _bind(events, selector, callback, remove) {
+function _bind(
+    this: {element: HTMLElement; id: number},
+    events: string | string[],
+    selector: string | number,
+    callback: any,
+    remove: boolean
+): void {
     if (!(events instanceof Array)) events = [events];
 
     const id = this.id;
@@ -152,7 +162,11 @@ function _bind(events, selector, callback, remove) {
 
 let _id = 0;
 const instances = {};
-function Gator(element, id) {
+function Gator(
+    this: {element: HTMLElement; id: number},
+    element: HTMLElement,
+    id?: number
+) {
     // called as function
     if (!(this instanceof Gator)) {
         // only keep one Gator instance per node to make sure that
@@ -165,18 +179,29 @@ function Gator(element, id) {
         }
 
         _id++;
-        return (instances[_id] = new Gator(element, _id));
+        return (instances[_id] = new (Gator as (
+            element: HTMLElement,
+            id?: number
+        ) => void)(element, _id));
     }
 
     this.element = element;
-    this.id = id;
+    this.id = id!;
 }
 
-Gator.prototype.on = function (events, selector, callback) {
+Gator.prototype.on = function (
+    events: string | string[],
+    selector: string,
+    callback: any
+) {
     _bind.call(this, events, selector, callback);
 };
 
-Gator.prototype.off = function (events, selector, callback) {
+Gator.prototype.off = function (
+    events: string | string[],
+    selector: string,
+    callback: any
+) {
     _bind.call(this, events, selector, callback, true);
 };
 

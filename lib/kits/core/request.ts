@@ -1,10 +1,26 @@
 import fetch from 'cross-fetch';
 import {error} from '../../util';
 
-async function request(
-    {coreUrl, url: rawUrl = '', apiKey, qs, method = 'get', headers, body},
-    callback
-) {
+async function request<T>(
+    {
+        coreUrl,
+        url: rawUrl = '',
+        apiKey,
+        qs,
+        method = 'get',
+        headers,
+        body
+    }: {
+        coreUrl?: string;
+        url: string | URL;
+        apiKey?: string;
+        qs?: Record<string, string>;
+        method?: RequestInit['method'];
+        headers?: Record<string, string>;
+        body?: RequestInit['body'];
+    },
+    callback?: (error: Error | null, result?: T) => void
+): Promise<void | Awaited<T>> {
     try {
         const url = new URL(rawUrl, coreUrl);
 

@@ -1,18 +1,30 @@
 import MicroEvent from 'microevent';
 import PageSpread from './page-spread';
 
-function chunk(arr, size) {
-    const results = [];
+function chunk<I extends any>(arr: I[], size: number) {
+    const results: I[][] = [];
 
     while (arr.length) results.push(arr.splice(0, size));
 
     return results;
 }
-
+export interface Page {
+    id: string;
+    label: string;
+    pageNumber: number;
+    images: {medium: string; large: string};
+}
+export type PageMode = 'single' | 'double';
+interface PagedPublicationPageSpreadsInit {
+    pages: Page[];
+    width: number;
+    maxZoomScale: number;
+}
 class PagedPublicationPageSpreads extends MicroEvent {
-    collection = [];
+    collection: PageSpread[] = [];
     ids = {};
-    constructor(options) {
+    options: PagedPublicationPageSpreadsInit;
+    constructor(options: PagedPublicationPageSpreadsInit) {
         super();
         this.options = options;
     }
@@ -31,8 +43,8 @@ class PagedPublicationPageSpreads extends MicroEvent {
         return frag;
     }
 
-    update(pageMode = 'single') {
-        const pageSpreads = [];
+    update(pageMode: PageMode = 'single') {
+        const pageSpreads: Page[][] = [];
         const ids = {};
         const pages = this.options.pages.slice();
         const {width, maxZoomScale} = this.options;

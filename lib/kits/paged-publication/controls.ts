@@ -3,8 +3,21 @@ import * as keyCodes from '../../key-codes';
 import {throttle} from '../../util';
 
 const visibilityClassName = 'sgn-pp--hidden';
+interface PagedPublicationControlsInit {
+    keyboard: boolean;
+}
 class PagedPublicationControls extends MicroEvent {
-    constructor(el, options = {}) {
+    options: PagedPublicationControlsInit;
+    root: HTMLElement;
+    progress: HTMLElement | null;
+    progressBar: HTMLElement | null;
+    progressLabel: HTMLElement | null;
+    prevControl: HTMLElement | null;
+    nextControl: HTMLElement | null;
+    close: HTMLElement | null;
+    keyDownHandler: typeof this.keyDown;
+    // @ts-expect-error
+    constructor(el: HTMLElement, options: PagedPublicationControlsInit = {}) {
         super();
         this.options = options;
         this.root = el;
@@ -102,25 +115,25 @@ class PagedPublicationControls extends MicroEvent {
         }
     };
 
-    prevClicked = (e) => {
+    prevClicked = (e: MouseEvent) => {
         e.preventDefault();
 
         this.trigger('prev');
     };
 
-    nextClicked = (e) => {
+    nextClicked = (e: MouseEvent) => {
         e.preventDefault();
 
         this.trigger('next');
     };
 
-    closeClicked = (e) => {
+    closeClicked = (e: MouseEvent) => {
         e.preventDefault();
 
         this.trigger('close');
     };
 
-    keyDown = (e) => {
+    keyDown = (e: KeyboardEvent) => {
         const {keyCode} = e;
 
         if (keyCodes.ARROW_LEFT === keyCode) {

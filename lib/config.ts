@@ -2,14 +2,15 @@ import MicroEvent from 'microevent';
 import * as configDefaults from './config-defaults';
 
 class Config extends MicroEvent {
+    keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'] as const;
     #attrs = {...configDefaults};
 
-    set(config) {
+    set(config: Record<string, any>) {
         const changedAttributes = {};
 
         for (let key in config) {
             if (key === 'appKey') key = 'apiKey';
-            if (this.keys.includes(key)) {
+            if (this.keys.includes(key as typeof this.keys[number])) {
                 this.#attrs[key] = config[key];
                 changedAttributes[key] = config[key];
             }
@@ -18,21 +19,23 @@ class Config extends MicroEvent {
         this.trigger('change', changedAttributes);
     }
 
-    get(option) {
+    get(option: string) {
         if (option === 'appKey') option = 'apiKey';
         return this.#attrs[option];
     }
 
-    shadow(optionsObject) {
+    shadow<T extends Record<string, any> = {}>(
+        optionsObject?: T
+    ): T & Record<typeof this.keys[number], string> {
         const optionsWithConfig = {...optionsObject};
         this.keys.forEach((key) => {
             const get = () => optionsObject?.[key] || this.get(key);
             Object.defineProperty(optionsWithConfig, key, {get});
         });
 
-        return optionsWithConfig;
+        return optionsWithConfig as T &
+            Record<typeof this.keys[number], string>;
     }
 }
-Config.prototype.keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'];
 
 export default Config;

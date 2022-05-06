@@ -1,9 +1,10 @@
 import MicroEvent from 'microevent';
 import {throttle} from '../../util';
+import PageSpread from '../../verso-browser/page_spread';
 import Verso from '../../verso-browser/verso';
-import PageSpreads from './page-spreads';
+import PageSpreads, {PageMode} from './page-spreads';
 
-function getColorBrightness(color) {
+function getColorBrightness(color: string) {
     color = color.replace('#', '');
     let sum = 0;
     let x = 0;
@@ -17,8 +18,26 @@ function getColorBrightness(color) {
     return sum <= 381 ? 'dark' : 'light';
 }
 
+interface PagedPublicationCoreInit {}
 class PagedPublicationCore extends MicroEvent {
-    constructor(el, options = {}) {
+    defaults = {
+        pages: [],
+        pageSpreadWidth: 100,
+        pageSpreadMaxZoomScale: 2.3,
+        idleDelay: 1000,
+        resizeDelay: 400,
+        color: '#ffffff'
+    };
+    rootEl: HTMLElement;
+    pagesEl: HTMLElement | null;
+    options: PagedPublicationCoreInit;
+    pageId: string;
+    verso: Verso;
+    pageMode: PageMode;
+    idleTimeout: NodeJS.Timeout | undefined;
+    pageSpreads: PageSpreads;
+    resizeListener: () => void;
+    constructor(el: HTMLElement, options: PagedPublicationCoreInit = {}) {
         super();
         this.options = this.makeOptions(options, this.defaults);
         this.pageId = this.getOption('pageId');
@@ -38,7 +57,7 @@ class PagedPublicationCore extends MicroEvent {
         this.setColor(this.getOption('color'));
 
         // It's important to insert the page spreads before instantiating Verso.
-        this.pagesEl.parentNode.insertBefore(
+        this.pagesEl!.parentNode!.insertBefore(
             this.pageSpreads.update(this.pageMode).getFrag(),
             this.pagesEl
         );
@@ -82,7 +101,7 @@ class PagedPublicationCore extends MicroEvent {
         verso.el
             .querySelectorAll('.sgn-pp__page-spread')
             .forEach((pageSpreadEl) => {
-                pageSpreadEl.parentNode.removeChild(pageSpreadEl);
+                pageSpreadEl.parentNode!.removeChild(pageSpreadEl);
             });
 
         verso.destroy();
@@ -91,25 +110,28 @@ class PagedPublicationCore extends MicroEvent {
         window.removeEventListener('beforeunload', this.unload, false);
     };
 
-    makeOptions(options, defaults) {
+    makeOptions(
+        options: Partial<PagedPublicationCoreInit>,
+        defaults: typeof this.defaults
+    ): Partial<PagedPublicationCoreInit> & typeof this.defaults {
         const opts = {};
 
         for (const key in options) opts[key] = options[key] ?? defaults[key];
 
-        return opts;
+        return opts as Partial<PagedPublicationCoreInit> & typeof this.defaults;
     }
 
-    getOption(key) {
+    getOption(key: string) {
         return this.options[key];
     }
 
-    setColor(color) {
+    setColor(color: string) {
         this.rootEl.dataset.colorBrightness = getColorBrightness(color);
         this.rootEl.style.backgroundColor = color;
     }
 
     createVerso() {
-        const verso = new Verso(this.rootEl.querySelector('.verso'), {
+        const verso = new Verso(this.rootEl.querySelector('.verso')!, {
             pageId: this.pageId
         });
 
@@ -216,7 +238,7 @@ class PagedPublicationCore extends MicroEvent {
         const progress = (position / (pageSpreadCount - 1)) * 100;
         const progressLabel = this.formatProgressLabel(pageSpread);
 
-        this.rootEl.dataset.navigating = true;
+        this.rootEl.dataset.navigating = String(true);
 
         this.renderPageSpreads();
         this.resetIdleTimer();
@@ -240,7 +262,7 @@ class PagedPublicationCore extends MicroEvent {
         const pageSpreadCount = theVerso.getPageSpreadCount();
         const newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
 
-        this.rootEl.dataset.navigating = false;
+        this.rootEl.dataset.navigating = String(false);
 
         this.trigger('afterNavigation', {
             verso: e,
@@ -305,7 +327,7 @@ class PagedPublicationCore extends MicroEvent {
 
         pageSpread?.zoomIn();
 
-        this.rootEl.dataset.zoomedIn = true;
+        this.rootEl.dataset.zoomedIn = String(true);
         this.trigger('zoomedIn', {verso: e, pageSpread});
     };
 
@@ -317,11 +339,11 @@ class PagedPublicationCore extends MicroEvent {
 
         pageSpread?.zoomOut();
 
-        this.rootEl.dataset.zoomedIn = false;
+        this.rootEl.dataset.zoomedIn = String(false);
         this.trigger('zoomedOut', {verso: e, pageSpread});
     };
 
-    getPageMode() {
+    getPageMode(): PageMode {
         return (
             this.getOption('pageMode') ||
             (this.rootEl.offsetHeight / this.rootEl.offsetWidth < 0.8
@@ -331,22 +353,22 @@ class PagedPublicationCore extends MicroEvent {
     }
 
     resetIdleTimer() {
-        clearTimeout(this.idleTimeout);
+        clearTimeout(this.idleTimeout!);
 
-        this.rootEl.dataset.idle = false;
+        this.rootEl.dataset.idle = String(false);
 
         return this;
     }
 
     startIdleTimer() {
         this.idleTimeout = setTimeout(() => {
-            this.rootEl.dataset.idle = true;
+            this.rootEl.dataset.idle = String(true);
         }, this.getOption('idleDelay'));
 
         return this;
     }
 
-    switchPageMode(pageMode) {
+    switchPageMode(pageMode: PageMode) {
         if (this.pageMode === pageMode) return this;
 
         const verso = this.getVerso();
@@ -361,15 +383,15 @@ class PagedPublicationCore extends MicroEvent {
         this.getVerso()
             .el.querySelectorAll('.sgn-pp__page-spread')
             .forEach((pageSpreadEl) => {
-                pageSpreadEl.parentNode.removeChild(pageSpreadEl);
+                pageSpreadEl.parentNode!.removeChild(pageSpreadEl);
             });
-        this.pagesEl.parentNode.insertBefore(
+        this.pagesEl!.parentNode!.insertBefore(
             this.pageSpreads.getFrag(),
             this.pagesEl
         );
 
         verso.refresh();
-        verso.navigateTo(verso.getPageSpreadPositionFromPageId(pageIds[0]), {
+        verso.navigateTo(verso.getPageSpreadPositionFromPageId(pageIds[0])!, {
             duration: 0
         });
         verso.pageSpreads.forEach(this.overridePageSpreadContentRect);
@@ -377,7 +399,7 @@ class PagedPublicationCore extends MicroEvent {
         return this;
     }
 
-    overridePageSpreadContentRect = (pageSpread) => {
+    overridePageSpreadContentRect = (pageSpread: PageSpread) => {
         if (pageSpread.getType() === 'page') {
             return (pageSpread.getContentRect = () =>
                 this.getContentRect(pageSpread));
@@ -398,13 +420,5 @@ class PagedPublicationCore extends MicroEvent {
         this.trigger('disappeared');
     };
 }
-PagedPublicationCore.prototype.defaults = {
-    pages: [],
-    pageSpreadWidth: 100,
-    pageSpreadMaxZoomScale: 2.3,
-    idleDelay: 1000,
-    resizeDelay: 400,
-    color: '#ffffff'
-};
 
 export default PagedPublicationCore;

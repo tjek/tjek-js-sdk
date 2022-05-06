@@ -1,4 +1,5 @@
 import MicroEvent from 'microevent';
+import {Page, PageMode} from './page-spreads';
 
 const loadImage = (src, callback) =>
     Object.assign(new Image(), {
@@ -11,10 +12,20 @@ const loadImage = (src, callback) =>
         src
     });
 
+interface PagedPublicationPageSpreadInit {
+    id: string;
+    pages: Page[];
+    maxZoomScale: number;
+    width: number;
+    pageMode: PageMode;
+}
 class PagedPublicationPageSpread extends MicroEvent {
     contentsRendered = false;
     hotspotsRendered = false;
-    constructor(options = {}) {
+    el: HTMLElement;
+    options: PagedPublicationPageSpreadInit;
+    // @ts-expect-error
+    constructor(options: PagedPublicationPageSpreadInit = {}) {
         super();
         this.options = options;
         this.el = this.renderEl();
@@ -40,10 +51,10 @@ class PagedPublicationPageSpread extends MicroEvent {
 
         el.dataset.id = this.getId();
         el.dataset.type = 'page';
-        el.dataset.width = this.options.width;
+        el.dataset.width = String(this.options.width);
         el.dataset.pageIds = pageIds.join(',');
-        el.dataset.maxZoomScale = this.options.maxZoomScale;
-        el.dataset.zoomable = false;
+        el.dataset.maxZoomScale = String(this.options.maxZoomScale);
+        el.dataset.zoomable = String(false);
 
         return el;
     }
@@ -96,7 +107,7 @@ class PagedPublicationPageSpread extends MicroEvent {
                 pageEl.dataset.height = img.height;
                 pageEl.innerHTML = '&nbsp;';
 
-                if (isComplete) el.dataset.zoomable = true;
+                if (isComplete) el.dataset.zoomable = String(true);
 
                 this.trigger('pageLoaded', {pageSpreadId, page});
                 if (isComplete) {
@@ -120,26 +131,29 @@ class PagedPublicationPageSpread extends MicroEvent {
     zoomIn() {
         const pages = this.getPages();
 
-        this.el.querySelectorAll('.sgn-pp__page').forEach((pageEl) => {
-            const id = pageEl.dataset.id;
-            const image = pages.find((page) => page.id === id).images.large;
+        this.el
+            .querySelectorAll<HTMLElement>('.sgn-pp__page')
+            .forEach((pageEl) => {
+                const id = pageEl.dataset.id;
+                const image = pages.find((page) => page.id === id)!.images
+                    .large;
 
-            loadImage(image, (err) => {
-                if (err) return console.error(err);
+                loadImage(image, (err) => {
+                    if (err) return console.error(err);
 
-                if (this.el.dataset.active === 'true') {
-                    pageEl.dataset.image = pageEl.style.backgroundImage;
-                    pageEl.style.backgroundImage = `url(${image})`;
-                }
+                    if (this.el.dataset.active === 'true') {
+                        pageEl.dataset.image = pageEl.style.backgroundImage;
+                        pageEl.style.backgroundImage = `url(${image})`;
+                    }
+                });
             });
-        });
     }
 
     zoomOut() {
         this.el
-            .querySelectorAll('.sgn-pp__page[data-image]')
+            .querySelectorAll<HTMLElement>('.sgn-pp__page[data-image]')
             .forEach((pageEl) => {
-                pageEl.style.backgroundImage = pageEl.dataset.image;
+                pageEl.style.backgroundImage = pageEl.dataset.image!;
 
                 delete pageEl.dataset.image;
             });

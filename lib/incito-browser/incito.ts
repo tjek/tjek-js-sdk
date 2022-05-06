@@ -1,6 +1,7 @@
 import fetch from 'cross-fetch';
 import MicroEvent from 'microevent';
 import './incito.styl';
+import {IIncito, TextView} from './types';
 
 function formatUnit(unit) {
     if (!unit) return 0;
@@ -31,12 +32,15 @@ function escapeHTML(unsafe) {
         : '';
 }
 
-function formatSpans(text, spans) {
-    const result = [];
+function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
+    const result: {
+        text?: string;
+        span?: NonNullable<TextView['spans']>[number];
+    }[] = [];
 
     if (spans.length === 0) {
         result.push({text});
-    } else if (spans[0].start > 0) {
+    } else if (spans[0].start! > 0) {
         result.push({text: text.slice(0, spans[0].start)});
     }
 
@@ -47,10 +51,10 @@ function formatSpans(text, spans) {
         result.push({text: text.slice(span.start, endIndex), span});
 
         if (i === spans.length - 1) {
-            if (endIndex < text.length) {
+            if (endIndex! < text.length) {
                 result.push({text: text.slice(endIndex, text.length)});
             }
-        } else if (endIndex < spans[i + 1].start) {
+        } else if (endIndex! < spans[i + 1].start!) {
             result.push({text: text.slice(endIndex, spans[i + 1].start)});
         }
     }
@@ -86,14 +90,15 @@ function formatSpans(text, spans) {
 
 const matches =
     typeof Element !== 'undefined' &&
-    (Element.prototype.matches ||
+    (Element.prototype.matches || // @ts-expect-error
         Element.prototype.msMatchesSelector ||
         Element.prototype.webkitMatchesSelector);
-function closest(el, s) {
+function closest(el: HTMLElement, s: string) {
     do {
+        // @ts-expect-error
         if (matches.call(el, s)) return el;
 
-        el = el.parentElement || el.parentNode;
+        el = el.parentElement || (el.parentNode as HTMLElement);
     } while (el !== null && el.nodeType === 1);
 
     return null;
@@ -121,8 +126,8 @@ function renderView(view, canLazyload) {
     let tagName = 'div';
     let contents;
     const classNames = ['incito__view'];
-    const styles = {};
-    const attrs = {};
+    const styles: Record<string, any> = {};
+    const attrs: Record<string, any> = {};
 
     switch (view.view_name) {
         case 'TextView': {
@@ -603,7 +608,7 @@ function renderView(view, canLazyload) {
         );
     }
 
-    const transforms = [];
+    const transforms: string[] = [];
     const translateX = formatUnit(view.transform_translate_x);
     const translateY = formatUnit(view.transform_translate_y);
 
@@ -647,7 +652,17 @@ function renderView(view, canLazyload) {
 }
 
 export default class Incito extends MicroEvent {
-    constructor(containerEl, {incito = {}}) {
+    containerEl: HTMLElement;
+    incito: IIncito;
+    el: HTMLDivElement;
+    ids: Record<string, unknown>;
+    sections: unknown[];
+    canLazyload: boolean;
+    styleEl: HTMLStyleElement;
+    lazyObserver: IntersectionObserver;
+    videoObserver: IntersectionObserver;
+    //@ts-expect-error
+    constructor(containerEl: HTMLElement, {incito}: {incito: IIncito} = {}) {
         super();
 
         this.containerEl = containerEl;
@@ -688,22 +703,23 @@ export default class Incito extends MicroEvent {
         }
 
         if (isDefinedStr(theme.background_color)) {
-            this.el.style.backgroundColor = theme.background_color;
+            this.el.style.backgroundColor = theme.background_color!;
         }
 
         if (isDefinedStr(theme.text_color)) {
-            this.el.style.color = theme.text_color;
+            this.el.style.color = theme.text_color!;
         }
 
         if (isDefinedStr(theme.style)) {
             this.styleEl = document.createElement('style');
 
-            this.styleEl.innerText = theme.style;
+            this.styleEl.innerText = theme.style!;
 
             document.head.appendChild(this.styleEl);
         }
 
         if (typeof theme.line_spacing_multiplier === 'number') {
+            //@ts-expect-error
             this.el.style.lineHeight = theme.line_spacing_multiplier;
         }
 
@@ -721,10 +737,13 @@ export default class Incito extends MicroEvent {
 
     start() {
         this.el.addEventListener('click', (e) => {
-            const el = closest(e.target, '.incito__view [data-link]');
+            const el = closest(
+                e.target as HTMLElement,
+                '.incito__view [data-link]'
+            );
             const link = el ? el.dataset.link : null;
 
-            if (isDefinedStr(link)) window.open(link, '_blank');
+            if (isDefinedStr(link)) window.open(link!, '_blank');
         });
 
         if (this.canLazyload) this.observeElements(this.el);
@@ -739,7 +758,7 @@ export default class Incito extends MicroEvent {
 
         this.containerEl.removeChild(this.el);
 
-        if (this.styleEl) this.styleEl.parentNode.removeChild(this.styleEl);
+        if (this.styleEl) this.styleEl.parentNode!.removeChild(this.styleEl);
 
         this.trigger('destroyed');
     }
@@ -804,17 +823,23 @@ export default class Incito extends MicroEvent {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         const autoplayState =
+                            // @ts-expect-error
                             entry.target.dataset.autoplayState;
 
                         this.loadEl(entry.target);
                         this.lazyObserver.unobserve(entry.target);
 
                         if (!autoplayState || autoplayState === 'paused') {
+                            // @ts-expect-error
                             entry.target.dataset.autoplayState = 'playing';
+                            // @ts-expect-error
                             entry.target.play();
                         }
+                        // @ts-expect-error
                     } else if (!entry.target.paused) {
+                        // @ts-expect-error
                         entry.target.dataset.autoplayState = 'paused';
+                        // @ts-expect-error
                         entry.target.pause();
                     }
                 });

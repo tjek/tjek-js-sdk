@@ -1,13 +1,27 @@
-import {request} from '../core';
-import Viewer from './viewer';
+import {request, V2Catalog, V2Page} from '../core';
+import {Tracker} from '../events';
+import Viewer, {ViewerInit} from './viewer';
 
+interface BootstrapperInit {
+    el: HTMLElement;
+    id: string;
+    pageId: string;
+    eventTracker: Tracker;
+    apiKey: string;
+    coreUrl: string;
+}
 export default class Bootstrapper {
+    options: BootstrapperInit;
     constructor(options = {}) {
+        //@ts-expect-error
         this.options = options;
     }
 
-    createViewer(data, viewerOptions) {
-        return new Viewer(this.options.el, {
+    createViewer(
+        data: {details: V2Catalog; pages: V2Page[]},
+        viewerOptions: Partial<ViewerInit>
+    ) {
+        return new Viewer(this.options.el!, {
             id: this.options.id,
             ownedBy: data.details.dealer_id,
             color: '#' + data.details.branding.pageflip.color,
@@ -61,7 +75,7 @@ export default class Bootstrapper {
         }
     }
 
-    fetchDetails = (callback) =>
+    fetchDetails = (callback?: (error: Error | null, result?: any) => void) =>
         request(
             {
                 apiKey: this.options.apiKey,
@@ -71,7 +85,7 @@ export default class Bootstrapper {
             callback
         );
 
-    fetchPages = (callback) =>
+    fetchPages = (callback?: (error: Error | null, result?: any) => void) =>
         request(
             {
                 apiKey: this.options.apiKey,

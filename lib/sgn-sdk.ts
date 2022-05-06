@@ -2,6 +2,7 @@ import Config from './config';
 import * as CoreUIKit from './kits/core-ui';
 import request from './kits/core/request';
 import * as EventsKit from './kits/events';
+import Tracker from './kits/events/tracker';
 import {
     Bootstrapper as IncitoBootstrapper,
     Viewer as IncitoViewer
@@ -18,25 +19,40 @@ import {error, isBrowser} from './util';
 
 const config = new Config();
 
-const SGN = {config, util, translations};
+const SGN = {
+    config,
+    util,
+    translations,
 
-// Expose storage backends.
-SGN.storage = {local: clientLocal};
+    // Expose storage backends.
+    storage: {local: clientLocal},
 
-// Expose the different kits.
-SGN.EventsKit = EventsKit;
-SGN.CoreKit = {
-    request: (options, callback) => request(config.shadow(options), callback)
+    // Expose the different kits.
+    EventsKit,
+    CoreKit: {
+        request: (
+            options: Parameters<typeof request>[0],
+            callback: Parameters<typeof request>[1]
+        ) => request(config.shadow(options), callback)
+    },
+    PagedPublicationKit: {
+        Bootstrapper: function (
+            options: ConstructorParameters<typeof PagedBootstrapper>[0]
+        ) {
+            return new PagedBootstrapper(config.shadow(options));
+        },
+        Viewer: PagedViewer
+    },
+    IncitoPublicationKit: {
+        Bootstrapper: function (
+            options: ConstructorParameters<typeof IncitoBootstrapper>[0]
+        ) {
+            return new IncitoBootstrapper(config.shadow(options));
+        },
+        Viewer: IncitoViewer
+    },
+    CoreUIKit
 };
-SGN.PagedPublicationKit = {
-    Bootstrapper: (options) => new PagedBootstrapper(config.shadow(options)),
-    Viewer: PagedViewer
-};
-SGN.IncitoPublicationKit = {
-    Bootstrapper: (options) => new IncitoBootstrapper(config.shadow(options)),
-    Viewer: IncitoViewer
-};
-SGN.CoreUIKit = CoreUIKit;
 
 config.bind('change', (changedAttributes) => {
     const newEventTracker = changedAttributes.eventTracker;
@@ -72,7 +88,10 @@ if (isBrowser()) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
         const trackId = scriptEl.dataset.trackId;
         const component = scriptEl.dataset.component;
-        const scriptConfig = {};
+        const scriptConfig: {
+            apiKey?: string;
+            eventTracker?: Tracker;
+        } = {};
 
         if (apiKey) scriptConfig.apiKey = apiKey;
 

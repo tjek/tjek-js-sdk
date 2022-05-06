@@ -1,7 +1,11 @@
 import MicroEvent from 'microevent';
+import {V2Catalog} from '../core';
+import {Tracker} from '../events';
 
 class IncitoPublicationEventTracking extends MicroEvent {
-    constructor(eventTracker, details) {
+    eventTracker: Tracker | undefined;
+    details: V2Catalog | undefined;
+    constructor(eventTracker?: Tracker, details?: V2Catalog) {
         super();
         this.eventTracker = eventTracker;
         this.details = details;

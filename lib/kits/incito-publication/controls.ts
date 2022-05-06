@@ -1,5 +1,9 @@
+import Viewer from './viewer';
+
 export default class Controls {
-    constructor(viewer) {
+    viewer: Viewer;
+    progressEl: HTMLElement | null;
+    constructor(viewer: Viewer) {
         this.viewer = viewer;
         this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
 
@@ -20,7 +24,7 @@ export default class Controls {
                 100
         );
 
-        this.progressEl.textContent = `${progress} %`;
+        this.progressEl!.textContent = `${progress} %`;
 
         this.viewer.trigger('progress', {progress});
     };
