@@ -4,7 +4,7 @@ export default {
     publication_viewer_shopping_list_clear_button: 'Clear list',
     publication_viewer_delete_crossed_out_button: 'Delete crossed out items',
     publication_viewer_print_button: 'Print',
-    publication_viewer_download_button: 'Download',
+    publication_viewer_download_button: 'Download PDF',
     publication_viewer_until_label: 'Through',
     publication_viewer_pages_button: 'Pages',
     publication_viewer_offers_button: 'Offers',
