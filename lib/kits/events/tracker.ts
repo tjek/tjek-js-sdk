@@ -11,12 +11,13 @@ const uuid = () =>
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
     });
 
-const btoa = (str) =>
+const btoa = (str: string) =>
     isBrowser()
         ? window.btoa(str)
         : Buffer.from(str.toString(), 'binary').toString('base64');
 
-const createTrackerClient = () => {
+type TrackerClient = {id: string};
+const createTrackerClient = (): TrackerClient => {
     let id = clientLocalStorage.get('client-id');
     if (id?.data) id = id.data;
 
@@ -26,7 +27,6 @@ const createTrackerClient = () => {
 
     return {id};
 };
-type TrackerClient = {id: string};
 function getPool() {
     const data = clientLocalStorage.get('event-tracker-pool');
 
@@ -39,7 +39,7 @@ const unloadHandler = () => {
     clientLocalStorage.set('event-tracker-pool', pool.concat(getPool()));
 };
 
-let pool;
+let pool: any[];
 class Tracker {
     hasMadeInitialDispatch = false;
     location = {geohash: null, time: null, country: null};
