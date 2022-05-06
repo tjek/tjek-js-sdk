@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>List Publications</title>
+
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta charset="utf-8" />
+
+        <link
+            href="/dist/shopgun-sdk/sgn-sdk.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+
+        <style>
+            body {
+                font-family: arial;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="list-publications"></div>
+
+        <!--
+        <script id="sgn-sdk-list-publications-template" type="text/template">
+        </script>
+        -->
+
+        <script
+            data-readme="API's and SDK's by Tjek (https://tjek.com)"
+            src="/dist/shopgun-sdk/sgn-sdk.js"
+            id="sgn-sdk"
+            data-api-key="GL0wU8"
+            data-track-id="2N2Gib"
+            data-business-id="11deC"
+            data-component="list-publications"
+            data-locale-code="da_DK"
+            data-component-publication-display-url-params="hash"
+            data-publication-hash="publication"
+            data-component-publications-list-item-click-behavior="open_publication_viewer"
+            data-component-list-publications-container="#list-publications"
+            data-component-publications-viewer-preferred-type="incito"
+            data-component-publication-disable-shopping-list="false"
+            data-component-publication-disable-close="false"
+            data-component-publication-disable-menu="false"
+            data-component-publication-disable-download="false"
+            data-component-publication-disable-header="false"
+            data-component-publication-disable-global-scrollbar="false"
+            data-component-publication-show-header-labels="true"
+            data-component-publication-viewer-offer-click-behavior="overview_modal"
+            data-translation-keys--publication-viewer-download-button="Download PDF"
+            defer
+        ></script>
+
+        <!--   Sample event listener on Incito offer -->
+        <script>
+            window.addEventListener(
+                'tjek-incito-publication-view-clicked',
+                (e) => {
+                    console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: f}
+                }
+            );
+        </script>
+
+        <!--   Sample event listener on Incito offer -->
+        <script>
+            window.addEventListener(
+                'tjek-publication-list-item-clicked',
+                (e) => {
+                    console.log('e.detail', e.detail); // {publication}
+                }
+            );
+        </script>
+    </body>
+</html>
