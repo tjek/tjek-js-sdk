@@ -1,22 +1,15 @@
-import _bindInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/bind';
-import _Reflect$construct from '@babel/runtime-corejs3/core-js-stable/reflect/construct';
 import _Object$keys from '@babel/runtime-corejs3/core-js-stable/object/keys';
 import _Object$getOwnPropertySymbols from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols';
 import _filterInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/filter';
 import _Object$getOwnPropertyDescriptor from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor';
-import _forEachInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/for-each';
 import _Object$getOwnPropertyDescriptors from '@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors';
-import _Object$defineProperties from '@babel/runtime-corejs3/core-js-stable/object/define-properties';
-import _Object$defineProperty from '@babel/runtime-corejs3/core-js-stable/object/define-property';
 import _defineProperty from '@babel/runtime-corejs3/helpers/defineProperty';
-import _classCallCheck from '@babel/runtime-corejs3/helpers/classCallCheck';
 import _createClass from '@babel/runtime-corejs3/helpers/createClass';
 import _assertThisInitialized from '@babel/runtime-corejs3/helpers/assertThisInitialized';
 import _inherits from '@babel/runtime-corejs3/helpers/inherits';
-import _possibleConstructorReturn from '@babel/runtime-corejs3/helpers/possibleConstructorReturn';
-import _getPrototypeOf from '@babel/runtime-corejs3/helpers/getPrototypeOf';
 import _classPrivateFieldGet from '@babel/runtime-corejs3/helpers/classPrivateFieldGet';
 import 'core-js/modules/es.object.to-string.js';
+import 'core-js/modules/web.dom-collections.for-each.js';
 import 'core-js/modules/es.array.iterator.js';
 import 'core-js/modules/web.dom-collections.iterator.js';
 import _concatInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/concat';
@@ -24,52 +17,38 @@ import _includesInstanceProperty from '@babel/runtime-corejs3/core-js-stable/ins
 import _keysInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/keys';
 import _WeakMap from '@babel/runtime-corejs3/core-js-stable/weak-map';
 import MicroEvent from 'microevent';
-import 'core-js/modules/es.string.search.js';
+import 'core-js/modules/es.function.name.js';
+import 'core-js/modules/es.regexp.constructor.js';
 import 'core-js/modules/es.regexp.exec.js';
 import 'core-js/modules/es.regexp.to-string.js';
-import _URL from '@babel/runtime-corejs3/core-js-stable/url';
-import _URLSearchParams from '@babel/runtime-corejs3/core-js-stable/url-search-params';
-import fetch from 'cross-fetch';
-import 'core-js/modules/es.string.match.js';
 import _spliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/splice';
-import _mapInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/map';
-import Mustache from 'mustache';
-import 'core-js/modules/es.array.join.js';
-import _Array$isArray from '@babel/runtime-corejs3/core-js-stable/array/is-array';
-import _Object$assign from '@babel/runtime-corejs3/core-js-stable/object/assign';
-import _sliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/slice';
-import _JSON$stringify from '@babel/runtime-corejs3/core-js-stable/json/stringify';
-import _setInterval from '@babel/runtime-corejs3/core-js-stable/set-interval';
-import md5 from 'md5';
-import _indexOfInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/index-of';
-import _lastIndexOfInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/last-index-of';
-import _parseInt from '@babel/runtime-corejs3/core-js-stable/parse-int';
-import _setTimeout from '@babel/runtime-corejs3/core-js-stable/set-timeout';
-import _Promise from '@babel/runtime-corejs3/core-js-stable/promise';
-import 'core-js/modules/es.function.name.js';
-import 'core-js/modules/es.string.replace.js';
-import 'core-js/modules/es.regexp.constructor.js';
-import _slicedToArray from '@babel/runtime-corejs3/helpers/slicedToArray';
-import 'core-js/modules/es.string.link.js';
-import 'core-js/modules/es.string.split.js';
-import _trimInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/trim';
-import _Array$from from '@babel/runtime-corejs3/core-js-stable/array/from';
-import _Symbol from '@babel/runtime-corejs3/core-js-stable/symbol';
-import _getIteratorMethod from '@babel/runtime-corejs3/core-js/get-iterator-method';
-import _getIterator from '@babel/runtime-corejs3/core-js/get-iterator';
-import _reduceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/reduce';
-import _Object$values from '@babel/runtime-corejs3/core-js-stable/object/values';
-import _findInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find';
-import 'core-js/modules/es.number.constructor.js';
-import _Date$now from '@babel/runtime-corejs3/core-js-stable/date/now';
-import _Object$create from '@babel/runtime-corejs3/core-js-stable/object/create';
-import _sortInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/sort';
-import _findIndexInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find-index';
-import _Object$entries from '@babel/runtime-corejs3/core-js-stable/object/entries';
+import 'core-js/modules/es.string.match.js';
 import _asyncToGenerator from '@babel/runtime-corejs3/helpers/asyncToGenerator';
 import _regeneratorRuntime from '@babel/runtime-corejs3/regenerator';
+import _JSON$stringify from '@babel/runtime-corejs3/core-js-stable/json/stringify';
+import _URL from '@babel/runtime-corejs3/core-js-stable/url';
+import fetch from 'cross-fetch';
+import _toConsumableArray from '@babel/runtime-corejs3/helpers/toConsumableArray';
+import _findInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find';
+import _mapInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/map';
+import _Object$values from '@babel/runtime-corejs3/core-js-stable/object/values';
+import _Promise from '@babel/runtime-corejs3/core-js-stable/promise';
+import 'core-js/modules/es.string.replace.js';
 import 'core-js/modules/es.promise.js';
 import 'core-js/modules/es.string.iterator.js';
+import 'core-js/modules/es.string.split.js';
+import _sliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/slice';
+import _trimInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/trim';
+import 'core-js/modules/es.array.join.js';
+import 'core-js/modules/es.string.link.js';
+import Mustache from 'mustache';
+import _slicedToArray from '@babel/runtime-corejs3/helpers/slicedToArray';
+import _Object$entries from '@babel/runtime-corejs3/core-js-stable/object/entries';
+import 'core-js/modules/es.number.constructor.js';
+import _Array$from from '@babel/runtime-corejs3/core-js-stable/array/from';
+import _findIndexInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/find-index';
+import _Object$assign from '@babel/runtime-corejs3/core-js-stable/object/assign';
+import md5 from 'md5';
 
 var coreUrl = 'https://squid-api.tjek.com';
 var eventsTrackUrl = 'https://wolf-api.tjek.com/sync';
@@ -80,270 +59,305 @@ var configDefaults = /*#__PURE__*/Object.freeze({
     eventsTrackUrl: eventsTrackUrl
 });
 
-function ownKeys$2(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); if (enumerableOnly) symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$9(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { var _context3; _forEachInstanceProperty(_context3 = ownKeys$2(Object(source), true)).call(_context3, function (key) { _defineProperty(target, key, source[key]); }); } else if (_Object$getOwnPropertyDescriptors) { _Object$defineProperties(target, _Object$getOwnPropertyDescriptors(source)); } else { var _context4; _forEachInstanceProperty(_context4 = ownKeys$2(Object(source))).call(_context4, function (key) { _Object$defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$9(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$9(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$9(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
 
-function _createSuper$b(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$b(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
-function _isNativeReflectConstruct$b() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
-var _attrs = new _WeakMap();
+var _attrs = /*#__PURE__*/new _WeakMap();
 
 var Config = /*#__PURE__*/function (_MicroEvent) {
   _inherits(Config, _MicroEvent);
-
-  var _super = _createSuper$b(Config);
 
   function Config() {
     var _context;
 
     var _this;
 
-    _classCallCheck(this, Config);
-
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    _this = _super.call.apply(_super, _concatInstanceProperty(_context = [this]).call(_context, args));
+    _this = _MicroEvent.call.apply(_MicroEvent, _concatInstanceProperty(_context = [this]).call(_context, args)) || this;
 
-    _attrs.set(_assertThisInitialized(_this), {
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _attrs, {
       writable: true,
-      value: _objectSpread$2({}, configDefaults)
+      value: _objectSpread$9({}, configDefaults)
     });
 
     return _this;
   }
 
-  _createClass(Config, [{
-    key: "set",
-    value: function set() {
-      var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var changedAttributes = {};
+  var _proto = Config.prototype;
 
-      for (var key in config) {
-        var _context2;
+  _proto.set = function set(config) {
+    var changedAttributes = {};
 
-        if (key === 'appKey') key = 'apiKey';
-        var value = config[key];
+    for (var key in config) {
+      var _context2;
 
-        if (_includesInstanceProperty(_context2 = _keysInstanceProperty(this)).call(_context2, key)) {
-          _classPrivateFieldGet(this, _attrs)[key] = value;
-          changedAttributes[key] = value;
+      if (key === 'appKey') key = 'apiKey';
+
+      if (_includesInstanceProperty(_context2 = _keysInstanceProperty(this)).call(_context2, key)) {
+        _classPrivateFieldGet(this, _attrs)[key] = config[key];
+        changedAttributes[key] = config[key];
+      }
+    }
+
+    this.trigger('change', changedAttributes);
+  };
+
+  _proto.get = function get(option) {
+    if (option === 'appKey') option = 'apiKey';
+    return _classPrivateFieldGet(this, _attrs)[option];
+  };
+
+  _proto.shadow = function shadow(optionsObject) {
+    var _this2 = this;
+
+    var optionsWithConfig = _objectSpread$9({}, optionsObject);
+
+    _keysInstanceProperty(this).forEach(function (key) {
+      var get = function get() {
+        return (optionsObject == null ? void 0 : optionsObject[key]) || _this2.get(key);
+      };
+
+      Object.defineProperty(optionsWithConfig, key, {
+        get: get
+      });
+    });
+
+    return optionsWithConfig;
+  };
+
+  return _createClass(Config);
+}(MicroEvent);
+
+Config.prototype.keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'];
+
+var _getMatcher = function _getMatcher(element) {
+  return element.matches || element.webkitMatchesSelector || element.mozMatchesSelector || element.msMatchesSelector || element.oMatchesSelector || Function.prototype;
+};
+
+var _level = 0;
+
+function _matchesSelector(element, selector, boundElement) {
+  if (element === boundElement) return;
+  if (_getMatcher(element).call(element, selector)) return element;
+
+  if (element.parentElement) {
+    _level++;
+    return _matchesSelector(element.parentElement, selector, boundElement);
+  }
+}
+
+var handlersBySelectorByTypeByInstance = {};
+
+function _bind(events, selector, callback, remove) {
+  var _this = this;
+
+  if (!(events instanceof Array)) events = [events];
+  var id = this.id;
+  var handlersBySelectorByType = handlersBySelectorByTypeByInstance[this.id];
+
+  var _loop = function _loop(k) {
+    var type = events[k];
+
+    if (remove) {
+      // if there are no events tied to this element at all
+      // then don't do anything
+      if (!handlersBySelectorByType) return {
+        v: void 0
+      }; // if there is no event type specified then remove all events
+      // example: Gator(element).off()
+
+      if (!type) {
+        _Object$keys(handlersBySelectorByType).forEach(function (handleType) {
+          handlersBySelectorByType[handleType] = {};
+        });
+
+        return {
+          v: void 0
+        };
+      } // if no callback or selector is specified remove all events of this type
+      // example: Gator(element).off('click')
+
+
+      if (!callback && !selector) {
+        handlersBySelectorByType[type] = {};
+        return {
+          v: void 0
+        };
+      } // if a selector is specified but no callback remove all events
+      // for this selector
+      // example: Gator(element).off('click', '.sub-element')
+
+
+      if (!callback) {
+        delete handlersBySelectorByType[type][selector];
+        return {
+          v: void 0
+        };
+      } // if we have specified an event type, selector, and callback then we
+      // need to make sure there are callbacks tied to this selector to
+      // begin with.  if there aren't then we can stop here
+
+
+      if (!handlersBySelectorByType[type][selector]) return {
+        v: void 0
+      }; // if there are then loop through all the callbacks and if we find
+      // one that matches remove it from the array
+
+      for (var i = 0; i < handlersBySelectorByType[type][selector].length; i++) {
+        var handlers = handlersBySelectorByType[type][selector];
+
+        if (handlers[i] === callback) {
+          _spliceInstanceProperty(handlers).call(handlers, i, 1);
+
+          break;
         }
       }
 
-      this.trigger('change', changedAttributes);
+      return "continue";
     }
-  }, {
-    key: "get",
-    value: function get(option) {
-      if (option === 'appKey') option = 'apiKey';
-      return _classPrivateFieldGet(this, _attrs)[option];
+
+    if (!handlersBySelectorByType || !handlersBySelectorByType[type]) _this.element.addEventListener(type, function (e) {
+      var handlersBySelector = handlersBySelectorByType[type];
+      if (!handlersBySelector) return;
+      var target = e.target;
+      var matches = {}; // find all events that match
+
+      _level = 0;
+
+      _Object$keys(handlersBySelector).forEach(function (handlerSelector) {
+        if (target instanceof HTMLElement) {
+          var match = _matchesSelector(target, handlerSelector, instances[id].element);
+
+          if (match) {
+            _level++;
+            handlersBySelector[handlerSelector].match = match;
+            matches[_level] = handlersBySelector[handlerSelector];
+          }
+        }
+      }); // stopPropagation() fails to set cancelBubble to true in Webkit
+      // @see http://code.google.com/p/chromium/issues/detail?id=162270
+
+
+      e.stopPropagation = function () {
+        e.cancelBubble = true;
+      };
+
+      for (var _i = 0; _i <= _level; _i++) {
+        if (matches[_i]) {
+          for (var j = 0; j < matches[_i].length; j++) {
+            if (matches[_i][j].call(matches[_i].match, e) === false) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+
+            if (e.cancelBubble) return;
+          }
+        }
+      }
+    }, type == 'blur' || type == 'focus');
+
+    if (!handlersBySelectorByType) {
+      handlersBySelectorByTypeByInstance[id] = {};
+      handlersBySelectorByType = handlersBySelectorByTypeByInstance[id];
     }
-  }]);
 
-  return Config;
-}(MicroEvent);
+    if (!handlersBySelectorByType[type]) {
+      handlersBySelectorByType[type] = {};
+    }
 
-Config.prototype.keys = ['appVersion', 'apiKey', 'authToken', 'eventTracker', 'coreUrl', 'eventsTrackUrl'];
+    if (!handlersBySelectorByType[type][selector]) handlersBySelectorByType[type][selector] = [];
+    handlersBySelectorByType[type][selector].push(callback);
+  };
 
-function isBrowser() {
+  for (var k = 0; k < events.length; k++) {
+    var _ret = _loop(k);
+
+    if (_ret === "continue") continue;
+    if (typeof _ret === "object") return _ret.v;
+  }
+}
+
+var _id = 0;
+var instances = {};
+
+function Gator(element, id) {
+  // called as function
+  if (!(this instanceof Gator)) {
+    // only keep one Gator instance per node to make sure that
+    // we don't create a ton of new objects if you want to delegate
+    // multiple events from the same node
+    //
+    // for example: Gator(document).on(...
+    for (var key in instances) {
+      if (instances[key].element === element) return instances[key];
+    }
+
+    _id++;
+    return instances[_id] = new Gator(element, _id);
+  }
+
+  this.element = element;
+  this.id = id;
+}
+
+Gator.prototype.on = function (events, selector, callback) {
+  _bind.call(this, events, selector, callback);
+};
+
+Gator.prototype.off = function (events, selector, callback) {
+  _bind.call(this, events, selector, callback, true);
+};
+
+var isBrowser = function isBrowser() {
   return typeof window === 'object' && typeof document === 'object';
-}
-function isNode() {
+};
+var isNode = function isNode() {
   return typeof process === 'object';
-}
+};
 function error(err, options) {
   err.message = err.message || null;
 
   if (typeof options === 'string') {
     err.message = options;
-  } else if (typeof options === 'object' && options != null) {
+  } else if (typeof options === 'object' && options) {
     for (var key in options) {
-      var value = options[key];
-      err[key] = value;
+      err[key] = options[key];
     }
 
-    if (options.message != null) {
-      err.message = options.message;
-    }
+    if (options.message) err.message = options.message;
 
-    if (options.code != null || options.message != null) {
+    if (options.code || options.message) {
       err.code = options.code || options.name;
     }
 
-    if (options.stack != null) {
-      err.stack = options.stack;
-    }
+    if (options.stack) err.stack = options.stack;
   }
 
-  err.name = (options === null || options === void 0 ? void 0 : options.name) || err.name || err.code || 'Error';
+  err.name = (options == null ? void 0 : options.name) || err.name || err.code || 'Error';
   err.time = new Date();
   return err;
 }
-function uuid() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 | 0;
-    var v = c === 'x' ? r : r & 0x3 | 0x8;
-    return v.toString(16);
-  });
-}
 function getQueryParam(field, url) {
-  var href = url || window.location.href;
   var reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
-  var string = reg.exec(href);
-
-  if (string) {
-    return string[1];
+  var string = reg.exec(url || window.location.href);
+  return string ? string[1] : undefined;
+}
+function throttle(fn, threshold, scope) {
+  if (threshold === void 0) {
+    threshold = 250;
   }
 
-  return undefined;
-}
-function getRandomNumberBetween(from, to) {
-  return Math.floor(Math.random() * to) + from;
-}
-function getOS() {
-  var name = null;
-  var ua = window.navigator.userAgent;
-
-  if (_indexOfInstanceProperty(ua).call(ua, 'Windows') > -1) {
-    name = 'Windows';
-  } else if (_indexOfInstanceProperty(ua).call(ua, 'Mac') > -1) {
-    name = 'macOS';
-  } else if (_indexOfInstanceProperty(ua).call(ua, 'X11') > -1) {
-    name = 'unix';
-  } else if (_indexOfInstanceProperty(ua).call(ua, 'Linux') > -1) {
-    name = 'Linux';
-  } else if (_indexOfInstanceProperty(ua).call(ua, 'iOS') > -1) {
-    name = 'iOS';
-  } else if (_indexOfInstanceProperty(ua).call(ua, 'Android') > -1) {
-    name = 'Android';
-  }
-
-  return name;
-}
-function getDeviceCategory() {
-  var deviceCategory = 'desktop';
-
-  if (navigator.platform === 'iPod' || navigator.platform === 'iPhone') {
-    deviceCategory = 'mobile';
-  } else if (navigator.platform === 'iPad') {
-    deviceCategory = 'tablet';
-  } else if (navigator.platform === 'Android' || /android/gi.test(navigator.userAgent)) {
-    if (/tablet/gi.test(navigator.userAgent)) {
-      deviceCategory = 'tablet';
-    } else {
-      deviceCategory = 'mobile';
-    }
-  }
-
-  return deviceCategory;
-}
-function getPointer() {
-  var pointer = 'fine';
-
-  if (matchMedia('(pointer:coarse)').matches) {
-    pointer = 'coarse';
-  }
-
-  return pointer;
-}
-function getOrientation(width, height) {
-  if (width === height) {
-    return 'quadratic';
-  } else if (width > height) {
-    return 'horizontal';
-  } else {
-    return 'vertical';
-  }
-}
-function getScreenDimensions() {
-  var _window$devicePixelRa;
-
-  var density = (_window$devicePixelRa = window.devicePixelRatio) !== null && _window$devicePixelRa !== void 0 ? _window$devicePixelRa : 1;
-  var logical = {
-    width: window.screen.width,
-    height: window.screen.height
-  };
-  var physical = {
-    width: Math.round(logical.width * density),
-    height: Math.round(logical.height * density)
-  };
-  return {
-    density: density,
-    logical: logical,
-    physical: physical
-  };
-}
-function getUtcOffsetSeconds() {
-  var now = new Date();
-  var jan1 = new Date(now.getFullYear(), 0, 1, 0, 0, 0, 0);
-  var tmp = jan1.toGMTString();
-  var jan2 = new Date(tmp.substring(0, _lastIndexOfInstanceProperty(tmp).call(tmp, ' ') - 1));
-  var stdTimeOffset = (jan1 - jan2) / 1000;
-  return stdTimeOffset;
-}
-function getUtcDstOffsetSeconds() {
-  return new Date().getTimezoneOffset() * 60 * -1;
-}
-function getColorBrightness(color) {
-  color = color.replace('#', '');
-
-  var hex = _parseInt((hex + '').replace(/[^a-f0-9]/gi, ''), 16);
-
-  var rgb = [];
-  var sum = 0;
-  var x = 0;
-
-  while (x < 3) {
-    var s = _parseInt(color.substring(2 * x, 2), 16);
-
-    rgb[x] = s;
-
-    if (s > 0) {
-      sum += s;
-    }
-
-    ++x;
-  }
-
-  if (sum <= 381) {
-    return 'dark';
-  } else {
-    return 'light';
-  }
-}
-function btoa(str) {
-  if (isBrowser()) {
-    return window.btoa(str);
-  } else {
-    var buffer = null;
-
-    if (str instanceof Buffer) {
-      buffer = str;
-    } else {
-      buffer = Buffer.from(str.toString(), 'binary');
-    }
-
-    return buffer.toString('base64');
-  }
-}
-function chunk(arr, size) {
-  var results = [];
-
-  while (arr.length) {
-    results.push(_spliceInstanceProperty(arr).call(arr, 0, size));
-  }
-
-  return results;
-}
-function throttle(fn) {
-  var threshold = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 250;
-  var scope = arguments.length > 2 ? arguments[2] : undefined;
-  var last = undefined;
-  var deferTimer = undefined;
+  var last;
+  var deferTimer;
   return function () {
     var context = scope || this;
     var now = new Date().getTime();
@@ -351,7 +365,7 @@ function throttle(fn) {
 
     if (last && now < last + threshold) {
       clearTimeout(deferTimer);
-      deferTimer = _setTimeout(function () {
+      deferTimer = setTimeout(function () {
         last = now;
         fn.apply(context, args);
       }, threshold);
@@ -361,1160 +375,208 @@ function throttle(fn) {
     }
   };
 }
-function loadImage(src, callback) {
-  var img = new Image();
-
-  img.onload = function () {
-    return callback(null, img.width, img.height);
-  };
-
-  img.onerror = function () {
-    return callback(new Error());
-  };
-
-  img.src = src;
-  return img;
-}
-function distance(lat1, lng1, lat2, lng2) {
-  var radlat1 = Math.PI * lat1 / 180;
-  var radlat2 = Math.PI * lat2 / 180;
-  var theta = lng1 - lng2;
-  var radtheta = Math.PI * theta / 180;
-  var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-  dist = Math.acos(dist);
-  dist = dist * 180 / Math.PI;
-  dist = dist * 60 * 1.1515;
-  dist = dist * 1.609344 * 1000;
-  return dist;
-}
-function closest(el, s) {
-  var matches = Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
-
-  do {
-    if (matches.call(el, s)) return el;
-    el = el.parentElement || el.parentNode;
-  } while (el !== null && el.nodeType === 1);
-
-  return null;
-}
-// to return promises if no callback is given in a call.
-// The second argument, cbParameterIndex, is the position of the callback in the original functions parameter list.
-// CoffeeScript optional parameters messes with this function arity detection,
-// not sure what to do about that, other than always setting cbParameterIndex at callsites.
-
-function promiseCallbackInterop(fun) {
-  var _this = this;
-
-  var cbParameterIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : fun.length - 1;
-
-  // This is the function that actually wraps and calls a method to return a promise.
-  var makePromise = function makePromise(fun, cbParameterIndex, parameters) {
-    return new _Promise(function (resolve, reject) {
-      var neoCallback = function neoCallback(error, result) {
-        if (error) {
-          return reject(error);
-        }
-
-        return resolve(result);
-      };
-
-      var callParameters = [];
-
-      for (var i = 0, end = Math.max(parameters.length, cbParameterIndex) + 1, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-        callParameters.push(i === cbParameterIndex ? neoCallback : parameters[i]);
-      }
-
-      return fun.apply(_this, callParameters);
-    });
-  }; // Wrapper function that decides what to do per-call.
-
-
-  return function () {
-    for (var _len = arguments.length, parameters = new Array(_len), _key = 0; _key < _len; _key++) {
-      parameters[_key] = arguments[_key];
-    }
-
-    if (typeof parameters[cbParameterIndex] === 'function') {
-      // Callback given, do a regular old call.
-      return fun.apply(null, parameters);
-    } else if (typeof _Promise === 'function') {
-      // No callback given, and we have promise support, use makePromise to wrap the call.
-      return makePromise(fun, cbParameterIndex, parameters);
-    } else {
-      // Ain't got callback, ain't got promise support; we gotta tell the developer.
-      throw new Error("To be able to use this asynchronous method you should:\nSupply a callback function as argument #".concat(1 + cbParameterIndex, ".\nThis callback function will be called with the method call response.\nAlternatively, when supported, it can return a Promise if no callback function is given."));
-    }
-  };
-}
+var on = function on(el, events, selector, callback) {
+  return Gator(el).on(events, selector, callback);
+};
+var off = function off(el, events, selector, callback) {
+  return Gator(el).off(events, selector, callback);
+};
 
 var util = /*#__PURE__*/Object.freeze({
     __proto__: null,
     isBrowser: isBrowser,
     isNode: isNode,
     error: error,
-    uuid: uuid,
     getQueryParam: getQueryParam,
-    getRandomNumberBetween: getRandomNumberBetween,
-    getOS: getOS,
-    getDeviceCategory: getDeviceCategory,
-    getPointer: getPointer,
-    getOrientation: getOrientation,
-    getScreenDimensions: getScreenDimensions,
-    getUtcOffsetSeconds: getUtcOffsetSeconds,
-    getUtcDstOffsetSeconds: getUtcDstOffsetSeconds,
-    getColorBrightness: getColorBrightness,
-    btoa: btoa,
-    chunk: chunk,
     throttle: throttle,
-    loadImage: loadImage,
-    distance: distance,
-    closest: closest,
-    promiseCallbackInterop: promiseCallbackInterop
-});
-
-function request() {
-  var _options$url, _options$headers;
-
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var callback = arguments.length > 1 ? arguments[1] : undefined;
-  var url = SGN.config.get('coreUrl') + ((_options$url = options.url) !== null && _options$url !== void 0 ? _options$url : '');
-  var method = options.method || 'get';
-  var headers = (_options$headers = options.headers) !== null && _options$headers !== void 0 ? _options$headers : {};
-  var apiKey = SGN.config.get('apiKey');
-  var clientVersion = SGN.config.get('clientVersion');
-  var body = options.body;
-
-  if (!apiKey) {
-    callback(new Error('`apiKey` needs to be configured, please see README'));
-    return;
-  }
-
-  headers['X-Api-Key'] = apiKey;
-
-  if (!headers['Accept']) {
-    headers['Accept'] = 'application/json';
-  }
-
-  if (clientVersion != null) {
-    headers['X-Client-Version'] = clientVersion;
-  }
-
-  if (options.qs) {
-    var url2 = new _URL(url);
-    var searchParams = new _URLSearchParams(url2.search);
-
-    for (var key in options.qs) {
-      searchParams.append(key, options.qs[key]);
-    }
-
-    url = url2.origin + url2.pathname + '?' + searchParams.toString();
-  }
-
-  fetch(url, {
-    method: method,
-    body: body,
-    headers: headers,
-    credentials: 'same-origin'
-  }).then(function (response) {
-    if (response.status >= 200 && response.status < 300 || response.status === 304) {
-      response.json().then(function (json) {
-        callback(null, json);
-      }).catch(callback);
-    } else {
-      callback(error(new Error('Core API error'), {
-        code: 'CoreAPIError',
-        statusCode: response.status
-      }), response.text());
-    }
-  }).catch(callback);
-}
-
-var request$1 = promiseCallbackInterop(request, 1);
-
-var CoreKit = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    request: request$1
-});
-
-function createCommonjsModule(fn) {
-  var module = { exports: {} };
-	return fn(module, module.exports), module.exports;
-}
-
-var gator = createCommonjsModule(function (module) {
-  var _matcher,
-      _level = 0,
-      _id = 0,
-      _handlers = {},
-      _gatorInstances = {};
-
-  function _addEvent(gator, type, callback) {
-    // blur and focus do not bubble up but if you use event capturing
-    // then you will get them
-    var useCapture = type == "blur" || type == "focus";
-    gator.element.addEventListener(type, callback, useCapture);
-  }
-
-  function _cancel(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-  /**
-       * returns function to use for determining if an element
-       * matches a query selector
-       *
-       * @returns {Function}
-       */
-
-
-  function _getMatcher(element) {
-    if (_matcher) {
-      return _matcher;
-    }
-
-    if (element.matches) {
-      _matcher = element.matches;
-      return _matcher;
-    }
-
-    if (element.webkitMatchesSelector) {
-      _matcher = element.webkitMatchesSelector;
-      return _matcher;
-    }
-
-    if (element.mozMatchesSelector) {
-      _matcher = element.mozMatchesSelector;
-      return _matcher;
-    }
-
-    if (element.msMatchesSelector) {
-      _matcher = element.msMatchesSelector;
-      return _matcher;
-    }
-
-    if (element.oMatchesSelector) {
-      _matcher = element.oMatchesSelector;
-      return _matcher;
-    } // if it doesn't match a native browser method
-    // fall back to the gator function
-
-
-    _matcher = Gator.matchesSelector;
-    return _matcher;
-  }
-  /**
-       * determines if the specified element matches a given selector
-       *
-       * @param {Node} element - the element to compare against the selector
-       * @param {string} selector
-       * @param {Node} boundElement - the element the listener was attached to
-       * @returns {void|Node}
-       */
-
-
-  function _matchesSelector(element, selector, boundElement) {
-    // no selector means this event was bound directly to this element
-    if (selector == "_root") {
-      return boundElement;
-    } // if we have moved up to the element you bound the event to
-    // then we have come too far
-
-
-    if (element === boundElement) {
-      return;
-    } // if this is a match then we are done!
-
-
-    if (_getMatcher(element).call(element, selector)) {
-      return element;
-    } // if this element did not match but has a parent we should try
-    // going up the tree to see if any of the parent elements match
-    // for example if you are looking for a click on an <a> tag but there
-    // is a <span> inside of the a tag that it is the target,
-    // it should still work
-
-
-    if (element.parentNode) {
-      _level++;
-      return _matchesSelector(element.parentNode, selector, boundElement);
-    }
-  }
-
-  function _addHandler(gator, event, selector, callback) {
-    if (!_handlers[gator.id]) {
-      _handlers[gator.id] = {};
-    }
-
-    if (!_handlers[gator.id][event]) {
-      _handlers[gator.id][event] = {};
-    }
-
-    if (!_handlers[gator.id][event][selector]) {
-      _handlers[gator.id][event][selector] = [];
-    }
-
-    _handlers[gator.id][event][selector].push(callback);
-  }
-
-  function _removeHandler(gator, event, selector, callback) {
-    // if there are no events tied to this element at all
-    // then don't do anything
-    if (!_handlers[gator.id]) {
-      return;
-    } // if there is no event type specified then remove all events
-    // example: Gator(element).off()
-
-
-    if (!event) {
-      for (var type in _handlers[gator.id]) {
-        if (_handlers[gator.id].hasOwnProperty(type)) {
-          _handlers[gator.id][type] = {};
-        }
-      }
-
-      return;
-    } // if no callback or selector is specified remove all events of this type
-    // example: Gator(element).off('click')
-
-
-    if (!callback && !selector) {
-      _handlers[gator.id][event] = {};
-      return;
-    } // if a selector is specified but no callback remove all events
-    // for this selector
-    // example: Gator(element).off('click', '.sub-element')
-
-
-    if (!callback) {
-      delete _handlers[gator.id][event][selector];
-      return;
-    } // if we have specified an event type, selector, and callback then we
-    // need to make sure there are callbacks tied to this selector to
-    // begin with.  if there aren't then we can stop here
-
-
-    if (!_handlers[gator.id][event][selector]) {
-      return;
-    } // if there are then loop through all the callbacks and if we find
-    // one that matches remove it from the array
-
-
-    for (var i = 0; i < _handlers[gator.id][event][selector].length; i++) {
-      if (_handlers[gator.id][event][selector][i] === callback) {
-        var _context;
-
-        _spliceInstanceProperty(_context = _handlers[gator.id][event][selector]).call(_context, i, 1);
-
-        break;
-      }
-    }
-  }
-
-  function _handleEvent(id, e, type) {
-    if (!_handlers[id][type]) {
-      return;
-    }
-
-    var target = e.target || e.srcElement,
-        selector,
-        match,
-        matches = {},
-        i = 0,
-        j = 0; // find all events that match
-
-    _level = 0;
-
-    for (selector in _handlers[id][type]) {
-      if (_handlers[id][type].hasOwnProperty(selector)) {
-        match = _matchesSelector(target, selector, _gatorInstances[id].element);
-
-        if (match && Gator.matchesEvent(type, _gatorInstances[id].element, match, selector == "_root", e)) {
-          _level++;
-          _handlers[id][type][selector].match = match;
-          matches[_level] = _handlers[id][type][selector];
-        }
-      }
-    } // stopPropagation() fails to set cancelBubble to true in Webkit
-    // @see http://code.google.com/p/chromium/issues/detail?id=162270
-
-
-    e.stopPropagation = function () {
-      e.cancelBubble = true;
-    };
-
-    for (i = 0; i <= _level; i++) {
-      if (matches[i]) {
-        for (j = 0; j < matches[i].length; j++) {
-          if (matches[i][j].call(matches[i].match, e) === false) {
-            Gator.cancel(e);
-            return;
-          }
-
-          if (e.cancelBubble) {
-            return;
-          }
-        }
-      }
-    }
-  }
-  /**
-       * binds the specified events to the element
-       *
-       * @param {string|Array} events
-       * @param {string} selector
-       * @param {Function} callback
-       * @param {boolean=} remove
-       * @returns {Object}
-       */
-
-
-  function _bind(events, selector, callback, remove) {
-    // fail silently if you pass null or undefined as an alement
-    // in the Gator constructor
-    if (!this.element) {
-      return;
-    }
-
-    if (!(events instanceof Array)) {
-      events = [events];
-    }
-
-    if (!callback && typeof selector == "function") {
-      callback = selector;
-      selector = "_root";
-    }
-
-    var id = this.id,
-        i;
-
-    function _getGlobalCallback(type) {
-      return function (e) {
-        _handleEvent(id, e, type);
-      };
-    }
-
-    for (i = 0; i < events.length; i++) {
-      if (remove) {
-        _removeHandler(this, events[i], selector, callback);
-
-        continue;
-      }
-
-      if (!_handlers[id] || !_handlers[id][events[i]]) {
-        Gator.addEvent(this, events[i], _getGlobalCallback(events[i]));
-      }
-
-      _addHandler(this, events[i], selector, callback);
-    }
-
-    return this;
-  }
-  /**
-       * Gator object constructor
-       *
-       * @param {Node} element
-       */
-
-
-  function Gator(element, id) {
-    // called as function
-    if (!(this instanceof Gator)) {
-      // only keep one Gator instance per node to make sure that
-      // we don't create a ton of new objects if you want to delegate
-      // multiple events from the same node
-      //
-      // for example: Gator(document).on(...
-      for (var key in _gatorInstances) {
-        if (_gatorInstances[key].element === element) {
-          return _gatorInstances[key];
-        }
-      }
-
-      _id++;
-      _gatorInstances[_id] = new Gator(element, _id);
-      return _gatorInstances[_id];
-    }
-
-    this.element = element;
-    this.id = id;
-  }
-  /**
-       * adds an event
-       *
-       * @param {string|Array} events
-       * @param {string} selector
-       * @param {Function} callback
-       * @returns {Object}
-       */
-
-
-  Gator.prototype.on = function (events, selector, callback) {
-    return _bind.call(this, events, selector, callback);
-  };
-  /**
-       * removes an event
-       *
-       * @param {string|Array} events
-       * @param {string} selector
-       * @param {Function} callback
-       * @returns {Object}
-       */
-
-
-  Gator.prototype.off = function (events, selector, callback) {
-    return _bind.call(this, events, selector, callback, true);
-  };
-
-  Gator.matchesSelector = function () {};
-
-  Gator.cancel = _cancel;
-  Gator.addEvent = _addEvent;
-
-  Gator.matchesEvent = function () {
-    return true;
-  };
-
-  if (module.exports) {
-    module.exports = Gator;
-  }
-
-  if (typeof window !== "undefined" && window.exports) {
-    window.Gator = Gator;
-  }
-});
-
-var OfferDetails = /*#__PURE__*/function () {
-  function OfferDetails(_ref) {
-    var _context;
-
-    var _ref$minWidth = _ref.minWidth,
-        minWidth = _ref$minWidth === void 0 ? 300 : _ref$minWidth,
-        _ref$maxWidth = _ref.maxWidth,
-        maxWidth = _ref$maxWidth === void 0 ? '100vw' : _ref$maxWidth,
-        anchorEl = _ref.anchorEl,
-        contentEl = _ref.contentEl;
-
-    _classCallCheck(this, OfferDetails);
-
-    this.resize = _bindInstanceProperty(_context = this.resize).call(_context, this);
-    this.minWidth = minWidth;
-    this.maxWidth = maxWidth;
-    this.anchorEl = anchorEl;
-    this.contentEl = contentEl;
-    this.elInner = document.createElement('div');
-    this.elInner.className = 'sgn-offer-details-inner';
-    this.el = document.createElement('div');
-    this.el.className = 'sgn-offer-details';
-    this.el.setAttribute('tabindex', -1);
-    this.el.appendChild(this.elInner);
-    this.el.appendChild(this.contentEl);
-    this.position();
-  }
-
-  _createClass(OfferDetails, [{
-    key: "appendTo",
-    value: function appendTo(el) {
-      el.appendChild(this.el);
-      this.el.offsetWidth;
-      this.show();
-      return this;
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      this.el.className += ' in';
-      window.addEventListener('resize', this.resize, false);
-      return this;
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      window.removeEventListener('resize', this.resize, false);
-      this.el.parentNode.removeChild(this.el);
-    }
-  }, {
-    key: "position",
-    value: function position() {
-      var rect = this.anchorEl.getBoundingClientRect();
-      var top = window.pageYOffset + rect.top + this.anchorEl.offsetHeight;
-      var left = window.pageXOffset + rect.left;
-      var width = this.anchorEl.offsetWidth;
-      this.el.style.top = top + 'px';
-      var rightAligned = rect.left >= window.outerWidth / 2;
-      left = window.pageXOffset + rect.left;
-      var right = window.pageXOffset + (window.outerWidth - rect.right);
-
-      if (rightAligned) {
-        this.el.style.left = 'auto';
-        this.el.style.right = right + 'px';
-        this.elInner.style.left = 'auto';
-        this.elInner.style.right = 0;
-      } else {
-        this.el.style.left = left + 'px';
-        this.el.style.right = 'auto';
-        this.elInner.style.left = 0;
-        this.elInner.style.right = 'auto';
-      }
-
-      this.el.style.minWidth = typeof this.minWidth === 'number' ? Math.max(width, this.minWidth) + 'px' : this.minWidth;
-      this.el.style.maxWidth = this.maxWidth;
-      this.elInner.style.width = width - 8 + 'px';
-    }
-  }, {
-    key: "resize",
-    value: function resize() {
-      this.position();
-    }
-  }]);
-
-  return OfferDetails;
-}();
-
-var ESC = 27;
-var ARROW_RIGHT = 39;
-var ARROW_LEFT = 37;
-var SPACE = 32;
-var NUMBER_ONE = 49;
-
-function _createSuper$a(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$a(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct$a() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-var defaultTemplate = "<div class=\"sgn-popover__background\" data-close></div>\n<div class=\"sgn-popover__menu\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#singleChoiceItems}}\n                <li data-index=\"{{index}}\">\n                    <p class=\"sgn-popover-item__title\">{{item.title}}</p>\n                    {{#item.subtitle}}\n                        <p class=\"sgn-popover-item__subtitle\">{{item.subtitle}}</p>\n                    {{/item.subtitle}}\n                </li>\n            {{/singleChoiceItems}}\n        </ul>\n    </div>\n</div>";
-
-var Popover = /*#__PURE__*/function (_MicroEvent) {
-  _inherits(Popover, _MicroEvent);
-
-  var _super = _createSuper$a(Popover);
-
-  function Popover() {
-    var _context, _context2, _context3;
-
-    var _this;
-
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, Popover);
-
-    _this = _super.call(this);
-    _this.keyUp = _bindInstanceProperty(_context = _this.keyUp).call(_context, _assertThisInitialized(_this));
-    _this.resize = _bindInstanceProperty(_context2 = _this.resize).call(_context2, _assertThisInitialized(_this));
-    _this.scroll = _bindInstanceProperty(_context3 = _this.scroll).call(_context3, _assertThisInitialized(_this));
-    _this.options = options;
-    _this.el = document.createElement('div');
-    _this.backgroundEl = document.createElement('div');
-    return _this;
-  }
-
-  _createClass(Popover, [{
-    key: "render",
-    value: function render() {
-      var _this$options = this.options,
-          header = _this$options.header,
-          singleChoiceItems = _this$options.singleChoiceItems,
-          _this$options$templat = _this$options.template,
-          template = _this$options$templat === void 0 ? defaultTemplate : _this$options$templat;
-      var view = {
-        header: header,
-        singleChoiceItems: singleChoiceItems === null || singleChoiceItems === void 0 ? void 0 : _mapInstanceProperty(singleChoiceItems).call(singleChoiceItems, function (item, index) {
-          return {
-            item: item,
-            index: index
-          };
-        })
-      };
-      this.el.className = 'sgn-popover';
-      this.el.setAttribute('tabindex', -1);
-      this.el.innerHTML = Mustache.render(template, view);
-      this.position();
-      this.addEventListeners();
-      return this;
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      gator(this.el).off();
-      window.removeEventListener('resize', this.resize, false);
-      window.removeEventListener('scroll', this.scroll, false);
-
-      if (this.el.parentNode) {
-        this.el.parentNode.removeChild(this.el);
-        this.trigger('destroyed');
-      }
-    }
-  }, {
-    key: "position",
-    value: function position() {
-      var top = this.options.y;
-      var left = this.options.x;
-      var menuEl = this.el.querySelector('.sgn-popover__menu');
-      var width = menuEl.offsetWidth;
-      var height = menuEl.offsetHeight;
-      var parentWidth = this.el.parentNode.offsetWidth;
-      var parentHeight = this.el.parentNode.offsetHeight;
-      var boundingRect = this.el.parentNode.getBoundingClientRect();
-      top -= boundingRect.top;
-      left -= boundingRect.left;
-      top -= window.pageYOffset;
-      left -= window.pageXOffset;
-
-      if (top + height > parentHeight) {
-        menuEl.style.top = parentHeight - height + 'px';
-      } else {
-        menuEl.style.top = top + 'px';
-      }
-
-      if (left + width > parentWidth) {
-        menuEl.style.left = parentWidth - width + 'px';
-      } else {
-        menuEl.style.left = left + 'px';
-      }
-    }
-  }, {
-    key: "addEventListeners",
-    value: function addEventListeners() {
-      var _context4,
-          _this2 = this;
-
-      var trigger = _bindInstanceProperty(_context4 = this.trigger).call(_context4, this);
-
-      this.el.addEventListener('keyup', this.keyUp);
-      gator(this.el).on('click', '[data-index]', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        trigger('selected', {
-          index: +this.getAttribute('data-index')
-        });
-      });
-      gator(this.el).on('click', '[data-close]', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        _this2.destroy();
-      });
-      gator(this.el).on('click', '.sgn-popover__menu', function (e) {
-        e.stopPropagation();
-      });
-      window.addEventListener('resize', this.resize, false);
-      window.addEventListener('scroll', this.scroll, false);
-    }
-  }, {
-    key: "keyUp",
-    value: function keyUp(e) {
-      if (e.keyCode === ESC) {
-        this.destroy();
-      }
-    }
-  }, {
-    key: "resize",
-    value: function resize() {
-      this.destroy();
-    }
-  }, {
-    key: "scroll",
-    value: function scroll() {
-      this.destroy();
-    }
-  }]);
-
-  return Popover;
-}(MicroEvent);
-
-function singleChoicePopover(ctx, callback) {
-  var items = ctx.items;
-  var popover = null;
-
-  if (items.length === 1) {
-    callback(items[0]);
-  } else if (items.length > 1) {
-    popover = new Popover({
-      header: ctx.header,
-      x: ctx.x,
-      y: ctx.y,
-      singleChoiceItems: items
-    });
-
-    _bindInstanceProperty(popover).call(popover, 'selected', function (e) {
-      callback(items[e.index]);
-      popover.destroy();
-    });
-
-    _bindInstanceProperty(popover).call(popover, 'destroyed', function () {
-      ctx.el.focus();
-    });
-
-    ctx.el.appendChild(popover.el);
-    popover.render().el.focus();
-  }
-
-  return {
-    destroy: function destroy() {
-      var _popover;
-
-      (_popover = popover) === null || _popover === void 0 ? void 0 : _popover.destroy();
-    }
-  };
-}
-
-var on = function on(el, events, selector, callback) {
-  return gator(el).on(events, selector, callback);
-};
-var off = function off(el, events, selector, callback) {
-  return gator(el).off(events, selector, callback);
-};
-
-var CoreUIKit = /*#__PURE__*/Object.freeze({
-    __proto__: null,
     on: on,
-    off: off,
-    OfferDetails: OfferDetails,
-    Popover: Popover,
-    singleChoicePopover: singleChoicePopover
+    off: off
 });
 
 var prefixKey = 'sgn-';
+var storage;
 
-var storage = function () {
+function ensureStorage() {
+  if (storage) return;
+
   try {
-    var _storage = window.localStorage;
-    _storage["".concat(prefixKey, "test-storage")] = 'foobar';
-    delete _storage["".concat(prefixKey, "test-storage")];
-    return _storage;
+    storage = window.localStorage;
+    storage[prefixKey + 'test-storage'] = 'foobar';
+    delete storage[prefixKey + 'test-storage'];
   } catch (error) {
-    return {};
+    storage = {};
   }
-}();
+}
 
 function get(key) {
+  ensureStorage();
+
   try {
-    return JSON.parse(storage["".concat(prefixKey).concat(key)]);
+    return JSON.parse(storage[prefixKey + key]);
   } catch (error) {}
 }
 function set(key, value) {
+  ensureStorage();
+
   try {
-    storage["".concat(prefixKey).concat(key)] = _JSON$stringify(value);
+    storage[prefixKey + key] = _JSON$stringify(value);
+  } catch (error) {}
+}
+function remove(key) {
+  ensureStorage();
+  delete storage[prefixKey + key];
+}
+function setWithEvent(key, value, eventName) {
+  try {
+    set(key, value);
+    var event = new Event(eventName);
+    window.dispatchEvent(event);
   } catch (error) {}
 }
 
 var clientLocal = /*#__PURE__*/Object.freeze({
     __proto__: null,
     get: get,
-    set: set
+    set: set,
+    remove: remove,
+    setWithEvent: setWithEvent
 });
 
-var createTrackerClient = function createTrackerClient() {
-  var _id;
+function ownKeys$8(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-  var id = get('client-id');
+function _objectSpread$8(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$8(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$8(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
 
-  if ((_id = id) !== null && _id !== void 0 && _id.data) {
-    id = id.data;
-  }
-
-  if (id == null) {
-    id = uuid();
-    set('client-id', id);
-  }
-
-  return {
-    id: id
-  };
-};
-
-function getPool() {
-  var data = get('event-tracker-pool');
-  return _Array$isArray(data) ? _filterInstanceProperty(data).call(data, function (evt) {
-    return typeof evt._i === 'string';
-  }) : [];
+function request(_x, _x2) {
+  return _request.apply(this, arguments);
 }
 
-var unloadHandler = function unloadHandler() {
-  return set('event-tracker-pool', _concatInstanceProperty(pool).call(pool, getPool()));
-};
+function _request() {
+  _request = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(_ref, callback) {
+    var coreUrl, _ref$url, rawUrl, apiKey, qs, _ref$method, method, headers, body, url, key, response, json;
 
-var pool;
+    return _regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            coreUrl = _ref.coreUrl, _ref$url = _ref.url, rawUrl = _ref$url === void 0 ? '' : _ref$url, apiKey = _ref.apiKey, qs = _ref.qs, _ref$method = _ref.method, method = _ref$method === void 0 ? 'get' : _ref$method, headers = _ref.headers, body = _ref.body;
+            _context.prev = 1;
+            url = new _URL(rawUrl, coreUrl);
 
-var Tracker = /*#__PURE__*/function () {
-  function Tracker() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+            if (apiKey) {
+              _context.next = 5;
+              break;
+            }
 
-    _classCallCheck(this, Tracker);
+            throw new Error('`apiKey` needs to be configured, please see README');
 
-    if (!pool) {
-      pool = getPool();
-      set('event-tracker-pool', []);
+          case 5:
+            for (key in qs) {
+              url.searchParams.append(key, qs[key]);
+            }
 
-      if (typeof window !== 'undefined') {
-        window.addEventListener('beforeunload', unloadHandler, false);
-      }
-    }
+            _context.next = 8;
+            return fetch(String(url), {
+              method: method,
+              body: body,
+              headers: _objectSpread$8({
+                Accept: 'application/json'
+              }, headers, {
+                'X-Api-Key': apiKey
+              }),
+              credentials: 'same-origin'
+            });
 
-    for (var key in this.defaultOptions) {
-      var value = this.defaultOptions[key];
-      this[key] = options[key] || value;
-    }
+          case 8:
+            response = _context.sent;
 
-    this.client = options.client || createTrackerClient();
-    this.eventsTrackUrl = options.eventsTrackUrl || eventsTrackUrl;
-    this.location = {
-      geohash: null,
-      time: null,
-      country: null
-    };
-    this.dispatching = false;
-    this.hasMadeInitialDispatch = false;
+            if (!(response.status >= 200 && response.status < 300 || response.status === 304)) {
+              _context.next = 15;
+              break;
+            }
 
-    if (this.eventsTrackUrl) {
-      dispatch(this.eventsTrackUrl);
-      this.hasMadeInitialDispatch = true;
-    }
-  }
+            _context.next = 12;
+            return response.json();
 
-  _createClass(Tracker, [{
-    key: "setEventsTrackUrl",
-    value: function setEventsTrackUrl(eventsTrackUrl) {
-      this.eventsTrackUrl = eventsTrackUrl;
+          case 12:
+            json = _context.sent;
+            if (typeof callback === 'function') callback(null, json);
+            return _context.abrupt("return", json);
 
-      if (!this.hasMadeInitialDispatch) {
-        dispatch(this.eventsTrackUrl);
-        this.hasMadeInitialDispatch = true;
-      }
-    }
-  }, {
-    key: "trackEvent",
-    value: function trackEvent(type) {
-      var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+          case 15:
+            throw error(new Error('Core API error'), {
+              code: 'CoreAPIError',
+              statusCode: response.status
+            });
 
-      if (typeof type !== 'number') {
-        throw error(new Error('Event type is required'));
-      }
+          case 18:
+            _context.prev = 18;
+            _context.t0 = _context["catch"](1);
 
-      if (this.trackId == null) {
-        return;
-      }
+            if (!(typeof callback === 'function')) {
+              _context.next = 22;
+              break;
+            }
 
-      var evt = _Object$assign({}, properties, {
-        _e: type,
-        _v: version,
-        _i: uuid(),
-        _t: Math.round(new Date().getTime() / 1000),
-        _a: this.trackId
-      });
+            return _context.abrupt("return", callback(_context.t0));
 
-      if (this.location.geohash) {
-        evt['l.h'] = this.location.geohash;
-      }
+          case 22:
+            throw _context.t0;
 
-      if (this.location.time) {
-        evt['l.ht'] = this.location.time;
-      }
-
-      if (this.location.country) {
-        evt['l.c'] = this.location.country;
-      }
-
-      pool.push(evt);
-
-      while (pool.length > this.poolLimit) {
-        pool.shift();
-      }
-
-      dispatch(this.eventsTrackUrl);
-      return this;
-    }
-  }, {
-    key: "setLocation",
-    value: function setLocation(location) {
-      for (var key in location) {
-        var value = location[key];
-
-        if (Object.prototype.hasOwnProperty.call(this.location, key)) {
-          this.location[key] = value;
+          case 23:
+          case "end":
+            return _context.stop();
         }
       }
+    }, _callee, null, [[1, 18]]);
+  }));
+  return _request.apply(this, arguments);
+}
 
-      return this;
-    }
-  }, {
-    key: "trackPagedPublicationOpened",
-    value: function trackPagedPublicationOpened(properties, version) {
-      return this.trackEvent(1, properties, version);
-    }
-  }, {
-    key: "trackPagedPublicationPageDisappeared",
-    value: function trackPagedPublicationPageDisappeared(properties, version) {
-      return this.trackEvent(2, properties, version);
-    }
-  }, {
-    key: "trackOfferOpened",
-    value: function trackOfferOpened(properties, version) {
-      return this.trackEvent(3, properties, version);
-    }
-  }, {
-    key: "trackSearched",
-    value: function trackSearched(properties, version) {
-      return this.trackEvent(5, properties, version);
-    }
-  }, {
-    key: "trackIncitoPublicationOpened",
-    value: function trackIncitoPublicationOpened(properties, version) {
-      return this.trackEvent(11, properties, version);
-    }
-  }, {
-    key: "createViewToken",
-    value: function createViewToken() {
-      var _context, _context2;
+var Controls = /*#__PURE__*/_createClass(function Controls(viewer) {
+  var _this = this;
 
-      for (var _len = arguments.length, parts = new Array(_len), _key = 0; _key < _len; _key++) {
-        parts[_key] = arguments[_key];
-      }
+  this.destroy = function () {
+    window.removeEventListener('scroll', _this.scroll, false);
+  };
 
-      return btoa(String.fromCharCode.apply(null, _sliceInstanceProperty(_context = md5(_concatInstanceProperty(_context2 = [this.client.id]).call(_context2, parts).join(''), {
-        asBytes: true
-      })).call(_context, 0, 8)));
-    }
-  }]);
+  this.scroll = function () {
+    var progress = Math.round(window.pageYOffset / (document.body.scrollHeight - window.innerHeight) * 100);
+    _this.progressEl.textContent = "".concat(progress, " %");
 
-  return Tracker;
-}();
+    _this.viewer.trigger('progress', {
+      progress: progress
+    });
+  };
 
-Tracker.prototype.defaultOptions = {
-  trackId: null,
-  poolLimit: 1000
-};
-var dispatching = false;
-var dispatchLimit = 100;
-var dispatchRetryInterval = null;
-var dispatch = throttle(function (eventsTrackUrl) {
-  if (!pool) {
-    console.warn('Tracker: dispatch called with no active event pool.');
-    return;
+  this.viewer = viewer;
+  this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
+
+  if (this.progressEl) {
+    this.scroll();
+    window.addEventListener('scroll', this.scroll, false);
   }
-
-  if (dispatching === true || pool.length === 0) {
-    return;
-  }
-
-  var events = _sliceInstanceProperty(pool).call(pool, 0, dispatchLimit);
-
-  var nacks = 0;
-  dispatching = true;
-  fetch(eventsTrackUrl, {
-    method: 'post',
-    timeout: 1000 * 20,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: _JSON$stringify({
-      events: events
-    })
-  }).then(function (response) {
-    return response.json();
-  }).then(function (response) {
-    var _context3;
-
-    dispatching = false;
-
-    if (dispatchRetryInterval) {
-      clearInterval(dispatchRetryInterval);
-      dispatchRetryInterval = null;
-    }
-
-    _forEachInstanceProperty(_context3 = response.events).call(_context3, function (resEvent) {
-      if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
-        pool = _filterInstanceProperty(pool).call(pool, function (poolEvent) {
-          return poolEvent._i !== resEvent.id;
-        });
-      } else {
-        nacks++;
-      }
-    }); // Keep dispatching until the pool size reaches a sane level.
-
-
-    if (pool.length >= dispatchLimit && nacks === 0) {
-      dispatch(eventsTrackUrl);
-    }
-  }).catch(function (err) {
-    dispatching = false; // Try dispatching again in 20 seconds, if we aren't already trying
-
-    if (!dispatchRetryInterval) {
-      console.warn("We're gonna keep trying, but there was an error while dispatching events:", err);
-      dispatchRetryInterval = _setInterval(function () {
-        return dispatch(eventsTrackUrl);
-      }, 20000);
-    }
-  });
-}, 4000);
-
-var EventsKit = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Tracker: Tracker
 });
 
-var formatUnit = function formatUnit(unit) {
-  if (unit == null) {
-    return 0;
-  } else if (typeof unit === 'number') {
-    return unit + 'px';
-  } else if (typeof unit === 'string') {
-    return unit.replace('dp', 'px');
-  } else {
-    return 0;
-  }
-};
-var escapeAttrValue = function escapeAttrValue(value) {
-  if (typeof value === 'string') {
-    return value.replace(/"/g, '&quot;');
-  }
+function formatUnit(unit) {
+  if (!unit) return 0;
+  if (typeof unit === 'number') return unit + 'px';
+  if (typeof unit === 'string') return unit.replace('dp', 'px');
+  return 0;
+}
 
-  return value;
-};
-var isDefinedStr = function isDefinedStr(value) {
+function escapeAttrValue(value) {
+  return typeof value === 'string' ? value.replace(/"/g, '&quot;') : value;
+}
+
+function isDefinedStr(value) {
   return typeof value === 'string' && value.length > 0;
-};
-var escapeHTML = function escapeHTML() {
-  var unsafe = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-};
-var getShadow = function getShadow(view) {
-  if (isDefinedStr(view.shadow_color)) {
-    var dx = typeof view.shadow_dx === 'number' ? view.shadow_dx : 0;
-    var dy = typeof view.shadow_dy === 'number' ? view.shadow_dy : 0;
-    var radius = typeof view.shadow_radius === 'number' ? view.shadow_radius : 0;
-    var color = view.shadow_color;
-    return {
-      dx: dx,
-      dy: dy,
-      radius: radius,
-      color: color
-    };
-  }
-};
-var getTransforms = function getTransforms(view) {
-  var transforms = [];
-  var translateX = formatUnit(view.transform_translate_x);
-  var translateY = formatUnit(view.transform_translate_y);
+}
 
-  if (translateX !== 0) {
-    transforms.push("translateX(".concat(translateX, ")"));
-  }
+function escapeHTML(unsafe) {
+  return unsafe ? unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;') : '';
+}
 
-  if (translateY !== 0) {
-    transforms.push("translateY(".concat(translateY, ")"));
-  }
-
-  if (typeof view.transform_rotate === 'number' && view.transform_rotate !== 0) {
-    transforms.push("rotate(".concat(view.transform_rotate, "deg)"));
-  }
-
-  if (typeof view.transform_scale === 'number' && view.transform_scale !== 1) {
-    transforms.push("scale(".concat(view.transform_scale, ")"));
-  }
-
-  return transforms;
-};
-var parseSpans = function parseSpans(text) {
-  var spans = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+function formatSpans(text, spans) {
   var result = [];
 
   if (spans.length === 0) {
@@ -1527,11 +589,11 @@ var parseSpans = function parseSpans(text) {
     });
   }
 
-  _forEachInstanceProperty(spans).call(spans, function (span, i) {
-    var startIndex = span.start;
+  for (var i = 0; i < spans.length; i++) {
+    var span = spans[i];
     var endIndex = span.end;
     result.push({
-      text: _sliceInstanceProperty(text).call(text, startIndex, endIndex),
+      text: _sliceInstanceProperty(text).call(text, span.start, endIndex),
       span: span
     });
 
@@ -1546,289 +608,57 @@ var parseSpans = function parseSpans(text) {
         text: _sliceInstanceProperty(text).call(text, endIndex, spans[i + 1].start)
       });
     }
-  });
-
-  return result;
-};
-var getTextShadow = function getTextShadow(view) {
-  if (isDefinedStr(view.text_shadow_color)) {
-    var dx = typeof view.text_shadow_dx === 'number' ? view.text_shadow_dx : 0;
-    var dy = typeof view.text_shadow_dy === 'number' ? view.text_shadow_dy : 0;
-    var radius = typeof view.text_shadow_radius === 'number' ? view.text_shadow_radius : 0;
-    var color = view.text_shadow_color;
-    return {
-      dx: dx,
-      dy: dy,
-      radius: radius,
-      color: color
-    };
-  }
-};
-var loadFonts = function loadFonts() {
-  var fontAssets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var styleEl = document.createElement('style');
-
-  for (var key in fontAssets) {
-    var _context, _context2;
-
-    var value = fontAssets[key];
-
-    var urls = _mapInstanceProperty(_context = value.src).call(_context, function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-          url = _ref2[1];
-
-      return "url('".concat(url, "')");
-    }).join(', ');
-
-    styleEl.appendChild(document.createTextNode(_concatInstanceProperty(_context2 = "@font-face { font-family: '".concat(key, "'; font-display: swap; src: ")).call(_context2, urls, "; }")));
   }
 
-  document.head.appendChild(styleEl);
-};
+  return result.reduce(function (memo, item) {
+    var _item$span;
 
-function _createSuper$9(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$9(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+    var escapedText = escapeHTML(item.text || '');
 
-function _isNativeReflectConstruct$9() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-var Incito = /*#__PURE__*/function (_MicroEvent) {
-  _inherits(Incito, _MicroEvent);
-
-  var _super = _createSuper$9(Incito);
-
-  function Incito(containerEl, _ref) {
-    var _this;
-
-    var _ref$incito = _ref.incito,
-        incito = _ref$incito === void 0 ? {} : _ref$incito;
-
-    _classCallCheck(this, Incito);
-
-    _this = _super.call(this);
-    _this.containerEl = containerEl;
-    _this.incito = incito;
-    _this.el = document.createElement('div');
-    _this.ids = {};
-    _this.sections = [];
-    _this.canLazyload = 'IntersectionObserver' in window;
-
-    _this.render();
-
-    return _this;
-  }
-
-  _createClass(Incito, [{
-    key: "render",
-    value: function render() {
-      var theme = this.incito.theme || {};
-      loadFonts(this.incito.font_assets);
-      this.el.dataset.readme = 'Incito by Tjek (https://incito.io)';
-      this.el.className = 'incito';
-
-      if (_Array$isArray(theme.font_family)) {
-        var _context;
-
-        this.el.style.fontFamily = _filterInstanceProperty(_context = theme.font_family).call(_context, function (v, i, a) {
-          return _indexOfInstanceProperty(a).call(a, v) === i;
-        }).join(', ');
+    if ((_item$span = item.span) != null && _item$span.name) {
+      if (item.span.name === 'link' && item.span.url) {
+        return memo + '<a href="' + encodeURI(item.span.url) + '" rel="external" target="_blank">' + escapedText + '</a>';
       }
 
-      if (isDefinedStr(theme.background_color)) {
-        this.el.style.backgroundColor = theme.background_color;
-      }
-
-      if (isDefinedStr(theme.text_color)) {
-        this.el.style.color = theme.text_color;
-      }
-
-      if (isDefinedStr(theme.style)) {
-        this.styleEl = document.createElement('style');
-        this.styleEl.innerText = theme.style;
-        document.head.appendChild(this.styleEl);
-      }
-
-      if (typeof theme.line_spacing_multiplier === 'number') {
-        this.el.style.lineHeight = theme.line_spacing_multiplier;
-      } // By setting the language we help the browser with stuff like hyphenation.
-
-
-      if (this.incito.locale != null) {
-        this.el.setAttribute('lang', this.incito.locale);
-      }
-
-      this.el.innerHTML = this.renderHtml(this.incito.root_view);
-      this.containerEl.appendChild(this.el);
-
-      if (this.canLazyload) {
-        this.enableLazyloading();
-      }
+      return memo + '<span data-name="' + item.span.name + '">' + escapedText + '</span>';
     }
-  }, {
-    key: "start",
-    value: function start() {
-      this.el.addEventListener('click', function (e) {
-        var el = closest(e.target, '.incito__view [data-link]');
-        var link = el ? el.dataset.link : null;
 
-        if (isDefinedStr(link)) {
-          window.open(link, '_blank');
-        }
-      });
+    return memo + escapedText;
+  }, '');
+}
 
-      if (this.canLazyload) {
-        this.observeElements(this.el);
-      }
+var matches = typeof Element !== 'undefined' && (Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
 
-      this.trigger('started');
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      if (this.lazyObserver) {
-        this.lazyObserver.disconnect();
-      }
+function closest(el, s) {
+  do {
+    if (matches.call(el, s)) return el;
+    el = el.parentElement || el.parentNode;
+  } while (el !== null && el.nodeType === 1);
 
-      if (this.videoObserver) {
-        this.videoObserver.disconnect();
-      }
+  return null;
+}
 
-      this.containerEl.removeChild(this.el);
+var flexAlignItemModes = ['stretch', 'center', 'flex-start', 'flex-end', 'baseline'];
+var flexJustifyModes = ['flex-start', 'flex-end', 'center', 'space-between', 'space-around'];
+var flexDirectionModes = ['row', 'column'];
+var backgroundTileModes = ['repeat_x', 'repeat_y', 'repeat'];
+var strokeStyles = ['solid', 'dotted', 'dashed'];
 
-      if (this.styleEl) {
-        this.styleEl.parentNode.removeChild(this.styleEl);
-      }
+function renderView(view, canLazyload) {
+  var tagName = 'div';
+  var contents;
+  var classNames = ['incito__view'];
+  var styles = {};
+  var attrs = {};
 
-      this.trigger('destroyed');
-    }
-  }, {
-    key: "observeElements",
-    value: function observeElements(el) {
-      var _context2,
-          _this2 = this,
-          _context3;
-
-      _forEachInstanceProperty(_context2 = el.querySelectorAll('.incito--lazy')).call(_context2, function (el) {
-        _this2.lazyObserver.observe(el);
-      });
-
-      _forEachInstanceProperty(_context3 = el.querySelectorAll('.incito__video-view[data-autoplay=true]')).call(_context3, function (el) {
-        _this2.videoObserver.observe(el);
-      });
-    }
-  }, {
-    key: "loadEl",
-    value: function loadEl(el) {
-      var _this3 = this;
-
-      if (el.tagName.toLowerCase() === 'video' && !el.dataset.isLazyloaded) {
-        var sourceEl = document.createElement('source');
-        sourceEl.setAttribute('src', el.dataset.src);
-        sourceEl.setAttribute('type', el.dataset.mime);
-        el.appendChild(sourceEl);
-        el.load();
-        el.dataset.isLazyloaded = true;
-      } else if (el.classList.contains('incito__incito-embed-view')) {
-        var url = el.dataset.src;
-        var method = el.dataset.method;
-        var body = el.dataset.body;
-        fetch(url, {
-          method: method || 'get',
-          body: body ? JSON.parse(unescape(body)) : null
-        }).then(function (res) {
-          if (res.status === 200) {
-            return res.json();
-          }
-        }).then(function (res) {
-          el.innerHTML = _this3.renderHtml(res);
-
-          _this3.observeElements(el);
-        });
-      } else if (el.dataset.bg) {
-        el.style.backgroundImage = "url(".concat(el.dataset.bg, ")");
-      } else if (el.dataset.src) {
-        el.src = el.dataset.src;
-      }
-    }
-  }, {
-    key: "enableLazyloading",
-    value: function enableLazyloading() {
-      var _this4 = this;
-
-      this.lazyObserver = new IntersectionObserver(function (entries) {
-        _forEachInstanceProperty(entries).call(entries, function (entry) {
-          if (entry.isIntersecting) {
-            _this4.loadEl(entry.target);
-
-            _this4.lazyObserver.unobserve(entry.target);
-          }
-        });
-      }, {
-        rootMargin: '500px 0px'
-      });
-      this.videoObserver = new IntersectionObserver(function (entries) {
-        _forEachInstanceProperty(entries).call(entries, function (entry) {
-          if (entry.isIntersecting) {
-            var autoplayState = entry.target.dataset.autoplayState;
-
-            _this4.loadEl(entry.target);
-
-            _this4.lazyObserver.unobserve(entry.target);
-
-            if (!autoplayState || autoplayState === 'paused') {
-              entry.target.dataset.autoplayState = 'playing';
-              entry.target.play();
-            }
-          } else if (!entry.target.paused) {
-            entry.target.dataset.autoplayState = 'paused';
-            entry.target.pause();
-          }
-        });
-      }, {
-        threshold: 0.25
-      });
-    }
-  }, {
-    key: "renderView",
-    value: function renderView(view) {
-      var _context12;
-
-      var tagName = 'div';
-      var contents;
-      var classNames = ['incito__view'];
-      var styles = {};
-      var attrs = {};
-
-      if (view.view_name === 'TextView') {
+  switch (view.view_name) {
+    case 'TextView':
+      {
         tagName = 'p';
         classNames.push('incito__text-view');
         var textStyles = (view.text_style || '').split('|');
         var text = view.text;
-
-        if (_Array$isArray(view.spans) && view.spans.length > 0) {
-          var parsedText = parseSpans(text, view.spans);
-          text = _mapInstanceProperty(parsedText).call(parsedText, function (item) {
-            var _item$span, _item$span2;
-
-            var escapedText = escapeHTML(item.text || '');
-
-            if (((_item$span = item.span) === null || _item$span === void 0 ? void 0 : _item$span.name) === 'link' && item.span.url != null) {
-              var _context4;
-
-              return _concatInstanceProperty(_context4 = "<a href=\"".concat(encodeURI(item.span.url), "\" rel=\"external\" target=\"_blank\">")).call(_context4, escapedText, "</a>");
-            }
-
-            if (((_item$span2 = item.span) === null || _item$span2 === void 0 ? void 0 : _item$span2.name) != null) {
-              var _context5;
-
-              var spanName = item.span.name;
-              return _concatInstanceProperty(_context5 = "<span data-name=\"".concat(spanName, "\">")).call(_context5, escapedText, "</span>");
-            }
-
-            return escapedText;
-          });
-          text = text.join('');
-        } else {
-          text = escapeHTML(text);
-        }
+        text = Array.isArray(view.spans) && view.spans.length > 0 ? formatSpans(text, view.spans) : escapeHTML(text);
 
         if (view.text_prevent_widow) {
           text = text.replace(/&nbsp;([^\s]+)$/, ' $1').replace(/\s([^\s]+)\s*$/, '&nbsp;$1');
@@ -1836,7 +666,7 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
 
         contents = text.replace(/\n/g, '<br>');
 
-        if (_Array$isArray(view.font_family) && view.font_family.length > 0) {
+        if (Array.isArray(view.font_family) && view.font_family.length > 0) {
           styles['font-family'] = view.font_family.join(', ');
         }
 
@@ -1848,30 +678,30 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
           styles['line-height'] = view.line_spacing_multiplier;
         }
 
-        if (view.text_color != null) {
+        if (view.text_color) {
           styles.color = view.text_color;
         }
 
-        if (_indexOfInstanceProperty(textStyles).call(textStyles, 'bold') !== -1) {
+        if (textStyles.indexOf('bold') !== -1) {
           styles['font-weight'] = 'bold';
         }
 
-        if (_indexOfInstanceProperty(textStyles).call(textStyles, 'italic') !== -1) {
+        if (textStyles.indexOf('italic') !== -1) {
           styles['font-style'] = 'italic';
         }
 
-        if (_Array$isArray(view.text_decoration_line)) {
+        if (Array.isArray(view.text_decoration_line)) {
           styles['text-decoration-line'] = view.text_decoration_line.join(' ');
         }
 
-        var textShadow = getTextShadow(view);
-
         if (isDefinedStr(view.text_shadow)) {
           styles['text-shadow'] = view.text_shadow;
-        } else if (textShadow != null) {
-          var _context6, _context7, _context8;
-
-          styles['text-shadow'] = _concatInstanceProperty(_context6 = _concatInstanceProperty(_context7 = _concatInstanceProperty(_context8 = "".concat(textShadow.dx, "px ")).call(_context8, textShadow.dy, "px ")).call(_context7, textShadow.radius, "px ")).call(_context6, textShadow.color);
+        } else if (isDefinedStr(view.text_shadow_color)) {
+          var dx = typeof view.text_shadow_dx === 'number' ? view.text_shadow_dx : 0;
+          var dy = typeof view.text_shadow_dy === 'number' ? view.text_shadow_dy : 0;
+          var radius = typeof view.text_shadow_radius === 'number' ? view.text_shadow_radius : 0;
+          var color = view.text_shadow_color;
+          styles['text-shadow'] = [dx, dy, radius, color].join('px ');
         }
 
         if (view.text_alignment === 'left') {
@@ -1893,24 +723,32 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         if (view.text_all_caps === true) {
           styles['text-transform'] = 'uppercase';
         }
-      } else if (view.view_name === 'ImageView') {
+
+        break;
+      }
+
+    case 'ImageView':
+      {
         tagName = 'img';
         classNames.push('incito__image-view');
         attrs.onerror = "this.style.display='none'";
+        var src = String(new _URL(view.src));
 
         if (isDefinedStr(view.src)) {
-          if (this.canLazyload) {
+          if (canLazyload) {
             classNames.push('incito--lazy');
-            attrs['data-src'] = view.src;
+            attrs['data-src'] = src;
           } else {
-            attrs.src = view.src;
+            attrs.src = src;
           }
         }
 
-        if (isDefinedStr(view.label)) {
-          attrs['alt'] = view.label;
-        }
-      } else if (view.view_name === 'VideoView') {
+        if (isDefinedStr(view.label)) attrs['alt'] = view.label;
+        break;
+      }
+
+    case 'VideoView':
+      {
         tagName = 'video';
         classNames.push('incito__video-view');
         attrs.muted = '';
@@ -1918,8 +756,10 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
         attrs.preload = 'none';
         attrs.poster = 'noposter';
 
-        if (this.canLazyload) {
-          attrs['data-src'] = view.src;
+        var _src = String(new _URL(view.src));
+
+        if (canLazyload) {
+          attrs['data-src'] = _src;
           attrs['data-mime'] = view.mime;
 
           if (view.autoplay === true) {
@@ -1934,485 +774,639 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
             attrs['loop'] = '';
           }
         } else {
-          attrs.src = view.src;
+          attrs.src = _src;
           attrs.controls = '';
         }
 
-        if (this.canLazyload) {
-          classNames.push('incito--lazy');
-        }
-      } else if (view.view_name === 'HTMLView') {
-        if (isDefinedStr(view.style)) {
-          var _context9, _context10;
+        if (canLazyload) classNames.push('incito--lazy');
+        break;
+      }
 
-          _forEachInstanceProperty(_context9 = _trimInstanceProperty(_context10 = view.style).call(_context10).split(';')).call(_context9, function (style) {
+    case 'HTMLView':
+      {
+        if (isDefinedStr(view.style)) {
+          var _context;
+
+          _trimInstanceProperty(_context = view.style).call(_context).split(';').forEach(function (style) {
             var _style$trim$split = _trimInstanceProperty(style).call(style).split(':'),
-                _style$trim$split2 = _slicedToArray(_style$trim$split, 2),
-                key = _style$trim$split2[0],
-                value = _style$trim$split2[1];
+                key = _style$trim$split[0],
+                value = _style$trim$split[1];
 
             styles[key] = value;
           });
         }
-      } else if (view.view_name === 'VideoEmbedView' || view.view_name === 'HTMLEmbedView') {
+
+        break;
+      }
+
+    case 'VideoEmbedView':
+    case 'HTMLEmbedView':
+      {
         tagName = 'iframe';
         classNames.push('incito__html-embed-view');
-        attrs.sandbox = 'allow-scripts allow-same-origin';
+        attrs.sandbox = 'allow-scripts';
         attrs.allowfullscreen = '';
 
-        if (this.canLazyload) {
+        var _src2 = String(new _URL(view.src));
+
+        if (canLazyload) {
           classNames.push('incito--lazy');
-          attrs['data-src'] = view.src;
+          attrs['data-src'] = _src2;
         } else {
-          attrs.src = view.src;
+          attrs.src = _src2;
         }
-      } else if (view.view_name === 'IncitoEmbedView') {
+
+        break;
+      }
+
+    case 'IncitoEmbedView':
+      {
         classNames.push('incito__incito-embed-view');
 
-        if (this.canLazyload) {
+        if (canLazyload) {
           classNames.push('incito--lazy');
-          attrs['data-src'] = view.src;
+          attrs['data-src'] = String(new _URL(view.src));
 
           if (view.method === 'get' || view.method === 'post') {
             attrs['data-method'] = view.method;
           }
 
           if (view.body) {
-            attrs['data-body'] = escape(_JSON$stringify(view.body));
+            attrs['data-body'] = encodeURIComponent(_JSON$stringify(view.body));
           }
         }
-      } else if (view.view_name === 'AbsoluteLayout') {
+
+        break;
+      }
+
+    case 'AbsoluteLayout':
+      {
         classNames.push('incito__absolute-layout-view');
-      } else if (view.view_name === 'FlexLayout') {
-        var flexAlignItemModes = ['stretch', 'center', 'flex-start', 'flex-end', 'baseline'];
-        var flexJustifyModes = ['flex-start', 'flex-end', 'center', 'space-between', 'space-around'];
-        var flexDirectionModes = ['row', 'column'];
+        break;
+      }
+
+    case 'FlexLayout':
+      {
         classNames.push('incito__flex-layout-view');
         styles.display = 'flex';
 
-        if (_indexOfInstanceProperty(flexAlignItemModes).call(flexAlignItemModes, view.layout_flex_align_items) !== -1) {
-          styles['align-items'] = view.layout_flex_align_items;
-          styles['ms-align-items'] = view.layout_flex_align_items;
+        if (flexAlignItemModes.indexOf(view.layout_flex_align_items) !== -1) {
+          styles['align-items'] = styles['ms-align-items'] = view.layout_flex_align_items;
         }
 
-        if (_indexOfInstanceProperty(flexJustifyModes).call(flexJustifyModes, view.layout_flex_justify_content) !== -1) {
-          styles['justify-content'] = view.layout_flex_justify_content;
-          styles['ms-flex-pack'] = view.layout_flex_justify_content;
+        if (flexJustifyModes.indexOf(view.layout_flex_justify_content) !== -1) {
+          styles['justify-content'] = styles['ms-flex-pack'] = view.layout_flex_justify_content;
         }
 
-        if (_indexOfInstanceProperty(flexDirectionModes).call(flexDirectionModes, view.layout_flex_direction) !== -1) {
-          styles['flex-direction'] = view.layout_flex_direction;
-          styles['ms-flex-direction'] = view.layout_flex_direction;
+        if (flexDirectionModes.indexOf(view.layout_flex_direction) !== -1) {
+          styles['flex-direction'] = styles['ms-flex-direction'] = view.layout_flex_direction;
         }
+
+        break;
       }
+  }
 
-      if (isDefinedStr(view.id)) {
-        attrs['data-id'] = escapeAttrValue(view.id);
-      }
+  if (isDefinedStr(view.id)) {
+    attrs['data-id'] = escapeAttrValue(view.id);
+  }
 
-      if (isDefinedStr(view.role)) {
-        attrs['data-role'] = escapeAttrValue(view.role);
-      }
+  if (isDefinedStr(view.role)) {
+    attrs['data-role'] = escapeAttrValue(view.role);
+  }
 
-      if (isDefinedStr(view.accessibility_label)) {
-        attrs['aria-label'] = escapeAttrValue(view.accessibility_label);
-      }
+  if (isDefinedStr(view.accessibility_label)) {
+    attrs['aria-label'] = escapeAttrValue(view.accessibility_label);
+  }
 
-      if (view.accessibility_hidden === true) {
-        attrs['aria-hidden'] = true;
-      }
+  if (view.accessibility_hidden === true) {
+    attrs['aria-hidden'] = true;
+  }
 
-      if (_Array$isArray(view.feature_labels)) {
-        var _context11;
+  if (Array.isArray(view.feature_labels)) {
+    var _context2;
 
-        var featureLabels = _filterInstanceProperty(_context11 = view.feature_labels).call(_context11, function (featureLabel) {
-          return /^[a-z_-]{1,14}$/.test(featureLabel);
-        });
+    var featureLabels = _filterInstanceProperty(_context2 = view.feature_labels).call(_context2, function (featureLabel) {
+      return /^[a-z_-]{1,14}$/.test(featureLabel);
+    });
 
-        if (featureLabels.length) {
-          attrs['data-feature-labels'] = featureLabels.join(',');
-        }
-      }
-
-      if (isDefinedStr(view.title)) {
-        attrs['title'] = escapeAttrValue(view.title);
-      }
-
-      if (view.gravity) {
-        attrs['data-gravity'] = view.gravity;
-      }
-
-      if (isDefinedStr(view.link)) {
-        attrs['data-link'] = view.link;
-      }
-
-      if (view.layout_width === 'match_parent') {
-        styles.width = '100%';
-      } else if (view.layout_width === 'wrap_content') {
-        styles.display = 'inline-block';
-      } else if (view.layout_width != null) {
-        styles.width = formatUnit(view.layout_width);
-      }
-
-      if (view.layout_height === 'match_parent') {
-        styles.height = '100%';
-      } else if (view.layout_height === 'wrap_content') {
-        styles.height = 'auto';
-      } else if (view.layout_height != null) {
-        styles.height = formatUnit(view.layout_height);
-      }
-
-      if (view.min_width != null) {
-        styles['min-width'] = formatUnit(view.min_width);
-      }
-
-      if (view.max_width != null) {
-        styles['max-width'] = formatUnit(view.max_width);
-      }
-
-      if (view.min_height != null) {
-        styles['min-height'] = formatUnit(view.min_height);
-      }
-
-      if (view.max_height != null) {
-        styles['max-height'] = formatUnit(view.max_height);
-      }
-
-      if (view.layout_top != null) {
-        styles.top = formatUnit(view.layout_top);
-      }
-
-      if (view.layout_left != null) {
-        styles.left = formatUnit(view.layout_left);
-      }
-
-      if (view.layout_right != null) {
-        styles.right = formatUnit(view.layout_right);
-      }
-
-      if (view.layout_bottom != null) {
-        styles.bottom = formatUnit(view.layout_bottom);
-      }
-
-      if (view.background_color) {
-        styles['background-color'] = view.background_color;
-      }
-
-      if (isDefinedStr(view.background_image)) {
-        if (this.canLazyload) {
-          classNames.push('incito--lazy');
-          attrs['data-bg'] = view.background_image;
-        } else {
-          styles['background-image'] = "url(".concat(view.background_image, ")");
-        }
-      }
-
-      if (_indexOfInstanceProperty(_context12 = ['repeat_x', 'repeat_y', 'repeat']).call(_context12, view.background_tile_mode) !== -1) {
-        styles['background-repeat'] = view.background_tile_mode.replace('_', '-');
-      }
-
-      if (isDefinedStr(view.background_image_position)) {
-        styles['background-position'] = view.background_image_position.replace('_', ' ');
-      }
-
-      if (view.background_image_scale_type === 'center_crop') {
-        styles['background-size'] = 'cover';
-      } else if (view.background_image_scale_type === 'center_inside') {
-        styles['background-size'] = 'contain';
-      }
-
-      if (view.layout_margin != null) {
-        styles.margin = formatUnit(view.layout_margin);
-      }
-
-      if (view.layout_margin_top != null) {
-        styles['margin-top'] = formatUnit(view.layout_margin_top);
-      }
-
-      if (view.layout_margin_left != null) {
-        styles['margin-left'] = formatUnit(view.layout_margin_left);
-      }
-
-      if (view.layout_margin_right != null) {
-        styles['margin-right'] = formatUnit(view.layout_margin_right);
-      }
-
-      if (view.layout_margin_bottom != null) {
-        styles['margin-bottom'] = formatUnit(view.layout_margin_bottom);
-      }
-
-      if (view.padding != null) {
-        styles.padding = formatUnit(view.padding);
-      }
-
-      if (view.padding_top != null) {
-        styles['padding-top'] = formatUnit(view.padding_top);
-      }
-
-      if (view.padding_left != null) {
-        styles['padding-left'] = formatUnit(view.padding_left);
-      }
-
-      if (view.padding_right != null) {
-        styles['padding-right'] = formatUnit(view.padding_right);
-      }
-
-      if (view.padding_bottom != null) {
-        styles['padding-bottom'] = formatUnit(view.padding_bottom);
-      }
-
-      if (view.corner_radius != null) {
-        styles['border-radius'] = formatUnit(view.corner_radius);
-      }
-
-      if (view.corner_top_left_radius != null) {
-        styles['border-top-left-radius'] = formatUnit(view.corner_top_left_radius);
-      }
-
-      if (view.corner_top_right_radius != null) {
-        styles['border-top-right-radius'] = formatUnit(view.corner_top_right_radius);
-      }
-
-      if (view.corner_bottom_left_radius != null) {
-        styles['border-bottom-left-radius'] = formatUnit(view.corner_bottom_left_radius);
-      }
-
-      if (view.corner_bottom_right_radius != null) {
-        styles['border-bottom-right-radius'] = formatUnit(view.corner_bottom_right_radius);
-      } // Clip children.
-
-
-      if (view.clip_children === false) {
-        styles['overflow'] = 'visible';
-      }
-
-      var shadow = getShadow(view);
-
-      if (shadow != null) {
-        var _context13, _context14, _context15;
-
-        styles['box-shadow'] = _concatInstanceProperty(_context13 = _concatInstanceProperty(_context14 = _concatInstanceProperty(_context15 = "".concat(shadow.dx, "px ")).call(_context15, shadow.dy, "px ")).call(_context14, shadow.radius, "px ")).call(_context13, shadow.color);
-      }
-
-      var strokeStyles = ['solid', 'dotted', 'dashed'];
-
-      if (view.stroke_width != null) {
-        styles['border-width'] = formatUnit(view.stroke_width);
-      }
-
-      if (view.stroke_color != null) {
-        styles['border-color'] = view.stroke_color;
-      }
-
-      if (_indexOfInstanceProperty(strokeStyles).call(strokeStyles, view.stroke_style) !== -1) {
-        styles['border-style'] = view.stroke_style;
-      }
-
-      if (view.stroke_top_width != null) {
-        styles['border-top-width'] = formatUnit(view.stroke_top_width);
-      }
-
-      if (view.stroke_top_color != null) {
-        styles['border-top-color'] = view.stroke_top_color;
-      }
-
-      if (view.stroke_left_width != null) {
-        styles['border-left-width'] = formatUnit(view.stroke_left_width);
-      }
-
-      if (view.stroke_left_color != null) {
-        styles['border-left-color'] = view.stroke_left_color;
-      }
-
-      if (view.stroke_right_width != null) {
-        styles['border-right-width'] = formatUnit(view.stroke_right_width);
-      }
-
-      if (view.stroke_right_color != null) {
-        styles['border-right-color'] = view.stroke_right_color;
-      }
-
-      if (view.stroke_bottom_width != null) {
-        styles['border-bottom-width'] = formatUnit(view.stroke_bottom_width);
-      }
-
-      if (view.stroke_bottom_color != null) {
-        styles['border-bottom-color'] = view.stroke_bottom_color;
-      }
-
-      if (typeof view.layout_flex_shrink === 'number') {
-        styles['flex-shrink'] = view.layout_flex_shrink;
-        styles['ms-flex-shrink'] = view.layout_flex_shrink;
-      }
-
-      if (typeof view.layout_flex_grow === 'number') {
-        styles['flex-grow'] = view.layout_flex_grow;
-        styles['ms-flex-grow'] = view.layout_flex_grow;
-      }
-
-      if (view.layout_flex_basis != null) {
-        styles['flex-basis'] = formatUnit(view.layout_flex_basis);
-        styles['ms-flex-basis'] = formatUnit(view.layout_flex_basis);
-      }
-
-      var transforms = getTransforms(view);
-
-      if (transforms.length > 0) {
-        styles.transform = transforms.join(' ');
-      } // Transform origin.
-
-
-      if (_Array$isArray(view.transform_origin) && view.transform_origin.length === 2) {
-        styles['transform-origin'] = [formatUnit(view.transform_origin[0]), formatUnit(view.transform_origin[1])].join(' ');
-      }
-
-      return {
-        tagName: tagName,
-        contents: contents,
-        classNames: classNames,
-        styles: styles,
-        attrs: attrs
-      };
+    if (featureLabels.length) {
+      attrs['data-feature-labels'] = featureLabels.join(',');
     }
-  }, {
-    key: "renderHtml",
-    value: function renderHtml(rootView) {
-      var _this5 = this;
+  }
 
-      var html = '';
+  if (isDefinedStr(view.title)) {
+    attrs['title'] = escapeAttrValue(view.title);
+  }
 
-      var iter = function iter(view) {
-        try {
-          var _this5$renderView = _this5.renderView(view),
-              tagName = _this5$renderView.tagName,
-              contents = _this5$renderView.contents,
-              classNames = _this5$renderView.classNames,
-              styles = _this5$renderView.styles,
-              attrs = _this5$renderView.attrs;
+  if (view.gravity) {
+    attrs['data-gravity'] = view.gravity;
+  }
 
-          if (view.id != null && typeof view.meta === 'object') {
-            _this5.ids[view.id] = view.meta;
-          }
+  if (isDefinedStr(view.link)) {
+    attrs['data-link'] = view.link;
+  }
 
-          if (view.role === 'section') {
-            _this5.sections.push({
-              id: view.id,
-              meta: view.meta
-            });
-          }
+  if (view.layout_width === 'match_parent') {
+    styles.width = '100%';
+  } else if (view.layout_width === 'wrap_content') {
+    styles.display = 'inline-block';
+  } else if (view.layout_width != null) {
+    styles.width = formatUnit(view.layout_width);
+  }
 
-          html += "<".concat(tagName);
-          html += " class=\"".concat(classNames.join(' '), "\"");
+  if (view.layout_height === 'match_parent') {
+    styles.height = '100%';
+  } else if (view.layout_height === 'wrap_content') {
+    styles.height = 'auto';
+  } else if (view.layout_height != null) {
+    styles.height = formatUnit(view.layout_height);
+  }
 
-          for (var key in attrs) {
-            var _context16;
+  if (view.min_width != null) {
+    styles['min-width'] = formatUnit(view.min_width);
+  }
 
-            var value = attrs[key];
-            html += _concatInstanceProperty(_context16 = " ".concat(key, "=\"")).call(_context16, value, "\"");
-          }
+  if (view.max_width != null) {
+    styles['max-width'] = formatUnit(view.max_width);
+  }
 
-          html += ' style="';
+  if (view.min_height != null) {
+    styles['min-height'] = formatUnit(view.min_height);
+  }
 
-          for (var _key in styles) {
-            var _context17;
+  if (view.max_height != null) {
+    styles['max-height'] = formatUnit(view.max_height);
+  }
 
-            var _value = styles[_key];
-            html += _concatInstanceProperty(_context17 = "".concat(_key, ":")).call(_context17, _value, "; ");
-          }
+  if (view.layout_top != null) {
+    styles.top = formatUnit(view.layout_top);
+  }
 
-          html += '"';
+  if (view.layout_left != null) {
+    styles.left = formatUnit(view.layout_left);
+  }
 
-          for (var _key2 in attrs) {
-            var _context18;
+  if (view.layout_right != null) {
+    styles.right = formatUnit(view.layout_right);
+  }
 
-            var _value2 = attrs[_key2];
-            html += _concatInstanceProperty(_context18 = " ".concat(_key2, "=\"")).call(_context18, _value2, "\"");
-          }
+  if (view.layout_bottom != null) {
+    styles.bottom = formatUnit(view.layout_bottom);
+  }
 
-          html += '>';
+  if (view.background_color) {
+    styles['background-color'] = view.background_color;
+  }
 
-          if (_Array$isArray(view.child_views)) {
-            var _context19;
-
-            _forEachInstanceProperty(_context19 = view.child_views).call(_context19, function (childView) {
-              iter(childView);
-            });
-          }
-
-          if (contents) {
-            html += contents;
-          }
-
-          html += "</".concat(tagName, ">");
-        } catch (error) {}
-      };
-
-      iter(rootView);
-      return html;
+  if (isDefinedStr(view.background_image)) {
+    if (canLazyload) {
+      classNames.push('incito--lazy');
+      attrs['data-bg'] = view.background_image;
+    } else {
+      styles['background-image'] = "url(".concat(view.background_image, ")");
     }
-  }]);
+  }
 
-  return Incito;
+  if (backgroundTileModes.indexOf(view.background_tile_mode) !== -1) {
+    styles['background-repeat'] = view.background_tile_mode.replace('_', '-');
+  }
+
+  if (isDefinedStr(view.background_image_position)) {
+    styles['background-position'] = view.background_image_position.replace('_', ' ');
+  }
+
+  if (view.background_image_scale_type === 'center_crop') {
+    styles['background-size'] = 'cover';
+  } else if (view.background_image_scale_type === 'center_inside') {
+    styles['background-size'] = 'contain';
+  }
+
+  if (view.layout_margin != null) {
+    styles.margin = formatUnit(view.layout_margin);
+  }
+
+  if (view.layout_margin_top != null) {
+    styles['margin-top'] = formatUnit(view.layout_margin_top);
+  }
+
+  if (view.layout_margin_left != null) {
+    styles['margin-left'] = formatUnit(view.layout_margin_left);
+  }
+
+  if (view.layout_margin_right != null) {
+    styles['margin-right'] = formatUnit(view.layout_margin_right);
+  }
+
+  if (view.layout_margin_bottom != null) {
+    styles['margin-bottom'] = formatUnit(view.layout_margin_bottom);
+  }
+
+  if (view.padding != null) {
+    styles.padding = formatUnit(view.padding);
+  }
+
+  if (view.padding_top != null) {
+    styles['padding-top'] = formatUnit(view.padding_top);
+  }
+
+  if (view.padding_left != null) {
+    styles['padding-left'] = formatUnit(view.padding_left);
+  }
+
+  if (view.padding_right != null) {
+    styles['padding-right'] = formatUnit(view.padding_right);
+  }
+
+  if (view.padding_bottom != null) {
+    styles['padding-bottom'] = formatUnit(view.padding_bottom);
+  }
+
+  if (view.corner_radius != null) {
+    styles['border-radius'] = formatUnit(view.corner_radius);
+  }
+
+  if (view.corner_top_left_radius != null) {
+    styles['border-top-left-radius'] = formatUnit(view.corner_top_left_radius);
+  }
+
+  if (view.corner_top_right_radius != null) {
+    styles['border-top-right-radius'] = formatUnit(view.corner_top_right_radius);
+  }
+
+  if (view.corner_bottom_left_radius != null) {
+    styles['border-bottom-left-radius'] = formatUnit(view.corner_bottom_left_radius);
+  }
+
+  if (view.corner_bottom_right_radius != null) {
+    styles['border-bottom-right-radius'] = formatUnit(view.corner_bottom_right_radius);
+  } // Clip children.
+
+
+  if (view.clip_children === false) {
+    styles['overflow'] = 'visible';
+  }
+
+  if (isDefinedStr(view.shadow_color)) {
+    var _dx = typeof view.shadow_dx === 'number' ? view.shadow_dx : 0;
+
+    var _dy = typeof view.shadow_dy === 'number' ? view.shadow_dy : 0;
+
+    var _radius = typeof view.shadow_radius === 'number' ? view.shadow_radius : 0;
+
+    var _color = view.shadow_color;
+    styles['box-shadow'] = [_dx, _dy, _radius, _color].join('px ');
+  }
+
+  if (view.stroke_width != null) {
+    styles['border-width'] = formatUnit(view.stroke_width);
+  }
+
+  if (view.stroke_color) {
+    styles['border-color'] = view.stroke_color;
+  }
+
+  if (strokeStyles.indexOf(view.stroke_style) !== -1) {
+    styles['border-style'] = view.stroke_style;
+  }
+
+  if (view.stroke_top_width != null) {
+    styles['border-top-width'] = formatUnit(view.stroke_top_width);
+  }
+
+  if (view.stroke_top_color) {
+    styles['border-top-color'] = view.stroke_top_color;
+  }
+
+  if (view.stroke_left_width != null) {
+    styles['border-left-width'] = formatUnit(view.stroke_left_width);
+  }
+
+  if (view.stroke_left_color) {
+    styles['border-left-color'] = view.stroke_left_color;
+  }
+
+  if (view.stroke_right_width != null) {
+    styles['border-right-width'] = formatUnit(view.stroke_right_width);
+  }
+
+  if (view.stroke_right_color) {
+    styles['border-right-color'] = view.stroke_right_color;
+  }
+
+  if (view.stroke_bottom_width != null) {
+    styles['border-bottom-width'] = formatUnit(view.stroke_bottom_width);
+  }
+
+  if (view.stroke_bottom_color) {
+    styles['border-bottom-color'] = view.stroke_bottom_color;
+  }
+
+  if (typeof view.layout_flex_shrink === 'number') {
+    styles['flex-shrink'] = styles['ms-flex-shrink'] = view.layout_flex_shrink;
+  }
+
+  if (typeof view.layout_flex_grow === 'number') {
+    styles['flex-grow'] = styles['ms-flex-grow'] = view.layout_flex_grow;
+  }
+
+  if (view.layout_flex_basis != null) {
+    styles['flex-basis'] = styles['ms-flex-basis'] = formatUnit(view.layout_flex_basis);
+  }
+
+  var transforms = [];
+  var translateX = formatUnit(view.transform_translate_x);
+  var translateY = formatUnit(view.transform_translate_y);
+  if (translateX !== 0) transforms.push("translateX(".concat(translateX, ")"));
+  if (translateY !== 0) transforms.push("translateY(".concat(translateY, ")"));
+
+  if (typeof view.transform_rotate === 'number' && view.transform_rotate !== 0) {
+    transforms.push("rotate(".concat(view.transform_rotate, "deg)"));
+  }
+
+  if (typeof view.transform_scale === 'number' && view.transform_scale !== 1) {
+    transforms.push("scale(".concat(view.transform_scale, ")"));
+  }
+
+  if (transforms.length > 0) styles.transform = transforms.join(' '); // Transform origin.
+
+  if (Array.isArray(view.transform_origin) && view.transform_origin.length === 2) {
+    styles['transform-origin'] = formatUnit(view.transform_origin[0]) + ' ' + formatUnit(view.transform_origin[1]);
+  }
+
+  attrs.style = '';
+
+  for (var key in styles) {
+    attrs.style += key + ':' + styles[key] + ';';
+  }
+
+  attrs.class = classNames.join(' ');
+  return {
+    tagName: tagName,
+    contents: contents,
+    attrs: attrs
+  };
+}
+
+var Incito = /*#__PURE__*/function (_MicroEvent) {
+  _inherits(Incito, _MicroEvent);
+
+  function Incito(containerEl, _ref) {
+    var _this;
+
+    var _ref$incito = _ref.incito,
+        incito = _ref$incito === void 0 ? {} : _ref$incito;
+    _this = _MicroEvent.call(this) || this;
+    _this.containerEl = containerEl;
+    _this.incito = incito;
+    _this.el = document.createElement('div');
+    _this.ids = {};
+    _this.sections = [];
+    _this.canLazyload = 'IntersectionObserver' in window;
+
+    _this.render();
+
+    return _this;
+  }
+
+  var _proto = Incito.prototype;
+
+  _proto.render = function render() {
+    var theme = this.incito.theme || {};
+
+    if (this.incito.font_assets) {
+      var styleEl = document.createElement('style');
+
+      for (var key in this.incito.font_assets) {
+        var _context3;
+
+        var src = this.incito.font_assets[key].src;
+
+        var urls = _mapInstanceProperty(src).call(src, function (item) {
+          return "url(\"".concat(item[1], "\")");
+        }).join(', ');
+
+        var rule = _concatInstanceProperty(_context3 = "@font-face { font-family: \"".concat(key, "\"; font-display: swap; src: ")).call(_context3, urls, "; }");
+
+        styleEl.appendChild(document.createTextNode(rule));
+      }
+
+      document.head.appendChild(styleEl);
+    }
+
+    this.el.dataset.readme = 'Incito by Tjek (https://incito.io)';
+    this.el.className = 'incito';
+
+    if (Array.isArray(theme.font_family)) {
+      this.el.style.fontFamily = theme.font_family.join(', ');
+    }
+
+    if (isDefinedStr(theme.background_color)) {
+      this.el.style.backgroundColor = theme.background_color;
+    }
+
+    if (isDefinedStr(theme.text_color)) {
+      this.el.style.color = theme.text_color;
+    }
+
+    if (isDefinedStr(theme.style)) {
+      this.styleEl = document.createElement('style');
+      this.styleEl.innerText = theme.style;
+      document.head.appendChild(this.styleEl);
+    }
+
+    if (typeof theme.line_spacing_multiplier === 'number') {
+      this.el.style.lineHeight = theme.line_spacing_multiplier;
+    } // By setting the language we help the browser with stuff like hyphenation.
+
+
+    if (this.incito.locale) {
+      this.el.setAttribute('lang', this.incito.locale);
+    }
+
+    this.el.innerHTML = this.renderHtml(this.incito.root_view);
+    this.containerEl.appendChild(this.el);
+    if (this.canLazyload) this.enableLazyloading();
+  };
+
+  _proto.start = function start() {
+    this.el.addEventListener('click', function (e) {
+      var el = closest(e.target, '.incito__view [data-link]');
+      var link = el ? el.dataset.link : null;
+      if (isDefinedStr(link)) window.open(link, '_blank');
+    });
+    if (this.canLazyload) this.observeElements(this.el);
+    this.trigger('started', 'a', 'b', 'c');
+  };
+
+  _proto.destroy = function destroy() {
+    if (this.lazyObserver) this.lazyObserver.disconnect();
+    if (this.videoObserver) this.videoObserver.disconnect();
+    this.containerEl.removeChild(this.el);
+    if (this.styleEl) this.styleEl.parentNode.removeChild(this.styleEl);
+    this.trigger('destroyed');
+  };
+
+  _proto.observeElements = function observeElements(el) {
+    var _this2 = this;
+
+    el.querySelectorAll('.incito--lazy').forEach(function (el) {
+      _this2.lazyObserver.observe(el);
+    });
+    el.querySelectorAll('.incito__video-view[data-autoplay=true]').forEach(function (el) {
+      _this2.videoObserver.observe(el);
+    });
+  };
+
+  _proto.loadEl = function loadEl(el) {
+    var _this3 = this;
+
+    if (el.tagName.toLowerCase() === 'video' && !el.dataset.isLazyloaded) {
+      var sourceEl = document.createElement('source');
+      sourceEl.setAttribute('src', el.dataset.src);
+      sourceEl.setAttribute('type', el.dataset.mime);
+      el.appendChild(sourceEl);
+      el.load();
+      el.dataset.isLazyloaded = true;
+    } else if (el.classList.contains('incito__incito-embed-view')) {
+      var _el$dataset = el.dataset,
+          url = _el$dataset.src,
+          _el$dataset$method = _el$dataset.method,
+          method = _el$dataset$method === void 0 ? 'get' : _el$dataset$method,
+          body = _el$dataset.body;
+      fetch(url, {
+        method: method,
+        body: body ? JSON.parse(decodeURIComponent(body)) : null
+      }).then(function (res) {
+        if (res.status === 200) return res.json();
+      }).then(function (res) {
+        el.innerHTML = _this3.renderHtml(res);
+
+        _this3.observeElements(el);
+      });
+    } else if (el.dataset.bg) {
+      el.style.backgroundImage = "url(".concat(el.dataset.bg, ")");
+    } else if (el.dataset.src) {
+      el.src = el.dataset.src;
+    }
+  };
+
+  _proto.enableLazyloading = function enableLazyloading() {
+    var _this4 = this;
+
+    this.lazyObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          _this4.loadEl(entry.target);
+
+          _this4.lazyObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '500px 0px'
+    });
+    this.videoObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var autoplayState = entry.target.dataset.autoplayState;
+
+          _this4.loadEl(entry.target);
+
+          _this4.lazyObserver.unobserve(entry.target);
+
+          if (!autoplayState || autoplayState === 'paused') {
+            entry.target.dataset.autoplayState = 'playing';
+            entry.target.play();
+          }
+        } else if (!entry.target.paused) {
+          entry.target.dataset.autoplayState = 'paused';
+          entry.target.pause();
+        }
+      });
+    }, {
+      threshold: 0.25
+    });
+  };
+
+  _proto.renderHtml = function renderHtml(view) {
+    var html = '';
+
+    try {
+      var _renderView = renderView(view, this.canLazyload),
+          tagName = _renderView.tagName,
+          contents = _renderView.contents,
+          attrs = _renderView.attrs;
+
+      var id = view.id,
+          child_views = view.child_views,
+          meta = view.meta,
+          role = view.role;
+      if (id != null && typeof meta === 'object') this.ids[id] = meta;
+      if (role === 'section') this.sections.push({
+        id: id,
+        meta: meta
+      });
+      html += '<' + tagName;
+
+      for (var key in attrs) {
+        html += ' ' + key + '="' + attrs[key] + '"';
+      }
+
+      html += '>';
+
+      if (Array.isArray(child_views)) {
+        for (var i = 0; i < child_views.length; i++) {
+          html += this.renderHtml(child_views[i]);
+        }
+      }
+
+      if (contents) html += contents;
+      html += '</' + tagName + '>';
+    } catch (_unused) {}
+
+    return html;
+  };
+
+  return _createClass(Incito);
 }(MicroEvent);
-
-function _createSuper$8(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$8(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct$8() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var IncitoPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
   _inherits(IncitoPublicationEventTracking, _MicroEvent);
 
-  var _super = _createSuper$8(IncitoPublicationEventTracking);
-
   function IncitoPublicationEventTracking(eventTracker, details) {
     var _this;
 
-    _classCallCheck(this, IncitoPublicationEventTracking);
-
-    _this = _super.call(this);
+    _this = _MicroEvent.call(this) || this;
     _this.eventTracker = eventTracker;
     _this.details = details;
     return _this;
   }
 
-  _createClass(IncitoPublicationEventTracking, [{
-    key: "trackOpened",
-    value: function trackOpened() {
-      var _context;
+  var _proto = IncitoPublicationEventTracking.prototype;
 
-      if (this.eventTracker == null || this.details == null) {
-        return this;
-      }
+  _proto.trackOpened = function trackOpened() {
+    if (!this.eventTracker || !this.details) return this;
+    this.eventTracker.trackIncitoPublicationOpened({
+      'ip.paged': this.details.types.indexOf('paged') > -1,
+      'ip.id': this.details.id,
+      vt: this.eventTracker.createViewToken(this.details.id)
+    });
+    return this;
+  };
 
-      this.eventTracker.trackIncitoPublicationOpened({
-        'ip.paged': _indexOfInstanceProperty(_context = this.details.types).call(_context, 'paged') > -1,
-        'ip.id': this.details.id,
-        vt: this.eventTracker.createViewToken(this.details.id)
-      });
-      return this;
-    }
-  }]);
-
-  return IncitoPublicationEventTracking;
+  return _createClass(IncitoPublicationEventTracking);
 }(MicroEvent);
-
-function _createSuper$7(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$7(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct$7() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var Viewer$1 = /*#__PURE__*/function (_MicroEvent) {
   _inherits(Viewer, _MicroEvent);
 
-  var _super = _createSuper$7(Viewer);
-
-  function Viewer(el) {
+  function Viewer(el, options) {
     var _this;
 
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    if (options === void 0) {
+      options = {};
+    }
 
-    _classCallCheck(this, Viewer);
-
-    _this = _super.call(this);
+    _this = _MicroEvent.call(this) || this;
     _this.el = el;
     _this.options = options;
     _this.incito = new Incito(_this.el, {
@@ -2422,242 +1416,86 @@ var Viewer$1 = /*#__PURE__*/function (_MicroEvent) {
     return _this;
   }
 
-  _createClass(Viewer, [{
-    key: "start",
-    value: function start() {
-      this.incito.start();
-      this.el.classList.add('sgn-incito--started');
+  var _proto = Viewer.prototype;
 
-      this._eventTracking.trackOpened();
+  _proto.start = function start() {
+    this.incito.start();
+    this.el.classList.add('sgn-incito--started');
 
-      return this;
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.incito.destroy();
-    }
-  }]);
+    this._eventTracking.trackOpened();
 
-  return Viewer;
+    return this;
+  };
+
+  _proto.destroy = function destroy() {
+    this.incito.destroy();
+  };
+
+  return _createClass(Viewer);
 }(MicroEvent);
 
-_defineProperty(Viewer$1, "Incito", Incito);
+Viewer$1.Incito = Incito;
 
-var Controls = /*#__PURE__*/function () {
-  function Controls(viewer) {
-    var _context;
+function getDeviceCategory() {
+  if (navigator.platform === 'iPod' || navigator.platform === 'iPhone') return 'mobile';
+  if (navigator.platform === 'iPad') return 'tablet';
 
-    _classCallCheck(this, Controls);
-
-    this.scroll = _bindInstanceProperty(_context = this.scroll).call(_context, this);
-    this.viewer = viewer;
-    this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
-
-    if (this.progressEl) {
-      this.scroll();
-      window.addEventListener('scroll', this.scroll, false);
-    }
+  if (navigator.platform === 'Android' || /android/gi.test(navigator.userAgent)) {
+    if (/tablet/gi.test(navigator.userAgent)) return 'tablet';
+    return 'mobile';
   }
 
-  _createClass(Controls, [{
-    key: "destroy",
-    value: function destroy() {
-      window.removeEventListener('scroll', this.scroll, false);
-    }
-  }, {
-    key: "scroll",
-    value: function scroll() {
-      var progress = Math.round(window.pageYOffset / (document.body.scrollHeight - window.innerHeight) * 100);
-      this.progressEl.textContent = "".concat(progress, " %");
-      this.viewer.trigger('progress', {
-        progress: progress
-      });
-    }
-  }]);
+  return 'desktop';
+}
 
-  return Controls;
-}();
+function getLocale() {
+  var localeChain = [];
 
-function _createForOfIteratorHelper$1(o, allowArrayLike) { var it; if (typeof _Symbol === "undefined" || _getIteratorMethod(o) == null) { if (_Array$isArray(o) || (it = _unsupportedIterableToArray$1(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = _getIterator(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+  if (Array.isArray(navigator.languages) && navigator.languages.length > 0) {
+    localeChain.push.apply(localeChain, _toConsumableArray(navigator.languages));
+  } else if (typeof navigator.language === 'string' && navigator.language) {
+    localeChain.push(navigator.language);
+  } else if (typeof navigator.browserLanguage === 'string' && navigator.browserLanguage) {
+    localeChain.push(navigator.browserLanguage);
+  }
 
-function _unsupportedIterableToArray$1(o, minLen) { var _context6; if (!o) return; if (typeof o === "string") return _arrayLikeToArray$1(o, minLen); var n = _sliceInstanceProperty(_context6 = Object.prototype.toString.call(o)).call(_context6, 8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return _Array$from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$1(o, minLen); }
-
-function _arrayLikeToArray$1(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+  localeChain.push('en_US');
+  return _findInstanceProperty(localeChain).call(localeChain, function (prefLocale) {
+    if (!prefLocale) return;
+    prefLocale = prefLocale.replace('-', '_');
+    if (/[a-z][a-z]_[A-Z][A-Z]/g.test(prefLocale)) return prefLocale;
+  });
+}
 
 var Bootstrapper$1 = /*#__PURE__*/function () {
-  function Bootstrapper() {
-    var _context;
+  function Bootstrapper(options) {
+    var _this = this;
 
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    if (options === void 0) {
+      options = {};
+    }
 
-    _classCallCheck(this, Bootstrapper);
-
-    this.fetchDetails = _bindInstanceProperty(_context = this.fetchDetails).call(_context, this);
-    this.options = options;
-    this.deviceCategory = this.getDeviceCategory();
-    this.pixelRatio = this.getPixelRatio();
-    this.pointer = this.getPointer();
-    this.orientation = this.getOrientation();
-    this.time = this.getTime();
-    this.locale = this.getLocale();
-    this.maxWidth = this.getMaxWidth();
+    this.deviceCategory = getDeviceCategory();
+    this.pixelRatio = window.devicePixelRatio || 1;
+    this.pointer = matchMedia('(pointer:coarse)').matches ? 'coarse' : 'fine';
+    this.orientation = screen.width >= screen.height ? 'horizontal' : 'vertical';
+    this.time = new Date().toISOString();
+    this.locale = getLocale();
     this.featureLabels = this.getFeatureLabels();
     this.versionsSupported = ['1.0.0'];
-  }
 
-  _createClass(Bootstrapper, [{
-    key: "getDeviceCategory",
-    value: function getDeviceCategory$1() {
-      return getDeviceCategory();
-    }
-  }, {
-    key: "getPixelRatio",
-    value: function getPixelRatio() {
-      return window.devicePixelRatio || 1;
-    }
-  }, {
-    key: "getPointer",
-    value: function getPointer$1() {
-      return getPointer();
-    }
-  }, {
-    key: "getOrientation",
-    value: function getOrientation$1() {
-      var orientation = getOrientation(screen.width, screen.height);
-
-      if (orientation === 'quadratic') {
-        orientation = 'horizontal';
-      }
-
-      return orientation;
-    }
-  }, {
-    key: "getTime",
-    value: function getTime() {
-      return new Date().toISOString();
-    }
-  }, {
-    key: "getLocale",
-    value: function getLocale() {
-      var localeChain = [];
-      var locale = null;
-
-      if (_Array$isArray(navigator.languages) && navigator.languages.length > 0) {
-        localeChain = _concatInstanceProperty(localeChain).call(localeChain, navigator.languages);
-      } else if (typeof navigator.language === 'string' && navigator.language.length > 0) {
-        localeChain.push(navigator.language);
-      } else if (typeof navigator.browserLanguage === 'string' && navigator.browserLanguage.length > 0) {
-        localeChain.push(navigator.browserLanguage);
-      }
-
-      localeChain.push('en_US');
-
-      var _iterator = _createForOfIteratorHelper$1(localeChain),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var prefLocale = _step.value;
-
-          if (prefLocale == null) {
-            continue;
-          }
-
-          prefLocale = prefLocale.replace('-', '_');
-
-          if (/[a-z][a-z]_[A-Z][A-Z]/g.test(prefLocale)) {
-            locale = prefLocale;
-            break;
-          }
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      return locale;
-    }
-  }, {
-    key: "getMaxWidth",
-    value: function getMaxWidth() {
-      if (Math.abs(window.orientation) === 90) {
-        return Math.min(this.options.el.offsetWidth, screen.width);
-      } else {
-        return this.options.el.offsetWidth;
-      }
-    }
-  }, {
-    key: "getFeatureLabels",
-    value: function getFeatureLabels() {
-      var featureLabels = get('incito-feature-labels');
-
-      if (_Array$isArray(featureLabels) === false) {
-        featureLabels = [];
-      }
-
-      return featureLabels;
-    }
-  }, {
-    key: "anonymizeFeatureLabels",
-    value: function anonymizeFeatureLabels() {
-      var _context2, _context3;
-
-      var count = this.featureLabels.length;
-
-      var vector = _reduceInstanceProperty(_context2 = this.featureLabels).call(_context2, function (acc, cur) {
-        if (!acc[cur]) {
-          acc[cur] = {
-            key: cur,
-            value: 0
-          };
-        }
-
-        acc[cur].value++;
-        return acc;
-      }, {});
-
-      return _mapInstanceProperty(_context3 = _Object$values(vector)).call(_context3, function (featureLabel) {
-        return {
-          key: featureLabel.key,
-          value: Math.round(featureLabel.value / count * 100) / 100
-        };
-      });
-    }
-  }, {
-    key: "fetch",
-    value: function fetch(callback) {
-      var _this = this;
-
-      this.fetchDetails(this.options.id, function (err, details) {
-        if (err != null) {
-          return callback(err);
-        }
-
-        _this.fetchIncito(details.incito_publication_id, function (err1, incito) {
-          if (err1 != null) {
-            return callback(err1);
-          }
-
-          callback(null, {
-            details: details,
-            incito: incito
-          });
-        });
-      });
-    }
-  }, {
-    key: "fetchDetails",
-    value: function fetchDetails(id, callback) {
-      request$1({
+    this.fetchDetails = function (id, callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
         url: "/v2/catalogs/".concat(id)
       }, callback);
-    }
-  }, {
-    key: "fetchIncito",
-    value: function fetchIncito(id, callback) {
-      request$1({
+    };
+
+    this.fetchIncito = function (id, callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
         url: '/v4/rpc/generate_incito_from_publication',
         method: 'post',
         headers: {
@@ -2665,66 +1503,2243 @@ var Bootstrapper$1 = /*#__PURE__*/function () {
         },
         body: _JSON$stringify({
           id: id,
-          device_category: this.deviceCategory,
-          pointer: this.pointer,
-          orientation: this.orientation,
-          pixel_ratio: this.pixelRatio,
-          max_width: this.maxWidth,
-          versions_supported: this.versionsSupported,
-          locale_code: this.locale,
-          time: this.time,
-          feature_labels: this.anonymizeFeatureLabels(this.featureLabels)
+          device_category: _this.deviceCategory,
+          pointer: _this.pointer,
+          orientation: _this.orientation,
+          pixel_ratio: _this.pixelRatio,
+          max_width: _this.maxWidth,
+          versions_supported: _this.versionsSupported,
+          locale_code: _this.locale,
+          time: _this.time,
+          feature_labels: _this.anonymizeFeatureLabels(_this.featureLabels)
         })
       }, callback);
+    };
+
+    this.options = options;
+    this.maxWidth = Math.abs(window.orientation) === 90 ? Math.min(this.options.el.offsetWidth, screen.width) : this.options.el.offsetWidth;
+  }
+
+  var _proto = Bootstrapper.prototype;
+
+  _proto.getFeatureLabels = function getFeatureLabels() {
+    var featureLabels = get('incito-feature-labels');
+    return Array.isArray(featureLabels) ? featureLabels : [];
+  };
+
+  _proto.anonymizeFeatureLabels = function anonymizeFeatureLabels() {
+    var _context;
+
+    var count = this.featureLabels.length;
+    var vector = this.featureLabels.reduce(function (acc, cur) {
+      if (!acc[cur]) acc[cur] = {
+        key: cur,
+        value: 0
+      };
+      acc[cur].value++;
+      return acc;
+    }, {});
+    return _mapInstanceProperty(_context = _Object$values(vector)).call(_context, function (featureLabel) {
+      return {
+        key: featureLabel.key,
+        value: Math.round(featureLabel.value / count * 100) / 100
+      };
+    });
+  };
+
+  _proto.fetch = /*#__PURE__*/function () {
+    var _fetch = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(callback) {
+      var _yield$Promise$all, details, incito, data;
+
+      return _regeneratorRuntime.wrap(function _callee$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return _Promise.all([this.fetchDetails(this.options.id), this.fetchIncito(this.options.id)]);
+
+            case 3:
+              _yield$Promise$all = _context2.sent;
+              details = _yield$Promise$all[0];
+              incito = _yield$Promise$all[1];
+              data = {
+                details: details,
+                incito: incito
+              };
+              if (typeof callback === 'function') callback(null, data);
+              return _context2.abrupt("return", data);
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](0);
+
+              if (!(typeof callback === 'function')) {
+                _context2.next = 17;
+                break;
+              }
+
+              callback(_context2.t0);
+              _context2.next = 18;
+              break;
+
+            case 17:
+              throw _context2.t0;
+
+            case 18:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee, this, [[0, 11]]);
+    }));
+
+    function fetch(_x) {
+      return _fetch.apply(this, arguments);
     }
-  }, {
-    key: "createViewer",
-    value: function createViewer(data) {
-      var _context4;
 
-      var self = this;
+    return fetch;
+  }();
 
-      if (data.incito == null) {
-        throw error(new Error(), 'You need to supply valid Incito to create a viewer');
+  _proto.createViewer = function createViewer(_ref) {
+    var details = _ref.details,
+        incito = _ref.incito;
+    var self = this;
+
+    if (!incito) {
+      throw error(new Error('You need to supply a valid Incito to create a viewer'));
+    }
+
+    var viewer = new Viewer$1(this.options.el, {
+      id: this.options.id,
+      details: details,
+      incito: incito,
+      eventTracker: this.options.eventTracker
+    });
+    var controls = new Controls(viewer);
+    viewer.incito.bind('destroy', controls.destroy); // Persist clicks on feature labels for later anonymization.
+
+    on(viewer.el, 'click', '.incito__view[data-feature-labels]', function () {
+      var _context3;
+
+      var featureLabels = this.dataset.featureLabels.split(',');
+      self.featureLabels = _concatInstanceProperty(_context3 = self.featureLabels).call(_context3, featureLabels);
+
+      while (self.featureLabels.length > 1000) {
+        self.featureLabels.shift();
       }
 
-      var viewer = new Viewer$1(this.options.el, {
-        id: this.options.id,
-        details: data.details,
-        incito: data.incito,
-        eventTracker: this.options.eventTracker
-      });
-      var controls = new Controls(viewer);
+      set('incito-feature-labels', self.featureLabels);
+    });
+    return viewer;
+  };
 
-      _bindInstanceProperty(_context4 = viewer.incito).call(_context4, 'destroy', function () {
-        controls.destroy();
-      }); // Persist clicks on feature labels for later anonymization.
-
-
-      gator(viewer.el).on('click', '.incito__view[data-feature-labels]', function () {
-        var _context5;
-
-        var featureLabels = this.getAttribute('data-feature-labels').split(',');
-        self.featureLabels = _concatInstanceProperty(_context5 = self.featureLabels).call(_context5, featureLabels);
-
-        while (self.featureLabels.length > 1000) {
-          self.featureLabels.shift();
-        }
-
-        set('incito-feature-labels', self.featureLabels);
-      });
-      return viewer;
-    }
-  }]);
-
-  return Bootstrapper;
+  return _createClass(Bootstrapper);
 }();
 
-var IncitoPublicationKit = /*#__PURE__*/Object.freeze({
+var ESC = 27;
+var ARROW_RIGHT = 39;
+var ARROW_LEFT = 37;
+var SPACE = 32;
+var NUMBER_ONE = 49;
+
+var da_DK = {
+  locale_code: 'da_DK',
+  publication_viewer_shopping_list_label: 'Indkøbsliste',
+  publication_viewer_shopping_list_clear_button: 'Ryd indkøbsliste',
+  publication_viewer_delete_crossed_out_button: 'Slet overstregede varer',
+  publication_viewer_print_button: 'Print',
+  publication_viewer_download_button: 'Hent',
+  publication_viewer_until_label: 'Til og med',
+  publication_viewer_pages_button: 'Sider',
+  publication_viewer_offers_button: 'Tilbud',
+  publication_viewer_search_text: 'Søg',
+  publication_viewer_currency: 'DKK',
+  publication_viewer_hotspot_picker_header: 'Hvilket tilbud mente du?',
+  publication_viewer_overview_button: 'Oversigt',
+  publication_viewer_close_label: 'Tilbage',
+  publication_viewer_add_to_shopping_list: 'Tilføj til indkøbsliste',
+  publication_viewer_visit_webshop_link: 'Besøg webshoplink'
+};
+
+var en_US = {
+  locale_code: 'en_US',
+  publication_viewer_shopping_list_label: 'Shopping List',
+  publication_viewer_shopping_list_clear_button: 'Clear list',
+  publication_viewer_delete_crossed_out_button: 'Delete crossed out items',
+  publication_viewer_print_button: 'Print',
+  publication_viewer_download_button: 'Download PDF',
+  publication_viewer_until_label: 'Through',
+  publication_viewer_pages_button: 'Pages',
+  publication_viewer_offers_button: 'Offers',
+  publication_viewer_search_text: 'Search',
+  publication_viewer_currency: 'USD',
+  publication_viewer_hotspot_picker_header: 'Which offer did you mean?',
+  publication_viewer_overview_button: 'Overview',
+  publication_viewer_close_label: 'Close',
+  publication_viewer_add_to_shopping_list: 'Add to Shopping List',
+  publication_viewer_visit_webshop_link: 'Visit Webshop Link'
+};
+
+var sv_SE = {
+  locale_code: 'sv_SE',
+  publication_viewer_shopping_list_label: 'Inköpslista',
+  publication_viewer_shopping_list_clear_button: 'Tydlig lista',
+  publication_viewer_delete_crossed_out_button: 'Ta bort överstrukna objekt',
+  publication_viewer_print_button: 'Skriva ut',
+  publication_viewer_download_button: 'Ladda ner',
+  publication_viewer_until_label: 'Till slut',
+  publication_viewer_pages_button: 'Sidor',
+  publication_viewer_offers_button: 'Erbjudanden',
+  publication_viewer_search_text: 'Sök',
+  publication_viewer_currency: 'SEK',
+  publication_viewer_hotspot_picker_header: 'Vilket erbjudande menade du?',
+  publication_viewer_overview_button: 'Översikt',
+  publication_viewer_close_label: 'Tillbaka',
+  publication_viewer_add_to_shopping_list: 'Lägg till inköpslista',
+  publication_viewer_visit_webshop_link: 'Besök webbshoplänk'
+};
+
+var nb_NO = {
+  locale_code: 'nb_NO',
+  publication_viewer_shopping_list_label: 'Handleliste',
+  publication_viewer_shopping_list_clear_button: 'Klar liste',
+  publication_viewer_delete_crossed_out_button: 'Slett overstrekede elementer',
+  publication_viewer_print_button: 'Skrive ut',
+  publication_viewer_download_button: 'nedlasting',
+  publication_viewer_until_label: 'Igjennom',
+  publication_viewer_pages_button: 'Sider',
+  publication_viewer_offers_button: 'Tilbud',
+  publication_viewer_search_text: 'Søk',
+  publication_viewer_currency: 'NOK',
+  publication_viewer_hotspot_picker_header: 'Hvilket tilbud mente du?',
+  publication_viewer_overview_button: 'oversikt',
+  publication_viewer_close_label: 'Tilbake',
+  publication_viewer_add_to_shopping_list: 'Legg til handleliste',
+  publication_viewer_visit_webshop_link: 'Besøk nettbutikklink'
+};
+
+var locales = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Viewer: Viewer$1,
-    Bootstrapper: Bootstrapper$1
+    da_dk: da_DK,
+    en_us: en_US,
+    sv_se: sv_SE,
+    nb_no: nb_NO
 });
+
+var destroyModal = function destroyModal() {
+  var pubContainer = document.querySelector('.sgn__pp') || document.querySelector('.sgn__incito');
+  var modalContainer = document.querySelector('.sgn-modal-container');
+  modalContainer.classList.add('sgn-modal-container-on-destroy');
+  pubContainer.focus();
+  window.setTimeout(function () {
+    var _modalContainer$paren;
+
+    modalContainer == null ? void 0 : (_modalContainer$paren = modalContainer.parentNode) == null ? void 0 : _modalContainer$paren.removeChild(modalContainer);
+  }, 300);
+};
+var createModal = function createModal(container, destroyCallback) {
+  if (!document.querySelector('.sgn-modal-container')) {
+    var pubContainer = document.querySelector('.sgn__pp') || document.querySelector('.sgn__incito');
+    var modalContainer = document.createElement('div');
+    var blocker = document.createElement('div');
+    blocker.className = 'sgn-blocker';
+    pubContainer.appendChild(modalContainer);
+    modalContainer.className = 'sgn-modal-container';
+    modalContainer.tabIndex = '-1';
+    modalContainer.appendChild(blocker);
+    modalContainer.appendChild(container);
+    modalContainer.focus();
+
+    var destroy = function destroy(e) {
+      e.stopPropagation();
+      destroyModal();
+
+      if (typeof destroyCallback === 'function') {
+        destroyCallback(e);
+      }
+    };
+
+    blocker.addEventListener('click', destroy, false);
+    modalContainer.addEventListener('keyup', function (e) {
+      if (e.keyCode === ESC) {
+        destroy(e);
+      }
+    });
+  }
+};
+var formatPrice = function formatPrice(price, localeCode, currency) {
+  if (localeCode === void 0) {
+    localeCode = 'en_US';
+  }
+
+  if (currency === void 0) {
+    currency = 'USD';
+  }
+
+  return new Intl.NumberFormat(localeCode.replace('_', '-'), {
+    style: 'currency',
+    currency: currency
+  }).format(price);
+};
+var formatDate = function formatDate(dateStr, localeCode, options) {
+  if (localeCode === void 0) {
+    localeCode = 'en_US';
+  }
+
+  var date = new Date(dateStr);
+  return new Intl.DateTimeFormat(localeCode.replace('_', '-'), options).format(date);
+};
+
+var getTranslationOverride = function getTranslationOverride(dataset) {
+  if (dataset === void 0) {
+    dataset = {};
+  }
+
+  return _Object$entries(dataset).reduce(function (translationsKeyVal, _ref) {
+    var key = _ref[0],
+        value = _ref[1];
+
+    if (_includesInstanceProperty(key).call(key, 'translationKeys-')) {
+      var newKey = key.replace('translationKeys-', '').replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+        return index === 0 ? word.toLowerCase() : "_".concat(word.toLowerCase());
+      });
+      translationsKeyVal[newKey] = value;
+    }
+
+    return translationsKeyVal;
+  }, {});
+};
+
+var translate = function translate(key, view) {
+  var _navigator$language, _navigator$language$r, _locales$locale, _locales$locale2, _locales$en_us;
+
+  if (key === void 0) {
+    key = '';
+  }
+
+  var scriptEl = document.getElementById('sgn-sdk');
+  var dataset = scriptEl.dataset;
+  var browserLocale = ((_navigator$language = navigator.language) == null ? void 0 : (_navigator$language$r = _navigator$language.replace('-', '_')) == null ? void 0 : _navigator$language$r.toLocaleLowerCase()) || 'en_us';
+  var locale = dataset != null && dataset.localeCode ? dataset.localeCode.replace('-', '_').toLowerCase() : browserLocale;
+  var translationOverride = getTranslationOverride(dataset);
+  var localeTranslation = typeof ((_locales$locale = locales[locale]) == null ? void 0 : _locales$locale[key]) !== 'undefined' ? (_locales$locale2 = locales[locale]) == null ? void 0 : _locales$locale2[key] : (_locales$en_us = en_US) == null ? void 0 : _locales$en_us[key];
+  var template = (translationOverride == null ? void 0 : translationOverride[key]) || localeTranslation || '';
+  return Mustache.render(template, view);
+};
+var transformFilter = function transformFilter(filter) {
+  var _ref2;
+
+  return (_ref2 = filter || '') == null ? void 0 : _ref2.split(',').reduce(function (queries, filter) {
+    var _filter$split = filter.split(':'),
+        key = _filter$split[0],
+        val = _filter$split[1];
+
+    if (key) {
+      queries[key] = val === 'true' ? true : val === 'false' ? false : val;
+    }
+
+    return queries;
+  }, {});
+};
+var getColorBrightness$1 = function getColorBrightness(color) {
+  color = color.replace('#', '');
+  var sum = 0;
+  var x = 0;
+
+  while (x < 3) {
+    sum += parseInt(color.substring(2 * x, 2), 16) || 0;
+    ++x;
+  }
+
+  return sum <= 381 ? 'dark' : 'light';
+};
+var pushQueryParam = function pushQueryParam(queryParams) {
+  var _Object$entries2;
+
+  if (queryParams === void 0) {
+    queryParams = {};
+  }
+
+  var newUrl = new _URL(window.location.href);
+  (_Object$entries2 = _Object$entries(queryParams)) == null ? void 0 : _Object$entries2.forEach(function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2),
+        key = _ref4[0],
+        val = _ref4[1];
+
+    newUrl.searchParams[val ? 'set' : 'delete'](key, val);
+  });
+  window.history.pushState({
+    path: String(newUrl)
+  }, '', newUrl);
+};
+var getHashFragments = function getHashFragments(hashParam) {
+  var _location$hash$match, _location$hash$match$;
+
+  var hashReg = new RegExp("".concat(hashParam, "/(.*)"));
+
+  var _ref5 = ((_location$hash$match = location.hash.match(hashReg)) == null ? void 0 : (_location$hash$match$ = _location$hash$match[1]) == null ? void 0 : _location$hash$match$.split('/')) || [],
+      _ref6 = _slicedToArray(_ref5, 2),
+      publicationId = _ref6[0],
+      pageNum = _ref6[1];
+
+  return {
+    publicationId: publicationId,
+    pageNum: pageNum
+  };
+};
+
+var defaultTemplate$a = "{{^disableHeader}}\n    <div class=\"sgn__header\">\n        <div class=\"sgn__nav\">\n            <div class=\"sgn__nav-content\" data-show-labels=\"{{showHeaderLabels}}\">\n            {{^disableClose}}\n                <button class=\"sgn__close-publication\">\n                    <svg\n                        aria-hidden=\"true\"\n                        class=\"sgn-header-icon-svg sgn-header-icon-svg-close\"\n                        role=\"img\" viewBox=\"0 0 320 512\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                    >\n                        <path\n                            fill=\"currentColor\"\n                            d=\"M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z\"\n                        >\n                        </path>\n                    </svg>\n                    <div class=\"sgn__nav-label\">\n                        <span>{{translations.close}}</span>\n                    </div>\n                </button>\n            {{/disableClose}}\n            {{^disableShoppingList}}\n                <button class=\"sgn__offer-shopping\">\n                    <svg\n                        aria-hidden=\"true\"\n                        class=\"sgn-header-icon-svg\"\n                        role=\"img\"\n                        viewBox=\"0 0 512 512\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                    >\n                        <path\n                            fill=\"currentColor\"\n                            d=\"M48 368a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm0-160a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm0-160a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm448 24H176a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V88a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16z\"\n                        >\n                        </path>\n                    </svg>\n                    <div class=\"sgn__offer-shopping-list-count\"></div>\n                    <div class=\"sgn__nav-label\">\n                        <span>{{translations.shoppingList}}</span>\n                    </div>\n                </button>\n            {{/disableShoppingList}}\n            {{^disableMenu}}\n                <button class=\"sgn__nav-menu-btn\">\n                    <svg\n                        aria-hidden=\"true\"\n                        class=\"sgn-header-icon-svg\"\n                        role=\"img\"\n                        viewBox=\"0 0 512 512\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                    >\n                        <path\n                            fill=\"currentColor\"\n                            d=\"M304 256c0 26.5-21.5 48-48 48s-48-21.5-48-48 21.5-48 48-48 48 21.5 48 48zm120-48c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm-336 0c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z\"\n                        >\n                        </path>\n                    </svg>\n                    <div class=\"sgn__nav-label\">\n                        <span>{{translations.overview}}</span>\n                    </div>\n                </button>\n            {{/disableMenu}}\n            </div>\n            {{#isIncito}}\n            <div class=\"sgn-incito__scroll-progress\">\n                <div class=\"sgn-incito__scroll-progress-bar\"></div>\n                <span class=\"sgn-incito__scroll-progress-text\"></span>\n            </div>\n            {{/isIncito}}\n            {{^isIncito}}\n            <div class=\"sgn-pp__progress\">\n                <div class=\"sgn-pp-progress__bar\"></div>\n                <div class=\"sgn-pp__progress-label\"></div>\n            </div>\n            {{/isIncito}}\n        </div>\n    </div>\n{{/disableHeader}}";
+var defaultShoppingListCounterTemplate = "{{#shoppingListCount}}\n    <div class=\"sgn__offer-shopping-list-counter\">\n        <span>{{shoppingListCount}}</span>\n    </div>\n{{/shoppingListCount}}";
+
+var Header = function Header(_ref) {
+  var _template;
+
+  var publicationType = _ref.publicationType,
+      template = _ref.template,
+      shoppingListCounterTemplate = _ref.shoppingListCounterTemplate,
+      el = _ref.el,
+      scriptEls = _ref.scriptEls;
+  var container = null;
+  publicationType = publicationType || 'paged';
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$a;
+  var translations = {
+    close: translate('publication_viewer_close_label'),
+    shoppingList: translate('publication_viewer_shopping_list_label'),
+    overview: translate('publication_viewer_overview_button')
+  };
+
+  var renderShoppingListCounter = function renderShoppingListCounter() {
+    var shoppingListCountEl = container.querySelector('.sgn__offer-shopping-list-count');
+
+    if (shoppingListCountEl) {
+      var storedPublicationOffers = get('publication-saved-offers');
+      shoppingListCountEl.innerHTML = Mustache.render((shoppingListCounterTemplate == null ? void 0 : shoppingListCounterTemplate.innerHTML) || defaultShoppingListCounterTemplate, {
+        shoppingListCount: storedPublicationOffers == null ? void 0 : storedPublicationOffers.length
+      });
+    }
+  };
+
+  var setNavColor = function setNavColor(color) {
+    var sgnNav = container.querySelector('.sgn__nav');
+
+    if (sgnNav) {
+      sgnNav.style.backgroundColor = color || 'transparent';
+      sgnNav.style.color = getColorBrightness$1(color) === 'dark' ? '#ffffff' : '#000000';
+    }
+  };
+
+  var show = function show(data) {
+    var _data, _data$details, _data$details$brandin, _data2, _data2$details, _data2$details$brandi;
+
+    if (data === void 0) {
+      data = {};
+    }
+
+    var brandColor = (_data = data) != null && (_data$details = _data.details) != null && (_data$details$brandin = _data$details.branding) != null && _data$details$brandin.color ? "#".concat((_data2 = data) == null ? void 0 : (_data2$details = _data2.details) == null ? void 0 : (_data2$details$brandi = _data2$details.branding) == null ? void 0 : _data2$details$brandi.color) : '#2c2c2e';
+    var headerEl = container.querySelector('.sgn__header');
+    setNavColor(brandColor);
+
+    if (headerEl) {
+      headerEl.classList.add('sgn-animate-header');
+    }
+  };
+
+  var addClosePubListener = function addClosePubListener() {
+    var sgnContainer = publicationType === 'incito' ? el.querySelector('.sgn__incito') : el.querySelector('.sgn__pp');
+    var closeBtn = container.querySelector('.sgn__close-publication');
+    closeBtn == null ? void 0 : closeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      destroyPublication(sgnContainer);
+    });
+    sgnContainer.addEventListener('keyup', function (e) {
+      if (e.keyCode === ESC && closeBtn) {
+        destroyPublication(sgnContainer);
+      }
+    }, false);
+  };
+
+  var destroyPublication = function destroyPublication(sgnContainer) {
+    var _sgnContainer$parentN, _pushQueryParam;
+
+    sgnContainer == null ? void 0 : (_sgnContainer$parentN = sgnContainer.parentNode) == null ? void 0 : _sgnContainer$parentN.removeChild(sgnContainer);
+    removeHtmlClass();
+    pushQueryParam((_pushQueryParam = {}, _defineProperty(_pushQueryParam, scriptEls.publicationIdParam, null), _defineProperty(_pushQueryParam, scriptEls.pageIdParam, null), _pushQueryParam));
+    location.hash = '';
+  };
+
+  var removeHtmlClass = function removeHtmlClass() {
+    if (scriptEls.disableGlobalScrollbar) {
+      var htmlEl = document.querySelector('html');
+      htmlEl == null ? void 0 : htmlEl.classList.remove('sgn-paged-publication--open');
+      htmlEl == null ? void 0 : htmlEl.classList.remove('sgn-incito-publication--open');
+    }
+  };
+
+  var addStorageListener = function addStorageListener() {
+    window.addEventListener('tjek_shopping_list_update', renderShoppingListCounter, false);
+  };
+
+  var render = function render() {
+    container = document.createElement('div');
+    container.className = 'sgn__header-content';
+    container.innerHTML = Mustache.render(template, {
+      translations: translations,
+      disableHeader: scriptEls.disableHeader,
+      disableShoppingList: scriptEls.disableShoppingList || scriptEls.offerClickBehavior === 'open_webshop_link_in_tab' || scriptEls.offerClickBehavior === 'redirect_to_webshop_link',
+      disableMenu: scriptEls.disableMenu,
+      disableClose: scriptEls.disableClose,
+      showHeaderLabels: scriptEls.showHeaderLabels,
+      isIncito: publicationType === 'incito'
+    });
+    renderShoppingListCounter();
+    addStorageListener();
+    addClosePubListener();
+    return container;
+  };
+
+  return {
+    render: render,
+    show: show
+  };
+};
+
+var defaultTemplate$9 = "    <div class=\"sgn-sections-content\">\n        <ol class=\"sgn-sections-list-items-container\">\n            {{#sections}}\n            <li class=\"sgn-sections-list-item-container\" data-section-id=\"{{view_id}}\">\n                <div class=\"sgn-sections-content-container\">\n                    <div class=\"sgn-sections-list-item-container-div-text\">\n                        <div>\n                            <span>{{title}}</span>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/sections}}\n        </ol>\n    </div>";
+
+var SectionList = function SectionList(_ref) {
+  var _template;
+
+  var _ref$sgnData = _ref.sgnData,
+      sgnData = _ref$sgnData === void 0 ? {} : _ref$sgnData,
+      template = _ref.template;
+  var container = null;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$9;
+
+  var render = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      var _sgnData$incito;
+
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              container = document.createElement('div');
+              container.className = 'sgn-sections-container';
+              container.innerHTML = Mustache.render(template, {
+                sections: sgnData == null ? void 0 : (_sgnData$incito = sgnData.incito) == null ? void 0 : _sgnData$incito.table_of_contents
+              });
+              addSectionClickListener();
+              return _context.abrupt("return", container);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function render() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var addSectionClickListener = function addSectionClickListener() {
+    container.querySelectorAll('.sgn-sections-list-item-container').forEach(function (itemEl) {
+      itemEl.addEventListener('click', scrollToSection, false);
+    });
+  };
+
+  var scrollToSection = function scrollToSection(e) {
+    var _e$currentTarget$data;
+
+    var sectionId = (_e$currentTarget$data = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data.sectionId;
+    var sectionCell = document.querySelector("[data-id=\"".concat(sectionId, "\"][data-role=\"section\"]"));
+    var incitoEl = document.querySelector('.sgn__incito');
+    var sectionOffset = sectionCell.offsetTop - 76 || 0;
+    destroyModal();
+    incitoEl.scrollTo({
+      top: sectionOffset,
+      behavior: 'smooth'
+    });
+  };
+
+  return {
+    render: render
+  };
+};
+
+function ownKeys$7(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$7(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$7(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+var defaultTemplate$8 = "    <div class=\"sgn-pages-content\">\n        <ol class=\"sgn-pages-list-items-container\">\n            {{#pages}}\n            <li class=\"sgn-pages-list-item-container\">\n                <div class=\"sgn-pages-content-container\">\n                    <a href=\"#\" class=\"sgn-page-item\" data-page-id=\"{{pageId}}\" data-page-num=\"{{pageNum}}\">\n                        <div class=\"sgn-pages-list-item-container-div-text\">\n                            <div class=\"sgn-pages-img-container\">\n                                <img src=\"{{thumb}}\" loading=\"lazy\">\n                            </div>\n                            <div>\n                                <span>{{pageNum}}</span>\n                            </div>\n                        </div>\n                    </a>\n                </div>\n            </li>\n            {{/pages}}\n        </ol>\n    </div>";
+
+var PageList = function PageList(_ref) {
+  var _template;
+
+  var _ref$scriptEls = _ref.scriptEls,
+      scriptEls = _ref$scriptEls === void 0 ? {} : _ref$scriptEls,
+      _ref$configs = _ref.configs,
+      configs = _ref$configs === void 0 ? {} : _ref$configs,
+      _ref$sgnData = _ref.sgnData,
+      sgnData = _ref$sgnData === void 0 ? {} : _ref$sgnData,
+      sgnViewer = _ref.sgnViewer,
+      template = _ref.template;
+  var container = null;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$8;
+
+  var render = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      var _sgnData$pages;
+
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              container = document.createElement('div');
+              container.className = 'sgn-pages-container';
+              _context.t0 = Mustache;
+              _context.t1 = template;
+              _context.t2 = transformPages;
+
+              if (!((sgnData == null ? void 0 : (_sgnData$pages = sgnData.pages) == null ? void 0 : _sgnData$pages.length) > 0)) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.t3 = sgnData.pages;
+              _context.next = 12;
+              break;
+
+            case 9:
+              _context.next = 11;
+              return request({
+                apiKey: configs.apiKey,
+                coreUrl: configs.coreUrl,
+                url: "/v2/catalogs/".concat(configs.id, "/pages")
+              });
+
+            case 11:
+              _context.t3 = _context.sent;
+
+            case 12:
+              _context.t4 = _context.t3;
+              _context.t5 = (0, _context.t2)(_context.t4);
+              _context.t6 = {
+                pages: _context.t5
+              };
+              container.innerHTML = _context.t0.render.call(_context.t0, _context.t1, _context.t6);
+              addPageClickListener();
+              return _context.abrupt("return", container);
+
+            case 18:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function render() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var addPageClickListener = function addPageClickListener() {
+    container.querySelectorAll('.sgn-page-item').forEach(function (itemEl) {
+      itemEl.addEventListener('click', navigateToPage, false);
+    });
+  };
+
+  var navigateToPage = function navigateToPage(e) {
+    var _scriptEls$displayUrl, _scriptEls$displayUrl2;
+
+    e.preventDefault();
+    var _e$currentTarget$data = e.currentTarget.dataset,
+        pageId = _e$currentTarget$data.pageId,
+        pageNum = _e$currentTarget$data.pageNum;
+    destroyModal();
+    sgnViewer.navigateToPageId(pageId);
+
+    if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
+      var _pushQueryParam;
+
+      pushQueryParam((_pushQueryParam = {}, _defineProperty(_pushQueryParam, scriptEls.publicationIdParam, configs.id), _defineProperty(_pushQueryParam, scriptEls.pageIdParam, pageNum), _pushQueryParam));
+    } else if (((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
+      var _context2, _context3;
+
+      location.hash = _concatInstanceProperty(_context2 = _concatInstanceProperty(_context3 = "".concat(scriptEls.publicationHash, "/")).call(_context3, configs.id, "/")).call(_context2, pageNum);
+    }
+  };
+
+  var transformPages = function transformPages(pages) {
+    return _mapInstanceProperty(pages).call(pages, function (page, index) {
+      return _objectSpread$7({}, page, {
+        pageId: "page".concat(index + 1),
+        pageNum: index + 1,
+        index: index
+      });
+    });
+  };
+
+  return {
+    render: render
+  };
+};
+
+function ownKeys$6(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$6(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+var defaultTemplate$7 = "    <div class=\"sgn-offers-content\">\n        <div class=\"sgn-offers-search-container\">\n            <input type=\"text\" id=\"sgn-offers-search-text\" class=\"sgn-offers-search-text\" name=\"sgn-offers-search-text\" placeholder=\"{{translations.searchText}}...\">\n        </div>\n        <ol class=\"sgn-offers-list-items-container\">\n            {{#offers}}\n            <li class=\"sgn-offers-list-item-container\">\n                <div class=\"sgn-offers-content-container\" data-page-id=\"{{pageId}}\" data-page-num=\"{{catalog_page}}\" data-view-id=\"{{catalog_view_id}}\">\n                    <div class=\"sgn-offers-content-img\">\n                        <img src=\"{{images.view}}\" alt=\"{{heading}}\">\n                    </div>\n                    <div class=\"sgn-offers-content-text\">\n                        <div class=\"sgn-offers-content-heading\">\n                            <span>{{heading}}</span>\n                        </div>\n                        <div class=\"sgn-offers-content-description\">\n                            <span>{{description}}&nbsp;</span>\n                        </div>\n                        <div class=\"sgn-offers-content-price\">\n                            <span>{{price}}</span>\n                        </div>\n                    </div>\n                    <div class=\"sgn-clearfix\"></div>\n                </div>\n            </li>\n            {{/offers}}\n        </ol>\n    </div>";
+
+var OfferList = function OfferList(_ref) {
+  var _template, _template$match;
+
+  var scriptEls = _ref.scriptEls,
+      publicationType = _ref.publicationType,
+      _ref$configs = _ref.configs,
+      configs = _ref$configs === void 0 ? {} : _ref$configs,
+      sgnViewer = _ref.sgnViewer,
+      template = _ref.template;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$7;
+  publicationType = publicationType || 'paged';
+  var offerTemplate = (_template$match = template.match(/(?=\{\{#offers\}\})[\s\S]*(\{\{\/offers\}\})/g)) == null ? void 0 : _template$match[0];
+  var container = null;
+  var offersList = [];
+  var offset = 0;
+  var limit = 24;
+  var searchKey = '';
+  var translations = {
+    localeCode: translate('locale_code'),
+    currency: translate('publication_viewer_currency'),
+    searchText: translate('publication_viewer_search_text')
+  };
+
+  var fetchSearch = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(query) {
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (query === void 0) {
+                query = '';
+              }
+
+              if (!query) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.t1 = transformOffers;
+              _context.next = 5;
+              return request({
+                url: '/v2/offers/search',
+                apiKey: configs.apiKey,
+                coreUrl: configs.coreUrl,
+                qs: {
+                  dealer_id: configs.businessId,
+                  catalog_id: configs.id,
+                  types: publicationType,
+                  limit: limit,
+                  query: query
+                }
+              });
+
+            case 5:
+              _context.t2 = _context.sent;
+              _context.t0 = (0, _context.t1)(_context.t2);
+              _context.next = 10;
+              break;
+
+            case 9:
+              _context.t0 = offersList;
+
+            case 10:
+              return _context.abrupt("return", _context.t0);
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchSearch(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var fetchOffers = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(offset, limit) {
+      return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              if (offset === void 0) {
+                offset = 0;
+              }
+
+              if (limit === void 0) {
+                limit = 24;
+              }
+
+              _context2.t0 = transformOffers;
+              _context2.next = 5;
+              return request({
+                apiKey: configs.apiKey,
+                coreUrl: configs.coreUrl,
+                url: '/v2/offers',
+                qs: {
+                  dealer_id: configs.businessId,
+                  catalog_id: configs.id,
+                  types: publicationType,
+                  offset: offset,
+                  limit: limit
+                }
+              });
+
+            case 5:
+              _context2.t1 = _context2.sent;
+              return _context2.abrupt("return", (0, _context2.t0)(_context2.t1));
+
+            case 7:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function fetchOffers(_x2, _x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var transformOffers = function transformOffers(offers) {
+    var localeCode = translations.localeCode,
+        currency = translations.currency;
+    return _mapInstanceProperty(offers).call(offers, function (offer) {
+      var _offer$pricing, _offer$pricing2;
+
+      return _objectSpread$6({}, offer, {
+        price: formatPrice(offer == null ? void 0 : (_offer$pricing = offer.pricing) == null ? void 0 : _offer$pricing.price, localeCode, (offer == null ? void 0 : (_offer$pricing2 = offer.pricing) == null ? void 0 : _offer$pricing2.currency) || currency),
+        pageId: "page".concat(offer.catalog_page || 1)
+      });
+    });
+  };
+
+  var fetchOnScrollEnd = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3(e) {
+      var offerOl, offers;
+      return _regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              offerOl = e.target;
+
+              if (!(offerOl.scrollHeight - offerOl.scrollTop === offerOl.clientHeight && !searchKey)) {
+                _context3.next = 8;
+                break;
+              }
+
+              _context3.next = 4;
+              return fetchOffers(offset += limit, limit);
+
+            case 4:
+              offers = _context3.sent;
+              offersList = _concatInstanceProperty(offersList).call(offersList, offers);
+              offerOl.innerHTML += Mustache.render(offerTemplate, {
+                translations: translations,
+                offers: offers
+              });
+              addOfferClickListener();
+
+            case 8:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function fetchOnScrollEnd(_x4) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var fetchOnSearch = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee4(e) {
+      var offerOl;
+      return _regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              searchKey = e.target.value || '';
+              offerOl = container.querySelector('.sgn-offers-list-items-container');
+              _context4.t0 = Mustache;
+              _context4.t1 = offerTemplate;
+              _context4.t2 = translations;
+
+              if (!searchKey) {
+                _context4.next = 11;
+                break;
+              }
+
+              _context4.next = 8;
+              return fetchSearch(searchKey);
+
+            case 8:
+              _context4.t3 = _context4.sent;
+              _context4.next = 12;
+              break;
+
+            case 11:
+              _context4.t3 = offersList;
+
+            case 12:
+              _context4.t4 = _context4.t3;
+              _context4.t5 = {
+                translations: _context4.t2,
+                offers: _context4.t4
+              };
+              offerOl.innerHTML = _context4.t0.render.call(_context4.t0, _context4.t1, _context4.t5);
+              addOfferClickListener();
+
+            case 16:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function fetchOnSearch(_x5) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  var addScrollListener = function addScrollListener() {
+    var _container$querySelec;
+
+    (_container$querySelec = container.querySelector('.sgn-offers-list-items-container')) == null ? void 0 : _container$querySelec.addEventListener('scroll', fetchOnScrollEnd);
+  };
+
+  var addSearchListener = function addSearchListener() {
+    var _container$querySelec2;
+
+    (_container$querySelec2 = container.querySelector('.sgn-offers-search-text')) == null ? void 0 : _container$querySelec2.addEventListener('input', fetchOnSearch);
+  };
+
+  var addOfferClickListener = function addOfferClickListener() {
+    container.querySelectorAll('.sgn-offers-content-container').forEach(function (itemEl) {
+      itemEl.addEventListener('click', publicationType === 'incito' ? scrollToOffer : navigateToPage, false);
+    });
+  };
+
+  var navigateToPage = function navigateToPage(e) {
+    var _scriptEls$displayUrl, _scriptEls$displayUrl2;
+
+    e.preventDefault();
+    var _e$currentTarget$data = e.currentTarget.dataset,
+        pageId = _e$currentTarget$data.pageId,
+        pageNum = _e$currentTarget$data.pageNum;
+    destroyModal();
+    sgnViewer.navigateToPageId(pageId);
+
+    if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
+      var _pushQueryParam;
+
+      pushQueryParam((_pushQueryParam = {}, _defineProperty(_pushQueryParam, scriptEls.publicationIdParam, configs.id), _defineProperty(_pushQueryParam, scriptEls.pageIdParam, pageNum), _pushQueryParam));
+    } else if (((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
+      var _context5, _context6;
+
+      location.hash = _concatInstanceProperty(_context5 = _concatInstanceProperty(_context6 = "".concat(scriptEls.publicationHash, "/")).call(_context6, configs.id, "/")).call(_context5, pageNum);
+    }
+  };
+
+  var scrollToOffer = function scrollToOffer(e) {
+    var _e$currentTarget$data2;
+
+    var viewid = (_e$currentTarget$data2 = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data2.viewId;
+    var offerCell = document.querySelector("[data-id=\"".concat(viewid, "\"][data-role=\"offer\"]"));
+    destroyModal();
+    offerCell.scrollIntoView({
+      behavior: 'smooth'
+    });
+  };
+
+  var render = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee5() {
+      return _regeneratorRuntime.wrap(function _callee5$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.next = 2;
+              return fetchOffers(0, 24);
+
+            case 2:
+              offersList = _context7.sent;
+              container = document.createElement('div');
+              container.className = 'sgn-offers-container';
+              container.innerHTML = Mustache.render(template, {
+                translations: translations,
+                offers: offersList
+              });
+              addSearchListener();
+              addScrollListener();
+              addOfferClickListener();
+              return _context7.abrupt("return", container);
+
+            case 10:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    return function render() {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  return {
+    render: render
+  };
+};
+
+var PublicationDownload = function PublicationDownload(_ref) {
+  var configs = _ref.configs;
+  return {
+    render: function render() {
+      var _document$querySelect;
+
+      (_document$querySelect = document.querySelector('.sgn__offer-download')) == null ? void 0 : _document$querySelect.addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+        var _yield$request, pdf_url;
+
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return request({
+                  apiKey: configs.apiKey,
+                  coreUrl: configs.coreUrl,
+                  url: "/v2/catalogs/".concat(configs == null ? void 0 : configs.id, "/download")
+                });
+
+              case 2:
+                _yield$request = _context.sent;
+                pdf_url = _yield$request.pdf_url;
+                location.href = pdf_url;
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      })), false);
+    }
+  };
+};
+
+var defaultTemplate$6 = "    <div class=\"sgn-popup-container sgn-menu-popup\">\n        <div class=\"sgn-menu-popup-labels\">\n            <div class=\"sgn-menu-label\">\n                <span>{{label}}</span>\n            </div>\n            <div class=\"sgn-menu-till\">\n                <span>{{translations.untilLabel}} {{till}}</span>\n            </div>\n        </div>\n        {{^disableDownload}}\n            <div class=\"sgn-menu-download\">\n                <button class=\"sgn__offer-download\">{{translations.downloadButton}}</button>\n            </div>\n        {{/disableDownload}}\n        <div class=\"sgn-clearfix\"></div>\n        {{#isIncito}}\n            {{#hasSections}}\n            <div class=\"sgn-menu-tab\">\n                <button class=\"sgn-menu-tab-btn sgn-menu-tab-btn-active\">{{translations.overviewButton}}</button>\n                <button class=\"sgn-menu-tab-btn\">{{translations.offersButton}}</button>\n            </div>\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-sections\"></div>\n                </div>\n                <div class=\"sgn-menu-tab-content\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n            </div>\n            {{/hasSections}}\n            {{^hasSections}}\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n            </div>\n            {{/hasSections}}\n        {{/isIncito}}\n        {{^isIncito}}\n            <div class=\"sgn-menu-tab\">\n                <button class=\"sgn-menu-tab-btn sgn-menu-tab-btn-active\">{{translations.pagesButton}}</button>\n                <button class=\"sgn-menu-tab-btn\">{{translations.offersButton}}</button>\n            </div>\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-pages\"></div>\n                </div>\n                <div class=\"sgn-menu-tab-content\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n        </div>\n        {{/isIncito}}\n    </div>";
+
+var MenuPopup = function MenuPopup(_ref) {
+  var publicationType = _ref.publicationType,
+      configs = _ref.configs,
+      sgnData = _ref.sgnData,
+      sgnViewer = _ref.sgnViewer,
+      templates = _ref.templates,
+      scriptEls = _ref.scriptEls;
+  publicationType = publicationType || 'paged';
+  var translations = {
+    localeCode: translate('locale_code'),
+    untilLabel: translate('publication_viewer_until_label'),
+    pagesButton: translate('publication_viewer_pages_button'),
+    overviewButton: translate('publication_viewer_overview_button'),
+    offersButton: translate('publication_viewer_offers_button'),
+    downloadButton: translate('publication_viewer_download_button')
+  };
+  var container = null;
+
+  var render = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      var _templates$menuContai, _sgnData$details, _sgnData$details2, _sgnData$details3, _sgnData$details4, _sgnData$incito, _sgnData$incito$table;
+
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              container = document.createElement('div');
+              container.className = 'sgn-menu-popup-container';
+              container.innerHTML = Mustache.render(((_templates$menuContai = templates.menuContainer) == null ? void 0 : _templates$menuContai.innerHTML) || defaultTemplate$6, {
+                translations: translations,
+                label: sgnData == null ? void 0 : (_sgnData$details = sgnData.details) == null ? void 0 : _sgnData$details.label,
+                from: formatDate(sgnData == null ? void 0 : (_sgnData$details2 = sgnData.details) == null ? void 0 : _sgnData$details2.run_from, translations.localeCode, {
+                  dateStyle: 'full'
+                }),
+                till: formatDate(sgnData == null ? void 0 : (_sgnData$details3 = sgnData.details) == null ? void 0 : _sgnData$details3.run_till, translations.localeCode, {
+                  dateStyle: 'full'
+                }),
+                disableDownload: sgnData != null && (_sgnData$details4 = sgnData.details) != null && _sgnData$details4.pdf_url ? scriptEls.disableDownload : true,
+                isIncito: publicationType === 'incito',
+                hasSections: (sgnData == null ? void 0 : (_sgnData$incito = sgnData.incito) == null ? void 0 : (_sgnData$incito$table = _sgnData$incito.table_of_contents) == null ? void 0 : _sgnData$incito$table.length) > 0
+              });
+              createModal(container);
+              renderPageList();
+              renderSectionList();
+              renderOfferList();
+              addTabClickListener();
+              renderDownload();
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function render() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var addTabClickListener = function addTabClickListener() {
+    var tabContentItems = container.querySelectorAll('.sgn-menu-tab-content');
+    container.querySelectorAll('.sgn-menu-tab-btn').forEach(function (itemEl, index) {
+      itemEl.addEventListener('click', function (e) {
+        hideTabContents();
+
+        if (tabContentItems[index]) {
+          e.currentTarget.classList.add('sgn-menu-tab-btn-active');
+          tabContentItems[index].classList.add('sgn-menu-tab-content-active');
+        }
+      }, false);
+    });
+  };
+
+  var hideTabContents = function hideTabContents() {
+    container.querySelectorAll('.sgn-menu-tab-btn').forEach(function (itemEl) {
+      itemEl.classList.remove('sgn-menu-tab-btn-active');
+    });
+    container.querySelectorAll('.sgn-menu-tab-content').forEach(function (itemEl) {
+      itemEl.classList.remove('sgn-menu-tab-content-active');
+    });
+  };
+
+  var renderPageList = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2() {
+      var _container$querySelec;
+
+      return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              if (!((_container$querySelec = container.querySelector('.sgn-menu-tab-content-pages')) == null)) {
+                _context2.next = 4;
+                break;
+              }
+
+              _context2.t0 = void 0;
+              _context2.next = 9;
+              break;
+
+            case 4:
+              _context2.t1 = _container$querySelec;
+              _context2.next = 7;
+              return PageList({
+                scriptEls: scriptEls,
+                configs: configs,
+                sgnData: sgnData,
+                sgnViewer: sgnViewer,
+                template: templates.pageList
+              }).render();
+
+            case 7:
+              _context2.t2 = _context2.sent;
+              _context2.t0 = _context2.t1.appendChild.call(_context2.t1, _context2.t2);
+
+            case 9:
+              return _context2.abrupt("return", _context2.t0);
+
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function renderPageList() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var renderSectionList = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3() {
+      var _container$querySelec2;
+
+      return _regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (!((_container$querySelec2 = container.querySelector('.sgn-menu-tab-content-sections')) == null)) {
+                _context3.next = 4;
+                break;
+              }
+
+              _context3.t0 = void 0;
+              _context3.next = 9;
+              break;
+
+            case 4:
+              _context3.t1 = _container$querySelec2;
+              _context3.next = 7;
+              return SectionList({
+                sgnData: sgnData,
+                template: templates.sectionList
+              }).render();
+
+            case 7:
+              _context3.t2 = _context3.sent;
+              _context3.t0 = _context3.t1.appendChild.call(_context3.t1, _context3.t2);
+
+            case 9:
+              return _context3.abrupt("return", _context3.t0);
+
+            case 10:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function renderSectionList() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var renderOfferList = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee4() {
+      return _regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.t0 = container.querySelector('.sgn-menu-tab-content-offers');
+              _context4.next = 3;
+              return OfferList({
+                scriptEls: scriptEls,
+                publicationType: publicationType,
+                configs: configs,
+                sgnViewer: sgnViewer,
+                template: templates.offerList
+              }).render();
+
+            case 3:
+              _context4.t1 = _context4.sent;
+              return _context4.abrupt("return", _context4.t0.appendChild.call(_context4.t0, _context4.t1));
+
+            case 5:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function renderOfferList() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  var renderDownload = function renderDownload() {
+    PublicationDownload({
+      configs: configs
+    }).render();
+  };
+
+  return {
+    render: render
+  };
+};
+
+function ownKeys$5(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$5(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+var defaultTemplate$5 = "    <div class=\"sgn-shopping-popup sgn-show-print-section\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-popup-header-label\">\n                <span>{{translations.shoppingListLabel}}</span>\n            </div>            \n            <div class=\"sgn-menu-share\">\n                <button class=\"sgn-shopping-share-list-btn sgn-hide-print\">\n                    <svg \n                        aria-hidden=\"true\"\n                        class=\"sgn-share-icon-svg\"\n                        role=\"img\"\n                        viewBox=\"0 0 640 512\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                    >\n                        <path \n                            fill=\"currentColor\" \n                            d=\"M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z\"\n                        >\n                        </path>\n                    </svg>\n                </button>\n            </div>\n            <div class=\"sgn-clearfix\"></div>\n        </div>\n        <ol class=\"sgn-shopping-list-items-container\">\n            {{#offers}}\n            <li class=\"sgn-shopping-list-item-container\" data-id=\"{{index}}\">\n                <div class=\"sgn-shopping-list-content-container\">\n                    <div class=\"sgn-shopping-list-content\">\n                        <div class=\"sgn-shopping-list-content-heading sgn-truncate-elipsis\">\n                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/offers}}\n            {{#tickedOffers}}\n            <li class=\"sgn-shopping-list-item-container sgn-shopping-list-item-container-ticked\" data-id=\"{{index}}\">\n                <div class=\"sgn-shopping-list-content-container\">\n                    <div class=\"sgn-shopping-list-content\">\n                        <div class=\"sgn-shopping-list-content-heading sgn-truncate-elipsis\">\n                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/tickedOffers}}\n            {{#hasTicked}}\n            <li class=\"sgn-shopping-list-item-container-crossed sgn-hide-print\">\n                <button class=\"sgn-shopping-clear-ticked-list-btn sgn-hide-print\">{{translations.deleteCrossedOutButton}}</button>\n            </li>\n            {{/hasTicked}}\n        </ol>\n        <div>\n            <button class=\"sgn-shopping-clear-list-btn sgn-hide-print\">{{translations.clearListButton}}</button>\n            <button class=\"sgn-shopping-print-list-btn sgn-hide-print\">{{translations.printButton}}</button>\n        </div>\n    </div>";
+
+var ShoppingList = function ShoppingList(_ref) {
+  var _template;
+
+  var template = _ref.template;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$5;
+  var shoppingListBtn = document.querySelector('.sgn__offer-shopping');
+  var container = null;
+  var translations = {
+    localeCode: translate('locale_code'),
+    shoppingListLabel: translate('publication_viewer_shopping_list_label'),
+    currency: translate('publication_viewer_currency'),
+    deleteCrossedOutButton: translate('publication_viewer_delete_crossed_out_button'),
+    clearListButton: translate('publication_viewer_shopping_list_clear_button'),
+    printButton: translate('publication_viewer_print_button')
+  };
+
+  var render = function render() {
+    shoppingListBtn == null ? void 0 : shoppingListBtn.addEventListener('click', showShoppingList, false);
+  };
+
+  var showShoppingList = function showShoppingList() {
+    var _transformSavedOffers, _transformSavedOffers2, _transformSavedOffers3;
+
+    var storedPublicationOffers = get('publication-saved-offers');
+    container = document.createElement('div');
+    container.className = 'sgn-shopping-list-container';
+    container.innerHTML = Mustache.render(template, {
+      translations: translations,
+      offers: (_transformSavedOffers = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty(_transformSavedOffers).call(_transformSavedOffers, function (offer) {
+        return !offer.is_ticked;
+      }),
+      tickedOffers: (_transformSavedOffers2 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty(_transformSavedOffers2).call(_transformSavedOffers2, function (offer) {
+        return offer.is_ticked;
+      }),
+      hasTicked: ((_transformSavedOffers3 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty(_transformSavedOffers3).call(_transformSavedOffers3, function (offer) {
+        return offer.is_ticked;
+      }).length) > 0
+    });
+    createModal(container);
+    addEventListeners();
+  };
+
+  var transformSavedOffers = function transformSavedOffers(savedOffers) {
+    if (savedOffers === void 0) {
+      savedOffers = [];
+    }
+
+    var localeCode = translations.localeCode,
+        currency = translations.currency;
+    return _mapInstanceProperty(savedOffers).call(savedOffers, function (offer, index) {
+      var _offer$pricing, _offer$pricing2, _offer$pricing3;
+
+      return _objectSpread$5({
+        index: index
+      }, offer, {
+        price: offer != null && (_offer$pricing = offer.pricing) != null && _offer$pricing.price ? formatPrice(offer == null ? void 0 : (_offer$pricing2 = offer.pricing) == null ? void 0 : _offer$pricing2.price, localeCode, (offer == null ? void 0 : (_offer$pricing3 = offer.pricing) == null ? void 0 : _offer$pricing3.currency) || currency) : null
+      });
+    });
+  };
+
+  var addTickerListener = function addTickerListener() {
+    container.querySelectorAll('.sgn-shopping-list-item-container').forEach(function (itemEl) {
+      itemEl.addEventListener('click', tickOffer, false);
+    });
+  };
+
+  var tickOffer = function tickOffer(e) {
+    var _e$currentTarget$data, _transformSavedOffers4, _transformSavedOffers5, _transformSavedOffers6;
+
+    var storedPublicationOffers = get('publication-saved-offers');
+    var index = (_e$currentTarget$data = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data.id;
+    storedPublicationOffers[index].is_ticked = !storedPublicationOffers[index].is_ticked;
+    setWithEvent('publication-saved-offers', storedPublicationOffers, 'tjek_shopping_list_update');
+    container.innerHTML = Mustache.render(template, {
+      translations: translations,
+      offers: (_transformSavedOffers4 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty(_transformSavedOffers4).call(_transformSavedOffers4, function (offer) {
+        return !offer.is_ticked;
+      }),
+      tickedOffers: (_transformSavedOffers5 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty(_transformSavedOffers5).call(_transformSavedOffers5, function (offer) {
+        return offer.is_ticked;
+      }),
+      hasTicked: ((_transformSavedOffers6 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty(_transformSavedOffers6).call(_transformSavedOffers6, function (offer) {
+        return offer.is_ticked;
+      }).length) > 0
+    });
+    addEventListeners();
+    e.stopPropagation();
+  };
+
+  var addClearListListener = function addClearListListener() {
+    var _container$querySelec;
+
+    (_container$querySelec = container.querySelector('.sgn-shopping-clear-list-btn')) == null ? void 0 : _container$querySelec.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setWithEvent('publication-saved-offers', [], 'tjek_shopping_list_update');
+      container.innerHTML = Mustache.render(template, {
+        translations: translations,
+        offers: []
+      });
+      addEventListeners();
+    });
+  };
+
+  var addClearTickedListListener = function addClearTickedListListener() {
+    var clearTickedBtn = container.querySelector('.sgn-shopping-clear-ticked-list-btn');
+    var storedPublicationOffers = get('publication-saved-offers');
+    var validOffers = storedPublicationOffers == null ? void 0 : _filterInstanceProperty(storedPublicationOffers).call(storedPublicationOffers, function (offer) {
+      return !offer.is_ticked;
+    });
+    clearTickedBtn == null ? void 0 : clearTickedBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setWithEvent('publication-saved-offers', validOffers, 'tjek_shopping_list_update');
+      container.innerHTML = Mustache.render(template, {
+        translations: translations,
+        offers: transformSavedOffers(validOffers)
+      });
+      addEventListeners();
+    });
+  };
+
+  var addPrintListener = function addPrintListener() {
+    var _container$querySelec2;
+
+    (_container$querySelec2 = container.querySelector('.sgn-shopping-print-list-btn')) == null ? void 0 : _container$querySelec2.addEventListener('click', function () {
+      window.print();
+    });
+  };
+
+  var addShareListener = function addShareListener() {
+    var _container$querySelec3;
+
+    (_container$querySelec3 = container.querySelector('.sgn-shopping-share-list-btn')) == null ? void 0 : _container$querySelec3.addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      var shareData, _context, shareEmailData, queryString;
+
+      return _regeneratorRuntime.wrap(function _callee$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              shareData = {
+                title: 'My Shopping List',
+                text: formatListToShare(transformSavedOffers(get('publication-saved-offers'))),
+                url: document.location.href
+              };
+              _context2.next = 4;
+              return navigator.share(shareData);
+
+            case 4:
+              _context2.next = 12;
+              break;
+
+            case 6:
+              _context2.prev = 6;
+              _context2.t0 = _context2["catch"](0);
+              console.log(_context2.t0);
+              shareEmailData = {
+                subject: 'My Shopping List',
+                body: formatListToShare(transformSavedOffers(get('publication-saved-offers')), '%0d%0a')
+              };
+              queryString = _mapInstanceProperty(_context = _Object$keys(shareEmailData)).call(_context, function (key) {
+                return key + '=' + shareEmailData[key];
+              }).join('&');
+              window.location.href = "mailto:?".concat(queryString);
+
+            case 12:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee, null, [[0, 6]]);
+    })));
+  };
+
+  var formatListToShare = function formatListToShare(data, newLineDelimiter) {
+    var _data, _data2;
+
+    if (data === void 0) {
+      data = [];
+    }
+
+    if (newLineDelimiter === void 0) {
+      newLineDelimiter = "\n";
+    }
+
+    var offerStr = '';
+    (_data = data) == null ? void 0 : _data.forEach(function (offer) {
+      if (!offer.is_ticked) {
+        var _context3;
+
+        offerStr += offer.price ? _concatInstanceProperty(_context3 = "[ ] ".concat(offer.price, " - ")).call(_context3, offer.name) : "[ ] ".concat(offer.name);
+        offerStr += newLineDelimiter;
+      }
+    });
+    (_data2 = data) == null ? void 0 : _data2.forEach(function (offer) {
+      if (offer.is_ticked) {
+        var _context4;
+
+        offerStr += offer.price ? _concatInstanceProperty(_context4 = "[x] ".concat(offer.price, " - ")).call(_context4, offer.name) : "[x] ".concat(offer.name);
+        offerStr += newLineDelimiter;
+      }
+    });
+    return offerStr;
+  };
+
+  var addEventListeners = function addEventListeners() {
+    var _document$querySelect;
+
+    (_document$querySelect = document.querySelector('.sgn-modal-container')) == null ? void 0 : _document$querySelect.focus();
+    addTickerListener();
+    addClearTickedListListener();
+    addClearListListener();
+    addPrintListener();
+    addShareListener();
+  };
+
+  return {
+    render: render
+  };
+};
+
+function ownKeys$4(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$4(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+var defaultTemplate$4 = "    <div class=\"sgn-offer-overview-popup\">\n        {{#offer}}\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>{{label}}</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>{{translations.untilLabel}} {{till}}</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <img src=\"{{images.zoom}}\" alt=\"{{heading}}\">\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>{{heading}}</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>{{description}}&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>{{price}}</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    {{^disableShoppingList}}\n                    <button class=\"sgn-shopping-add-to-list-btn\">{{translations.addToShoppingList}}</button>\n                    {{/disableShoppingList}}\n                    {{#webshop_link}}\n                    <button class=\"sgn-shopping-open-webshop-btn\">{{translations.visitWebshopLink}}</button>\n                    {{/webshop_link}}\n                </div>\n            </div>\n        </div>\n        {{/offer}} \n    </div>";
+var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn_modal_loader-container\">\n            <div class=\"sgn_modal_loader\"></div>\n        </div>\n    </div>";
+
+var OfferOverview = function OfferOverview(_ref) {
+  var _template;
+
+  var template = _ref.template,
+      configs = _ref.configs,
+      sgnData = _ref.sgnData,
+      offer = _ref.offer,
+      type = _ref.type,
+      addToShoppingList = _ref.addToShoppingList;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$4;
+  var container = null;
+  var translations = {
+    localeCode: translate('locale_code'),
+    currency: translate('publication_viewer_currency'),
+    untilLabel: translate('publication_viewer_until_label'),
+    addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
+    visitWebshopLink: translate('publication_viewer_visit_webshop_link')
+  };
+
+  var render = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      var _sgnData$details;
+
+      var transformedOffer;
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              container = document.createElement('div');
+              container.className = 'sgn-offer-overview-container';
+              createModal(container);
+              container.innerHTML = Mustache.render(loaderTemplate, {});
+
+              if (!(type === 'paged')) {
+                _context.next = 10;
+                break;
+              }
+
+              _context.next = 7;
+              return fetchOffer(offer.id);
+
+            case 7:
+              _context.t0 = _context.sent;
+              _context.next = 11;
+              break;
+
+            case 10:
+              _context.t0 = transformIncitoOffer(offer);
+
+            case 11:
+              transformedOffer = _context.t0;
+              container.innerHTML = Mustache.render(template, {
+                translations: translations,
+                label: sgnData == null ? void 0 : (_sgnData$details = sgnData.details) == null ? void 0 : _sgnData$details.label,
+                disableShoppingList: document.querySelector('.sgn__offer-shopping') ? false : true,
+                offer: transformedOffer
+              });
+              addEventListeners();
+
+            case 14:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function render() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var transformIncitoOffer = function transformIncitoOffer(offer) {
+    var _offer$images, _offer$images$, _offer$validity, _offer$validity2;
+
+    var localeCode = translations.localeCode,
+        currency = translations.currency;
+    return _objectSpread$4({}, offer, {
+      heading: offer.name,
+      price: formatPrice(offer == null ? void 0 : offer.price, localeCode, (offer == null ? void 0 : offer.currency_code) || currency),
+      images: {
+        zoom: offer == null ? void 0 : (_offer$images = offer.images) == null ? void 0 : (_offer$images$ = _offer$images[0]) == null ? void 0 : _offer$images$.url
+      },
+      from: formatDate(offer == null ? void 0 : (_offer$validity = offer.validity) == null ? void 0 : _offer$validity.from, translations.localeCode, {
+        dateStyle: 'full'
+      }),
+      till: formatDate(offer == null ? void 0 : (_offer$validity2 = offer.validity) == null ? void 0 : _offer$validity2.to, translations.localeCode, {
+        dateStyle: 'full'
+      })
+    });
+  };
+
+  var addOpenWebshopListener = function addOpenWebshopListener() {
+    var _container$querySelec;
+
+    (_container$querySelec = container.querySelector('.sgn-shopping-open-webshop-btn')) == null ? void 0 : _container$querySelec.addEventListener('click', function () {
+      window.open(offer.webshop_link);
+    });
+  };
+
+  var addShoppingListListener = function addShoppingListListener() {
+    var _container$querySelec2;
+
+    (_container$querySelec2 = container.querySelector('.sgn-shopping-add-to-list-btn')) == null ? void 0 : _container$querySelec2.addEventListener('click', function () {
+      addToShoppingList(offer);
+      destroyModal();
+    });
+  };
+
+  var fetchOffer = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(id) {
+      var _offer$pricing, _offer$pricing2;
+
+      var localeCode, currency, offer;
+      return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              localeCode = translations.localeCode, currency = translations.currency;
+              _context2.next = 3;
+              return request({
+                apiKey: configs.apiKey,
+                coreUrl: configs.coreUrl,
+                url: "/v2/offers/".concat(id)
+              });
+
+            case 3:
+              offer = _context2.sent;
+              return _context2.abrupt("return", _objectSpread$4({}, offer, {
+                price: formatPrice(offer == null ? void 0 : (_offer$pricing = offer.pricing) == null ? void 0 : _offer$pricing.price, localeCode, (offer == null ? void 0 : (_offer$pricing2 = offer.pricing) == null ? void 0 : _offer$pricing2.currency) || currency),
+                from: formatDate(offer == null ? void 0 : offer.run_from, translations.localeCode, {
+                  dateStyle: 'full'
+                }),
+                till: formatDate(offer == null ? void 0 : offer.run_till, translations.localeCode, {
+                  dateStyle: 'full'
+                })
+              }));
+
+            case 5:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function fetchOffer(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var addEventListeners = function addEventListeners() {
+    var _document$querySelect;
+
+    (_document$querySelect = document.querySelector('.sgn-modal-container')) == null ? void 0 : _document$querySelect.focus();
+    addOpenWebshopListener();
+    addShoppingListListener();
+  };
+
+  return {
+    render: render
+  };
+};
+
+var transformScriptData = function transformScriptData(scriptEl, mainContainer) {
+  var dataset = scriptEl.dataset;
+  return {
+    businessId: dataset.businessId,
+    mainContainer: dataset.componentPublicationContainer || mainContainer,
+    publicationId: dataset.componentPublicationId,
+    publicationIdParam: dataset.publicationIdQueryParam || 'publicationid',
+    pageIdParam: dataset.publicationPageQueryParam || 'publicationpage',
+    publicationHash: dataset.publicationHash || 'publication',
+    displayUrlParams: dataset.componentPublicationDisplayUrlParams,
+    localeCode: dataset.localeCode,
+    translationKeys: dataset.translationKeyIncito_publication_viewer,
+    theme: dataset.componentTheme,
+    publicationsListClickBehavior: dataset.componentPublicationsListItemClickBehavior || 'open_publication_viewer',
+    offerClickBehavior: dataset.componentPublicationViewerOfferClickBehavior || 'shopping_list',
+    disableShoppingList: dataset.componentPublicationDisableShoppingList === 'true',
+    disableClose: dataset.componentPublicationDisableClose === 'true',
+    disableMenu: dataset.componentPublicationDisableMenu === 'true',
+    disableDownload: dataset.componentPublicationDisableDownload === 'true',
+    disableHeader: dataset.componentPublicationDisableHeader === 'true',
+    disableGlobalScrollbar: dataset.componentPublicationDisableGlobalScrollbar === 'true',
+    showHeaderLabels: dataset.componentPublicationShowHeaderLabels === 'true'
+  };
+};
+
+var defaultTemplate$3 = "    <div class=\"sgn_loader-container\">\n        <div class=\"sgn_loader\"></div>\n    </div>\n    <div class=\"sgn__incito\" data-component-template=\"true\" tabindex=\"-1\" data-component-template-disable-header=\"{{disableHeader}}\">\n        <div class=\"sgn__header-container\"></div>\n        {{#disableHeader}}\n        <div class=\"sgn-incito__scroll-progress\">\n            <div class=\"sgn-incito__scroll-progress-bar\"></div>\n            <span class=\"sgn-incito__scroll-progress-text\"></span>\n        </div>\n        {{/disableHeader}}\n    </div>";
+
+var MainContainer$2 = function MainContainer(_ref) {
+  var _template;
+
+  var template = _ref.template,
+      el = _ref.el,
+      scriptEls = _ref.scriptEls;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$3;
+
+  var setCustomStyles = function setCustomStyles() {
+    var sgnIncito = el.querySelector('.sgn__incito');
+    sgnIncito.classList.add("sgn__theme-".concat(scriptEls.theme || 'light'));
+  };
+
+  var render = function render() {
+    var _el$querySelector;
+
+    el.innerHTML = Mustache.render(template, {
+      disableHeader: scriptEls.disableHeader,
+      disableShoppingList: scriptEls.disableShoppingList || scriptEls.offerClickBehavior !== 'shopping_list',
+      disableMenu: scriptEls.disableMenu,
+      disableClose: scriptEls.disableClose
+    });
+    (_el$querySelector = el.querySelector('.sgn__incito')) == null ? void 0 : _el$querySelector.focus();
+    setCustomStyles();
+  };
+
+  return {
+    render: render
+  };
+};
+
+var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
+  var _document$querySelect;
+
+  var _ref = _temp === void 0 ? {} : _temp,
+      _ref$mainContainer = _ref.mainContainer,
+      mainContainer = _ref$mainContainer === void 0 ? '' : _ref$mainContainer,
+      apiKey = _ref.apiKey,
+      coreUrl = _ref.coreUrl,
+      eventTracker = _ref.eventTracker;
+
+  var options = {};
+  var sgnData = {};
+  var sgnViewer = null;
+  var bootstrapper = null;
+  var scriptEls = transformScriptData(scriptEl, mainContainer);
+  var customTemplates = {
+    mainContainer: document.getElementById('sgn-sdk-incito-publication-viewer-template'),
+    headerContainer: document.getElementById('sgn-sdk-incito-publication-viewer-header-template'),
+    offerList: document.getElementById('sgn-sdk-incito-publication-viewer-offer-list-template'),
+    shoppingList: document.getElementById('sgn-sdk-incito-publication-viewer-shopping-list-template'),
+    shoppingListCounter: document.getElementById('sgn-sdk-incito-publication-viewer-shopping-list-counter-template'),
+    sectionList: document.getElementById('sgn-sdk-incito-publication-viewer-section-list-template'),
+    offerOverview: document.getElementById('sgn-sdk-incito-publication-viewer-offer-overview-template'),
+    menuContainer: document.getElementById('sgn-sdk-incito-publication-viewer-menu-container-template')
+  };
+  MainContainer$2({
+    template: customTemplates.mainContainer,
+    shoppingListCounterTemplate: customTemplates.shoppingListCounter,
+    el: document.querySelector(scriptEls.mainContainer),
+    scriptEls: scriptEls
+  }).render();
+  var header = Header({
+    publicationType: 'incito',
+    template: customTemplates.headerContainer,
+    shoppingListCounterTemplate: customTemplates.shoppingListCounter,
+    el: document.querySelector(scriptEls.mainContainer),
+    scriptEls: scriptEls
+  });
+  (_document$querySelect = document.querySelector('.sgn__header-container')) == null ? void 0 : _document$querySelect.appendChild(header.render());
+
+  var render = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!(_Object$keys(options).length === 0)) {
+                _context.next = 3;
+                break;
+              }
+
+              _context.next = 3;
+              return setOptions();
+
+            case 3:
+              start();
+              addScrollListener();
+              renderShoppingList();
+              renderMenuPopup();
+
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function render() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var renderShoppingList = function renderShoppingList() {
+    return ShoppingList({
+      template: customTemplates.shoppingList
+    }).render();
+  };
+
+  var renderMenuPopup = function renderMenuPopup() {
+    var _document$querySelect2;
+
+    return (_document$querySelect2 = document.querySelector('.sgn__nav-menu-btn')) == null ? void 0 : _document$querySelect2.addEventListener('click', function (e) {
+      e.preventDefault();
+      MenuPopup({
+        publicationType: 'incito',
+        configs: options,
+        sgnData: sgnData,
+        templates: customTemplates,
+        scriptEls: scriptEls
+      }).render();
+    });
+  };
+
+  var animateShoppingListCounter = function animateShoppingListCounter() {
+    var shoppingListCounter = document.querySelector('.sgn__offer-shopping-list-counter');
+    shoppingListCounter == null ? void 0 : shoppingListCounter.classList.remove('sgn-animate-bounce');
+    shoppingListCounter == null ? void 0 : shoppingListCounter.classList.add('sgn-animate-bounce');
+  };
+
+  var setOptions = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(opts) {
+      return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.t0 = document.querySelector('.sgn__incito');
+              _context2.t1 = apiKey;
+              _context2.t2 = coreUrl;
+              _context2.t3 = eventTracker;
+              _context2.t4 = (opts == null ? void 0 : opts.pageId) || "page".concat(getQueryParam(scriptEls.pageIdParam) || 1);
+              _context2.t5 = (opts == null ? void 0 : opts.id) || getQueryParam(scriptEls.publicationIdParam) || scriptEls.publicationId;
+
+              if (_context2.t5) {
+                _context2.next = 10;
+                break;
+              }
+
+              _context2.next = 9;
+              return fetchLatestPublicationId();
+
+            case 9:
+              _context2.t5 = _context2.sent;
+
+            case 10:
+              _context2.t6 = _context2.t5;
+              _context2.t7 = (opts == null ? void 0 : opts.businessId) || scriptEls.businessId;
+              options = {
+                el: _context2.t0,
+                apiKey: _context2.t1,
+                coreUrl: _context2.t2,
+                eventTracker: _context2.t3,
+                pageId: _context2.t4,
+                id: _context2.t6,
+                businessId: _context2.t7
+              };
+
+            case 13:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function setOptions(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var start = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee4() {
+      var _sgnLoader$parentNode;
+
+      var sgnLoader, data;
+      return _regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              sgnLoader = document.querySelector('.sgn_loader-container');
+              bootstrapper = new Bootstrapper$1(options);
+              _context4.next = 4;
+              return bootstrapper.fetch();
+
+            case 4:
+              data = _context4.sent;
+              sgnData = data;
+              sgnViewer = bootstrapper.createViewer(data);
+              header.show(sgnData);
+              on(options.el, 'click', '.incito__view[data-role="offer"]', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3(e) {
+                var viewId, publicationId;
+                return _regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  while (1) {
+                    switch (_context3.prev = _context3.next) {
+                      case 0:
+                        e.preventDefault();
+                        viewId = this.dataset.id;
+                        publicationId = options.id;
+                        clickOfferCell(viewId, publicationId);
+
+                      case 4:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }
+                }, _callee3, this);
+              })));
+              sgnViewer.start();
+
+              if (scriptEls.disableGlobalScrollbar) {
+                document.querySelector('html').classList.add('sgn-incito-publication--open');
+              }
+
+              sgnLoader == null ? void 0 : (_sgnLoader$parentNode = sgnLoader.parentNode) == null ? void 0 : _sgnLoader$parentNode.removeChild(sgnLoader);
+
+            case 12:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function start() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var dispatchOfferClickEvent = function dispatchOfferClickEvent(detail) {
+    window.dispatchEvent(new CustomEvent('tjek-incito-publication-view-clicked', {
+      detail: detail
+    }));
+  };
+
+  var clickOfferCell = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee5(viewId, publicationId) {
+      var shoppingBtn, _yield$fetchOffer, offer, newWindowRef, _yield$fetchOffer2, _offer, _yield$fetchOffer3, _offer2, _yield$fetchOffer4, _offer3;
+
+      return _regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              dispatchOfferClickEvent({
+                fetchOffer: fetchOffer,
+                viewId: viewId,
+                publicationId: publicationId
+              });
+              shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
+
+              if (!(scriptEls.offerClickBehavior === 'overview_modal')) {
+                _context5.next = 10;
+                break;
+              }
+
+              _context5.next = 5;
+              return fetchOffer({
+                viewId: viewId,
+                publicationId: publicationId
+              });
+
+            case 5:
+              _yield$fetchOffer = _context5.sent;
+              offer = _yield$fetchOffer.offer;
+              OfferOverview({
+                template: customTemplates.offerOverview,
+                configs: options,
+                sgnData: sgnData,
+                offer: offer,
+                type: 'incito',
+                addToShoppingList: addToShoppingList
+              }).render();
+              _context5.next = 33;
+              break;
+
+            case 10:
+              if (!(scriptEls.offerClickBehavior === 'open_webshop_link_in_tab')) {
+                _context5.next = 19;
+                break;
+              }
+
+              newWindowRef = window.open();
+              _context5.next = 14;
+              return fetchOffer({
+                viewId: viewId,
+                publicationId: publicationId
+              });
+
+            case 14:
+              _yield$fetchOffer2 = _context5.sent;
+              _offer = _yield$fetchOffer2.offer;
+
+              if (_offer.webshop_link) {
+                newWindowRef.location = _offer.webshop_link;
+              } else {
+                newWindowRef.close();
+              }
+
+              _context5.next = 33;
+              break;
+
+            case 19:
+              if (!(scriptEls.offerClickBehavior === 'redirect_to_webshop_link')) {
+                _context5.next = 27;
+                break;
+              }
+
+              _context5.next = 22;
+              return fetchOffer({
+                viewId: viewId,
+                publicationId: publicationId
+              });
+
+            case 22:
+              _yield$fetchOffer3 = _context5.sent;
+              _offer2 = _yield$fetchOffer3.offer;
+
+              if (_offer2.webshop_link) {
+                location.href = _offer2.webshop_link;
+              }
+
+              _context5.next = 33;
+              break;
+
+            case 27:
+              if (!shoppingBtn) {
+                _context5.next = 33;
+                break;
+              }
+
+              _context5.next = 30;
+              return fetchOffer({
+                viewId: viewId,
+                publicationId: publicationId
+              });
+
+            case 30:
+              _yield$fetchOffer4 = _context5.sent;
+              _offer3 = _yield$fetchOffer4.offer;
+              addToShoppingList(_offer3);
+
+            case 33:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    return function clickOfferCell(_x3, _x4) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var addToShoppingList = function addToShoppingList(offer) {
+    var storedPublicationOffers = get('publication-saved-offers');
+    var shopListOffer = {
+      name: offer.name,
+      pricing: {
+        price: offer.price,
+        currency: offer.currency_code
+      },
+      is_ticked: false
+    };
+
+    if (!storedPublicationOffers) {
+      setWithEvent('publication-saved-offers', [shopListOffer], 'tjek_shopping_list_update');
+    } else {
+      storedPublicationOffers.push(shopListOffer);
+      setWithEvent('publication-saved-offers', storedPublicationOffers, 'tjek_shopping_list_update');
+    }
+
+    animateShoppingListCounter();
+  };
+
+  var addScrollListener = function addScrollListener() {
+    var isContainerFixed = window.getComputedStyle(options.el).position === 'fixed';
+    var progressContainer = options.el.querySelector('.sgn-incito__scroll-progress');
+    var progressBar = options.el.querySelector('.sgn-incito__scroll-progress-bar');
+    var progressText = options.el.querySelector('.sgn-incito__scroll-progress-text');
+
+    if (progressText && isContainerFixed) {
+      progressText.innerHTML = '0%';
+      options.el.addEventListener('scroll', function () {
+        var scrollValue = getContainerScrollValue();
+        progressBar.style.transform = "scaleX(".concat(scrollValue / 100, ")");
+        progressText.innerHTML = "".concat(Math.round(scrollValue), "%");
+      });
+    } else {
+      var _progressContainer$pa;
+
+      progressContainer == null ? void 0 : (_progressContainer$pa = progressContainer.parentNode) == null ? void 0 : _progressContainer$pa.removeChild(progressContainer);
+    }
+  };
+
+  var getContainerScrollValue = function getContainerScrollValue() {
+    return 100 * options.el.scrollTop / (options.el.scrollHeight - options.el.clientHeight);
+  };
+
+  var fetchLatestPublicationId = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee6() {
+      var _yield$request, _yield$request$;
+
+      return _regeneratorRuntime.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.next = 2;
+              return request({
+                apiKey: apiKey,
+                coreUrl: coreUrl,
+                url: '/v2/catalogs',
+                qs: {
+                  dealer_id: scriptEls.businessId,
+                  order_by: '-publication_date',
+                  types: 'incito',
+                  limit: 1
+                }
+              });
+
+            case 2:
+              _context6.t0 = _yield$request = _context6.sent;
+
+              if (!(_context6.t0 == null)) {
+                _context6.next = 7;
+                break;
+              }
+
+              _context6.t1 = void 0;
+              _context6.next = 8;
+              break;
+
+            case 7:
+              _context6.t1 = (_yield$request$ = _yield$request[0]) == null ? void 0 : _yield$request$.id;
+
+            case 8:
+              return _context6.abrupt("return", _context6.t1);
+
+            case 9:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
+    }));
+
+    return function fetchLatestPublicationId() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+
+  var fetchOffer = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee7(_ref8, callback) {
+      var viewId, publicationId, res;
+      return _regeneratorRuntime.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              viewId = _ref8.viewId, publicationId = _ref8.publicationId;
+              _context7.prev = 1;
+              _context7.next = 4;
+              return request({
+                apiKey: apiKey,
+                coreUrl: coreUrl,
+                url: '/v4/rpc/get_offer_from_incito_publication_view',
+                method: 'post',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: _JSON$stringify({
+                  view_id: viewId,
+                  publication_id: publicationId
+                })
+              });
+
+            case 4:
+              res = _context7.sent;
+
+              if (res.offer.id) {
+                eventTracker == null ? void 0 : eventTracker.trackOfferOpened({
+                  'of.id': res.offer.id,
+                  vt: eventTracker.createViewToken(res.offer.id)
+                });
+              }
+
+              if (typeof callback === 'function') callback(null, res);
+              return _context7.abrupt("return", res);
+
+            case 10:
+              _context7.prev = 10;
+              _context7.t0 = _context7["catch"](1);
+
+              if (!(typeof callback === 'function')) {
+                _context7.next = 16;
+                break;
+              }
+
+              callback(_context7.t0);
+              _context7.next = 17;
+              break;
+
+            case 16:
+              throw _context7.t0;
+
+            case 17:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[1, 10]]);
+    }));
+
+    return function fetchOffer(_x5, _x6) {
+      return _ref9.apply(this, arguments);
+    };
+  }();
+
+  return {
+    render: render,
+    setOptions: setOptions
+  };
+};
+
+var defaultTemplate$2 = "<div class=\"sgn__publications\">\n    <ul class=\"sgn-publications-list-items-container\">\n        {{#publications}}\n        <li class=\"sgn-publications-li\">\n            <div class=\"publications__item\" data-id=\"{{id}}\">\n                <div class=\"sgn-publications-list-content-img\">\n                    <img data-id=\"{{id}}\" src=\"{{images.view}}\" alt=\"{{label}}\">\n                </div>\n                <div class=\"sgn-publications-list-content-text\">\n                    <div class=\"sgn-publications-list-content-heading\">\n                        <span>{{label}}</span>\n                    </div>\n                    <div class=\"sgn-publications-list-content-date\">\n                        <span>{{dateFrom}}-{{dateTill}}</span>\n                    </div>\n                </div>\n            </div>\n        </li>\n        {{/publications}}\n    </u;>\n</div>\n<div id=\"sgn-publication-viewer-container\"></div>\n";
+
+var MainContainer$1 = function MainContainer(_ref) {
+  var publications = _ref.publications,
+      template = _ref.template,
+      el = _ref.el;
+
+  var render = function render() {
+    el.innerHTML = Mustache.render((template == null ? void 0 : template.innerHTML) || defaultTemplate$2, {
+      publications: publications
+    });
+  };
+
+  return {
+    render: render
+  };
+};
 
 var pairs = {
   'paged_publication.hotspot_picker.header': 'Which offer did you mean?',
@@ -2733,13 +3748,12 @@ var pairs = {
 function t(key, view) {
   var _pairs$key;
 
-  var template = (_pairs$key = pairs[key]) !== null && _pairs$key !== void 0 ? _pairs$key : '';
+  var template = (_pairs$key = pairs[key]) != null ? _pairs$key : '';
   return Mustache.render(template, view);
 }
 function update(translations) {
   for (var key in translations) {
-    var value = translations[key];
-    pairs[key] = value;
+    pairs[key] = translations[key];
   }
 }
 
@@ -2749,230 +3763,353 @@ var translations = /*#__PURE__*/Object.freeze({
     update: update
 });
 
-function _createSuper$6(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$6(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+var defaultTemplate$1 = "<div class=\"sgn-popover__background\" data-close></div>\n<div class=\"sgn-popover__menu\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#singleChoiceItems}}\n                <li data-index=\"{{index}}\">\n                    <p class=\"sgn-popover-item__title\">{{item.title}}</p>\n                    {{#item.subtitle}}\n                        <p class=\"sgn-popover-item__subtitle\">{{item.subtitle}}</p>\n                    {{/item.subtitle}}\n                </li>\n            {{/singleChoiceItems}}\n        </ul>\n    </div>\n</div>";
 
-function _isNativeReflectConstruct$6() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var Popover = /*#__PURE__*/function (_MicroEvent) {
+  _inherits(Popover, _MicroEvent);
+
+  function Popover(options) {
+    var _this;
+
+    if (options === void 0) {
+      options = {};
+    }
+
+    _this = _MicroEvent.call(this) || this;
+    _this.el = document.createElement('div');
+    _this.backgroundEl = document.createElement('div');
+
+    _this.keyUp = function (e) {
+      if (e.keyCode === ESC) _this.destroy();
+    };
+
+    _this.resize = function () {
+      _this.destroy();
+    };
+
+    _this.scroll = function () {
+      _this.destroy();
+    };
+
+    _this.options = options;
+    return _this;
+  }
+
+  var _proto = Popover.prototype;
+
+  _proto.render = function render() {
+    var _this$options = this.options,
+        header = _this$options.header,
+        singleChoiceItems = _this$options.singleChoiceItems,
+        template = _this$options.template;
+    this.el.className = 'sgn-popover';
+    this.el.setAttribute('tabindex', -1);
+    this.el.innerHTML = Mustache.render(template || defaultTemplate$1, {
+      header: header,
+      singleChoiceItems: singleChoiceItems == null ? void 0 : _mapInstanceProperty(singleChoiceItems).call(singleChoiceItems, function (item, index) {
+        return {
+          item: item,
+          index: index
+        };
+      })
+    });
+    this.position();
+    this.addEventListeners();
+    return this;
+  };
+
+  _proto.destroy = function destroy() {
+    off(this.el);
+    window.removeEventListener('resize', this.resize, false);
+    window.removeEventListener('scroll', this.scroll, false);
+
+    if (this.el.parentNode) {
+      this.el.parentNode.removeChild(this.el);
+      this.trigger('destroyed');
+    }
+  };
+
+  _proto.position = function position() {
+    var top = this.options.y;
+    var left = this.options.x;
+    var menuEl = this.el.querySelector('.sgn-popover__menu');
+    var width = menuEl.offsetWidth;
+    var height = menuEl.offsetHeight;
+    var parentWidth = this.el.parentNode.offsetWidth;
+    var parentHeight = this.el.parentNode.offsetHeight;
+    var boundingRect = this.el.parentNode.getBoundingClientRect();
+    top -= boundingRect.top;
+    left -= boundingRect.left;
+    top -= window.pageYOffset;
+    left -= window.pageXOffset;
+    menuEl.style.top = top + height > parentHeight ? parentHeight - height + 'px' : top + 'px';
+    menuEl.style.left = left + width > parentWidth ? parentWidth - width + 'px' : left + 'px';
+  };
+
+  _proto.addEventListeners = function addEventListeners() {
+    var _this2 = this;
+
+    var trigger = this.trigger.bind(this);
+    this.el.addEventListener('keyup', this.keyUp);
+    on(this.el, 'click', '[data-index]', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      trigger('selected', {
+        index: this.dataset.index
+      });
+    });
+    on(this.el, 'click', '[data-close]', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      _this2.destroy();
+    });
+    on(this.el, 'click', '.sgn-popover__menu', function (e) {
+      e.stopPropagation();
+    });
+    window.addEventListener('resize', this.resize, false);
+    window.addEventListener('scroll', this.scroll, false);
+  };
+
+  return _createClass(Popover);
+}(MicroEvent);
+
+function singleChoicePopover(_ref, callback) {
+  var items = _ref.items,
+      el = _ref.el,
+      header = _ref.header,
+      x = _ref.x,
+      y = _ref.y;
+  var popover = null;
+
+  if (items.length === 1) {
+    callback(items[0]);
+  } else if (items.length > 1) {
+    popover = new Popover({
+      header: header,
+      x: x,
+      y: y,
+      singleChoiceItems: items
+    });
+    popover.bind('selected', function (e) {
+      callback(items[e.index]);
+      popover.destroy();
+    });
+    popover.bind('destroyed', function () {
+      el.focus();
+    });
+    el.appendChild(popover.el);
+    popover.render().el.focus();
+  }
+
+  return {
+    destroy: function destroy() {
+      var _popover;
+
+      (_popover = popover) == null ? void 0 : _popover.destroy();
+    }
+  };
+}
+
+var visibilityClassName = 'sgn-pp--hidden';
 
 var PagedPublicationControls = /*#__PURE__*/function (_MicroEvent) {
   _inherits(PagedPublicationControls, _MicroEvent);
 
-  var _super = _createSuper$6(PagedPublicationControls);
-
-  function PagedPublicationControls(el) {
-    var _context, _context2, _context3, _context4, _context5, _context6, _this$els$prevControl, _this$els$nextControl, _this$els$close;
+  function PagedPublicationControls(el, options) {
+    var _this$prevControl2, _this$nextControl2, _this$close2;
 
     var _this;
 
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    if (options === void 0) {
+      options = {};
+    }
 
-    _classCallCheck(this, PagedPublicationControls);
+    _this = _MicroEvent.call(this) || this;
 
-    _this = _super.call(this);
-    _this.destroy = _bindInstanceProperty(_context = _this.destroy).call(_context, _assertThisInitialized(_this));
-    _this.beforeNavigation = _bindInstanceProperty(_context2 = _this.beforeNavigation).call(_context2, _assertThisInitialized(_this));
-    _this.prevClicked = _bindInstanceProperty(_context3 = _this.prevClicked).call(_context3, _assertThisInitialized(_this));
-    _this.nextClicked = _bindInstanceProperty(_context4 = _this.nextClicked).call(_context4, _assertThisInitialized(_this));
-    _this.closeClicked = _bindInstanceProperty(_context5 = _this.closeClicked).call(_context5, _assertThisInitialized(_this));
-    _this.keyDown = _bindInstanceProperty(_context6 = _this.keyDown).call(_context6, _assertThisInitialized(_this));
-    _this.options = options;
-    _this.els = {
-      root: el,
-      progress: el.querySelector('.sgn-pp__progress'),
-      progressBar: el.querySelector('.sgn-pp-progress__bar'),
-      progressLabel: el.querySelector('.sgn-pp__progress-label'),
-      prevControl: el.querySelector('.sgn-pp__control[data-direction=prev]'),
-      nextControl: el.querySelector('.sgn-pp__control[data-direction=next]'),
-      close: el.querySelector('.sgn-pp--close')
+    _this.destroy = function () {
+      var _this$prevControl, _this$nextControl, _this$close;
+
+      if (_this.options.keyboard === true) {
+        _this.root.removeEventListener('keydown', _this.keyDownHandler, false);
+      }
+
+      (_this$prevControl = _this.prevControl) == null ? void 0 : _this$prevControl.removeEventListener('mousedown', _this.prevClicked, false);
+      (_this$nextControl = _this.nextControl) == null ? void 0 : _this$nextControl.removeEventListener('mousedown', _this.nextClicked, false);
+      (_this$close = _this.close) == null ? void 0 : _this$close.removeEventListener('mousedown', _this.closeClicked, false);
     };
+
+    _this.beforeNavigation = function (e) {
+      var showProgress = typeof e.progressLabel === 'string' && e.progressLabel.length > 0;
+
+      if (_this.progress && _this.progressBar) {
+        _this.progressBar.style.width = "".concat(e.progress, "%");
+
+        if (showProgress) {
+          _this.progress.classList.remove(visibilityClassName);
+        } else {
+          _this.progress.classList.add(visibilityClassName);
+        }
+      }
+
+      if (_this.progressLabel) {
+        if (showProgress) {
+          _this.progressLabel.textContent = e.progressLabel;
+
+          _this.progressLabel.classList.remove(visibilityClassName);
+        } else {
+          _this.progressLabel.classList.add(visibilityClassName);
+        }
+      }
+
+      if (_this.prevControl) {
+        if (e.verso.newPosition === 0) {
+          _this.prevControl.classList.add(visibilityClassName);
+        } else {
+          _this.prevControl.classList.remove(visibilityClassName);
+        }
+      }
+
+      if (_this.nextControl) {
+        if (e.verso.newPosition === e.pageSpreadCount - 1) {
+          _this.nextControl.classList.add(visibilityClassName);
+        } else {
+          _this.nextControl.classList.remove(visibilityClassName);
+        }
+      }
+    };
+
+    _this.prevClicked = function (e) {
+      e.preventDefault();
+
+      _this.trigger('prev');
+    };
+
+    _this.nextClicked = function (e) {
+      e.preventDefault();
+
+      _this.trigger('next');
+    };
+
+    _this.closeClicked = function (e) {
+      e.preventDefault();
+
+      _this.trigger('close');
+    };
+
+    _this.keyDown = function (e) {
+      var keyCode = e.keyCode;
+
+      if (ARROW_LEFT === keyCode) {
+        _this.trigger('prev', {
+          duration: 0
+        });
+      } else if (ARROW_RIGHT === keyCode || SPACE === keyCode) {
+        _this.trigger('next', {
+          duration: 0
+        });
+      } else if (NUMBER_ONE === keyCode) {
+        _this.trigger('first', {
+          duration: 0
+        });
+      }
+    };
+
+    _this.options = options;
+    _this.root = el;
+    _this.progress = el.querySelector('.sgn-pp__progress');
+    _this.progressBar = el.querySelector('.sgn-pp-progress__bar');
+    _this.progressLabel = el.querySelector('.sgn-pp__progress-label');
+    _this.prevControl = el.querySelector('.sgn-pp__control[data-direction=prev]');
+    _this.nextControl = el.querySelector('.sgn-pp__control[data-direction=next]');
+    _this.close = el.querySelector('.sgn-pp--close');
     _this.keyDownHandler = throttle(_this.keyDown, 150, _assertThisInitialized(_this));
 
     if (_this.options.keyboard === true) {
-      _this.els.root.addEventListener('keydown', _this.keyDownHandler, false);
+      _this.root.addEventListener('keydown', _this.keyDownHandler, false);
     }
 
-    (_this$els$prevControl = _this.els.prevControl) === null || _this$els$prevControl === void 0 ? void 0 : _this$els$prevControl.addEventListener('mousedown', _this.prevClicked, false);
-    (_this$els$nextControl = _this.els.nextControl) === null || _this$els$nextControl === void 0 ? void 0 : _this$els$nextControl.addEventListener('mousedown', _this.nextClicked, false);
-    (_this$els$close = _this.els.close) === null || _this$els$close === void 0 ? void 0 : _this$els$close.addEventListener('mousedown', _this.closeClicked, false);
+    (_this$prevControl2 = _this.prevControl) == null ? void 0 : _this$prevControl2.addEventListener('mousedown', _this.prevClicked, false);
+    (_this$nextControl2 = _this.nextControl) == null ? void 0 : _this$nextControl2.addEventListener('mousedown', _this.nextClicked, false);
+    (_this$close2 = _this.close) == null ? void 0 : _this$close2.addEventListener('mousedown', _this.closeClicked, false);
 
-    _bindInstanceProperty(_this).call(_this, 'beforeNavigation', _this.beforeNavigation);
+    _this.bind('beforeNavigation', _this.beforeNavigation);
 
-    _bindInstanceProperty(_this).call(_this, 'destroyed', _this.destroy);
+    _this.bind('destroyed', _this.destroy);
 
     return _this;
   }
 
-  _createClass(PagedPublicationControls, [{
-    key: "destroy",
-    value: function destroy() {
-      var _this$els$prevControl2, _this$els$nextControl2, _this$els$close2;
-
-      if (this.options.keyboard === true) {
-        this.els.root.removeEventListener('keydown', this.keyDownHandler, false);
-      }
-
-      (_this$els$prevControl2 = this.els.prevControl) === null || _this$els$prevControl2 === void 0 ? void 0 : _this$els$prevControl2.removeEventListener('mousedown', this.prevClicked, false);
-      (_this$els$nextControl2 = this.els.nextControl) === null || _this$els$nextControl2 === void 0 ? void 0 : _this$els$nextControl2.removeEventListener('mousedown', this.nextClicked, false);
-      (_this$els$close2 = this.els.close) === null || _this$els$close2 === void 0 ? void 0 : _this$els$close2.removeEventListener('mousedown', this.closeClicked, false);
-    }
-  }, {
-    key: "beforeNavigation",
-    value: function beforeNavigation(e) {
-      var showProgress = typeof e.progressLabel === 'string' && e.progressLabel.length > 0;
-      var visibilityClassName = 'sgn-pp--hidden';
-
-      if (this.els.progress && this.els.progressBar) {
-        this.els.progressBar.style.width = "".concat(e.progress, "%");
-
-        if (showProgress === true) {
-          this.els.progress.classList.remove(visibilityClassName);
-        } else {
-          this.els.progress.classList.add(visibilityClassName);
-        }
-      }
-
-      if (this.els.progressLabel) {
-        if (showProgress === true) {
-          this.els.progressLabel.textContent = e.progressLabel;
-          this.els.progressLabel.classList.remove(visibilityClassName);
-        } else {
-          this.els.progressLabel.classList.add(visibilityClassName);
-        }
-      }
-
-      if (this.els.prevControl) {
-        if (e.verso.newPosition === 0) {
-          this.els.prevControl.classList.add(visibilityClassName);
-        } else {
-          this.els.prevControl.classList.remove(visibilityClassName);
-        }
-      }
-
-      if (this.els.nextControl) {
-        if (e.verso.newPosition === e.pageSpreadCount - 1) {
-          this.els.nextControl.classList.add(visibilityClassName);
-        } else {
-          this.els.nextControl.classList.remove(visibilityClassName);
-        }
-      }
-    }
-  }, {
-    key: "prevClicked",
-    value: function prevClicked(e) {
-      e.preventDefault();
-      this.trigger('prev');
-    }
-  }, {
-    key: "nextClicked",
-    value: function nextClicked(e) {
-      e.preventDefault();
-      this.trigger('next');
-    }
-  }, {
-    key: "closeClicked",
-    value: function closeClicked(e) {
-      e.preventDefault();
-      this.trigger('close');
-    }
-  }, {
-    key: "keyDown",
-    value: function keyDown(e) {
-      var keyCode = e.keyCode;
-
-      if (ARROW_LEFT === keyCode) {
-        this.trigger('prev', {
-          duration: 0
-        });
-      } else if (ARROW_RIGHT === keyCode || SPACE === keyCode) {
-        this.trigger('next', {
-          duration: 0
-        });
-      } else if (NUMBER_ONE === keyCode) {
-        this.trigger('first', {
-          duration: 0
-        });
-      }
-    }
-  }]);
-
-  return PagedPublicationControls;
+  return _createClass(PagedPublicationControls);
 }(MicroEvent);
 
 var Animation = /*#__PURE__*/function () {
   function Animation(el) {
-    _classCallCheck(this, Animation);
-
-    _defineProperty(this, "run", 0);
-
+    this.run = 0;
     this.el = el;
   }
 
-  _createClass(Animation, [{
-    key: "animate",
-    value: function animate() {
-      var _options$x,
-          _options$y,
-          _options$scale,
-          _options$easing,
-          _options$duration,
-          _context,
-          _context2,
-          _this = this;
+  var _proto = Animation.prototype;
 
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
-      var x = (_options$x = options.x) !== null && _options$x !== void 0 ? _options$x : 0;
-      var y = (_options$y = options.y) !== null && _options$y !== void 0 ? _options$y : 0;
-      var scale = (_options$scale = options.scale) !== null && _options$scale !== void 0 ? _options$scale : 1;
-      var easing = (_options$easing = options.easing) !== null && _options$easing !== void 0 ? _options$easing : 'ease-out';
-      var duration = (_options$duration = options.duration) !== null && _options$duration !== void 0 ? _options$duration : 0;
-      var run = ++this.run;
+  _proto.animate = function animate(_temp, callback) {
+    var _context,
+        _context2,
+        _this = this;
 
-      var transform = _concatInstanceProperty(_context = _concatInstanceProperty(_context2 = "translateX(".concat(x, ") translateY(")).call(_context2, y, ") scale(")).call(_context, scale, ")");
+    var _ref = _temp === void 0 ? {} : _temp,
+        _ref$x = _ref.x,
+        x = _ref$x === void 0 ? 0 : _ref$x,
+        _ref$y = _ref.y,
+        y = _ref$y === void 0 ? 0 : _ref$y,
+        _ref$scale = _ref.scale,
+        scale = _ref$scale === void 0 ? 1 : _ref$scale,
+        _ref$easing = _ref.easing,
+        easing = _ref$easing === void 0 ? 'ease-out' : _ref$easing,
+        _ref$duration = _ref.duration,
+        duration = _ref$duration === void 0 ? 0 : _ref$duration;
 
-      if (this.el.style.transform === transform) {
-        callback();
-      } else if (duration > 0) {
-        var _context3;
+    var run = ++this.run;
 
-        var transitionEnd = function transitionEnd() {
-          if (run !== _this.run) {
-            return;
-          }
+    var transform = _concatInstanceProperty(_context = _concatInstanceProperty(_context2 = "translateX(".concat(x, ") translateY(")).call(_context2, y, ") scale(")).call(_context, scale, ")");
 
-          _this.el.removeEventListener('transitionend', transitionEnd);
+    if (this.el.style.transform === transform) {
+      callback == null ? void 0 : callback();
+    } else if (duration > 0) {
+      var _context3;
 
-          _this.el.style.transition = 'none';
-          callback();
-        };
+      var transitionEnd = function transitionEnd() {
+        if (run !== _this.run) return;
 
-        this.el.addEventListener('transitionend', transitionEnd, false);
-        this.el.style.transition = _concatInstanceProperty(_context3 = "transform ".concat(easing, " ")).call(_context3, duration, "ms");
-        this.el.style.transform = transform;
-      } else {
-        this.el.style.transition = 'none';
-        this.el.style.transform = transform;
-        callback();
-      }
+        _this.el.removeEventListener('transitionend', transitionEnd);
 
-      return this;
+        _this.el.style.transition = 'none';
+        callback == null ? void 0 : callback();
+      };
+
+      this.el.addEventListener('transitionend', transitionEnd, false);
+      this.el.style.transition = _concatInstanceProperty(_context3 = "transform ".concat(easing, " ")).call(_context3, duration, "ms");
+      this.el.style.transform = transform;
+    } else {
+      this.el.style.transition = 'none';
+      this.el.style.transform = transform;
+      callback == null ? void 0 : callback();
     }
-  }]);
 
-  return Animation;
+    return this;
+  };
+
+  return _createClass(Animation);
 }();
 
 var PageSpread = /*#__PURE__*/function () {
-  function PageSpread(el) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  function PageSpread(el, options) {
+    if (options === void 0) {
+      options = {};
+    }
 
-    _classCallCheck(this, PageSpread);
-
-    _defineProperty(this, "visibility", 'gone');
-
-    _defineProperty(this, "positioned", false);
-
-    _defineProperty(this, "active", false);
-
+    this.visibility = 'gone';
+    this.positioned = false;
+    this.active = false;
     this.el = el;
     this.options = options;
     this.id = this.options.id;
@@ -2983,418 +4120,136 @@ var PageSpread = /*#__PURE__*/function () {
     this.maxZoomScale = this.options.maxZoomScale;
   }
 
-  _createClass(PageSpread, [{
-    key: "isZoomable",
-    value: function isZoomable() {
-      return this.getMaxZoomScale() > 1 && this.getEl().getAttribute('data-zoomable') !== 'false';
-    }
-  }, {
-    key: "isScrollable",
-    value: function isScrollable() {
-      return this.getEl().classList.contains('verso--scrollable');
-    }
-  }, {
-    key: "getEl",
-    value: function getEl() {
-      return this.el;
-    }
-  }, {
-    key: "getOverlayEls",
-    value: function getOverlayEls() {
-      return this.getEl().querySelectorAll('.verso__overlay');
-    }
-  }, {
-    key: "getPageEls",
-    value: function getPageEls() {
-      return this.getEl().querySelectorAll('.verso__page');
-    }
-  }, {
-    key: "getRect",
-    value: function getRect() {
-      return this.getEl().getBoundingClientRect();
-    }
-  }, {
-    key: "getContentRect",
-    value: function getContentRect() {
-      var _rect$top, _rect$left, _rect$right, _rect$bottom;
+  var _proto = PageSpread.prototype;
 
-      var rect = {
-        top: null,
-        left: null,
-        right: null,
-        bottom: null,
-        width: null,
-        height: null
-      };
+  _proto.isZoomable = function isZoomable() {
+    return this.getMaxZoomScale() > 1 && this.getEl().dataset.zoomable !== 'false';
+  };
 
-      for (var _i = 0, _Array$from$1 = _Array$from(this.getPageEls()); _i < _Array$from$1.length; _i++) {
-        var pageEl = _Array$from$1[_i];
-        var pageRect = pageEl.getBoundingClientRect();
+  _proto.isScrollable = function isScrollable() {
+    return this.getEl().classList.contains('verso--scrollable');
+  };
 
-        if (pageRect.top < rect.top || rect.top == null) {
-          rect.top = pageRect.top;
-        }
+  _proto.getEl = function getEl() {
+    return this.el;
+  };
 
-        if (pageRect.left < rect.left || rect.left == null) {
-          rect.left = pageRect.left;
-        }
+  _proto.getOverlayEls = function getOverlayEls() {
+    return this.getEl().querySelectorAll('.verso__overlay');
+  };
 
-        if (pageRect.right > rect.right || rect.right == null) {
-          rect.right = pageRect.right;
-        }
+  _proto.getPageEls = function getPageEls() {
+    return this.getEl().querySelectorAll('.verso__page');
+  };
 
-        if (pageRect.bottom > rect.bottom || rect.bottom == null) {
-          rect.bottom = pageRect.bottom;
-        }
+  _proto.getRect = function getRect() {
+    return this.getEl().getBoundingClientRect();
+  };
+
+  _proto.getContentRect = function getContentRect() {
+    var _rect$top, _rect$left, _rect$right, _rect$bottom;
+
+    var rect = {
+      top: null,
+      left: null,
+      right: null,
+      bottom: null,
+      width: null,
+      height: null
+    };
+    var pageEls = this.getPageEls();
+
+    for (var idx = 0; idx < pageEls.length; idx++) {
+      var pageEl = pageEls[idx];
+      var pageRect = pageEl.getBoundingClientRect();
+
+      if (pageRect.top < rect.top || rect.top == null) {
+        rect.top = pageRect.top;
       }
 
-      rect.top = (_rect$top = rect.top) !== null && _rect$top !== void 0 ? _rect$top : 0;
-      rect.left = (_rect$left = rect.left) !== null && _rect$left !== void 0 ? _rect$left : 0;
-      rect.right = (_rect$right = rect.right) !== null && _rect$right !== void 0 ? _rect$right : 0;
-      rect.bottom = (_rect$bottom = rect.bottom) !== null && _rect$bottom !== void 0 ? _rect$bottom : 0;
-      rect.width = rect.right - rect.left;
-      rect.height = rect.bottom - rect.top;
-      return rect;
-    }
-  }, {
-    key: "getId",
-    value: function getId() {
-      return this.id;
-    }
-  }, {
-    key: "getType",
-    value: function getType() {
-      return this.type;
-    }
-  }, {
-    key: "getPageIds",
-    value: function getPageIds() {
-      return this.pageIds;
-    }
-  }, {
-    key: "getWidth",
-    value: function getWidth() {
-      return this.width;
-    }
-  }, {
-    key: "getLeft",
-    value: function getLeft() {
-      return this.left;
-    }
-  }, {
-    key: "getMaxZoomScale",
-    value: function getMaxZoomScale() {
-      return this.maxZoomScale;
-    }
-  }, {
-    key: "getVisibility",
-    value: function getVisibility() {
-      return this.visibility;
-    }
-  }, {
-    key: "setVisibility",
-    value: function setVisibility(visibility) {
-      if (this.visibility !== visibility) {
-        this.getEl().style.display = visibility === 'visible' ? 'block' : 'none';
-        this.visibility = visibility;
+      if (pageRect.left < rect.left || rect.left == null) {
+        rect.left = pageRect.left;
       }
 
-      return this;
-    }
-  }, {
-    key: "position",
-    value: function position() {
-      if (this.positioned === false) {
-        this.getEl().style.left = "".concat(this.getLeft(), "%");
-        this.positioned = true;
+      if (pageRect.right > rect.right || rect.right == null) {
+        rect.right = pageRect.right;
       }
 
-      return this;
+      if (pageRect.bottom > rect.bottom || rect.bottom == null) {
+        rect.bottom = pageRect.bottom;
+      }
     }
-  }, {
-    key: "activate",
-    value: function activate() {
-      this.active = true;
-      this.getEl().setAttribute('data-active', this.active);
-    }
-  }, {
-    key: "deactivate",
-    value: function deactivate() {
-      this.active = false;
-      this.getEl().setAttribute('data-active', this.active);
-    }
-  }]);
 
-  return PageSpread;
+    rect.top = (_rect$top = rect.top) != null ? _rect$top : 0;
+    rect.left = (_rect$left = rect.left) != null ? _rect$left : 0;
+    rect.right = (_rect$right = rect.right) != null ? _rect$right : 0;
+    rect.bottom = (_rect$bottom = rect.bottom) != null ? _rect$bottom : 0;
+    rect.width = rect.right - rect.left;
+    rect.height = rect.bottom - rect.top;
+    return rect;
+  };
+
+  _proto.getId = function getId() {
+    return this.id;
+  };
+
+  _proto.getType = function getType() {
+    return this.type;
+  };
+
+  _proto.getPageIds = function getPageIds() {
+    return this.pageIds;
+  };
+
+  _proto.getWidth = function getWidth() {
+    return this.width;
+  };
+
+  _proto.getLeft = function getLeft() {
+    return this.left;
+  };
+
+  _proto.getMaxZoomScale = function getMaxZoomScale() {
+    return this.maxZoomScale;
+  };
+
+  _proto.getVisibility = function getVisibility() {
+    return this.visibility;
+  };
+
+  _proto.setVisibility = function setVisibility(visibility) {
+    if (this.visibility !== visibility) {
+      this.getEl().style.display = visibility === 'visible' ? 'block' : 'none';
+      this.visibility = visibility;
+    }
+
+    return this;
+  };
+
+  _proto.position = function position() {
+    if (!this.positioned) {
+      this.getEl().style.left = "".concat(this.getLeft(), "%");
+      this.positioned = true;
+    }
+
+    return this;
+  };
+
+  _proto.activate = function activate() {
+    this.active = true;
+    this.getEl().dataset.active = this.active;
+  };
+
+  _proto.deactivate = function deactivate() {
+    this.active = false;
+    this.getEl().dataset.active = this.active;
+  };
+
+  return _createClass(PageSpread);
 }();
 
-/*! Hammer.JS - v2.0.7 - 2016-04-22
- * http://hammerjs.github.io/
- *
- * Copyright (c) 2016 Jorik Tangelder;
- * Licensed under the MIT license */
-
-function ownKeys$1(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); if (enumerableOnly) symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { var _context20; _forEachInstanceProperty(_context20 = ownKeys$1(Object(source), true)).call(_context20, function (key) { _defineProperty(target, key, source[key]); }); } else if (_Object$getOwnPropertyDescriptors) { _Object$defineProperties(target, _Object$getOwnPropertyDescriptors(source)); } else { var _context21; _forEachInstanceProperty(_context21 = ownKeys$1(Object(source))).call(_context21, function (key) { _Object$defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } } return target; }
-var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
-
-var TEST_ELEMENT = function TEST_ELEMENT() {
-  return typeof document != 'undefined' && document.createElement('div');
-};
-
-var TYPE_FUNCTION = 'function';
-var round = Math.round;
-var abs = Math.abs;
-var now = _Date$now;
-/**
- * if the argument is an array, we want to execute the fn on each entry
- * if it aint an array we don't want to do a thing.
- * this is used by all the methods that accept a single and array argument.
- * @param {*|Array} arg
- * @param {String} fn
- * @param {Object} [context]
- * @returns {Boolean}
- */
-
-function invokeArrayArg(arg, fn, context) {
-  if (_Array$isArray(arg)) {
-    each(arg, context[fn], context);
-    return true;
-  }
-
-  return false;
-}
-/**
- * walk objects and arrays
- * @param {Object} obj
- * @param {Function} iterator
- * @param {Object} context
- */
-
-
-function each(obj, iterator, context) {
-  var i;
-  if (!obj) return;
-
-  if (_forEachInstanceProperty(obj)) {
-    _forEachInstanceProperty(obj).call(obj, iterator, context);
-  } else if (obj.length !== undefined) {
-    i = 0;
-
-    while (i < obj.length) {
-      iterator.call(context, obj[i], i, obj);
-      i++;
-    }
-  } else {
-    for (i in obj) {
-      if (Object.hasOwnProperty.call(obj, i)) {
-        iterator.call(context, obj[i], i, obj);
-      }
-    }
-  }
-}
-/**
- * simple class inheritance
- * @param {Function} child
- * @param {Function} base
- * @param {Object} [properties]
- */
-
-
-function inherit(child, base, properties) {
-  var baseP = base.prototype,
-      childP;
-  childP = child.prototype = _Object$create(baseP);
-  childP.constructor = child;
-  childP._super = baseP;
-  if (properties) _Object$assign(childP, properties);
-}
-/**
- * let a boolean value also be a function that must return a boolean
- * this first item in args will be used as the context
- * @param {Boolean|Function} val
- * @param {Array} [args]
- * @returns {Boolean}
- */
-
-
-function boolOrFn(val, args) {
-  if (typeof val == TYPE_FUNCTION) {
-    return val.apply(args ? args[0] || undefined : undefined, args);
-  }
-
-  return val;
-}
-/**
- * use the val2 when val1 is undefined
- * @param {*} val1
- * @param {*} val2
- * @returns {*}
- */
-
-
-function ifUndefined(val1, val2) {
-  return val1 === undefined ? val2 : val1;
-}
-/**
- * addEventListener with multiple events at once
- * @param {EventTarget} target
- * @param {String} types
- * @param {Function} handler
- */
-
-
-function addEventListeners(target, types, handler) {
-  var _context;
-
-  _forEachInstanceProperty(_context = splitStr(types)).call(_context, function (type) {
-    return target.addEventListener(type, handler, false);
-  });
-}
-/**
- * removeEventListener with multiple events at once
- * @param {EventTarget} target
- * @param {String} types
- * @param {Function} handler
- */
-
-
-function removeEventListeners(target, types, handler) {
-  var _context2;
-
-  _forEachInstanceProperty(_context2 = splitStr(types)).call(_context2, function (type) {
-    return target.removeEventListener(type, handler, false);
-  });
-}
-/**
- * find if a node is in the given parent
- * @method hasParent
- * @param {HTMLElement} node
- * @param {HTMLElement} parent
- * @return {Boolean} found
- */
-
-
-function hasParent(node, parent) {
-  while (node) {
-    if (node == parent) return true;
-    node = node.parentNode;
-  }
-
-  return false;
-}
-/**
- * small indexOf wrapper
- * @param {String} str
- * @param {String} find
- * @returns {Boolean} found
- */
-
-
-function inStr(str, find) {
-  return _indexOfInstanceProperty(str).call(str, find) > -1;
-}
-/**
- * split string on whitespace
- * @param {String} str
- * @returns {Array} words
- */
-
-
-function splitStr(str) {
-  return _trimInstanceProperty(str).call(str).split(/\s+/g);
-}
-/**
- * convert array-like objects to real arrays
- * @param {Object} obj
- * @returns {Array}
- */
-
-
-var toArray = function toArray(obj) {
-  return _sliceInstanceProperty(Array.prototype).call(obj, 0);
-};
-/**
- * unique array with objects based on a key (like 'id') or just by the array's value
- * @param {Array} src [{id:1},{id:2},{id:1}]
- * @param {String} [key]
- * @param {Boolean} [sort=False]
- * @returns {Array} [{id:1},{id:2}]
- */
-
-
-function uniqueArray(array, key, sort) {
-  var results = [];
-  var values = [];
-
-  _forEachInstanceProperty(array).call(array, function (item, i) {
-    var val = key ? item[key] : item;
-    if (_indexOfInstanceProperty(values).call(values, val) < 0) results.push(item);
-    values[i] = val;
-  });
-
-  if (sort) _sortInstanceProperty(results).call(results, !key ? undefined : function (a, b) {
-    return a[key] > b[key];
-  });
-  return results;
-}
-/**
- * get the prefixed property
- * @param {Object} obj
- * @param {String} property
- * @returns {String|Undefined} prefixed
- */
-
-
-function prefixed(obj, property) {
-  var camelProp = property[0].toUpperCase() + _sliceInstanceProperty(property).call(property, 1);
-
-  return _findInstanceProperty(VENDOR_PREFIXES).call(VENDOR_PREFIXES, function (prefix) {
-    return (prefix ? prefix + camelProp : property) in obj;
-  });
-}
-/**
- * get a unique id
- * @returns {number} uniqueId
- */
-
-
-var _uniqueId = 1;
-
-var uniqueId = function uniqueId() {
-  return _uniqueId++;
-};
-/**
- * get the window object of an element
- * @param {HTMLElement} element
- * @returns {DocumentView|Window}
- */
-
-
-function getWindowForElement(element) {
-  var doc = element.ownerDocument || element;
-  return doc.defaultView || doc.parentWindow || typeof window !== 'undefined' && window;
-}
-
-var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
-
-var SUPPORT_TOUCH = function SUPPORT_TOUCH() {
-  return typeof window !== 'undefined' && 'ontouchstart' in window;
-};
-
-var SUPPORT_POINTER_EVENTS = function SUPPORT_POINTER_EVENTS() {
-  return typeof window !== 'undefined' && prefixed(window, 'PointerEvent') !== undefined;
-};
-
-var SUPPORT_ONLY_TOUCH = function SUPPORT_ONLY_TOUCH() {
-  return SUPPORT_TOUCH() && MOBILE_REGEX.test(navigator.userAgent);
-};
-
 var INPUT_TYPE_TOUCH = 'touch';
-var INPUT_TYPE_PEN = 'pen';
 var INPUT_TYPE_MOUSE = 'mouse';
-var INPUT_TYPE_KINECT = 'kinect';
 var COMPUTE_INTERVAL = 25;
 var INPUT_START = 1;
 var INPUT_MOVE = 2;
@@ -3410,153 +4265,129 @@ var DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN;
 var DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL;
 var PROPS_XY = ['x', 'y'];
 var PROPS_CLIENT_XY = ['clientX', 'clientY'];
-/**
- * create new input type manager
- * @param {Manager} manager
- * @param {Function} callback
- * @returns {Input}
- * @constructor
- */
-
-function Input(manager, callback) {
-  var self = this;
-  this.manager = manager;
-  this.callback = callback;
-  this.element = manager.element;
-  this.target = manager.options.inputTarget; // smaller wrapper around the handler, for the scope and the enabled state of the manager,
-  // so when disabled the input events are completely bypassed.
-
-  this.domHandler = function (ev) {
-    if (boolOrFn(manager.options.enable, [manager])) {
-      self.handler(ev);
-    }
-  };
-
-  this.init();
-}
-
-Input.prototype = {
-  /**
-   * should handle the inputEvent data and trigger the callback
-   * @virtual
-   */
-  handler: function handler() {},
-
-  /**
-   * bind the events
-   */
-  init: function init() {
-    this.evEl && addEventListeners(this.element, this.evEl, this.domHandler);
-    this.evTarget && addEventListeners(this.target, this.evTarget, this.domHandler);
-    this.evWin && addEventListeners(getWindowForElement(this.element), this.evWin, this.domHandler);
-  },
-
-  /**
-   * unbind the events
-   */
-  destroy: function destroy() {
-    this.evEl && removeEventListeners(this.element, this.evEl, this.domHandler);
-    this.evTarget && removeEventListeners(this.target, this.evTarget, this.domHandler);
-    this.evWin && removeEventListeners(getWindowForElement(this.element), this.evWin, this.domHandler);
-  }
+var TOUCH_INPUT_MAP = {
+  touchstart: INPUT_START,
+  touchmove: INPUT_MOVE,
+  touchend: INPUT_END,
+  touchcancel: INPUT_CANCEL
 };
 /**
- * create new input type manager
- * called by the Manager constructor
- * @param {Hammer} manager
- * @returns {Input}
+ * @private
+ * calculate the absolute distance between two points
+ * @param {Object} p1 {x, y}
+ * @param {Object} p2 {x, y}
+ * @param {Array} [props] containing x and y keys
+ * @return {Number} distance
  */
 
-function createInputInstance(manager) {
-  var inputClass = manager.options.inputClass;
-  var Type;
+function getDistance(p1, p2, props) {
+  if (props === void 0) {
+    props = PROPS_XY;
+  }
 
-  if (inputClass) {
-    Type = inputClass;
-  } else if (SUPPORT_POINTER_EVENTS()) {
-    Type = PointerEventInput;
-  } else if (SUPPORT_ONLY_TOUCH()) {
-    Type = TouchInput;
-  } else if (!SUPPORT_TOUCH()) {
-    Type = MouseInput;
+  var x = p2[props[0]] - p1[props[0]];
+  var y = p2[props[1]] - p1[props[1]];
+  return Math.sqrt(x * x + y * y);
+}
+/**
+ * @private
+ * direction cons to string
+ * @param {constant} direction
+ * @returns {String}
+ */
+
+function directionStr(direction) {
+  if (direction === DIRECTION_DOWN) return 'down';
+  if (direction === DIRECTION_UP) return 'up';
+  if (direction === DIRECTION_LEFT) return 'left';
+  if (direction === DIRECTION_RIGHT) return 'right';
+  return '';
+}
+
+function getAngle(p1, p2, props) {
+  if (props === void 0) {
+    props = PROPS_XY;
+  }
+
+  var x = p2[props[0]] - p1[props[0]];
+  var y = p2[props[1]] - p1[props[1]];
+  return Math.atan2(y, x) * 180 / Math.PI;
+}
+
+function getCenter(pointers) {
+  var x = 0;
+  var y = 0;
+  pointers.forEach(function (pointer) {
+    x += pointer.clientX;
+    y += pointer.clientY;
+  });
+  return {
+    x: Math.round(x / pointers.length),
+    y: Math.round(y / pointers.length)
+  };
+}
+
+var getRotation = function getRotation(start, end) {
+  return getAngle(end[1], end[0], PROPS_CLIENT_XY) + getAngle(start[1], start[0], PROPS_CLIENT_XY);
+};
+
+var getScale = function getScale(start, end) {
+  return getDistance(end[0], end[1], PROPS_CLIENT_XY) / getDistance(start[0], start[1], PROPS_CLIENT_XY);
+};
+
+var getDirection = function getDirection(x, y) {
+  return x === y ? DIRECTION_NONE : Math.abs(x) >= Math.abs(y) ? x < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT : y < 0 ? DIRECTION_UP : DIRECTION_DOWN;
+};
+
+var getVelocity = function getVelocity(deltaTime, x, y) {
+  return {
+    x: x / deltaTime || 0,
+    y: y / deltaTime || 0
+  };
+};
+/**
+ * @private
+ * velocity is calculated every x ms
+ * @param {Object} session
+ * @param {Object} input
+ */
+
+
+function computeIntervalInputData(session, input) {
+  var last = session.lastInterval || input;
+  var deltaTime = input.timeStamp - last.timeStamp;
+  var velocity;
+  var velocityX;
+  var velocityY;
+  var direction;
+
+  if (input.eventType !== INPUT_CANCEL && (deltaTime > COMPUTE_INTERVAL || last.velocity === undefined)) {
+    var deltaX = input.deltaX - last.deltaX;
+    var deltaY = input.deltaY - last.deltaY;
+    var v = getVelocity(deltaTime, deltaX, deltaY);
+    velocityX = v.x;
+    velocityY = v.y;
+    velocity = Math.abs(v.x) > Math.abs(v.y) ? v.x : v.y;
+    direction = getDirection(deltaX, deltaY);
+    session.lastInterval = input;
   } else {
-    Type = TouchMouseInput;
+    // use latest velocity info if it doesn't overtake a minimum period
+    velocity = last.velocity;
+    velocityX = last.velocityX;
+    velocityY = last.velocityY;
+    direction = last.direction;
   }
 
-  return new Type(manager, inputHandler);
-}
-/**
- * handle input events
- * @param {Manager} manager
- * @param {String} eventType
- * @param {Object} input
- */
-
-
-function inputHandler(manager, eventType, input) {
-  var pointersLen = input.pointers.length;
-  var changedPointersLen = input.changedPointers.length;
-  var isFirst = eventType & INPUT_START && pointersLen - changedPointersLen === 0;
-  var isFinal = eventType & (INPUT_END | INPUT_CANCEL) && pointersLen - changedPointersLen === 0;
-  input.isFirst = !!isFirst;
-  input.isFinal = !!isFinal;
-  if (isFirst) manager.session = {}; // source event is the normalized value of the domEvents
-  // like 'touchstart, mouseup, pointerdown'
-
-  input.eventType = eventType; // compute scale, rotation etc
-
-  computeInputData(manager, input); // emit secret event
-
-  manager.emit('hammer.input', input);
-  manager.recognize(input);
-  manager.session.prevInput = input;
-}
-/**
- * extend the data with some usable properties like scale, rotate, velocity etc
- * @param {Object} manager
- * @param {Object} input
- */
-
-
-function computeInputData(manager, input) {
-  var session = manager.session;
-  var pointers = input.pointers;
-  var pointersLength = pointers.length; // store the first input to calculate the distance and direction
-
-  if (!session.firstInput) session.firstInput = simpleCloneInputData(input); // to compute scale and rotation we need to store the multiple touches
-
-  if (pointersLength > 1 && !session.firstMultiple) {
-    session.firstMultiple = simpleCloneInputData(input);
-  } else if (pointersLength === 1) {
-    session.firstMultiple = false;
-  }
-
-  var firstInput = session.firstInput;
-  var firstMultiple = session.firstMultiple;
-  var offsetCenter = firstMultiple ? firstMultiple.center : firstInput.center;
-  var center = input.center = getCenter(pointers);
-  input.timeStamp = now();
-  input.deltaTime = input.timeStamp - firstInput.timeStamp;
-  input.angle = getAngle(offsetCenter, center);
-  input.distance = getDistance(offsetCenter, center);
-  computeDeltaXY(session, input);
-  input.offsetDirection = getDirection(input.deltaX, input.deltaY);
-  var overallVelocity = getVelocity(input.deltaTime, input.deltaX, input.deltaY);
-  input.overallVelocityX = overallVelocity.x;
-  input.overallVelocityY = overallVelocity.y;
-  input.overallVelocity = abs(overallVelocity.x) > abs(overallVelocity.y) ? overallVelocity.x : overallVelocity.y;
-  input.scale = firstMultiple ? getScale(firstMultiple.pointers, pointers) : 1;
-  input.rotation = firstMultiple ? getRotation(firstMultiple.pointers, pointers) : 0;
-  input.maxPointers = !session.prevInput ? input.pointers.length : input.pointers.length > session.prevInput.maxPointers ? input.pointers.length : session.prevInput.maxPointers;
-  computeIntervalInputData(session, input); // find the correct target
-
-  var target = manager.element;
-  if (hasParent(input.srcEvent.target, target)) target = input.srcEvent.target;
-  input.target = target;
+  input.velocity = velocity;
+  input.velocityX = velocityX;
+  input.velocityY = velocityY;
+  input.direction = direction;
 }
 
 function computeDeltaXY(session, input) {
-  var center = input.center;
+  var center = input.center; // let { offsetDelta:offset = {}, prevDelta = {}, prevInput = {} } = session;
+  // jscs throwing error on defalut destructured values and without defaults tests fail
+
   var offset = session.offsetDelta || {};
   var prevDelta = session.prevDelta || {};
   var prevInput = session.prevInput || {};
@@ -3576,43 +4407,7 @@ function computeDeltaXY(session, input) {
   input.deltaY = prevDelta.y + (center.y - offset.y);
 }
 /**
- * velocity is calculated every x ms
- * @param {Object} session
- * @param {Object} input
- */
-
-
-function computeIntervalInputData(session, input) {
-  var last = session.lastInterval || input,
-      deltaTime = input.timeStamp - last.timeStamp,
-      velocity,
-      velocityX,
-      velocityY,
-      direction;
-
-  if (input.eventType != INPUT_CANCEL && (deltaTime > COMPUTE_INTERVAL || last.velocity === undefined)) {
-    var deltaX = input.deltaX - last.deltaX;
-    var deltaY = input.deltaY - last.deltaY;
-    var v = getVelocity(deltaTime, deltaX, deltaY);
-    velocityX = v.x;
-    velocityY = v.y;
-    velocity = abs(v.x) > abs(v.y) ? v.x : v.y;
-    direction = getDirection(deltaX, deltaY);
-    session.lastInterval = input;
-  } else {
-    // use latest velocity info if it doesn't overtake a minimum period
-    velocity = last.velocity;
-    velocityX = last.velocityX;
-    velocityY = last.velocityY;
-    direction = last.direction;
-  }
-
-  input.velocity = velocity;
-  input.velocityX = velocityX;
-  input.velocityY = velocityY;
-  input.direction = direction;
-}
-/**
+ * @private
  * create a simple clone from the input used for storage of firstInput and firstMultiple
  * @param {Object} input
  * @returns {Object} clonedInputData
@@ -3620,19 +4415,21 @@ function computeIntervalInputData(session, input) {
 
 
 function simpleCloneInputData(input) {
-  var _context3;
+  var _context;
 
   // make a simple copy of the pointers because we will get a reference if we don't
   // we only need clientXY for the calculations
-  var pointers = _mapInstanceProperty(_context3 = input.pointers).call(_context3, function (pointer) {
+  var pointers = _mapInstanceProperty(_context = input.pointers).call(_context, function (_ref) {
+    var clientX = _ref.clientX,
+        clientY = _ref.clientY;
     return {
-      clientX: round(pointer.clientX),
-      clientY: round(pointer.clientY)
+      clientX: Math.round(clientX),
+      clientY: Math.round(clientY)
     };
   });
 
   return {
-    timeStamp: now(),
+    timeStamp: Date.now(),
     pointers: pointers,
     center: getCenter(pointers),
     deltaX: input.deltaX,
@@ -3640,122 +4437,263 @@ function simpleCloneInputData(input) {
   };
 }
 /**
- * get the center of all the pointers
- * @param {Array} pointers
- * @return {Object} center contains `x` and `y` properties
+ * @private
+ * extend the data with some usable properties like scale, rotate, velocity etc
+ * @param {Object} manager
+ * @param {Object} input
  */
 
 
-function getCenter(pointers) {
-  var pointersLength = pointers.length; // no need to loop when only one touch
+function computeInputData(manager, input) {
+  var session = manager.session;
+  var pointers = input.pointers;
+  var pointersLength = pointers.length; // store the first input to calculate the distance and direction
 
-  if (pointersLength === 1) {
-    return {
-      x: round(pointers[0].clientX),
-      y: round(pointers[0].clientY)
-    };
+  if (!session.firstInput) session.firstInput = simpleCloneInputData(input); // to compute scale and rotation we need to store the multiple touches
+
+  if (pointersLength > 1 && !session.firstMultiple) {
+    session.firstMultiple = simpleCloneInputData(input);
+  } else if (pointersLength === 1) {
+    session.firstMultiple = false;
   }
 
-  var x = 0;
-  var y = 0;
+  var firstInput = session.firstInput,
+      firstMultiple = session.firstMultiple;
+  var offsetCenter = firstMultiple ? firstMultiple.center : firstInput.center;
+  input.center = getCenter(pointers);
+  input.timeStamp = Date.now();
+  input.deltaTime = input.timeStamp - firstInput.timeStamp;
+  input.angle = getAngle(offsetCenter, input.center);
+  input.distance = getDistance(offsetCenter, input.center);
+  computeDeltaXY(session, input);
+  input.offsetDirection = getDirection(input.deltaX, input.deltaY);
+  var overallVelocity = getVelocity(input.deltaTime, input.deltaX, input.deltaY);
+  input.overallVelocityX = overallVelocity.x;
+  input.overallVelocityY = overallVelocity.y;
+  input.overallVelocity = Math.abs(overallVelocity.x) > Math.abs(overallVelocity.y) ? overallVelocity.x : overallVelocity.y;
+  input.scale = firstMultiple ? getScale(firstMultiple.pointers, pointers) : 1;
+  input.rotation = firstMultiple ? getRotation(firstMultiple.pointers, pointers) : 0;
+  input.maxPointers = !session.prevInput ? input.pointers.length : input.pointers.length > session.prevInput.maxPointers ? input.pointers.length : session.prevInput.maxPointers;
+  computeIntervalInputData(session, input); // find the correct target
 
-  _forEachInstanceProperty(pointers).call(pointers, function (_ref) {
-    var clientX = _ref.clientX,
-        clientY = _ref.clientY;
-    x += clientX;
-    y += clientY;
+  input.target = manager.element.contains(input.srcEvent.target) ? input.srcEvent.target : manager.element;
+}
+/**
+ * @private
+ * handle input events
+ * @param {Manager} manager
+ * @param {String} eventType
+ * @param {Object} input
+ */
+
+
+function inputHandler(manager, eventType, input) {
+  var pointersLen = input.pointers.length;
+  var changedPointersLen = input.changedPointers.length;
+  var isFirst = eventType & INPUT_START && pointersLen - changedPointersLen === 0;
+  var isFinal = eventType & (INPUT_END | INPUT_CANCEL) && pointersLen - changedPointersLen === 0;
+  input.isFirst = Boolean(isFirst);
+  input.isFinal = Boolean(isFinal);
+  if (isFirst) manager.session = {}; // source event is the normalized value of the domEvents
+  // like 'touchstart, mouseup, pointerdown'
+
+  input.eventType = eventType; // compute scale, rotation etc
+
+  computeInputData(manager, input);
+  manager.recognize(input);
+  manager.session.prevInput = input;
+}
+
+var addEventListeners = function addEventListeners(target, types, handler) {
+  return _trimInstanceProperty(types).call(types).split(/\s+/g).forEach(function (type) {
+    target.addEventListener(type, handler, false);
   });
+};
 
-  return {
-    x: round(x / pointersLength),
-    y: round(y / pointersLength)
-  };
+var removeEventListeners = function removeEventListeners(target, types, handler) {
+  return _trimInstanceProperty(types).call(types).split(/\s+/g).forEach(function (type) {
+    target.removeEventListener(type, handler, false);
+  });
+};
+/**
+ * @private
+ * get the window object of an element
+ * @param {HTMLElement} element
+ * @returns {DocumentView|Window}
+ */
+
+
+function getWindowForElement(element) {
+  var _ref2 = element.ownerDocument || element,
+      defaultView = _ref2.defaultView,
+      parentWindow = _ref2.parentWindow;
+
+  return defaultView || parentWindow || typeof window !== 'undefined' && window;
 }
 /**
- * calculate the velocity between two points. unit is in px per ms.
- * @param {Number} deltaTime
- * @param {Number} x
- * @param {Number} y
- * @return {Object} velocity `x` and `y`
+ * @private
+ * create new input type manager
+ * @param {Manager} manager
+ * @param {Function} callback
+ * @returns {Input}
+ * @constructor
  */
 
 
-var getVelocity = function getVelocity(deltaTime, x, y) {
-  return {
-    x: x / deltaTime || 0,
-    y: y / deltaTime || 0
+var Input = /*#__PURE__*/function () {
+  function Input(manager) {
+    var _this = this;
+
+    this.manager = manager;
+    this.callback = inputHandler;
+    this.element = manager.element;
+    this.target = manager.options.inputTarget; // smaller wrapper around the handler, for the scope and the enabled state of the manager,
+    // so when disabled the input events are completely bypassed.
+
+    this.domHandler = function (ev) {
+      if (manager.options.enable) _this.handler(ev);
+    };
+  }
+  /**
+   * @private
+   * should handle the inputEvent data and trigger the callback
+   * @virtual
+   */
+
+
+  var _proto = Input.prototype;
+
+  _proto.handler = function handler() {}
+  /**
+   * @private
+   * bind the events
+   */
+  ;
+
+  _proto.init = function init() {
+    var element = this.element,
+        evEl = this.evEl,
+        evTarget = this.evTarget,
+        evWin = this.evWin,
+        domHandler = this.domHandler,
+        target = this.target;
+    if (evEl) addEventListeners(element, evEl, domHandler);
+    if (evTarget) addEventListeners(target, evTarget, domHandler);
+
+    if (evWin) {
+      addEventListeners(getWindowForElement(element), evWin, domHandler);
+    }
+  }
+  /**
+   * @private
+   * unbind the events
+   */
+  ;
+
+  _proto.destroy = function destroy() {
+    var element = this.element,
+        evEl = this.evEl,
+        evTarget = this.evTarget,
+        evWin = this.evWin,
+        domHandler = this.domHandler,
+        target = this.target;
+    if (evEl) removeEventListeners(element, evEl, domHandler);
+    if (evTarget) removeEventListeners(target, evTarget, domHandler);
+
+    if (evWin) {
+      removeEventListeners(getWindowForElement(element), evWin, domHandler);
+    }
   };
-};
+
+  return _createClass(Input);
+}();
+
 /**
- * get the direction between two points
- * @param {Number} x
- * @param {Number} y
- * @return {Number} direction
+ * @private
+ * Multi-user touch events input
+ * @constructor
+ * @extends Input
  */
 
+var TouchInput = /*#__PURE__*/function (_Input) {
+  _inherits(TouchInput, _Input);
 
-function getDirection(x, y) {
-  if (x === y) return DIRECTION_NONE;
-  if (abs(x) >= abs(y)) return x < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT;
-  return y < 0 ? DIRECTION_UP : DIRECTION_DOWN;
-}
-/**
- * calculate the absolute distance between two points
- * @param {Object} p1 {x, y}
- * @param {Object} p2 {x, y}
- * @param {Array} [props] containing x and y keys
- * @return {Number} distance
- */
+  function TouchInput() {
+    var _this;
 
+    _this = _Input.apply(this, arguments) || this;
+    _this.evTarget = 'touchstart touchmove touchend touchcancel';
+    _this.targetIds = {};
 
-var getDistance = function getDistance(p1, p2) {
-  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : PROPS_XY,
-      _ref3 = _slicedToArray(_ref2, 2),
-      xKey = _ref3[0],
-      yKey = _ref3[1];
+    _this.init();
 
-  return Math.sqrt(Math.pow(p2[xKey] - p1[xKey], 2) + Math.pow(p2[yKey] - p1[yKey], 2));
-};
-/**
- * calculate the angle between two coordinates
- * @param {Object} p1
- * @param {Object} p2
- * @param {Array} [props] containing x and y keys
- * @return {Number} angle
- */
+    return _this;
+  }
 
+  var _proto = TouchInput.prototype;
 
-var getAngle = function getAngle(p1, p2) {
-  var _ref4 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : PROPS_XY,
-      _ref5 = _slicedToArray(_ref4, 2),
-      xKey = _ref5[0],
-      yKey = _ref5[1];
+  _proto.handler = function handler(ev) {
+    var type = TOUCH_INPUT_MAP[ev.type];
+    var touches = this.getTouches(ev, type);
+    if (!touches) return;
+    this.callback(this.manager, type, {
+      pointers: touches[0],
+      changedPointers: touches[1],
+      pointerType: INPUT_TYPE_TOUCH,
+      srcEvent: ev
+    });
+  };
 
-  return Math.atan2(p2[yKey] - p1[yKey], p2[xKey] - p1[xKey]) * 180 / Math.PI;
-};
-/**
- * calculate the rotation degrees between two pointersets
- * @param {Array} start array of pointers
- * @param {Array} end array of pointers
- * @return {Number} rotation
- */
+  _proto.getTouches = function getTouches(ev, type) {
+    var _this2 = this,
+        _context;
+
+    var allTouches = _Array$from(ev.touches);
+
+    var targetIds = this.targetIds; // when there is only one touch, the process can be simplified
+
+    if (type & (INPUT_START | INPUT_MOVE) && allTouches.length === 1) {
+      targetIds[allTouches[0].identifier] = true;
+      return [allTouches, allTouches];
+    } // get target touches from touches
 
 
-var getRotation = function getRotation(start, end) {
-  return getAngle(end[1], end[0], PROPS_CLIENT_XY) + getAngle(start[1], start[0], PROPS_CLIENT_XY);
-};
-/**
- * calculate the scale factor between two pointersets
- * no scale is 1, and goes down to 0 when pinched together, and bigger when pinched out
- * @param {Array} start array of pointers
- * @param {Array} end array of pointers
- * @return {Number} scale
- */
+    var targetTouches = _filterInstanceProperty(allTouches).call(allTouches, function (touch) {
+      return _this2.target.contains(touch.target);
+    }); // collect touches
 
 
-var getScale = function getScale(start, end) {
-  return getDistance(end[0], end[1], PROPS_CLIENT_XY) / getDistance(start[0], start[1], PROPS_CLIENT_XY);
-};
+    if (type === INPUT_START) {
+      targetTouches.forEach(function (targetTouch) {
+        targetIds[targetTouch.identifier] = true;
+      });
+    } // filter changed touches to only contain touches that exist in the collected target ids
+
+
+    var changedTargetTouches = [];
+
+    _Array$from(ev.changedTouches).forEach(function (changedTouch) {
+      if (targetIds[changedTouch.identifier]) {
+        changedTargetTouches.push(changedTouch);
+      } // cleanup removed touches
+
+
+      if (type & (INPUT_END | INPUT_CANCEL)) {
+        delete targetIds[changedTouch.identifier];
+      }
+    });
+
+    if (!changedTargetTouches.length) return;
+    return [_filterInstanceProperty(_context = _concatInstanceProperty(targetTouches).call(targetTouches, changedTargetTouches)).call(_context, function (item, i, list) {
+      return _findIndexInstanceProperty(list).call(list, function (_ref) {
+        var identifier = _ref.identifier;
+        return identifier === item.identifier;
+      }) === i;
+    }), changedTargetTouches];
+  };
+
+  return _createClass(TouchInput);
+}(Input);
 
 var MOUSE_INPUT_MAP = {
   mousedown: INPUT_START,
@@ -3765,103 +4703,107 @@ var MOUSE_INPUT_MAP = {
 var MOUSE_ELEMENT_EVENTS = 'mousedown';
 var MOUSE_WINDOW_EVENTS = 'mousemove mouseup';
 /**
+ * @private
  * Mouse events input
  * @constructor
  * @extends Input
  */
 
-function MouseInput() {
-  this.evEl = MOUSE_ELEMENT_EVENTS;
-  this.evWin = MOUSE_WINDOW_EVENTS;
-  this.pressed = false; // mousedown state
+var MouseInput = /*#__PURE__*/function (_Input) {
+  _inherits(MouseInput, _Input);
 
-  Input.apply(this, arguments);
-}
+  // mousedown state
+  function MouseInput() {
+    var _this;
 
-inherit(MouseInput, Input, {
+    _this = _Input.apply(this, arguments) || this;
+    _this.evEl = MOUSE_ELEMENT_EVENTS;
+    _this.evWin = MOUSE_WINDOW_EVENTS;
+    _this.pressed = false;
+
+    _this.init();
+
+    return _this;
+  }
   /**
+   * @private
    * handle mouse events
    * @param {Object} ev
    */
-  handler: function handler(ev) {
+
+
+  var _proto = MouseInput.prototype;
+
+  _proto.handler = function handler(ev) {
     var eventType = MOUSE_INPUT_MAP[ev.type]; // on start we want to have the left mouse button down
 
-    if (eventType & INPUT_START && ev.button === 0) {
-      this.pressed = true;
-    }
+    if (eventType & INPUT_START && ev.button === 0) this.pressed = true;
+    if (eventType & INPUT_MOVE && ev.which !== 1) eventType = INPUT_END; // mouse must be down
 
-    if (eventType & INPUT_MOVE && ev.which !== 1) {
-      eventType = INPUT_END;
-    } // mouse must be down
-
-
-    if (!this.pressed) {
-      return;
-    }
-
-    if (eventType & INPUT_END) {
-      this.pressed = false;
-    }
-
+    if (!this.pressed) return;
+    if (eventType & INPUT_END) this.pressed = false;
     this.callback(this.manager, eventType, {
       pointers: [ev],
       changedPointers: [ev],
       pointerType: INPUT_TYPE_MOUSE,
       srcEvent: ev
     });
-  }
-});
+  };
+
+  return _createClass(MouseInput);
+}(Input);
+
 var POINTER_INPUT_MAP = {
   pointerdown: INPUT_START,
   pointermove: INPUT_MOVE,
   pointerup: INPUT_END,
   pointercancel: INPUT_CANCEL,
   pointerout: INPUT_CANCEL
-}; // in IE10 the pointer types is defined as an enum
-
-var IE10_POINTER_TYPE_ENUM = {
-  2: INPUT_TYPE_TOUCH,
-  3: INPUT_TYPE_PEN,
-  4: INPUT_TYPE_MOUSE,
-  5: INPUT_TYPE_KINECT // see https://twitter.com/jacobrossi/status/480596438489890816
-
 };
 var POINTER_ELEMENT_EVENTS = 'pointerdown';
-var POINTER_WINDOW_EVENTS = 'pointermove pointerup pointercancel'; // IE10 has prefixed support, and case-sensitive
-
-if (typeof window !== 'undefined' && window.MSPointerEvent && !window.PointerEvent) {
-  POINTER_ELEMENT_EVENTS = 'MSPointerDown';
-  POINTER_WINDOW_EVENTS = 'MSPointerMove MSPointerUp MSPointerCancel';
-}
+var POINTER_WINDOW_EVENTS = 'pointermove pointerup pointercancel';
 /**
+ * @private
  * Pointer events input
  * @constructor
  * @extends Input
  */
 
+var PointerEventInput = /*#__PURE__*/function (_Input) {
+  _inherits(PointerEventInput, _Input);
 
-function PointerEventInput() {
-  this.evEl = POINTER_ELEMENT_EVENTS;
-  this.evWin = POINTER_WINDOW_EVENTS;
-  Input.apply(this, arguments);
-  this.store = this.manager.session.pointerEvents = [];
-}
+  function PointerEventInput() {
+    var _this;
 
-inherit(PointerEventInput, Input, {
+    _this = _Input.apply(this, arguments) || this;
+    _this.evEl = POINTER_ELEMENT_EVENTS;
+    _this.evWin = POINTER_WINDOW_EVENTS;
+    _this.store = _this.manager.session.pointerEvents = [];
+
+    _this.init();
+
+    return _this;
+  }
   /**
+   * @private
    * handle mouse events
    * @param {Object} ev
    */
-  handler: function handler(ev) {
+
+
+  var _proto = PointerEventInput.prototype;
+
+  _proto.handler = function handler(ev) {
     var store = this.store;
     var removePointer = false;
     var eventTypeNormalized = ev.type.toLowerCase().replace('ms', '');
     var eventType = POINTER_INPUT_MAP[eventTypeNormalized];
-    var pointerType = IE10_POINTER_TYPE_ENUM[ev.pointerType] || ev.pointerType;
-    var isTouch = pointerType == INPUT_TYPE_TOUCH; // get index of the event in the store
+    var pointerType = ev.pointerType;
+    var isTouch = pointerType === INPUT_TYPE_TOUCH; // get index of the event in the store
 
-    var storeIndex = _findIndexInstanceProperty(store).call(store, function (item) {
-      return item.pointerId == ev.pointerId;
+    var storeIndex = _findIndexInstanceProperty(store).call(store, function (_ref) {
+      var pointerId = _ref.pointerId;
+      return pointerId === ev.pointerId;
     }); // start and mouse must be down
 
 
@@ -3886,147 +4828,13 @@ inherit(PointerEventInput, Input, {
     }); // remove from the store
 
     if (removePointer) _spliceInstanceProperty(store).call(store, storeIndex, 1);
-  }
-});
-var SINGLE_TOUCH_INPUT_MAP = {
-  touchstart: INPUT_START,
-  touchmove: INPUT_MOVE,
-  touchend: INPUT_END,
-  touchcancel: INPUT_CANCEL
-};
-var SINGLE_TOUCH_TARGET_EVENTS = 'touchstart';
-var SINGLE_TOUCH_WINDOW_EVENTS = 'touchstart touchmove touchend touchcancel';
+  };
+
+  return _createClass(PointerEventInput);
+}(Input);
+
 /**
- * Touch events input
- * @constructor
- * @extends Input
- */
-
-function SingleTouchInput() {
-  this.evTarget = SINGLE_TOUCH_TARGET_EVENTS;
-  this.evWin = SINGLE_TOUCH_WINDOW_EVENTS;
-  this.started = false;
-  Input.apply(this, arguments);
-}
-
-inherit(SingleTouchInput, Input, {
-  handler: function handler(srcEvent) {
-    var type = SINGLE_TOUCH_INPUT_MAP[srcEvent.type]; // should we handle the touch events?
-
-    if (type === INPUT_START) this.started = true;
-    if (!this.started) return;
-
-    var _normalizeSingleTouch = normalizeSingleTouches(srcEvent, type),
-        _normalizeSingleTouch2 = _slicedToArray(_normalizeSingleTouch, 2),
-        pointers = _normalizeSingleTouch2[0],
-        changedPointers = _normalizeSingleTouch2[1]; // when done, reset the started state
-
-
-    if (type & (INPUT_END | INPUT_CANCEL) && pointers.length - changedPointers.length === 0) {
-      this.started = false;
-    }
-
-    this.callback(this.manager, type, {
-      pointers: pointers,
-      changedPointers: changedPointers,
-      pointerType: INPUT_TYPE_TOUCH,
-      srcEvent: srcEvent
-    });
-  }
-});
-/**
- * @this {TouchInput}
- * @param {Object} ev
- * @param {Number} type flag
- * @returns {undefined|Array} [all, changed]
- */
-
-function normalizeSingleTouches(ev, type) {
-  var all = toArray(ev.touches);
-  var changed = toArray(ev.changedTouches);
-
-  if (type & (INPUT_END | INPUT_CANCEL)) {
-    all = uniqueArray(_concatInstanceProperty(all).call(all, changed), 'identifier', true);
-  }
-
-  return [all, changed];
-}
-
-var TOUCH_INPUT_MAP = {
-  touchstart: INPUT_START,
-  touchmove: INPUT_MOVE,
-  touchend: INPUT_END,
-  touchcancel: INPUT_CANCEL
-};
-var TOUCH_TARGET_EVENTS = 'touchstart touchmove touchend touchcancel';
-/**
- * Multi-user touch events input
- * @constructor
- * @extends Input
- */
-
-function TouchInput() {
-  this.evTarget = TOUCH_TARGET_EVENTS;
-  this.targetIds = {};
-  Input.apply(this, arguments);
-}
-
-inherit(TouchInput, Input, {
-  handler: function handler(ev) {
-    var type = TOUCH_INPUT_MAP[ev.type];
-    var touches = getTouches.call(this, ev, type);
-    if (!touches) return;
-    this.callback(this.manager, type, {
-      pointers: touches[0],
-      changedPointers: touches[1],
-      pointerType: INPUT_TYPE_TOUCH,
-      srcEvent: ev
-    });
-  }
-});
-/**
- * @this {TouchInput}
- * @param {Object} ev
- * @param {Number} type flag
- * @returns {undefined|Array} [all, changed]
- */
-
-function getTouches(ev, type) {
-  var allTouches = toArray(ev.touches);
-  var targetIds = this.targetIds; // when there is only one touch, the process can be simplified
-
-  if (type & (INPUT_START | INPUT_MOVE) && allTouches.length === 1) {
-    targetIds[allTouches[0].identifier] = true;
-    return [allTouches, allTouches];
-  }
-
-  var targetTouches,
-      changedTouches = toArray(ev.changedTouches),
-      changedTargetTouches = [],
-      target = this.target; // get target touches from touches
-
-  targetTouches = _filterInstanceProperty(allTouches).call(allTouches, function (touch) {
-    return hasParent(touch.target, target);
-  }); // collect touches
-
-  if (type === INPUT_START) {
-    _forEachInstanceProperty(targetTouches).call(targetTouches, function (targetTouch) {
-      targetIds[targetTouch.identifier] = true;
-    });
-  } // filter changed touches to only contain touches that exist in the collected target ids
-
-
-  _forEachInstanceProperty(changedTouches).call(changedTouches, function (changedTouch) {
-    if (targetIds[changedTouch.identifier]) changedTargetTouches.push(changedTouch); // cleanup removed touches
-
-    if (type & (INPUT_END | INPUT_CANCEL)) delete targetIds[changedTouch.identifier];
-  });
-
-  if (!changedTargetTouches.length) return;
-  return [// merge targetTouches with changedTargetTouches so it contains ALL touches, including 'end' and 'cancel'
-  uniqueArray(_concatInstanceProperty(targetTouches).call(targetTouches, changedTargetTouches), 'identifier', true), changedTargetTouches];
-}
-/**
+ * @private
  * Combined touch and mouse input
  *
  * Touch has a higher priority then mouse, and while touching no mouse events are allowed.
@@ -4036,262 +4844,138 @@ function getTouches(ev, type) {
  * @extends Input
  */
 
-
 var DEDUP_TIMEOUT = 2500;
 var DEDUP_DISTANCE = 25;
 
-function TouchMouseInput() {
-  var _context4;
+var TouchMouseInput = /*#__PURE__*/function (_Input) {
+  _inherits(TouchMouseInput, _Input);
 
-  Input.apply(this, arguments);
+  function TouchMouseInput() {
+    var _this;
 
-  var handler = _bindInstanceProperty(_context4 = this.handler).call(_context4, this);
+    _this = _Input.apply(this, arguments) || this;
+    _this.primaryTouch = null;
+    _this.lastTouches = [];
 
-  this.touch = new TouchInput(this.manager, handler);
-  this.mouse = new MouseInput(this.manager, handler);
-  this.primaryTouch = null;
-  this.lastTouches = [];
-}
+    _this.handler = function (manager, inputEvent, inputData) {
+      var isTouch = inputData.pointerType === INPUT_TYPE_TOUCH;
+      var isMouse = inputData.pointerType === INPUT_TYPE_MOUSE;
 
-inherit(TouchMouseInput, Input, {
+      if (isMouse && inputData.sourceCapabilities && inputData.sourceCapabilities.firesTouchEvents) {
+        return;
+      } // when we're in a touch event, record touches to  de-dupe synthetic mouse event
+
+
+      if (isTouch) {
+        if (inputEvent & INPUT_START) {
+          _this.primaryTouch = inputData.changedPointers[0].identifier;
+
+          _this.setLastTouch(inputData);
+        } else if (inputEvent & (INPUT_END | INPUT_CANCEL)) {
+          _this.setLastTouch(inputData);
+        }
+      } else if (isMouse && _this.isSyntheticEvent(inputData)) {
+        return;
+      }
+
+      _this.callback(manager, inputEvent, inputData);
+    };
+
+    _this.touch = new TouchInput(_this.manager, _this.handler);
+    _this.mouse = new MouseInput(_this.manager, _this.handler);
+
+    _this.init();
+
+    return _this;
+  }
   /**
+   * @private
    * handle mouse and touch events
    * @param {Hammer} manager
    * @param {String} inputEvent
    * @param {Object} inputData
    */
-  handler: function handler(manager, inputEvent, inputData) {
-    var isTouch = inputData.pointerType == INPUT_TYPE_TOUCH,
-        isMouse = inputData.pointerType == INPUT_TYPE_MOUSE;
-
-    if (isMouse && inputData.sourceCapabilities && inputData.sourceCapabilities.firesTouchEvents) {
-      return;
-    } // when we're in a touch event, record touches to  de-dupe synthetic mouse event
 
 
-    if (isTouch) {
-      recordTouches.call(this, inputEvent, inputData);
-    } else if (isMouse && isSyntheticEvent.call(this, inputData)) {
-      return;
-    }
-
-    this.callback(manager, inputEvent, inputData);
-  },
+  var _proto = TouchMouseInput.prototype;
 
   /**
+   * @private
    * remove the event listeners
    */
-  destroy: function destroy() {
+  _proto.destroy = function destroy() {
     this.touch.destroy();
     this.mouse.destroy();
-  }
-});
+  };
 
-function recordTouches(eventType, eventData) {
-  if (eventType & INPUT_START) {
-    this.primaryTouch = eventData.changedPointers[0].identifier;
-    setLastTouch.call(this, eventData);
-  } else if (eventType & (INPUT_END | INPUT_CANCEL)) {
-    setLastTouch.call(this, eventData);
-  }
-}
-
-function setLastTouch(eventData) {
-  var touch = eventData.changedPointers[0];
-
-  if (touch.identifier === this.primaryTouch) {
-    var lastTouch = {
-      x: touch.clientX,
-      y: touch.clientY
-    };
-    this.lastTouches.push(lastTouch);
-    var lts = this.lastTouches;
-
-    var removeLastTouch = function removeLastTouch() {
-      var i = _indexOfInstanceProperty(lts).call(lts, lastTouch);
-
-      if (i > -1) {
-        _spliceInstanceProperty(lts).call(lts, i, 1);
-      }
-    };
-
-    _setTimeout(removeLastTouch, DEDUP_TIMEOUT);
-  }
-}
-
-function isSyntheticEvent(_ref6) {
-  var _context5;
-
-  var _ref6$srcEvent = _ref6.srcEvent,
-      clientX = _ref6$srcEvent.clientX,
-      clientY = _ref6$srcEvent.clientY;
-  return !!_findInstanceProperty(_context5 = this.lastTouches).call(_context5, function (lastTouch) {
-    return Math.abs(clientX - lastTouch.x) <= DEDUP_DISTANCE && Math.abs(clientY - lastTouch.y) <= DEDUP_DISTANCE;
-  });
-}
-
-var PREFIXED_TOUCH_ACTION = function PREFIXED_TOUCH_ACTION() {
-  var te = TEST_ELEMENT();
-  if (te) return prefixed(te.style, 'touchAction');
-};
-
-var NATIVE_TOUCH_ACTION = function NATIVE_TOUCH_ACTION() {
-  return PREFIXED_TOUCH_ACTION() !== undefined;
-}; // magical touchAction value
-
-
-var TOUCH_ACTION_COMPUTE = 'compute';
-var TOUCH_ACTION_AUTO = 'auto';
-var TOUCH_ACTION_MANIPULATION = 'manipulation'; // not implemented
-
-var TOUCH_ACTION_NONE = 'none';
-var TOUCH_ACTION_PAN_X = 'pan-x';
-var TOUCH_ACTION_PAN_Y = 'pan-y';
-/**
- * Touch Action
- * sets the touchAction property or uses the js alternative
- * @param {Manager} manager
- * @param {String} value
- * @constructor
- */
-
-function TouchAction(manager, value) {
-  this.manager = manager;
-  this.set(value);
-}
-
-TouchAction.prototype = {
-  /**
-   * set the touchAction value on the element or enable the polyfill
-   * @param {String} value
-   */
-  set: function set(value) {
-    var _context6;
-
-    // find out the touch-action by the event handlers
-    if (value == TOUCH_ACTION_COMPUTE) {
-      value = this.compute();
-    }
-
-    var TOUCH_ACTION_MAP = getTouchActionProps();
-
-    if (NATIVE_TOUCH_ACTION() && this.manager.element.style && TOUCH_ACTION_MAP[value]) {
-      this.manager.element.style[PREFIXED_TOUCH_ACTION()] = value;
-    }
-
-    this.actions = _trimInstanceProperty(_context6 = value.toLowerCase()).call(_context6);
-  },
-
-  /**
-   * just re-set the touchAction value
-   */
-  update: function update() {
-    this.set(this.manager.options.touchAction);
-  },
-
-  /**
-   * compute the value for the touchAction property based on the recognizer's settings
-   * @returns {String} value
-   */
-  compute: function compute() {
-    var _context7;
-
-    var actions = [];
-
-    _forEachInstanceProperty(_context7 = this.manager.recognizers).call(_context7, function (recognizer) {
-      if (boolOrFn(recognizer.options.enable, [recognizer])) {
-        actions = _concatInstanceProperty(actions).call(actions, recognizer.getTouchAction());
-      }
+  _proto.isSyntheticEvent = function isSyntheticEvent(_ref) {
+    var _ref$srcEvent = _ref.srcEvent,
+        clientX = _ref$srcEvent.clientX,
+        clientY = _ref$srcEvent.clientY;
+    return this.lastTouches.some(function (_ref2) {
+      var x = _ref2.x,
+          y = _ref2.y;
+      return Math.abs(clientX - x) <= DEDUP_DISTANCE && Math.abs(clientY - y) <= DEDUP_DISTANCE;
     });
+  };
 
-    return cleanTouchActions(actions.join(' '));
-  },
+  _proto.setLastTouch = function setLastTouch(_ref3) {
+    var _ref3$changedPointers = _slicedToArray(_ref3.changedPointers, 1),
+        _ref3$changedPointers2 = _ref3$changedPointers[0],
+        identifier = _ref3$changedPointers2.identifier,
+        clientX = _ref3$changedPointers2.clientX,
+        clientY = _ref3$changedPointers2.clientY;
 
-  /**
-   * this method is called on each input cycle and provides the preventing of the browser behavior
-   * @param {Object} input
-   */
-  preventDefaults: function preventDefaults(input) {
-    var srcEvent = input.srcEvent;
-    var direction = input.offsetDirection; // if the touch action did prevented once this session
-
-    if (this.manager.session.prevented) {
-      srcEvent.preventDefault();
-      return;
+    if (identifier === this.primaryTouch) {
+      var lastTouch = {
+        x: clientX,
+        y: clientY
+      };
+      this.lastTouches.push(lastTouch);
+      var lts = this.lastTouches;
+      setTimeout(function () {
+        var i = lts.indexOf(lastTouch);
+        if (i > -1) _spliceInstanceProperty(lts).call(lts, i, 1);
+      }, DEDUP_TIMEOUT);
     }
+  };
 
-    var actions = this.actions;
-    var TOUCH_ACTION_MAP = getTouchActionProps();
-    var hasNone = inStr(actions, TOUCH_ACTION_NONE) && !TOUCH_ACTION_MAP[TOUCH_ACTION_NONE];
-    var hasPanY = inStr(actions, TOUCH_ACTION_PAN_Y) && !TOUCH_ACTION_MAP[TOUCH_ACTION_PAN_Y];
-    var hasPanX = inStr(actions, TOUCH_ACTION_PAN_X) && !TOUCH_ACTION_MAP[TOUCH_ACTION_PAN_X];
+  return _createClass(TouchMouseInput);
+}(Input);
 
-    if (hasNone) {
-      //do not prevent defaults if this is a tap gesture
-      var isTapPointer = input.pointers.length === 1;
-      var isTapMovement = input.distance < 2;
-      var isTapTouchTime = input.deltaTime < 250;
+function ownKeys$3(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-      if (isTapPointer && isTapMovement && isTapTouchTime) {
-        return;
-      }
-    }
+function _objectSpread$3(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$3(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$3(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
 
-    if (hasPanX && hasPanY) {
-      // `pan-x pan-y` means browser handles all scrolling/panning, do not prevent
-      return;
-    }
+var STATE_POSSIBLE = 1;
+var STATE_BEGAN = 2;
+var STATE_CHANGED = 4;
+var STATE_ENDED = 8;
+var STATE_RECOGNIZED = STATE_ENDED;
+var STATE_CANCELLED = 16;
+var STATE_FAILED = 32;
 
-    if (hasNone || hasPanY && direction & DIRECTION_HORIZONTAL || hasPanX && direction & DIRECTION_VERTICAL) {
-      return this.preventSrc(srcEvent);
-    }
-  },
-
-  /**
-   * call preventDefault to prevent the browser's default behavior (scrolling in most cases)
-   * @param {Object} srcEvent
-   */
-  preventSrc: function preventSrc(srcEvent) {
-    this.manager.session.prevented = true;
-    srcEvent.preventDefault();
-  }
-};
+function stateStr(state) {
+  if (state & STATE_CANCELLED) return 'cancel';
+  if (state & STATE_ENDED) return 'end';
+  if (state & STATE_CHANGED) return 'move';
+  if (state & STATE_BEGAN) return 'start';
+  return '';
+}
 /**
- * when the touchActions are collected they are not a valid value, so we need to clean things up. *
- * @param {String} actions
- * @returns {*}
+ * @private
+ * get a unique id
+ * @returns {number} uniqueId
  */
 
-function cleanTouchActions(actions) {
-  // none
-  if (inStr(actions, TOUCH_ACTION_NONE)) return TOUCH_ACTION_NONE;
-  var hasPanX = inStr(actions, TOUCH_ACTION_PAN_X);
-  var hasPanY = inStr(actions, TOUCH_ACTION_PAN_Y); // if both pan-x and pan-y are set (different recognizers
-  // for different directions, e.g. horizontal pan but vertical swipe?)
-  // we need none (as otherwise with pan-x pan-y combined none of these
-  // recognizers will work, since the browser would handle all panning
 
-  if (hasPanX && hasPanY) return TOUCH_ACTION_NONE; // pan-x OR pan-y
+var _uniqueId = 1;
 
-  if (hasPanX || hasPanY) return hasPanX ? TOUCH_ACTION_PAN_X : TOUCH_ACTION_PAN_Y; // manipulation
-
-  if (inStr(actions, TOUCH_ACTION_MANIPULATION)) return TOUCH_ACTION_MANIPULATION;
-  return TOUCH_ACTION_AUTO;
-}
-
-var touchVals = ['auto', 'manipulation', 'pan-y', 'pan-x', 'pan-x pan-y', 'none'];
-
-function getTouchActionProps() {
-  if (!NATIVE_TOUCH_ACTION()) return false;
-  var cssSupports = typeof window !== 'undefined' && window.CSS && window.CSS.supports;
-  return _reduceInstanceProperty(touchVals).call(touchVals, function (touchMap, val) {
-    // If css.supports is not supported but there is native touch-action assume it supports
-    // all values. This is the case for IE 10 and 11.
-    touchMap[val] = cssSupports ? window.CSS.supports('touch-action', val) : true;
-    return touchMap;
-  }, {});
-}
+var uniqueId = function uniqueId() {
+  return _uniqueId++;
+};
 /**
+ * @private
  * Recognizer flow explained; *
  * All recognizers have the initial state of POSSIBLE when a input session starts.
  * The definition of a input session is from the first input until the last input, with all it's movement in it. *
@@ -4319,206 +5003,81 @@ function getTouchActionProps() {
  *                                  Ended/Recognized
  */
 
-
-var STATE_POSSIBLE = 1;
-var STATE_BEGAN = 2;
-var STATE_CHANGED = 4;
-var STATE_ENDED = 8;
-var STATE_RECOGNIZED = STATE_ENDED;
-var STATE_CANCELLED = 16;
-var STATE_FAILED = 32;
 /**
+ * @private
  * Recognizer
  * Every recognizer needs to extend from this class.
  * @constructor
  * @param {Object} options
  */
 
-function Recognizer(options) {
-  this.options = _objectSpread$1(_objectSpread$1({}, this.defaults), options);
-  this.id = uniqueId();
-  this.manager = null; // default is enable true
 
-  this.options.enable = ifUndefined(this.options.enable, true);
-  this.state = STATE_POSSIBLE;
-  this.simultaneous = {};
-  this.requireFail = [];
-}
+var Recognizer = /*#__PURE__*/function () {
+  function Recognizer(options) {
+    var _this$options$enable;
 
-Recognizer.prototype = {
+    this.id = uniqueId();
+    this.manager = null;
+    this.state = STATE_POSSIBLE;
+    this.simultaneous = {};
+    this.options = _objectSpread$3({}, this.defaults, options);
+    this.options.enable = (_this$options$enable = this.options.enable) != null ? _this$options$enable : true;
+  }
   /**
-   * @virtual
-   * @type {Object}
-   */
-  defaults: {},
-
-  /**
+   * @private
    * set options
    * @param {Object} options
    * @return {Recognizer}
    */
-  set: function set(options) {
+
+
+  var _proto = Recognizer.prototype;
+
+  _proto.set = function set(options) {
     _Object$assign(this.options, options); // also update the touchAction, in case something changed about the directions/enabled state
 
 
-    this.manager && this.manager.touchAction.update();
+    if (this.manager) this.manager.touchAction.update();
     return this;
-  },
-
+  }
   /**
-   * recognize simultaneous with an other recognizer.
-   * @param {Recognizer} otherRecognizer
-   * @returns {Recognizer} this
-   */
-  recognizeWith: function recognizeWith(otherRecognizer) {
-    if (invokeArrayArg(otherRecognizer, 'recognizeWith', this)) return this;
-    var simultaneous = this.simultaneous;
-    otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-
-    if (!simultaneous[otherRecognizer.id]) {
-      simultaneous[otherRecognizer.id] = otherRecognizer;
-      otherRecognizer.recognizeWith(this);
-    }
-
-    return this;
-  },
-
-  /**
-   * drop the simultaneous link. it doesnt remove the link on the other recognizer.
-   * @param {Recognizer} otherRecognizer
-   * @returns {Recognizer} this
-   */
-  dropRecognizeWith: function dropRecognizeWith(otherRecognizer) {
-    if (invokeArrayArg(otherRecognizer, 'dropRecognizeWith', this)) return this;
-    otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-    delete this.simultaneous[otherRecognizer.id];
-    return this;
-  },
-
-  /**
-   * recognizer can only run when an other is failing
-   * @param {Recognizer} otherRecognizer
-   * @returns {Recognizer} this
-   */
-  requireFailure: function requireFailure(otherRecognizer) {
-    if (invokeArrayArg(otherRecognizer, 'requireFailure', this)) return this;
-    var requireFail = this.requireFail;
-    otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-
-    if (_indexOfInstanceProperty(requireFail).call(requireFail, otherRecognizer) === -1) {
-      requireFail.push(otherRecognizer);
-      otherRecognizer.requireFailure(this);
-    }
-
-    return this;
-  },
-
-  /**
-   * drop the requireFailure link. it does not remove the link on the other recognizer.
-   * @param {Recognizer} otherRecognizer
-   * @returns {Recognizer} this
-   */
-  dropRequireFailure: function dropRequireFailure(otherRecognizer) {
-    var _context8, _context9;
-
-    if (invokeArrayArg(otherRecognizer, 'dropRequireFailure', this)) return this;
-    otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-
-    var index = _indexOfInstanceProperty(_context8 = this.requireFail).call(_context8, otherRecognizer);
-
-    if (index > -1) _spliceInstanceProperty(_context9 = this.requireFail).call(_context9, index, 1);
-    return this;
-  },
-
-  /**
-   * has require failures boolean
-   * @returns {boolean}
-   */
-  hasRequireFailures: function hasRequireFailures() {
-    return this.requireFail.length > 0;
-  },
-
-  /**
-   * if the recognizer can recognize simultaneous with an other recognizer
-   * @param {Recognizer} otherRecognizer
-   * @returns {Boolean}
-   */
-  canRecognizeWith: function canRecognizeWith(otherRecognizer) {
-    return !!this.simultaneous[otherRecognizer.id];
-  },
-
-  /**
+   * @private
    * You should use `tryEmit` instead of `emit` directly to check
    * that all the needed recognizers has failed before emitting.
    * @param {Object} input
    */
-  emit: function emit(input) {
-    var self = this;
-    var state = this.state;
+  ;
 
-    function emit(event) {
-      self.manager.emit(event, input);
-    } // 'panstart' and 'panmove'
+  _proto.emit = function emit(input) {
+    var manager = this.manager,
+        options = this.options,
+        state = this.state;
 
-
-    if (state < STATE_ENDED) {
-      emit(self.options.event + stateStr(state));
-    }
-
-    emit(self.options.event); // simple 'eventName' events
-
-    if (input.additionalEvent) {
-      // additional event(panleft, panright, pinchin, pinchout...)
-      emit(input.additionalEvent);
-    } // panend and pancancel
+    var emit = function emit(event) {
+      return manager.emit(event, input);
+    }; // 'panstart' and 'panmove'
 
 
-    if (state >= STATE_ENDED) {
-      emit(self.options.event + stateStr(state));
-    }
-  },
+    if (state < STATE_ENDED) emit(options.event + stateStr(state));
+    emit(this.options.event); // simple 'eventName' events
+    // additional event(panleft, panright, pinchin, pinchout...)
 
+    if (input.additionalEvent) emit(input.additionalEvent); // panend and pancancel
+
+    if (state >= STATE_ENDED) emit(options.event + stateStr(state));
+  }
   /**
-   * Check that all the require failure recognizers has failed,
-   * if true, it emits a gesture event,
-   * otherwise, setup the state to FAILED.
-   * @param {Object} input
-   */
-  tryEmit: function tryEmit(input) {
-    if (this.canEmit()) return this.emit(input); // it's failing anyway
-
-    this.state = STATE_FAILED;
-  },
-
-  /**
-   * can we emit?
-   * @returns {boolean}
-   */
-  canEmit: function canEmit() {
-    var i = 0;
-
-    while (i < this.requireFail.length) {
-      if (!(this.requireFail[i].state & (STATE_FAILED | STATE_POSSIBLE))) {
-        return false;
-      }
-
-      i++;
-    }
-
-    return true;
-  },
-
-  /**
+   * @private
    * update the recognizer
    * @param {Object} inputData
    */
-  recognize: function recognize(inputData) {
+  ;
+
+  _proto.recognize = function recognize(inputData) {
     // make a new copy of the inputData
     // so we can change the inputData without messing up the other recognizers
-    var inputDataClone = _objectSpread$1({}, inputData); // is is enabled and allow recognizing?
-
-
-    if (!boolOrFn(this.options.enable, [this, inputDataClone])) {
+    // is is enabled and allow recognizing?
+    if (!this.options.enable) {
       this.reset();
       this.state = STATE_FAILED;
       return;
@@ -4529,530 +5088,227 @@ Recognizer.prototype = {
       this.state = STATE_POSSIBLE;
     }
 
+    var inputDataClone = _objectSpread$3({}, inputData);
+
     this.state = this.process(inputDataClone); // the recognizer has recognized a gesture
     // so trigger an event
 
     if (this.state & (STATE_BEGAN | STATE_CHANGED | STATE_ENDED | STATE_CANCELLED)) {
-      this.tryEmit(inputDataClone);
+      this.emit(inputDataClone);
     }
-  },
-
+  }
   /**
+   * @private
    * return the state of the recognizer
    * the actual recognizing happens in this method
    * @virtual
    * @param {Object} inputData
-   * @returns {Const} STATE
+   * @returns {constant} STATE
    */
-  process: function process() {},
-  // jshint ignore:line
+
+  /* jshint ignore:start */
+  ;
+
+  _proto.process = function process() {}
+  /* jshint ignore:end */
 
   /**
+   * @private
    * return the preferred touch-action
    * @virtual
    * @returns {Array}
    */
-  getTouchAction: function getTouchAction() {},
+  ;
 
+  _proto.getTouchAction = function getTouchAction() {}
   /**
+   * @private
    * called when the gesture isn't allowed to recognize
    * like when another is being recognized or it is disabled
    * @virtual
    */
-  reset: function reset() {}
-};
+  ;
+
+  _proto.reset = function reset() {};
+
+  return _createClass(Recognizer);
+}();
+
+var VENDOR_PREFIXES = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
 /**
- * get a usable string, used as event postfix
- * @param {Const} state
- * @returns {String} state
+ * @private
+ * get the prefixed property
+ * @param {Object} obj
+ * @param {String} property
+ * @returns {String|Undefined} prefixed
  */
 
-function stateStr(state) {
-  if (state & STATE_CANCELLED) {
-    return 'cancel';
-  } else if (state & STATE_ENDED) {
-    return 'end';
-  } else if (state & STATE_CHANGED) {
-    return 'move';
-  } else if (state & STATE_BEGAN) {
-    return 'start';
-  }
+function prefixed(obj, property) {
+  var camelProp = property[0].toUpperCase() + _sliceInstanceProperty(property).call(property, 1);
 
-  return '';
+  return _findInstanceProperty(VENDOR_PREFIXES).call(VENDOR_PREFIXES, function (prefix) {
+    return (prefix ? prefix + camelProp : property) in obj;
+  });
+}
+
+var _window$CSS;
+var PREFIXED_TOUCH_ACTION = typeof document !== 'undefined' && prefixed(document.createElement('div').style, 'touchAction'); // magical touchAction value
+
+var TOUCH_ACTION_COMPUTE = 'compute';
+var TOUCH_ACTION_AUTO = 'auto';
+var TOUCH_ACTION_MANIPULATION = 'manipulation'; // not implemented
+
+var TOUCH_ACTION_PAN_X = 'pan-x';
+var TOUCH_ACTION_PAN_Y = 'pan-y';
+var TOUCH_ACTION_NONE = 'none';
+var actions = ['auto', 'manipulation', 'pan-y', 'pan-x', 'pan-x pan-y', 'none'];
+var cssSupports = typeof window !== 'undefined' && ((_window$CSS = window.CSS) == null ? void 0 : _window$CSS.supports);
+var TOUCH_ACTION_MAP = PREFIXED_TOUCH_ACTION && actions.reduce(function (touchMap, val) {
+  // If css.supports is not supported but there is native touch-action assume it supports
+  // all values. This is the case for IE 10 and 11.
+  touchMap[val] = cssSupports ? cssSupports('touch-action', val) : true;
+  return touchMap;
+}, {});
+
+function cleanTouchActions(actions) {
+  // none
+  if (_includesInstanceProperty(actions).call(actions, TOUCH_ACTION_NONE)) return TOUCH_ACTION_NONE;
+
+  var hasPanX = _includesInstanceProperty(actions).call(actions, TOUCH_ACTION_PAN_X);
+
+  var hasPanY = _includesInstanceProperty(actions).call(actions, TOUCH_ACTION_PAN_Y); // if both pan-x and pan-y are set (different recognizers
+  // for different directions, e.g. horizontal pan but vertical swipe?)
+  // we need none (as otherwise with pan-x pan-y combined none of these
+  // recognizers will work, since the browser would handle all panning
+
+
+  if (hasPanX && hasPanY) return TOUCH_ACTION_NONE; // pan-x OR pan-y
+
+  if (hasPanX) return TOUCH_ACTION_PAN_X;
+  if (hasPanY) return TOUCH_ACTION_PAN_Y; // manipulation
+
+  var hasManipulation = _includesInstanceProperty(actions).call(actions, TOUCH_ACTION_MANIPULATION);
+
+  if (hasManipulation) return TOUCH_ACTION_MANIPULATION;
+  return TOUCH_ACTION_AUTO;
 }
 /**
- * direction cons to string
- * @param {Const} direction
- * @returns {String}
- */
-
-
-function directionStr(direction) {
-  if (direction == DIRECTION_DOWN) {
-    return 'down';
-  } else if (direction == DIRECTION_UP) {
-    return 'up';
-  } else if (direction == DIRECTION_LEFT) {
-    return 'left';
-  } else if (direction == DIRECTION_RIGHT) {
-    return 'right';
-  }
-
-  return '';
-}
-/**
- * get a recognizer by name if it is bound to a manager
- * @param {Recognizer|String} otherRecognizer
- * @param {Recognizer} recognizer
- * @returns {Recognizer}
- */
-
-
-var getRecognizerByNameIfManager = function getRecognizerByNameIfManager(otherRecognizer, _ref7) {
-  var manager = _ref7.manager;
-  return manager ? manager.get(otherRecognizer) : otherRecognizer;
-};
-/**
- * This recognizer is just used as a base for the simple attribute recognizers.
+ * @private
+ * Touch Action
+ * sets the touchAction property or uses the js alternative
+ * @param {Manager} manager
+ * @param {String} value
  * @constructor
- * @extends Recognizer
  */
 
 
-function AttrRecognizer() {
-  Recognizer.apply(this, arguments);
-}
-
-inherit(AttrRecognizer, Recognizer, {
+var TouchAction = /*#__PURE__*/function () {
+  function TouchAction(manager, value) {
+    this.manager = manager;
+    this.set(value);
+  }
   /**
-   * @namespace
-   * @memberof AttrRecognizer
+   * @private
+   * set the touchAction value on the element or enable the polyfill
+   * @param {String} value
    */
-  defaults: {
-    /**
-     * @type {Number}
-     * @default 1
-     */
-    pointers: 1
-  },
 
+
+  var _proto = TouchAction.prototype;
+
+  _proto.set = function set(value) {
+    var _context;
+
+    // find out the touch-action by the event handlers
+    if (value === TOUCH_ACTION_COMPUTE) value = this.compute();
+
+    if (PREFIXED_TOUCH_ACTION && this.manager.element.style && TOUCH_ACTION_MAP[value]) {
+      this.manager.element.style[PREFIXED_TOUCH_ACTION] = value;
+    }
+
+    this.actions = _trimInstanceProperty(_context = value.toLowerCase()).call(_context);
+  }
   /**
-   * Used to check if it the recognizer receives valid input, like input.distance > 10.
-   * @memberof AttrRecognizer
+   * @private
+   * just re-set the touchAction value
+   */
+  ;
+
+  _proto.update = function update() {
+    this.set(this.manager.options.touchAction);
+  }
+  /**
+   * @private
+   * compute the value for the touchAction property based on the recognizer's settings
+   * @returns {String} value
+   */
+  ;
+
+  _proto.compute = function compute() {
+    return cleanTouchActions(this.manager.recognizers.reduce(function (actions, recognizer) {
+      return recognizer.options.enable ? _concatInstanceProperty(actions).call(actions, recognizer.getTouchAction()) : actions;
+    }, []).join(' '));
+  }
+  /**
+   * @private
+   * this method is called on each input cycle and provides the preventing of the browser behavior
    * @param {Object} input
-   * @returns {Boolean} recognized
    */
-  attrTest: function attrTest(input) {
-    var optionPointers = this.options.pointers;
-    return optionPointers === 0 || input.pointers.length === optionPointers;
-  },
+  ;
 
-  /**
-   * Process the input and return the state for the recognizer
-   * @memberof AttrRecognizer
-   * @param {Object} input
-   * @returns {*} State
-   */
-  process: function process(input) {
-    var state = this.state;
-    var eventType = input.eventType;
-    var isRecognized = state & (STATE_BEGAN | STATE_CHANGED);
-    var isValid = this.attrTest(input); // on cancel input and we've recognized before, return STATE_CANCELLED
+  _proto.preventDefaults = function preventDefaults(_ref) {
+    var _context2, _context3, _context4;
 
-    if (isRecognized && (eventType & INPUT_CANCEL || !isValid)) {
-      return state | STATE_CANCELLED;
-    } else if (isRecognized || isValid) {
-      if (eventType & INPUT_END) {
-        return state | STATE_ENDED;
-      } else if (!(state & STATE_BEGAN)) {
-        return STATE_BEGAN;
-      }
+    var srcEvent = _ref.srcEvent,
+        pointers = _ref.pointers,
+        distance = _ref.distance,
+        deltaTime = _ref.deltaTime,
+        offsetDirection = _ref.offsetDirection;
+    // if the touch action did prevented once this session
+    if (this.manager.session.prevented) return srcEvent.preventDefault();
+    var hasNone = _includesInstanceProperty(_context2 = this.actions).call(_context2, TOUCH_ACTION_NONE) && !TOUCH_ACTION_MAP[TOUCH_ACTION_NONE]; // do not prevent defaults if this is a tap gesture
 
-      return state | STATE_CHANGED;
+    if (hasNone && pointers.length === 1 && distance < 2 && deltaTime < 250) return;
+    var hasPanY = _includesInstanceProperty(_context3 = this.actions).call(_context3, TOUCH_ACTION_PAN_Y) && !TOUCH_ACTION_MAP[TOUCH_ACTION_PAN_Y];
+    var hasPanX = _includesInstanceProperty(_context4 = this.actions).call(_context4, TOUCH_ACTION_PAN_X) && !TOUCH_ACTION_MAP[TOUCH_ACTION_PAN_X]; // `pan-x pan-y` means browser handles all scrolling/panning, do not prevent
+
+    if (hasPanX && hasPanY) return;
+
+    if (hasNone || hasPanY && offsetDirection & DIRECTION_HORIZONTAL || hasPanX && offsetDirection & DIRECTION_VERTICAL) {
+      this.manager.session.prevented = true;
+      srcEvent.preventDefault();
     }
+  };
 
-    return STATE_FAILED;
-  }
-});
+  return _createClass(TouchAction);
+}();
+
+function ownKeys$2(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$2(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$2(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+var SUPPORT_TOUCH = typeof window !== 'undefined' && 'ontouchstart' in window;
+var SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && /mobile|tablet|ip(ad|hone|od)|android/i.test(navigator.userAgent);
+var SUPPORT_POINTER_EVENTS = typeof window !== 'undefined' && Boolean(prefixed(window, 'PointerEvent'));
 /**
- * Pan
- * Recognized when the pointer is down and moved in the allowed direction.
- * @constructor
- * @extends AttrRecognizer
+ * @private
+ * create new input type manager
+ * called by the Manager constructor
+ * @param {Hammer} manager
+ * @returns {Input}
  */
 
-function PanRecognizer() {
-  AttrRecognizer.apply(this, arguments);
-  this.pX = null;
-  this.pY = null;
+function createInputInstance(manager) {
+  var inputClass = manager.options.inputClass;
+  if (inputClass) return new inputClass(manager);
+  if (SUPPORT_POINTER_EVENTS) return new PointerEventInput(manager);
+  if (SUPPORT_ONLY_TOUCH) return new TouchInput(manager);
+  if (!SUPPORT_TOUCH) return new MouseInput(manager);
+  return new TouchMouseInput(manager);
 }
 
-inherit(PanRecognizer, AttrRecognizer, {
+var defaults = {
   /**
-   * @namespace
-   * @memberof PanRecognizer
-   */
-  defaults: {
-    event: 'pan',
-    threshold: 10,
-    pointers: 1,
-    direction: DIRECTION_ALL
-  },
-  getTouchAction: function getTouchAction() {
-    var direction = this.options.direction;
-    var actions = [];
-    if (direction & DIRECTION_HORIZONTAL) actions.push(TOUCH_ACTION_PAN_Y);
-    if (direction & DIRECTION_VERTICAL) actions.push(TOUCH_ACTION_PAN_X);
-    return actions;
-  },
-  directionTest: function directionTest(input) {
-    var options = this.options;
-    var hasMoved = true;
-    var distance = input.distance;
-    var direction = input.direction;
-    var x = input.deltaX;
-    var y = input.deltaY; // lock to axis?
-
-    if (!(direction & options.direction)) {
-      if (options.direction & DIRECTION_HORIZONTAL) {
-        direction = x === 0 ? DIRECTION_NONE : x < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT;
-        hasMoved = x != this.pX;
-        distance = Math.abs(input.deltaX);
-      } else {
-        direction = y === 0 ? DIRECTION_NONE : y < 0 ? DIRECTION_UP : DIRECTION_DOWN;
-        hasMoved = y != this.pY;
-        distance = Math.abs(input.deltaY);
-      }
-    }
-
-    input.direction = direction;
-    return hasMoved && distance > options.threshold && direction & options.direction;
-  },
-  attrTest: function attrTest(input) {
-    return AttrRecognizer.prototype.attrTest.call(this, input) && (this.state & STATE_BEGAN || !(this.state & STATE_BEGAN) && this.directionTest(input));
-  },
-  emit: function emit(input) {
-    this.pX = input.deltaX;
-    this.pY = input.deltaY;
-    var direction = directionStr(input.direction);
-    if (direction) input.additionalEvent = this.options.event + direction;
-
-    this._super.emit.call(this, input);
-  }
-});
-/**
- * Pinch
- * Recognized when two or more pointers are moving toward (zoom-in) or away from each other (zoom-out).
- * @constructor
- * @extends AttrRecognizer
- */
-
-function PinchRecognizer() {
-  AttrRecognizer.apply(this, arguments);
-}
-
-inherit(PinchRecognizer, AttrRecognizer, {
-  /**
-   * @namespace
-   * @memberof PinchRecognizer
-   */
-  defaults: {
-    event: 'pinch',
-    threshold: 0,
-    pointers: 2
-  },
-  getTouchAction: function getTouchAction() {
-    return [TOUCH_ACTION_NONE];
-  },
-  attrTest: function attrTest(input) {
-    return this._super.attrTest.call(this, input) && (Math.abs(input.scale - 1) > this.options.threshold || this.state & STATE_BEGAN);
-  },
-  emit: function emit(input) {
-    if (input.scale !== 1) {
-      var inOut = input.scale < 1 ? 'in' : 'out';
-      input.additionalEvent = this.options.event + inOut;
-    }
-
-    this._super.emit.call(this, input);
-  }
-});
-/**
- * Press
- * Recognized when the pointer is down for x ms without any movement.
- * @constructor
- * @extends Recognizer
- */
-
-function PressRecognizer() {
-  Recognizer.apply(this, arguments);
-  this._timer = null;
-  this._input = null;
-}
-
-inherit(PressRecognizer, Recognizer, {
-  /**
-   * @namespace
-   * @memberof PressRecognizer
-   */
-  defaults: {
-    event: 'press',
-    pointers: 1,
-    time: 251,
-    // minimal time of the pointer to be pressed
-    threshold: 9 // a minimal movement is ok, but keep it low
-
-  },
-  getTouchAction: function getTouchAction() {
-    return [TOUCH_ACTION_AUTO];
-  },
-  process: function process(input) {
-    var _this = this;
-
-    var options = this.options;
-    var validPointers = input.pointers.length === options.pointers;
-    var validMovement = input.distance < options.threshold;
-    var validTime = input.deltaTime > options.time;
-    this._input = input; // we only allow little movement
-    // and we've reached an end event, so a tap is possible
-
-    if (!validMovement || !validPointers || input.eventType & (INPUT_END | INPUT_CANCEL) && !validTime) {
-      this.reset();
-    } else if (input.eventType & INPUT_START) {
-      this.reset();
-      this._timer = _setTimeout(function () {
-        _this.state = STATE_RECOGNIZED;
-
-        _this.tryEmit();
-      }, options.time);
-    } else if (input.eventType & INPUT_END) {
-      return STATE_RECOGNIZED;
-    }
-
-    return STATE_FAILED;
-  },
-  reset: function reset() {
-    clearTimeout(this._timer);
-  },
-  emit: function emit(input) {
-    if (this.state !== STATE_RECOGNIZED) {
-      return;
-    }
-
-    if (input && input.eventType & INPUT_END) {
-      this.manager.emit(this.options.event + 'up', input);
-    } else {
-      this._input.timeStamp = now();
-      this.manager.emit(this.options.event, this._input);
-    }
-  }
-});
-/**
- * Rotate
- * Recognized when two or more pointer are moving in a circular motion.
- * @constructor
- * @extends AttrRecognizer
- */
-
-function RotateRecognizer() {
-  AttrRecognizer.apply(this, arguments);
-}
-
-inherit(RotateRecognizer, AttrRecognizer, {
-  /**
-   * @namespace
-   * @memberof RotateRecognizer
-   */
-  defaults: {
-    event: 'rotate',
-    threshold: 0,
-    pointers: 2
-  },
-  getTouchAction: function getTouchAction() {
-    return [TOUCH_ACTION_NONE];
-  },
-  attrTest: function attrTest(input) {
-    return this._super.attrTest.call(this, input) && (Math.abs(input.rotation) > this.options.threshold || this.state & STATE_BEGAN);
-  }
-});
-/**
- * Swipe
- * Recognized when the pointer is moving fast (velocity), with enough distance in the allowed direction.
- * @constructor
- * @extends AttrRecognizer
- */
-
-function SwipeRecognizer() {
-  AttrRecognizer.apply(this, arguments);
-}
-
-inherit(SwipeRecognizer, AttrRecognizer, {
-  /**
-   * @namespace
-   * @memberof SwipeRecognizer
-   */
-  defaults: {
-    event: 'swipe',
-    threshold: 10,
-    velocity: 0.3,
-    direction: DIRECTION_HORIZONTAL | DIRECTION_VERTICAL,
-    pointers: 1
-  },
-  getTouchAction: function getTouchAction() {
-    return PanRecognizer.prototype.getTouchAction.call(this);
-  },
-  attrTest: function attrTest(input) {
-    var direction = this.options.direction;
-    var velocity;
-
-    if (direction & (DIRECTION_HORIZONTAL | DIRECTION_VERTICAL)) {
-      velocity = input.overallVelocity;
-    } else if (direction & DIRECTION_HORIZONTAL) {
-      velocity = input.overallVelocityX;
-    } else if (direction & DIRECTION_VERTICAL) {
-      velocity = input.overallVelocityY;
-    }
-
-    return this._super.attrTest.call(this, input) && direction & input.offsetDirection && input.distance > this.options.threshold && input.maxPointers == this.options.pointers && abs(velocity) > this.options.velocity && input.eventType & INPUT_END;
-  },
-  emit: function emit(input) {
-    var direction = directionStr(input.offsetDirection);
-    if (direction) this.manager.emit(this.options.event + direction, input);
-    this.manager.emit(this.options.event, input);
-  }
-});
-/**
- * A tap is ecognized when the pointer is doing a small tap/click. Multiple taps are recognized if they occur
- * between the given interval and position. The delay option can be used to recognize multi-taps without firing
- * a single tap.
- *
- * The eventData from the emitted event contains the property `tapCount`, which contains the amount of
- * multi-taps being recognized.
- * @constructor
- * @extends Recognizer
- */
-
-function TapRecognizer() {
-  Recognizer.apply(this, arguments); // previous time and center,
-  // used for tap counting
-
-  this.pTime = false;
-  this.pCenter = false;
-  this._timer = null;
-  this._input = null;
-  this.count = 0;
-}
-
-inherit(TapRecognizer, Recognizer, {
-  /**
-   * @namespace
-   * @memberof PinchRecognizer
-   */
-  defaults: {
-    event: 'tap',
-    pointers: 1,
-    taps: 1,
-    interval: 300,
-    // max time between the multi-tap taps
-    time: 250,
-    // max time of the pointer to be down (like finger on the screen)
-    threshold: 9,
-    // a minimal movement is ok, but keep it low
-    posThreshold: 10 // a multi-tap can be a bit off the initial position
-
-  },
-  getTouchAction: function getTouchAction() {
-    return [TOUCH_ACTION_MANIPULATION];
-  },
-  process: function process(input) {
-    var _this2 = this;
-
-    var options = this.options;
-    var validPointers = input.pointers.length === options.pointers;
-    var validMovement = input.distance < options.threshold;
-    var validTouchTime = input.deltaTime < options.time;
-    this.reset();
-    if (input.eventType & INPUT_START && this.count === 0) return this.failTimeout(); // we only allow little movement
-    // and we've reached an end event, so a tap is possible
-
-    if (validMovement && validTouchTime && validPointers) {
-      if (input.eventType != INPUT_END) return this.failTimeout();
-      var validInterval = this.pTime ? input.timeStamp - this.pTime < options.interval : true;
-      var validMultiTap = !this.pCenter || getDistance(this.pCenter, input.center) < options.posThreshold;
-      this.pTime = input.timeStamp;
-      this.pCenter = input.center;
-
-      if (!validMultiTap || !validInterval) {
-        this.count = 1;
-      } else {
-        this.count += 1;
-      }
-
-      this._input = input; // if tap count matches we have recognized it,
-      // else it has began recognizing...
-
-      var tapCount = this.count % options.taps;
-
-      if (tapCount === 0) {
-        // no failing requirements, immediately trigger the tap event
-        // or wait as long as the multitap interval to trigger
-        if (!this.hasRequireFailures()) {
-          return STATE_RECOGNIZED;
-        } else {
-          this._timer = _setTimeout(function () {
-            _this2.state = STATE_RECOGNIZED;
-
-            _this2.tryEmit();
-          }, options.interval);
-          return STATE_BEGAN;
-        }
-      }
-    }
-
-    return STATE_FAILED;
-  },
-  failTimeout: function failTimeout() {
-    var _this3 = this;
-
-    this._timer = _setTimeout(function () {
-      _this3.state = STATE_FAILED;
-    }, this.options.interval);
-    return STATE_FAILED;
-  },
-  reset: function reset() {
-    clearTimeout(this._timer);
-  },
-  emit: function emit() {
-    if (this.state == STATE_RECOGNIZED) {
-      this._input.tapCount = this.count;
-      this.manager.emit(this.options.event, this._input);
-    }
-  }
-});
-/**
- * Simple way to create a manager with a default set of recognizers.
- * @param {HTMLElement} element
- * @param {Object} [options]
- * @constructor
- */
-
-function Hammer(element, options) {
-  options = options || {};
-  options.recognizers = ifUndefined(options.recognizers, Hammer.defaults.preset);
-  return new Manager(element, options);
-}
-/**
- * @const {string}
- */
-
-
-Hammer.VERSION = '2.0.7';
-/**
- * default settings
- * @namespace
- */
-
-Hammer.defaults = {
-  /**
+   * @private
    * set if DOM events are being triggered.
    * But this is slower and unused by simple implementations, so disabled by default.
    * @type {Boolean}
@@ -5061,6 +5317,7 @@ Hammer.defaults = {
   domEvents: false,
 
   /**
+   * @private
    * The value for the touchAction property/fallback.
    * When set to `compute` it will magically set the correct value based on the added recognizers.
    * @type {String}
@@ -5069,12 +5326,14 @@ Hammer.defaults = {
   touchAction: TOUCH_ACTION_COMPUTE,
 
   /**
+   * @private
    * @type {Boolean}
    * @default true
    */
   enable: true,
 
   /**
+   * @private
    * EXPERIMENTAL FEATURE -- can be removed/changed
    * Change the parent input target element.
    * If Null, then it is being set the to main element.
@@ -5084,6 +5343,7 @@ Hammer.defaults = {
   inputTarget: null,
 
   /**
+   * @private
    * force an input class
    * @type {Null|Function}
    * @default null
@@ -5091,31 +5351,14 @@ Hammer.defaults = {
   inputClass: null,
 
   /**
-   * Default recognizer setup when calling `Hammer()`
-   * When creating a new Manager these will be skipped.
-   * @type {Array}
-   */
-  preset: [// RecognizerClass, options, [recognizeWith, ...], [requireFailure, ...]
-  [RotateRecognizer, {
-    enable: false
-  }], [PinchRecognizer, {
-    enable: false
-  }, ['rotate']], [SwipeRecognizer, {
-    direction: DIRECTION_HORIZONTAL
-  }], [PanRecognizer, {
-    direction: DIRECTION_HORIZONTAL
-  }, ['swipe']], [TapRecognizer], [TapRecognizer, {
-    event: 'doubletap',
-    taps: 2
-  }, ['tap']], [PressRecognizer]],
-
-  /**
+   * @private
    * Some CSS properties can be used to improve the working of Hammer.
    * Add them to this method and they will be set when creating a new Manager.
    * @namespace
    */
   cssProps: {
     /**
+     * @private
      * Disables text selection to improve the dragging gesture. Mainly for desktop browsers.
      * @type {String}
      * @default 'none'
@@ -5123,6 +5366,7 @@ Hammer.defaults = {
     userSelect: 'none',
 
     /**
+     * @private
      * Disable the Windows Phone grippers when pressing an element.
      * @type {String}
      * @default 'none'
@@ -5130,6 +5374,7 @@ Hammer.defaults = {
     touchSelect: 'none',
 
     /**
+     * @private
      * Disables the default callout shown when you touch and hold a touch target.
      * On iOS, when you touch and hold a touch target such as a link, Safari displays
      * a callout containing information about the link. This property allows you to disable that callout.
@@ -5139,13 +5384,7 @@ Hammer.defaults = {
     touchCallout: 'none',
 
     /**
-     * Specifies whether zooming is enabled. Used by IE10>
-     * @type {String}
-     * @default 'none'
-     */
-    contentZooming: 'none',
-
-    /**
+     * @private
      * Specifies that an entire element should be draggable instead of its contents. Mainly for desktop browsers.
      * @type {String}
      * @default 'none'
@@ -5153,6 +5392,7 @@ Hammer.defaults = {
     userDrag: 'none',
 
     /**
+     * @private
      * Overrides the highlight color shown when the user taps a link or a JavaScript
      * clickable element in iOS. This property obeys the alpha value, if specified.
      * @type {String}
@@ -5161,48 +5401,46 @@ Hammer.defaults = {
     tapHighlightColor: 'rgba(0,0,0,0)'
   }
 };
-var STOP = 1;
-var FORCED_STOP = 2;
 /**
+ * @private
  * Manager
  * @param {HTMLElement} element
  * @param {Object} [options]
  * @constructor
  */
 
-function Manager(element, options) {
-  var _this4 = this;
+var Manager = /*#__PURE__*/function () {
+  function Manager(element, options) {
+    var _this = this;
 
-  this.options = _objectSpread$1(_objectSpread$1({}, Hammer.defaults), options);
-  this.options.inputTarget = this.options.inputTarget || element;
-  this.handlers = {};
-  this.session = {};
-  this.recognizers = [];
-  this.oldCssProps = {};
-  this.element = element;
-  this.input = createInputInstance(this);
-  this.touchAction = new TouchAction(this, this.options.touchAction);
-  toggleCssProps(this, true);
+    this.handlers = {};
+    this.session = {};
+    this.recognizers = [];
+    this.oldCssProps = {};
+    this.options = _objectSpread$2({}, defaults, options);
+    this.options.inputTarget = this.options.inputTarget || element;
+    this.element = element;
+    this.input = createInputInstance(this);
+    this.touchAction = new TouchAction(this, this.options.touchAction);
+    this.toggleCssProps(true);
+    this.options.recognizers.forEach(function (_ref) {
+      var ctor = _ref[0],
+          opts = _ref[1];
 
-  if (this.options.recognizers) {
-    var _context10;
-
-    _forEachInstanceProperty(_context10 = this.options.recognizers).call(_context10, function (item) {
-      var recognizer = _this4.add(new item[0](item[1]));
-
-      item[2] && recognizer.recognizeWith(item[2]);
-      item[3] && recognizer.requireFailure(item[3]);
-    });
+      _this.add(new ctor(opts));
+    }, this);
   }
-}
-
-Manager.prototype = {
   /**
+   * @private
    * set options
    * @param {Object} options
    * @returns {Manager}
    */
-  set: function set(options) {
+
+
+  var _proto = Manager.prototype;
+
+  _proto.set = function set(options) {
     _Object$assign(this.options, options); // Options that need a little more setup
 
 
@@ -5216,30 +5454,20 @@ Manager.prototype = {
     }
 
     return this;
-  },
-
+  }
   /**
-   * stop recognizing for this session.
-   * This session will be discarded, when a new [input]start event is fired.
-   * When forced, the recognizer cycle is stopped immediately.
-   * @param {Boolean} [force]
-   */
-  stop: function stop(force) {
-    this.session.stopped = force ? FORCED_STOP : STOP;
-  },
-
-  /**
+   * @private
    * run the recognizers!
    * called by the inputHandler function on every movement of the pointers (touches)
    * it walks through all the recognizers and tries to detect the gesture that is being made
    * @param {Object} inputData
    */
-  recognize: function recognize(inputData) {
-    var session = this.session;
-    if (session.stopped) return; // run the touch-action polyfill
+  ;
 
-    this.touchAction.preventDefaults(inputData);
-    var recognizers = this.recognizers; // this holds the recognizer that is being recognized.
+  _proto.recognize = function recognize(inputData) {
+    var session = this.session; // run the touch-action polyfill
+
+    this.touchAction.preventDefaults(inputData); // this holds the recognizer that is being recognized.
     // so the recognizer's state needs to be BEGAN, CHANGED, ENDED or RECOGNIZED
     // if no recognizer is detecting a thing, it is set to `null`
 
@@ -5250,17 +5478,11 @@ Manager.prototype = {
       curRecognizer = session.curRecognizer = null;
     }
 
-    _forEachInstanceProperty(recognizers).call(recognizers, function (recognizer) {
+    this.recognizers.forEach(function (recognizer) {
       // find out if we are allowed try to recognize the input for this one.
-      // 1.   allow if the session is NOT forced stopped (see the .stop() method)
       // 2.   allow if we still haven't recognized a gesture in this session, or the this recognizer is the one
       //      that is being recognized.
-      // 3.   allow if the recognizer is allowed to run simultaneous with the current recognized recognizer.
-      //      this can be setup with the `recognizeWith()` method on the recognizer.
-      if (session.stopped !== FORCED_STOP && ( // 1
-      !curRecognizer || recognizer == curRecognizer || // 2
-      recognizer.canRecognizeWith(curRecognizer))) {
-        // 3
+      if (!curRecognizer || recognizer === curRecognizer) {
         recognizer.recognize(inputData);
       } else {
         recognizer.reset();
@@ -5272,124 +5494,123 @@ Manager.prototype = {
         curRecognizer = session.curRecognizer = recognizer;
       }
     });
-  },
-
+  }
   /**
+   * @private
    * get a recognizer by its event name.
    * @param {Recognizer|String} recognizer
-   * @returns {Recognizer|Null}
+   * @returns {Recognizer|undefined}
    */
-  get: function get(recognizer) {
-    var _context11;
+  ;
 
-    if (recognizer instanceof Recognizer) return recognizer;
-    return _findInstanceProperty(_context11 = this.recognizers).call(_context11, function (_ref8) {
-      var options = _ref8.options;
-      return options.event == recognizer;
-    }) || null;
-  },
+  _proto.get = function get(recognizer) {
+    var _context;
 
+    return recognizer instanceof Recognizer ? recognizer : _findInstanceProperty(_context = this.recognizers).call(_context, function (recogger) {
+      return recogger.options.event === recognizer;
+    });
+  }
   /**
-   * add a recognizer to the manager
+   * @private add a recognizer to the manager
    * existing recognizers with the same event name will be removed
    * @param {Recognizer} recognizer
    * @returns {Recognizer|Manager}
    */
-  add: function add(recognizer) {
-    if (invokeArrayArg(recognizer, 'add', this)) return this; // remove existing
+  ;
 
+  _proto.add = function add(recognizer) {
+    // remove existing
     var existing = this.get(recognizer.options.event);
     if (existing) this.remove(existing);
     this.recognizers.push(recognizer);
     recognizer.manager = this;
     this.touchAction.update();
     return recognizer;
-  },
-
+  }
   /**
+   * @private
    * remove a recognizer by name or instance
    * @param {Recognizer|String} recognizer
    * @returns {Manager}
    */
-  remove: function remove(recognizer) {
-    if (invokeArrayArg(recognizer, 'remove', this)) return this;
+  ;
+
+  _proto.remove = function remove(recognizer) {
     recognizer = this.get(recognizer); // let's make sure this recognizer exists
 
     if (recognizer) {
-      var _context12;
-
-      var index = _indexOfInstanceProperty(_context12 = this.recognizers).call(_context12, recognizer);
+      var index = this.recognizers.indexOf(recognizer);
 
       if (index !== -1) {
-        var _context13;
+        var _context2;
 
-        _spliceInstanceProperty(_context13 = this.recognizers).call(_context13, index, 1);
+        _spliceInstanceProperty(_context2 = this.recognizers).call(_context2, index, 1);
 
         this.touchAction.update();
       }
     }
 
     return this;
-  },
-
+  }
   /**
+   * @private
    * bind event
    * @param {String} events
    * @param {Function} handler
    * @returns {EventEmitter} this
    */
-  on: function on(events, handler) {
-    var _context14;
+  ;
 
+  _proto.on = function on(events, handler) {
     if (events === undefined || handler === undefined) return;
     var handlers = this.handlers;
 
-    _forEachInstanceProperty(_context14 = splitStr(events)).call(_context14, function (event) {
+    _trimInstanceProperty(events).call(events).split(/\s+/g).forEach(function (event) {
       handlers[event] = handlers[event] || [];
       handlers[event].push(handler);
     });
 
     return this;
-  },
-
+  }
   /**
-   * unbind event, leave emit blank to remove all handlers
+   * @private unbind event, leave emit blank to remove all handlers
    * @param {String} events
    * @param {Function} [handler]
    * @returns {EventEmitter} this
    */
-  off: function off(events, handler) {
-    var _context15;
+  ;
+
+  _proto.off = function off(events, handler) {
+    var _this2 = this;
 
     if (events === undefined) return;
-    var handlers = this.handlers;
 
-    _forEachInstanceProperty(_context15 = splitStr(events)).call(_context15, function (event) {
+    _trimInstanceProperty(events).call(events).split(/\s+/g).forEach(function (event) {
       if (!handler) {
-        delete handlers[event];
-      } else if (handlers[event]) {
-        var _context16, _context17;
+        delete _this2.handlers[event];
+      } else if (_this2.handlers[event]) {
+        var _context3;
 
-        _spliceInstanceProperty(_context16 = handlers[event]).call(_context16, _indexOfInstanceProperty(_context17 = handlers[event]).call(_context17, handler), 1);
+        _spliceInstanceProperty(_context3 = _this2.handlers[event]).call(_context3, _this2.handlers[event].indexOf(handler), 1);
       }
     });
 
     return this;
-  },
-
+  }
   /**
-   * emit event to the listeners
+   * @private emit event to the listeners
    * @param {String} event
    * @param {Object} data
    */
-  emit: function emit(event, data) {
-    var _context18;
+  ;
+
+  _proto.emit = function emit(event, data) {
+    var _context4;
 
     // we also want to trigger dom events
-    if (this.options.domEvents) triggerDomEvent(event, data);
+    if (this.options.domEvents) triggerDomEvent(event, data); // no handlers, so skip it all
 
-    var handlers = this.handlers[event] && _sliceInstanceProperty(_context18 = this.handlers[event]).call(_context18); // no handlers, so skip it all
-
+    var handlers = this.handlers[event] && _sliceInstanceProperty(_context4 = this.handlers[event]).call(_context4);
 
     if (!handlers || !handlers.length) return;
     data.type = event;
@@ -5398,59 +5619,49 @@ Manager.prototype = {
       data.srcEvent.preventDefault();
     };
 
-    _forEachInstanceProperty(handlers).call(handlers, function (handler) {
-      return handler(data);
+    handlers.forEach(function (handler) {
+      handler(data);
     });
-  },
-
+  }
   /**
+   * @private
    * destroy the manager and unbinds all events
    * it doesn't unbind dom events, that is the user own responsibility
    */
-  destroy: function destroy() {
-    this.element && toggleCssProps(this, false);
+  ;
+
+  _proto.destroy = function destroy() {
+    if (this.element) this.toggleCssProps(false);
     this.handlers = {};
     this.session = {};
     this.input.destroy();
     this.element = null;
-  }
-};
-/**
- * add/remove the css properties as defined in manager.options.cssProps
- * @param {Manager} manager
- * @param {Boolean} add
- */
+  };
 
-function toggleCssProps(manager, add) {
-  var _context19;
+  _proto.toggleCssProps = function toggleCssProps(add) {
+    var _this3 = this;
 
-  var element = manager.element;
-  if (!element.style) return;
-  var prop;
+    var element = this.element;
+    if (!element.style) return;
 
-  _forEachInstanceProperty(_context19 = _Object$entries(manager.options.cssProps)).call(_context19, function (_ref9) {
-    var _ref10 = _slicedToArray(_ref9, 2),
-        value = _ref10[0],
-        name = _ref10[1];
+    _Object$entries(this.options.cssProps).forEach(function (_ref2) {
+      var value = _ref2[0],
+          name = _ref2[1];
+      var prop = prefixed(element.style, name);
 
-    prop = prefixed(element.style, name);
+      if (add) {
+        _this3.oldCssProps[prop] = element.style[prop];
+        element.style[prop] = value;
+      } else {
+        element.style[prop] = _this3.oldCssProps[prop] || '';
+      }
+    });
 
-    if (add) {
-      manager.oldCssProps[prop] = element.style[prop];
-      element.style[prop] = value;
-    } else {
-      element.style[prop] = manager.oldCssProps[prop] || '';
-    }
-  });
+    if (!add) this.oldCssProps = {};
+  };
 
-  if (!add) manager.oldCssProps = {};
-}
-/**
- * trigger dom event
- * @param {String} event
- * @param {Object} data
- */
-
+  return _createClass(Manager);
+}();
 
 function triggerDomEvent(event, data) {
   var gestureEvent = document.createEvent('Event');
@@ -5459,67 +5670,460 @@ function triggerDomEvent(event, data) {
   data.target.dispatchEvent(gestureEvent);
 }
 
-_Object$assign(Hammer, {
-  INPUT_START: INPUT_START,
-  INPUT_MOVE: INPUT_MOVE,
-  INPUT_END: INPUT_END,
-  INPUT_CANCEL: INPUT_CANCEL,
-  STATE_POSSIBLE: STATE_POSSIBLE,
-  STATE_BEGAN: STATE_BEGAN,
-  STATE_CHANGED: STATE_CHANGED,
-  STATE_ENDED: STATE_ENDED,
-  STATE_RECOGNIZED: STATE_RECOGNIZED,
-  STATE_CANCELLED: STATE_CANCELLED,
-  STATE_FAILED: STATE_FAILED,
-  DIRECTION_NONE: DIRECTION_NONE,
-  DIRECTION_LEFT: DIRECTION_LEFT,
-  DIRECTION_RIGHT: DIRECTION_RIGHT,
-  DIRECTION_UP: DIRECTION_UP,
-  DIRECTION_DOWN: DIRECTION_DOWN,
-  DIRECTION_HORIZONTAL: DIRECTION_HORIZONTAL,
-  DIRECTION_VERTICAL: DIRECTION_VERTICAL,
-  DIRECTION_ALL: DIRECTION_ALL,
-  Manager: Manager,
-  Input: Input,
-  TouchAction: TouchAction,
-  TouchInput: TouchInput,
-  MouseInput: MouseInput,
-  PointerEventInput: PointerEventInput,
-  TouchMouseInput: TouchMouseInput,
-  SingleTouchInput: SingleTouchInput,
-  Recognizer: Recognizer,
-  AttrRecognizer: AttrRecognizer,
-  Tap: TapRecognizer,
-  Pan: PanRecognizer,
-  Swipe: SwipeRecognizer,
-  Pinch: PinchRecognizer,
-  Rotate: RotateRecognizer,
-  Press: PressRecognizer,
-  on: addEventListeners,
-  off: removeEventListeners,
-  each: each,
-  inherit: inherit,
-  prefixed: prefixed
-});
+/**
+ * @private
+ * This recognizer is just used as a base for the simple attribute recognizers.
+ * @constructor
+ * @extends Recognizer
+ */
 
-var hammer = Hammer;
+var AttrRecognizer = /*#__PURE__*/function (_Recognizer) {
+  _inherits(AttrRecognizer, _Recognizer);
+
+  function AttrRecognizer() {
+    return _Recognizer.apply(this, arguments) || this;
+  }
+
+  var _proto = AttrRecognizer.prototype;
+
+  /**
+   * @private
+   * Used to check if it the recognizer receives valid input, like input.distance > 10.
+   * @memberof AttrRecognizer
+   * @param {Object} input
+   * @returns {Boolean} recognized
+   */
+  _proto.attrTest = function attrTest(input) {
+    var optionPointers = this.options.pointers;
+    return optionPointers === 0 || input.pointers.length === optionPointers;
+  }
+  /**
+   * @private
+   * Process the input and return the state for the recognizer
+   * @memberof AttrRecognizer
+   * @param {Object} input
+   * @returns {*} State
+   */
+  ;
+
+  _proto.process = function process(input) {
+    var state = this.state;
+    var isRecognized = state & (STATE_BEGAN | STATE_CHANGED);
+    var isValid = this.attrTest(input); // on cancel input and we've recognized before, return STATE_CANCELLED
+
+    if (isRecognized && (input.eventType & INPUT_CANCEL || !isValid)) {
+      return state | STATE_CANCELLED;
+    }
+
+    if (isRecognized || isValid) {
+      if (input.eventType & INPUT_END) return state | STATE_ENDED;
+      if (!(state & STATE_BEGAN)) return STATE_BEGAN;
+      return state | STATE_CHANGED;
+    }
+
+    return STATE_FAILED;
+  };
+
+  return _createClass(AttrRecognizer);
+}(Recognizer);
+AttrRecognizer.prototype.defaults = {
+  /**
+   * @private
+   * @type {Number}
+   * @default 1
+   */
+  pointers: 1
+};
+
+/**
+ * @private
+ * Pan
+ * Recognized when the pointer is down and moved in the allowed direction.
+ * @constructor
+ * @extends AttrRecognizer
+ */
+
+var PanRecognizer = /*#__PURE__*/function (_AttrRecognizer) {
+  _inherits(PanRecognizer, _AttrRecognizer);
+
+  function PanRecognizer() {
+    var _context;
+
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _AttrRecognizer.call.apply(_AttrRecognizer, _concatInstanceProperty(_context = [this]).call(_context, args)) || this;
+    _this.pX = null;
+    _this.pY = null;
+    return _this;
+  }
+
+  var _proto = PanRecognizer.prototype;
+
+  _proto.getTouchAction = function getTouchAction() {
+    var direction = this.options.direction;
+    var actions = [];
+    if (direction & DIRECTION_HORIZONTAL) actions.push(TOUCH_ACTION_PAN_Y);
+    if (direction & DIRECTION_VERTICAL) actions.push(TOUCH_ACTION_PAN_X);
+    return actions;
+  };
+
+  _proto.directionTest = function directionTest(input) {
+    var options = this.options;
+    var deltaX = input.deltaX,
+        deltaY = input.deltaY;
+    var distance = input.distance; // lock to axis?
+
+    var hasMoved = true;
+
+    if (!(input.direction & options.direction)) {
+      if (options.direction & DIRECTION_HORIZONTAL) {
+        input.direction = deltaX === 0 ? DIRECTION_NONE : deltaX < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT;
+        hasMoved = deltaX !== this.pX;
+        distance = Math.abs(deltaX);
+      } else {
+        input.direction = deltaY === 0 ? DIRECTION_NONE : deltaY < 0 ? DIRECTION_UP : DIRECTION_DOWN;
+        hasMoved = deltaY !== this.pY;
+        distance = Math.abs(deltaY);
+      }
+    }
+
+    return hasMoved && distance > options.threshold && input.direction & options.direction;
+  };
+
+  _proto.attrTest = function attrTest(input) {
+    return _AttrRecognizer.prototype.attrTest.call(this, input) && (this.state & STATE_BEGAN || !(this.state & STATE_BEGAN) && this.directionTest(input));
+  };
+
+  _proto.emit = function emit(input) {
+    this.pX = input.deltaX;
+    this.pY = input.deltaY;
+    var direction = directionStr(input.direction);
+    if (direction) input.additionalEvent = this.options.event + direction;
+
+    _AttrRecognizer.prototype.emit.call(this, input);
+  };
+
+  return _createClass(PanRecognizer);
+}(AttrRecognizer);
+PanRecognizer.prototype.defaults = {
+  event: 'pan',
+  threshold: 10,
+  pointers: 1,
+  direction: DIRECTION_ALL
+};
+
+/**
+ * @private
+ * Pinch
+ * Recognized when two or more pointers are moving toward (zoom-in) or away from each other (zoom-out).
+ * @constructor
+ * @extends AttrRecognizer
+ */
+
+var PinchRecognizer = /*#__PURE__*/function (_AttrRecognizer) {
+  _inherits(PinchRecognizer, _AttrRecognizer);
+
+  function PinchRecognizer() {
+    return _AttrRecognizer.apply(this, arguments) || this;
+  }
+
+  var _proto = PinchRecognizer.prototype;
+
+  _proto.getTouchAction = function getTouchAction() {
+    return [TOUCH_ACTION_NONE];
+  };
+
+  _proto.attrTest = function attrTest(input) {
+    return _AttrRecognizer.prototype.attrTest.call(this, input) && (Math.abs(input.scale - 1) > this.options.threshold || this.state & STATE_BEGAN);
+  };
+
+  _proto.emit = function emit(input) {
+    if (input.scale !== 1) {
+      var inOut = input.scale < 1 ? 'in' : 'out';
+      input.additionalEvent = this.options.event + inOut;
+    }
+
+    _AttrRecognizer.prototype.emit.call(this, input);
+  };
+
+  return _createClass(PinchRecognizer);
+}(AttrRecognizer);
+PinchRecognizer.prototype.defaults = {
+  event: 'pinch',
+  threshold: 0,
+  pointers: 2
+};
+
+/**
+ * @private
+ * Press
+ * Recognized when the pointer is down for x ms without any movement.
+ * @constructor
+ * @extends Recognizer
+ */
+
+var PressRecognizer = /*#__PURE__*/function (_Recognizer) {
+  _inherits(PressRecognizer, _Recognizer);
+
+  function PressRecognizer() {
+    var _context;
+
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _Recognizer.call.apply(_Recognizer, _concatInstanceProperty(_context = [this]).call(_context, args)) || this;
+    _this._timer = null;
+    _this._input = null;
+    return _this;
+  }
+
+  var _proto = PressRecognizer.prototype;
+
+  _proto.getTouchAction = function getTouchAction() {
+    return [TOUCH_ACTION_AUTO];
+  };
+
+  _proto.process = function process(input) {
+    var _this2 = this;
+
+    var options = this.options;
+    var validPointers = input.pointers.length === options.pointers;
+    var validMovement = input.distance < options.threshold;
+    var validTime = input.deltaTime > options.time;
+    this._input = input; // we only allow little movement
+    // and we've reached an end event, so a tap is possible
+
+    if (!validMovement || !validPointers || input.eventType & (INPUT_END | INPUT_CANCEL) && !validTime) {
+      this.reset();
+    } else if (input.eventType & INPUT_START) {
+      this.reset();
+      this._timer = setTimeout(function () {
+        _this2.state = STATE_RECOGNIZED;
+
+        _this2.tryEmit();
+      }, options.time);
+    } else if (input.eventType & INPUT_END) {
+      return STATE_RECOGNIZED;
+    }
+
+    return STATE_FAILED;
+  };
+
+  _proto.reset = function reset() {
+    clearTimeout(this._timer);
+  };
+
+  _proto.emit = function emit(input) {
+    if (this.state !== STATE_RECOGNIZED) return;
+
+    if (input && input.eventType & INPUT_END) {
+      this.manager.emit("".concat(this.options.event, "up"), input);
+    } else {
+      this._input.timeStamp = Date.now();
+      this.manager.emit(this.options.event, this._input);
+    }
+  };
+
+  return _createClass(PressRecognizer);
+}(Recognizer);
+PressRecognizer.prototype.defaults = {
+  event: 'press',
+  pointers: 1,
+  time: 251,
+  // minimal time of the pointer to be pressed
+  threshold: 9 // a minimal movement is ok, but keep it low
+
+};
+
+/**
+ * @private
+ * A tap is recognized when the pointer is doing a small tap/click. Multiple taps are recognized if they occur
+ * between the given interval and position. The delay option can be used to recognize multi-taps without firing
+ * a single tap.
+ *
+ * The eventData from the emitted event contains the property `tapCount`, which contains the amount of
+ * multi-taps being recognized.
+ * @constructor
+ * @extends Recognizer
+ */
+
+var TapRecognizer = /*#__PURE__*/function (_Recognizer) {
+  _inherits(TapRecognizer, _Recognizer);
+
+  function TapRecognizer() {
+    var _context;
+
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _Recognizer.call.apply(_Recognizer, _concatInstanceProperty(_context = [this]).call(_context, args)) || this;
+    _this.pTime = false;
+    _this.pCenter = false;
+    _this._timer = null;
+    _this._input = null;
+    _this.count = 0;
+    return _this;
+  }
+
+  var _proto = TapRecognizer.prototype;
+
+  _proto.getTouchAction = function getTouchAction() {
+    return [TOUCH_ACTION_MANIPULATION];
+  };
+
+  _proto.process = function process(input) {
+    var options = this.options;
+    var validPointers = input.pointers.length === options.pointers;
+    var validMovement = input.distance < options.threshold;
+    var validTouchTime = input.deltaTime < options.time;
+    this.reset();
+
+    if (input.eventType & INPUT_START && this.count === 0) {
+      return this.failTimeout();
+    } // we only allow little movement
+    // and we've reached an end event, so a tap is possible
+
+
+    if (validMovement && validTouchTime && validPointers) {
+      if (input.eventType !== INPUT_END) return this.failTimeout();
+      var validInterval = this.pTime ? input.timeStamp - this.pTime < options.interval : true;
+      var validMultiTap = !this.pCenter || getDistance(this.pCenter, input.center) < options.posThreshold;
+      this.pTime = input.timeStamp;
+      this.pCenter = input.center;
+      this.count = !validMultiTap || !validInterval ? 1 : this.count + 1;
+      this._input = input; // if tap count matches we have recognized it,
+      // else it has began recognizing...
+
+      if (this.count % options.taps === 0) return STATE_RECOGNIZED;
+    }
+
+    return STATE_FAILED;
+  };
+
+  _proto.failTimeout = function failTimeout() {
+    var _this2 = this;
+
+    this._timer = setTimeout(function () {
+      _this2.state = STATE_FAILED;
+    }, this.options.interval);
+    return STATE_FAILED;
+  };
+
+  _proto.reset = function reset() {
+    clearTimeout(this._timer);
+  };
+
+  _proto.emit = function emit() {
+    if (this.state === STATE_RECOGNIZED) {
+      this._input.tapCount = this.count;
+      this.manager.emit(this.options.event, this._input);
+    }
+  };
+
+  return _createClass(TapRecognizer);
+}(Recognizer);
+TapRecognizer.prototype.defaults = {
+  event: 'tap',
+  pointers: 1,
+  taps: 1,
+  interval: 300,
+  // max time between the multi-tap taps
+  time: 250,
+  // max time of the pointer to be down (like finger on the screen)
+  threshold: 9,
+  // a minimal movement is ok, but keep it low
+  posThreshold: 10 // a multi-tap can be a bit off the initial position
+
+};
+
+var getHammerInputClass = function getHammerInputClass() {
+  return typeof window !== 'undefined' && 'ontouchstart' in window && /mobile|tablet|ip(ad|hone|od)|android/i.test(navigator.userAgent) ? TouchInput : null;
+};
+
+var buildPageIds = function buildPageIds(pageSpreads) {
+  return pageSpreads.reduce(function (pageIds, pageSpread) {
+    pageSpread.options.pageIds.forEach(function (pageId) {
+      pageIds[pageId] = pageSpread;
+    });
+    return pageIds;
+  }, {});
+};
+
+var clipCoordinate = function clipCoordinate(coordinate, scale, size, offset) {
+  return size * scale < 100 ? offset * -scale + 50 - size * scale / 2 : Math.max(Math.min(coordinate, offset * -scale), offset * -scale - size * scale + 100);
+};
+
+function getPageSpreadBounds(pageSpread) {
+  var pageSpreadRect = pageSpread.getRect();
+  var pageSpreadContentRect = pageSpread.getContentRect();
+  return {
+    left: (pageSpreadContentRect.left - pageSpreadRect.left) / pageSpreadRect.width * 100,
+    top: (pageSpreadContentRect.top - pageSpreadRect.top) / pageSpreadRect.height * 100,
+    width: pageSpreadContentRect.width / pageSpreadRect.width * 100,
+    height: pageSpreadContentRect.height / pageSpreadRect.height * 100,
+    pageSpreadRect: pageSpreadRect,
+    pageSpreadContentRect: pageSpreadContentRect
+  };
+}
+
+function isCoordinateInsideElement(x, y, el) {
+  var _el$getBoundingClient = el.getBoundingClientRect(),
+      left = _el$getBoundingClient.left,
+      right = _el$getBoundingClient.right,
+      top = _el$getBoundingClient.top,
+      bottom = _el$getBoundingClient.bottom;
+
+  return x >= left && x <= right && y >= top && y <= bottom;
+}
+
+function traversePageSpreads(els) {
+  var pageSpreads = [];
+  var left = 0;
+
+  for (var i = 0; i < els.length; i++) {
+    var _el$dataset$width, _el$dataset$pageIds, _el$dataset$maxZoomSc;
+
+    var el = els[i];
+    var width = Number((_el$dataset$width = el.dataset.width) != null ? _el$dataset$width : 100);
+    var pageSpread = new PageSpread(el, {
+      id: el.dataset.id,
+      type: el.dataset.type,
+      pageIds: ((_el$dataset$pageIds = el.dataset.pageIds) == null ? void 0 : _el$dataset$pageIds.split(',')) || [],
+      maxZoomScale: Number((_el$dataset$maxZoomSc = el.dataset.maxZoomScale) != null ? _el$dataset$maxZoomSc : 1),
+      width: width,
+      left: left
+    });
+    left += width;
+    pageSpreads.push(pageSpread);
+  }
+
+  return pageSpreads;
+}
 
 var Verso = /*#__PURE__*/function () {
-  function Verso(el) {
-    var _this$options$swipeVe, _this$options$swipeTh, _this$options$navigat, _this$options$navigat2, _this$options$zoomDur, _this$options$doubleT;
+  function Verso(el, _options) {
+    var _this = this,
+        _this$options$swipeVe,
+        _this$options$swipeTh,
+        _this$options$navigat,
+        _this$options$navigat2,
+        _this$options$zoomDur,
+        _this$options$doubleT;
 
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    if (_options === void 0) {
+      _options = {};
+    }
 
-    _classCallCheck(this, Verso);
-
-    this.el = el;
-    this.options = options;
-    this.swipeVelocity = (_this$options$swipeVe = this.options.swipeVelocity) !== null && _this$options$swipeVe !== void 0 ? _this$options$swipeVe : 0.3;
-    this.swipeThreshold = (_this$options$swipeTh = this.options.swipeThreshold) !== null && _this$options$swipeTh !== void 0 ? _this$options$swipeTh : 10;
-    this.navigationDuration = (_this$options$navigat = this.options.navigationDuration) !== null && _this$options$navigat !== void 0 ? _this$options$navigat : 240;
-    this.navigationPanDuration = (_this$options$navigat2 = this.options.navigationPanDuration) !== null && _this$options$navigat2 !== void 0 ? _this$options$navigat2 : 200;
-    this.zoomDuration = (_this$options$zoomDur = this.options.zoomDuration) !== null && _this$options$zoomDur !== void 0 ? _this$options$zoomDur : 200;
-    this.doubleTapDelay = (_this$options$doubleT = this.options.doubleTapDelay) !== null && _this$options$doubleT !== void 0 ? _this$options$doubleT : 300;
     this.position = -1;
     this.pinching = false;
     this.panning = false;
@@ -5533,1364 +6137,998 @@ var Verso = /*#__PURE__*/function () {
       top: 0,
       scale: 1
     };
-    this.tap = {
-      count: 0,
-      delay: this.doubleTapDelay
-    };
     this.started = false;
     this.destroyed = false;
     this._events = {};
-  }
 
-  _createClass(Verso, [{
-    key: "bind",
-    value: function bind(event, fn) {
-      this._events[event] = this._events[event] || [];
-      return this._events[event].push(fn);
-    }
-  }, {
-    key: "unbind",
-    value: function unbind(event, fn) {
-      if (this._events[event]) {
-        var _context, _context2;
-
-        return _spliceInstanceProperty(_context = this._events[event]).call(_context, _indexOfInstanceProperty(_context2 = this._events[event]).call(_context2, fn), 1);
-      }
-    }
-  }, {
-    key: "trigger",
-    value: function trigger(event) {
-      var _this$_events$event,
-          _this = this;
-
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-
-      (_this$_events$event = this._events[event]) === null || _this$_events$event === void 0 ? void 0 : _forEachInstanceProperty(_this$_events$event).call(_this$_events$event, function (e) {
-        return e.apply(_this, args);
-      });
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      var _context3, _context4, _context5, _context6, _context7, _context8, _context9, _context10, _context11, _context12, _context13, _context14, _this$getPageSpreadPo, _context15, _context16, _context17;
-
-      this.scrollerEl = this.el.querySelector('.verso__scroller');
-      this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
-      this.pageSpreads = this.traversePageSpreads(this.pageSpreadEls);
-      this.pageIds = this.buildPageIds(this.pageSpreads);
-      this.animation = new Animation(this.scrollerEl);
-      this.hammer = new hammer.Manager(this.scrollerEl, {
-        touchAction: 'none',
-        enable: false,
-        inputClass: this.getHammerInputClass()
-      });
-      this.hammer.add(new hammer.Pan({
-        threshold: 5,
-        direction: hammer.DIRECTION_ALL
-      }));
-      this.hammer.add(new hammer.Tap({
-        event: 'singletap',
-        interval: 0
-      }));
-      this.hammer.add(new hammer.Pinch());
-      this.hammer.add(new hammer.Press({
-        time: 500
-      }));
-      this.hammer.on('panstart', _bindInstanceProperty(_context3 = this.onPanStart).call(_context3, this));
-      this.hammer.on('panmove', _bindInstanceProperty(_context4 = this.onPanMove).call(_context4, this));
-      this.hammer.on('panend', _bindInstanceProperty(_context5 = this.onPanEnd).call(_context5, this));
-      this.hammer.on('pancancel', _bindInstanceProperty(_context6 = this.onPanEnd).call(_context6, this));
-      this.hammer.on('singletap', _bindInstanceProperty(_context7 = this.onSingletap).call(_context7, this));
-      this.hammer.on('pinchstart', _bindInstanceProperty(_context8 = this.onPinchStart).call(_context8, this));
-      this.hammer.on('pinchmove', _bindInstanceProperty(_context9 = this.onPinchMove).call(_context9, this));
-      this.hammer.on('pinchend', _bindInstanceProperty(_context10 = this.onPinchEnd).call(_context10, this));
-      this.hammer.on('pinchcancel', _bindInstanceProperty(_context11 = this.onPinchEnd).call(_context11, this));
-      this.hammer.on('press', _bindInstanceProperty(_context12 = this.onPress).call(_context12, this));
-      this.scrollerEl.addEventListener('contextmenu', _bindInstanceProperty(_context13 = this.onContextmenu).call(_context13, this), false);
-      this.scrollerEl.addEventListener('wheel', _bindInstanceProperty(_context14 = this.onWheel).call(_context14, this), false);
-      var pageId = (_this$getPageSpreadPo = this.getPageSpreadPositionFromPageId(this.options.pageId)) !== null && _this$getPageSpreadPo !== void 0 ? _this$getPageSpreadPo : 0;
-      this.hammer.set({
-        enable: true
-      });
-      this.started = true;
-      this.destroyed = false;
-      this.navigateTo(pageId, {
-        duration: 0
-      });
-      this.resizeListener = _bindInstanceProperty(_context15 = this.onResize).call(_context15, this);
-      this.touchStartListener = _bindInstanceProperty(_context16 = this.onTouchStart).call(_context16, this);
-      this.touchEndListener = _bindInstanceProperty(_context17 = this.onTouchEnd).call(_context17, this);
-      this.el.addEventListener('touchstart', this.touchStartListener, false);
-      this.el.addEventListener('touchend', this.touchEndListener, false);
-
-      if (typeof window !== 'undefined' && window !== null) {
-        window.addEventListener('resize', this.resizeListener, false);
-      }
-
-      return this;
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      var _context18, _context19;
-
-      if (!this.started) {
-        return console.warn("You've called .destroy() on a viewer that was not started yet, this is a no-op.");
-      }
-
-      if (this.destroyed) {
-        return console.warn("You've called .destroy() on a viewer that has already been destroyed and not restarted, this is a no-op.");
-      }
-
-      this.scrollerEl.removeEventListener('contextmenu', _bindInstanceProperty(_context18 = this.onContextmenu).call(_context18, this));
-      this.scrollerEl.removeEventListener('wheel', _bindInstanceProperty(_context19 = this.onWheel).call(_context19, this));
-      this.hammer.destroy();
-      this.el.removeEventListener('touchstart', this.touchStartListener);
-      this.el.removeEventListener('touchend', this.touchEndListener);
-      window.removeEventListener('resize', this.resizeListener);
-      this.started = false;
-      this.destroyed = true;
-      return this;
-    }
-  }, {
-    key: "first",
-    value: function first(options) {
-      return this.navigateTo(0, options);
-    }
-  }, {
-    key: "prev",
-    value: function prev(options) {
-      return this.navigateTo(this.getPosition() - 1, options);
-    }
-  }, {
-    key: "next",
-    value: function next(options) {
-      return this.navigateTo(this.getPosition() + 1, options);
-    }
-  }, {
-    key: "last",
-    value: function last(options) {
-      return this.navigateTo(this.getPageSpreadCount() - 1, options);
-    }
-  }, {
-    key: "navigateTo",
-    value: function navigateTo(position) {
-      var _options$velocity,
-          _options$duration,
-          _context20,
-          _this2 = this;
-
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      if (this.destroyed) {
-        return console.warn("You've called a navigation method on a viewer that was previously destroyed, this is a no-op.\nPlease call viewer.start() again, if you want to reuse this Viewer instance.\n\nYou might have forgotten to remove an event handler that\ncalls first/prev/next/last/navigateTo on the viewer.");
-      }
-
-      if (!this.started) {
-        return console.warn("\nYou've called a navigation method on a viewer that hasn't been started yet, this is a no-op.\nPlease call viewer.start() first.\n\nYou might have forgotten to remove an event handler that\ncalls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.\n");
-      }
-
-      if (position < 0 || position > this.getPageSpreadCount() - 1) {
-        return;
-      }
-
-      var currentPosition = this.getPosition();
-      var currentPageSpread = this.getPageSpreadFromPosition(currentPosition);
-      var activePageSpread = this.getPageSpreadFromPosition(position);
-      var carousel = this.getCarouselFromPageSpread(activePageSpread);
-      var velocity = (_options$velocity = options.velocity) !== null && _options$velocity !== void 0 ? _options$velocity : 1;
-      var duration = (_options$duration = options.duration) !== null && _options$duration !== void 0 ? _options$duration : this.navigationDuration;
-      duration = duration / Math.abs(velocity);
-      var touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
-      currentPageSpread === null || currentPageSpread === void 0 ? void 0 : currentPageSpread.deactivate();
-      activePageSpread.activate();
-
-      _forEachInstanceProperty(_context20 = carousel.visible).call(_context20, function (pageSpread) {
-        return pageSpread.position().setVisibility('visible');
-      });
-
-      this.hammer.set({
-        touchAction: touchAction
-      });
-      this.transform.left = this.getLeftTransformFromPageSpread(position, activePageSpread);
-      this.setPosition(position);
-
-      if (this.transform.scale > 1) {
-        this.transform.top = 0;
-        this.transform.scale = 1;
-        this.trigger('zoomedOut', {
-          position: currentPosition
-        });
-      }
-
-      this.trigger('beforeNavigation', {
-        currentPosition: currentPosition,
-        newPosition: position
-      });
-      this.animation.animate({
-        x: "".concat(this.transform.left, "%"),
-        duration: duration
-      }, function () {
-        var _context21;
-
-        carousel = _this2.getCarouselFromPageSpread(_this2.getActivePageSpread());
-
-        _forEachInstanceProperty(_context21 = carousel.gone).call(_context21, function (pageSpread) {
-          return pageSpread.setVisibility('gone');
-        });
-
-        _this2.trigger('afterNavigation', {
-          newPosition: _this2.getPosition(),
-          previousPosition: currentPosition
-        });
-      });
-    }
-  }, {
-    key: "getPosition",
-    value: function getPosition() {
-      return this.position;
-    }
-  }, {
-    key: "setPosition",
-    value: function setPosition(position) {
-      this.position = position;
-      return this;
-    }
-  }, {
-    key: "getLeftTransformFromPageSpread",
-    value: function getLeftTransformFromPageSpread(position, pageSpread) {
-      var left = 0;
-
-      if (position === this.getPageSpreadCount() - 1) {
-        left = 100 - pageSpread.getWidth() - pageSpread.getLeft();
-      } else if (position > 0) {
-        left = (100 - pageSpread.getWidth()) / 2 - pageSpread.getLeft();
-      }
-
-      return left;
-    }
-  }, {
-    key: "getCarouselFromPageSpread",
-    value: function getCarouselFromPageSpread(pageSpreadSubject) {
-      var _context22;
-
-      var carousel = {
-        visible: [],
-        gone: []
-      }; // Identify the page spreads that should be a part of the carousel.
-
-      _forEachInstanceProperty(_context22 = this.pageSpreads).call(_context22, function (pageSpread) {
-        var visible = false;
-
-        if (pageSpread.getLeft() <= pageSpreadSubject.getLeft()) {
-          if (pageSpread.getLeft() + pageSpread.getWidth() > pageSpreadSubject.getLeft() - 100) {
-            visible = true;
-          }
-        } else {
-          if (pageSpread.getLeft() - pageSpread.getWidth() < pageSpreadSubject.getLeft() + 100) {
-            visible = true;
-          }
-        }
-
-        if (visible === true) {
-          carousel.visible.push(pageSpread);
-        } else {
-          carousel.gone.push(pageSpread);
-        }
-      });
-
-      return carousel;
-    }
-  }, {
-    key: "traversePageSpreads",
-    value: function traversePageSpreads(els) {
-      var pageSpreads = [];
-      var left = 0;
-
-      for (var _i = 0, _Array$from$1 = _Array$from(els); _i < _Array$from$1.length; _i++) {
-        var _el$getAttribute, _el$getAttribute2, _el$getAttribute3;
-
-        var el = _Array$from$1[_i];
-        var id = el.getAttribute('data-id');
-        var type = el.getAttribute('data-type');
-        var pageIds = ((_el$getAttribute = el.getAttribute('data-page-ids')) === null || _el$getAttribute === void 0 ? void 0 : _el$getAttribute.split(',')) || [];
-        var maxZoomScale = Number((_el$getAttribute2 = el.getAttribute('data-max-zoom-scale')) !== null && _el$getAttribute2 !== void 0 ? _el$getAttribute2 : 1);
-        var width = Number((_el$getAttribute3 = el.getAttribute('data-width')) !== null && _el$getAttribute3 !== void 0 ? _el$getAttribute3 : 100);
-        var pageSpread = new PageSpread(el, {
-          id: id,
-          type: type,
-          pageIds: pageIds,
-          maxZoomScale: maxZoomScale,
-          width: width,
-          left: left
-        });
-        left += width;
-        pageSpreads.push(pageSpread);
-      }
-
-      return pageSpreads;
-    }
-  }, {
-    key: "buildPageIds",
-    value: function buildPageIds(pageSpreads) {
-      var pageIds = {};
-
-      _forEachInstanceProperty(pageSpreads).call(pageSpreads, function (pageSpread) {
-        var _context23;
-
-        _forEachInstanceProperty(_context23 = pageSpread.options.pageIds).call(_context23, function (pageId) {
-          pageIds[pageId] = pageSpread;
-        });
-      });
-
-      return pageIds;
-    }
-  }, {
-    key: "isCoordinateInsideElement",
-    value: function isCoordinateInsideElement(x, y, el) {
-      var rect = el.getBoundingClientRect();
-      return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-    }
-  }, {
-    key: "getCoordinateInfo",
-    value: function getCoordinateInfo(x, y, pageSpread) {
-      var pageEl;
-      x -= this.el.offsetLeft;
-      y -= this.el.offsetTop;
-      var info = {
-        x: x,
-        y: y,
-        contentX: 0,
-        contentY: 0,
-        pageX: 0,
-        pageY: 0,
-        overlayEls: [],
-        pageEl: null,
-        isInsideContentX: false,
-        isInsideContentY: false,
-        isInsideContent: false
-      };
-      var contentRect = pageSpread.getContentRect();
-      var overlayEls = pageSpread.getOverlayEls();
-      var pageEls = pageSpread.getPageEls();
-
-      for (var _i2 = 0, _Array$from3 = _Array$from(overlayEls); _i2 < _Array$from3.length; _i2++) {
-        var overlayEl = _Array$from3[_i2];
-
-        if (this.isCoordinateInsideElement(x, y, overlayEl)) {
-          info.overlayEls.push(overlayEl);
-        }
-      }
-
-      for (var _i3 = 0, _Array$from4 = _Array$from(pageEls); _i3 < _Array$from4.length; _i3++) {
-        pageEl = _Array$from4[_i3];
-
-        if (this.isCoordinateInsideElement(x, y, pageEl)) {
-          info.pageEl = pageEl;
-          break;
-        }
-      }
-
-      info.contentX = (x - contentRect.left) / Math.max(1, contentRect.width);
-      info.contentY = (y - contentRect.top) / Math.max(1, contentRect.height);
-
-      if (info.pageEl) {
-        info.isInsideContentX = info.contentX >= 0 && info.contentX <= 1;
-        info.isInsideContentY = info.contentY >= 0 && info.contentY <= 1;
-        info.isInsideContent = info.isInsideContentX && info.isInsideContentY;
-      }
-
-      return info;
-    }
-  }, {
-    key: "getPageSpreadCount",
-    value: function getPageSpreadCount() {
-      return this.pageSpreads.length;
-    }
-  }, {
-    key: "getActivePageSpread",
-    value: function getActivePageSpread() {
-      return this.getPageSpreadFromPosition(this.getPosition());
-    }
-  }, {
-    key: "getPageSpreadFromPosition",
-    value: function getPageSpreadFromPosition(position) {
-      return this.pageSpreads[position];
-    }
-  }, {
-    key: "getPageSpreadPositionFromPageId",
-    value: function getPageSpreadPositionFromPageId(pageId) {
-      for (var idx = 0; idx < this.pageSpreads.length; idx++) {
-        var _context24;
-
-        var pageSpread = this.pageSpreads[idx];
-
-        if (_indexOfInstanceProperty(_context24 = pageSpread.options.pageIds).call(_context24, pageId) > -1) {
-          return idx;
-        }
-      }
-    }
-  }, {
-    key: "getPageSpreadBounds",
-    value: function getPageSpreadBounds(pageSpread) {
-      var pageSpreadRect = pageSpread.getRect();
-      var pageSpreadContentRect = pageSpread.getContentRect();
-      return {
-        left: (pageSpreadContentRect.left - pageSpreadRect.left) / pageSpreadRect.width * 100,
-        top: (pageSpreadContentRect.top - pageSpreadRect.top) / pageSpreadRect.height * 100,
-        width: pageSpreadContentRect.width / pageSpreadRect.width * 100,
-        height: pageSpreadContentRect.height / pageSpreadRect.height * 100,
-        pageSpreadRect: pageSpreadRect,
-        pageSpreadContentRect: pageSpreadContentRect
-      };
-    }
-  }, {
-    key: "clipCoordinate",
-    value: function clipCoordinate(coordinate, scale, size, offset) {
-      if (size * scale < 100) {
-        coordinate = offset * -scale + 50 - size * scale / 2;
-      } else {
-        coordinate = Math.min(coordinate, offset * -scale);
-        coordinate = Math.max(coordinate, offset * -scale - size * scale + 100);
-      }
-
-      return coordinate;
-    }
-  }, {
-    key: "zoomTo",
-    value: function zoomTo() {
-      var _options$x, _options$y;
-
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var callback = arguments.length > 1 ? arguments[1] : undefined;
-      var scale = options.scale;
-      var curScale = this.transform.scale;
-      var activePageSpread = this.getActivePageSpread();
-      var pageSpreadBounds = this.getPageSpreadBounds(activePageSpread);
-      var carouselOffset = activePageSpread.getLeft();
-      var carouselScaledOffset = carouselOffset * curScale;
-      var x = (_options$x = options.x) !== null && _options$x !== void 0 ? _options$x : 0;
-      var y = (_options$y = options.y) !== null && _options$y !== void 0 ? _options$y : 0;
-
-      if (scale !== 1) {
-        x -= pageSpreadBounds.pageSpreadRect.left;
-        y -= pageSpreadBounds.pageSpreadRect.top;
-        x = x / (pageSpreadBounds.pageSpreadRect.width / curScale) * 100;
-        y = y / (pageSpreadBounds.pageSpreadRect.height / curScale) * 100;
-        x = this.transform.left + carouselScaledOffset + x - x * scale / curScale;
-        y = this.transform.top + y - y * scale / curScale; // Make sure the animation doesn't exceed the content bounds.
-
-        if (options.bounds !== false && scale > 1) {
-          x = this.clipCoordinate(x, scale, pageSpreadBounds.width, pageSpreadBounds.left);
-          y = this.clipCoordinate(y, scale, pageSpreadBounds.height, pageSpreadBounds.top);
-        }
-      } else {
-        x = 0;
-        y = 0;
-      } // Account for the page spreads left of the active one.
-
-
-      x -= carouselOffset * scale;
-      this.transform.left = x;
-      this.transform.top = y;
-      this.transform.scale = scale;
-      this.animation.animate({
-        x: "".concat(x, "%"),
-        y: "".concat(y, "%"),
-        scale: scale,
-        easing: options.easing,
-        duration: options.duration
-      }, callback);
-    }
-  }, {
-    key: "refresh",
-    value: function refresh() {
-      this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
-      this.pageSpreads = this.traversePageSpreads(this.pageSpreadEls);
-      this.pageIds = this.buildPageIds(this.pageSpreads);
-      return this;
-    }
-  }, {
-    key: "getHammerInputClass",
-    value: function getHammerInputClass() {
-      var mobileRegex = /mobile|tablet|ip(ad|hone|od)|android/i;
-      var supportTouch = typeof window !== 'undefined' && 'ontouchstart' in window;
-
-      if (supportTouch && mobileRegex.test(navigator.userAgent)) {
-        return hammer.TouchInput;
-      } else {
-        return null;
-      }
-    } //#############
-
-    /* Events */
-    //#############
-
-  }, {
-    key: "onPanStart",
-    value: function onPanStart(e) {
+    this.onPanStart = function (e) {
       // Only allow panning if zoomed in or doing a horizontal pan.
       // This ensures vertical scrolling works for scrollable page spreads.
-      if (this.transform.scale > 1 || e.direction === hammer.DIRECTION_LEFT || e.direction === hammer.DIRECTION_RIGHT) {
+      if (_this.transform.scale > 1 || e.direction === DIRECTION_LEFT || e.direction === DIRECTION_RIGHT) {
         var x = e.center.x;
         var edgeThreshold = 30;
-        var width = this.scrollerEl.offsetWidth; // Prevent panning when edge-swiping on iOS.
+        var width = _this.scrollerEl.offsetWidth; // Prevent panning when edge-swiping on iOS.
 
         if (x > edgeThreshold && x < width - edgeThreshold) {
-          this.startTransform.left = this.transform.left;
-          this.startTransform.top = this.transform.top;
-          this.panning = true;
-          this.trigger('panStart');
+          _this.startTransform.left = _this.transform.left;
+          _this.startTransform.top = _this.transform.top;
+          _this.panning = true;
+
+          _this.trigger('panStart');
         }
       }
-    }
-  }, {
-    key: "onPanMove",
-    value: function onPanMove(e) {
-      var x;
+    };
 
-      if (this.pinching === true || this.panning === false) {
-        return;
-      }
+    this.onPanMove = function (e) {
+      if (_this.pinching || !_this.panning) return;
+      var scale = _this.transform.scale;
 
-      if (this.transform.scale > 1) {
-        var activePageSpread = this.getActivePageSpread();
+      if (scale > 1) {
+        var activePageSpread = _this.getActivePageSpread();
+
         var carouselOffset = activePageSpread.getLeft();
-        var carouselScaledOffset = carouselOffset * this.transform.scale;
-        var pageSpreadBounds = this.getPageSpreadBounds(activePageSpread);
-        var scale = this.transform.scale;
-        x = this.startTransform.left + carouselScaledOffset + e.deltaX / this.scrollerEl.offsetWidth * 100;
-        var y = this.startTransform.top + e.deltaY / this.scrollerEl.offsetHeight * 100;
-        x = this.clipCoordinate(x, scale, pageSpreadBounds.width, pageSpreadBounds.left);
-        y = this.clipCoordinate(y, scale, pageSpreadBounds.height, pageSpreadBounds.top);
-        x -= carouselScaledOffset;
-        this.transform.left = x;
-        this.transform.top = y;
-        this.animation.animate({
-          x: "".concat(x, "%"),
-          y: "".concat(y, "%"),
+        var carouselScaledOffset = carouselOffset * scale;
+
+        var _getPageSpreadBounds = getPageSpreadBounds(activePageSpread),
+            width = _getPageSpreadBounds.width,
+            height = _getPageSpreadBounds.height,
+            left = _getPageSpreadBounds.left,
+            top = _getPageSpreadBounds.top;
+
+        var x = _this.startTransform.left + carouselScaledOffset + e.deltaX / _this.scrollerEl.offsetWidth * 100;
+        x = clipCoordinate(x, scale, width, left) - carouselScaledOffset;
+        var y = _this.startTransform.top + e.deltaY / _this.scrollerEl.offsetHeight * 100;
+        y = clipCoordinate(y, scale, height, top);
+        _this.transform.left = x;
+        _this.transform.top = y;
+
+        _this.animation.animate({
+          x: x + '%',
+          y: y + '%',
           scale: scale,
           easing: 'linear'
         });
       } else {
-        x = this.transform.left + e.deltaX / this.scrollerEl.offsetWidth * 100;
-        this.animation.animate({
-          x: "".concat(x, "%"),
+        _this.animation.animate({
+          x: _this.transform.left + e.deltaX / _this.scrollerEl.offsetWidth * 100 + '%',
           easing: 'linear'
         });
       }
-    }
-  }, {
-    key: "onPanEnd",
-    value: function onPanEnd(e) {
-      if (this.panning === false) {
-        return;
-      }
+    };
 
-      this.panning = false;
-      this.trigger('panEnd');
+    this.onPanEnd = function (e) {
+      if (!_this.panning) return;
+      _this.panning = false;
 
-      if (this.transform.scale === 1 && this.pinching === false) {
-        var position = this.getPosition();
+      _this.trigger('panEnd');
+
+      if (_this.transform.scale === 1 && !_this.pinching) {
+        var position = _this.getPosition();
+
         var velocity = e.overallVelocityX;
 
-        if (Math.abs(velocity) >= this.swipeVelocity) {
-          if (Math.abs(e.deltaX) >= this.swipeThreshold) {
-            if (e.offsetDirection === hammer.DIRECTION_LEFT) {
-              this.next({
-                velocity: velocity,
-                duration: this.navigationPanDuration
-              });
-            } else if (e.offsetDirection === hammer.DIRECTION_RIGHT) {
-              this.prev({
-                velocity: velocity,
-                duration: this.navigationPanDuration
-              });
-            }
+        if (Math.abs(velocity) >= _this.swipeVelocity && Math.abs(e.deltaX) >= _this.swipeThreshold) {
+          var options = {
+            velocity: velocity,
+            duration: _this.navigationPanDuration
+          };
+
+          if (e.offsetDirection === DIRECTION_LEFT) {
+            _this.next(options);
+          } else if (e.offsetDirection === DIRECTION_RIGHT) {
+            _this.prev(options);
           }
         }
 
-        if (position === this.getPosition()) {
-          this.animation.animate({
-            x: "".concat(this.transform.left, "%"),
-            duration: this.navigationPanDuration
+        if (position === _this.getPosition()) {
+          _this.animation.animate({
+            x: _this.transform.left + '%',
+            duration: _this.navigationPanDuration
           });
-          this.trigger('attemptedNavigation', {
-            position: this.getPosition()
+
+          _this.trigger('attemptedNavigation', {
+            position: _this.getPosition()
           });
         }
       }
-    }
-  }, {
-    key: "onPinchStart",
-    value: function onPinchStart() {
-      if (!this.getActivePageSpread().isZoomable()) {
-        return;
-      }
+    };
 
-      this.pinching = true;
-      this.el.setAttribute('data-pinching', true);
-      this.startTransform.scale = this.transform.scale;
-    }
-  }, {
-    key: "onPinchMove",
-    value: function onPinchMove(e) {
-      if (this.pinching === false) {
-        return;
-      }
+    this.onPinchStart = function () {
+      if (!_this.getActivePageSpread().isZoomable()) return;
+      _this.pinching = true;
+      _this.el.dataset.pinching = true;
+      _this.startTransform.scale = _this.transform.scale;
+    };
 
-      this.zoomTo({
+    this.onPinchMove = function (e) {
+      if (!_this.pinching) return;
+
+      _this.zoomTo({
         x: e.center.x,
         y: e.center.y,
-        scale: this.startTransform.scale * e.scale,
+        scale: _this.startTransform.scale * e.scale,
         bounds: false,
         easing: 'linear'
       });
-    }
-  }, {
-    key: "onPinchEnd",
-    value: function onPinchEnd(e) {
-      var _this3 = this;
+    };
 
-      if (this.pinching === false) {
-        return;
-      }
+    this.onPinchEnd = function (e) {
+      if (!_this.pinching) return;
 
-      var activePageSpread = this.getActivePageSpread();
+      var activePageSpread = _this.getActivePageSpread();
+
       var maxZoomScale = activePageSpread.getMaxZoomScale();
-      var scale = Math.max(1, Math.min(this.transform.scale, maxZoomScale));
-      var position = this.getPosition();
+      var scale = Math.max(1, Math.min(_this.transform.scale, maxZoomScale));
 
-      if (this.startTransform.scale === 1 && scale > 1) {
-        this.trigger('zoomedIn', {
+      var position = _this.getPosition();
+
+      if (_this.startTransform.scale === 1 && scale > 1) {
+        _this.trigger('zoomedIn', {
           position: position
         });
-      } else if (this.startTransform.scale > 1 && scale === 1) {
-        this.trigger('zoomedOut', {
+      } else if (_this.startTransform.scale > 1 && scale === 1) {
+        _this.trigger('zoomedOut', {
           position: position
         });
       }
 
-      this.zoomTo({
+      _this.zoomTo({
         x: e.center.x,
         y: e.center.y,
         scale: scale,
-        duration: this.zoomDuration
+        duration: _this.zoomDuration
       }, function () {
-        _this3.pinching = false;
-
-        _this3.el.setAttribute('data-pinching', false);
+        _this.pinching = false;
+        _this.el.dataset.pinching = false;
       });
-    }
-  }, {
-    key: "onPress",
-    value: function onPress(e) {
-      this.trigger('pressed', this.getCoordinateInfo(e.center.x, e.center.y, this.getActivePageSpread()));
-    }
-  }, {
-    key: "onContextmenu",
-    value: function onContextmenu(e) {
+    };
+
+    this.onPress = function (e) {
+      _this.trigger('pressed', _this.getCoordinateInfo(e.center.x, e.center.y, _this.getActivePageSpread()));
+    };
+
+    this.onContextmenu = function (e) {
       e.preventDefault();
-      this.trigger('contextmenu', this.getCoordinateInfo(e.clientX, e.clientY, this.getActivePageSpread()));
+
+      _this.trigger('contextmenu', _this.getCoordinateInfo(e.clientX, e.clientY, _this.getActivePageSpread()));
+
       return false;
-    }
-  }, {
-    key: "onWheel",
-    value: function onWheel(e) {
-      var _this4 = this;
+    };
 
-      var position, scale;
-      var activePageSpread = this.getActivePageSpread();
+    this.onWheel = function (e) {
+      var activePageSpread = _this.getActivePageSpread();
 
-      if (activePageSpread.isZoomable() === false) {
-        return;
-      } // see https://stackoverflow.com/a/23668035
-
+      if (!activePageSpread.isZoomable()) return; // see https://stackoverflow.com/a/23668035
 
       var deltaY = e.deltaY;
+      if (event.webkitDirectionInvertedFromDevice) deltaY = -deltaY;
 
-      if (event.webkitDirectionInvertedFromDevice) {
-        deltaY = -deltaY;
-      }
+      var position = _this.getPosition();
 
-      if (deltaY > 0 && this.transform.scale === 1) {
-        scale = activePageSpread.getMaxZoomScale();
-        position = this.getPosition();
-        this.zoomTo({
+      if (deltaY > 0 && _this.transform.scale === 1) {
+        _this.zoomTo({
           x: e.clientX,
           y: e.clientY,
-          scale: scale,
-          duration: this.zoomDuration
+          scale: activePageSpread.getMaxZoomScale(),
+          duration: _this.zoomDuration
         }, function () {
-          _this4.trigger('zoomedIn', {
+          _this.trigger('zoomedIn', {
             position: position
           });
         });
-      } else if (deltaY < 0 && this.transform.scale > 1) {
-        position = this.getPosition();
-        this.zoomTo({
+      } else if (deltaY < 0 && _this.transform.scale > 1) {
+        _this.zoomTo({
           x: e.clientX,
           y: e.clientY,
           scale: 1,
-          duration: this.zoomDuration
+          duration: _this.zoomDuration
         }, function () {
-          _this4.trigger('zoomedOut', {
+          _this.trigger('zoomedOut', {
             position: position
           });
         });
       }
-    }
-  }, {
-    key: "onSingletap",
-    value: function onSingletap(e) {
-      var _this5 = this;
+    };
 
-      var activePageSpread = this.getActivePageSpread();
-      var coordinateInfo = this.getCoordinateInfo(e.center.x, e.center.y, activePageSpread);
-      clearTimeout(this.tap.timeout);
+    this.onSingletap = function (e) {
+      var activePageSpread = _this.getActivePageSpread();
 
-      if (this.tap.count === 1) {
-        this.tap.count = 0;
-        this.trigger('doubleClicked', coordinateInfo);
+      var coordinateInfo = _this.getCoordinateInfo(e.center.x, e.center.y, activePageSpread);
+
+      clearTimeout(_this.tap.timeout);
+
+      if (_this.tap.count === 1) {
+        _this.tap.count = 0;
+
+        _this.trigger('doubleClicked', coordinateInfo);
 
         if (activePageSpread.isZoomable()) {
           var maxZoomScale = activePageSpread.getMaxZoomScale();
-          var zoomedIn = this.transform.scale > 1;
+          var zoomedIn = _this.transform.scale > 1;
           var scale = zoomedIn ? 1 : maxZoomScale;
           var zoomEvent = zoomedIn ? 'zoomedOut' : 'zoomedIn';
-          var position = this.getPosition();
-          this.zoomTo({
+
+          var position = _this.getPosition();
+
+          _this.zoomTo({
             x: e.center.x,
             y: e.center.y,
             scale: scale,
-            duration: this.zoomDuration
+            duration: _this.zoomDuration
           }, function () {
-            _this5.trigger(zoomEvent, {
+            _this.trigger(zoomEvent, {
               position: position
             });
           });
         }
       } else {
-        this.tap.count++;
-        this.tap.timeout = _setTimeout(function () {
-          _this5.tap.count = 0;
+        _this.tap.count++;
+        _this.tap.timeout = setTimeout(function () {
+          _this.tap.count = 0;
 
-          _this5.trigger('clicked', coordinateInfo);
-        }, this.tap.delay);
+          _this.trigger('clicked', coordinateInfo);
+        }, _this.tap.delay);
       }
-    }
-  }, {
-    key: "onTouchStart",
-    value: function onTouchStart(e) {
-      if (!this.getActivePageSpread().isScrollable()) {
-        e.preventDefault();
-      }
-    }
-  }, {
-    key: "onTouchEnd",
-    value: function onTouchEnd(e) {
-      if (!this.getActivePageSpread().isScrollable()) {
-        e.preventDefault();
-      }
-    }
-  }, {
-    key: "onResize",
-    value: function onResize() {
-      if (this.transform.scale > 1) {
-        var position = this.getPosition();
-        var activePageSpread = this.getActivePageSpread();
-        this.transform.left = this.getLeftTransformFromPageSpread(position, activePageSpread);
-        this.transform.top = 0;
-        this.transform.scale = 1;
-        this.zoomTo({
-          x: this.transform.left,
-          y: this.transform.top,
-          scale: this.transform.scale,
+    };
+
+    this.onTouchStart = function (e) {
+      if (!_this.getActivePageSpread().isScrollable()) e.preventDefault();
+    };
+
+    this.onTouchEnd = function (e) {
+      if (!_this.getActivePageSpread().isScrollable()) e.preventDefault();
+    };
+
+    this.onResize = function () {
+      if (_this.transform.scale > 1) {
+        var position = _this.getPosition();
+
+        _this.transform.left = _this.getLeftTransformFromPageSpread(position, _this.getActivePageSpread());
+        _this.transform.top = 0;
+        _this.transform.scale = 1;
+
+        _this.zoomTo({
+          x: _this.transform.left,
+          y: _this.transform.top,
+          scale: _this.transform.scale,
           duration: 0
         });
-        this.trigger('zoomedOut', {
+
+        _this.trigger('zoomedOut', {
           position: position
         });
       }
-    }
-  }]);
+    };
 
-  return Verso;
+    this.el = el;
+    this.options = _options;
+    this.swipeVelocity = (_this$options$swipeVe = this.options.swipeVelocity) != null ? _this$options$swipeVe : 0.3;
+    this.swipeThreshold = (_this$options$swipeTh = this.options.swipeThreshold) != null ? _this$options$swipeTh : 10;
+    this.navigationDuration = (_this$options$navigat = this.options.navigationDuration) != null ? _this$options$navigat : 240;
+    this.navigationPanDuration = (_this$options$navigat2 = this.options.navigationPanDuration) != null ? _this$options$navigat2 : 200;
+    this.zoomDuration = (_this$options$zoomDur = this.options.zoomDuration) != null ? _this$options$zoomDur : 200;
+    this.tap = {
+      count: 0,
+      delay: (_this$options$doubleT = this.options.doubleTapDelay) != null ? _this$options$doubleT : 300
+    };
+  }
+
+  var _proto = Verso.prototype;
+
+  _proto.bind = function bind(event, fn) {
+    this._events[event] = this._events[event] || [];
+    return this._events[event].push(fn);
+  };
+
+  _proto.unbind = function unbind(event, fn) {
+    if (this._events[event]) {
+      var _context;
+
+      return _spliceInstanceProperty(_context = this._events[event]).call(_context, this._events[event].indexOf(fn), 1);
+    }
+  };
+
+  _proto.trigger = function trigger(event) {
+    var _this$_events$event,
+        _this2 = this;
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    (_this$_events$event = this._events[event]) == null ? void 0 : _this$_events$event.forEach(function (e) {
+      e.apply(_this2, args);
+    });
+  };
+
+  _proto.start = function start() {
+    var _this$getPageSpreadPo;
+
+    this.scrollerEl = this.el.querySelector('.verso__scroller');
+    this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
+    this.pageSpreads = traversePageSpreads(this.pageSpreadEls);
+    this.pageIds = buildPageIds(this.pageSpreads);
+    this.animation = new Animation(this.scrollerEl);
+    this.hammer = new Manager(this.scrollerEl, {
+      touchAction: 'none',
+      enable: false,
+      inputClass: getHammerInputClass(),
+      recognizers: [[PanRecognizer, {
+        threshold: 5,
+        direction: DIRECTION_ALL
+      }], [TapRecognizer, {
+        event: 'singletap',
+        interval: 0
+      }], [PinchRecognizer], [PressRecognizer, {
+        time: 500
+      }]]
+    });
+    this.hammer.on('panstart', this.onPanStart);
+    this.hammer.on('panmove', this.onPanMove);
+    this.hammer.on('panend', this.onPanEnd);
+    this.hammer.on('pancancel', this.onPanEnd);
+    this.hammer.on('singletap', this.onSingletap);
+    this.hammer.on('pinchstart', this.onPinchStart);
+    this.hammer.on('pinchmove', this.onPinchMove);
+    this.hammer.on('pinchend', this.onPinchEnd);
+    this.hammer.on('pinchcancel', this.onPinchEnd);
+    this.hammer.on('press', this.onPress);
+    this.scrollerEl.addEventListener('contextmenu', this.onContextmenu, false);
+    this.scrollerEl.addEventListener('wheel', this.onWheel, false);
+    var pageId = (_this$getPageSpreadPo = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? _this$getPageSpreadPo : 0;
+    this.hammer.set({
+      enable: true
+    });
+    this.started = true;
+    this.destroyed = false;
+    this.navigateTo(pageId, {
+      duration: 0
+    });
+    this.el.addEventListener('touchstart', this.onTouchStart, false);
+    this.el.addEventListener('touchend', this.onTouchEnd, false);
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', this.onResize, false);
+    }
+
+    return this;
+  };
+
+  _proto.destroy = function destroy() {
+    if (!this.started) {
+      return console.warn("You've called .destroy() on a viewer that was not started yet, this is a no-op.");
+    }
+
+    if (this.destroyed) {
+      return console.warn("You've called .destroy() on a viewer that has already been destroyed and not restarted, this is a no-op.");
+    }
+
+    this.scrollerEl.removeEventListener('contextmenu', this.onContextmenu);
+    this.scrollerEl.removeEventListener('wheel', this.onWheel);
+    this.hammer.destroy();
+    this.el.removeEventListener('touchstart', this.onTouchStart);
+    this.el.removeEventListener('touchend', this.onTouchEnd);
+
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResize);
+    }
+
+    this.started = false;
+    this.destroyed = true;
+    return this;
+  };
+
+  _proto.first = function first(options) {
+    return this.navigateTo(0, options);
+  };
+
+  _proto.prev = function prev(options) {
+    return this.navigateTo(this.getPosition() - 1, options);
+  };
+
+  _proto.next = function next(options) {
+    return this.navigateTo(this.getPosition() + 1, options);
+  };
+
+  _proto.last = function last(options) {
+    return this.navigateTo(this.getPageSpreadCount() - 1, options);
+  };
+
+  _proto.navigateTo = function navigateTo(newPosition, options) {
+    var _options$velocity,
+        _options$duration,
+        _this3 = this;
+
+    if (this.destroyed) {
+      return console.warn("You've called a navigation method on a viewer that was previously destroyed, this is a no-op.\nPlease call viewer.start() again, if you want to reuse this Viewer instance.\n\nYou might have forgotten to remove an event handler that\ncalls first/prev/next/last/navigateTo on the viewer.");
+    }
+
+    if (!this.started) {
+      return console.warn("\nYou've called a navigation method on a viewer that hasn't been started yet, this is a no-op.\nPlease call viewer.start() first.\n\nYou might have forgotten to remove an event handler that\ncalls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.\n");
+    }
+
+    if (newPosition < 0 || newPosition > this.getPageSpreadCount() - 1) {
+      return;
+    }
+
+    var currentPosition = this.getPosition();
+    var currentPageSpread = this.getPageSpreadFromPosition(currentPosition);
+    var activePageSpread = this.getPageSpreadFromPosition(newPosition);
+    var carousel = this.getCarouselFromPageSpread(activePageSpread);
+    var velocity = (_options$velocity = options == null ? void 0 : options.velocity) != null ? _options$velocity : 1;
+    var duration = (_options$duration = options == null ? void 0 : options.duration) != null ? _options$duration : this.navigationDuration;
+    duration = duration / Math.abs(velocity);
+    var touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
+    currentPageSpread == null ? void 0 : currentPageSpread.deactivate();
+    activePageSpread.activate();
+    carousel.visible.forEach(function (pageSpread) {
+      pageSpread.position().setVisibility('visible');
+    });
+    this.hammer.set({
+      touchAction: touchAction
+    });
+    this.transform.left = this.getLeftTransformFromPageSpread(newPosition, activePageSpread);
+    this.setPosition(newPosition);
+
+    if (this.transform.scale > 1) {
+      this.transform.top = 0;
+      this.transform.scale = 1;
+      this.trigger('zoomedOut', {
+        position: currentPosition
+      });
+    }
+
+    this.trigger('beforeNavigation', {
+      currentPosition: currentPosition,
+      newPosition: newPosition
+    });
+    this.animation.animate({
+      x: this.transform.left + '%',
+      duration: duration
+    }, function () {
+      carousel = _this3.getCarouselFromPageSpread(_this3.getActivePageSpread());
+      carousel.gone.forEach(function (pageSpread) {
+        pageSpread.setVisibility('gone');
+      });
+
+      _this3.trigger('afterNavigation', {
+        newPosition: _this3.getPosition(),
+        previousPosition: currentPosition
+      });
+    });
+  };
+
+  _proto.getPosition = function getPosition() {
+    return this.position;
+  };
+
+  _proto.setPosition = function setPosition(position) {
+    this.position = position;
+    return this;
+  };
+
+  _proto.getLeftTransformFromPageSpread = function getLeftTransformFromPageSpread(position, pageSpread) {
+    if (position === this.getPageSpreadCount() - 1) {
+      return 100 - pageSpread.getWidth() - pageSpread.getLeft();
+    }
+
+    if (position > 0) {
+      return (100 - pageSpread.getWidth()) / 2 - pageSpread.getLeft();
+    }
+
+    return 0;
+  };
+
+  _proto.getCarouselFromPageSpread = function getCarouselFromPageSpread(pageSpreadSubject) {
+    var carousel = {
+      visible: [],
+      gone: []
+    }; // Identify the page spreads that should be a part of the carousel.
+
+    this.pageSpreads.forEach(function (pageSpread) {
+      var visible = false;
+
+      if (pageSpread.getLeft() <= pageSpreadSubject.getLeft()) {
+        if (pageSpread.getLeft() + pageSpread.getWidth() > pageSpreadSubject.getLeft() - 100) {
+          visible = true;
+        }
+      } else {
+        if (pageSpread.getLeft() - pageSpread.getWidth() < pageSpreadSubject.getLeft() + 100) {
+          visible = true;
+        }
+      }
+
+      if (visible) {
+        carousel.visible.push(pageSpread);
+      } else {
+        carousel.gone.push(pageSpread);
+      }
+    });
+    return carousel;
+  };
+
+  _proto.getCoordinateInfo = function getCoordinateInfo(x, y, pageSpread) {
+    x -= this.el.offsetLeft;
+    y -= this.el.offsetTop;
+    var info = {
+      x: x,
+      y: y,
+      contentX: 0,
+      contentY: 0,
+      pageX: 0,
+      pageY: 0,
+      overlayEls: [],
+      pageEl: null,
+      isInsideContentX: false,
+      isInsideContentY: false,
+      isInsideContent: false
+    };
+    var overlayEls = pageSpread.getOverlayEls();
+
+    for (var idx = 0; idx < overlayEls.length; idx++) {
+      var overlayEl = overlayEls[idx];
+
+      if (isCoordinateInsideElement(x, y, overlayEl)) {
+        info.overlayEls.push(overlayEl);
+      }
+    }
+
+    var pageEls = pageSpread.getPageEls();
+
+    for (var _idx = 0; _idx < pageEls.length; _idx++) {
+      var pageEl = pageEls[_idx];
+
+      if (isCoordinateInsideElement(x, y, pageEl)) {
+        info.pageEl = pageEl;
+        break;
+      }
+    }
+
+    var contentRect = pageSpread.getContentRect();
+    info.contentX = (x - contentRect.left) / Math.max(1, contentRect.width);
+    info.contentY = (y - contentRect.top) / Math.max(1, contentRect.height);
+
+    if (info.pageEl) {
+      info.isInsideContentX = info.contentX >= 0 && info.contentX <= 1;
+      info.isInsideContentY = info.contentY >= 0 && info.contentY <= 1;
+      info.isInsideContent = info.isInsideContentX && info.isInsideContentY;
+    }
+
+    return info;
+  };
+
+  _proto.getPageSpreadCount = function getPageSpreadCount() {
+    return this.pageSpreads.length;
+  };
+
+  _proto.getActivePageSpread = function getActivePageSpread() {
+    return this.getPageSpreadFromPosition(this.getPosition());
+  };
+
+  _proto.getPageSpreadFromPosition = function getPageSpreadFromPosition(position) {
+    return this.pageSpreads[position];
+  };
+
+  _proto.getPageSpreadPositionFromPageId = function getPageSpreadPositionFromPageId(pageId) {
+    for (var idx = 0; idx < this.pageSpreads.length; idx++) {
+      var pageSpread = this.pageSpreads[idx];
+      if (pageSpread.options.pageIds.indexOf(pageId) > -1) return idx;
+    }
+  };
+
+  _proto.zoomTo = function zoomTo(_temp, callback) {
+    var _ref = _temp === void 0 ? {} : _temp,
+        duration = _ref.duration,
+        easing = _ref.easing,
+        scale = _ref.scale,
+        _ref$x = _ref.x,
+        x = _ref$x === void 0 ? 0 : _ref$x,
+        _ref$y = _ref.y,
+        y = _ref$y === void 0 ? 0 : _ref$y,
+        bounds = _ref.bounds;
+
+    var curScale = this.transform.scale;
+    var activePageSpread = this.getActivePageSpread();
+
+    var _getPageSpreadBounds2 = getPageSpreadBounds(activePageSpread),
+        left = _getPageSpreadBounds2.left,
+        top = _getPageSpreadBounds2.top,
+        width = _getPageSpreadBounds2.width,
+        height = _getPageSpreadBounds2.height,
+        pageSpreadRect = _getPageSpreadBounds2.pageSpreadRect;
+
+    var carouselOffset = activePageSpread.getLeft();
+    var carouselScaledOffset = carouselOffset * curScale;
+
+    if (scale !== 1) {
+      x -= pageSpreadRect.left;
+      y -= pageSpreadRect.top;
+      x = x / (pageSpreadRect.width / curScale) * 100;
+      y = y / (pageSpreadRect.height / curScale) * 100;
+      x = this.transform.left + carouselScaledOffset + x - x * scale / curScale;
+      y = this.transform.top + y - y * scale / curScale; // Make sure the animation doesn't exceed the content bounds.
+
+      if (bounds !== false && scale > 1) {
+        x = clipCoordinate(x, scale, width, left);
+        y = clipCoordinate(y, scale, height, top);
+      }
+    } else {
+      x = 0;
+      y = 0;
+    } // Account for the page spreads left of the active one.
+
+
+    x -= carouselOffset * scale;
+    this.transform.left = x;
+    this.transform.top = y;
+    this.transform.scale = scale;
+    this.animation.animate({
+      x: x + '%',
+      y: y + '%',
+      scale: scale,
+      easing: easing,
+      duration: duration
+    }, callback);
+  };
+
+  _proto.refresh = function refresh() {
+    this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
+    this.pageSpreads = traversePageSpreads(this.pageSpreadEls);
+    this.pageIds = buildPageIds(this.pageSpreads);
+    return this;
+  } //#############
+
+  /* Events */
+  //#############
+  ;
+
+  return _createClass(Verso);
 }();
 
-function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var loadImage = function loadImage(src, callback) {
+  return _Object$assign(new Image(), {
+    onload: function onload(_ref) {
+      var target = _ref.target;
+      callback(null, target);
+    },
+    onerror: function onerror() {
+      callback(new Error());
+    },
+    src: src
+  });
+};
 
 var PagedPublicationPageSpread = /*#__PURE__*/function (_MicroEvent) {
   _inherits(PagedPublicationPageSpread, _MicroEvent);
 
-  var _super = _createSuper$5(PagedPublicationPageSpread);
-
-  function PagedPublicationPageSpread() {
+  function PagedPublicationPageSpread(options) {
     var _this;
 
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    if (options === void 0) {
+      options = {};
+    }
 
-    _classCallCheck(this, PagedPublicationPageSpread);
-
-    _this = _super.call(this);
-    _this.options = options;
+    _this = _MicroEvent.call(this) || this;
     _this.contentsRendered = false;
     _this.hotspotsRendered = false;
+    _this.options = options;
     _this.el = _this.renderEl();
     return _this;
   }
 
-  _createClass(PagedPublicationPageSpread, [{
-    key: "getId",
-    value: function getId() {
-      return this.options.id;
-    }
-  }, {
-    key: "getEl",
-    value: function getEl() {
-      return this.el;
-    }
-  }, {
-    key: "getPages",
-    value: function getPages() {
-      return this.options.pages;
-    }
-  }, {
-    key: "renderEl",
-    value: function renderEl() {
-      var _context;
+  var _proto = PagedPublicationPageSpread.prototype;
 
-      var el = document.createElement('div');
+  _proto.getId = function getId() {
+    return this.options.id;
+  };
 
-      var pageIds = _mapInstanceProperty(_context = this.getPages()).call(_context, function (page) {
-        return page.id;
-      });
+  _proto.getEl = function getEl() {
+    return this.el;
+  };
 
-      el.className = 'verso__page-spread sgn-pp__page-spread';
-      el.setAttribute('data-id', this.getId());
-      el.setAttribute('data-type', 'page');
-      el.setAttribute('data-width', this.options.width);
-      el.setAttribute('data-page-ids', pageIds.join(','));
-      el.setAttribute('data-max-zoom-scale', this.options.maxZoomScale);
-      el.setAttribute('data-zoomable', false);
-      return el;
-    }
-  }, {
-    key: "renderContents",
-    value: function renderContents() {
-      var _this2 = this;
+  _proto.getPages = function getPages() {
+    return this.options.pages;
+  };
 
-      var id = this.getId();
-      var el = this.getEl();
-      var pages = this.getPages();
-      var pageCount = pages.length;
-      var imageLoads = 0;
-      var maxPageWidth = el.clientWidth * (window.devicePixelRatio || 1);
+  _proto.renderEl = function renderEl() {
+    var _context;
 
-      if (this.options.pageMode === 'double') {
-        maxPageWidth = maxPageWidth / 2;
+    var el = document.createElement('div');
+
+    var pageIds = _mapInstanceProperty(_context = this.getPages()).call(_context, function (page) {
+      return page.id;
+    });
+
+    el.className = 'verso__page-spread sgn-pp__page-spread';
+    el.dataset.id = this.getId();
+    el.dataset.type = 'page';
+    el.dataset.width = this.options.width;
+    el.dataset.pageIds = pageIds.join(',');
+    el.dataset.maxZoomScale = this.options.maxZoomScale;
+    el.dataset.zoomable = false;
+    return el;
+  };
+
+  _proto.renderContents = function renderContents() {
+    var _this2 = this;
+
+    var pageSpreadId = this.getId();
+    var el = this.getEl();
+    var pages = this.getPages();
+    var pageCount = pages.length;
+    var imageLoads = 0;
+    var maxPageWidth = el.clientWidth * (window.devicePixelRatio || 1);
+    if (this.options.pageMode === 'double') maxPageWidth = maxPageWidth / 2;
+    var useLargeImage = maxPageWidth > 700;
+    pages.forEach(function (page, i) {
+      var image = useLargeImage ? page.images.large : page.images.medium;
+      var pageEl = document.createElement('div');
+      var loaderEl = document.createElement('div');
+      pageEl.className = 'sgn-pp__page verso__page';
+      if (page.id) pageEl.dataset.id = page.id;
+
+      if (pageCount === 2) {
+        pageEl.className += i === 0 ? ' verso-page--verso' : ' verso-page--recto';
       }
 
-      var useLargeImage = maxPageWidth > 700;
-
-      _forEachInstanceProperty(pages).call(pages, function (page, i) {
-        var image = page.images.medium;
-
-        if (useLargeImage) {
-          image = page.images.large;
+      pageEl.appendChild(loaderEl);
+      el.appendChild(pageEl);
+      loaderEl.className = 'sgn-pp-page__loader';
+      loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
+      loadImage(image, function (err, img) {
+        if (err) {
+          loaderEl.innerHTML = '<span>!</span>';
+          return console.error(err);
         }
 
-        var pageEl = document.createElement('div');
-        var loaderEl = document.createElement('div');
-        pageEl.className = 'sgn-pp__page verso__page';
+        var isComplete = ++imageLoads === pageCount;
+        pageEl.style.backgroundImage = "url(".concat(image, ")");
+        pageEl.dataset.width = img.width;
+        pageEl.dataset.height = img.height;
+        pageEl.innerHTML = '&nbsp;';
+        if (isComplete) el.dataset.zoomable = true;
 
-        if (page.id != null) {
-          pageEl.setAttribute('data-id', page.id);
+        _this2.trigger('pageLoaded', {
+          pageSpreadId: pageSpreadId,
+          page: page
+        });
+
+        if (isComplete) {
+          _this2.trigger('pagesLoaded', {
+            pageSpreadId: pageSpreadId,
+            pages: pages
+          });
         }
+      });
+    });
+    this.contentsRendered = true;
+    return this;
+  };
 
-        if (pageCount === 2) {
-          pageEl.className += i === 0 ? ' verso-page--verso' : ' verso-page--recto';
+  _proto.clearContents = function clearContents() {
+    this.el.innerHTML = '';
+    this.contentsRendered = false;
+    return this;
+  };
+
+  _proto.zoomIn = function zoomIn() {
+    var _this3 = this;
+
+    var pages = this.getPages();
+    this.el.querySelectorAll('.sgn-pp__page').forEach(function (pageEl) {
+      var id = pageEl.dataset.id;
+
+      var image = _findInstanceProperty(pages).call(pages, function (page) {
+        return page.id === id;
+      }).images.large;
+
+      loadImage(image, function (err) {
+        if (err) return console.error(err);
+
+        if (_this3.el.dataset.active === 'true') {
+          pageEl.dataset.image = pageEl.style.backgroundImage;
+          pageEl.style.backgroundImage = "url(".concat(image, ")");
         }
-
-        pageEl.appendChild(loaderEl);
-        el.appendChild(pageEl);
-        loaderEl.className = 'sgn-pp-page__loader';
-        loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
-        loadImage(image, function (err, width, height) {
-          if (err == null) {
-            var isComplete = ++imageLoads === pageCount;
-            pageEl.style.backgroundImage = "url(".concat(image, ")");
-            pageEl.setAttribute('data-width', width);
-            pageEl.setAttribute('data-height', height);
-            pageEl.innerHTML = '&nbsp;';
-
-            if (isComplete) {
-              el.setAttribute('data-zoomable', true);
-            }
-
-            _this2.trigger('pageLoaded', {
-              pageSpreadId: id,
-              page: page
-            });
-
-            if (isComplete) {
-              _this2.trigger('pagesLoaded', {
-                pageSpreadId: id,
-                pages: pages
-              });
-            }
-          } else {
-            loaderEl.innerHTML = '<span>!</span>';
-          }
-        });
       });
+    });
+  };
 
-      this.contentsRendered = true;
-      return this;
-    }
-  }, {
-    key: "clearContents",
-    value: function clearContents() {
-      this.el.innerHTML = '';
-      this.contentsRendered = false;
-      return this;
-    }
-  }, {
-    key: "zoomIn",
-    value: function zoomIn() {
-      var _this3 = this;
+  _proto.zoomOut = function zoomOut() {
+    this.el.querySelectorAll('.sgn-pp__page[data-image]').forEach(function (pageEl) {
+      pageEl.style.backgroundImage = pageEl.dataset.image;
+      delete pageEl.dataset.image;
+    });
+  };
 
-      var pageEls = _sliceInstanceProperty([]).call(this.el.querySelectorAll('.sgn-pp__page'));
-
-      var pages = this.getPages();
-
-      _forEachInstanceProperty(pageEls).call(pageEls, function (pageEl) {
-        var id = pageEl.getAttribute('data-id');
-
-        var page = _findInstanceProperty(pages).call(pages, function (page) {
-          return page.id === id;
-        });
-
-        var image = page.images.large;
-        loadImage(image, function (err) {
-          if (err == null && _this3.el.getAttribute('data-active') === 'true') {
-            pageEl.setAttribute('data-image', pageEl.style.backgroundImage);
-            pageEl.style.backgroundImage = "url(".concat(image, ")");
-          }
-        });
-      });
-    }
-  }, {
-    key: "zoomOut",
-    value: function zoomOut() {
-      var pageEls = _Array$from(this.el.querySelectorAll('.sgn-pp__page[data-image]'));
-
-      _forEachInstanceProperty(pageEls).call(pageEls, function (pageEl) {
-        pageEl.style.backgroundImage = pageEl.getAttribute('data-image');
-        pageEl.removeAttribute('data-image');
-      });
-    }
-  }]);
-
-  return PagedPublicationPageSpread;
+  return _createClass(PagedPublicationPageSpread);
 }(MicroEvent);
 
-function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function chunk(arr, size) {
+  var results = [];
 
-function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  while (arr.length) {
+    results.push(_spliceInstanceProperty(arr).call(arr, 0, size));
+  }
+
+  return results;
+}
 
 var PagedPublicationPageSpreads = /*#__PURE__*/function (_MicroEvent) {
   _inherits(PagedPublicationPageSpreads, _MicroEvent);
 
-  var _super = _createSuper$4(PagedPublicationPageSpreads);
-
   function PagedPublicationPageSpreads(options) {
     var _this;
 
-    _classCallCheck(this, PagedPublicationPageSpreads);
-
-    _this = _super.call(this);
-    _this.options = options;
+    _this = _MicroEvent.call(this) || this;
     _this.collection = [];
     _this.ids = {};
+    _this.options = options;
     return _this;
   }
 
-  _createClass(PagedPublicationPageSpreads, [{
-    key: "get",
-    value: function get(id) {
-      return this.ids[id];
+  var _proto = PagedPublicationPageSpreads.prototype;
+
+  _proto.get = function get(id) {
+    return this.ids[id];
+  };
+
+  _proto.getFrag = function getFrag() {
+    var frag = document.createDocumentFragment();
+    this.collection.forEach(function (pageSpread) {
+      frag.appendChild(pageSpread.el);
+    });
+    return frag;
+  };
+
+  _proto.update = function update(pageMode) {
+    var _context,
+        _this2 = this;
+
+    if (pageMode === void 0) {
+      pageMode = 'single';
     }
-  }, {
-    key: "getFrag",
-    value: function getFrag() {
-      var _context;
 
-      var frag = document.createDocumentFragment();
+    var pageSpreads = [];
+    var ids = {};
 
-      _forEachInstanceProperty(_context = this.collection).call(_context, function (pageSpread) {
-        return frag.appendChild(pageSpread.el);
+    var pages = _sliceInstanceProperty(_context = this.options.pages).call(_context);
+
+    var _this$options = this.options,
+        width = _this$options.width,
+        maxZoomScale = _this$options.maxZoomScale;
+
+    if (pageMode === 'single') {
+      pages.forEach(function (page) {
+        pageSpreads.push([page]);
       });
-
-      return frag;
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      var _context2,
-          _this2 = this;
-
-      var pageMode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'single';
-      var pageSpreads = [];
-      var ids = {};
-
-      var pages = _sliceInstanceProperty(_context2 = this.options.pages).call(_context2);
-
-      var _this$options = this.options,
-          width = _this$options.width,
-          maxZoomScale = _this$options.maxZoomScale;
-
-      if (pageMode === 'single') {
-        _forEachInstanceProperty(pages).call(pages, function (page) {
-          return pageSpreads.push([page]);
-        });
-      } else {
-        var firstPage = pages.shift();
-        var lastPage = pages.length % 2 === 1 ? pages.pop() : null;
-        var midstPageSpreads = chunk(pages, 2);
-
-        if (firstPage) {
-          pageSpreads.push([firstPage]);
-        }
-
-        _forEachInstanceProperty(midstPageSpreads).call(midstPageSpreads, function (midstPages) {
-          return pageSpreads.push(_mapInstanceProperty(midstPages).call(midstPages, function (page) {
-            return page;
-          }));
-        });
-
-        if (lastPage) {
-          pageSpreads.push([lastPage]);
-        }
-      }
-
-      this.collection = _mapInstanceProperty(pageSpreads).call(pageSpreads, function (pages, i) {
-        var _context3;
-
-        var id = _concatInstanceProperty(_context3 = "".concat(pageMode, "-")).call(_context3, i);
-
-        var pageSpread = new PagedPublicationPageSpread({
-          width: width,
-          pageMode: pageMode,
-          maxZoomScale: maxZoomScale,
-          pages: pages,
-          id: id
-        });
-
-        _bindInstanceProperty(pageSpread).call(pageSpread, 'pageLoaded', function (e) {
-          return _this2.trigger('pageLoaded', e);
-        });
-
-        _bindInstanceProperty(pageSpread).call(pageSpread, 'pagesLoaded', function (e) {
-          return _this2.trigger('pagesLoaded', e);
-        });
-
-        ids[id] = pageSpread;
-        return pageSpread;
+    } else {
+      var firstPage = pages.shift();
+      var lastPage = pages.length % 2 === 1 ? pages.pop() : null;
+      var midstPageSpreads = chunk(pages, 2);
+      if (firstPage) pageSpreads.push([firstPage]);
+      midstPageSpreads.forEach(function (midstPages) {
+        pageSpreads.push(midstPages);
       });
-      this.ids = ids;
-      return this;
+      if (lastPage) pageSpreads.push([lastPage]);
     }
-  }]);
 
-  return PagedPublicationPageSpreads;
+    this.collection = _mapInstanceProperty(pageSpreads).call(pageSpreads, function (pages, i) {
+      var _context2;
+
+      var id = _concatInstanceProperty(_context2 = "".concat(pageMode, "-")).call(_context2, i);
+
+      var pageSpread = new PagedPublicationPageSpread({
+        width: width,
+        pageMode: pageMode,
+        maxZoomScale: maxZoomScale,
+        pages: pages,
+        id: id
+      });
+      pageSpread.bind('pageLoaded', function (e) {
+        _this2.trigger('pageLoaded', e);
+      });
+      pageSpread.bind('pagesLoaded', function (e) {
+        _this2.trigger('pagesLoaded', e);
+      });
+      ids[id] = pageSpread;
+      return pageSpread;
+    });
+    this.ids = ids;
+    return this;
+  };
+
+  return _createClass(PagedPublicationPageSpreads);
 }(MicroEvent);
 
-function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function getColorBrightness(color) {
+  color = color.replace('#', '');
+  var sum = 0;
+  var x = 0;
 
-function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  while (x < 3) {
+    sum += parseInt(color.substring(2 * x, 2), 16) || 0;
+    ++x;
+  }
+
+  return sum <= 381 ? 'dark' : 'light';
+}
 
 var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
   _inherits(PagedPublicationCore, _MicroEvent);
 
-  var _super = _createSuper$3(PagedPublicationCore);
-
-  function PagedPublicationCore(el) {
-    var _context, _context2, _context3, _context4, _context5, _context6, _context7, _context8, _context9, _context10, _context11, _context12, _context13, _context14, _context15, _context16, _context17, _context18, _context19;
-
+  function PagedPublicationCore(el, options) {
     var _this;
 
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    _classCallCheck(this, PagedPublicationCore);
-
-    _this = _super.call(this);
-    _this.beforeNavigation = _bindInstanceProperty(_context = _this.beforeNavigation).call(_context, _assertThisInitialized(_this));
-    _this.afterNavigation = _bindInstanceProperty(_context2 = _this.afterNavigation).call(_context2, _assertThisInitialized(_this));
-    _this.attemptedNavigation = _bindInstanceProperty(_context3 = _this.attemptedNavigation).call(_context3, _assertThisInitialized(_this));
-    _this.clicked = _bindInstanceProperty(_context4 = _this.clicked).call(_context4, _assertThisInitialized(_this));
-    _this.doubleClicked = _bindInstanceProperty(_context5 = _this.doubleClicked).call(_context5, _assertThisInitialized(_this));
-    _this.pressed = _bindInstanceProperty(_context6 = _this.pressed).call(_context6, _assertThisInitialized(_this));
-    _this.contextmenu = _bindInstanceProperty(_context7 = _this.contextmenu).call(_context7, _assertThisInitialized(_this));
-    _this.panStart = _bindInstanceProperty(_context8 = _this.panStart).call(_context8, _assertThisInitialized(_this));
-    _this.panEnd = _bindInstanceProperty(_context9 = _this.panEnd).call(_context9, _assertThisInitialized(_this));
-    _this.zoomedIn = _bindInstanceProperty(_context10 = _this.zoomedIn).call(_context10, _assertThisInitialized(_this));
-    _this.zoomedOut = _bindInstanceProperty(_context11 = _this.zoomedOut).call(_context11, _assertThisInitialized(_this));
-    _this.resize = _bindInstanceProperty(_context12 = _this.resize).call(_context12, _assertThisInitialized(_this));
-    _this.unload = _bindInstanceProperty(_context13 = _this.unload).call(_context13, _assertThisInitialized(_this));
-    _this.options = _this.makeOptions(options, _this.defaults);
-    _this.pageId = _this.getOption('pageId');
-    _this.els = {
-      root: el,
-      pages: el.querySelector('.sgn-pp__pages'),
-      verso: el.querySelector('.verso')
-    };
-    _this.pageMode = _this.getPageMode();
-    _this.pageSpreads = new PagedPublicationPageSpreads({
-      pages: _this.getOption('pages'),
-      maxZoomScale: _this.getOption('pageSpreadMaxZoomScale'),
-      width: _this.getOption('pageSpreadWidth')
-    });
-
-    _bindInstanceProperty(_context14 = _this.pageSpreads).call(_context14, 'pageLoaded', _bindInstanceProperty(_context15 = _this.pageLoaded).call(_context15, _assertThisInitialized(_this)));
-
-    _bindInstanceProperty(_context16 = _this.pageSpreads).call(_context16, 'pagesLoaded', _bindInstanceProperty(_context17 = _this.pagesLoaded).call(_context17, _assertThisInitialized(_this)));
-
-    _this.setColor(_this.getOption('color')); // It's important to insert the page spreads before instantiating Verso.
-
-
-    _this.els.pages.parentNode.insertBefore(_this.pageSpreads.update(_this.pageMode).getFrag(), _this.els.pages);
-
-    _this.verso = _this.createVerso();
-
-    _bindInstanceProperty(_this).call(_this, 'started', _bindInstanceProperty(_context18 = _this.start).call(_context18, _assertThisInitialized(_this)));
-
-    _bindInstanceProperty(_this).call(_this, 'destroyed', _bindInstanceProperty(_context19 = _this.destroy).call(_context19, _assertThisInitialized(_this)));
-
-    return _this;
-  }
-
-  _createClass(PagedPublicationCore, [{
-    key: "start",
-    value: function start() {
-      var _context20, _context21;
-
-      var verso = this.getVerso();
-      verso.start();
-
-      _forEachInstanceProperty(_context20 = verso.pageSpreads).call(_context20, _bindInstanceProperty(_context21 = this.overridePageSpreadContentRect).call(_context21, this));
-
-      this.resizeListener = throttle(this.resize, this.getOption('resizeDelay'));
-      window.addEventListener('resize', this.resizeListener, false);
-      window.addEventListener('beforeunload', this.unload, false);
-      this.els.root.setAttribute('data-started', '');
-      this.els.root.setAttribute('tabindex', '-1');
-      this.els.root.focus();
+    if (options === void 0) {
+      options = {};
     }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      var _context22;
 
-      var verso = this.getVerso();
-      var pageSpreadEls = verso.el.querySelectorAll('.sgn-pp__page-spread');
-      this.els.root.removeAttribute('data-started');
-      this.els.root.removeAttribute('data-idle');
-      this.els.root.removeAttribute('data-navigating');
-      this.els.root.removeAttribute('data-color-brightness');
-      this.els.root.removeAttribute('data-zoomed-in');
-      this.els.root.style.backgroundColor = '#ffffff';
+    _this = _MicroEvent.call(this) || this;
 
-      _forEachInstanceProperty(_context22 = _Array$from(pageSpreadEls)).call(_context22, function (pageSpreadEl) {
+    _this.start = function () {
+      var verso = _this.getVerso();
+
+      verso.start();
+      verso.pageSpreads.forEach(_this.overridePageSpreadContentRect);
+      _this.resizeListener = throttle(_this.resize, _this.getOption('resizeDelay'));
+      window.addEventListener('resize', _this.resizeListener, false);
+      window.addEventListener('beforeunload', _this.unload, false);
+      _this.rootEl.dataset.started = '';
+
+      _this.rootEl.setAttribute('tabindex', '-1');
+
+      _this.rootEl.focus();
+    };
+
+    _this.destroy = function () {
+      var verso = _this.getVerso();
+
+      delete _this.rootEl.dataset.started;
+      delete _this.rootEl.dataset.idle;
+      delete _this.rootEl.dataset.navigating;
+      delete _this.rootEl.dataset.colorBrightness;
+      delete _this.rootEl.dataset.zoomedIn;
+      _this.rootEl.style.backgroundColor = '#ffffff';
+      verso.el.querySelectorAll('.sgn-pp__page-spread').forEach(function (pageSpreadEl) {
         pageSpreadEl.parentNode.removeChild(pageSpreadEl);
       });
-
       verso.destroy();
-      window.removeEventListener('resize', this.resizeListener, false);
-      window.removeEventListener('beforeunload', this.unload, false);
-    }
-  }, {
-    key: "makeOptions",
-    value: function makeOptions(options, defaults) {
-      var opts = {};
+      window.removeEventListener('resize', _this.resizeListener, false);
+      window.removeEventListener('beforeunload', _this.unload, false);
+    };
 
-      for (var key in options) {
-        var _options$key;
+    _this.pageLoaded = function (e) {
+      _this.trigger('pageLoaded', e);
+    };
 
-        opts[key] = (_options$key = options[key]) !== null && _options$key !== void 0 ? _options$key : defaults[key];
-      }
+    _this.pagesLoaded = function (e) {
+      _this.trigger('pagesLoaded', e);
+    };
 
-      return opts;
-    }
-  }, {
-    key: "getOption",
-    value: function getOption(key) {
-      return this.options[key];
-    }
-  }, {
-    key: "setColor",
-    value: function setColor(color) {
-      this.els.root.setAttribute('data-color-brightness', getColorBrightness(color));
-      this.els.root.style.backgroundColor = color;
-    }
-  }, {
-    key: "createVerso",
-    value: function createVerso() {
-      var verso = new Verso(this.els.verso, {
-        pageId: this.pageId
-      });
-
-      _bindInstanceProperty(verso).call(verso, 'beforeNavigation', this.beforeNavigation);
-
-      _bindInstanceProperty(verso).call(verso, 'afterNavigation', this.afterNavigation);
-
-      _bindInstanceProperty(verso).call(verso, 'attemptedNavigation', this.attemptedNavigation);
-
-      _bindInstanceProperty(verso).call(verso, 'clicked', this.clicked);
-
-      _bindInstanceProperty(verso).call(verso, 'doubleClicked', this.doubleClicked);
-
-      _bindInstanceProperty(verso).call(verso, 'pressed', this.pressed);
-
-      _bindInstanceProperty(verso).call(verso, 'contextmenu', this.contextmenu);
-
-      _bindInstanceProperty(verso).call(verso, 'panStart', this.panStart);
-
-      _bindInstanceProperty(verso).call(verso, 'panEnd', this.panEnd);
-
-      _bindInstanceProperty(verso).call(verso, 'zoomedIn', this.zoomedIn);
-
-      _bindInstanceProperty(verso).call(verso, 'zoomedOut', this.zoomedOut);
-
-      return verso;
-    }
-  }, {
-    key: "getVerso",
-    value: function getVerso() {
-      return this.verso;
-    }
-  }, {
-    key: "getContentRect",
-    value: function getContentRect(pageSpread) {
-      var rect = {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        width: 0,
-        height: 0
-      };
-      var pageEls = pageSpread.getPageEls();
-      var pageEl = pageEls[0];
-      var pageCount = pageEls.length;
-
-      if (!pageCount) {
-        return rect;
-      }
-
-      var scale = this.getVerso().transform.scale;
-      var pageWidth = pageEl.offsetWidth * pageCount * scale;
-      var pageHeight = pageEl.offsetHeight * scale;
-      var imageRatio = +pageEl.getAttribute('data-height') / (+pageEl.getAttribute('data-width') * pageCount);
-      var actualHeight = pageHeight;
-      var actualWidth = actualHeight / imageRatio;
-      actualWidth = Math.min(pageWidth, actualWidth);
-      actualHeight = actualWidth * imageRatio;
-      var clientRect = pageEl.getBoundingClientRect();
-      rect.width = actualWidth;
-      rect.height = actualHeight;
-      rect.top = clientRect.top + (pageHeight - actualHeight) / 2;
-      rect.left = clientRect.left + (pageWidth - actualWidth) / 2;
-      rect.right = rect.width + rect.left;
-      rect.bottom = rect.height + rect.top;
-      return rect;
-    }
-  }, {
-    key: "formatProgressLabel",
-    value: function formatProgressLabel(pageSpread) {
-      var _pageSpread$options$p;
-
-      var pages = (_pageSpread$options$p = pageSpread === null || pageSpread === void 0 ? void 0 : pageSpread.options.pages) !== null && _pageSpread$options$p !== void 0 ? _pageSpread$options$p : [];
-
-      var pageIds = _mapInstanceProperty(pages).call(pages, function (page) {
-        return page.id;
-      });
-
-      var pageLabels = _mapInstanceProperty(pages).call(pages, function (page) {
-        return page.label;
-      });
-
-      var pageCount = this.getOption('pages').length;
-      var label = pageIds.length > 0 ? pageLabels.join('-') + ' / ' + pageCount : null;
-      return label;
-    }
-  }, {
-    key: "renderPageSpreads",
-    value: function renderPageSpreads() {
-      var _context23,
-          _this2 = this;
-
-      _forEachInstanceProperty(_context23 = this.getVerso().pageSpreads).call(_context23, function (pageSpread) {
-        var visibility = pageSpread.getVisibility();
-
-        var match = _this2.pageSpreads.get(pageSpread.getId());
-
-        if (match) {
-          if (visibility === 'visible' && match.contentsRendered === false) {
-            var _context24;
-
-            _setTimeout(_bindInstanceProperty(_context24 = match.renderContents).call(_context24, match), 0);
-          }
-
-          if (visibility === 'gone' && match.contentsRendered === true) {
-            var _context25;
-
-            _setTimeout(_bindInstanceProperty(_context25 = match.clearContents).call(_context25, match), 0);
-          }
-        }
-      });
-
-      return this;
-    }
-  }, {
-    key: "findPage",
-    value: function findPage(pageId) {
-      var _context26;
-
-      return _findInstanceProperty(_context26 = this.getOption('pages')).call(_context26, function (page) {
-        return page.id === pageId;
-      });
-    }
-  }, {
-    key: "pageLoaded",
-    value: function pageLoaded(e) {
-      this.trigger('pageLoaded', e);
-    }
-  }, {
-    key: "pagesLoaded",
-    value: function pagesLoaded(e) {
-      this.trigger('pagesLoaded', e);
-    }
-  }, {
-    key: "beforeNavigation",
-    value: function beforeNavigation(e) {
+    _this.beforeNavigation = function (e) {
       var position = e.newPosition;
-      var theVerso = this.getVerso();
+
+      var theVerso = _this.getVerso();
+
       var versoPageSpread = theVerso.getPageSpreadFromPosition(position);
-      var pageSpread = this.pageSpreads.get(versoPageSpread.getId());
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
       var pageSpreadCount = theVerso.getPageSpreadCount();
       var newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
       var progress = position / (pageSpreadCount - 1) * 100;
-      var progressLabel = this.formatProgressLabel(pageSpread);
-      this.els.root.setAttribute('data-navigating', true);
-      this.renderPageSpreads();
-      this.resetIdleTimer();
-      this.startIdleTimer();
-      this.trigger('beforeNavigation', {
+
+      var progressLabel = _this.formatProgressLabel(pageSpread);
+
+      _this.rootEl.dataset.navigating = true;
+
+      _this.renderPageSpreads();
+
+      _this.resetIdleTimer();
+
+      _this.startIdleTimer();
+
+      _this.trigger('beforeNavigation', {
         verso: e,
         pageSpread: pageSpread,
         newSpreadEl: newSpreadEl,
@@ -6899,209 +7137,329 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
         pageSpreadCount: pageSpreadCount,
         newPositionIsEnd: e.newPosition + 1 === pageSpreadCount
       });
-    }
-  }, {
-    key: "afterNavigation",
-    value: function afterNavigation(e) {
+    };
+
+    _this.afterNavigation = function (e) {
       var position = e.newPosition;
-      var theVerso = this.getVerso();
+
+      var theVerso = _this.getVerso();
+
       var versoPageSpread = theVerso.getPageSpreadFromPosition(position);
-      var pageSpread = this.pageSpreads.get(versoPageSpread.getId());
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
       var pageSpreadCount = theVerso.getPageSpreadCount();
       var newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
-      this.els.root.setAttribute('data-navigating', false);
-      this.trigger('afterNavigation', {
+      _this.rootEl.dataset.navigating = false;
+
+      _this.trigger('afterNavigation', {
         verso: e,
         pageSpread: pageSpread,
         pageSpreadCount: pageSpreadCount,
         newSpreadEl: newSpreadEl,
         newPositionIsEnd: e.newPosition + 1 === pageSpreadCount
       });
-    }
-  }, {
-    key: "attemptedNavigation",
-    value: function attemptedNavigation(e) {
-      this.trigger('attemptedNavigation', {
+    };
+
+    _this.attemptedNavigation = function (e) {
+      _this.trigger('attemptedNavigation', {
         verso: e
       });
-    }
-  }, {
-    key: "clicked",
-    value: function clicked(e) {
+    };
+
+    _this.clicked = function (e) {
       if (e.isInsideContent) {
-        var pageId = e.pageEl.getAttribute('data-id');
-        var page = this.findPage(pageId);
-        this.trigger('clicked', {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('clicked', {
           verso: e,
           page: page
         });
       }
-    }
-  }, {
-    key: "doubleClicked",
-    value: function doubleClicked(e) {
+    };
+
+    _this.doubleClicked = function (e) {
       if (e.isInsideContent) {
-        var pageId = e.pageEl.getAttribute('data-id');
-        var page = this.findPage(pageId);
-        this.trigger('doubleClicked', {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('doubleClicked', {
           verso: e,
           page: page
         });
       }
-    }
-  }, {
-    key: "pressed",
-    value: function pressed(e) {
+    };
+
+    _this.pressed = function (e) {
       if (e.isInsideContent) {
-        var pageId = e.pageEl.getAttribute('data-id');
-        var page = this.findPage(pageId);
-        this.trigger('pressed', {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('pressed', {
           verso: e,
           page: page
         });
       }
-    }
-  }, {
-    key: "contextmenu",
-    value: function contextmenu(e) {
+    };
+
+    _this.contextmenu = function (e) {
       if (e.isInsideContent) {
-        var pageId = e.pageEl.getAttribute('data-id');
-        var page = this.findPage(pageId);
-        this.trigger('contextmenu', {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('contextmenu', {
           verso: e,
           page: page
         });
       }
-    }
-  }, {
-    key: "panStart",
-    value: function panStart() {
-      this.resetIdleTimer();
-      this.trigger('panStart', {
-        scale: this.getVerso().transform.scale
+    };
+
+    _this.panStart = function () {
+      _this.resetIdleTimer();
+
+      _this.trigger('panStart', {
+        scale: _this.getVerso().transform.scale
       });
-    }
-  }, {
-    key: "panEnd",
-    value: function panEnd() {
-      this.startIdleTimer();
-      this.trigger('panEnd');
-    }
-  }, {
-    key: "zoomedIn",
-    value: function zoomedIn(e) {
+    };
+
+    _this.panEnd = function () {
+      _this.startIdleTimer();
+
+      _this.trigger('panEnd');
+    };
+
+    _this.zoomedIn = function (e) {
       var position = e.position;
-      var versoPageSpread = this.getVerso().getPageSpreadFromPosition(position);
-      var pageSpread = this.pageSpreads.get(versoPageSpread.getId());
-      pageSpread === null || pageSpread === void 0 ? void 0 : pageSpread.zoomIn();
-      this.els.root.setAttribute('data-zoomed-in', true);
-      this.trigger('zoomedIn', {
+
+      var versoPageSpread = _this.getVerso().getPageSpreadFromPosition(position);
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
+      pageSpread == null ? void 0 : pageSpread.zoomIn();
+      _this.rootEl.dataset.zoomedIn = true;
+
+      _this.trigger('zoomedIn', {
         verso: e,
         pageSpread: pageSpread
       });
-    }
-  }, {
-    key: "zoomedOut",
-    value: function zoomedOut(e) {
+    };
+
+    _this.zoomedOut = function (e) {
       var position = e.position;
-      var versoPageSpread = this.getVerso().getPageSpreadFromPosition(position);
-      var pageSpread = this.pageSpreads.get(versoPageSpread.getId());
-      pageSpread === null || pageSpread === void 0 ? void 0 : pageSpread.zoomOut();
-      this.els.root.setAttribute('data-zoomed-in', false);
-      this.trigger('zoomedOut', {
+
+      var versoPageSpread = _this.getVerso().getPageSpreadFromPosition(position);
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
+      pageSpread == null ? void 0 : pageSpread.zoomOut();
+      _this.rootEl.dataset.zoomedIn = false;
+
+      _this.trigger('zoomedOut', {
         verso: e,
         pageSpread: pageSpread
       });
-    }
-  }, {
-    key: "getPageMode",
-    value: function getPageMode() {
-      var pageMode = this.getOption('pageMode');
+    };
 
-      if (pageMode == null) {
-        var width = this.els.root.offsetWidth;
-        var height = this.els.root.offsetHeight;
-        pageMode = height / width < 0.8 ? 'double' : 'single';
-      }
-
-      return pageMode;
-    }
-  }, {
-    key: "resetIdleTimer",
-    value: function resetIdleTimer() {
-      clearTimeout(this.idleTimeout);
-      this.els.root.setAttribute('data-idle', false);
-      return this;
-    }
-  }, {
-    key: "startIdleTimer",
-    value: function startIdleTimer() {
-      var _this3 = this;
-
-      this.idleTimeout = _setTimeout(function () {
-        _this3.els.root.setAttribute('data-idle', true);
-      }, this.getOption('idleDelay'));
-      return this;
-    }
-  }, {
-    key: "switchPageMode",
-    value: function switchPageMode(pageMode) {
-      var _context27, _context28, _context29;
-
-      if (this.pageMode === pageMode) {
-        return this;
-      }
-
-      var verso = this.getVerso();
-      var pageIds = verso.getPageSpreadFromPosition(verso.getPosition()).getPageIds();
-      var pageSpreadEls = this.getVerso().el.querySelectorAll('.sgn-pp__page-spread');
-      this.pageMode = pageMode;
-      this.pageSpreads.update(this.pageMode);
-
-      _forEachInstanceProperty(_context27 = _Array$from(pageSpreadEls)).call(_context27, function (pageSpreadEl) {
-        pageSpreadEl.parentNode.removeChild(pageSpreadEl);
-      });
-
-      this.els.pages.parentNode.insertBefore(this.pageSpreads.getFrag(), this.els.pages);
-      verso.refresh();
-      verso.navigateTo(verso.getPageSpreadPositionFromPageId(pageIds[0]), {
-        duration: 0
-      });
-
-      _forEachInstanceProperty(_context28 = verso.pageSpreads).call(_context28, _bindInstanceProperty(_context29 = this.overridePageSpreadContentRect).call(_context29, this));
-
-      return this;
-    }
-  }, {
-    key: "overridePageSpreadContentRect",
-    value: function overridePageSpreadContentRect(pageSpread) {
-      var _this4 = this;
-
+    _this.overridePageSpreadContentRect = function (pageSpread) {
       if (pageSpread.getType() === 'page') {
         return pageSpread.getContentRect = function () {
-          return _this4.getContentRect(pageSpread);
+          return _this.getContentRect(pageSpread);
         };
       }
-    }
-  }, {
-    key: "resize",
-    value: function resize() {
-      var pageMode = this.getPageMode();
+    };
 
-      if (this.getOption('pageMode') == null && pageMode !== this.pageMode) {
-        this.switchPageMode(pageMode);
+    _this.resize = function () {
+      var pageMode = _this.getPageMode();
+
+      if (!_this.getOption('pageMode') && pageMode !== _this.pageMode) {
+        _this.switchPageMode(pageMode);
       } else {
-        this.trigger('resized');
+        _this.trigger('resized');
       }
-    }
-  }, {
-    key: "unload",
-    value: function unload() {
-      this.trigger('disappeared');
-    }
-  }]);
+    };
 
-  return PagedPublicationCore;
+    _this.unload = function () {
+      _this.trigger('disappeared');
+    };
+
+    _this.options = _this.makeOptions(options, _this.defaults);
+    _this.pageId = _this.getOption('pageId');
+    _this.rootEl = el;
+    _this.pagesEl = el.querySelector('.sgn-pp__pages');
+    _this.pageMode = _this.getPageMode();
+    _this.pageSpreads = new PagedPublicationPageSpreads({
+      pages: _this.getOption('pages'),
+      maxZoomScale: _this.getOption('pageSpreadMaxZoomScale'),
+      width: _this.getOption('pageSpreadWidth')
+    });
+
+    _this.pageSpreads.bind('pageLoaded', _this.pageLoaded);
+
+    _this.pageSpreads.bind('pagesLoaded', _this.pagesLoaded);
+
+    _this.setColor(_this.getOption('color')); // It's important to insert the page spreads before instantiating Verso.
+
+
+    _this.pagesEl.parentNode.insertBefore(_this.pageSpreads.update(_this.pageMode).getFrag(), _this.pagesEl);
+
+    _this.verso = _this.createVerso();
+
+    _this.bind('started', _this.start);
+
+    _this.bind('destroyed', _this.destroy);
+
+    return _this;
+  }
+
+  var _proto = PagedPublicationCore.prototype;
+
+  _proto.makeOptions = function makeOptions(options, defaults) {
+    var opts = {};
+
+    for (var key in options) {
+      var _options$key;
+
+      opts[key] = (_options$key = options[key]) != null ? _options$key : defaults[key];
+    }
+
+    return opts;
+  };
+
+  _proto.getOption = function getOption(key) {
+    return this.options[key];
+  };
+
+  _proto.setColor = function setColor(color) {
+    this.rootEl.dataset.colorBrightness = getColorBrightness(color);
+    this.rootEl.style.backgroundColor = color;
+  };
+
+  _proto.createVerso = function createVerso() {
+    var verso = new Verso(this.rootEl.querySelector('.verso'), {
+      pageId: this.pageId
+    });
+    verso.bind('beforeNavigation', this.beforeNavigation);
+    verso.bind('afterNavigation', this.afterNavigation);
+    verso.bind('attemptedNavigation', this.attemptedNavigation);
+    verso.bind('clicked', this.clicked);
+    verso.bind('doubleClicked', this.doubleClicked);
+    verso.bind('pressed', this.pressed);
+    verso.bind('contextmenu', this.contextmenu);
+    verso.bind('panStart', this.panStart);
+    verso.bind('panEnd', this.panEnd);
+    verso.bind('zoomedIn', this.zoomedIn);
+    verso.bind('zoomedOut', this.zoomedOut);
+    return verso;
+  };
+
+  _proto.getVerso = function getVerso() {
+    return this.verso;
+  };
+
+  _proto.getContentRect = function getContentRect(pageSpread) {
+    var rect = {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: 0,
+      height: 0
+    };
+    var pageEls = pageSpread.getPageEls();
+    var pageEl = pageEls[0];
+    var pageCount = pageEls.length;
+    if (!pageCount) return rect;
+    var scale = this.getVerso().transform.scale;
+    var pageWidth = pageEl.offsetWidth * pageCount * scale;
+    var pageHeight = pageEl.offsetHeight * scale;
+    var imageRatio = Number(pageEl.dataset.height) / (Number(pageEl.dataset.width) * pageCount);
+    var actualHeight = pageHeight;
+    var actualWidth = actualHeight / imageRatio;
+    actualWidth = Math.min(pageWidth, actualWidth);
+    actualHeight = actualWidth * imageRatio;
+    var clientRect = pageEl.getBoundingClientRect();
+    rect.width = actualWidth;
+    rect.height = actualHeight;
+    rect.top = clientRect.top + (pageHeight - actualHeight) / 2;
+    rect.left = clientRect.left + (pageWidth - actualWidth) / 2;
+    rect.right = rect.width + rect.left;
+    rect.bottom = rect.height + rect.top;
+    return rect;
+  };
+
+  _proto.formatProgressLabel = function formatProgressLabel(pageSpread) {
+    var pages = (pageSpread == null ? void 0 : pageSpread.options.pages) || [];
+
+    var pageLabels = _mapInstanceProperty(pages).call(pages, function (_ref) {
+      var label = _ref.label;
+      return label;
+    });
+
+    return pages.length > 0 ? pageLabels.join('-') + ' / ' + this.getOption('pages').length : null;
+  };
+
+  _proto.renderPageSpreads = function renderPageSpreads() {
+    var _this2 = this;
+
+    this.getVerso().pageSpreads.forEach(function (pageSpread) {
+      var visibility = pageSpread.getVisibility();
+
+      var match = _this2.pageSpreads.get(pageSpread.getId());
+
+      if (visibility === 'visible' && (match == null ? void 0 : match.contentsRendered) === false) {
+        setTimeout(match.renderContents.bind(match), 0);
+      }
+
+      if (visibility === 'gone' && (match == null ? void 0 : match.contentsRendered) === true) {
+        setTimeout(match.clearContents.bind(match), 0);
+      }
+    });
+    return this;
+  };
+
+  _proto.findPage = function findPage(pageId) {
+    var _context;
+
+    return _findInstanceProperty(_context = this.getOption('pages')).call(_context, function (page) {
+      return page.id === pageId;
+    });
+  };
+
+  _proto.getPageMode = function getPageMode() {
+    return this.getOption('pageMode') || (this.rootEl.offsetHeight / this.rootEl.offsetWidth < 0.8 ? 'double' : 'single');
+  };
+
+  _proto.resetIdleTimer = function resetIdleTimer() {
+    clearTimeout(this.idleTimeout);
+    this.rootEl.dataset.idle = false;
+    return this;
+  };
+
+  _proto.startIdleTimer = function startIdleTimer() {
+    var _this3 = this;
+
+    this.idleTimeout = setTimeout(function () {
+      _this3.rootEl.dataset.idle = true;
+    }, this.getOption('idleDelay'));
+    return this;
+  };
+
+  _proto.switchPageMode = function switchPageMode(pageMode) {
+    if (this.pageMode === pageMode) return this;
+    var verso = this.getVerso();
+    var pageIds = verso.getPageSpreadFromPosition(verso.getPosition()).getPageIds();
+    this.pageMode = pageMode;
+    this.pageSpreads.update(this.pageMode);
+    this.getVerso().el.querySelectorAll('.sgn-pp__page-spread').forEach(function (pageSpreadEl) {
+      pageSpreadEl.parentNode.removeChild(pageSpreadEl);
+    });
+    this.pagesEl.parentNode.insertBefore(this.pageSpreads.getFrag(), this.pagesEl);
+    verso.refresh();
+    verso.navigateTo(verso.getPageSpreadPositionFromPageId(pageIds[0]), {
+      duration: 0
+    });
+    verso.pageSpreads.forEach(this.overridePageSpreadContentRect);
+    return this;
+  };
+
+  return _createClass(PagedPublicationCore);
 }(MicroEvent);
 
 PagedPublicationCore.prototype.defaults = {
@@ -7113,360 +7471,275 @@ PagedPublicationCore.prototype.defaults = {
   color: '#ffffff'
 };
 
-function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
 var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
   _inherits(PagedPublicationEventTracking, _MicroEvent);
 
-  var _super = _createSuper$2(PagedPublicationEventTracking);
-
   function PagedPublicationEventTracking(eventTracker, id) {
-    var _context, _context2, _context3, _context4, _context5, _context6, _context7;
-
     var _this;
 
-    _classCallCheck(this, PagedPublicationEventTracking);
-
-    _this = _super.call(this);
-    _this.eventTracker = eventTracker;
-    _this.id = id;
+    _this = _MicroEvent.call(this) || this;
     _this.hidden = true;
     _this.pageSpread = null;
 
-    _bindInstanceProperty(_this).call(_this, 'appeared', _bindInstanceProperty(_context = _this.appeared).call(_context, _assertThisInitialized(_this)));
+    _this.destroy = function () {
+      _this.pageSpreadDisappeared();
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'disappeared', _bindInstanceProperty(_context2 = _this.disappeared).call(_context2, _assertThisInitialized(_this)));
+    _this.appeared = function (e) {
+      _this.pageSpreadAppeared(e.pageSpread);
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'beforeNavigation', _bindInstanceProperty(_context3 = _this.beforeNavigation).call(_context3, _assertThisInitialized(_this)));
+    _this.disappeared = function () {
+      _this.pageSpreadDisappeared();
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'afterNavigation', _bindInstanceProperty(_context4 = _this.afterNavigation).call(_context4, _assertThisInitialized(_this)));
+    _this.beforeNavigation = function () {
+      _this.pageSpreadDisappeared();
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'attemptedNavigation', _bindInstanceProperty(_context5 = _this.attemptedNavigation).call(_context5, _assertThisInitialized(_this)));
+    _this.afterNavigation = function (e) {
+      _this.pageSpreadAppeared(e.pageSpread);
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'panStart', _bindInstanceProperty(_context6 = _this.panStart).call(_context6, _assertThisInitialized(_this)));
+    _this.attemptedNavigation = function (e) {
+      _this.pageSpreadAppeared(e.pageSpread);
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'destroyed', _bindInstanceProperty(_context7 = _this.destroy).call(_context7, _assertThisInitialized(_this)));
+    _this.panStart = function (e) {
+      if (e.scale === 1) _this.pageSpreadDisappeared();
+    };
+
+    _this.eventTracker = eventTracker;
+    _this.id = id;
+
+    _this.bind('appeared', _this.appeared);
+
+    _this.bind('disappeared', _this.disappeared);
+
+    _this.bind('beforeNavigation', _this.beforeNavigation);
+
+    _this.bind('afterNavigation', _this.afterNavigation);
+
+    _this.bind('attemptedNavigation', _this.attemptedNavigation);
+
+    _this.bind('panStart', _this.panStart);
+
+    _this.bind('destroyed', _this.destroy);
 
     return _this;
   }
 
-  _createClass(PagedPublicationEventTracking, [{
-    key: "destroy",
-    value: function destroy() {
-      this.pageSpreadDisappeared();
-    }
-  }, {
-    key: "trackOpened",
-    value: function trackOpened() {
-      if (this.eventTracker == null) {
-        return this;
-      }
+  var _proto = PagedPublicationEventTracking.prototype;
 
-      this.eventTracker.trackPagedPublicationOpened({
-        'pp.id': this.id,
-        vt: this.eventTracker.createViewToken(this.id)
+  _proto.trackOpened = function trackOpened() {
+    if (!this.eventTracker) return this;
+    this.eventTracker.trackPagedPublicationOpened({
+      'pp.id': this.id,
+      vt: this.eventTracker.createViewToken(this.id)
+    });
+    return this;
+  };
+
+  _proto.trackPageSpreadDisappeared = function trackPageSpreadDisappeared(pageNumbers) {
+    var _this2 = this;
+
+    if (!this.eventTracker) return this;
+    pageNumbers.forEach(function (pageNumber) {
+      _this2.eventTracker.trackPagedPublicationPageDisappeared({
+        'pp.id': _this2.id,
+        'ppp.n': pageNumber,
+        vt: _this2.eventTracker.createViewToken(_this2.id, pageNumber)
       });
-      return this;
-    }
-  }, {
-    key: "trackPageSpreadDisappeared",
-    value: function trackPageSpreadDisappeared(pageNumbers) {
-      var _this2 = this;
+    });
+    return this;
+  };
 
-      if (this.eventTracker == null) {
-        return this;
-      }
+  _proto.pageSpreadAppeared = function pageSpreadAppeared(pageSpread) {
+    if (pageSpread && this.hidden) {
+      this.pageSpread = pageSpread;
+      this.hidden = false;
+    }
+  };
 
-      _forEachInstanceProperty(pageNumbers).call(pageNumbers, function (pageNumber) {
-        _this2.eventTracker.trackPagedPublicationPageDisappeared({
-          'pp.id': _this2.id,
-          'ppp.n': pageNumber,
-          vt: _this2.eventTracker.createViewToken(_this2.id, pageNumber)
-        });
-      });
+  _proto.pageSpreadDisappeared = function pageSpreadDisappeared() {
+    if (this.pageSpread && !this.hidden) {
+      var _context;
 
-      return this;
+      this.trackPageSpreadDisappeared(_mapInstanceProperty(_context = this.pageSpread.getPages()).call(_context, function (page) {
+        return page.pageNumber;
+      }));
+      this.hidden = true;
+      this.pageSpread = null;
     }
-  }, {
-    key: "appeared",
-    value: function appeared(e) {
-      this.pageSpreadAppeared(e.pageSpread);
-    }
-  }, {
-    key: "disappeared",
-    value: function disappeared() {
-      this.pageSpreadDisappeared();
-    }
-  }, {
-    key: "beforeNavigation",
-    value: function beforeNavigation() {
-      this.pageSpreadDisappeared();
-    }
-  }, {
-    key: "afterNavigation",
-    value: function afterNavigation(e) {
-      this.pageSpreadAppeared(e.pageSpread);
-    }
-  }, {
-    key: "attemptedNavigation",
-    value: function attemptedNavigation(e) {
-      this.pageSpreadAppeared(e.pageSpread);
-    }
-  }, {
-    key: "panStart",
-    value: function panStart(e) {
-      if (e.scale === 1) {
-        this.pageSpreadDisappeared();
-      }
-    }
-  }, {
-    key: "pageSpreadAppeared",
-    value: function pageSpreadAppeared(pageSpread) {
-      if (pageSpread && this.hidden === true) {
-        this.pageSpread = pageSpread;
-        this.hidden = false;
-      }
-    }
-  }, {
-    key: "pageSpreadDisappeared",
-    value: function pageSpreadDisappeared() {
-      if (this.pageSpread && this.hidden === false) {
-        var _context8;
+  };
 
-        this.trackPageSpreadDisappeared(_mapInstanceProperty(_context8 = this.pageSpread.getPages()).call(_context8, function (page) {
-          return page.pageNumber;
-        }));
-        this.hidden = true;
-        this.pageSpread = null;
-      }
-    }
-  }]);
-
-  return PagedPublicationEventTracking;
+  return _createClass(PagedPublicationEventTracking);
 }(MicroEvent);
 
-function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function getPosition(pages, ratio, hotspot) {
+  var minX = null;
+  var minY = null;
+  var maxX = null;
+  var maxY = null;
 
-function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  var pageNumbers = _mapInstanceProperty(pages).call(pages, function (page) {
+    return page.pageNumber;
+  });
+
+  var _loop = function _loop(pageNumber) {
+    if (pageNumbers.indexOf(Number(pageNumber)) === -1) return "continue";
+    hotspot.locations[pageNumber].forEach(function (_ref) {
+      var x = _ref[0],
+          y = _ref[1];
+      if (pages[1] && pageNumbers[1] === Number(pageNumber)) x += 1;
+      x /= pages.length;
+
+      if (minX == null) {
+        minX = maxX = x;
+        minY = maxY = y;
+      }
+
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    });
+  };
+
+  for (var pageNumber in hotspot.locations) {
+    var _ret = _loop(pageNumber);
+
+    if (_ret === "continue") continue;
+  }
+
+  var width = maxX - minX;
+  var height = maxY - minY;
+  return {
+    top: minY / ratio * 100,
+    left: minX * 100,
+    width: width * 100,
+    height: height / ratio * 100
+  };
+}
+
+function renderHotspot(hotspot, position, contentRect, boundingRect) {
+  var el = document.createElement('div');
+  var top = Math.round(contentRect.height / 100 * position.top);
+  var left = Math.round(contentRect.width / 100 * position.left);
+  var width = Math.round(contentRect.width / 100 * position.width);
+  var height = Math.round(contentRect.height / 100 * position.height);
+  top += Math.round(contentRect.top);
+  left += Math.round(contentRect.left);
+  top -= boundingRect.top;
+  left -= boundingRect.left;
+  el.className = 'sgn-pp__hotspot verso__overlay';
+  if (hotspot.id) el.dataset.id = hotspot.id;
+  if (hotspot.type) el.dataset.type = hotspot.type;
+  el.innerHTML = Mustache.render('', hotspot);
+  el.style.top = "".concat(top, "px");
+  el.style.left = "".concat(left, "px");
+  el.style.width = "".concat(width, "px");
+  el.style.height = "".concat(height, "px");
+  return el;
+}
 
 var PagedPublicationHotspots = /*#__PURE__*/function (_MicroEvent) {
   _inherits(PagedPublicationHotspots, _MicroEvent);
 
-  var _super = _createSuper$1(PagedPublicationHotspots);
-
   function PagedPublicationHotspots() {
-    var _context, _context2, _context3, _context4;
-
     var _this;
 
-    _classCallCheck(this, PagedPublicationHotspots);
-
-    _this = _super.call(this);
+    _this = _MicroEvent.call(this) || this;
     _this.currentPageSpreadId = null;
     _this.pageSpreadsLoaded = {};
     _this.cache = {};
 
-    _bindInstanceProperty(_this).call(_this, 'hotspotsReceived', _bindInstanceProperty(_context = _this.hotspotsReceived).call(_context, _assertThisInitialized(_this)));
+    _this.hotspotsReceived = function (e) {
+      _this.setCache(e.pageSpread.getId(), e);
 
-    _bindInstanceProperty(_this).call(_this, 'afterNavigation', _bindInstanceProperty(_context2 = _this.afterNavigation).call(_context2, _assertThisInitialized(_this)));
+      _this.renderHotspots(e);
+    };
 
-    _bindInstanceProperty(_this).call(_this, 'pagesLoaded', _bindInstanceProperty(_context3 = _this.pagesLoaded).call(_context3, _assertThisInitialized(_this)));
+    _this.afterNavigation = function (e) {
+      if (!e.pageSpread) return;
+      var id = e.pageSpread.getId();
+      _this.currentPageSpreadId = id;
 
-    _bindInstanceProperty(_this).call(_this, 'resized', _bindInstanceProperty(_context4 = _this.resized).call(_context4, _assertThisInitialized(_this)));
+      if (_this.pageSpreadsLoaded[id]) {
+        _this.requestHotspots(id, e.pageSpread.getPages());
+      }
+    };
+
+    _this.pagesLoaded = function (e) {
+      _this.pageSpreadsLoaded[e.pageSpreadId] = true;
+
+      if (_this.currentPageSpreadId === e.pageSpreadId) {
+        _this.requestHotspots(e.pageSpreadId, e.pages);
+      }
+    };
+
+    _this.resized = function () {
+      var data = _this.getCache(_this.currentPageSpreadId);
+
+      if (data) _this.renderHotspots(data);
+    };
+
+    _this.bind('hotspotsReceived', _this.hotspotsReceived);
+
+    _this.bind('afterNavigation', _this.afterNavigation);
+
+    _this.bind('pagesLoaded', _this.pagesLoaded);
+
+    _this.bind('resized', _this.resized);
 
     return _this;
   }
 
-  _createClass(PagedPublicationHotspots, [{
-    key: "renderHotspots",
-    value: function renderHotspots(data) {
-      var _context5;
+  var _proto = PagedPublicationHotspots.prototype;
 
-      var frag = document.createDocumentFragment();
-      var contentRect = data.versoPageSpread.getContentRect();
-      var pageSpreadEl = data.pageSpread.getEl();
-      var hotspotEls = pageSpreadEl.querySelectorAll('.sgn-pp__hotspot');
-      var boundingRect = pageSpreadEl.getBoundingClientRect();
+  _proto.renderHotspots = function renderHotspots(_ref2) {
+    var versoPageSpread = _ref2.versoPageSpread,
+        pageSpread = _ref2.pageSpread,
+        hotspots = _ref2.hotspots,
+        pages = _ref2.pages,
+        ratio = _ref2.ratio;
+    var contentRect = versoPageSpread.getContentRect();
+    var pageSpreadEl = pageSpread.getEl();
+    var boundingRect = pageSpreadEl.getBoundingClientRect();
+    pageSpreadEl.querySelectorAll('.sgn-pp__hotspot').forEach(function (hotspotEl) {
+      hotspotEl.parentNode.removeChild(hotspotEl);
+    });
+    var frag = document.createDocumentFragment();
 
-      _forEachInstanceProperty(_context5 = _Array$from(hotspotEls)).call(_context5, function (hotspotEl) {
-        hotspotEl.parentNode.removeChild(hotspotEl);
-      });
-
-      for (var id in data.hotspots) {
-        var hotspot = data.hotspots[id];
-        var position = this.getPosition(data.pages, data.ratio, hotspot);
-        var el = this.renderHotspot(hotspot, position, contentRect, boundingRect);
-        frag.appendChild(el);
-      }
-
-      pageSpreadEl.appendChild(frag);
-      return this;
+    for (var id in hotspots) {
+      var hotspot = hotspots[id];
+      var position = getPosition(pages, ratio, hotspot);
+      var el = renderHotspot(hotspot, position, contentRect, boundingRect);
+      frag.appendChild(el);
     }
-  }, {
-    key: "renderHotspot",
-    value: function renderHotspot(hotspot, position, contentRect, boundingRect) {
-      var el = document.createElement('div');
-      var top = Math.round(contentRect.height / 100 * position.top);
-      var left = Math.round(contentRect.width / 100 * position.left);
-      var width = Math.round(contentRect.width / 100 * position.width);
-      var height = Math.round(contentRect.height / 100 * position.height);
-      top += Math.round(contentRect.top);
-      left += Math.round(contentRect.left);
-      top -= boundingRect.top;
-      left -= boundingRect.left;
-      el.className = 'sgn-pp__hotspot verso__overlay';
 
-      if (hotspot.id != null) {
-        el.setAttribute('data-id', hotspot.id);
-      }
+    pageSpreadEl.appendChild(frag);
+    return this;
+  };
 
-      if (hotspot.type != null) {
-        el.setAttribute('data-type', hotspot.type);
-      }
+  _proto.requestHotspots = function requestHotspots(id, pages) {
+    this.trigger('hotspotsRequested', {
+      id: id,
+      pages: pages
+    });
+  };
 
-      el.innerHTML = Mustache.render('', hotspot);
-      el.style.top = "".concat(top, "px");
-      el.style.left = "".concat(left, "px");
-      el.style.width = "".concat(width, "px");
-      el.style.height = "".concat(height, "px");
-      return el;
-    }
-  }, {
-    key: "getPosition",
-    value: function getPosition(pages, ratio, hotspot) {
-      var minX = null;
-      var minY = null;
-      var maxX = null;
-      var maxY = null;
+  _proto.getCache = function getCache(pageSpreadId) {
+    return this.cache[pageSpreadId];
+  };
 
-      var pageNumbers = _mapInstanceProperty(pages).call(pages, function (page) {
-        return page.pageNumber;
-      });
+  _proto.setCache = function setCache(pageSpreadId, data) {
+    this.cache[pageSpreadId] = data;
+    return this;
+  };
 
-      for (var pageNumber in hotspot.locations) {
-        var _context6;
-
-        if (_indexOfInstanceProperty(pageNumbers).call(pageNumbers, +pageNumber) === -1) {
-          continue;
-        }
-
-        _forEachInstanceProperty(_context6 = hotspot.locations[pageNumber]).call(_context6, function (coords) {
-          var _coords = _slicedToArray(coords, 2),
-              x = _coords[0],
-              y = _coords[1];
-
-          if (pages[1] && pageNumbers[1] === +pageNumber) {
-            x += 1;
-          }
-
-          x /= pages.length;
-
-          if (minX == null) {
-            minX = maxX = x;
-            minY = maxY = y;
-          }
-
-          if (x < minX) {
-            minX = x;
-          }
-
-          if (x > maxX) {
-            maxX = x;
-          }
-
-          if (y < minY) {
-            minY = y;
-          }
-
-          if (y > maxY) {
-            return maxY = y;
-          }
-        });
-      }
-
-      var width = maxX - minX;
-      var height = maxY - minY;
-      return {
-        top: minY / ratio * 100,
-        left: minX * 100,
-        width: width * 100,
-        height: height / ratio * 100
-      };
-    }
-  }, {
-    key: "requestHotspots",
-    value: function requestHotspots(pageSpreadId, pages) {
-      this.trigger('hotspotsRequested', {
-        id: pageSpreadId,
-        pages: pages
-      });
-    }
-  }, {
-    key: "hotspotsReceived",
-    value: function hotspotsReceived(e) {
-      var pageSpreadId = e.pageSpread.getId();
-      this.setCache(pageSpreadId, e);
-      this.renderHotspots(e);
-    }
-  }, {
-    key: "getCache",
-    value: function getCache(pageSpreadId) {
-      return this.cache[pageSpreadId];
-    }
-  }, {
-    key: "setCache",
-    value: function setCache(pageSpreadId, data) {
-      this.cache[pageSpreadId] = data;
-      return this;
-    }
-  }, {
-    key: "afterNavigation",
-    value: function afterNavigation(e) {
-      if (e.pageSpread == null) {
-        return;
-      }
-
-      var id = e.pageSpread.getId();
-      this.currentPageSpreadId = id;
-
-      if (this.pageSpreadsLoaded[id]) {
-        this.requestHotspots(id, e.pageSpread.getPages());
-      }
-    }
-  }, {
-    key: "pagesLoaded",
-    value: function pagesLoaded(e) {
-      this.pageSpreadsLoaded[e.pageSpreadId] = true;
-
-      if (this.currentPageSpreadId === e.pageSpreadId) {
-        this.requestHotspots(e.pageSpreadId, e.pages);
-      }
-    }
-  }, {
-    key: "resized",
-    value: function resized() {
-      var data = this.getCache(this.currentPageSpreadId);
-
-      if (data) {
-        this.renderHotspots(data);
-      }
-    }
-  }]);
-
-  return PagedPublicationHotspots;
+  return _createClass(PagedPublicationHotspots);
 }(MicroEvent);
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof _Symbol === "undefined" || _getIteratorMethod(o) == null) { if (_Array$isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = _getIterator(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { var _context36; if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = _sliceInstanceProperty(_context36 = Object.prototype.toString.call(o)).call(_context36, 8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return _Array$from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function defaultPickHotspot(hotspots, e, el, callback) {
   var _context;
@@ -7486,7 +7759,7 @@ function defaultPickHotspot(hotspots, e, el, callback) {
       };
     })
   }, function (picked) {
-    return callback(_findInstanceProperty(hotspots).call(hotspots, function (hotspot) {
+    callback(_findInstanceProperty(hotspots).call(hotspots, function (hotspot) {
       return hotspot.id === picked.id;
     }));
   });
@@ -7496,18 +7769,89 @@ function defaultPickHotspot(hotspots, e, el, callback) {
 var Viewer = /*#__PURE__*/function (_MicroEvent) {
   _inherits(Viewer, _MicroEvent);
 
-  var _super = _createSuper(Viewer);
-
-  function Viewer(el) {
+  function Viewer(el, _options) {
     var _this;
 
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    if (_options === void 0) {
+      _options = {};
+    }
 
-    _classCallCheck(this, Viewer);
+    _this = _MicroEvent.call(this) || this;
+    _this._hotspots = new PagedPublicationHotspots();
+    _this.hotspots = null;
+    _this.hotspotQueue = [];
+    _this.popover = null;
 
-    _this = _super.call(this);
+    _this.destroy = function () {
+      _this._core.trigger('destroyed');
+
+      _this._hotspots.trigger('destroyed');
+
+      _this._controls.trigger('destroyed');
+
+      _this._eventTracking.trigger('destroyed');
+
+      _this.trigger('destroyed');
+
+      return _assertThisInitialized(_this);
+    };
+
+    _this.first = function (options) {
+      _this._core.getVerso().first(options);
+
+      return _assertThisInitialized(_this);
+    };
+
+    _this.prev = function (options) {
+      _this._core.getVerso().prev(options);
+
+      return _assertThisInitialized(_this);
+    };
+
+    _this.next = function (options) {
+      _this._core.getVerso().next(options);
+
+      return _assertThisInitialized(_this);
+    };
+
+    _this.last = function (options) {
+      _this._core.getVerso().last(options);
+
+      return _assertThisInitialized(_this);
+    };
+
+    _this.hotspotsRequested = function (e) {
+      _this.hotspotQueue.push(e);
+
+      _this.processHotspotQueue();
+    };
+
+    _this.beforeNavigation = function () {
+      var _this$popover;
+
+      (_this$popover = _this.popover) == null ? void 0 : _this$popover.destroy == null ? void 0 : _this$popover.destroy();
+    };
+
+    _this.clicked = function (e) {
+      _this.pickHotspot(e, function (hotspot) {
+        _this.trigger('hotspotClicked', hotspot);
+      });
+    };
+
+    _this.contextmenu = function (e) {
+      _this.pickHotspot(e, function (hotspot) {
+        _this.trigger('hotspotContextmenu', hotspot);
+      });
+    };
+
+    _this.pressed = function (e) {
+      _this.pickHotspot(e, function (hotspot) {
+        _this.trigger('hotspotPressed', hotspot);
+      });
+    };
+
     _this.el = el;
-    _this.options = options;
+    _this.options = _options;
     _this._core = new PagedPublicationCore(_this.el, {
       id: _this.options.id,
       pages: _this.options.pages,
@@ -7518,539 +7862,1327 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
       resizeDelay: _this.options.resizeDelay,
       color: _this.options.color
     });
-    _this._hotspots = new PagedPublicationHotspots();
     _this._controls = new PagedPublicationControls(_this.el, {
       keyboard: _this.options.keyboard
     });
     _this._eventTracking = new PagedPublicationEventTracking(_this.options.eventTracker, _this.options.id);
-    _this.hotspots = null;
-    _this.hotspotQueue = [];
-    _this.popover = null;
 
-    _this._setupEventListeners();
+    _this._controls.bind('prev', _this.prev);
+
+    _this._controls.bind('next', _this.next);
+
+    _this._controls.bind('first', _this.first);
+
+    _this._controls.bind('last', _this.last);
+
+    _this._controls.bind('close', _this.destroy);
+
+    _this._hotspots.bind('hotspotsRequested', function (e) {
+      _this.trigger('hotspotsRequested', e);
+    });
+
+    _this._core.bind('appeared', function (e) {
+      _this._eventTracking.trigger('appeared', e);
+
+      _this.trigger('appeared', e);
+    });
+
+    _this._core.bind('disappeared', function (e) {
+      _this._eventTracking.trigger('disappeared', e);
+
+      _this.trigger('disappeared', e);
+    });
+
+    _this._core.bind('beforeNavigation', function (e) {
+      _this._eventTracking.trigger('beforeNavigation', e);
+
+      _this._controls.trigger('beforeNavigation', e);
+
+      _this.trigger('beforeNavigation', e);
+    });
+
+    _this._core.bind('afterNavigation', function (e) {
+      _this._eventTracking.trigger('afterNavigation', e);
+
+      _this._hotspots.trigger('afterNavigation', e);
+
+      _this.trigger('afterNavigation', e);
+    });
+
+    _this._core.bind('attemptedNavigation', function (e) {
+      _this._eventTracking.trigger('attemptedNavigation', e);
+
+      _this.trigger('attemptedNavigation', e);
+    });
+
+    _this._core.bind('clicked', function (e) {
+      _this._eventTracking.trigger('clicked', e);
+
+      _this.trigger('clicked', e);
+    });
+
+    _this._core.bind('doubleClicked', function (e) {
+      _this._eventTracking.trigger('doubleClicked', e);
+
+      _this.trigger('doubleClicked', e);
+    });
+
+    _this._core.bind('contextmenu', function (e) {
+      _this.trigger('contextmenu', e);
+    });
+
+    _this._core.bind('pressed', function (e) {
+      _this._eventTracking.trigger('pressed', e);
+
+      _this.trigger('pressed', e);
+    });
+
+    _this._core.bind('panStart', function (e) {
+      _this._eventTracking.trigger('panStart', e);
+
+      _this.trigger('panStart', e);
+    });
+
+    _this._core.bind('zoomedIn', function (e) {
+      _this._eventTracking.trigger('zoomedIn', e);
+
+      _this.trigger('zoomedIn', e);
+    });
+
+    _this._core.bind('zoomedOut', function (e) {
+      _this._eventTracking.trigger('zoomedOut', e);
+
+      _this.trigger('zoomedOut', e);
+    });
+
+    _this._core.bind('pageLoaded', function (e) {
+      _this._eventTracking.trigger('pageLoaded', e);
+
+      _this.trigger('pageLoaded', e);
+    });
+
+    _this._core.bind('pagesLoaded', function (e) {
+      _this._hotspots.trigger('pagesLoaded', e);
+
+      _this.trigger('pagesLoaded', e);
+    });
+
+    _this._core.bind('resized', function (e) {
+      _this._hotspots.trigger('resized');
+
+      _this.trigger('resized', e);
+    });
+
+    _this.bind('hotspotsRequested', _this.hotspotsRequested);
+
+    _this.bind('beforeNavigation', _this.beforeNavigation);
+
+    _this.bind('clicked', _this.clicked);
+
+    _this.bind('contextmenu', _this.contextmenu);
+
+    _this.bind('pressed', _this.pressed);
 
     return _this;
   }
 
-  _createClass(Viewer, [{
-    key: "start",
-    value: function start() {
-      this._eventTracking.trackOpened();
+  var _proto = Viewer.prototype;
 
-      this._core.trigger('started');
+  _proto.start = function start() {
+    this._eventTracking.trackOpened();
 
-      return this;
+    this._core.trigger('started');
+
+    return this;
+  };
+
+  _proto.navigateTo = function navigateTo(position, options) {
+    return this.navigateToIndex(position, options);
+  };
+
+  _proto.navigateToIndex = function navigateToIndex(position, options) {
+    this._core.getVerso().navigateTo(position, options);
+
+    return this;
+  };
+
+  _proto.navigateToPageId = function navigateToPageId(pageId, options) {
+    var verso = this._core.getVerso();
+
+    var newPosition = verso.getPageSpreadPositionFromPageId(pageId);
+    verso.navigateTo(newPosition, options);
+    return this;
+  };
+
+  _proto.pickHotspot = function pickHotspot(e, callback) {
+    var _context2,
+        _this2 = this;
+
+    if (!this.hotspots) return;
+
+    if (this.popover) {
+      var _this$popover$destroy, _this$popover2;
+
+      (_this$popover$destroy = (_this$popover2 = this.popover).destroy) == null ? void 0 : _this$popover$destroy.call(_this$popover2);
+      this.popover = null;
     }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this._core.trigger('destroyed');
 
-      this._hotspots.trigger('destroyed');
+    var hotspots = _mapInstanceProperty(_context2 = e.verso.overlayEls).call(_context2, function (overlayEl) {
+      return _this2.hotspots[overlayEl.dataset.id];
+    });
 
-      this._controls.trigger('destroyed');
-
-      this._eventTracking.trigger('destroyed');
-
-      this.trigger('destroyed');
-      return this;
+    if (hotspots.length === 1) {
+      callback(hotspots[0]);
+    } else if (hotspots.length > 1) {
+      this.popover = {
+        destroy: (this.options.pickHotspot || defaultPickHotspot)(hotspots, e, this.el, callback)
+      };
     }
-  }, {
-    key: "navigateTo",
-    value: function navigateTo(position, options) {
-      this.navigateToIndex(position, options);
-      return this;
-    }
-  }, {
-    key: "navigateToIndex",
-    value: function navigateToIndex(position, options) {
-      this._core.getVerso().navigateTo(position, options);
+  };
 
-      return this;
-    }
-  }, {
-    key: "navigateToPageId",
-    value: function navigateToPageId(pageId, options) {
-      var position = this._core.getVerso().getPageSpreadPositionFromPageId(pageId);
+  _proto.processHotspotQueue = function processHotspotQueue() {
+    var _context3,
+        _this3 = this;
 
-      return this._core.getVerso().navigateTo(position, options);
-    }
-  }, {
-    key: "first",
-    value: function first(options) {
-      this._core.getVerso().first(options);
+    if (!this.hotspots) return;
+    this.hotspotQueue = _filterInstanceProperty(_context3 = this.hotspotQueue).call(_context3, function (hotspotRequest) {
+      var _context4;
 
-      return this;
-    }
-  }, {
-    key: "prev",
-    value: function prev(options) {
-      this._core.getVerso().prev(options);
+      var hotspots = {};
 
-      return this;
-    }
-  }, {
-    key: "next",
-    value: function next(options) {
-      this._core.getVerso().next(options);
+      for (var hotspotId in _this3.hotspots) {
+        if (hotspots[hotspotId]) continue;
+        var _this3$hotspots$hotsp = _this3.hotspots[hotspotId],
+            id = _this3$hotspots$hotsp.id,
+            type = _this3$hotspots$hotsp.type,
+            locations = _this3$hotspots$hotsp.locations;
 
-      return this;
-    }
-  }, {
-    key: "last",
-    value: function last(options) {
-      this._core.getVerso().last(options);
+        for (var idx = 0; idx < hotspotRequest.pages.length; idx++) {
+          var pageNumber = hotspotRequest.pages[idx].pageNumber;
 
-      return this;
-    }
-  }, {
-    key: "_setupEventListeners",
-    value: function _setupEventListeners() {
-      var _context2,
-          _this2 = this,
-          _context3,
-          _context4,
-          _context5,
-          _context6,
-          _context7,
-          _context8,
-          _context9,
-          _context10,
-          _context11,
-          _context12,
-          _context13,
-          _context14,
-          _context15,
-          _context16,
-          _context17,
-          _context18,
-          _context19,
-          _context20,
-          _context21,
-          _context22,
-          _context23,
-          _context24,
-          _context25,
-          _context26,
-          _context27,
-          _context28,
-          _context29,
-          _context30,
-          _context31,
-          _context32;
-
-      _bindInstanceProperty(_context2 = this._controls).call(_context2, 'prev', function (e) {
-        _this2.prev(e);
-      });
-
-      _bindInstanceProperty(_context3 = this._controls).call(_context3, 'next', function (e) {
-        _this2.next(e);
-      });
-
-      _bindInstanceProperty(_context4 = this._controls).call(_context4, 'first', function (e) {
-        _this2.first(e);
-      });
-
-      _bindInstanceProperty(_context5 = this._controls).call(_context5, 'last', function (e) {
-        _this2.last(e);
-      });
-
-      _bindInstanceProperty(_context6 = this._controls).call(_context6, 'close', function (e) {
-        _this2.destroy(e);
-      });
-
-      _bindInstanceProperty(_context7 = this._hotspots).call(_context7, 'hotspotsRequested', function (e) {
-        _this2.trigger('hotspotsRequested', e);
-      });
-
-      _bindInstanceProperty(_context8 = this._core).call(_context8, 'appeared', function (e) {
-        _this2._eventTracking.trigger('appeared', e);
-
-        _this2.trigger('appeared', e);
-      });
-
-      _bindInstanceProperty(_context9 = this._core).call(_context9, 'disappeared', function (e) {
-        _this2._eventTracking.trigger('disappeared', e);
-
-        _this2.trigger('disappeared', e);
-      });
-
-      _bindInstanceProperty(_context10 = this._core).call(_context10, 'beforeNavigation', function (e) {
-        _this2._eventTracking.trigger('beforeNavigation', e);
-
-        _this2._controls.trigger('beforeNavigation', e);
-
-        _this2.trigger('beforeNavigation', e);
-      });
-
-      _bindInstanceProperty(_context11 = this._core).call(_context11, 'afterNavigation', function (e) {
-        _this2._eventTracking.trigger('afterNavigation', e);
-
-        _this2._hotspots.trigger('afterNavigation', e);
-
-        _this2.trigger('afterNavigation', e);
-      });
-
-      _bindInstanceProperty(_context12 = this._core).call(_context12, 'attemptedNavigation', function (e) {
-        _this2._eventTracking.trigger('attemptedNavigation', e);
-
-        _this2.trigger('attemptedNavigation', e);
-      });
-
-      _bindInstanceProperty(_context13 = this._core).call(_context13, 'clicked', function (e) {
-        _this2._eventTracking.trigger('clicked', e);
-
-        _this2.trigger('clicked', e);
-      });
-
-      _bindInstanceProperty(_context14 = this._core).call(_context14, 'doubleClicked', function (e) {
-        _this2._eventTracking.trigger('doubleClicked', e);
-
-        _this2.trigger('doubleClicked', e);
-      });
-
-      _bindInstanceProperty(_context15 = this._core).call(_context15, 'contextmenu', function (e) {
-        _this2.trigger('contextmenu', e);
-      });
-
-      _bindInstanceProperty(_context16 = this._core).call(_context16, 'pressed', function (e) {
-        _this2._eventTracking.trigger('pressed', e);
-
-        _this2.trigger('pressed', e);
-      });
-
-      _bindInstanceProperty(_context17 = this._core).call(_context17, 'panStart', function (e) {
-        _this2._eventTracking.trigger('panStart', e);
-
-        _this2.trigger('panStart', e);
-      });
-
-      _bindInstanceProperty(_context18 = this._core).call(_context18, 'zoomedIn', function (e) {
-        _this2._eventTracking.trigger('zoomedIn', e);
-
-        _this2.trigger('zoomedIn', e);
-      });
-
-      _bindInstanceProperty(_context19 = this._core).call(_context19, 'zoomedOut', function (e) {
-        _this2._eventTracking.trigger('zoomedOut', e);
-
-        _this2.trigger('zoomedOut', e);
-      });
-
-      _bindInstanceProperty(_context20 = this._core).call(_context20, 'pageLoaded', function (e) {
-        _this2._eventTracking.trigger('pageLoaded', e);
-
-        _this2.trigger('pageLoaded', e);
-      });
-
-      _bindInstanceProperty(_context21 = this._core).call(_context21, 'pagesLoaded', function (e) {
-        _this2._hotspots.trigger('pagesLoaded', e);
-
-        _this2.trigger('pagesLoaded', e);
-      });
-
-      _bindInstanceProperty(_context22 = this._core).call(_context22, 'resized', function (e) {
-        _this2._hotspots.trigger('resized');
-
-        _this2.trigger('resized', e);
-      });
-
-      _bindInstanceProperty(_context23 = this).call(_context23, 'hotspotsRequested', _bindInstanceProperty(_context24 = this.hotspotsRequested).call(_context24, this));
-
-      _bindInstanceProperty(_context25 = this).call(_context25, 'beforeNavigation', _bindInstanceProperty(_context26 = this.beforeNavigation).call(_context26, this));
-
-      _bindInstanceProperty(_context27 = this).call(_context27, 'clicked', _bindInstanceProperty(_context28 = this.clicked).call(_context28, this));
-
-      _bindInstanceProperty(_context29 = this).call(_context29, 'contextmenu', _bindInstanceProperty(_context30 = this.contextmenu).call(_context30, this));
-
-      _bindInstanceProperty(_context31 = this).call(_context31, 'pressed', _bindInstanceProperty(_context32 = this.pressed).call(_context32, this));
-    }
-  }, {
-    key: "pickHotspot",
-    value: function pickHotspot(e, callback) {
-      var _context33,
-          _this3 = this;
-
-      if (this.hotspots == null) {
-        return;
-      }
-
-      if (this.popover != null) {
-        var _this$popover$destroy, _this$popover;
-
-        (_this$popover$destroy = (_this$popover = this.popover).destroy) === null || _this$popover$destroy === void 0 ? void 0 : _this$popover$destroy.call(_this$popover);
-        this.popover = null;
-      }
-
-      var hotspots = _mapInstanceProperty(_context33 = e.verso.overlayEls).call(_context33, function (overlayEl) {
-        return _this3.hotspots[overlayEl.getAttribute('data-id')];
-      });
-
-      if (hotspots.length === 1) {
-        callback(hotspots[0]);
-      } else if (hotspots.length > 1) {
-        this.popover = {
-          destroy: (this.options.pickHotspot || defaultPickHotspot)(hotspots, e, this.el, callback)
-        };
-      }
-    }
-  }, {
-    key: "processHotspotQueue",
-    value: function processHotspotQueue() {
-      var _context34,
-          _this4 = this;
-
-      if (this.hotspots == null) {
-        return;
-      }
-
-      this.hotspotQueue = _filterInstanceProperty(_context34 = this.hotspotQueue).call(_context34, function (hotspotRequest) {
-        var _context35;
-
-        var id;
-        var hotspots = {};
-
-        var versoPageSpread = _findInstanceProperty(_context35 = _this4._core.getVerso().pageSpreads).call(_context35, function (pageSpread) {
-          return pageSpread.getId() === hotspotRequest.id;
-        });
-
-        for (id in _this4.hotspots) {
-          var hotspot = _this4.hotspots[id];
-
-          if (hotspots[id]) {
-            continue;
-          }
-
-          var _iterator = _createForOfIteratorHelper(hotspotRequest.pages),
-              _step;
-
-          try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var page = _step.value;
-
-              if (hotspot.locations[page.pageNumber]) {
-                hotspots[id] = {
-                  type: hotspot.type,
-                  id: hotspot.id,
-                  locations: hotspot.locations
-                };
-                break;
-              }
-            }
-          } catch (err) {
-            _iterator.e(err);
-          } finally {
-            _iterator.f();
+          if (locations[pageNumber]) {
+            hotspots[hotspotId] = {
+              type: type,
+              id: id,
+              locations: locations
+            };
+            break;
           }
         }
+      }
 
-        _this4._hotspots.trigger('hotspotsReceived', {
-          pageSpread: _this4._core.pageSpreads.get(hotspotRequest.id),
-          versoPageSpread: versoPageSpread,
-          ratio: _this4.options.hotspotRatio,
-          pages: hotspotRequest.pages,
-          hotspots: hotspots
-        });
-
-        return false;
+      var versoPageSpread = _findInstanceProperty(_context4 = _this3._core.getVerso().pageSpreads).call(_context4, function (pageSpread) {
+        return pageSpread.getId() === hotspotRequest.id;
       });
-    }
-  }, {
-    key: "hotspotsRequested",
-    value: function hotspotsRequested(e) {
-      this.hotspotQueue.push(e);
-      this.processHotspotQueue();
-    }
-  }, {
-    key: "applyHotspots",
-    value: function applyHotspots() {
-      var hotspots = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      this.hotspots = hotspots;
-      this.processHotspotQueue();
-    }
-  }, {
-    key: "beforeNavigation",
-    value: function beforeNavigation() {
-      var _this$popover2, _this$popover2$destro;
 
-      (_this$popover2 = this.popover) === null || _this$popover2 === void 0 ? void 0 : (_this$popover2$destro = _this$popover2.destroy) === null || _this$popover2$destro === void 0 ? void 0 : _this$popover2$destro.call(_this$popover2);
-    }
-  }, {
-    key: "clicked",
-    value: function clicked(e) {
-      var _this5 = this;
-
-      this.pickHotspot(e, function (hotspot) {
-        _this5.trigger('hotspotClicked', hotspot);
+      _this3._hotspots.trigger('hotspotsReceived', {
+        pageSpread: _this3._core.pageSpreads.get(hotspotRequest.id),
+        versoPageSpread: versoPageSpread,
+        ratio: _this3.options.hotspotRatio,
+        pages: hotspotRequest.pages,
+        hotspots: hotspots
       });
-    }
-  }, {
-    key: "contextmenu",
-    value: function contextmenu(e) {
-      var _this6 = this;
 
-      this.pickHotspot(e, function (hotspot) {
-        _this6.trigger('hotspotContextmenu', hotspot);
-      });
-    }
-  }, {
-    key: "pressed",
-    value: function pressed(e) {
-      var _this7 = this;
+      return false;
+    });
+  };
 
-      this.pickHotspot(e, function (hotspot) {
-        _this7.trigger('hotspotPressed', hotspot);
-      });
-    }
-  }]);
+  _proto.applyHotspots = function applyHotspots(hotspots) {
+    this.hotspots = hotspots;
+    this.processHotspotQueue();
+  };
 
-  return Viewer;
+  return _createClass(Viewer);
 }(MicroEvent);
 
-function ownKeys(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); if (enumerableOnly) symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$1(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { var _context2; _forEachInstanceProperty(_context2 = ownKeys(Object(source), true)).call(_context2, function (key) { _defineProperty(target, key, source[key]); }); } else if (_Object$getOwnPropertyDescriptors) { _Object$defineProperties(target, _Object$getOwnPropertyDescriptors(source)); } else { var _context3; _forEachInstanceProperty(_context3 = ownKeys(Object(source))).call(_context3, function (key) { _Object$defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 var Bootstrapper = /*#__PURE__*/function () {
-  function Bootstrapper() {
+  function Bootstrapper(options) {
     var _this = this;
 
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    if (options === void 0) {
+      options = {};
+    }
 
-    _classCallCheck(this, Bootstrapper);
-
-    _defineProperty(this, "fetchDetails", function (callback) {
-      return request$1({
+    this.fetchDetails = function (callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
         url: "/v2/catalogs/".concat(_this.options.id)
       }, callback);
-    });
+    };
 
-    _defineProperty(this, "fetchPages", function (callback) {
-      return request$1({
+    this.fetchPages = function (callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
         url: "/v2/catalogs/".concat(_this.options.id, "/pages")
       }, callback);
-    });
+    };
 
-    _defineProperty(this, "fetchHotspots", function (callback) {
-      return request$1({
+    this.fetchHotspots = function (callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
         url: "/v2/catalogs/".concat(_this.options.id, "/hotspots")
       }, callback);
-    });
+    };
 
     this.options = options;
   }
 
-  _createClass(Bootstrapper, [{
-    key: "createViewer",
-    value: function createViewer(data, viewerOptions) {
-      return new Viewer(this.options.el, _objectSpread({
-        id: this.options.id,
-        ownedBy: data.details.dealer_id,
-        color: '#' + data.details.branding.pageflip.color,
-        hotspotRatio: data.details.dimensions.height,
-        keyboard: true,
-        pageId: this.options.pageId,
-        eventTracker: this.options.eventTracker,
-        pages: this.transformPages(data.pages)
-      }, viewerOptions));
-    }
-  }, {
-    key: "transformPages",
-    value: function transformPages(pages) {
-      return _mapInstanceProperty(pages).call(pages, function (page, i) {
+  var _proto = Bootstrapper.prototype;
+
+  _proto.createViewer = function createViewer(data, viewerOptions) {
+    var _context;
+
+    return new Viewer(this.options.el, _objectSpread$1({
+      id: this.options.id,
+      ownedBy: data.details.dealer_id,
+      color: '#' + data.details.branding.pageflip.color,
+      hotspotRatio: data.details.dimensions.height,
+      keyboard: true,
+      pageId: this.options.pageId,
+      eventTracker: this.options.eventTracker,
+      pages: _mapInstanceProperty(_context = data.pages).call(_context, function (_ref, i) {
+        var view = _ref.view,
+            zoom = _ref.zoom;
         var pageNumber = i + 1;
         return {
           id: 'page' + pageNumber,
-          label: pageNumber + '',
+          label: String(pageNumber),
           pageNumber: pageNumber,
           images: {
-            medium: page.view,
-            large: page.zoom
+            medium: view,
+            large: zoom
           }
         };
-      });
-    }
-  }, {
-    key: "applyHotspots",
-    value: function applyHotspots(viewer, hotspots) {
-      var obj = {};
+      })
+    }, viewerOptions));
+  };
 
-      _forEachInstanceProperty(hotspots).call(hotspots, function (hotspot) {
-        return obj[hotspot.id] = hotspot;
-      });
+  _proto.applyHotspots = function applyHotspots(viewer, hotspots) {
+    viewer.applyHotspots(hotspots.reduce(function (obj, hotspot) {
+      obj[hotspot.id] = hotspot;
+      return obj;
+    }, {}));
+  };
 
-      viewer.applyHotspots(obj);
-    }
-  }, {
-    key: "fetch",
-    value: function () {
-      var _fetch = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(callback) {
-        var _yield$Promise$all, _yield$Promise$all2, details, pages;
+  _proto.fetch = /*#__PURE__*/function () {
+    var _fetch = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(callback) {
+      var _yield$Promise$all, details, pages, data;
 
-        return _regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return _Promise.all([this.fetchDetails(), this.fetchPages()]);
+      return _regeneratorRuntime.wrap(function _callee$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return _Promise.all([this.fetchDetails(), this.fetchPages()]);
 
-              case 3:
-                _yield$Promise$all = _context.sent;
-                _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 2);
-                details = _yield$Promise$all2[0];
-                pages = _yield$Promise$all2[1];
+            case 3:
+              _yield$Promise$all = _context2.sent;
+              details = _yield$Promise$all[0];
+              pages = _yield$Promise$all[1];
 
-                if (!(details && pages)) {
-                  _context.next = 11;
-                  break;
-                }
-
-                callback(null, {
-                  details: details,
-                  pages: pages
-                });
-                _context.next = 12;
+              if (!(!details || !pages)) {
+                _context2.next = 8;
                 break;
+              }
 
-              case 11:
-                throw new Error();
+              throw new Error();
 
-              case 12:
-                _context.next = 17;
+            case 8:
+              data = {
+                details: details,
+                pages: pages
+              };
+              if (typeof callback === 'function') callback(null, data);
+              return _context2.abrupt("return", data);
+
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](0);
+
+              if (!(typeof callback === 'function')) {
+                _context2.next = 19;
                 break;
+              }
 
-              case 14:
-                _context.prev = 14;
-                _context.t0 = _context["catch"](0);
-                callback(_context.t0);
+              callback(_context2.t0);
+              _context2.next = 20;
+              break;
 
-              case 17:
-              case "end":
-                return _context.stop();
-            }
+            case 19:
+              throw _context2.t0;
+
+            case 20:
+            case "end":
+              return _context2.stop();
           }
-        }, _callee, this, [[0, 14]]);
-      }));
+        }
+      }, _callee, this, [[0, 13]]);
+    }));
 
-      function fetch(_x) {
-        return _fetch.apply(this, arguments);
-      }
+    function fetch(_x) {
+      return _fetch.apply(this, arguments);
+    }
 
-      return fetch;
-    }()
-  }]);
+    return fetch;
+  }();
 
-  return Bootstrapper;
+  return _createClass(Bootstrapper);
 }();
 
-var PagedPublicationKit = /*#__PURE__*/Object.freeze({
+var defaultTemplate = "    <div class=\"sgn__pp\" data-layout-fixed=\"true\" data-component-template=\"true\" {{#disableHeader}}data-component-template-disable-header=\"true\"{{/disableHeader}}>\n        <div class=\"sgn__header-container\"></div>\n\n        <div class=\"verso\">\n            <div class=\"verso__scroller\">\n                <div class=\"sgn-pp__pages\"></div>\n            </div>\n        </div>\n\n        {{#disableHeader}}\n            <div class=\"sgn-pp__progress\">\n                <div class=\"sgn-pp-progress__bar\"></div>\n            </div>\n            <div class=\"sgn-pp__progress-label\"></div>\n        {{/disableHeader}}\n        <button\n            class=\"sgn-pp__control\"\n            data-direction=\"prev\"\n        >\n            &lsaquo;\n        </button>\n        <button\n            class=\"sgn-pp__control\"\n            data-direction=\"next\"\n        >\n            &rsaquo;\n        </button>\n        <button\n            class=\"sgn-pp__control sgn-pp--hidden\"\n            data-direction=\"first\"\n        >\n            &laquo;\n        </button>\n        <button\n            class=\"sgn-pp__control sgn-pp--hidden\"\n            data-direction=\"last\"\n        >\n            &raquo;\n        </button>\n    </div>";
+
+var MainContainer = function MainContainer(_ref) {
+  var _template;
+
+  var template = _ref.template,
+      el = _ref.el,
+      scriptEls = _ref.scriptEls;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate;
+
+  var setCustomStyles = function setCustomStyles() {
+    var sgnPp = el.querySelector('.sgn__pp');
+    sgnPp.classList.add("sgn__theme-".concat(scriptEls.theme || 'light'));
+  };
+
+  var render = function render() {
+    el.innerHTML = Mustache.render(template, {
+      disableHeader: scriptEls.disableHeader
+    });
+    setCustomStyles();
+  };
+
+  return {
+    render: render
+  };
+};
+
+var PagedPublication = function PagedPublication(scriptEl, _temp) {
+  var _document$querySelect;
+
+  var _ref = _temp === void 0 ? {} : _temp,
+      _ref$mainContainer = _ref.mainContainer,
+      mainContainer = _ref$mainContainer === void 0 ? '' : _ref$mainContainer,
+      apiKey = _ref.apiKey,
+      coreUrl = _ref.coreUrl,
+      eventTracker = _ref.eventTracker;
+
+  var options = {};
+  var sgnData = {};
+  var sgnViewer = null;
+  var scriptEls = transformScriptData(scriptEl, mainContainer);
+  var customTemplates = {
+    mainContainer: document.getElementById('sgn-sdk-paged-publication-viewer-template'),
+    headerContainer: document.getElementById('sgn-sdk-paged-publication-viewer-header-template'),
+    offerList: document.getElementById('sgn-sdk-paged-publication-viewer-offer-list-template'),
+    shoppingList: document.getElementById('sgn-sdk-paged-publication-viewer-shopping-list-template'),
+    shoppingListCounter: document.getElementById('sgn-sdk-paged-publication-viewer-shopping-list-counter-template'),
+    pageList: document.getElementById('sgn-sdk-paged-publication-viewer-page-list-template'),
+    offerOverview: document.getElementById('sgn-sdk-paged-publication-viewer-offer-overview-template'),
+    menuContainer: document.getElementById('sgn-sdk-paged-publication-viewer-menu-container-template')
+  };
+  MainContainer({
+    template: customTemplates.mainContainer,
+    shoppingListCounterTemplate: customTemplates.shoppingListCounter,
+    el: document.querySelector(scriptEls.mainContainer),
+    scriptEls: scriptEls
+  }).render();
+  var header = Header({
+    publicationType: 'paged',
+    template: customTemplates.headerContainer,
+    shoppingListCounterTemplate: customTemplates.shoppingListCounter,
+    el: document.querySelector(scriptEls.mainContainer),
+    scriptEls: scriptEls
+  });
+  (_document$querySelect = document.querySelector('.sgn__header-container')) == null ? void 0 : _document$querySelect.appendChild(header.render());
+
+  var render = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!(_Object$keys(options).length === 0)) {
+                _context.next = 3;
+                break;
+              }
+
+              _context.next = 3;
+              return setOptions();
+
+            case 3:
+              start();
+              renderShoppingList();
+              renderMenuPopup();
+
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function render() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var renderShoppingList = function renderShoppingList() {
+    return ShoppingList({
+      template: customTemplates.shoppingList
+    }).render();
+  };
+
+  var renderMenuPopup = function renderMenuPopup() {
+    var _document$querySelect2;
+
+    return (_document$querySelect2 = document.querySelector('.sgn__nav-menu-btn')) == null ? void 0 : _document$querySelect2.addEventListener('click', function (e) {
+      e.preventDefault();
+      MenuPopup({
+        publicationType: 'paged',
+        configs: options,
+        sgnData: sgnData,
+        sgnViewer: sgnViewer,
+        templates: customTemplates,
+        scriptEls: scriptEls
+      }).render();
+    });
+  };
+
+  var animateShoppingListCounter = function animateShoppingListCounter() {
+    var shoppingListCounter = document.querySelector('.sgn__offer-shopping-list-counter');
+    shoppingListCounter == null ? void 0 : shoppingListCounter.classList.remove('sgn-animate-bounce');
+    shoppingListCounter == null ? void 0 : shoppingListCounter.classList.add('sgn-animate-bounce');
+  };
+
+  var setOptions = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(opts) {
+      var _getHashFragments, _getHashFragments2;
+
+      return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.t0 = document.querySelector('.sgn__pp');
+              _context2.t1 = apiKey;
+              _context2.t2 = coreUrl;
+              _context2.t3 = eventTracker;
+              _context2.t4 = (opts == null ? void 0 : opts.pageId) || "page".concat(getQueryParam(scriptEls.pageIdParam) || ((_getHashFragments = getHashFragments(scriptEls.publicationHash)) == null ? void 0 : _getHashFragments.pageNum) || 1);
+              _context2.t5 = (opts == null ? void 0 : opts.id) || getQueryParam(scriptEls.publicationIdParam) || ((_getHashFragments2 = getHashFragments(scriptEls.publicationHash)) == null ? void 0 : _getHashFragments2.publicationId) || scriptEls.publicationId;
+
+              if (_context2.t5) {
+                _context2.next = 10;
+                break;
+              }
+
+              _context2.next = 9;
+              return fetchLatestPublicationId();
+
+            case 9:
+              _context2.t5 = _context2.sent;
+
+            case 10:
+              _context2.t6 = _context2.t5;
+              _context2.t7 = (opts == null ? void 0 : opts.businessId) || scriptEls.businessId;
+              options = {
+                el: _context2.t0,
+                apiKey: _context2.t1,
+                coreUrl: _context2.t2,
+                eventTracker: _context2.t3,
+                pageId: _context2.t4,
+                id: _context2.t6,
+                businessId: _context2.t7
+              };
+
+            case 13:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function setOptions(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var start = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3() {
+      var bootstrapper, data, hotspots;
+      return _regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              bootstrapper = new Bootstrapper(options);
+              _context3.next = 3;
+              return bootstrapper.fetch();
+
+            case 3:
+              data = _context3.sent;
+              sgnData = data;
+              sgnViewer = bootstrapper.createViewer(data);
+              update({
+                'paged_publication.hotspot_picker.header': translate('paged_publication_viewer_hotspot_picker_header')
+              });
+              header.show(sgnData);
+              sgnViewer.bind('hotspotClicked', function (hotspot) {
+                clickHotspot(hotspot);
+              });
+              sgnViewer.start();
+
+              if (scriptEls.disableGlobalScrollbar) {
+                document.querySelector('html').classList.add('sgn-paged-publication--open');
+              }
+
+              _context3.next = 13;
+              return bootstrapper.fetchHotspots();
+
+            case 13:
+              hotspots = _context3.sent;
+              bootstrapper.applyHotspots(sgnViewer, hotspots);
+              displayUrlParams();
+              addFirstLastControlListener();
+
+            case 17:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function start() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var addFirstLastControlListener = function addFirstLastControlListener() {
+    var firstControl = options.el.querySelector('.sgn-pp__control[data-direction=first]');
+    var lastControl = options.el.querySelector('.sgn-pp__control[data-direction=last]');
+    var prevBtn = options.el.querySelector('.sgn-pp__control[data-direction=prev]');
+    var nextBtn = options.el.querySelector('.sgn-pp__control[data-direction=next]');
+    var controlDirectionObserver = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'attributes') {
+          var _element$dataset, _element$dataset2;
+
+          var element = mutation.target;
+
+          if ((element == null ? void 0 : (_element$dataset = element.dataset) == null ? void 0 : _element$dataset.direction) === 'prev') {
+            element != null && element.classList.contains('sgn-pp--hidden') ? firstControl.classList.add('sgn-pp--hidden') : firstControl.classList.remove('sgn-pp--hidden');
+          }
+
+          if ((element == null ? void 0 : (_element$dataset2 = element.dataset) == null ? void 0 : _element$dataset2.direction) === 'next') {
+            element != null && element.classList.contains('sgn-pp--hidden') ? lastControl.classList.add('sgn-pp--hidden') : lastControl.classList.remove('sgn-pp--hidden');
+          }
+        }
+      });
+    });
+    prevBtn != null && prevBtn.classList.contains('sgn-pp--hidden') ? firstControl.classList.add('sgn-pp--hidden') : firstControl.classList.remove('sgn-pp--hidden');
+    nextBtn != null && nextBtn.classList.contains('sgn-pp--hidden') ? lastControl.classList.add('sgn-pp--hidden') : lastControl.classList.remove('sgn-pp--hidden');
+    firstControl == null ? void 0 : firstControl.addEventListener('click', function () {
+      sgnViewer.first();
+    });
+    lastControl == null ? void 0 : lastControl.addEventListener('click', function () {
+      sgnViewer.last();
+    });
+    controlDirectionObserver.observe(prevBtn, {
+      attributes: true
+    });
+    controlDirectionObserver.observe(nextBtn, {
+      attributes: true
+    });
+  };
+
+  var displayUrlParams = function displayUrlParams() {
+    var _scriptEls$displayUrl, _scriptEls$displayUrl2;
+
+    if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query' || ((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
+      var progressLabel = options.el.querySelector('.sgn-pp__progress-label');
+      progressLabel == null ? void 0 : progressLabel.addEventListener('DOMSubtreeModified', function (e) {
+        var _e$target$innerHTML, _e$target$innerHTML$s, _e$target$innerHTML$s2, _e$target$innerHTML$s3, _scriptEls$displayUrl3, _pushQueryParam, _context4, _context5;
+
+        var pageNum = (_e$target$innerHTML = e.target.innerHTML) == null ? void 0 : (_e$target$innerHTML$s = _e$target$innerHTML.split(' ')) == null ? void 0 : (_e$target$innerHTML$s2 = _e$target$innerHTML$s[0]) == null ? void 0 : (_e$target$innerHTML$s3 = _e$target$innerHTML$s2.split('-')) == null ? void 0 : _e$target$innerHTML$s3[0];
+        ((_scriptEls$displayUrl3 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl3.toLowerCase()) === 'query' ? pushQueryParam((_pushQueryParam = {}, _defineProperty(_pushQueryParam, scriptEls.publicationIdParam, options.id), _defineProperty(_pushQueryParam, scriptEls.pageIdParam, pageNum), _pushQueryParam)) : location.hash = _concatInstanceProperty(_context4 = _concatInstanceProperty(_context5 = "".concat(scriptEls.publicationHash, "/")).call(_context5, options.id, "/")).call(_context4, pageNum);
+      });
+    }
+  };
+
+  var clickHotspot = function clickHotspot(hotspot) {
+    var shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
+
+    if (scriptEls.offerClickBehavior === 'overview_modal') {
+      OfferOverview({
+        template: customTemplates.offerOverview,
+        configs: options,
+        sgnData: sgnData,
+        offer: hotspot,
+        type: 'paged',
+        addToShoppingList: addToShoppingList
+      }).render();
+    } else if (scriptEls.offerClickBehavior === 'open_webshop_link_in_tab' && hotspot != null && hotspot.webshop) {
+      window.open(hotspot.webshop);
+    } else if (scriptEls.offerClickBehavior === 'redirect_to_webshop_link' && hotspot != null && hotspot.webshop) {
+      location.href = hotspot.webshop;
+    } else if (shoppingBtn) {
+      addToShoppingList(hotspot);
+    }
+  };
+
+  var addToShoppingList = function addToShoppingList(hotspot) {
+    var _hotspot$offer;
+
+    var storedPublicationOffers = get('publication-saved-offers');
+    var shopListOffer = {
+      name: hotspot.heading,
+      pricing: (_hotspot$offer = hotspot.offer) == null ? void 0 : _hotspot$offer.pricing,
+      is_ticked: false
+    };
+
+    if (!storedPublicationOffers) {
+      setWithEvent('publication-saved-offers', [shopListOffer], 'tjek_shopping_list_update');
+    } else {
+      storedPublicationOffers.push(shopListOffer);
+      setWithEvent('publication-saved-offers', storedPublicationOffers, 'tjek_shopping_list_update');
+    }
+
+    animateShoppingListCounter();
+  };
+
+  var fetchLatestPublicationId = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee4() {
+      var _yield$request, _yield$request$;
+
+      return _regeneratorRuntime.wrap(function _callee4$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.next = 2;
+              return request({
+                apiKey: apiKey,
+                coreUrl: coreUrl,
+                url: '/v2/catalogs',
+                qs: {
+                  dealer_id: scriptEls.businessId,
+                  order_by: '-publication_date',
+                  limit: 1
+                }
+              });
+
+            case 2:
+              _context6.t0 = _yield$request = _context6.sent;
+
+              if (!(_context6.t0 == null)) {
+                _context6.next = 7;
+                break;
+              }
+
+              _context6.t1 = void 0;
+              _context6.next = 8;
+              break;
+
+            case 7:
+              _context6.t1 = (_yield$request$ = _yield$request[0]) == null ? void 0 : _yield$request$.id;
+
+            case 8:
+              return _context6.abrupt("return", _context6.t1);
+
+            case 9:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function fetchLatestPublicationId() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  return {
+    render: render,
+    setOptions: setOptions
+  };
+};
+
+function ownKeys(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = _filterInstanceProperty(symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+var ListPublications = function ListPublications(scriptEl, _temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      _ref$mainContainer = _ref.mainContainer,
+      mainContainer = _ref$mainContainer === void 0 ? '' : _ref$mainContainer,
+      apiKey = _ref.apiKey,
+      coreUrl = _ref.coreUrl,
+      eventTracker = _ref.eventTracker;
+
+  var scriptEls = _objectSpread({}, transformScriptData(scriptEl, mainContainer), {
+    mainContainer: scriptEl.dataset.componentListPublicationsContainer || mainContainer,
+    orderBy: scriptEl.dataset.componentListPublicationsOrderBy,
+    requestFilter: scriptEl.dataset.componentListPublicationsRequestFilter,
+    clientFilter: scriptEl.dataset.componentListPublicationsClientFilter,
+    preferredViewer: scriptEl.dataset.componentPublicationsViewerPreferredType
+  });
+
+  var customTemplates = {
+    mainContainer: document.getElementById('sgn-sdk-list-publications-template')
+  };
+  var orderBys = {
+    newest: '-publication_date',
+    oldest: 'publication_date'
+  };
+  var options = {
+    el: document.querySelector('.sgn__pp'),
+    apiKey: apiKey,
+    coreUrl: coreUrl,
+    eventTracker: eventTracker,
+    businessId: scriptEls.businessId,
+    orderBy: scriptEls.orderBy ? orderBys[scriptEls.orderBy] : orderBys.newest,
+    requestFilter: scriptEls.requestFilter,
+    clientFilter: scriptEls.clientFilter
+  };
+  var publications = [];
+
+  var clickPublicationItem = function clickPublicationItem(e) {
+    var _scriptEls$displayUrl, _scriptEls$displayUrl2;
+
+    var _ref2 = e.currentTarget.dataset || {},
+        id = _ref2.id;
+
+    var publication = findPublicationById(id);
+
+    if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
+      pushQueryParam(_defineProperty({}, scriptEls.publicationIdParam, id));
+    } else if (((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
+      var _context;
+
+      location.hash = _concatInstanceProperty(_context = "".concat(scriptEls.publicationHash, "/")).call(_context, id);
+    }
+
+    dispatchPublicationClickEvent(publication);
+    renderPublicationViewer(publication);
+  };
+
+  var findPublicationById = function findPublicationById(id) {
+    var _publications;
+
+    return (_publications = publications) == null ? void 0 : _findInstanceProperty(_publications).call(_publications, function (publication) {
+      return publication.id === id;
+    });
+  };
+
+  var renderPublicationViewer = function renderPublicationViewer(publication) {
+    var id = publication.id,
+        types = publication.types;
+
+    if (scriptEls.publicationsListClickBehavior === 'open_publication_viewer') {
+      if (scriptEls.preferredViewer === 'incito' && _includesInstanceProperty(types).call(types, 'incito') || !_includesInstanceProperty(types).call(types, 'paged')) {
+        var incitoPublication = IncitoPublication(scriptEl, {
+          mainContainer: '#sgn-publication-viewer-container',
+          apiKey: apiKey,
+          coreUrl: coreUrl,
+          eventTracker: eventTracker
+        });
+        incitoPublication.setOptions({
+          id: id
+        });
+        incitoPublication.render();
+      } else {
+        var pagedPublication = PagedPublication(scriptEl, {
+          mainContainer: '#sgn-publication-viewer-container',
+          apiKey: apiKey,
+          coreUrl: coreUrl,
+          eventTracker: eventTracker
+        });
+        pagedPublication.setOptions({
+          id: id
+        });
+        pagedPublication.render();
+      }
+    }
+  };
+
+  var addPublicationListener = function addPublicationListener() {
+    return document.querySelectorAll('.publications__item').forEach(function (itemEl) {
+      itemEl.addEventListener('click', clickPublicationItem, false);
+    });
+  };
+
+  var dispatchPublicationClickEvent = function dispatchPublicationClickEvent(detail) {
+    window.dispatchEvent(new CustomEvent('tjek-publication-list-item-clicked', {
+      detail: detail
+    }));
+  };
+
+  var fetchPublications = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      return _regeneratorRuntime.wrap(function _callee$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.t0 = transformPublications;
+              _context2.next = 3;
+              return request({
+                apiKey: options.apiKey,
+                coreUrl: options.coreUrl,
+                url: "/v2/catalogs",
+                qs: _objectSpread({
+                  dealer_id: options.businessId,
+                  order_by: options.orderBy,
+                  offset: 0,
+                  limit: 24,
+                  types: 'paged,incito'
+                }, transformFilter(options.requestFilter))
+              });
+
+            case 3:
+              _context2.t1 = _context2.sent;
+              return _context2.abrupt("return", (0, _context2.t0)(_context2.t1));
+
+            case 5:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchPublications() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var transformPublications = function transformPublications(publications) {
+    var _context3;
+
+    var localeCode = translate('locale_code');
+    var filters = transformFilter(options.clientFilter);
+    return _mapInstanceProperty(_context3 = _filterInstanceProperty(publications).call(publications, function (publication) {
+      return _Object$entries(filters).reduce(function (prev, _ref4) {
+        var key = _ref4[0],
+            value = _ref4[1];
+        return publication[key] === value && prev;
+      }, {});
+    })).call(_context3, function (publication) {
+      return _objectSpread({}, publication, {
+        dateFrom: formatDate(publication == null ? void 0 : publication.run_from, localeCode),
+        dateTill: formatDate(publication == null ? void 0 : publication.run_till, localeCode)
+      });
+    });
+  };
+
+  var render = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2() {
+      var _getHashFragments;
+
+      return _regeneratorRuntime.wrap(function _callee2$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return fetchPublications();
+
+            case 2:
+              publications = _context4.sent;
+              MainContainer$1({
+                publications: publications,
+                template: customTemplates.mainContainer,
+                el: document.querySelector(scriptEls.mainContainer)
+              }).render();
+              addPublicationListener();
+
+              if (getQueryParam(scriptEls.publicationIdParam)) {
+                renderPublicationViewer(findPublicationById(getQueryParam(scriptEls.publicationIdParam)));
+              } else if ((_getHashFragments = getHashFragments(scriptEls.publicationHash)) != null && _getHashFragments.publicationId) {
+                renderPublicationViewer(findPublicationById(getHashFragments(scriptEls.publicationHash).publicationId));
+              }
+
+            case 6:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function render() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  return {
+    render: render
+  };
+};
+
+var OfferDetails = /*#__PURE__*/function () {
+  function OfferDetails(_ref) {
+    var _this = this;
+
+    var _ref$minWidth = _ref.minWidth,
+        minWidth = _ref$minWidth === void 0 ? 300 : _ref$minWidth,
+        _ref$maxWidth = _ref.maxWidth,
+        maxWidth = _ref$maxWidth === void 0 ? '100vw' : _ref$maxWidth,
+        anchorEl = _ref.anchorEl,
+        contentEl = _ref.contentEl;
+
+    this.resize = function () {
+      _this.position();
+    };
+
+    this.minWidth = minWidth;
+    this.maxWidth = maxWidth;
+    this.anchorEl = anchorEl;
+    this.contentEl = contentEl;
+    this.elInner = document.createElement('div');
+    this.elInner.className = 'sgn-offer-details-inner';
+    this.el = document.createElement('div');
+    this.el.className = 'sgn-offer-details';
+    this.el.setAttribute('tabindex', -1);
+    this.el.appendChild(this.elInner);
+    this.el.appendChild(this.contentEl);
+    this.position();
+  }
+
+  var _proto = OfferDetails.prototype;
+
+  _proto.appendTo = function appendTo(el) {
+    el.appendChild(this.el);
+    this.el.offsetWidth;
+    this.show();
+    return this;
+  };
+
+  _proto.show = function show() {
+    this.el.className += ' in';
+    window.addEventListener('resize', this.resize, false);
+    return this;
+  };
+
+  _proto.destroy = function destroy() {
+    window.removeEventListener('resize', this.resize, false);
+    this.el.parentNode.removeChild(this.el);
+  };
+
+  _proto.position = function position() {
+    var rect = this.anchorEl.getBoundingClientRect();
+    var top = window.pageYOffset + rect.top + this.anchorEl.offsetHeight;
+    var left = window.pageXOffset + rect.left;
+    var width = this.anchorEl.offsetWidth;
+    this.el.style.top = top + 'px';
+    var rightAligned = rect.left >= window.outerWidth / 2;
+    left = window.pageXOffset + rect.left;
+    var right = window.pageXOffset + (window.outerWidth - rect.right);
+
+    if (rightAligned) {
+      this.el.style.left = 'auto';
+      this.el.style.right = right + 'px';
+      this.elInner.style.left = 'auto';
+      this.elInner.style.right = 0;
+    } else {
+      this.el.style.left = left + 'px';
+      this.el.style.right = 'auto';
+      this.elInner.style.left = 0;
+      this.elInner.style.right = 'auto';
+    }
+
+    this.el.style.minWidth = typeof this.minWidth === 'number' ? Math.max(width, this.minWidth) + 'px' : this.minWidth;
+    this.el.style.maxWidth = this.maxWidth;
+    this.elInner.style.width = width - 8 + 'px';
+  };
+
+  return _createClass(OfferDetails);
+}();
+
+var CoreUIKit = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Viewer: Viewer,
-    Bootstrapper: Bootstrapper
+    off: off,
+    on: on,
+    IncitoPublication: IncitoPublication,
+    ListPublications: ListPublications,
+    OfferDetails: OfferDetails,
+    PagedPublication: PagedPublication,
+    Popover: Popover,
+    singleChoicePopover: singleChoicePopover
 });
 
-var _context;
+var uuid = function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : r & 0x3 | 0x8).toString(16);
+  });
+};
+
+var btoa = function btoa(str) {
+  return isBrowser() ? window.btoa(str) : Buffer.from(str.toString(), 'binary').toString('base64');
+};
+
+var createTrackerClient = function createTrackerClient() {
+  var _id;
+
+  var id = get('client-id');
+  if ((_id = id) != null && _id.data) id = id.data;
+  if (!id) id = uuid();
+  set('client-id', id);
+  return {
+    id: id
+  };
+};
+
+function getPool() {
+  var data = get('event-tracker-pool');
+  return Array.isArray(data) ? _filterInstanceProperty(data).call(data, function (_ref) {
+    var _i = _ref._i;
+    return typeof _i === 'string';
+  }) : [];
+}
+
+var unloadHandler = function unloadHandler() {
+  set('event-tracker-pool', _concatInstanceProperty(pool).call(pool, getPool()));
+};
+
+var pool;
+
+var Tracker = /*#__PURE__*/function () {
+  function Tracker(options) {
+    this.hasMadeInitialDispatch = false;
+    this.location = {
+      geohash: null,
+      time: null,
+      country: null
+    };
+
+    if (!pool) {
+      pool = getPool();
+      set('event-tracker-pool', []);
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('beforeunload', unloadHandler, false);
+      }
+    }
+
+    for (var key in this.defaultOptions) {
+      this[key] = (options == null ? void 0 : options[key]) || this.defaultOptions[key];
+    }
+
+    this.client = (options == null ? void 0 : options.client) || createTrackerClient();
+    this.eventsTrackUrl = (options == null ? void 0 : options.eventsTrackUrl) || eventsTrackUrl;
+
+    if (this.eventsTrackUrl) {
+      dispatch(this.eventsTrackUrl);
+      this.hasMadeInitialDispatch = true;
+    }
+  }
+
+  var _proto = Tracker.prototype;
+
+  _proto.setEventsTrackUrl = function setEventsTrackUrl(eventsTrackUrl) {
+    this.eventsTrackUrl = eventsTrackUrl;
+
+    if (!this.hasMadeInitialDispatch) {
+      dispatch(this.eventsTrackUrl);
+      this.hasMadeInitialDispatch = true;
+    }
+  };
+
+  _proto.trackEvent = function trackEvent(type, properties, version) {
+    if (version === void 0) {
+      version = 2;
+    }
+
+    if (typeof type !== 'number') throw error(new Error('Event type is required'));
+    if (!this.trackId) return;
+
+    var evt = _Object$assign({}, properties, {
+      _e: type,
+      _v: version,
+      _i: uuid(),
+      _t: Math.round(new Date().getTime() / 1000),
+      _a: this.trackId
+    });
+
+    if (this.location.geohash) evt['l.h'] = this.location.geohash;
+    if (this.location.time) evt['l.ht'] = this.location.time;
+    if (this.location.country) evt['l.c'] = this.location.country;
+    pool.push(evt);
+
+    while (pool.length > this.poolLimit) {
+      pool.shift();
+    }
+
+    dispatch(this.eventsTrackUrl);
+    return this;
+  };
+
+  _proto.setLocation = function setLocation(location) {
+    for (var key in location) {
+      this.location[key] = location[key];
+    }
+
+    return this;
+  };
+
+  _proto.trackPagedPublicationOpened = function trackPagedPublicationOpened(properties, version) {
+    return this.trackEvent(1, properties, version);
+  };
+
+  _proto.trackPagedPublicationPageDisappeared = function trackPagedPublicationPageDisappeared(properties, version) {
+    return this.trackEvent(2, properties, version);
+  };
+
+  _proto.trackOfferOpened = function trackOfferOpened(properties, version) {
+    return this.trackEvent(3, properties, version);
+  };
+
+  _proto.trackSearched = function trackSearched(properties, version) {
+    return this.trackEvent(5, properties, version);
+  };
+
+  _proto.trackIncitoPublicationOpened = function trackIncitoPublicationOpened(properties, version) {
+    return this.trackEvent(11, properties, version);
+  };
+
+  _proto.createViewToken = function createViewToken() {
+    var _context, _context2;
+
+    for (var _len = arguments.length, parts = new Array(_len), _key = 0; _key < _len; _key++) {
+      parts[_key] = arguments[_key];
+    }
+
+    return btoa(String.fromCharCode.apply(null, _sliceInstanceProperty(_context = md5(_concatInstanceProperty(_context2 = [this.client.id]).call(_context2, parts).join(''), {
+      asBytes: true
+    })).call(_context, 0, 8)));
+  };
+
+  return _createClass(Tracker);
+}();
+
+Tracker.prototype.defaultOptions = {
+  trackId: null,
+  poolLimit: 1000
+};
+var dispatching = false;
+var dispatchLimit = 100;
+var dispatchRetryInterval = null;
+var dispatch = throttle( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(eventsTrackUrl) {
+  var _pool;
+
+  var events, nacks, response, json, _loop, i;
+
+  return _regeneratorRuntime.wrap(function _callee$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          if (pool) {
+            _context3.next = 3;
+            break;
+          }
+
+          console.warn('Tracker: dispatch called with no active event pool.');
+          return _context3.abrupt("return");
+
+        case 3:
+          if (!(dispatching || !((_pool = pool) != null && _pool.length))) {
+            _context3.next = 5;
+            break;
+          }
+
+          return _context3.abrupt("return");
+
+        case 5:
+          events = _sliceInstanceProperty(pool).call(pool, 0, dispatchLimit);
+          nacks = 0;
+          dispatching = true;
+          _context3.prev = 8;
+          _context3.next = 11;
+          return fetch(eventsTrackUrl, {
+            method: 'post',
+            timeout: 1000 * 20,
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: _JSON$stringify({
+              events: events
+            })
+          });
+
+        case 11:
+          response = _context3.sent;
+          _context3.next = 14;
+          return response.json();
+
+        case 14:
+          json = _context3.sent;
+
+          if (dispatchRetryInterval) {
+            dispatchRetryInterval = clearInterval(dispatchRetryInterval);
+          }
+
+          _loop = function _loop(i) {
+            var _json$events$i = json.events[i],
+                status = _json$events$i.status,
+                id = _json$events$i.id;
+
+            if (status === 'validation_error' || status === 'ack') {
+              pool = _filterInstanceProperty(pool).call(pool, function (_ref3) {
+                var _i = _ref3._i;
+                return _i !== id;
+              });
+            } else {
+              nacks++;
+            }
+          };
+
+          for (i = 0; i < json.events.length; i++) {
+            _loop(i);
+          } // Keep dispatching until the pool size reaches a sane level.
+
+
+          if (pool.length >= dispatchLimit && !nacks) dispatch(eventsTrackUrl);
+          _context3.next = 24;
+          break;
+
+        case 21:
+          _context3.prev = 21;
+          _context3.t0 = _context3["catch"](8);
+
+          // Try dispatching again in 20 seconds, if we aren't already trying
+          if (!dispatchRetryInterval) {
+            console.warn("We're gonna keep trying, but there was an error while dispatching events:", _context3.t0);
+            dispatchRetryInterval = setInterval(function () {
+              dispatch(eventsTrackUrl);
+            }, 20000);
+          }
+
+        case 24:
+          _context3.prev = 24;
+          dispatching = false;
+          return _context3.finish(24);
+
+        case 27:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  }, _callee, null, [[8, 21, 24, 27]]);
+})), 4000);
+
+var EventsKit = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Tracker: Tracker
+});
+
 var config = new Config();
 var SGN = {
   config: config,
@@ -8063,32 +9195,43 @@ SGN.storage = {
 }; // Expose the different kits.
 
 SGN.EventsKit = EventsKit;
-SGN.CoreKit = CoreKit;
-SGN.PagedPublicationKit = PagedPublicationKit;
-SGN.IncitoPublicationKit = IncitoPublicationKit;
+SGN.CoreKit = {
+  request: function request$1(options, callback) {
+    return request(config.shadow(options), callback);
+  }
+};
+SGN.PagedPublicationKit = {
+  Bootstrapper: function Bootstrapper$1(options) {
+    return new Bootstrapper(config.shadow(options));
+  },
+  Viewer: Viewer
+};
+SGN.IncitoPublicationKit = {
+  Bootstrapper: function Bootstrapper(options) {
+    return new Bootstrapper$1(config.shadow(options));
+  },
+  Viewer: Viewer$1
+};
 SGN.CoreUIKit = CoreUIKit;
-
-_bindInstanceProperty(_context = SGN.config).call(_context, 'change', function (changedAttributes) {
+config.bind('change', function (changedAttributes) {
   var _ref;
 
   var newEventTracker = changedAttributes.eventTracker;
   var newApiKey = changedAttributes.apiKey;
 
-  if ((newApiKey || newEventTracker) && ((_ref = newEventTracker || SGN.config.get('eventTracker')) === null || _ref === void 0 ? void 0 : _ref.trackId) === (newApiKey || SGN.config.get('apiKey'))) {
+  if ((newApiKey || newEventTracker) && ((_ref = newEventTracker || config.get('eventTracker')) == null ? void 0 : _ref.trackId) === (newApiKey || config.get('apiKey'))) {
     throw error(new Error('Track identifier must not be identical to app key. Go to https://etilbudsavis.dk/developers/apps to get a track identifier for your app'));
-  }
+  } // default eventsTrackUrl
 
-  if (newEventTracker != null) {
-    // default eventsTrackUrl
-    if (!newEventTracker.eventsTrackUrl) {
-      newEventTracker.setEventsTrackUrl(SGN.config.get('eventsTrackUrl'));
-    }
+
+  if (newEventTracker && !newEventTracker.eventsTrackUrl) {
+    newEventTracker.setEventsTrackUrl(config.get('eventsTrackUrl'));
   }
 
   var newEventsTrackUrl = changedAttributes.eventsTrackUrl;
 
-  if (newEventsTrackUrl && SGN.config.get('eventTracker')) {
-    SGN.config.get('eventTracker').setEventsTrackUrl(newEventsTrackUrl);
+  if (newEventsTrackUrl && config.get('eventTracker')) {
+    config.get('eventTracker').setEventsTrackUrl(newEventsTrackUrl);
   }
 });
 
@@ -8097,23 +9240,33 @@ if (isBrowser()) {
   var scriptEl = document.getElementById('sgn-sdk');
 
   if (scriptEl) {
-    var apiKey = scriptEl.getAttribute('data-api-key') || scriptEl.getAttribute('data-app-key');
-    var trackId = scriptEl.getAttribute('data-track-id');
-    var _config = {};
+    var apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
+    var trackId = scriptEl.dataset.trackId;
+    var component = scriptEl.dataset.component;
+    var scriptConfig = {};
+    if (apiKey) scriptConfig.apiKey = apiKey;
+    if (trackId) scriptConfig.eventTracker = new Tracker({
+      trackId: trackId
+    });
+    config.set(scriptConfig);
 
-    if (apiKey) {
-      _config.apiKey = apiKey;
+    if (component === 'paged-publication-viewer') {
+      PagedPublication(scriptEl, config.shadow()).render();
     }
 
-    if (trackId) {
-      _config.eventTracker = new SGN.EventsKit.Tracker({
-        trackId: trackId
-      });
+    if (component === 'incito-publication-viewer') {
+      IncitoPublication(scriptEl, {
+        apiKey: config.get('apiKey'),
+        coreUrl: config.get('coreUrl'),
+        eventTracker: config.get('eventTracker')
+      }).render();
     }
 
-    SGN.config.set(_config);
+    if (component === 'list-publications') {
+      ListPublications(scriptEl, config.shadow()).render();
+    }
   }
 }
 
-export default SGN;
+export { SGN as default };
 //# sourceMappingURL=sgn-sdk.es.js.map

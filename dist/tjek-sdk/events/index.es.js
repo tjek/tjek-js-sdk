@@ -1,113 +1,90 @@
-import _classCallCheck from '@babel/runtime-corejs3/helpers/classCallCheck';
+import _asyncToGenerator from '@babel/runtime-corejs3/helpers/asyncToGenerator';
 import _createClass from '@babel/runtime-corejs3/helpers/createClass';
-import 'core-js/modules/es.array.join.js';
-import _Array$isArray from '@babel/runtime-corejs3/core-js-stable/array/is-array';
+import _regeneratorRuntime from '@babel/runtime-corejs3/regenerator';
 import _filterInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/filter';
 import _concatInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/concat';
 import _Object$assign from '@babel/runtime-corejs3/core-js-stable/object/assign';
 import _sliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/slice';
 import _JSON$stringify from '@babel/runtime-corejs3/core-js-stable/json/stringify';
-import _forEachInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/for-each';
-import _setInterval from '@babel/runtime-corejs3/core-js-stable/set-interval';
-import fetch from 'cross-fetch';
-import md5 from 'md5';
-import '@babel/runtime-corejs3/core-js-stable/instance/index-of';
-import '@babel/runtime-corejs3/core-js-stable/instance/last-index-of';
-import '@babel/runtime-corejs3/core-js-stable/parse-int';
-import '@babel/runtime-corejs3/core-js-stable/instance/splice';
-import _setTimeout from '@babel/runtime-corejs3/core-js-stable/set-timeout';
-import '@babel/runtime-corejs3/core-js-stable/promise';
-import 'core-js/modules/es.function.name.js';
-import 'core-js/modules/es.string.replace.js';
 import 'core-js/modules/es.regexp.exec.js';
+import 'core-js/modules/es.string.replace.js';
 import 'core-js/modules/es.object.to-string.js';
 import 'core-js/modules/es.regexp.to-string.js';
+import 'core-js/modules/es.array.join.js';
+import fetch from 'cross-fetch';
+import md5 from 'md5';
+import 'core-js/modules/es.function.name.js';
 import 'core-js/modules/es.regexp.constructor.js';
+import '@babel/runtime-corejs3/core-js-stable/object/keys';
+import '@babel/runtime-corejs3/core-js-stable/instance/splice';
+import 'core-js/modules/web.dom-collections.for-each.js';
+import 'core-js/modules/es.string.match.js';
 
 var eventsTrackUrl = 'https://wolf-api.tjek.com/sync';
 
 var prefixKey = 'sgn-';
+var storage;
 
-var storage = function () {
+function ensureStorage() {
+  if (storage) return;
+
   try {
-    var _storage = window.localStorage;
-    _storage["".concat(prefixKey, "test-storage")] = 'foobar';
-    delete _storage["".concat(prefixKey, "test-storage")];
-    return _storage;
+    storage = window.localStorage;
+    storage[prefixKey + 'test-storage'] = 'foobar';
+    delete storage[prefixKey + 'test-storage'];
   } catch (error) {
-    return {};
+    storage = {};
   }
-}();
+}
 
 function get(key) {
+  ensureStorage();
+
   try {
-    return JSON.parse(storage["".concat(prefixKey).concat(key)]);
+    return JSON.parse(storage[prefixKey + key]);
   } catch (error) {}
 }
 function set(key, value) {
+  ensureStorage();
+
   try {
-    storage["".concat(prefixKey).concat(key)] = _JSON$stringify(value);
+    storage[prefixKey + key] = _JSON$stringify(value);
   } catch (error) {}
 }
 
-function isBrowser() {
+var isBrowser = function isBrowser() {
   return typeof window === 'object' && typeof document === 'object';
-}
+};
 function error(err, options) {
   err.message = err.message || null;
 
   if (typeof options === 'string') {
     err.message = options;
-  } else if (typeof options === 'object' && options != null) {
+  } else if (typeof options === 'object' && options) {
     for (var key in options) {
-      var value = options[key];
-      err[key] = value;
+      err[key] = options[key];
     }
 
-    if (options.message != null) {
-      err.message = options.message;
-    }
+    if (options.message) err.message = options.message;
 
-    if (options.code != null || options.message != null) {
+    if (options.code || options.message) {
       err.code = options.code || options.name;
     }
 
-    if (options.stack != null) {
-      err.stack = options.stack;
-    }
+    if (options.stack) err.stack = options.stack;
   }
 
-  err.name = (options === null || options === void 0 ? void 0 : options.name) || err.name || err.code || 'Error';
+  err.name = (options == null ? void 0 : options.name) || err.name || err.code || 'Error';
   err.time = new Date();
   return err;
 }
-function uuid() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 | 0;
-    var v = c === 'x' ? r : r & 0x3 | 0x8;
-    return v.toString(16);
-  });
-}
-function btoa(str) {
-  if (isBrowser()) {
-    return window.btoa(str);
-  } else {
-    var buffer = null;
-
-    if (str instanceof Buffer) {
-      buffer = str;
-    } else {
-      buffer = Buffer.from(str.toString(), 'binary');
-    }
-
-    return buffer.toString('base64');
+function throttle(fn, threshold, scope) {
+  if (threshold === void 0) {
+    threshold = 250;
   }
-}
-function throttle(fn) {
-  var threshold = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 250;
-  var scope = arguments.length > 2 ? arguments[2] : undefined;
-  var last = undefined;
-  var deferTimer = undefined;
+
+  var last;
+  var deferTimer;
   return function () {
     var context = scope || this;
     var now = new Date().getTime();
@@ -115,7 +92,7 @@ function throttle(fn) {
 
     if (last && now < last + threshold) {
       clearTimeout(deferTimer);
-      deferTimer = _setTimeout(function () {
+      deferTimer = setTimeout(function () {
         last = now;
         fn.apply(context, args);
       }, threshold);
@@ -126,20 +103,24 @@ function throttle(fn) {
   };
 }
 
+var uuid = function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : r & 0x3 | 0x8).toString(16);
+  });
+};
+
+var btoa = function btoa(str) {
+  return isBrowser() ? window.btoa(str) : Buffer.from(str.toString(), 'binary').toString('base64');
+};
+
 var createTrackerClient = function createTrackerClient() {
   var _id;
 
   var id = get('client-id');
-
-  if ((_id = id) !== null && _id !== void 0 && _id.data) {
-    id = id.data;
-  }
-
-  if (id == null) {
-    id = uuid();
-    set('client-id', id);
-  }
-
+  if ((_id = id) != null && _id.data) id = id.data;
+  if (!id) id = uuid();
+  set('client-id', id);
   return {
     id: id
   };
@@ -147,22 +128,26 @@ var createTrackerClient = function createTrackerClient() {
 
 function getPool() {
   var data = get('event-tracker-pool');
-  return _Array$isArray(data) ? _filterInstanceProperty(data).call(data, function (evt) {
-    return typeof evt._i === 'string';
+  return Array.isArray(data) ? _filterInstanceProperty(data).call(data, function (_ref) {
+    var _i = _ref._i;
+    return typeof _i === 'string';
   }) : [];
 }
 
 var unloadHandler = function unloadHandler() {
-  return set('event-tracker-pool', _concatInstanceProperty(pool).call(pool, getPool()));
+  set('event-tracker-pool', _concatInstanceProperty(pool).call(pool, getPool()));
 };
 
 var pool;
 
 var Tracker = /*#__PURE__*/function () {
-  function Tracker() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, Tracker);
+  function Tracker(options) {
+    this.hasMadeInitialDispatch = false;
+    this.location = {
+      geohash: null,
+      time: null,
+      country: null
+    };
 
     if (!pool) {
       pool = getPool();
@@ -174,19 +159,11 @@ var Tracker = /*#__PURE__*/function () {
     }
 
     for (var key in this.defaultOptions) {
-      var value = this.defaultOptions[key];
-      this[key] = options[key] || value;
+      this[key] = (options == null ? void 0 : options[key]) || this.defaultOptions[key];
     }
 
-    this.client = options.client || createTrackerClient();
-    this.eventsTrackUrl = options.eventsTrackUrl || eventsTrackUrl;
-    this.location = {
-      geohash: null,
-      time: null,
-      country: null
-    };
-    this.dispatching = false;
-    this.hasMadeInitialDispatch = false;
+    this.client = (options == null ? void 0 : options.client) || createTrackerClient();
+    this.eventsTrackUrl = (options == null ? void 0 : options.eventsTrackUrl) || eventsTrackUrl;
 
     if (this.eventsTrackUrl) {
       dispatch(this.eventsTrackUrl);
@@ -194,113 +171,87 @@ var Tracker = /*#__PURE__*/function () {
     }
   }
 
-  _createClass(Tracker, [{
-    key: "setEventsTrackUrl",
-    value: function setEventsTrackUrl(eventsTrackUrl) {
-      this.eventsTrackUrl = eventsTrackUrl;
+  var _proto = Tracker.prototype;
 
-      if (!this.hasMadeInitialDispatch) {
-        dispatch(this.eventsTrackUrl);
-        this.hasMadeInitialDispatch = true;
-      }
-    }
-  }, {
-    key: "trackEvent",
-    value: function trackEvent(type) {
-      var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var version = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+  _proto.setEventsTrackUrl = function setEventsTrackUrl(eventsTrackUrl) {
+    this.eventsTrackUrl = eventsTrackUrl;
 
-      if (typeof type !== 'number') {
-        throw error(new Error('Event type is required'));
-      }
-
-      if (this.trackId == null) {
-        return;
-      }
-
-      var evt = _Object$assign({}, properties, {
-        _e: type,
-        _v: version,
-        _i: uuid(),
-        _t: Math.round(new Date().getTime() / 1000),
-        _a: this.trackId
-      });
-
-      if (this.location.geohash) {
-        evt['l.h'] = this.location.geohash;
-      }
-
-      if (this.location.time) {
-        evt['l.ht'] = this.location.time;
-      }
-
-      if (this.location.country) {
-        evt['l.c'] = this.location.country;
-      }
-
-      pool.push(evt);
-
-      while (pool.length > this.poolLimit) {
-        pool.shift();
-      }
-
+    if (!this.hasMadeInitialDispatch) {
       dispatch(this.eventsTrackUrl);
-      return this;
+      this.hasMadeInitialDispatch = true;
     }
-  }, {
-    key: "setLocation",
-    value: function setLocation(location) {
-      for (var key in location) {
-        var value = location[key];
+  };
 
-        if (Object.prototype.hasOwnProperty.call(this.location, key)) {
-          this.location[key] = value;
-        }
-      }
+  _proto.trackEvent = function trackEvent(type, properties, version) {
+    if (version === void 0) {
+      version = 2;
+    }
 
-      return this;
-    }
-  }, {
-    key: "trackPagedPublicationOpened",
-    value: function trackPagedPublicationOpened(properties, version) {
-      return this.trackEvent(1, properties, version);
-    }
-  }, {
-    key: "trackPagedPublicationPageDisappeared",
-    value: function trackPagedPublicationPageDisappeared(properties, version) {
-      return this.trackEvent(2, properties, version);
-    }
-  }, {
-    key: "trackOfferOpened",
-    value: function trackOfferOpened(properties, version) {
-      return this.trackEvent(3, properties, version);
-    }
-  }, {
-    key: "trackSearched",
-    value: function trackSearched(properties, version) {
-      return this.trackEvent(5, properties, version);
-    }
-  }, {
-    key: "trackIncitoPublicationOpened",
-    value: function trackIncitoPublicationOpened(properties, version) {
-      return this.trackEvent(11, properties, version);
-    }
-  }, {
-    key: "createViewToken",
-    value: function createViewToken() {
-      var _context, _context2;
+    if (typeof type !== 'number') throw error(new Error('Event type is required'));
+    if (!this.trackId) return;
 
-      for (var _len = arguments.length, parts = new Array(_len), _key = 0; _key < _len; _key++) {
-        parts[_key] = arguments[_key];
-      }
+    var evt = _Object$assign({}, properties, {
+      _e: type,
+      _v: version,
+      _i: uuid(),
+      _t: Math.round(new Date().getTime() / 1000),
+      _a: this.trackId
+    });
 
-      return btoa(String.fromCharCode.apply(null, _sliceInstanceProperty(_context = md5(_concatInstanceProperty(_context2 = [this.client.id]).call(_context2, parts).join(''), {
-        asBytes: true
-      })).call(_context, 0, 8)));
+    if (this.location.geohash) evt['l.h'] = this.location.geohash;
+    if (this.location.time) evt['l.ht'] = this.location.time;
+    if (this.location.country) evt['l.c'] = this.location.country;
+    pool.push(evt);
+
+    while (pool.length > this.poolLimit) {
+      pool.shift();
     }
-  }]);
 
-  return Tracker;
+    dispatch(this.eventsTrackUrl);
+    return this;
+  };
+
+  _proto.setLocation = function setLocation(location) {
+    for (var key in location) {
+      this.location[key] = location[key];
+    }
+
+    return this;
+  };
+
+  _proto.trackPagedPublicationOpened = function trackPagedPublicationOpened(properties, version) {
+    return this.trackEvent(1, properties, version);
+  };
+
+  _proto.trackPagedPublicationPageDisappeared = function trackPagedPublicationPageDisappeared(properties, version) {
+    return this.trackEvent(2, properties, version);
+  };
+
+  _proto.trackOfferOpened = function trackOfferOpened(properties, version) {
+    return this.trackEvent(3, properties, version);
+  };
+
+  _proto.trackSearched = function trackSearched(properties, version) {
+    return this.trackEvent(5, properties, version);
+  };
+
+  _proto.trackIncitoPublicationOpened = function trackIncitoPublicationOpened(properties, version) {
+    return this.trackEvent(11, properties, version);
+  };
+
+  _proto.createViewToken = function createViewToken() {
+    var _context, _context2;
+
+    for (var _len = arguments.length, parts = new Array(_len), _key = 0; _key < _len; _key++) {
+      parts[_key] = arguments[_key];
+    }
+
+    return btoa(String.fromCharCode.apply(null, _sliceInstanceProperty(_context = md5(_concatInstanceProperty(_context2 = [this.client.id]).call(_context2, parts).join(''), {
+      asBytes: true
+    })).call(_context, 0, 8)));
+  };
+
+  return _createClass(Tracker);
 }();
 
 Tracker.prototype.defaultOptions = {
@@ -310,66 +261,108 @@ Tracker.prototype.defaultOptions = {
 var dispatching = false;
 var dispatchLimit = 100;
 var dispatchRetryInterval = null;
-var dispatch = throttle(function (eventsTrackUrl) {
-  if (!pool) {
-    console.warn('Tracker: dispatch called with no active event pool.');
-    return;
-  }
+var dispatch = throttle( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(eventsTrackUrl) {
+  var _pool;
 
-  if (dispatching === true || pool.length === 0) {
-    return;
-  }
+  var events, nacks, response, json, _loop, i;
 
-  var events = _sliceInstanceProperty(pool).call(pool, 0, dispatchLimit);
+  return _regeneratorRuntime.wrap(function _callee$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          if (pool) {
+            _context3.next = 3;
+            break;
+          }
 
-  var nacks = 0;
-  dispatching = true;
-  fetch(eventsTrackUrl, {
-    method: 'post',
-    timeout: 1000 * 20,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: _JSON$stringify({
-      events: events
-    })
-  }).then(function (response) {
-    return response.json();
-  }).then(function (response) {
-    var _context3;
+          console.warn('Tracker: dispatch called with no active event pool.');
+          return _context3.abrupt("return");
 
-    dispatching = false;
+        case 3:
+          if (!(dispatching || !((_pool = pool) != null && _pool.length))) {
+            _context3.next = 5;
+            break;
+          }
 
-    if (dispatchRetryInterval) {
-      clearInterval(dispatchRetryInterval);
-      dispatchRetryInterval = null;
-    }
+          return _context3.abrupt("return");
 
-    _forEachInstanceProperty(_context3 = response.events).call(_context3, function (resEvent) {
-      if (resEvent.status === 'validation_error' || resEvent.status === 'ack') {
-        pool = _filterInstanceProperty(pool).call(pool, function (poolEvent) {
-          return poolEvent._i !== resEvent.id;
-        });
-      } else {
-        nacks++;
+        case 5:
+          events = _sliceInstanceProperty(pool).call(pool, 0, dispatchLimit);
+          nacks = 0;
+          dispatching = true;
+          _context3.prev = 8;
+          _context3.next = 11;
+          return fetch(eventsTrackUrl, {
+            method: 'post',
+            timeout: 1000 * 20,
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: _JSON$stringify({
+              events: events
+            })
+          });
+
+        case 11:
+          response = _context3.sent;
+          _context3.next = 14;
+          return response.json();
+
+        case 14:
+          json = _context3.sent;
+
+          if (dispatchRetryInterval) {
+            dispatchRetryInterval = clearInterval(dispatchRetryInterval);
+          }
+
+          _loop = function _loop(i) {
+            var _json$events$i = json.events[i],
+                status = _json$events$i.status,
+                id = _json$events$i.id;
+
+            if (status === 'validation_error' || status === 'ack') {
+              pool = _filterInstanceProperty(pool).call(pool, function (_ref3) {
+                var _i = _ref3._i;
+                return _i !== id;
+              });
+            } else {
+              nacks++;
+            }
+          };
+
+          for (i = 0; i < json.events.length; i++) {
+            _loop(i);
+          } // Keep dispatching until the pool size reaches a sane level.
+
+
+          if (pool.length >= dispatchLimit && !nacks) dispatch(eventsTrackUrl);
+          _context3.next = 24;
+          break;
+
+        case 21:
+          _context3.prev = 21;
+          _context3.t0 = _context3["catch"](8);
+
+          // Try dispatching again in 20 seconds, if we aren't already trying
+          if (!dispatchRetryInterval) {
+            console.warn("We're gonna keep trying, but there was an error while dispatching events:", _context3.t0);
+            dispatchRetryInterval = setInterval(function () {
+              dispatch(eventsTrackUrl);
+            }, 20000);
+          }
+
+        case 24:
+          _context3.prev = 24;
+          dispatching = false;
+          return _context3.finish(24);
+
+        case 27:
+        case "end":
+          return _context3.stop();
       }
-    }); // Keep dispatching until the pool size reaches a sane level.
-
-
-    if (pool.length >= dispatchLimit && nacks === 0) {
-      dispatch(eventsTrackUrl);
     }
-  }).catch(function (err) {
-    dispatching = false; // Try dispatching again in 20 seconds, if we aren't already trying
-
-    if (!dispatchRetryInterval) {
-      console.warn("We're gonna keep trying, but there was an error while dispatching events:", err);
-      dispatchRetryInterval = _setInterval(function () {
-        return dispatch(eventsTrackUrl);
-      }, 20000);
-    }
-  });
-}, 4000);
+  }, _callee, null, [[8, 21, 24, 27]]);
+})), 4000);
 
 export { Tracker };
 //# sourceMappingURL=index.es.js.map

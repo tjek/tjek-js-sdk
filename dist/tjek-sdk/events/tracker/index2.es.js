@@ -335,7 +335,10 @@ var dispatch = throttle( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerat
           } // Keep dispatching until the pool size reaches a sane level.
 
 
-          if (pool.length >= dispatchLimit && !nacks) dispatch(eventsTrackUrl);
+          if (pool.length >= dispatchLimit && !nacks) {
+            dispatch(eventsTrackUrl);
+          }
+
           _context3.next = 24;
           break;
 

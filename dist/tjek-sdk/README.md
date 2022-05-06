@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.0.0.min.css"
+    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
     rel="stylesheet"
     type="text/css"
 />
 <script
-    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.0.0.min.js"
+    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
     id="sgn-sdk"
     data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
@@ -44,7 +44,7 @@ npm install shopgun-sdk
 When installed you can require and configure the SDK:
 
 ```javascript
-SGN = require('sgn-sdk');
+SGN = require('shopgun-sdk');
 
 SGN.config.set({
     apiKey: 'YOUR_API_KEY'
@@ -70,9 +70,100 @@ To learn more about integrating the same experience on iOS and Android be sure t
 -   [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
 -   [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
 
+## Core UI
+
+To minimize the effort needed in setting this up, we've created some built-in (customizable) templates to list and view your publications.
+
+### Setup
+
+The setup is almost the same from above, you need to include the CSS and Javascript libraries. However, instead of creating an extra script to render the publication viewer, you only need to add a container and a few more required data-\* attributes to render the template. Eg:
+
+```html
+<link
+    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+
+<div id="paged-publication"></div>
+
+<script
+    data-readme="API's and SDK's by Tjek (https://tjek.com)"
+    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    id="sgn-sdk"
+    data-api-key="YOUR_API_KEY"
+    data-track-id="YOUR_TRACK_ID"
+    data-business-id="YOUR_BUSINESS_ID"
+    data-component="paged-publication-viewer"
+    data-component-publication-container="#paged-publication"
+    defer
+></script>
+```
+
+Below is another example which will render the list of active publications. It will also render the publication viewer upon clicking on a certain publication:
+
+```html
+<link
+    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+
+<div id="list-publications"></div>
+
+<script
+    data-readme="API's and SDK's by Tjek (https://tjek.com)"
+    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    id="sgn-sdk"
+    data-api-key="YOUR_API_KEY"
+    data-track-id="YOUR_TRACK_ID"
+    data-business-id="YOUR_BUSINESS_ID"
+    data-component="list-publications"
+    data-component-list-publications-container="#list-publications"
+    defer
+></script>
+```
+
+### Available data attributes
+
+Aside from the required data- attributes, the SDK still support a few more data for customizations
+
+| Attribute                                              | Value                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data-business-id                                       | Business ID                                                                                                                                                                                                                                                                                                                                                                                         |
+| data-component                                         | `paged-publication-viewer` : To render (default: latest) paged publication viewer<br/>`incito-publication-viewer` : To render incito publication viewer<br/>`list-publications` : To render the list of active publications.                                                                                                                                                                        |
+| data-component-list-publications-container             | `#custom_container_id` <br/> `.custom_container_class`                                                                                                                                                                                                                                                                                                                                              |
+| data-component-publication-container                   | `#custom_container_id` <br/> `.custom_container_class`                                                                                                                                                                                                                                                                                                                                              |
+| data-component-list-publications-order-by              | `newest` (default) <br/>`oldest`                                                                                                                                                                                                                                                                                                                                                                    |
+| data-component-publication-id                          | `{publication_id}` : To render specific publication                                                                                                                                                                                                                                                                                                                                                 |
+| data-locale-code                                       | `en_US` (default) <br/>`da_DK`                                                                                                                                                                                                                                                                                                                                                                      |
+| data-component-theme                                   | `light` (default)<br/> `dark`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-publication-id-query-param                        | `id` (default) : The page publication viewer can accept query param to display a certain publication. This is to override the default `id` param                                                                                                                                                                                                                                                    |
+| data-publication-page-query-param                      | `page` (default) : The page publication viewer can accept query param to initially load a certain page. This is to override the default `page` param                                                                                                                                                                                                                                                |
+| data-component-publication-display-url-params          | `null` (default) : No URL params will be displayed <br /> `hash` : publication id and page will be displayed as hash fragment. eg: 'domain.com/#publication/{id}/{page}' <br/> `query` : publication id and page will be displayed as query params. eg: 'domain.com/?publicationid={id}&publicationpage={page}'                                                                                     |
+| data-publication-hash                                  | `publication` (default) : This is to override the default hash value eg: eg: 'domain.com/#publication/{id}/{page}'                                                                                                                                                                                                                                                                                  |
+| data-component-publications-list-item-click-behavior   | `open_publication_viewer` (default) : Open publication viewer upon clicking it from the publication list                                                                                                                                                                                                                                                                                            |
+| data-translation-keys--{key}                           | `{key}` : Any value that will replace the default value per key from the locale files                                                                                                                                                                                                                                                                                                               |
+| data-component-publication-viewer-offer-click-behavior | `shopping_list` (default) : Offer will be added to shopping list<br/> `redirect_to_webshop_link` : Clicking an offer will redirect to webshop link; Shopping list will be disabled automatically<br/>`open_webshop_link_in_tab` : Clicking an offer will open webshop link in new tab; Shopping list will be disabled automatically <br/> `overview_modal`: Open modal that shows the offer details |
+| data-component-publication-disable-shopping-list       | `false` (default)<br/> `true`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-component-publication-disable-close               | `false` (default)<br/> `true`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-component-publication-disable-menu                | `false` (default)<br/> `true`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-component-publication-disable-download            | `false` (default)<br/> `true`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-component-publication-disable-header              | `false` (default)<br/> `true`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-component-publication-show-header-labels          | `false` (default)<br/> `true`                                                                                                                                                                                                                                                                                                                                                                       |
+| data-component-publication-override-global-scrollbar   | `false` (default)<br/> `true` : To disable html scroll on publication reader                                                                                                                                                                                                                                                                                                                        |
+| data-component-list-publications-request-filter        | eg: `r_lat:59.9139,r_lng:10.7522` <br/> Filter on request level - key:value and is separated by comma                                                                                                                                                                                                                                                                                               |
+| data-component-list-publications-client-filter         | eg: `all_stores:true` <br/> Filter on client side level - key:value and is separated by comma                                                                                                                                                                                                                                                                                                       |
+
 ## Changelog
 
+### Version 4.0.2
+
+-   Remove `incito-browser` hyphenation behavior to prevent line-breaks in offer details
+-   Update dependencies
+
 ### Version 4.0.1
+
 -   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js
 -   Update dependencies
 -   Fix Incito `data-link` behavior.
