@@ -2913,7 +2913,7 @@ var ShoppingList = function ShoppingList(_ref) {
             case 0:
               _context2.prev = 0;
               shareData = {
-                title: 'My Shopping List',
+                title: translations.shoppingListLabel,
                 text: formatListToShare(transformSavedOffers(get('publication-saved-offers'))),
                 url: document.location.href
               };
@@ -2921,15 +2921,14 @@ var ShoppingList = function ShoppingList(_ref) {
               return navigator.share(shareData);
 
             case 4:
-              _context2.next = 12;
+              _context2.next = 11;
               break;
 
             case 6:
               _context2.prev = 6;
               _context2.t0 = _context2["catch"](0);
-              console.log(_context2.t0);
               shareEmailData = {
-                subject: 'My Shopping List',
+                subject: translations.shoppingListLabel,
                 body: formatListToShare(transformSavedOffers(get('publication-saved-offers')), '%0d%0a')
               };
               queryString = _mapInstanceProperty(_context = _Object$keys(shareEmailData)).call(_context, function (key) {
@@ -2937,7 +2936,7 @@ var ShoppingList = function ShoppingList(_ref) {
               }).join('&');
               window.location.href = "mailto:?".concat(queryString);
 
-            case 12:
+            case 11:
             case "end":
               return _context2.stop();
           }
@@ -2947,7 +2946,7 @@ var ShoppingList = function ShoppingList(_ref) {
   };
 
   var formatListToShare = function formatListToShare(data, newLineDelimiter) {
-    var _data, _data2;
+    var _data;
 
     if (data === void 0) {
       data = [];
@@ -2962,15 +2961,7 @@ var ShoppingList = function ShoppingList(_ref) {
       if (!offer.is_ticked) {
         var _context3;
 
-        offerStr += offer.price ? _concatInstanceProperty(_context3 = "[ ] ".concat(offer.price, " - ")).call(_context3, offer.name) : "[ ] ".concat(offer.name);
-        offerStr += newLineDelimiter;
-      }
-    });
-    (_data2 = data) == null ? void 0 : _data2.forEach(function (offer) {
-      if (offer.is_ticked) {
-        var _context4;
-
-        offerStr += offer.price ? _concatInstanceProperty(_context4 = "[x] ".concat(offer.price, " - ")).call(_context4, offer.name) : "[x] ".concat(offer.name);
+        offerStr += offer.price ? _concatInstanceProperty(_context3 = "".concat(offer.price, " - ")).call(_context3, offer.name) : "".concat(offer.name);
         offerStr += newLineDelimiter;
       }
     });
@@ -2997,7 +2988,7 @@ function ownKeys$4(object, enumerableOnly) { var keys = _Object$keys(object); if
 
 function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$4(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
 var defaultTemplate$4 = "    <div class=\"sgn-offer-overview-popup\">\n        {{#offer}}\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>{{label}}</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>{{translations.untilLabel}} {{till}}</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <img src=\"{{images.zoom}}\" alt=\"{{heading}}\">\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>{{heading}}</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>{{description}}&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>{{price}}</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    {{^disableShoppingList}}\n                    <button class=\"sgn-shopping-add-to-list-btn\">{{translations.addToShoppingList}}</button>\n                    {{/disableShoppingList}}\n                    {{#webshop_link}}\n                    <button class=\"sgn-shopping-open-webshop-btn\">{{translations.visitWebshopLink}}</button>\n                    {{/webshop_link}}\n                </div>\n            </div>\n        </div>\n        {{/offer}} \n    </div>";
-var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn_modal_loader-container\">\n            <div class=\"sgn_modal_loader\"></div>\n        </div>\n    </div>";
+var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>&nbsp;</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <div class=\"sgn_modal_loader\"></div>\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>&nbsp;</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n    </div>";
 
 var OfferOverview = function OfferOverview(_ref) {
   var _template;

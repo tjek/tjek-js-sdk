@@ -435,19 +435,19 @@
 	  return EXISTS$3 ? document$6.createElement(it) : {};
 	};
 
-	var DESCRIPTORS$s = descriptors$1;
+	var DESCRIPTORS$t = descriptors$1;
 	var fails$J = fails$N;
 	var createElement$3 = documentCreateElement$4;
 
 	// Thank's IE8 for his funny defineProperty
-	var ie8DomDefine$1 = !DESCRIPTORS$s && !fails$J(function () {
+	var ie8DomDefine$1 = !DESCRIPTORS$t && !fails$J(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(createElement$3('div'), 'a', {
 	    get: function () { return 7; }
 	  }).a != 7;
 	});
 
-	var DESCRIPTORS$r = descriptors$1;
+	var DESCRIPTORS$s = descriptors$1;
 	var call$v = functionCall$1;
 	var propertyIsEnumerableModule$3 = objectPropertyIsEnumerable$1;
 	var createPropertyDescriptor$c = createPropertyDescriptor$d;
@@ -461,7 +461,7 @@
 
 	// `Object.getOwnPropertyDescriptor` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-	objectGetOwnPropertyDescriptor$1.f = DESCRIPTORS$r ? $getOwnPropertyDescriptor$4 : function getOwnPropertyDescriptor(O, P) {
+	objectGetOwnPropertyDescriptor$1.f = DESCRIPTORS$s ? $getOwnPropertyDescriptor$4 : function getOwnPropertyDescriptor(O, P) {
 	  O = toIndexedObject$h(O);
 	  P = toPropertyKey$7(P);
 	  if (IE8_DOM_DEFINE$3) try {
@@ -508,12 +508,12 @@
 
 	var objectDefineProperty$1 = {};
 
-	var DESCRIPTORS$q = descriptors$1;
+	var DESCRIPTORS$r = descriptors$1;
 	var fails$H = fails$N;
 
 	// V8 ~ Chrome 36-
 	// https://bugs.chromium.org/p/v8/issues/detail?id=3334
-	var v8PrototypeDefineBug$1 = DESCRIPTORS$q && fails$H(function () {
+	var v8PrototypeDefineBug$1 = DESCRIPTORS$r && fails$H(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(function () { /* empty */ }, 'prototype', {
 	    value: 42,
@@ -534,7 +534,7 @@
 	};
 
 	var global$1k = global$1A;
-	var DESCRIPTORS$p = descriptors$1;
+	var DESCRIPTORS$q = descriptors$1;
 	var IE8_DOM_DEFINE$2 = ie8DomDefine$1;
 	var V8_PROTOTYPE_DEFINE_BUG$3 = v8PrototypeDefineBug$1;
 	var anObject$u = anObject$v;
@@ -551,7 +551,7 @@
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
-	objectDefineProperty$1.f = DESCRIPTORS$p ? V8_PROTOTYPE_DEFINE_BUG$3 ? function defineProperty(O, P, Attributes) {
+	objectDefineProperty$1.f = DESCRIPTORS$q ? V8_PROTOTYPE_DEFINE_BUG$3 ? function defineProperty(O, P, Attributes) {
 	  anObject$u(O);
 	  P = toPropertyKey$6(P);
 	  anObject$u(Attributes);
@@ -578,11 +578,11 @@
 	  return O;
 	};
 
-	var DESCRIPTORS$o = descriptors$1;
+	var DESCRIPTORS$p = descriptors$1;
 	var definePropertyModule$b = objectDefineProperty$1;
 	var createPropertyDescriptor$b = createPropertyDescriptor$d;
 
-	var createNonEnumerableProperty$h = DESCRIPTORS$o ? function (object, key, value) {
+	var createNonEnumerableProperty$h = DESCRIPTORS$p ? function (object, key, value) {
 	  return definePropertyModule$b.f(object, key, createPropertyDescriptor$b(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
@@ -902,7 +902,7 @@
 
 	var objectDefineProperties$1 = {};
 
-	var DESCRIPTORS$n = descriptors$1;
+	var DESCRIPTORS$o = descriptors$1;
 	var V8_PROTOTYPE_DEFINE_BUG$2 = v8PrototypeDefineBug$1;
 	var definePropertyModule$a = objectDefineProperty$1;
 	var anObject$t = anObject$v;
@@ -912,7 +912,7 @@
 	// `Object.defineProperties` method
 	// https://tc39.es/ecma262/#sec-object.defineproperties
 	// eslint-disable-next-line es/no-object-defineproperties -- safe
-	objectDefineProperties$1.f = DESCRIPTORS$n && !V8_PROTOTYPE_DEFINE_BUG$2 ? Object.defineProperties : function defineProperties(O, Properties) {
+	objectDefineProperties$1.f = DESCRIPTORS$o && !V8_PROTOTYPE_DEFINE_BUG$2 ? Object.defineProperties : function defineProperties(O, Properties) {
 	  anObject$t(O);
 	  var props = toIndexedObject$e(Properties);
 	  var keys = objectKeys$5(Properties);
@@ -1411,7 +1411,7 @@
 	var apply$7 = functionApply$1;
 	var call$u = functionCall$1;
 	var uncurryThis$H = functionUncurryThis$1;
-	var DESCRIPTORS$m = descriptors$1;
+	var DESCRIPTORS$n = descriptors$1;
 	var NATIVE_SYMBOL$2 = nativeSymbol$1;
 	var fails$E = fails$N;
 	var hasOwn$m = hasOwnProperty_1$1;
@@ -1478,7 +1478,7 @@
 	var USE_SETTER = !QObject || !QObject[PROTOTYPE$1] || !QObject[PROTOTYPE$1].findChild;
 
 	// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-	var setSymbolDescriptor = DESCRIPTORS$m && fails$E(function () {
+	var setSymbolDescriptor = DESCRIPTORS$n && fails$E(function () {
 	  return nativeObjectCreate(nativeDefineProperty({}, 'a', {
 	    get: function () { return nativeDefineProperty(this, 'a', { value: 7 }).a; }
 	  })).a != 7;
@@ -1498,7 +1498,7 @@
 	    tag: tag,
 	    description: description
 	  });
-	  if (!DESCRIPTORS$m) symbol.description = description;
+	  if (!DESCRIPTORS$n) symbol.description = description;
 	  return symbol;
 	};
 
@@ -1523,7 +1523,7 @@
 	  var properties = toIndexedObject$c(Properties);
 	  var keys = objectKeys$4(properties).concat($getOwnPropertySymbols(properties));
 	  $forEach$1(keys, function (key) {
-	    if (!DESCRIPTORS$m || call$u($propertyIsEnumerable$2, properties, key)) $defineProperty$1(O, key, properties[key]);
+	    if (!DESCRIPTORS$n || call$u($propertyIsEnumerable$2, properties, key)) $defineProperty$1(O, key, properties[key]);
 	  });
 	  return O;
 	};
@@ -1584,7 +1584,7 @@
 	      if (hasOwn$m(this, HIDDEN) && hasOwn$m(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
 	      setSymbolDescriptor(this, tag, createPropertyDescriptor$9(1, value));
 	    };
-	    if (DESCRIPTORS$m && USE_SETTER) setSymbolDescriptor(ObjectPrototype$2, tag, { configurable: true, set: setter });
+	    if (DESCRIPTORS$n && USE_SETTER) setSymbolDescriptor(ObjectPrototype$2, tag, { configurable: true, set: setter });
 	    return wrap(tag, description);
 	  };
 
@@ -1609,7 +1609,7 @@
 	    return wrap(wellKnownSymbol$B(name), name);
 	  };
 
-	  if (DESCRIPTORS$m) {
+	  if (DESCRIPTORS$n) {
 	    // https://github.com/tc39/proposal-Symbol-description
 	    nativeDefineProperty(SymbolPrototype, 'description', {
 	      configurable: true,
@@ -1649,7 +1649,7 @@
 	  useSimple: function () { USE_SETTER = false; }
 	});
 
-	$$G({ target: 'Object', stat: true, forced: !NATIVE_SYMBOL$2, sham: !DESCRIPTORS$m }, {
+	$$G({ target: 'Object', stat: true, forced: !NATIVE_SYMBOL$2, sham: !DESCRIPTORS$n }, {
 	  // `Object.create` method
 	  // https://tc39.es/ecma262/#sec-object.create
 	  create: $create,
@@ -1815,14 +1815,14 @@
 	var fails$C = fails$N;
 	var toIndexedObject$b = toIndexedObject$i;
 	var nativeGetOwnPropertyDescriptor = objectGetOwnPropertyDescriptor$1.f;
-	var DESCRIPTORS$l = descriptors$1;
+	var DESCRIPTORS$m = descriptors$1;
 
 	var FAILS_ON_PRIMITIVES$1 = fails$C(function () { nativeGetOwnPropertyDescriptor(1); });
-	var FORCED$3 = !DESCRIPTORS$l || FAILS_ON_PRIMITIVES$1;
+	var FORCED$3 = !DESCRIPTORS$m || FAILS_ON_PRIMITIVES$1;
 
 	// `Object.getOwnPropertyDescriptor` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-	$$E({ target: 'Object', stat: true, forced: FORCED$3, sham: !DESCRIPTORS$l }, {
+	$$E({ target: 'Object', stat: true, forced: FORCED$3, sham: !DESCRIPTORS$m }, {
 	  getOwnPropertyDescriptor: function getOwnPropertyDescriptor(it, key) {
 	    return nativeGetOwnPropertyDescriptor(toIndexedObject$b(it), key);
 	  }
@@ -1866,7 +1866,7 @@
 	};
 
 	var $$D = _export$1;
-	var DESCRIPTORS$k = descriptors$1;
+	var DESCRIPTORS$l = descriptors$1;
 	var ownKeys$d = ownKeys$e;
 	var toIndexedObject$a = toIndexedObject$i;
 	var getOwnPropertyDescriptorModule$2 = objectGetOwnPropertyDescriptor$1;
@@ -1874,7 +1874,7 @@
 
 	// `Object.getOwnPropertyDescriptors` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertydescriptors
-	$$D({ target: 'Object', stat: true, sham: !DESCRIPTORS$k }, {
+	$$D({ target: 'Object', stat: true, sham: !DESCRIPTORS$l }, {
 	  getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
 	    var O = toIndexedObject$a(object);
 	    var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule$2.f;
@@ -1909,13 +1909,13 @@
 	var defineProperty$f = {exports: {}};
 
 	var $$C = _export$1;
-	var DESCRIPTORS$j = descriptors$1;
+	var DESCRIPTORS$k = descriptors$1;
 	var defineProperty$e = objectDefineProperty$1.f;
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
-	$$C({ target: 'Object', stat: true, forced: Object.defineProperty !== defineProperty$e, sham: !DESCRIPTORS$j }, {
+	$$C({ target: 'Object', stat: true, forced: Object.defineProperty !== defineProperty$e, sham: !DESCRIPTORS$k }, {
 	  defineProperty: defineProperty$e
 	});
 
@@ -1995,12 +1995,12 @@
 	var create$c = {exports: {}};
 
 	var $$B = _export$1;
-	var DESCRIPTORS$i = descriptors$1;
+	var DESCRIPTORS$j = descriptors$1;
 	var create$b = objectCreate$1;
 
 	// `Object.create` method
 	// https://tc39.es/ecma262/#sec-object.create
-	$$B({ target: 'Object', stat: true, sham: !DESCRIPTORS$i }, {
+	$$B({ target: 'Object', stat: true, sham: !DESCRIPTORS$j }, {
 	  create: create$b
 	});
 
@@ -2196,10 +2196,10 @@
 	(shared$4.exports = function (key, value) {
 	  return store$2[key] || (store$2[key] = value !== undefined ? value : {});
 	})('versions', []).push({
-	  version: '3.22.4',
+	  version: '3.22.5',
 	  mode: 'global',
 	  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-	  license: 'https://github.com/zloirock/core-js/blob/v3.22.4/LICENSE',
+	  license: 'https://github.com/zloirock/core-js/blob/v3.22.5/LICENSE',
 	  source: 'https://github.com/zloirock/core-js'
 	});
 
@@ -2412,24 +2412,24 @@
 	  return EXISTS$2 ? document$5.createElement(it) : {};
 	};
 
-	var DESCRIPTORS$h = descriptors;
+	var DESCRIPTORS$i = descriptors;
 	var fails$x = fails$B;
 	var createElement$2 = documentCreateElement$2;
 
 	// Thanks to IE8 for its funny defineProperty
-	var ie8DomDefine = !DESCRIPTORS$h && !fails$x(function () {
+	var ie8DomDefine = !DESCRIPTORS$i && !fails$x(function () {
 	  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(createElement$2('div'), 'a', {
 	    get: function () { return 7; }
 	  }).a != 7;
 	});
 
-	var DESCRIPTORS$g = descriptors;
+	var DESCRIPTORS$h = descriptors;
 	var fails$w = fails$B;
 
 	// V8 ~ Chrome 36-
 	// https://bugs.chromium.org/p/v8/issues/detail?id=3334
-	var v8PrototypeDefineBug = DESCRIPTORS$g && fails$w(function () {
+	var v8PrototypeDefineBug = DESCRIPTORS$h && fails$w(function () {
 	  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(function () { /* empty */ }, 'prototype', {
 	    value: 42,
@@ -2564,7 +2564,7 @@
 	};
 
 	var global$X = global$1a;
-	var DESCRIPTORS$f = descriptors;
+	var DESCRIPTORS$g = descriptors;
 	var IE8_DOM_DEFINE$1 = ie8DomDefine;
 	var V8_PROTOTYPE_DEFINE_BUG$1 = v8PrototypeDefineBug;
 	var anObject$n = anObject$o;
@@ -2581,7 +2581,7 @@
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
-	objectDefineProperty.f = DESCRIPTORS$f ? V8_PROTOTYPE_DEFINE_BUG$1 ? function defineProperty(O, P, Attributes) {
+	objectDefineProperty.f = DESCRIPTORS$g ? V8_PROTOTYPE_DEFINE_BUG$1 ? function defineProperty(O, P, Attributes) {
 	  anObject$n(O);
 	  P = toPropertyKey$2(P);
 	  anObject$n(Attributes);
@@ -2617,11 +2617,11 @@
 	  };
 	};
 
-	var DESCRIPTORS$e = descriptors;
+	var DESCRIPTORS$f = descriptors;
 	var definePropertyModule$7 = objectDefineProperty;
 	var createPropertyDescriptor$7 = createPropertyDescriptor$8;
 
-	var createNonEnumerableProperty$c = DESCRIPTORS$e ? function (object, key, value) {
+	var createNonEnumerableProperty$c = DESCRIPTORS$f ? function (object, key, value) {
 	  return definePropertyModule$7.f(object, key, createPropertyDescriptor$7(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
@@ -2630,17 +2630,17 @@
 
 	var makeBuiltIn$2 = {exports: {}};
 
-	var DESCRIPTORS$d = descriptors;
+	var DESCRIPTORS$e = descriptors;
 	var hasOwn$k = hasOwnProperty_1;
 
 	var FunctionPrototype$3 = Function.prototype;
 	// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
-	var getDescriptor$1 = DESCRIPTORS$d && Object.getOwnPropertyDescriptor;
+	var getDescriptor$1 = DESCRIPTORS$e && Object.getOwnPropertyDescriptor;
 
 	var EXISTS$1 = hasOwn$k(FunctionPrototype$3, 'name');
 	// additional protection from minified / mangled / dropped function names
 	var PROPER$1 = EXISTS$1 && (function something() { /* empty */ }).name === 'something';
-	var CONFIGURABLE$1 = EXISTS$1 && (!DESCRIPTORS$d || (DESCRIPTORS$d && getDescriptor$1(FunctionPrototype$3, 'name').configurable));
+	var CONFIGURABLE$1 = EXISTS$1 && (!DESCRIPTORS$e || (DESCRIPTORS$e && getDescriptor$1(FunctionPrototype$3, 'name').configurable));
 
 	var functionName$1 = {
 	  EXISTS: EXISTS$1,
@@ -2755,15 +2755,17 @@
 	var fails$v = fails$B;
 	var isCallable$m = isCallable$u;
 	var hasOwn$i = hasOwnProperty_1;
-	var defineProperty$8 = objectDefineProperty.f;
+	var DESCRIPTORS$d = descriptors;
 	var CONFIGURABLE_FUNCTION_NAME$1 = functionName$1.CONFIGURABLE;
 	var inspectSource$3 = inspectSource$5;
 	var InternalStateModule$a = internalState;
 
 	var enforceInternalState$2 = InternalStateModule$a.enforce;
 	var getInternalState$6 = InternalStateModule$a.get;
+	// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+	var defineProperty$8 = Object.defineProperty;
 
-	var CONFIGURABLE_LENGTH = !fails$v(function () {
+	var CONFIGURABLE_LENGTH = DESCRIPTORS$d && !fails$v(function () {
 	  return defineProperty$8(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
 	});
 
@@ -2781,6 +2783,11 @@
 	  if (CONFIGURABLE_LENGTH && options && hasOwn$i(options, 'arity') && value.length !== options.arity) {
 	    defineProperty$8(value, 'length', { value: options.arity });
 	  }
+	  if (options && hasOwn$i(options, 'constructor') && options.constructor) {
+	    if (DESCRIPTORS$d) try {
+	      defineProperty$8(value, 'prototype', { writable: false });
+	    } catch (error) { /* empty */ }
+	  } else value.prototype = undefined;
 	  var state = enforceInternalState$2(value);
 	  if (!hasOwn$i(state, 'source')) {
 	    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
@@ -5545,7 +5552,7 @@
 
 	  RegExpPrototype$2.constructor = RegExpWrapper;
 	  RegExpWrapper.prototype = RegExpPrototype$2;
-	  defineBuiltIn$5(global$y, 'RegExp', RegExpWrapper);
+	  defineBuiltIn$5(global$y, 'RegExp', RegExpWrapper, { constructor: true });
 	}
 
 	// https://tc39.es/ecma262/#sec-get-regexp-@@species
@@ -12122,7 +12129,7 @@
 	  }
 	}
 
-	$$b({ global: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR$4 }, {
+	$$b({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR$4 }, {
 	  Promise: PromiseConstructor
 	});
 
@@ -16023,7 +16030,7 @@
 	            case 0:
 	              _context2.prev = 0;
 	              shareData = {
-	                title: 'My Shopping List',
+	                title: translations.shoppingListLabel,
 	                text: formatListToShare(transformSavedOffers(get('publication-saved-offers'))),
 	                url: document.location.href
 	              };
@@ -16031,15 +16038,14 @@
 	              return navigator.share(shareData);
 
 	            case 4:
-	              _context2.next = 12;
+	              _context2.next = 11;
 	              break;
 
 	            case 6:
 	              _context2.prev = 6;
 	              _context2.t0 = _context2["catch"](0);
-	              console.log(_context2.t0);
 	              shareEmailData = {
-	                subject: 'My Shopping List',
+	                subject: translations.shoppingListLabel,
 	                body: formatListToShare(transformSavedOffers(get('publication-saved-offers')), '%0d%0a')
 	              };
 	              queryString = _mapInstanceProperty(_context = _Object$keys(shareEmailData)).call(_context, function (key) {
@@ -16047,7 +16053,7 @@
 	              }).join('&');
 	              window.location.href = "mailto:?".concat(queryString);
 
-	            case 12:
+	            case 11:
 	            case "end":
 	              return _context2.stop();
 	          }
@@ -16057,7 +16063,7 @@
 	  };
 
 	  var formatListToShare = function formatListToShare(data, newLineDelimiter) {
-	    var _data, _data2;
+	    var _data;
 
 	    if (data === void 0) {
 	      data = [];
@@ -16072,15 +16078,7 @@
 	      if (!offer.is_ticked) {
 	        var _context3;
 
-	        offerStr += offer.price ? _concatInstanceProperty(_context3 = "[ ] ".concat(offer.price, " - ")).call(_context3, offer.name) : "[ ] ".concat(offer.name);
-	        offerStr += newLineDelimiter;
-	      }
-	    });
-	    (_data2 = data) == null ? void 0 : _data2.forEach(function (offer) {
-	      if (offer.is_ticked) {
-	        var _context4;
-
-	        offerStr += offer.price ? _concatInstanceProperty(_context4 = "[x] ".concat(offer.price, " - ")).call(_context4, offer.name) : "[x] ".concat(offer.name);
+	        offerStr += offer.price ? _concatInstanceProperty(_context3 = "".concat(offer.price, " - ")).call(_context3, offer.name) : "".concat(offer.name);
 	        offerStr += newLineDelimiter;
 	      }
 	    });
@@ -16107,7 +16105,7 @@
 
 	function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$4(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
 	var defaultTemplate$4 = "    <div class=\"sgn-offer-overview-popup\">\n        {{#offer}}\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>{{label}}</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>{{translations.untilLabel}} {{till}}</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <img src=\"{{images.zoom}}\" alt=\"{{heading}}\">\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>{{heading}}</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>{{description}}&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>{{price}}</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    {{^disableShoppingList}}\n                    <button class=\"sgn-shopping-add-to-list-btn\">{{translations.addToShoppingList}}</button>\n                    {{/disableShoppingList}}\n                    {{#webshop_link}}\n                    <button class=\"sgn-shopping-open-webshop-btn\">{{translations.visitWebshopLink}}</button>\n                    {{/webshop_link}}\n                </div>\n            </div>\n        </div>\n        {{/offer}} \n    </div>";
-	var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn_modal_loader-container\">\n            <div class=\"sgn_modal_loader\"></div>\n        </div>\n    </div>";
+	var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>&nbsp;</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <div class=\"sgn_modal_loader\"></div>\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>&nbsp;</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n    </div>";
 
 	var OfferOverview = function OfferOverview(_ref) {
 	  var _template;
@@ -17280,7 +17278,7 @@
 	  }
 	  NumberWrapper.prototype = NumberPrototype;
 	  NumberPrototype.constructor = NumberWrapper;
-	  defineBuiltIn(global$1, NUMBER, NumberWrapper);
+	  defineBuiltIn(global$1, NUMBER, NumberWrapper, { constructor: true });
 	}
 
 	var Animation = /*#__PURE__*/function () {

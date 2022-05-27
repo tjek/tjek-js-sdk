@@ -6,6 +6,6 @@
   "name": "verso-browser",
   "dependencies": {
     "@babel/runtime-corejs3": "^7.17.9",
-    "core-js": "^3.22.2"
+    "core-js": "^3.22.4"
   }
 }
