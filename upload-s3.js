@@ -21,7 +21,7 @@ function putObject(options) {
                 console.error(err);
                 console.log('Could not upload ' + options.key);
             } else {
-                console.log('Uploaded ' + options.key);
+                console.log('Uploaded https://d21oefkcnoen8i.cloudfront.net/' + options.key);
             }
         }
     );
