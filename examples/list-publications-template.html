@@ -32,7 +32,7 @@
             id="sgn-sdk"
             data-api-key="GL0wU8"
             data-track-id="2N2Gib"
-            data-business-id="0c200g"
+            data-business-id="11deC"
             data-component="list-publications"
             data-locale-code="da_DK"
             data-component-publication-display-url-params="hash"
@@ -68,19 +68,6 @@
                 'tjek-publication-list-item-clicked',
                 (e) => {
                     console.log('e.detail', e.detail); // {publication}
-                }
-            );
-        </script>
-
-        <!--   Sample event listener on Incito Publication Data -->
-        <script>
-            window.addEventListener(
-                'tjek-publication-loaded',
-                (e) => {
-                    const {details, incito} = e.detail
-                    
-                    console.log('Table of contents:', incito?.table_of_contents) // [{title: 'Section title', view_id: 'viewId'}]
-                    
                 }
             );
         </script>
