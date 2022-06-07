@@ -66,15 +66,16 @@
             data-component-publication-disable-global-scrollbar="false"
             data-translation-keys--publication-viewer-shopping-list-label="Shopping List"
             data-translation-keys--publication-viewer-download-button="Download Now"
+            defer
         ></script>
 
         <script>
-            (async () => {
-                const publicationData = await SGN.PublicationData
+            window.addEventListener('DOMContentLoaded', async () => {
+                const publicationData = await SGN.component.IncitoPublication;
 
                 console.log(publicationData); // {details: {…}, incito: {…}}
                 console.log(publicationData.incito.table_of_contents); //[{title: 'Section Title', view_id: '1'}]
-            })()
+            });
         </script>
         
     </body>
