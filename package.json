@@ -95,7 +95,7 @@
     "dependencies": {
         "@babel/runtime": "^7.18.3",
         "@babel/runtime-corejs3": "^7.18.3",
-        "core-js": "^3.22.7",
+        "core-js": "^3.22.8",
         "cross-fetch": "^3.1.5",
         "md5": "^2.3.0",
         "microevent": "^1.0.0",
@@ -112,12 +112,12 @@
         "@rollup/plugin-node-resolve": "^13.3.0",
         "@rollup/plugin-replace": "^4.0.0",
         "app-root-path": "^3.0.0",
-        "aws-sdk": "^2.1145.0",
+        "aws-sdk": "^2.1150.0",
         "bundlesize": "^0.18.1",
         "chalk": "^4.1.2",
         "clean-css": "^5.3.0",
         "diff": "^5.1.0",
-        "eslint": "^8.16.0",
+        "eslint": "^8.17.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-playwright": "^0.9.0",
         "file-type": "^16.5.3",
@@ -139,7 +139,7 @@
         "playwright": "^1.22.2",
         "process": "^0.11.10",
         "recursive-readdir": "^2.2.2",
-        "rollup": "^2.75.3",
+        "rollup": "^2.75.6",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-generate-package-json": "^3.2.0",
         "rollup-plugin-terser": "^7.0.2",
@@ -149,7 +149,7 @@
         "tar": "^6.1.11",
         "thenify": "^3.3.1",
         "tmp-promise": "^3.0.3",
-        "webpack": "^5.72.1"
+        "webpack": "^5.73.0"
     },
     "publishConfig": {
         "access": "public"
