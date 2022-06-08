@@ -70,13 +70,11 @@
         ></script>
 
         <script>
-            window.addEventListener('DOMContentLoaded', async () => {
-                const publicationData = await SGN.component.IncitoPublication;
-
-                console.log(publicationData); // {details: {…}, incito: {…}}
-                console.log(publicationData.incito.table_of_contents); //[{title: 'Section Title', view_id: '1'}]
-            });
+            document
+                .querySelector('#publication-container')
+                .addEventListener('tjek-publication:rendered', (e) => {
+                    console.log('e.detail', e.detail); // {details: {…}, incito: {…}}
+                });
         </script>
-        
     </body>
 </html>

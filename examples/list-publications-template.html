@@ -62,7 +62,7 @@
             );
         </script>
 
-        <!--   Sample event listener on Incito offer -->
+        <!--   Sample event listener on Incito click -->
         <script>
             window.addEventListener(
                 'tjek-publication-list-item-clicked',
@@ -70,6 +70,15 @@
                     console.log('e.detail', e.detail); // {publication}
                 }
             );
+        </script>
+
+        <!--   Sample event listener on Publication onload -->
+        <script>
+            document
+                .querySelector('#list-publications')
+                .addEventListener('tjek-publication:rendered', (e) => {
+                    console.log('publication details', e.detail); // {details: {…}, incito: {…}}
+                });
         </script>
     </body>
 </html>
