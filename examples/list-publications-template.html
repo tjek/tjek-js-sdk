@@ -18,6 +18,7 @@
             }
         </style>
     </head>
+
     <body>
         <div id="list-publications"></div>
 
@@ -54,22 +55,29 @@
 
         <!--   Sample event listener on Incito offer -->
         <script>
-            window.addEventListener(
-                'tjek-incito-publication-view-clicked',
-                (e) => {
+            document
+                .querySelector('#list-publications')
+                .addEventListener('publication:offer_clicked', (e) => {
                     console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: f}
-                }
-            );
+                });
         </script>
 
-        <!--   Sample event listener on Incito offer -->
+        <!--   Sample event listener on Incito click -->
         <script>
-            window.addEventListener(
-                'tjek-publication-list-item-clicked',
-                (e) => {
-                    console.log('e.detail', e.detail); // {publication}
-                }
-            );
+            document
+                .querySelector('#list-publications')
+                .addEventListener('publication:clicked', (e) => {
+                    console.log(e.detail); // {publication}
+                });
+        </script>
+
+        <!--   Sample event listener on Publication onload -->
+        <script>
+            document
+                .querySelector('#list-publications')
+                .addEventListener('publication:rendered', (e) => {
+                    console.log(e.detail); // {details: {…}, incito: {…}}
+                });
         </script>
     </body>
 </html>
