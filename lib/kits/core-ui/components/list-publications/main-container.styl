@@ -50,3 +50,13 @@
 
 .sgn-publications-list-content-date
     font-size 12px
+
+@media (max-width 451px)
+    .sgn-publications-list-items-container
+        display grid
+        grid-template-columns repeat(auto-fill, minmax(130px, 1fr))
+
+@media (max-width 311px)
+    .sgn-publications-list-items-container
+        display grid
+        grid-template-columns repeat(auto-fill, minmax(80px, 1fr))

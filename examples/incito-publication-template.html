@@ -52,7 +52,7 @@
             id="sgn-sdk"
             data-api-key="GL0wU8"
             data-track-id="2N2Gib"
-            data-business-id="0c200g"
+            data-business-id="DsxsNz"
             data-component="incito-publication-viewer"
             data-component-publication-container="#publication-container"
             data-locale-code="da_DK"
@@ -68,5 +68,21 @@
             data-translation-keys--publication-viewer-download-button="Download Now"
             defer
         ></script>
+
+        <script>
+            // Example event listener for when publication is rendered
+            document
+                .querySelector('#publication-container')
+                .addEventListener('publication:rendered', (e) => {
+                    console.log(e.detail); // {details: {…}, incito: {…}}
+                });
+
+            // Example event listener for when offer is clicked
+            document
+                .querySelector('#publication-container')
+                .addEventListener('publication:offer_clicked', (e) => {
+                    console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: f}
+                });
+        </script>
     </body>
 </html>

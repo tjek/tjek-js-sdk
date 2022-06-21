@@ -7,7 +7,7 @@ const {promises: fs, createReadStream} = require('fs');
 const chalk = require('chalk');
 const path = require('path');
 const {prompt} = require('inquirer');
-const {spawn} = require('child_process');
+const {spawn, execSync} = require('child_process');
 const {isBinaryFile} = require('isbinaryfile');
 const jsdiff = require('diff');
 const ora = require('ora');
@@ -48,7 +48,10 @@ async function npmPack(pkg, cwd) {
     try {
         pack = path.join(cwd, await run('npm', ['pack', pkg], {cwd}));
     } catch (error) {
-        if (error.startsWith('npm ERR! code E404')) {
+        if (
+            error.startsWith('npm ERR! code E404') ||
+            error.startsWith('npm ERR! code ETARGET')
+        ) {
             throw new NotFoundError(`${pkg} Not Found on NPM`);
         }
         throw error;
@@ -180,17 +183,15 @@ async function npmDiff(packageJsonPath, tag) {
         ind.succeed(`Downloaded ${nameTag} from NPM`);
     } catch (error) {
         if (!(error instanceof NotFoundError)) {
-            ind.fail(error.message);
+            ind.fail(error);
             throw error;
         } else {
-            ind.warn(`${chalk.blue(pkg.name)} has not yet been published`);
+            ind.warn(`${chalk.blue(nameTag)} has not yet been published`);
         }
     }
-    const newFiles =
-        //        oldFiles ||
-        await extract(
-            path.resolve(packageJsonPath.replace('package.json', ''))
-        );
+    const newFiles = await extract(
+        path.resolve(packageJsonPath.replace('package.json', ''))
+    );
 
     ind.start(
         `Diffing local ${pkg.name} with ${
@@ -232,12 +233,25 @@ const printDiffPackage = (diffObj) =>
 
 async function publish() {
     console.clear();
+
+    const commithash = execSync('git rev-parse --short HEAD', {
+        encoding: 'utf8'
+    }).trim();
+    const shortdate = new Date()
+        .toISOString()
+        .split('T')[0]
+        .replaceAll('-', '');
+
     const {tag} = await prompt([
         {
             type: 'list',
             name: 'tag',
             message: 'How would you like to publish today?',
             choices: [
+                {
+                    name: `🪄 Publish experimetal (\`0.0.0-experimental-${commithash}-${shortdate}\`)`,
+                    value: `experimental-${commithash}-${shortdate}`
+                },
                 {name: '🧪 Publish prerelease (`beta`)', value: 'beta'},
                 {name: '🚀 Release for real (`latest`)', value: 'latest'}
             ]
@@ -298,7 +312,7 @@ async function publish() {
                 ]) => {
                     let disabled = !changeCount;
                     let name = `${chalk.blue.bold(
-                        pkg.name
+                        `${pkg.name}@${tag}`
                     )} (currently ${chalk.blue.bold(
                         pkg.version || 'unpublished'
                     )})`;
@@ -324,6 +338,15 @@ async function publish() {
             const [pkg] = packageDiffs[packageJsonPath];
             const version = pkg.version || '0.0.0';
             const pre = tag === 'beta';
+            if (tag.startsWith('experimental')) {
+                return {
+                    type: 'list',
+                    name: packageJsonPath,
+                    message: `Experimental releases are always version 0.0.0`,
+                    choices: [{name: `0.0.0-${tag}`, value: `0.0.0-${tag}`}]
+                };
+            }
+
             return {
                 type: 'list',
                 name: packageJsonPath,
@@ -398,8 +421,17 @@ async function publish() {
         const [{name}] = packageDiffs[packageJsonPath];
         const nextVersion = await run('npm', ['version', version]);
         const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
-        await run('npm', ['publish', '--access', 'public', `--tag=${tag}`]);
-        pubInd.succeed(`Published ${name}@${tag} ${nextVersion}`);
+        await run('npm', [
+            'publish',
+            '--access',
+            'public',
+            `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
+        ]);
+        pubInd.succeed(
+            `Published ${name}@${
+                tag.startsWith('experimental') ? 'experimental' : tag
+            } ${nextVersion}`
+        );
 
         process.chdir(cwd);
     }
