@@ -23,7 +23,6 @@
         {
             "displayName": "Chrome",
             "preset": "jest-playwright-preset",
-            "setupFilesAfterEnv": ["expect-playwright"],
             "testRegex": "((\\.|/)(test-chrome))\\.(j|t)s$",
             "moduleNameMapper": {
                 "\\.(css|styl)$": "<rootDir>/__tests_utils__/style-mock.js"
