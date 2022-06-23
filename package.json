@@ -155,6 +155,7 @@
         "thenify": "^3.3.1",
         "tmp-promise": "^3.0.3",
         "ts-jest": "^27.1.5",
+        "typescript": "^4.7.4",
         "webpack": "^5.73.0"
     },
     "publishConfig": {
