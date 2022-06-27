@@ -22,10 +22,12 @@ each(
         ['require', 'import']
     ])
 ).test('Webpack + Chrome: %s %s %s', async (path, mode, pkg) => {
-    const code =
-        pkg === 'import'
-            ? `import A from '${path}'; console.log(A)`
-            : `const A = require('${path}'); console.log(A)`;
-
-    await page.evaluate(await webpackCompiler(code, {mode}));
+    await page.evaluate(
+        await webpackCompiler(
+            pkg === 'import'
+                ? `import A from '${path}'; console.log(A)`
+                : `const A = require('${path}'); console.log(A)`,
+            {mode}
+        )
+    );
 });

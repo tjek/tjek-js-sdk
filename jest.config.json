@@ -1,0 +1,32 @@
+{
+    "testPathIgnorePatterns": ["node_modules"],
+    "testTimeout": 30000,
+    "projects": [
+        {
+            "displayName": "Node",
+            "preset": "ts-jest/presets/js-with-ts-esm",
+            "testEnvironment": "node",
+            "testRegex": "((\\.|/)(test|test-node))\\.(j|t)s$",
+            "moduleNameMapper": {
+                "\\.(css|styl)$": "<rootDir>/__tests_utils__/style-mock.js"
+            }
+        },
+        {
+            "displayName": "JSDom",
+            "preset": "ts-jest/presets/js-with-ts-esm",
+            "testEnvironment": "jsdom",
+            "testRegex": "((\\.|/)(test|test-jsdom))\\.(j|t)s$",
+            "moduleNameMapper": {
+                "\\.(css|styl)$": "<rootDir>/__tests_utils__/style-mock.js"
+            }
+        },
+        {
+            "displayName": "Chrome",
+            "preset": "jest-playwright-preset",
+            "testRegex": "((\\.|/)(test-chrome))\\.(j|t)s$",
+            "moduleNameMapper": {
+                "\\.(css|styl)$": "<rootDir>/__tests_utils__/style-mock.js"
+            }
+        }
+    ]
+}
