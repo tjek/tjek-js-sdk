@@ -67,7 +67,7 @@ const defaultTemplate = `\
 const ShoppingList = ({template}) => {
     template = template?.innerHTML || defaultTemplate;
     const shoppingListBtn = document.querySelector('.sgn__offer-shopping');
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     const translations = {
         localeCode: translate('locale_code'),
@@ -112,10 +112,10 @@ const ShoppingList = ({template}) => {
         addEventListeners();
     };
 
-    const transformSavedOffers = (savedOffers = []) => {
+    const transformSavedOffers = (savedOffers) => {
         const {localeCode, currency} = translations;
 
-        return savedOffers.map((offer, index) => ({
+        return (savedOffers || []).map((offer, index) => ({
             index,
             ...offer,
             price: offer?.pricing?.price
@@ -130,7 +130,7 @@ const ShoppingList = ({template}) => {
 
     const addTickerListener = () => {
         container
-            .querySelectorAll('.sgn-shopping-list-item-container')
+            ?.querySelectorAll('.sgn-shopping-list-item-container')
             .forEach((itemEl) => {
                 itemEl.addEventListener('click', tickOffer, false);
             });
@@ -150,19 +150,20 @@ const ShoppingList = ({template}) => {
             storedPublicationOffers,
             'tjek_shopping_list_update'
         );
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            offers: transformSavedOffers(storedPublicationOffers)?.filter(
-                (offer) => !offer.is_ticked
-            ),
-            tickedOffers: transformSavedOffers(storedPublicationOffers)?.filter(
-                (offer) => offer.is_ticked
-            ),
-            hasTicked:
-                transformSavedOffers(storedPublicationOffers)?.filter(
-                    (offer) => offer.is_ticked
-                ).length > 0
-        });
+        if (container)
+            container.innerHTML = Mustache.render(template, {
+                translations,
+                offers: transformSavedOffers(storedPublicationOffers)?.filter(
+                    (offer) => !offer.is_ticked
+                ),
+                tickedOffers: transformSavedOffers(
+                    storedPublicationOffers
+                )?.filter((offer) => offer.is_ticked),
+                hasTicked:
+                    transformSavedOffers(storedPublicationOffers)?.filter(
+                        (offer) => offer.is_ticked
+                    ).length > 0
+            });
 
         addEventListeners();
         e.stopPropagation();
@@ -170,7 +171,7 @@ const ShoppingList = ({template}) => {
 
     const addClearListListener = () => {
         container
-            .querySelector('.sgn-shopping-clear-list-btn')
+            ?.querySelector('.sgn-shopping-clear-list-btn')
             ?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 clientLocalStorage.setWithEvent(
@@ -178,16 +179,17 @@ const ShoppingList = ({template}) => {
                     [],
                     'tjek_shopping_list_update'
                 );
-                container.innerHTML = Mustache.render(template, {
-                    translations,
-                    offers: []
-                });
+                if (container)
+                    container.innerHTML = Mustache.render(template, {
+                        translations,
+                        offers: []
+                    });
                 addEventListeners();
             });
     };
 
     const addClearTickedListListener = () => {
-        const clearTickedBtn = container.querySelector(
+        const clearTickedBtn = container?.querySelector(
             '.sgn-shopping-clear-ticked-list-btn'
         );
         const storedPublicationOffers = clientLocalStorage.get(
@@ -205,10 +207,11 @@ const ShoppingList = ({template}) => {
                 validOffers,
                 'tjek_shopping_list_update'
             );
-            container.innerHTML = Mustache.render(template, {
-                translations,
-                offers: transformSavedOffers(validOffers)
-            });
+            if (container)
+                container.innerHTML = Mustache.render(template, {
+                    translations,
+                    offers: transformSavedOffers(validOffers)
+                });
 
             addEventListeners();
         });
@@ -216,7 +219,7 @@ const ShoppingList = ({template}) => {
 
     const addPrintListener = () => {
         container
-            .querySelector('.sgn-shopping-print-list-btn')
+            ?.querySelector('.sgn-shopping-print-list-btn')
             ?.addEventListener('click', () => {
                 window.print();
             });
@@ -224,7 +227,7 @@ const ShoppingList = ({template}) => {
 
     const addShareListener = () => {
         container
-            .querySelector('.sgn-shopping-share-list-btn')
+            ?.querySelector('.sgn-shopping-share-list-btn')
             ?.addEventListener('click', async () => {
                 try {
                     const shareData = {
@@ -268,7 +271,7 @@ const ShoppingList = ({template}) => {
             });
     };
 
-    const formatListToShare = (data = [], newLineDelimiter = `\n`) => {
+    const formatListToShare = (data, newLineDelimiter = `\n`) => {
         let offerStr = '';
 
         data?.forEach((offer) => {
@@ -284,7 +287,7 @@ const ShoppingList = ({template}) => {
     };
 
     const addEventListeners = () => {
-        document.querySelector('.sgn-modal-container')?.focus();
+        document.querySelector<HTMLDivElement>('.sgn-modal-container')?.focus();
 
         addTickerListener();
         addClearTickedListListener();

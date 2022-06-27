@@ -14,14 +14,27 @@ import {
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
+import {Viewer} from '../paged-publication';
+import {V2Catalog, V2Hotspot, V2Page} from '../core';
+import type {Tracker} from '../events';
 
 const PagedPublication = (
-    scriptEl,
-    {mainContainer = '', apiKey, coreUrl, eventTracker} = {}
+    scriptEl: HTMLScriptElement,
+    {
+        mainContainer = '',
+        apiKey,
+        coreUrl,
+        eventTracker
+    }: {
+        mainContainer: string;
+        apiKey: string;
+        coreUrl: string;
+        eventTracker: Tracker;
+    }
 ) => {
-    let options = {};
-    let sgnData = {};
-    let sgnViewer = null;
+    let options;
+    let sgnData: {details: V2Catalog; pages: V2Page[]} | undefined | {} = {};
+    let sgnViewer: Viewer;
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -53,7 +66,6 @@ const PagedPublication = (
 
     MainContainer({
         template: customTemplates.mainContainer,
-        shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     }).render();
@@ -71,7 +83,7 @@ const PagedPublication = (
         ?.appendChild(header.render());
 
     const render = async () => {
-        if (Object.keys(options).length === 0) await setOptions();
+        if (Object.keys(options || {}).length === 0) await setOptions();
 
         await start();
 
@@ -107,9 +119,9 @@ const PagedPublication = (
         shoppingListCounter?.classList.add('sgn-animate-bounce');
     };
 
-    const setOptions = async (opts) => {
+    const setOptions = async (opts?: any) => {
         options = {
-            el: document.querySelector('.sgn__pp'),
+            el: document.querySelector<HTMLDivElement>('.sgn__pp'),
             apiKey,
             coreUrl,
             eventTracker,
@@ -136,6 +148,7 @@ const PagedPublication = (
         const data = await bootstrapper.fetch();
 
         sgnData = data;
+        // @ts-expect-error
         sgnViewer = bootstrapper.createViewer(data);
 
         updateViewerTranslation({
@@ -155,7 +168,7 @@ const PagedPublication = (
         if (scriptEls.disableGlobalScrollbar) {
             document
                 .querySelector('html')
-                .classList.add('sgn-paged-publication--open');
+                ?.classList.add('sgn-paged-publication--open');
         }
 
         const hotspots = await bootstrapper.fetchHotspots();
@@ -183,14 +196,14 @@ const PagedPublication = (
         const controlDirectionObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes') {
-                    const element = mutation.target;
-                    if (element?.dataset?.direction === 'prev') {
-                        element?.classList.contains('sgn-pp--hidden')
+                    const element = mutation.target as HTMLButtonElement;
+                    if (element.dataset.direction === 'prev') {
+                        element.classList.contains('sgn-pp--hidden')
                             ? firstControl.classList.add('sgn-pp--hidden')
                             : firstControl.classList.remove('sgn-pp--hidden');
                     }
-                    if (element?.dataset?.direction === 'next') {
-                        element?.classList.contains('sgn-pp--hidden')
+                    if (element.dataset.direction === 'next') {
+                        element.classList.contains('sgn-pp--hidden')
                             ? lastControl.classList.add('sgn-pp--hidden')
                             : lastControl.classList.remove('sgn-pp--hidden');
                     }
@@ -206,19 +219,15 @@ const PagedPublication = (
             : lastControl.classList.remove('sgn-pp--hidden');
 
         firstControl?.addEventListener('click', () => {
-            sgnViewer.first();
+            sgnViewer?.first();
         });
         lastControl?.addEventListener('click', () => {
-            sgnViewer.last();
+            sgnViewer?.last();
         });
 
-        controlDirectionObserver.observe(prevBtn, {
-            attributes: true
-        });
+        controlDirectionObserver.observe(prevBtn, {attributes: true});
 
-        controlDirectionObserver.observe(nextBtn, {
-            attributes: true
-        });
+        controlDirectionObserver.observe(nextBtn, {attributes: true});
     };
 
     const displayUrlParams = () => {
@@ -245,7 +254,7 @@ const PagedPublication = (
         }
     };
 
-    const clickHotspot = (hotspot) => {
+    const clickHotspot = (hotspot: V2Hotspot) => {
         const shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
 
         if (scriptEls.offerClickBehavior === 'overview_modal') {
@@ -272,7 +281,7 @@ const PagedPublication = (
         }
     };
 
-    const addToShoppingList = (hotspot) => {
+    const addToShoppingList = (hotspot: V2Hotspot) => {
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
@@ -301,8 +310,9 @@ const PagedPublication = (
     };
 
     const fetchLatestPublicationId = async () =>
+        scriptEls.businessId &&
         (
-            await request({
+            await request<V2Catalog[]>({
                 apiKey,
                 coreUrl,
                 url: '/v2/catalogs',

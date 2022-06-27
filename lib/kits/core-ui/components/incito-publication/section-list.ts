@@ -20,8 +20,8 @@ const defaultTemplate = `\
     </div>\
 `;
 
-const SectionList = ({sgnData = {}, template}) => {
-    let container = null;
+const SectionList = ({sgnData, template}) => {
+    let container: HTMLDivElement | null = null;
 
     template = template?.innerHTML || defaultTemplate;
 
@@ -39,7 +39,7 @@ const SectionList = ({sgnData = {}, template}) => {
 
     const addSectionClickListener = () => {
         container
-            .querySelectorAll('.sgn-sections-list-item-container')
+            ?.querySelectorAll('.sgn-sections-list-item-container')
             .forEach((itemEl) => {
                 itemEl.addEventListener('click', scrollToSection, false);
             });
@@ -51,11 +51,12 @@ const SectionList = ({sgnData = {}, template}) => {
             `[data-id="${sectionId}"][data-role="section"]`
         );
         const incitoEl = document.querySelector('.sgn__incito');
+        // @ts-expect-error
         const sectionOffset = sectionCell.offsetTop - 76 || 0;
 
         destroyModal();
 
-        incitoEl.scrollTo({top: sectionOffset, behavior: 'smooth'});
+        incitoEl?.scrollTo({top: sectionOffset, behavior: 'smooth'});
     };
 
     return {render};

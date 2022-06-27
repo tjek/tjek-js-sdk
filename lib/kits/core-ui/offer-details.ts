@@ -1,6 +1,12 @@
 import './offer-details.styl';
 
 export default class OfferDetails {
+    el: HTMLDivElement;
+    elInner: HTMLDivElement;
+    contentEl: HTMLDivElement;
+    anchorEl: HTMLDivElement;
+    minWidth: number | string;
+    maxWidth: number | string;
     constructor({minWidth = 300, maxWidth = '100vw', anchorEl, contentEl}) {
         this.minWidth = minWidth;
         this.maxWidth = maxWidth;
@@ -12,7 +18,7 @@ export default class OfferDetails {
         this.el = document.createElement('div');
 
         this.el.className = 'sgn-offer-details';
-        this.el.setAttribute('tabindex', -1);
+        this.el.setAttribute('tabindex', '-1');
         this.el.appendChild(this.elInner);
         this.el.appendChild(this.contentEl);
 
@@ -40,7 +46,7 @@ export default class OfferDetails {
     destroy() {
         window.removeEventListener('resize', this.resize, false);
 
-        this.el.parentNode.removeChild(this.el);
+        this.el.parentNode?.removeChild(this.el);
     }
 
     position() {
@@ -60,12 +66,12 @@ export default class OfferDetails {
             this.el.style.right = right + 'px';
 
             this.elInner.style.left = 'auto';
-            this.elInner.style.right = 0;
+            this.elInner.style.right = '0';
         } else {
             this.el.style.left = left + 'px';
             this.el.style.right = 'auto';
 
-            this.elInner.style.left = 0;
+            this.elInner.style.left = '0';
             this.elInner.style.right = 'auto';
         }
 
@@ -73,7 +79,7 @@ export default class OfferDetails {
             typeof this.minWidth === 'number'
                 ? Math.max(width, this.minWidth) + 'px'
                 : this.minWidth;
-        this.el.style.maxWidth = this.maxWidth;
+        this.el.style.maxWidth = String(this.maxWidth);
 
         this.elInner.style.width = width - 8 + 'px';
     }

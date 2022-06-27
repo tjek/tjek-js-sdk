@@ -1,11 +1,13 @@
 import Mustache from 'mustache';
-import {request} from '../../../core';
+import {request, V2Offer} from '../../../core';
+import {Viewer} from '../../../paged-publication';
 import {
     destroyModal,
     formatPrice,
-    translate,
-    pushQueryParam
+    pushQueryParam,
+    translate
 } from '../helpers/component';
+import {transformScriptData} from '../helpers/transformers';
 import './offer-list.styl';
 
 const defaultTemplate = `\
@@ -42,18 +44,23 @@ const defaultTemplate = `\
 const OfferList = ({
     scriptEls,
     publicationType,
-    configs = {},
+    configs,
     sgnViewer,
     template
+}: {
+    scriptEls: ReturnType<typeof transformScriptData>;
+    publicationType?: string;
+    configs: {apiKey: string; coreUrl: string; id?: string; businessId?: string};
+    sgnViewer?: Viewer;
+    template?: Element | null;
 }) => {
-    template = template?.innerHTML || defaultTemplate;
     publicationType = publicationType || 'paged';
 
-    const offerTemplate = template.match(
+    const offerTemplate = (template?.innerHTML || defaultTemplate).match(
         /(?={{#offers}}).*({{\/offers}})/gs
     )?.[0];
-    let container = null;
-    let offersList = [];
+    let container: HTMLDivElement | null = null;
+    let offersList: ReturnType<typeof transformOffers> = [];
     let offset = 0;
     const limit = 24;
     let searchKey = '';
@@ -67,7 +74,7 @@ const OfferList = ({
     const fetchSearch = async (query = '') =>
         query
             ? transformOffers(
-                  await request({
+                  await request<V2Offer[]>({
                       url: '/v2/offers/search',
                       apiKey: configs.apiKey,
                       coreUrl: configs.coreUrl,
@@ -84,7 +91,7 @@ const OfferList = ({
 
     const fetchOffers = async (offset = 0, limit = 24) =>
         transformOffers(
-            await request({
+            await request<V2Offer[]>({
                 apiKey: configs.apiKey,
                 coreUrl: configs.coreUrl,
                 url: '/v2/offers',
@@ -99,10 +106,10 @@ const OfferList = ({
             })
         );
 
-    const transformOffers = (offers) => {
+    const transformOffers = (offers?: V2Offer[]) => {
         const {localeCode, currency} = translations;
 
-        return offers.map((offer) => ({
+        return (offers || []).map((offer) => ({
             ...offer,
             price: formatPrice(
                 offer?.pricing?.price,
@@ -124,10 +131,11 @@ const OfferList = ({
 
             offersList = offersList.concat(offers);
 
-            offerOl.innerHTML += Mustache.render(offerTemplate, {
-                translations,
-                offers
-            });
+            if (offerTemplate)
+                offerOl.innerHTML += Mustache.render(offerTemplate, {
+                    translations,
+                    offers
+                });
 
             addOfferClickListener();
         }
@@ -135,33 +143,34 @@ const OfferList = ({
 
     const fetchOnSearch = async (e) => {
         searchKey = e.target.value || '';
-        const offerOl = container.querySelector(
+        const offerOl = container?.querySelector(
             '.sgn-offers-list-items-container'
         );
 
-        offerOl.innerHTML = Mustache.render(offerTemplate, {
-            translations,
-            offers: searchKey ? await fetchSearch(searchKey) : offersList
-        });
+        if (offerOl && offerTemplate)
+            offerOl.innerHTML = Mustache.render(offerTemplate, {
+                translations,
+                offers: searchKey ? await fetchSearch(searchKey) : offersList
+            });
 
         addOfferClickListener();
     };
 
     const addScrollListener = () => {
         container
-            .querySelector('.sgn-offers-list-items-container')
+            ?.querySelector('.sgn-offers-list-items-container')
             ?.addEventListener('scroll', fetchOnScrollEnd);
     };
 
     const addSearchListener = () => {
         container
-            .querySelector('.sgn-offers-search-text')
+            ?.querySelector('.sgn-offers-search-text')
             ?.addEventListener('input', fetchOnSearch);
     };
 
     const addOfferClickListener = () => {
         container
-            .querySelectorAll('.sgn-offers-content-container')
+            ?.querySelectorAll('.sgn-offers-content-container')
             .forEach((itemEl) => {
                 itemEl.addEventListener(
                     'click',
@@ -178,7 +187,7 @@ const OfferList = ({
         const {pageId, pageNum} = e.currentTarget.dataset;
 
         destroyModal();
-        sgnViewer.navigateToPageId(pageId);
+        sgnViewer?.navigateToPageId(pageId);
 
         if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
             pushQueryParam({
@@ -197,17 +206,17 @@ const OfferList = ({
         );
 
         destroyModal();
-        offerCell.scrollIntoView({behavior: 'smooth'});
+        offerCell?.scrollIntoView({behavior: 'smooth'});
     };
 
     const render = async () => {
         offersList = await fetchOffers(0, 24);
         container = document.createElement('div');
         container.className = 'sgn-offers-container';
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            offers: offersList
-        });
+        container.innerHTML = Mustache.render(
+            template?.innerHTML || defaultTemplate,
+            {translations, offers: offersList}
+        );
 
         addSearchListener();
         addScrollListener();

@@ -1,4 +1,4 @@
-import {request, V2Catalog, V2Page} from '../core';
+import {request, V2Catalog, V2Hotspot, V2Page} from '../core';
 import {Tracker} from '../events';
 import Viewer, {ViewerInit} from './viewer';
 
@@ -19,7 +19,7 @@ export default class Bootstrapper {
 
     createViewer(
         data: {details: V2Catalog; pages: V2Page[]},
-        viewerOptions: Partial<ViewerInit>
+        viewerOptions?: Partial<ViewerInit>
     ) {
         return new Viewer(this.options.el!, {
             id: this.options.id,
@@ -53,7 +53,7 @@ export default class Bootstrapper {
         );
     }
 
-    async fetch(callback) {
+    async fetch(callback?: Parameters<typeof request>[1]) {
         try {
             const {0: details, 1: pages} = await Promise.all([
                 this.fetchDetails(),
@@ -75,8 +75,8 @@ export default class Bootstrapper {
         }
     }
 
-    fetchDetails = (callback?: (error: Error | null, result?: any) => void) =>
-        request(
+    fetchDetails = (callback?: Parameters<typeof request>[1]) =>
+        request<V2Catalog>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
@@ -85,8 +85,8 @@ export default class Bootstrapper {
             callback
         );
 
-    fetchPages = (callback?: (error: Error | null, result?: any) => void) =>
-        request(
+    fetchPages = (callback?: Parameters<typeof request>[1]) =>
+        request<V2Page[]>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
@@ -95,8 +95,8 @@ export default class Bootstrapper {
             callback
         );
 
-    fetchHotspots = (callback) =>
-        request(
+    fetchHotspots = (callback?: Parameters<typeof request>[1]) =>
+        request<V2Hotspot>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,

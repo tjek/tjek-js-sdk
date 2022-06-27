@@ -55,8 +55,8 @@ const SGN = {
 };
 
 config.bind('change', (changedAttributes) => {
-    const newEventTracker = changedAttributes.eventTracker;
-    const newApiKey = changedAttributes.apiKey;
+    const newEventTracker: Tracker | undefined = changedAttributes.eventTracker;
+    const newApiKey: string | undefined = changedAttributes.apiKey;
     if (
         (newApiKey || newEventTracker) &&
         (newEventTracker || config.get('eventTracker'))?.trackId ===
@@ -76,13 +76,17 @@ config.bind('change', (changedAttributes) => {
 
     const newEventsTrackUrl = changedAttributes.eventsTrackUrl;
     if (newEventsTrackUrl && config.get('eventTracker')) {
-        config.get('eventTracker').setEventsTrackUrl(newEventsTrackUrl);
+        config
+            .get<Tracker>('eventTracker')
+            .setEventsTrackUrl(newEventsTrackUrl);
     }
 });
 
 if (isBrowser()) {
     // Autoconfigure the SDK.
-    const scriptEl = document.getElementById('sgn-sdk');
+    const scriptEl = document.getElementById(
+        'sgn-sdk'
+    ) as HTMLScriptElement | null;
 
     if (scriptEl) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
@@ -105,11 +109,7 @@ if (isBrowser()) {
         }
 
         if (component === 'incito-publication-viewer') {
-            CoreUIKit.IncitoPublication(scriptEl, {
-                apiKey: config.get('apiKey'),
-                coreUrl: config.get('coreUrl'),
-                eventTracker: config.get('eventTracker')
-            }).render();
+            CoreUIKit.IncitoPublication(scriptEl, config.shadow()).render();
         }
 
         if (component === 'list-publications') {

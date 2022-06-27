@@ -38,7 +38,7 @@ export function error(
     return err;
 }
 
-export function getQueryParam(field, url) {
+export function getQueryParam(field, url?: string) {
     const reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
     const string = reg.exec(url || window.location.href);
 
@@ -77,16 +77,16 @@ export const on = (
     el: HTMLElement,
     events: string | string[],
     selector: string,
-    callback: () => void
+    callback: (event: any) => void
 ) =>
     //@ts-expect-error
     Gator(el).on(events, selector, callback);
 
 export const off = (
     el: HTMLElement,
-    events: string | string[],
-    selector: string,
-    callback: () => void
+    events?: string | string[],
+    selector?: string,
+    callback?: (event: any) => void
 ) =>
     //@ts-expect-error
     Gator(el).off(events, selector, callback);

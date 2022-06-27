@@ -1,4 +1,5 @@
 import Mustache from 'mustache';
+import {transformScriptData} from '../helpers/transformers';
 import './main-container.styl';
 
 const defaultTemplate = `\
@@ -16,16 +17,24 @@ const defaultTemplate = `\
     </div>\
 `;
 
-const MainContainer = ({template, el, scriptEls}) => {
-    template = template?.innerHTML || defaultTemplate;
-
+const MainContainer = ({
+    template,
+    el,
+    scriptEls
+}: {
+    template?: Element | null;
+    el: Element | null;
+    scriptEls: ReturnType<typeof transformScriptData>;
+}) => {
     const setCustomStyles = () => {
-        const sgnIncito = el.querySelector('.sgn__incito');
-        sgnIncito.classList.add(`sgn__theme-${scriptEls.theme || 'light'}`);
+        const sgnIncito = el?.querySelector('.sgn__incito');
+        sgnIncito?.classList.add(`sgn__theme-${scriptEls.theme || 'light'}`);
     };
 
     const render = () => {
-        el.innerHTML = Mustache.render(template, {
+        if (!el) return;
+
+        el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
             disableHeader: scriptEls.disableHeader,
             disableShoppingList:
                 scriptEls.disableShoppingList ||
@@ -34,7 +43,7 @@ const MainContainer = ({template, el, scriptEls}) => {
             disableClose: scriptEls.disableClose
         });
 
-        el.querySelector('.sgn__incito')?.focus();
+        el.querySelector<HTMLDivElement>('.sgn__incito')?.focus();
 
         setCustomStyles();
     };

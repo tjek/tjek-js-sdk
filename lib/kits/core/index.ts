@@ -53,9 +53,9 @@ export interface V2Offer {
     images: V2Images;
     links: {webshop: string | null};
     pricing: V2Pricing;
-    publish: Date;
-    run_from: Date;
-    run_till: Date;
+    publish: string;
+    run_from: string;
+    run_till: string;
     quantity: V2Quantity;
     /** @deprecated */
     store_id?: null;
@@ -108,7 +108,7 @@ export interface V2Store {
 export interface V2Catalog {
     id: string;
     ern: string;
-    run_from: Date;
+    run_from: string;
     store_id: string | null;
     store_url: null;
     images: V2Images;
@@ -119,7 +119,7 @@ export interface V2Catalog {
     branding: V2Branding;
     pdf_url: string;
     label: string;
-    run_till: Date;
+    run_till: string;
     /** @deprecated */
     pages?: {view: []; thumb: []; zoom: []};
     background: string;
@@ -174,9 +174,9 @@ export interface V2Hotspot {
         heading: string;
         pricing: V2Pricing;
         quantity: V2Quantity;
-        run_from: Date;
-        run_till: Date;
-        publish: Date;
+        run_from: string;
+        run_till: string;
+        publish: string;
     };
     id_collection: {type: 'id'; provider: 'shopgun-core'; value: string}[];
 }

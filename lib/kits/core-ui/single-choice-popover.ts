@@ -1,10 +1,16 @@
 import Popover from './popover';
 
 export default function singleChoicePopover(
-    {items, el, header, x, y},
+    {
+        items,
+        el,
+        header,
+        x,
+        y
+    }: {items; el: HTMLElement; header?: string; x: number; y: number},
     callback
 ) {
-    let popover = null;
+    let popover: Popover | undefined;
 
     if (items.length === 1) {
         callback(items[0]);
@@ -14,7 +20,7 @@ export default function singleChoicePopover(
         popover.bind('selected', (e) => {
             callback(items[e.index]);
 
-            popover.destroy();
+            popover?.destroy();
         });
 
         popover.bind('destroyed', () => {

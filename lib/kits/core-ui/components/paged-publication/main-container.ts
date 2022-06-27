@@ -1,4 +1,5 @@
 import Mustache from 'mustache';
+import {transformScriptData} from '../helpers/transformers';
 import './main-container.styl';
 
 const defaultTemplate = `\
@@ -44,16 +45,24 @@ const defaultTemplate = `\
     </div>\
 `;
 
-const MainContainer = ({template, el, scriptEls}) => {
-    template = template?.innerHTML || defaultTemplate;
-
+const MainContainer = ({
+    template,
+    el,
+    scriptEls
+}: {
+    template: Element | null;
+    el: Element | null;
+    scriptEls: ReturnType<typeof transformScriptData>;
+}) => {
     const setCustomStyles = () => {
+        // @ts-expect-error
         const sgnPp = el.querySelector('.sgn__pp');
-        sgnPp.classList.add(`sgn__theme-${scriptEls.theme || 'light'}`);
+        sgnPp?.classList.add(`sgn__theme-${scriptEls.theme || 'light'}`);
     };
 
     const render = () => {
-        el.innerHTML = Mustache.render(template, {
+        // @ts-expect-error
+        el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
             disableHeader: scriptEls.disableHeader
         });
 

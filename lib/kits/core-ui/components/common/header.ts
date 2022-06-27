@@ -1,11 +1,13 @@
 import Mustache from 'mustache';
 import {ESC as EscKey} from '../../../../key-codes';
 import * as clientLocalStorage from '../../../../storage/client-local';
+import type {V2Catalog} from '../../../core';
 import {
     getColorBrightness,
     pushQueryParam,
     translate
 } from '../helpers/component';
+import {transformScriptData} from '../helpers/transformers';
 import './header.styl';
 
 const defaultTemplate = `\
@@ -105,10 +107,15 @@ const Header = ({
     shoppingListCounterTemplate,
     el,
     scriptEls
+}: {
+    publicationType?: 'incito' | 'paged';
+    template?: Element | null;
+    shoppingListCounterTemplate?: Element | null;
+    el: Element | null;
+    scriptEls: ReturnType<typeof transformScriptData>;
 }) => {
-    let container = null;
+    let container: HTMLDivElement | null = null;
     publicationType = publicationType || 'paged';
-    template = template?.innerHTML || defaultTemplate;
 
     const translations = {
         close: translate('publication_viewer_close_label'),
@@ -117,7 +124,7 @@ const Header = ({
     };
 
     const renderShoppingListCounter = () => {
-        const shoppingListCountEl = container.querySelector(
+        const shoppingListCountEl = container?.querySelector(
             '.sgn__offer-shopping-list-count'
         );
 
@@ -135,7 +142,7 @@ const Header = ({
     };
 
     const setNavColor = (color) => {
-        const sgnNav = container.querySelector('.sgn__nav');
+        const sgnNav = container?.querySelector<HTMLDivElement>('.sgn__nav');
 
         if (sgnNav) {
             sgnNav.style.backgroundColor = color || 'transparent';
@@ -144,34 +151,29 @@ const Header = ({
         }
     };
 
-    const show = (data = {}) => {
-        const brandColor = data?.details?.branding?.color
-            ? `#${data?.details?.branding?.color}`
-            : '#2c2c2e';
-        const headerEl = container.querySelector('.sgn__header');
+    const show = (data: {details?: V2Catalog} = {}) => {
+        setNavColor(`#${data?.details?.branding?.color || '2c2c2e'}`);
 
-        setNavColor(brandColor);
-
-        if (headerEl) {
-            headerEl.classList.add('sgn-animate-header');
-        }
+        container
+            ?.querySelector('.sgn__header')
+            ?.classList.add('sgn-animate-header');
     };
 
     const addClosePubListener = () => {
         const sgnContainer =
             publicationType === 'incito'
-                ? el.querySelector('.sgn__incito')
-                : el.querySelector('.sgn__pp');
-        const closeBtn = container.querySelector('.sgn__close-publication');
+                ? el?.querySelector('.sgn__incito')
+                : el?.querySelector('.sgn__pp');
+        const closeBtn = container?.querySelector('.sgn__close-publication');
 
         closeBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             destroyPublication(sgnContainer);
         });
 
-        sgnContainer.addEventListener(
+        sgnContainer?.addEventListener(
             'keyup',
-            (e) => {
+            (e: KeyboardEvent) => {
                 if (e.keyCode === EscKey && closeBtn) {
                     destroyPublication(sgnContainer);
                 }
@@ -211,18 +213,22 @@ const Header = ({
     const render = () => {
         container = document.createElement('div');
         container.className = 'sgn__header-content';
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            disableHeader: scriptEls.disableHeader,
-            disableShoppingList:
-                scriptEls.disableShoppingList ||
-                scriptEls.offerClickBehavior === 'open_webshop_link_in_tab' ||
-                scriptEls.offerClickBehavior === 'redirect_to_webshop_link',
-            disableMenu: scriptEls.disableMenu,
-            disableClose: scriptEls.disableClose,
-            showHeaderLabels: scriptEls.showHeaderLabels,
-            isIncito: publicationType === 'incito'
-        });
+        container.innerHTML = Mustache.render(
+            template?.innerHTML || defaultTemplate,
+            {
+                translations,
+                disableHeader: scriptEls.disableHeader,
+                disableShoppingList:
+                    scriptEls.disableShoppingList ||
+                    scriptEls.offerClickBehavior ===
+                        'open_webshop_link_in_tab' ||
+                    scriptEls.offerClickBehavior === 'redirect_to_webshop_link',
+                disableMenu: scriptEls.disableMenu,
+                disableClose: scriptEls.disableClose,
+                showHeaderLabels: scriptEls.showHeaderLabels,
+                isIncito: publicationType === 'incito'
+            }
+        );
 
         renderShoppingListCounter();
         addStorageListener();

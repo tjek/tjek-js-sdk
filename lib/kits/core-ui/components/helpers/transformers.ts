@@ -1,4 +1,7 @@
-export const transformScriptData = (scriptEl, mainContainer) => {
+export const transformScriptData = (
+    scriptEl: HTMLScriptElement,
+    mainContainer: string
+) => {
     const {dataset} = scriptEl;
 
     return {

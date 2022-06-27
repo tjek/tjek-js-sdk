@@ -1,6 +1,7 @@
 import MicroEvent from 'microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
+import {V2Hotspot} from '../core';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
 import Controls from './controls';
@@ -10,7 +11,12 @@ import Hotspots from './hotspots';
 import {Page} from './page-spreads';
 import './viewer.styl';
 
-function defaultPickHotspot(hotspots, e, el, callback) {
+function defaultPickHotspot(
+    hotspots: V2Hotspot[],
+    e,
+    el: HTMLElement,
+    callback
+) {
     const popover = singleChoicePopover(
         {
             el,
@@ -190,7 +196,7 @@ class Viewer extends MicroEvent {
         return this;
     }
 
-    navigateToPageId(pageId, options) {
+    navigateToPageId(pageId, options?: Parameters<Verso['navigateTo']>[1]) {
         const verso = this._core.getVerso();
 
         const newPosition = verso.getPageSpreadPositionFromPageId(pageId)!;
@@ -199,7 +205,7 @@ class Viewer extends MicroEvent {
         return this;
     }
 
-    first = (options: Parameters<Verso['first']>[0]) => {
+    first = (options?: Parameters<Verso['first']>[0]) => {
         this._core.getVerso().first(options);
 
         return this;
@@ -217,7 +223,7 @@ class Viewer extends MicroEvent {
         return this;
     };
 
-    last = (options: Parameters<Verso['last']>[0]) => {
+    last = (options?: Parameters<Verso['last']>[0]) => {
         this._core.getVerso().last(options);
 
         return this;

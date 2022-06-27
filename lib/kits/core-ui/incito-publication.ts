@@ -1,22 +1,44 @@
+import type {IIncito} from '../../incito-browser/types';
 import * as clientLocalStorage from '../../storage/client-local';
 import {getQueryParam, on} from '../../util';
+import type {V2Catalog} from '../core';
 import request from '../core/request';
+import type {Tracker} from '../events';
+import type {Viewer} from '../incito-publication';
 import Bootstrapper from '../incito-publication/bootstrapper';
 import Header from './components/common/header';
 import MenuPopup from './components/common/menu-popup';
-import ShoppingList from './components/common/shopping-list';
 import OfferOverview from './components/common/offer-overview';
+import ShoppingList from './components/common/shopping-list';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/incito-publication/main-container';
 
 const IncitoPublication = (
-    scriptEl,
-    {mainContainer = '', apiKey, coreUrl, eventTracker} = {}
+    scriptEl: HTMLScriptElement,
+    {
+        mainContainer = '',
+        apiKey,
+        coreUrl,
+        eventTracker
+    }: {
+        mainContainer: string;
+        apiKey: string;
+        coreUrl: string;
+        eventTracker: Tracker;
+    }
 ) => {
-    let options = {};
-    let sgnData = {};
-    let sgnViewer = null;
-    let bootstrapper = null;
+    let options: {
+        el?: HTMLDivElement | null;
+        apiKey: string;
+        coreUrl: string;
+        eventTracker: Tracker;
+        pageId?: string;
+        id?: string;
+        businessId?: string;
+    };
+    let sgnData: {details?: V2Catalog; incito?: IIncito} | undefined;
+    let sgnViewer: Viewer | undefined;
+    let bootstrapper: Bootstrapper | undefined;
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -48,7 +70,6 @@ const IncitoPublication = (
 
     MainContainer({
         template: customTemplates.mainContainer,
-        shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     }).render();
@@ -66,7 +87,7 @@ const IncitoPublication = (
         ?.appendChild(header.render());
 
     const render = async () => {
-        if (Object.keys(options).length === 0) await setOptions();
+        if (Object.keys(options || {}).length === 0) await setOptions();
 
         await start();
 
@@ -104,9 +125,9 @@ const IncitoPublication = (
         shoppingListCounter?.classList.add('sgn-animate-bounce');
     };
 
-    const setOptions = async (opts) => {
+    const setOptions = async (opts?: any) => {
         options = {
-            el: document.querySelector('.sgn__incito'),
+            el: document.querySelector<HTMLDivElement>('.sgn__incito'),
             apiKey,
             coreUrl,
             eventTracker,
@@ -124,35 +145,38 @@ const IncitoPublication = (
 
     const start = async () => {
         const sgnLoader = document.querySelector('.sgn_loader-container');
+        // @ts-expect-error
         bootstrapper = new Bootstrapper(options);
 
         const data = await bootstrapper.fetch();
 
         sgnData = data;
+        // @ts-expect-error
         sgnViewer = bootstrapper.createViewer(data);
 
         header.show(sgnData);
 
-        on(
-            options.el,
-            'click',
-            '.incito__view[data-role="offer"]',
-            async function (e) {
-                e.preventDefault();
+        if (options?.el)
+            on(
+                options.el,
+                'click',
+                '.incito__view[data-role="offer"]',
+                async function (e) {
+                    e.preventDefault();
 
-                const viewId = this.dataset.id;
-                const publicationId = options.id;
+                    const viewId = this.dataset.id;
+                    const publicationId = options.id;
 
-                clickOfferCell(viewId, publicationId);
-            }
-        );
+                    clickOfferCell(viewId, publicationId);
+                }
+            );
 
         sgnViewer.start();
 
         if (scriptEls.disableGlobalScrollbar) {
             document
                 .querySelector('html')
-                .classList.add('sgn-incito-publication--open');
+                ?.classList.add('sgn-incito-publication--open');
         }
 
         sgnLoader?.parentNode?.removeChild(sgnLoader);
@@ -185,7 +209,7 @@ const IncitoPublication = (
     const clickOfferCell = async (viewId, publicationId) => {
         dispatchOfferClickEvent({fetchOffer, viewId, publicationId});
 
-        const shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
+        const shoppingBtn = options.el?.querySelector('.sgn__offer-shopping');
 
         if (scriptEls.offerClickBehavior === 'overview_modal') {
             const {offer} = await fetchOffer({viewId, publicationId});
@@ -204,10 +228,12 @@ const IncitoPublication = (
             const newWindowRef = window.open();
             const {offer} = await fetchOffer({viewId, publicationId});
 
-            if (offer.webshop_link) {
-                newWindowRef.location = offer.webshop_link;
-            } else {
-                newWindowRef.close();
+            if (newWindowRef) {
+                if (offer.webshop_link) {
+                    newWindowRef.location = offer.webshop_link;
+                } else {
+                    newWindowRef.close();
+                }
             }
         } else if (
             scriptEls.offerClickBehavior === 'redirect_to_webshop_link'
@@ -252,12 +278,14 @@ const IncitoPublication = (
     };
 
     const addScrollListener = () => {
+        if (!options.el) return;
+
         const isContainerFixed =
             window.getComputedStyle(options.el).position === 'fixed';
         const progressContainer = options.el.querySelector(
             '.sgn-incito__scroll-progress'
         );
-        const progressBar = options.el.querySelector(
+        const progressBar = options.el.querySelector<HTMLDivElement>(
             '.sgn-incito__scroll-progress-bar'
         );
         const progressText = options.el.querySelector(
@@ -269,9 +297,13 @@ const IncitoPublication = (
 
             options.el.addEventListener('scroll', () => {
                 const scrollValue = getContainerScrollValue();
-
-                progressBar.style.transform = `scaleX(${scrollValue / 100})`;
-                progressText.innerHTML = `${Math.round(scrollValue)}%`;
+                if (scrollValue) {
+                    if (progressBar)
+                        progressBar.style.transform = `scaleX(${
+                            scrollValue / 100
+                        })`;
+                    progressText.innerHTML = `${Math.round(scrollValue)}%`;
+                }
             });
         } else {
             progressContainer?.parentNode?.removeChild(progressContainer);
@@ -279,12 +311,13 @@ const IncitoPublication = (
     };
 
     const getContainerScrollValue = () =>
+        options.el &&
         (100 * options.el.scrollTop) /
-        (options.el.scrollHeight - options.el.clientHeight);
+            (options.el.scrollHeight - options.el.clientHeight);
 
     const fetchLatestPublicationId = async () =>
         (
-            await request({
+            await request<V2Catalog[]>({
                 apiKey,
                 coreUrl,
                 url: '/v2/catalogs',
@@ -297,36 +330,88 @@ const IncitoPublication = (
             })
         )?.[0]?.id;
 
-    const fetchOffer = async ({viewId, publicationId}, callback) => {
-        try {
-            const res = await request({
-                apiKey,
-                coreUrl,
-                url: '/v4/rpc/get_offer_from_incito_publication_view',
-                method: 'post',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    view_id: viewId,
-                    publication_id: publicationId
-                })
+    const fetchOffer = async ({viewId, publicationId}) => {
+        const res = await request<{
+            offer: {
+                __typename: 'offer';
+                id: string;
+                name: string;
+                description?: string;
+                images: {width: number; height?: number; url: string}[];
+                webshop_link?: string;
+                price: number;
+                currency_code:
+                    | 'DKK'
+                    | 'EUR'
+                    | 'NOK'
+                    | 'PLN'
+                    | 'SEK'
+                    | 'ISK'
+                    | 'RON';
+                savings?: number;
+                piece_count: {from: number; to: number};
+                unit_symbol:
+                    | 'gram'
+                    | 'kilogram'
+                    | 'milligram'
+                    | 'milliliter'
+                    | 'centiliter'
+                    | 'deciliter'
+                    | 'liter'
+                    | 'piece'
+                    | 'microgram'
+                    | 'centigram'
+                    | 'decigram'
+                    | 'tonne'
+                    | 'ounce'
+                    | 'pound'
+                    | 'stone'
+                    | 'us_ton'
+                    | 'imperial_ton'
+                    | 'kiloliter'
+                    | 'cubic_meter'
+                    | 'megaliter'
+                    | 'us_teaspoon'
+                    | 'us_tablespoon'
+                    | 'us_fluid_ounce'
+                    | 'us_cup'
+                    | 'us_pint'
+                    | 'us_quart'
+                    | 'us_gallon'
+                    | 'imperial_fluid_ounce'
+                    | 'imperial_teaspoon'
+                    | 'imperial_tablespoon'
+                    | 'imperial_pint'
+                    | 'imperial_quart'
+                    | 'imperial_gallon'
+                    | 'cubic_inch'
+                    | 'cubic_foot';
+                unit_size: {from: number; to: number};
+                validity: {from: Date; to: Date};
+                visible_from: string;
+            };
+        }>({
+            apiKey,
+            coreUrl,
+            url: '/v4/rpc/get_offer_from_incito_publication_view',
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                view_id: viewId,
+                publication_id: publicationId
+            })
+        });
+
+        if (!res) throw new Error();
+
+        if (res.offer.id) {
+            eventTracker?.trackOfferOpened({
+                'of.id': res.offer.id,
+                vt: eventTracker.createViewToken(res.offer.id)
             });
-            if (res.offer.id) {
-                eventTracker?.trackOfferOpened({
-                    'of.id': res.offer.id,
-                    vt: eventTracker.createViewToken(res.offer.id)
-                });
-            }
-
-            if (typeof callback === 'function') callback(null, res);
-
-            return res;
-        } catch (err) {
-            if (typeof callback === 'function') {
-                callback(err);
-            } else {
-                throw err;
-            }
         }
+
+        return res;
     };
 
     return {render, setOptions};

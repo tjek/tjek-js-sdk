@@ -1,5 +1,7 @@
 import Mustache from 'mustache';
+import {Viewer} from '../../../paged-publication';
 import {createModal, formatDate, translate} from '../helpers/component';
+import {transformScriptData} from '../helpers/transformers';
 import SectionList from '../incito-publication/section-list';
 import PageList from '../paged-publication/page-list';
 import './menu-popup.styl';
@@ -69,6 +71,28 @@ const MenuPopup = ({
     sgnViewer,
     templates,
     scriptEls
+}: {
+    publicationType?: string;
+    configs: {
+        apiKey: string;
+        coreUrl: string;
+        id?: string;
+        businessId?: string;
+    };
+    sgnData;
+    sgnViewer?: Viewer;
+    templates: {
+        mainContainer: HTMLElement | null;
+        headerContainer: HTMLElement | null;
+        offerList: HTMLElement | null;
+        shoppingList: HTMLElement | null;
+        shoppingListCounter: HTMLElement | null;
+        sectionList?: HTMLElement | null;
+        pageList?: HTMLElement | null;
+        offerOverview: HTMLElement | null;
+        menuContainer: HTMLElement | null;
+    };
+    scriptEls: ReturnType<typeof transformScriptData>;
 }) => {
     publicationType = publicationType || 'paged';
 
@@ -81,7 +105,7 @@ const MenuPopup = ({
         downloadButton: translate('publication_viewer_download_button')
     };
 
-    let container = null;
+    let container: HTMLDivElement | null = null;
     const render = async () => {
         container = document.createElement('div');
         container.className = 'sgn-menu-popup-container';
@@ -118,21 +142,22 @@ const MenuPopup = ({
     };
 
     const addTabClickListener = () => {
-        const tabContentItems = container.querySelectorAll(
+        const tabContentItems = container?.querySelectorAll(
             '.sgn-menu-tab-content'
         );
 
         container
-            .querySelectorAll('.sgn-menu-tab-btn')
+            ?.querySelectorAll('.sgn-menu-tab-btn')
             .forEach((itemEl, index) => {
                 itemEl.addEventListener(
                     'click',
                     (e) => {
                         hideTabContents();
-                        if (tabContentItems[index]) {
-                            e.currentTarget.classList.add(
-                                'sgn-menu-tab-btn-active'
-                            );
+                        if (tabContentItems?.[index]) {
+                            (
+                                e.currentTarget as HTMLButtonElement | null
+                            )?.classList.add('sgn-menu-tab-btn-active');
+
                             tabContentItems[index].classList.add(
                                 'sgn-menu-tab-content-active'
                             );
@@ -144,19 +169,19 @@ const MenuPopup = ({
     };
 
     const hideTabContents = () => {
-        container.querySelectorAll('.sgn-menu-tab-btn').forEach((itemEl) => {
+        container?.querySelectorAll('.sgn-menu-tab-btn').forEach((itemEl) => {
             itemEl.classList.remove('sgn-menu-tab-btn-active');
         });
 
         container
-            .querySelectorAll('.sgn-menu-tab-content')
+            ?.querySelectorAll('.sgn-menu-tab-content')
             .forEach((itemEl) => {
                 itemEl.classList.remove('sgn-menu-tab-content-active');
             });
     };
 
     const renderPageList = async () =>
-        container.querySelector('.sgn-menu-tab-content-pages')?.appendChild(
+        container?.querySelector('.sgn-menu-tab-content-pages')?.appendChild(
             await PageList({
                 scriptEls,
                 configs,
@@ -167,7 +192,7 @@ const MenuPopup = ({
         );
 
     const renderSectionList = async () =>
-        container.querySelector('.sgn-menu-tab-content-sections')?.appendChild(
+        container?.querySelector('.sgn-menu-tab-content-sections')?.appendChild(
             await SectionList({
                 sgnData,
                 template: templates.sectionList
@@ -175,7 +200,7 @@ const MenuPopup = ({
         );
 
     const renderOfferList = async () =>
-        container.querySelector('.sgn-menu-tab-content-offers').appendChild(
+        container?.querySelector('.sgn-menu-tab-content-offers')?.appendChild(
             await OfferList({
                 scriptEls,
                 publicationType,

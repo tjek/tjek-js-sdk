@@ -8,19 +8,22 @@ export const insertAfter = (referenceNode, newNode) => {
 
 export const destroyModal = () => {
     const pubContainer =
-        document.querySelector('.sgn__pp') ||
-        document.querySelector('.sgn__incito');
+        document.querySelector<HTMLDivElement>('.sgn__pp') ||
+        document.querySelector<HTMLDivElement>('.sgn__incito');
     const modalContainer = document.querySelector('.sgn-modal-container');
-    modalContainer.classList.add('sgn-modal-container-on-destroy');
+    modalContainer?.classList.add('sgn-modal-container-on-destroy');
 
-    pubContainer.focus();
+    pubContainer?.focus();
 
     window.setTimeout(() => {
         modalContainer?.parentNode?.removeChild(modalContainer);
     }, 300);
 };
 
-export const createModal = (container, destroyCallback) => {
+export const createModal = (
+    container: HTMLElement,
+    destroyCallback?: (event: any) => void
+) => {
     if (!document.querySelector('.sgn-modal-container')) {
         const pubContainer =
             document.querySelector('.sgn__pp') ||
@@ -29,9 +32,9 @@ export const createModal = (container, destroyCallback) => {
         const blocker = document.createElement('div');
 
         blocker.className = 'sgn-blocker';
-        pubContainer.appendChild(modalContainer);
+        pubContainer?.appendChild(modalContainer);
         modalContainer.className = 'sgn-modal-container';
-        modalContainer.tabIndex = '-1';
+        modalContainer.tabIndex = -1;
         modalContainer.appendChild(blocker);
         modalContainer.appendChild(container);
         modalContainer.focus();
@@ -62,7 +65,11 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
     }).format(price);
 };
 
-export const formatDate = (dateStr, localeCode = 'en_US', options) => {
+export const formatDate = (
+    dateStr: string,
+    localeCode: string = 'en_US',
+    options?: Intl.DateTimeFormatOptions
+) => {
     const date = new Date(dateStr);
 
     return new Intl.DateTimeFormat(
@@ -86,9 +93,9 @@ const getTranslationOverride = (dataset = {}) =>
         return translationsKeyVal;
     }, {});
 
-export const translate = (key = '', view) => {
+export const translate = (key = '', view = undefined) => {
     const scriptEl = document.getElementById('sgn-sdk');
-    const {dataset} = scriptEl;
+    const dataset = scriptEl?.dataset;
     const browserLocale =
         navigator.language?.replace('-', '_')?.toLocaleLowerCase() || 'en_us';
     const locale = dataset?.localeCode
@@ -135,8 +142,8 @@ export const getColorBrightness = (color) => {
 export const pushQueryParam = (queryParams = {}) => {
     const newUrl = new URL(window.location.href);
 
-    Object.entries(queryParams)?.forEach(([key, val]) => {
-        newUrl.searchParams[val ? 'set' : 'delete'](key, val);
+    Object.entries(queryParams).forEach(([key, val]) => {
+        newUrl.searchParams[val ? 'set' : 'delete'](key, String(val));
     });
 
     window.history.pushState({path: String(newUrl)}, '', newUrl);

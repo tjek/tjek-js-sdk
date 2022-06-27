@@ -19,7 +19,7 @@ class Config extends MicroEvent {
         this.trigger('change', changedAttributes);
     }
 
-    get(option: string) {
+    get<T>(option: string): T {
         if (option === 'appKey') option = 'apiKey';
         return this.#attrs[option];
     }

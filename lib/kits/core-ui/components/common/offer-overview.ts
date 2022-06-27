@@ -6,7 +6,7 @@ import {
     translate,
     formatDate
 } from '../helpers/component';
-import {request} from '../../../core';
+import {request, V2Offer} from '../../../core';
 import './offer-overview.styl';
 
 const defaultTemplate = `\
@@ -97,7 +97,7 @@ const OfferOverview = ({
     addToShoppingList
 }) => {
     template = template?.innerHTML || defaultTemplate;
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     const translations = {
         localeCode: translate('locale_code'),
@@ -156,7 +156,7 @@ const OfferOverview = ({
 
     const addOpenWebshopListener = () => {
         container
-            .querySelector('.sgn-shopping-open-webshop-btn')
+            ?.querySelector('.sgn-shopping-open-webshop-btn')
             ?.addEventListener('click', () => {
                 window.open(offer.webshop_link);
             });
@@ -164,16 +164,16 @@ const OfferOverview = ({
 
     const addShoppingListListener = () => {
         container
-            .querySelector('.sgn-shopping-add-to-list-btn')
+            ?.querySelector('.sgn-shopping-add-to-list-btn')
             ?.addEventListener('click', () => {
                 addToShoppingList(offer);
                 destroyModal();
             });
     };
 
-    const fetchOffer = async (id) => {
+    const fetchOffer = async (id: string) => {
         const {localeCode, currency} = translations;
-        const offer = await request({
+        const offer = await request<V2Offer>({
             apiKey: configs.apiKey,
             coreUrl: configs.coreUrl,
             url: `/v2/offers/${id}`
@@ -186,17 +186,21 @@ const OfferOverview = ({
                 localeCode,
                 offer?.pricing?.currency || currency
             ),
-            from: formatDate(offer?.run_from, translations.localeCode, {
-                dateStyle: 'full'
-            }),
-            till: formatDate(offer?.run_till, translations.localeCode, {
-                dateStyle: 'full'
-            })
+            from:
+                offer?.run_from &&
+                formatDate(offer?.run_from, translations.localeCode, {
+                    dateStyle: 'full'
+                }),
+            till:
+                offer?.run_till &&
+                formatDate(offer?.run_till, translations.localeCode, {
+                    dateStyle: 'full'
+                })
         };
     };
 
     const addEventListeners = () => {
-        document.querySelector('.sgn-modal-container')?.focus();
+        document.querySelector<HTMLDivElement>('.sgn-modal-container')?.focus();
 
         addOpenWebshopListener();
         addShoppingListListener();

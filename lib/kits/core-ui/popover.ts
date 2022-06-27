@@ -25,10 +25,18 @@ const defaultTemplate = `\
 </div>\
 `;
 
+interface PopoverOptions {
+    header?: string;
+    singleChoiceItems?: any;
+    template?: string;
+    x: number;
+    y: number;
+}
 class Popover extends MicroEvent {
     el = document.createElement('div');
     backgroundEl = document.createElement('div');
-    constructor(options = {}) {
+    options: PopoverOptions;
+    constructor(options: PopoverOptions) {
         super();
         this.options = options;
     }
@@ -37,7 +45,7 @@ class Popover extends MicroEvent {
         const {header, singleChoiceItems, template} = this.options;
 
         this.el.className = 'sgn-popover';
-        this.el.setAttribute('tabindex', -1);
+        this.el.setAttribute('tabindex', '-1');
         this.el.innerHTML = Mustache.render(template || defaultTemplate, {
             header,
             singleChoiceItems: singleChoiceItems?.map((item, index) => ({
@@ -69,29 +77,32 @@ class Popover extends MicroEvent {
         let top = this.options.y;
         let left = this.options.x;
 
-        const menuEl = this.el.querySelector('.sgn-popover__menu');
+        const menuEl =
+            this.el.querySelector<HTMLDivElement>('.sgn-popover__menu');
 
-        const width = menuEl.offsetWidth;
-        const height = menuEl.offsetHeight;
-        const parentWidth = this.el.parentNode.offsetWidth;
-        const parentHeight = this.el.parentNode.offsetHeight;
-        const boundingRect = this.el.parentNode.getBoundingClientRect();
+        if (menuEl && this.el.parentElement) {
+            const width = menuEl.offsetWidth;
+            const height = menuEl.offsetHeight;
+            const parentWidth = this.el.parentElement.offsetWidth;
+            const parentHeight = this.el.parentElement.offsetHeight;
+            const boundingRect = this.el.parentElement.getBoundingClientRect();
 
-        top -= boundingRect.top;
-        left -= boundingRect.left;
+            top -= boundingRect.top;
+            left -= boundingRect.left;
 
-        top -= window.pageYOffset;
-        left -= window.pageXOffset;
+            top -= window.pageYOffset;
+            left -= window.pageXOffset;
 
-        menuEl.style.top =
-            top + height > parentHeight
-                ? parentHeight - height + 'px'
-                : top + 'px';
+            menuEl.style.top =
+                top + height > parentHeight
+                    ? parentHeight - height + 'px'
+                    : top + 'px';
 
-        menuEl.style.left =
-            left + width > parentWidth
-                ? parentWidth - width + 'px'
-                : left + 'px';
+            menuEl.style.left =
+                left + width > parentWidth
+                    ? parentWidth - width + 'px'
+                    : left + 'px';
+        }
     }
 
     addEventListeners() {

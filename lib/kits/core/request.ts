@@ -14,13 +14,13 @@ async function request<T>(
         coreUrl?: string;
         url: string | URL;
         apiKey?: string;
-        qs?: Record<string, string>;
+        qs?: Record<string, string | number | undefined>;
         method?: RequestInit['method'];
         headers?: Record<string, string>;
         body?: RequestInit['body'];
     },
-    callback?: (error: Error | null, result?: T) => void
-): Promise<void | Awaited<T>> {
+    callback?: (error: Error | null, result?: T | null) => void
+): Promise<Awaited<T>> {
     try {
         const url = new URL(rawUrl, coreUrl);
 
@@ -30,6 +30,7 @@ async function request<T>(
             );
         }
 
+        // @ts-expect-error
         for (const key in qs) url.searchParams.append(key, qs[key]);
 
         const response = await fetch(String(url), {
@@ -48,7 +49,7 @@ async function request<T>(
         ) {
             const json = await response.json();
 
-            if (typeof callback === 'function') callback(null, json);
+            callback?.(null, json);
 
             return json;
         }
@@ -57,8 +58,7 @@ async function request<T>(
             statusCode: response.status
         });
     } catch (error) {
-        // Don't throw when there's a callback to avoid creating uncaught promise rejections.
-        if (typeof callback === 'function') return callback(error);
+        callback?.(error);
 
         throw error;
     }

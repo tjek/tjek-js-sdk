@@ -100,7 +100,12 @@ export default class Bootstrapper {
         }));
     }
 
-    async fetch(callback) {
+    async fetch(
+        callback?: (
+            err: any,
+            res?: {details: V2Catalog; incito: IIncito}
+        ) => void
+    ) {
         try {
             const {0: details, 1: incito} = await Promise.all([
                 this.fetchDetails(this.options.id),

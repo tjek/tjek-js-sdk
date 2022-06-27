@@ -1,6 +1,8 @@
 import Mustache from 'mustache';
-import {request} from '../../../core';
+import {request, V2Page} from '../../../core';
+import {Viewer} from '../../../paged-publication';
 import {destroyModal, pushQueryParam} from '../helpers/component';
+import {transformScriptData} from '../helpers/transformers';
 import './page-list.styl';
 
 const defaultTemplate = `\
@@ -27,30 +29,37 @@ const defaultTemplate = `\
 `;
 
 const PageList = ({
-    scriptEls = {},
-    configs = {},
-    sgnData = {},
+    scriptEls,
+    configs,
+    sgnData,
     sgnViewer,
     template
+}: {
+    scriptEls: ReturnType<typeof transformScriptData>;
+    configs: {apiKey: string; coreUrl: string; id?: string};
+    sgnData?: {pages?: V2Page[]};
+    sgnViewer?: Viewer;
+    template?: HTMLElement | null;
 }) => {
-    let container = null;
-
-    template = template?.innerHTML || defaultTemplate;
+    let container: HTMLDivElement | null = null;
 
     const render = async () => {
         container = document.createElement('div');
         container.className = 'sgn-pages-container';
-        container.innerHTML = Mustache.render(template, {
-            pages: transformPages(
-                sgnData?.pages?.length > 0
-                    ? sgnData.pages
-                    : await request({
-                          apiKey: configs.apiKey,
-                          coreUrl: configs.coreUrl,
-                          url: `/v2/catalogs/${configs.id}/pages`
-                      })
-            )
-        });
+        container.innerHTML = Mustache.render(
+            template?.innerHTML || defaultTemplate,
+            {
+                pages: transformPages(
+                    sgnData?.pages?.length
+                        ? sgnData.pages
+                        : await request<V2Page[]>({
+                              apiKey: configs.apiKey,
+                              coreUrl: configs.coreUrl,
+                              url: `/v2/catalogs/${configs.id}/pages`
+                          })
+                )
+            }
+        );
 
         addPageClickListener();
 
@@ -58,7 +67,7 @@ const PageList = ({
     };
 
     const addPageClickListener = () => {
-        container.querySelectorAll('.sgn-page-item').forEach((itemEl) => {
+        container?.querySelectorAll('.sgn-page-item').forEach((itemEl) => {
             itemEl.addEventListener('click', navigateToPage, false);
         });
     };
@@ -68,7 +77,7 @@ const PageList = ({
         const {pageId, pageNum} = e.currentTarget.dataset;
 
         destroyModal();
-        sgnViewer.navigateToPageId(pageId);
+        sgnViewer?.navigateToPageId(pageId);
 
         if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
             pushQueryParam({

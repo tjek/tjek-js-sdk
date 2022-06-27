@@ -3,7 +3,7 @@ import IncitoPublication from './incito-publication';
 import PagedPublication from './paged-publication';
 import {transformScriptData} from './components/helpers/transformers';
 import {getQueryParam} from '../../util';
-import {request} from '../core';
+import {request, V2Catalog} from '../core';
 import {
     pushQueryParam,
     formatDate,
@@ -11,10 +11,21 @@ import {
     translate,
     getHashFragments
 } from './components/helpers/component';
+import type {Tracker} from '../events';
 
 const ListPublications = (
-    scriptEl,
-    {mainContainer = '', apiKey, coreUrl, eventTracker} = {}
+    scriptEl: HTMLScriptElement,
+    {
+        mainContainer = '',
+        apiKey,
+        coreUrl,
+        eventTracker
+    }: {
+        mainContainer: string;
+        apiKey: string;
+        coreUrl: string;
+        eventTracker: Tracker;
+    }
 ) => {
     const scriptEls = {
         ...transformScriptData(scriptEl, mainContainer),
@@ -52,26 +63,30 @@ const ListPublications = (
         clientFilter: scriptEls.clientFilter
     };
 
-    let publications = [];
+    let publications: ReturnType<typeof transformPublications> = [];
 
     const clickPublicationItem = (e) => {
         const {id} = e.currentTarget.dataset || {};
         const publication = findPublicationById(id);
 
-        if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-            pushQueryParam({[scriptEls.publicationIdParam]: id});
-        } else if (scriptEls.displayUrlParams?.toLowerCase() === 'hash') {
-            location.hash = `${scriptEls.publicationHash}/${id}`;
-        }
+        if (publication) {
+            if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                pushQueryParam({[scriptEls.publicationIdParam]: id});
+            } else if (scriptEls.displayUrlParams?.toLowerCase() === 'hash') {
+                location.hash = `${scriptEls.publicationHash}/${id}`;
+            }
 
-        dispatchPublicationClickEvent(publication);
-        renderPublicationViewer(publication);
+            dispatchPublicationClickEvent(publication);
+            renderPublicationViewer(publication);
+        }
     };
 
-    const findPublicationById = (id) =>
+    const findPublicationById = (id: string) =>
         publications?.find((publication) => publication.id === id);
 
-    const renderPublicationViewer = (publication) => {
+    const renderPublicationViewer = (
+        publication: ReturnType<typeof transformPublications>[number]
+    ) => {
         const {id, types} = publication;
 
         if (
@@ -121,7 +136,7 @@ const ListPublications = (
 
     const fetchPublications = async () =>
         transformPublications(
-            await request({
+            await request<V2Catalog[]>({
                 apiKey: options.apiKey,
                 coreUrl: options.coreUrl,
                 url: `/v2/catalogs`,
@@ -136,11 +151,11 @@ const ListPublications = (
             })
         );
 
-    const transformPublications = (publications) => {
+    const transformPublications = (publications?: V2Catalog[]) => {
         const localeCode = translate('locale_code');
         const filters = transformFilter(options.clientFilter);
 
-        return publications
+        return (publications || [])
             .filter((publication) =>
                 Object.entries(filters).reduce(
                     (prev, {0: key, 1: value}) =>
@@ -166,17 +181,19 @@ const ListPublications = (
 
         addPublicationListener();
 
-        if (getQueryParam(scriptEls.publicationIdParam)) {
-            renderPublicationViewer(
-                findPublicationById(getQueryParam(scriptEls.publicationIdParam))
-            );
-        } else if (getHashFragments(scriptEls.publicationHash)?.publicationId) {
-            renderPublicationViewer(
-                findPublicationById(
-                    getHashFragments(scriptEls.publicationHash).publicationId
-                )
-            );
+        const paramPublicationId = getQueryParam(scriptEls.publicationIdParam);
+        const hashPulicationId = getHashFragments(
+            scriptEls.publicationHash
+        )?.publicationId;
+        let publication:
+            | ReturnType<typeof transformPublications>[number]
+            | undefined;
+        if (paramPublicationId) {
+            publication = findPublicationById(paramPublicationId);
+        } else if (hashPulicationId) {
+            publication = findPublicationById(hashPulicationId);
         }
+        if (publication) renderPublicationViewer(publication);
     };
 
     return {render};
