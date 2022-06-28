@@ -75,8 +75,6 @@ export const formatDate = (
         dateStr.length - 2
     )}:${dateStr.slice(dateStr.length - 2)}`; // Add Colon ':' to timezone format
 
-    console.log(dateStr, formatedDateStr);
-
     const date = new Date(formatedDateStr);
 
     return new Intl.DateTimeFormat(
