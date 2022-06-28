@@ -51,6 +51,24 @@ const bundles = [
     {
         input: path.join(libDir, 'kits', 'events', 'tracker.ts'),
         output: path.join(distDir, 'tjek-sdk', 'events', 'tracker')
+    },
+    {
+        input: path.join(libDir, 'incito-browser', 'incito.ts'),
+        output: path.join(distDir, 'tjek-sdk', 'incito-publication', 'incito')
+    },
+    {
+        input: path.join(
+            libDir,
+            'kits',
+            'paged-publication',
+            'bootstrapper.ts'
+        ),
+        output: path.join(
+            distDir,
+            'tjek-sdk',
+            'paged-publication',
+            'bootstrapper'
+        )
     }
 ];
 
