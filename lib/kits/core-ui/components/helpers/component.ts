@@ -70,7 +70,14 @@ export const formatDate = (
     localeCode: string = 'en_US',
     options?: Intl.DateTimeFormatOptions
 ) => {
-    const date = new Date(dateStr);
+    const formatedDateStr = `${dateStr.slice(
+        0,
+        dateStr.length - 2
+    )}:${dateStr.slice(dateStr.length - 2)}`; // Add Colon ':' to timezone format
+
+    console.log(dateStr, formatedDateStr);
+
+    const date = new Date(formatedDateStr);
 
     return new Intl.DateTimeFormat(
         localeCode.replace('_', '-'),
