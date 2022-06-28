@@ -18,7 +18,7 @@ const defaultTemplate = `\
                     <span>{{label}}</span>
                 </div>
                 <div class="sgn-menu-till">
-                    <span>{{translations.untilLabel}} {{till}}</span>
+                    <span>{{from}} - {{till}}</span>
                 </div>
             </div>
         </div>
@@ -145,12 +145,8 @@ const OfferOverview = ({
             images: {
                 zoom: offer?.images?.[0]?.url
             },
-            from: formatDate(offer?.validity?.from, translations.localeCode, {
-                dateStyle: 'full'
-            }),
-            till: formatDate(offer?.validity?.to, translations.localeCode, {
-                dateStyle: 'full'
-            })
+            from: formatDate(offer?.validity?.from, translations.localeCode),
+            till: formatDate(offer?.validity?.to, translations.localeCode)
         };
     };
 
@@ -188,14 +184,10 @@ const OfferOverview = ({
             ),
             from:
                 offer?.run_from &&
-                formatDate(offer?.run_from, translations.localeCode, {
-                    dateStyle: 'full'
-                }),
+                formatDate(offer?.run_from, translations.localeCode),
             till:
                 offer?.run_till &&
-                formatDate(offer?.run_till, translations.localeCode, {
-                    dateStyle: 'full'
-                })
+                formatDate(offer?.run_till, translations.localeCode)
         };
     };
 
