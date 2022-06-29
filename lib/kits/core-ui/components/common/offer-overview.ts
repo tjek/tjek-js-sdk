@@ -4,7 +4,6 @@ import {
     destroyModal,
     formatPrice,
     translate,
-    formatDate,
     parseDateStr
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
