@@ -4,7 +4,8 @@ import {
     destroyModal,
     formatPrice,
     translate,
-    formatDate
+    formatDate,
+    parseDateStr
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import './offer-overview.styl';
@@ -19,6 +20,9 @@ const defaultTemplate = `\
                 </div>
                 <div class="sgn-menu-till">
                     <span>{{from}} - {{till}}</span>
+                </div>
+                <div class="sgn-menu-till">
+                    <span>{{status}}</span>
                 </div>
             </div>
         </div>
@@ -145,8 +149,10 @@ const OfferOverview = ({
             images: {
                 zoom: offer?.images?.[0]?.url
             },
-            from: formatDate(offer?.validity?.from, translations.localeCode),
-            till: formatDate(offer?.validity?.to, translations.localeCode)
+            from:
+                offer?.validity?.from && formatOfferDate(offer?.validity?.from),
+            till: offer?.validity?.to && formatOfferDate(offer?.validity?.to),
+            status: getOfferStatus(offer?.validity?.from, offer?.validity?.to)
         };
     };
 
@@ -182,12 +188,9 @@ const OfferOverview = ({
                 localeCode,
                 offer?.pricing?.currency || currency
             ),
-            from:
-                offer?.run_from &&
-                formatDate(offer?.run_from, translations.localeCode),
-            till:
-                offer?.run_till &&
-                formatDate(offer?.run_till, translations.localeCode)
+            from: offer?.run_from && formatOfferDate(offer?.run_from),
+            till: offer?.run_till && formatOfferDate(offer?.run_till),
+            status: getOfferStatus(offer?.run_from, offer?.run_till)
         };
     };
 
@@ -196,6 +199,36 @@ const OfferOverview = ({
 
         addOpenWebshopListener();
         addShoppingListListener();
+    };
+
+    const formatOfferDate = (dateStr) => {
+        const date = parseDateStr(dateStr);
+        const month = `0${date.getUTCMonth() + 1}`.slice(-2);
+        const day = `0${date.getUTCDate()}`.slice(-2);
+
+        return `${day}/${month}`;
+    };
+
+    const getOfferStatus = (fromDateStr, tillDateStr) => {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const fromDate = parseDateStr(fromDateStr).valueOf();
+        const tillDate = parseDateStr(tillDateStr).valueOf();
+        const todayDate = new Date().valueOf();
+        const diffDays = Math.round(Math.abs((todayDate - fromDate) / oneDay));
+
+        if (todayDate >= fromDate && todayDate < tillDate) {
+            return translate('publication_viewer_expires_in_days_label', {
+                days: diffDays
+            });
+        } else if (todayDate > tillDate) {
+            return translate('publication_viewer_expired_label');
+        } else if (todayDate < fromDate) {
+            return translate('publication_viewer_valid_in_days_label', {
+                days: diffDays
+            });
+        }
+
+        return null;
     };
 
     return {render};

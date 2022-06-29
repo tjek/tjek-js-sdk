@@ -65,7 +65,7 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
     }).format(price);
 };
 
-const parseDateStr = (dateStr: string) => {
+export const parseDateStr = (dateStr: string) => {
     const parts = dateStr.match(
         /(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:\.(\d{0,7}))?(?:Z|(.)(\d{2}):?(\d{2})?)?/
     );
@@ -113,7 +113,7 @@ const getTranslationOverride = (dataset = {}) =>
         return translationsKeyVal;
     }, {});
 
-export const translate = (key = '', view = undefined) => {
+export const translate = (key = '', view = {}) => {
     const scriptEl = document.getElementById('sgn-sdk');
     const dataset = scriptEl?.dataset;
     const browserLocale =
