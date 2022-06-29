@@ -197,13 +197,14 @@ const OfferOverview = ({
         addShoppingListListener();
     };
 
-    const formatOfferDate = (dateStr) => {
-        const date = parseDateStr(dateStr);
-        const month = `0${date.getUTCMonth() + 1}`.slice(-2);
-        const day = `0${date.getUTCDate()}`.slice(-2);
-
-        return `${day}/${month}`;
-    };
+    const formatOfferDate = (dateStr) =>
+        parseDateStr(dateStr).toLocaleDateString(
+            translations.localeCode.replace('_', '-'),
+            {
+                day: '2-digit',
+                month: '2-digit'
+            }
+        );
 
     const getOfferStatus = (fromDateStr, tillDateStr) => {
         const oneDay = 24 * 60 * 60 * 1000;
