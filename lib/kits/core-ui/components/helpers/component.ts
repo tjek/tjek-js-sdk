@@ -65,12 +65,32 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
     }).format(price);
 };
 
+const parseDateStr = (dateStr: string) => {
+    const parts = dateStr.match(
+        /(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:\.(\d{0,7}))?(?:Z|(.)(\d{2}):?(\d{2})?)?/
+    );
+    if (parts) {
+        return new Date(
+            Date.UTC(
+                +parts[1],
+                +parts[2] - 1,
+                +parts[3],
+                +parts[4] - (+parts[9] || 0) * (parts[8] == '-' ? -1 : 1),
+                +parts[5] - (+parts[10] || 0) * (parts[8] == '-' ? -1 : 1),
+                +parts[6],
+                +((parts[7] || '0') + '00').substring(0, 3)
+            )
+        );
+    }
+    return new Date(NaN);
+};
+
 export const formatDate = (
     dateStr: string,
     localeCode: string = 'en_US',
     options?: Intl.DateTimeFormatOptions
 ) => {
-    const date = new Date(dateStr);
+    const date = parseDateStr(dateStr);
 
     return new Intl.DateTimeFormat(
         localeCode.replace('_', '-'),
