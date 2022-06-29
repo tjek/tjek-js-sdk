@@ -18,10 +18,7 @@ const defaultTemplate = `\
                     <span>{{label}}</span>
                 </div>
                 <div class="sgn-menu-till">
-                    <span>{{from}} - {{till}}</span>
-                </div>
-                <div class="sgn-menu-till">
-                    <span>{{status}}</span>
+                    <span>{{from}} - {{till}}</span><span class="sgn-menu-status"> {{status}}</span>
                 </div>
             </div>
         </div>
