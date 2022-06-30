@@ -213,6 +213,8 @@ const OfferOverview = ({
         const todayDate = new Date().valueOf();
         const diffDays = Math.round(Math.abs((todayDate - fromDate) / oneDay));
 
+        return null;
+
         if (todayDate >= fromDate && todayDate < tillDate) {
             return translate('publication_viewer_expires_in_days_label', {
                 days: diffDays
