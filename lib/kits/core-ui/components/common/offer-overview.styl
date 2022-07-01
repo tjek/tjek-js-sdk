@@ -29,7 +29,18 @@
             opacity 0.8
             cursor pointer
 
-    .sgn-menu-status
+    .sgn-menu-date
+        span
+            &[data-validity-state="inactive"]
+                color red
+            
+            &[data-validity-state="expired"]
+                color red
+
+            &[data-validity-state="active"]
+                color rgb(40, 175, 76)
+
+    .sgn-menu-status-message
         color #000000
 
     .sgn-offer-img

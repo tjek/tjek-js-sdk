@@ -17,8 +17,8 @@ const defaultTemplate = `\
                 <div class="sgn-menu-label">
                     <span>{{label}}</span>
                 </div>
-                <div class="sgn-menu-till">
-                    <span>{{from}} - {{till}}</span><span class="sgn-menu-status"> {{status}}</span>
+                <div class="sgn-menu-date">
+                    <span data-validity-state="{{status}}">{{from}} - {{till}}</span> <span class="sgn-menu-status-message">{{statusMessage}}</span>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@ const loaderTemplate = `\
                 <div class="sgn-menu-label">
                     <span>&nbsp;</span>
                 </div>
-                <div class="sgn-menu-till">
+                <div class="sgn-menu-date">
                     <span>&nbsp;</span>
                 </div>
             </div>
@@ -148,7 +148,11 @@ const OfferOverview = ({
             from:
                 offer?.validity?.from && formatOfferDate(offer?.validity?.from),
             till: offer?.validity?.to && formatOfferDate(offer?.validity?.to),
-            status: getOfferStatus(offer?.validity?.from, offer?.validity?.to)
+            status: getStatus(offer?.validity?.from, offer?.validity?.to),
+            statusMessage: getStatusMessage(
+                offer?.validity?.from,
+                offer?.validity?.to
+            )
         };
     };
 
@@ -186,7 +190,8 @@ const OfferOverview = ({
             ),
             from: offer?.run_from && formatOfferDate(offer?.run_from),
             till: offer?.run_till && formatOfferDate(offer?.run_till),
-            status: getOfferStatus(offer?.run_from, offer?.run_till)
+            status: getStatus(offer?.run_from, offer?.run_till),
+            statusMessage: getStatusMessage(offer?.run_from, offer?.run_till)
         };
     };
 
@@ -206,25 +211,47 @@ const OfferOverview = ({
             }
         );
 
-    const getOfferStatus = (fromDateStr, tillDateStr) => {
+    const getStatus = (fromDateStr, tillDateStr) => {
+        const fromDate = parseDateStr(fromDateStr).valueOf();
+        const tillDate = parseDateStr(tillDateStr).valueOf();
+        const todayDate = new Date().valueOf();
+
+        if (todayDate >= fromDate && todayDate < tillDate) {
+            return 'active';
+        } else if (todayDate > tillDate) {
+            return 'expired';
+        } else if (todayDate < fromDate) {
+            return 'inactive';
+        }
+
+        return null;
+    };
+
+    const getStatusMessage = (fromDateStr, tillDateStr) => {
         const oneDay = 24 * 60 * 60 * 1000;
         const fromDate = parseDateStr(fromDateStr).valueOf();
         const tillDate = parseDateStr(tillDateStr).valueOf();
         const todayDate = new Date().valueOf();
-        const diffDays = Math.round(Math.abs((todayDate - fromDate) / oneDay));
+        const status = getStatus(fromDateStr, tillDateStr);
 
-        return null;
+        if (status === 'active') {
+            const diffDays = Math.round(
+                Math.abs((tillDate - todayDate) / oneDay)
+            );
 
-        if (todayDate >= fromDate && todayDate < tillDate) {
             return translate('publication_viewer_expires_in_days_label', {
                 days: diffDays
             });
-        } else if (todayDate > tillDate) {
-            return translate('publication_viewer_expired_label');
-        } else if (todayDate < fromDate) {
+        } else if (status === 'inactive') {
+            const diffDays = Math.round(
+                Math.abs((fromDate - todayDate) / oneDay)
+            );
+
             return translate('publication_viewer_valid_in_days_label', {
                 days: diffDays
             });
+        } else if (status === 'expired') {
+            return translate('publication_viewer_expired_label');
         }
 
         return null;
