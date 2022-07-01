@@ -4,7 +4,6 @@ import {
     destroyModal,
     formatPrice,
     translate,
-    parseDateStr,
     getDateRange,
     getPubState,
     getPubStateMessage

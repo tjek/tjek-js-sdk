@@ -2,7 +2,6 @@ import Mustache from 'mustache';
 import {Viewer} from '../../../paged-publication';
 import {
     createModal,
-    parseDateStr,
     getDateRange,
     getPubState,
     getPubStateMessage,
