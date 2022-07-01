@@ -214,7 +214,8 @@ const OfferOverview = ({
     const getStatus = (fromDateStr, tillDateStr) => {
         const fromDate = parseDateStr(fromDateStr).valueOf();
         const tillDate = parseDateStr(tillDateStr).valueOf();
-        const todayDate = new Date().valueOf();
+        const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
+        const todayDate = new Date().valueOf() + timeOffset;
 
         if (todayDate >= fromDate && todayDate < tillDate) {
             return 'active';
@@ -231,7 +232,8 @@ const OfferOverview = ({
         const oneDay = 24 * 60 * 60 * 1000;
         const fromDate = parseDateStr(fromDateStr).valueOf();
         const tillDate = parseDateStr(tillDateStr).valueOf();
-        const todayDate = new Date().valueOf();
+        const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
+        const todayDate = new Date().valueOf() + timeOffset;
         const status = getStatus(fromDateStr, tillDateStr);
 
         if (status === 'active') {
