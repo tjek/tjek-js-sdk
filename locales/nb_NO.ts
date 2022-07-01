@@ -7,6 +7,7 @@ export default {
     publication_viewer_print_button: 'Skrive ut',
     publication_viewer_download_button: 'nedlasting',
     publication_viewer_until_label: 'Igjennom',
+    publication_viewer_date_range: '{{from}} - {{till}}',
     publication_viewer_expires_in_days_label: '(Utløper in {{days}} dager)',
     publication_viewer_valid_in_days_label: '(Gyldig om {{days}} dager)',
     publication_viewer_expired_label: '(Utløpt)',

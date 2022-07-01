@@ -4,7 +4,10 @@ import {
     destroyModal,
     formatPrice,
     translate,
-    parseDateStr
+    parseDateStr,
+    getDateRange,
+    getPubState,
+    getPubStateMessage
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import './offer-overview.styl';
@@ -18,7 +21,7 @@ const defaultTemplate = `\
                     <span>{{label}}</span>
                 </div>
                 <div class="sgn-menu-date">
-                    <span data-validity-state="{{status}}">{{from}} - {{till}}</span> <span class="sgn-menu-status-message">{{statusMessage}}</span>
+                    <span data-validity-state="{{status}}">{{dateRange}}</span> <span class="sgn-menu-status-message">{{statusMessage}}</span>
                 </div>
             </div>
         </div>
@@ -102,7 +105,6 @@ const OfferOverview = ({
     const translations = {
         localeCode: translate('locale_code'),
         currency: translate('publication_viewer_currency'),
-        untilLabel: translate('publication_viewer_until_label'),
         addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
         visitWebshopLink: translate('publication_viewer_visit_webshop_link')
     };
@@ -145,11 +147,9 @@ const OfferOverview = ({
             images: {
                 zoom: offer?.images?.[0]?.url
             },
-            from:
-                offer?.validity?.from && formatOfferDate(offer?.validity?.from),
-            till: offer?.validity?.to && formatOfferDate(offer?.validity?.to),
-            status: getStatus(offer?.validity?.from, offer?.validity?.to),
-            statusMessage: getStatusMessage(
+            dateRange: getDateRange(offer?.validity?.from, offer?.validity?.to),
+            status: getPubState(offer?.validity?.from, offer?.validity?.to),
+            statusMessage: getPubStateMessage(
                 offer?.validity?.from,
                 offer?.validity?.to
             )
@@ -188,10 +188,9 @@ const OfferOverview = ({
                 localeCode,
                 offer?.pricing?.currency || currency
             ),
-            from: offer?.run_from && formatOfferDate(offer?.run_from),
-            till: offer?.run_till && formatOfferDate(offer?.run_till),
-            status: getStatus(offer?.run_from, offer?.run_till),
-            statusMessage: getStatusMessage(offer?.run_from, offer?.run_till)
+            dateRange: getDateRange(offer?.run_from, offer?.run_till),
+            status: getPubState(offer?.run_from, offer?.run_till),
+            statusMessage: getPubStateMessage(offer?.run_from, offer?.run_till)
         };
     };
 
@@ -200,63 +199,6 @@ const OfferOverview = ({
 
         addOpenWebshopListener();
         addShoppingListListener();
-    };
-
-    const formatOfferDate = (dateStr) =>
-        parseDateStr(dateStr).toLocaleDateString(
-            translations.localeCode.replace('_', '-'),
-            {
-                day: '2-digit',
-                month: '2-digit'
-            }
-        );
-
-    const getStatus = (fromDateStr, tillDateStr) => {
-        const fromDate = parseDateStr(fromDateStr).valueOf();
-        const tillDate = parseDateStr(tillDateStr).valueOf();
-        const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
-        const todayDate = new Date().valueOf() + timeOffset;
-
-        if (todayDate >= fromDate && todayDate < tillDate) {
-            return 'active';
-        } else if (todayDate > tillDate) {
-            return 'expired';
-        } else if (todayDate < fromDate) {
-            return 'inactive';
-        }
-
-        return null;
-    };
-
-    const getStatusMessage = (fromDateStr, tillDateStr) => {
-        const oneDay = 24 * 60 * 60 * 1000;
-        const fromDate = parseDateStr(fromDateStr).valueOf();
-        const tillDate = parseDateStr(tillDateStr).valueOf();
-        const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
-        const todayDate = new Date().valueOf() + timeOffset;
-        const status = getStatus(fromDateStr, tillDateStr);
-
-        if (status === 'active') {
-            const diffDays = Math.round(
-                Math.abs((tillDate - todayDate) / oneDay)
-            );
-
-            return translate('publication_viewer_expires_in_days_label', {
-                days: diffDays
-            });
-        } else if (status === 'inactive') {
-            const diffDays = Math.round(
-                Math.abs((fromDate - todayDate) / oneDay)
-            );
-
-            return translate('publication_viewer_valid_in_days_label', {
-                days: diffDays
-            });
-        } else if (status === 'expired') {
-            return translate('publication_viewer_expired_label');
-        }
-
-        return null;
     };
 
     return {render};

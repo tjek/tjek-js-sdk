@@ -98,6 +98,69 @@ export const formatDate = (
     ).format(date);
 };
 
+export const getDateRange = (fromDateStr, tillDateStr) => {
+    const scriptEl = document.getElementById('sgn-sdk');
+    const dataset = scriptEl?.dataset;
+    const browserLocale = navigator.language || 'en-US';
+    const locale = dataset?.localeCode
+        ? dataset.localeCode.replace('_', '-')
+        : browserLocale;
+    const from = parseDateStr(fromDateStr).toLocaleDateString(locale, {
+        day: '2-digit',
+        month: '2-digit'
+    });
+    const till = parseDateStr(tillDateStr).toLocaleDateString(locale, {
+        day: '2-digit',
+        month: '2-digit'
+    });
+
+    return translate('publication_viewer_date_range', {from, till});
+};
+
+export const getPubState = (fromDateStr, tillDateStr) => {
+    const fromDate = parseDateStr(fromDateStr).valueOf();
+    const tillDate = parseDateStr(tillDateStr).valueOf();
+    const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
+    const todayDate = new Date().valueOf() + timeOffset;
+
+    if (todayDate >= fromDate && todayDate < tillDate) {
+        return 'active';
+    } else if (todayDate > tillDate) {
+        return 'expired';
+    } else if (todayDate < fromDate) {
+        return 'inactive';
+    }
+
+    return null;
+};
+
+export const getPubStateMessage = (fromDateStr, tillDateStr) => {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const fromDate = parseDateStr(fromDateStr).valueOf();
+    const tillDate = parseDateStr(tillDateStr).valueOf();
+    const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
+    const todayDate = new Date().valueOf() + timeOffset;
+    const status = getPubState(fromDateStr, tillDateStr);
+
+    if (status === 'active') {
+        const diffDays = Math.round(Math.abs((tillDate - todayDate) / oneDay));
+
+        return translate('publication_viewer_expires_in_days_label', {
+            days: diffDays
+        });
+    } else if (status === 'inactive') {
+        const diffDays = Math.round(Math.abs((fromDate - todayDate) / oneDay));
+
+        return translate('publication_viewer_valid_in_days_label', {
+            days: diffDays
+        });
+    } else if (status === 'expired') {
+        return translate('publication_viewer_expired_label');
+    }
+
+    return null;
+};
+
 const getTranslationOverride = (dataset = {}) =>
     Object.entries(dataset).reduce((translationsKeyVal, {0: key, 1: value}) => {
         if (key.includes('translationKeys-')) {

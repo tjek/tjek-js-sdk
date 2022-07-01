@@ -6,6 +6,7 @@ export default {
     publication_viewer_print_button: 'Skriva ut',
     publication_viewer_download_button: 'Ladda ner',
     publication_viewer_until_label: 'Till slut',
+    publication_viewer_date_range: '{{from}} - {{till}}',
     publication_viewer_expires_in_days_label: '(Går ut om {{days}} dagar)',
     publication_viewer_valid_in_days_label: '(Gäller in {{days}} days)',
     publication_viewer_expired_label: '(Utgånget)',
