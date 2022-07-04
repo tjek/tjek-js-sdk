@@ -20,7 +20,7 @@ const defaultTemplate = `\
                     <span>{{label}}</span>
                 </div>
                 <div class="sgn-menu-date">
-                    <span data-validity-state="{{status}}">{{dateRange}}</span> <span class="sgn-menu-status-message">{{statusMessage}}</span>
+                    <span data-validity-state="{{status}}">{{dateRange}}</span>
                 </div>
             </div>
         </div>

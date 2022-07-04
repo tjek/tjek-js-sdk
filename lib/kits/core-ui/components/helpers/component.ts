@@ -138,8 +138,6 @@ export const getPubStateMessage = (fromDateStr, tillDateStr) => {
     const oneDay = 24 * 60 * 60 * 1000;
     const fromDate = parseDateStr(fromDateStr).valueOf();
     const tillDate = parseDateStr(tillDateStr).valueOf();
-    // const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
-    // const todayDate = new Date().valueOf() + timeOffset;
     const todayDate = new Date().valueOf();
     const status = getPubState(fromDateStr, tillDateStr);
 
