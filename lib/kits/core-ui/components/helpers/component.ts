@@ -138,18 +138,19 @@ export const getPubStateMessage = (fromDateStr, tillDateStr) => {
     const oneDay = 24 * 60 * 60 * 1000;
     const fromDate = parseDateStr(fromDateStr).valueOf();
     const tillDate = parseDateStr(tillDateStr).valueOf();
-    const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
-    const todayDate = new Date().valueOf() + timeOffset;
+    // const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
+    // const todayDate = new Date().valueOf() + timeOffset;
+    const todayDate = new Date().valueOf();
     const status = getPubState(fromDateStr, tillDateStr);
 
     if (status === 'active') {
-        const diffDays = Math.round(Math.abs((tillDate - todayDate) / oneDay));
+        const diffDays = Math.ceil(Math.abs((tillDate - todayDate) / oneDay));
 
         return translate('publication_viewer_expires_in_days_label', {
             days: diffDays
         });
     } else if (status === 'inactive') {
-        const diffDays = Math.round(Math.abs((fromDate - todayDate) / oneDay));
+        const diffDays = Math.ceil(Math.abs((fromDate - todayDate) / oneDay));
 
         return translate('publication_viewer_valid_in_days_label', {
             days: diffDays
