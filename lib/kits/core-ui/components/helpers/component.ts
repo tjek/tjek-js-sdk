@@ -97,10 +97,7 @@ export const formatDate = (
         : browserLocale;
     const date = parseDateStr(dateStr);
 
-    return new Intl.DateTimeFormat(locale, {
-        ...options,
-        timeZone: options?.timeZone || 'Europe/Copenhagen'
-    }).format(date);
+    return new Intl.DateTimeFormat(locale, options).format(date);
 };
 
 export const getDateRange = (fromDateStr, tillDateStr) => {
