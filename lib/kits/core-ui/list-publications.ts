@@ -8,7 +8,6 @@ import {
     pushQueryParam,
     formatDate,
     transformFilter,
-    translate,
     getHashFragments
 } from './components/helpers/component';
 import type {Tracker} from '../events';
@@ -152,7 +151,6 @@ const ListPublications = (
         );
 
     const transformPublications = (publications?: V2Catalog[]) => {
-        const localeCode = translate('locale_code');
         const filters = transformFilter(options.clientFilter);
 
         return (publications || [])
@@ -165,8 +163,8 @@ const ListPublications = (
             )
             .map((publication) => ({
                 ...publication,
-                dateFrom: formatDate(publication?.run_from, localeCode),
-                dateTill: formatDate(publication?.run_till, localeCode)
+                dateFrom: formatDate(publication?.run_from),
+                dateTill: formatDate(publication?.run_till)
             }));
     };
 

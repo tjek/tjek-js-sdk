@@ -87,29 +87,28 @@ export const parseDateStr = (dateStr: string) => {
 
 export const formatDate = (
     dateStr: string,
-    localeCode: string = 'en_US',
     options?: Intl.DateTimeFormatOptions
 ) => {
-    const date = parseDateStr(dateStr);
-
-    return new Intl.DateTimeFormat(
-        localeCode.replace('_', '-'),
-        options
-    ).format(date);
-};
-
-export const getDateRange = (fromDateStr, tillDateStr) => {
     const scriptEl = document.getElementById('sgn-sdk');
     const dataset = scriptEl?.dataset;
     const browserLocale = navigator.language || 'en-US';
     const locale = dataset?.localeCode
-        ? dataset.localeCode.replace('_', '-')
+        ? dataset?.localeCode.replace('_', '-')
         : browserLocale;
-    const from = parseDateStr(fromDateStr).toLocaleDateString(locale, {
+    const date = parseDateStr(dateStr);
+
+    return new Intl.DateTimeFormat(locale, {
+        ...options,
+        timeZone: options?.timeZone || 'Europe/Copenhagen'
+    }).format(date);
+};
+
+export const getDateRange = (fromDateStr, tillDateStr) => {
+    const from = formatDate(fromDateStr, {
         day: '2-digit',
         month: '2-digit'
     });
-    const till = parseDateStr(tillDateStr).toLocaleDateString(locale, {
+    const till = formatDate(tillDateStr, {
         day: '2-digit',
         month: '2-digit'
     });
@@ -120,8 +119,7 @@ export const getDateRange = (fromDateStr, tillDateStr) => {
 export const getPubState = (fromDateStr, tillDateStr) => {
     const fromDate = parseDateStr(fromDateStr).valueOf();
     const tillDate = parseDateStr(tillDateStr).valueOf();
-    const timeOffset = new Date().getTimezoneOffset() * 1000 * 60;
-    const todayDate = new Date().valueOf() + timeOffset;
+    const todayDate = new Date().valueOf();
 
     if (todayDate >= fromDate && todayDate < tillDate) {
         return 'active';
