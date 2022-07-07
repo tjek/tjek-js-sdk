@@ -6,6 +6,7 @@ export default {
     publication_viewer_print_button: 'Print',
     publication_viewer_download_button: 'Download PDF',
     publication_viewer_until_label: 'Through',
+    publication_viewer_date_range: '{{{from}}} - {{{till}}}',
     publication_viewer_expires_in_days_label: '(Expires in {{days}} days)',
     publication_viewer_valid_in_days_label: '(Valid in {{days}} days)',
     publication_viewer_expired_label: '(Expired)',

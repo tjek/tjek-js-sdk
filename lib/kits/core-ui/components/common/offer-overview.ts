@@ -4,7 +4,9 @@ import {
     destroyModal,
     formatPrice,
     translate,
-    parseDateStr
+    getDateRange,
+    getPubState,
+    getPubStateMessage
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import './offer-overview.styl';
@@ -17,8 +19,8 @@ const defaultTemplate = `\
                 <div class="sgn-menu-label">
                     <span>{{label}}</span>
                 </div>
-                <div class="sgn-menu-till">
-                    <span>{{from}} - {{till}}</span><span class="sgn-menu-status"> {{status}}</span>
+                <div class="sgn-menu-date">
+                    <span data-validity-state="{{status}}">{{dateRange}}</span>
                 </div>
             </div>
         </div>
@@ -59,7 +61,7 @@ const loaderTemplate = `\
                 <div class="sgn-menu-label">
                     <span>&nbsp;</span>
                 </div>
-                <div class="sgn-menu-till">
+                <div class="sgn-menu-date">
                     <span>&nbsp;</span>
                 </div>
             </div>
@@ -102,7 +104,6 @@ const OfferOverview = ({
     const translations = {
         localeCode: translate('locale_code'),
         currency: translate('publication_viewer_currency'),
-        untilLabel: translate('publication_viewer_until_label'),
         addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
         visitWebshopLink: translate('publication_viewer_visit_webshop_link')
     };
@@ -145,10 +146,12 @@ const OfferOverview = ({
             images: {
                 zoom: offer?.images?.[0]?.url
             },
-            from:
-                offer?.validity?.from && formatOfferDate(offer?.validity?.from),
-            till: offer?.validity?.to && formatOfferDate(offer?.validity?.to),
-            status: getOfferStatus(offer?.validity?.from, offer?.validity?.to)
+            dateRange: getDateRange(offer?.validity?.from, offer?.validity?.to),
+            status: getPubState(offer?.validity?.from, offer?.validity?.to),
+            statusMessage: getPubStateMessage(
+                offer?.validity?.from,
+                offer?.validity?.to
+            )
         };
     };
 
@@ -184,9 +187,9 @@ const OfferOverview = ({
                 localeCode,
                 offer?.pricing?.currency || currency
             ),
-            from: offer?.run_from && formatOfferDate(offer?.run_from),
-            till: offer?.run_till && formatOfferDate(offer?.run_till),
-            status: getOfferStatus(offer?.run_from, offer?.run_till)
+            dateRange: getDateRange(offer?.run_from, offer?.run_till),
+            status: getPubState(offer?.run_from, offer?.run_till),
+            statusMessage: getPubStateMessage(offer?.run_from, offer?.run_till)
         };
     };
 
@@ -195,39 +198,6 @@ const OfferOverview = ({
 
         addOpenWebshopListener();
         addShoppingListListener();
-    };
-
-    const formatOfferDate = (dateStr) =>
-        parseDateStr(dateStr).toLocaleDateString(
-            translations.localeCode.replace('_', '-'),
-            {
-                day: '2-digit',
-                month: '2-digit'
-            }
-        );
-
-    const getOfferStatus = (fromDateStr, tillDateStr) => {
-        const oneDay = 24 * 60 * 60 * 1000;
-        const fromDate = parseDateStr(fromDateStr).valueOf();
-        const tillDate = parseDateStr(tillDateStr).valueOf();
-        const todayDate = new Date().valueOf();
-        const diffDays = Math.round(Math.abs((todayDate - fromDate) / oneDay));
-
-        return null;
-
-        if (todayDate >= fromDate && todayDate < tillDate) {
-            return translate('publication_viewer_expires_in_days_label', {
-                days: diffDays
-            });
-        } else if (todayDate > tillDate) {
-            return translate('publication_viewer_expired_label');
-        } else if (todayDate < fromDate) {
-            return translate('publication_viewer_valid_in_days_label', {
-                days: diffDays
-            });
-        }
-
-        return null;
     };
 
     return {render};

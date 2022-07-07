@@ -1,6 +1,12 @@
 import Mustache from 'mustache';
 import {Viewer} from '../../../paged-publication';
-import {createModal, formatDate, translate} from '../helpers/component';
+import {
+    createModal,
+    getDateRange,
+    getPubState,
+    getPubStateMessage,
+    translate
+} from '../helpers/component';
 import {transformScriptData} from '../helpers/transformers';
 import SectionList from '../incito-publication/section-list';
 import PageList from '../paged-publication/page-list';
@@ -14,8 +20,8 @@ const defaultTemplate = `\
             <div class="sgn-menu-label">
                 <span>{{label}}</span>
             </div>
-            <div class="sgn-menu-till">
-                <span>{{translations.untilLabel}} {{till}}</span>
+            <div class="sgn-menu-date">
+                <span data-validity-state="{{status}}">{{dateRange}}</span>
             </div>
         </div>
         {{^disableDownload}}
@@ -98,7 +104,6 @@ const MenuPopup = ({
 
     const translations = {
         localeCode: translate('locale_code'),
-        untilLabel: translate('publication_viewer_until_label'),
         pagesButton: translate('publication_viewer_pages_button'),
         overviewButton: translate('publication_viewer_overview_button'),
         offersButton: translate('publication_viewer_offers_button'),
@@ -115,15 +120,18 @@ const MenuPopup = ({
             {
                 translations,
                 label: sgnData?.details?.label,
-                from: formatDate(
+
+                dateRange: getDateRange(
                     sgnData?.details?.run_from,
-                    translations.localeCode,
-                    {dateStyle: 'full'}
+                    sgnData?.details?.run_till
                 ),
-                till: formatDate(
-                    sgnData?.details?.run_till,
-                    translations.localeCode,
-                    {dateStyle: 'full'}
+                status: getPubState(
+                    sgnData?.details?.run_from,
+                    sgnData?.details?.run_till
+                ),
+                statusMessage: getPubStateMessage(
+                    sgnData?.details?.run_from,
+                    sgnData?.details?.run_till
                 ),
                 disableDownload: sgnData?.details?.pdf_url
                     ? scriptEls.disableDownload

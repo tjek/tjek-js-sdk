@@ -40,11 +40,21 @@
     font-weight 600
     font-size 18px
 
-.sgn-menu-till
+.sgn-menu-date
     font-weight 400
     font-size 16px
     vertical-align baseline
     border-radius 0.25em
+    
+    span
+        &[data-validity-state="inactive"]
+            color #f00000
+        
+        &[data-validity-state="expired"]
+            color #f00000
+
+        &[data-validity-state="active"]
+            color #28af4c
 
 .sgn-menu-tab
     color #202020
