@@ -100,7 +100,7 @@ export const formatDate = (
     return new Intl.DateTimeFormat(locale, options).format(date);
 };
 
-export const getDateRange = (fromDateStr, tillDateStr) => {
+export const getDateRange = (fromDateStr, tillDateStr, templateKey) => {
     const from = formatDate(fromDateStr, {
         day: '2-digit',
         month: '2-digit'
@@ -110,7 +110,7 @@ export const getDateRange = (fromDateStr, tillDateStr) => {
         month: '2-digit'
     });
 
-    return translate('publication_viewer_date_range', {from, till});
+    return translate(templateKey, {from, till});
 };
 
 export const getPubState = (fromDateStr, tillDateStr) => {
