@@ -93,6 +93,7 @@ const loaderTemplate = `\
 const OfferOverview = ({
     template,
     configs,
+    scriptEls,
     sgnData,
     offer,
     type,
@@ -129,6 +130,8 @@ const OfferOverview = ({
                 : true,
             offer: transformedOffer
         });
+
+        dispatchOfferClickEvent(transformedOffer);
         addEventListeners();
     };
 
@@ -191,6 +194,18 @@ const OfferOverview = ({
             status: getPubState(offer?.run_from, offer?.run_till),
             statusMessage: getPubStateMessage(offer?.run_from, offer?.run_till)
         };
+    };
+
+    const dispatchOfferClickEvent = (detail) => {
+        const mainContainerEl = document.querySelector(
+            scriptEls.listPublicationsContainer || scriptEls.mainContainer
+        );
+
+        mainContainerEl?.dispatchEvent(
+            new CustomEvent('publication:offer_modal_rendered', {
+                detail
+            })
+        );
     };
 
     const addEventListeners = () => {
