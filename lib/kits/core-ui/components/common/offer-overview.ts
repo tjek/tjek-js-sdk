@@ -149,7 +149,11 @@ const OfferOverview = ({
             images: {
                 zoom: offer?.images?.[0]?.url
             },
-            dateRange: getDateRange(offer?.validity?.from, offer?.validity?.to),
+            dateRange: getDateRange(
+                offer?.validity?.from,
+                offer?.validity?.to,
+                'publication_viewer_offer_date_range'
+            ),
             status: getPubState(offer?.validity?.from, offer?.validity?.to),
             statusMessage: getPubStateMessage(
                 offer?.validity?.from,
@@ -190,7 +194,11 @@ const OfferOverview = ({
                 localeCode,
                 offer?.pricing?.currency || currency
             ),
-            dateRange: getDateRange(offer?.run_from, offer?.run_till),
+            dateRange: getDateRange(
+                offer?.run_from,
+                offer?.run_till,
+                'publication_viewer_offer_date_range'
+            ),
             status: getPubState(offer?.run_from, offer?.run_till),
             statusMessage: getPubStateMessage(offer?.run_from, offer?.run_till)
         };
