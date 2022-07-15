@@ -123,7 +123,8 @@ const MenuPopup = ({
 
                 dateRange: getDateRange(
                     sgnData?.details?.run_from,
-                    sgnData?.details?.run_till
+                    sgnData?.details?.run_till,
+                    'publication_viewer_menu_date_range'
                 ),
                 status: getPubState(
                     sgnData?.details?.run_from,
