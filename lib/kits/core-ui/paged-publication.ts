@@ -261,6 +261,7 @@ const PagedPublication = (
             OfferOverview({
                 template: customTemplates.offerOverview,
                 configs: options,
+                scriptEls,
                 sgnData,
                 offer: hotspot,
                 type: 'paged',

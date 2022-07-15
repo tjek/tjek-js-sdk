@@ -217,6 +217,7 @@ const IncitoPublication = (
             OfferOverview({
                 template: customTemplates.offerOverview,
                 configs: options,
+                scriptEls,
                 sgnData,
                 offer,
                 type: 'incito',
