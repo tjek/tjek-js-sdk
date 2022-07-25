@@ -138,6 +138,7 @@ class PagedPublicationCore extends MicroEvent {
         verso.bind('beforeNavigation', this.beforeNavigation);
         verso.bind('afterNavigation', this.afterNavigation);
         verso.bind('attemptedNavigation', this.attemptedNavigation);
+        verso.bind('pointerdown', this.pointerdown);
         verso.bind('clicked', this.clicked);
         verso.bind('doubleClicked', this.doubleClicked);
         verso.bind('pressed', this.pressed);
@@ -277,6 +278,13 @@ class PagedPublicationCore extends MicroEvent {
         this.trigger('attemptedNavigation', {verso: e});
     };
 
+    pointerdown = (e) => {
+        if (e.isInsideContent) {
+            const page = this.findPage(e.pageEl.dataset.id);
+
+            this.trigger('pointerdown', {verso: e, page});
+        }
+    };
     clicked = (e) => {
         if (e.isInsideContent) {
             const page = this.findPage(e.pageEl.dataset.id);
