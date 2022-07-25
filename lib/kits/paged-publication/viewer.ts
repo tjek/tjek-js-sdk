@@ -121,6 +121,10 @@ class Viewer extends MicroEvent {
             this._eventTracking.trigger('attemptedNavigation', e);
             this.trigger('attemptedNavigation', e);
         });
+        this._core.bind('pointerdown', (e) => {
+            this._eventTracking.trigger('pointerdown', e);
+            this.trigger('pointerdown', e);
+        });
         this._core.bind('clicked', (e) => {
             this._eventTracking.trigger('clicked', e);
             this.trigger('clicked', e);
@@ -164,6 +168,7 @@ class Viewer extends MicroEvent {
         this.bind('hotspotsRequested', this.hotspotsRequested);
         this.bind('beforeNavigation', this.beforeNavigation);
         this.bind('clicked', this.clicked);
+        this.bind('pointerdown', this.pointerdown);
         this.bind('contextmenu', this.contextmenu);
         this.bind('pressed', this.pressed);
     }
@@ -229,17 +234,20 @@ class Viewer extends MicroEvent {
         return this;
     };
 
-    pickHotspot(e, callback) {
-        if (!this.hotspots) return;
+    getPointerEventHotspots(e): V2Hotspot[] {
+        const hotspots = this.hotspots;
+        if (!hotspots) return [];
 
+        return e.verso.overlayEls.map((el) => hotspots[el.dataset.id]);
+    }
+
+    pickHotspot(e: any, callback: (hotspot: V2Hotspot) => void) {
         if (this.popover) {
             this.popover.destroy?.();
             this.popover = null;
         }
 
-        const hotspots = e.verso.overlayEls.map(
-            (overlayEl) => this.hotspots![overlayEl.dataset.id]
-        );
+        const hotspots = this.getPointerEventHotspots(e);
 
         if (hotspots.length === 1) {
             callback(hotspots[0]);
@@ -310,6 +318,11 @@ class Viewer extends MicroEvent {
         this.pickHotspot(e, (hotspot) => {
             this.trigger('hotspotClicked', hotspot);
         });
+    };
+
+    pointerdown = (e) => {
+        const hotspots = this.getPointerEventHotspots(e);
+        if (hotspots.length > 0) this.trigger('hotspotsPointerdown', hotspots);
     };
 
     contextmenu = (e) => {
