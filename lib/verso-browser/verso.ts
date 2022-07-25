@@ -767,6 +767,7 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
             e.center.y,
             activePageSpread
         );
+        this.trigger('pointerdown', coordinateInfo);
 
         clearTimeout(this.tap.timeout!);
 
