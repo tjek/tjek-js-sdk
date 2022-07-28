@@ -1,38 +1,22 @@
-'use strict';
-
-var _createClass = require('@babel/runtime-corejs3/helpers/createClass');
-var _inherits = require('@babel/runtime-corejs3/helpers/inherits');
-var _sliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/slice');
-var _URL = require('@babel/runtime-corejs3/core-js-stable/url');
-var _trimInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/trim');
-var _JSON$stringify = require('@babel/runtime-corejs3/core-js-stable/json/stringify');
-var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
-var _mapInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/map');
-var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
-require('core-js/modules/es.regexp.exec.js');
-require('core-js/modules/es.string.replace.js');
-require('core-js/modules/es.object.to-string.js');
-require('core-js/modules/es.function.name.js');
-require('core-js/modules/es.string.split.js');
-require('core-js/modules/es.array.join.js');
-require('core-js/modules/web.dom-collections.for-each.js');
-require('core-js/modules/es.string.link.js');
-var fetch = require('cross-fetch');
-var MicroEvent = require('microevent');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
-var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
-var _sliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sliceInstanceProperty);
-var _URL__default = /*#__PURE__*/_interopDefaultLegacy(_URL);
-var _trimInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_trimInstanceProperty);
-var _JSON$stringify__default = /*#__PURE__*/_interopDefaultLegacy(_JSON$stringify);
-var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
-var _mapInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_mapInstanceProperty);
-var _concatInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_concatInstanceProperty);
-var fetch__default = /*#__PURE__*/_interopDefaultLegacy(fetch);
-var MicroEvent__default = /*#__PURE__*/_interopDefaultLegacy(MicroEvent);
+import _createClass from '@babel/runtime-corejs3/helpers/createClass';
+import _inherits from '@babel/runtime-corejs3/helpers/inherits';
+import _sliceInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/slice';
+import _URL from '@babel/runtime-corejs3/core-js-stable/url';
+import _trimInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/trim';
+import _JSON$stringify from '@babel/runtime-corejs3/core-js-stable/json/stringify';
+import _filterInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/filter';
+import _mapInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/map';
+import _concatInstanceProperty from '@babel/runtime-corejs3/core-js-stable/instance/concat';
+import 'core-js/modules/es.regexp.exec.js';
+import 'core-js/modules/es.string.replace.js';
+import 'core-js/modules/es.object.to-string.js';
+import 'core-js/modules/es.function.name.js';
+import 'core-js/modules/es.string.split.js';
+import 'core-js/modules/es.array.join.js';
+import 'core-js/modules/web.dom-collections.for-each.js';
+import 'core-js/modules/es.string.link.js';
+import fetch from 'cross-fetch';
+import MicroEvent from 'microevent';
 
 function formatUnit(unit) {
   if (!unit) return 0;
@@ -62,7 +46,7 @@ function formatSpans(text, spans) {
     });
   } else if (spans[0].start > 0) {
     result.push({
-      text: _sliceInstanceProperty__default["default"](text).call(text, 0, spans[0].start)
+      text: _sliceInstanceProperty(text).call(text, 0, spans[0].start)
     });
   }
 
@@ -70,19 +54,19 @@ function formatSpans(text, spans) {
     var span = spans[i];
     var endIndex = span.end;
     result.push({
-      text: _sliceInstanceProperty__default["default"](text).call(text, span.start, endIndex),
+      text: _sliceInstanceProperty(text).call(text, span.start, endIndex),
       span: span
     });
 
     if (i === spans.length - 1) {
       if (endIndex < text.length) {
         result.push({
-          text: _sliceInstanceProperty__default["default"](text).call(text, endIndex, text.length)
+          text: _sliceInstanceProperty(text).call(text, endIndex, text.length)
         });
       }
     } else if (endIndex < spans[i + 1].start) {
       result.push({
-        text: _sliceInstanceProperty__default["default"](text).call(text, endIndex, spans[i + 1].start)
+        text: _sliceInstanceProperty(text).call(text, endIndex, spans[i + 1].start)
       });
     }
   }
@@ -211,7 +195,7 @@ function renderView(view, canLazyload) {
         tagName = 'img';
         classNames.push('incito__image-view');
         attrs.onerror = "this.style.display='none'";
-        var src = String(new _URL__default["default"](view.src));
+        var src = String(new _URL(view.src));
 
         if (isDefinedStr(view.src)) {
           if (canLazyload) {
@@ -235,7 +219,7 @@ function renderView(view, canLazyload) {
         attrs.preload = 'none';
         attrs.poster = 'noposter';
 
-        var _src = String(new _URL__default["default"](view.src));
+        var _src = String(new _URL(view.src));
 
         if (canLazyload) {
           attrs['data-src'] = _src;
@@ -266,8 +250,8 @@ function renderView(view, canLazyload) {
         if (isDefinedStr(view.style)) {
           var _context;
 
-          _trimInstanceProperty__default["default"](_context = view.style).call(_context).split(';').forEach(function (style) {
-            var _style$trim$split = _trimInstanceProperty__default["default"](style).call(style).split(':'),
+          _trimInstanceProperty(_context = view.style).call(_context).split(';').forEach(function (style) {
+            var _style$trim$split = _trimInstanceProperty(style).call(style).split(':'),
                 key = _style$trim$split[0],
                 value = _style$trim$split[1];
 
@@ -286,7 +270,7 @@ function renderView(view, canLazyload) {
         attrs.sandbox = 'allow-scripts allow-same-origin';
         attrs.allowfullscreen = '';
 
-        var _src2 = String(new _URL__default["default"](view.src));
+        var _src2 = String(new _URL(view.src));
 
         if (canLazyload) {
           classNames.push('incito--lazy');
@@ -304,14 +288,14 @@ function renderView(view, canLazyload) {
 
         if (canLazyload) {
           classNames.push('incito--lazy');
-          attrs['data-src'] = String(new _URL__default["default"](view.src));
+          attrs['data-src'] = String(new _URL(view.src));
 
           if (view.method === 'get' || view.method === 'post') {
             attrs['data-method'] = view.method;
           }
 
           if (view.body) {
-            attrs['data-body'] = encodeURIComponent(_JSON$stringify__default["default"](view.body));
+            attrs['data-body'] = encodeURIComponent(_JSON$stringify(view.body));
           }
         }
 
@@ -364,7 +348,7 @@ function renderView(view, canLazyload) {
   if (Array.isArray(view.feature_labels)) {
     var _context2;
 
-    var featureLabels = _filterInstanceProperty__default["default"](_context2 = view.feature_labels).call(_context2, function (featureLabel) {
+    var featureLabels = _filterInstanceProperty(_context2 = view.feature_labels).call(_context2, function (featureLabel) {
       return /^[a-z_-]{1,14}$/.test(featureLabel);
     });
 
@@ -627,7 +611,7 @@ function renderView(view, canLazyload) {
 }
 
 var Incito = /*#__PURE__*/function (_MicroEvent) {
-  _inherits__default["default"](Incito, _MicroEvent);
+  _inherits(Incito, _MicroEvent);
 
   //@ts-expect-error
   function Incito(containerEl, _temp) {
@@ -671,11 +655,11 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
 
         var src = this.incito.font_assets[key].src;
 
-        var urls = _mapInstanceProperty__default["default"](src).call(src, function (item) {
+        var urls = _mapInstanceProperty(src).call(src, function (item) {
           return "url(\"".concat(item[1], "\")");
         }).join(', ');
 
-        var rule = _concatInstanceProperty__default["default"](_context3 = "@font-face { font-family: \"".concat(key, "\"; font-display: swap; src: ")).call(_context3, urls, "; }");
+        var rule = _concatInstanceProperty(_context3 = "@font-face { font-family: \"".concat(key, "\"; font-display: swap; src: ")).call(_context3, urls, "; }");
 
         styleEl.appendChild(document.createTextNode(rule));
       }
@@ -764,7 +748,7 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
           _el$dataset$method = _el$dataset.method,
           method = _el$dataset$method === void 0 ? 'get' : _el$dataset$method,
           body = _el$dataset.body;
-      fetch__default["default"](url, {
+      fetch(url, {
         method: method,
         body: body ? JSON.parse(decodeURIComponent(body)) : null
       }).then(function (res) {
@@ -863,8 +847,8 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     return html;
   };
 
-  return _createClass__default["default"](Incito);
-}(MicroEvent__default["default"]);
+  return _createClass(Incito);
+}(MicroEvent);
 
-module.exports = Incito;
-//# sourceMappingURL=incito.cjs.js.map
+export { Incito as default };
+//# sourceMappingURL=index.es.js.map

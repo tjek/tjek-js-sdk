@@ -867,4 +867,4 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
 }(MicroEvent__default["default"]);
 
 module.exports = Incito;
-//# sourceMappingURL=incito.cjs.js.map
+//# sourceMappingURL=index.cjs.js.map

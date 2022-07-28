@@ -71,7 +71,7 @@ var isBrowser = function isBrowser() {
   return typeof window === 'object' && typeof document === 'object';
 };
 function error(err, options) {
-  err.message = err.message || null;
+  err.message = err.message;
 
   if (typeof options === 'string') {
     err.message = options;
@@ -87,6 +87,7 @@ function error(err, options) {
     }
 
     if (options.stack) err.stack = options.stack;
+    if (options.statusCode) err.statusCode = options.statusCode;
   }
 
   err.name = (options == null ? void 0 : options.name) || err.name || err.code || 'Error';
@@ -163,6 +164,10 @@ var Tracker = /*#__PURE__*/function () {
       time: null,
       country: null
     };
+    this.trackId = null;
+    this.poolLimit = 1000;
+    this.client = void 0;
+    this.eventsTrackUrl = void 0;
 
     if (!pool) {
       pool = getPool();
@@ -173,10 +178,8 @@ var Tracker = /*#__PURE__*/function () {
       }
     }
 
-    for (var key in this.defaultOptions) {
-      this[key] = (options == null ? void 0 : options[key]) || this.defaultOptions[key];
-    }
-
+    this.trackId = (options == null ? void 0 : options.trackId) || this.trackId;
+    this.poolLimit = (options == null ? void 0 : options.poolLimit) || this.poolLimit;
     this.client = (options == null ? void 0 : options.client) || createTrackerClient();
     this.eventsTrackUrl = (options == null ? void 0 : options.eventsTrackUrl) || eventsTrackUrl;
 
@@ -268,11 +271,6 @@ var Tracker = /*#__PURE__*/function () {
 
   return _createClass__default["default"](Tracker);
 }();
-
-Tracker.prototype.defaultOptions = {
-  trackId: null,
-  poolLimit: 1000
-};
 var dispatching = false;
 var dispatchLimit = 100;
 var dispatchRetryInterval = null;
@@ -309,7 +307,6 @@ var dispatch = throttle( /*#__PURE__*/_asyncToGenerator__default["default"]( /*#
           _context3.next = 11;
           return fetch__default["default"](eventsTrackUrl, {
             method: 'post',
-            timeout: 1000 * 20,
             headers: {
               'Content-Type': 'application/json; charset=utf-8'
             },

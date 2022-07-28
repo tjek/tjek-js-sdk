@@ -88,10 +88,12 @@ function formatSpans(text, spans) {
   }, '');
 }
 
-var matches = typeof Element !== 'undefined' && (Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
+var matches = typeof Element !== 'undefined' && (Element.prototype.matches || // @ts-expect-error
+Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
 
 function closest(el, s) {
   do {
+    // @ts-expect-error
     if (matches.call(el, s)) return el;
     el = el.parentElement || el.parentNode;
   } while (el !== null && el.nodeType === 1);
@@ -265,7 +267,7 @@ function renderView(view, canLazyload) {
       {
         tagName = 'iframe';
         classNames.push('incito__html-embed-view');
-        attrs.sandbox = 'allow-scripts';
+        attrs.sandbox = 'allow-scripts allow-same-origin';
         attrs.allowfullscreen = '';
 
         var _src2 = String(new _URL(view.src));
@@ -611,12 +613,23 @@ function renderView(view, canLazyload) {
 var Incito = /*#__PURE__*/function (_MicroEvent) {
   _inherits(Incito, _MicroEvent);
 
-  function Incito(containerEl, _ref) {
+  //@ts-expect-error
+  function Incito(containerEl, _temp) {
     var _this;
 
-    var _ref$incito = _ref.incito,
-        incito = _ref$incito === void 0 ? {} : _ref$incito;
+    var _ref = _temp === void 0 ? {} : _temp,
+        incito = _ref.incito;
+
     _this = _MicroEvent.call(this) || this;
+    _this.containerEl = void 0;
+    _this.incito = void 0;
+    _this.el = void 0;
+    _this.ids = void 0;
+    _this.sections = void 0;
+    _this.canLazyload = void 0;
+    _this.styleEl = void 0;
+    _this.lazyObserver = void 0;
+    _this.videoObserver = void 0;
     _this.containerEl = containerEl;
     _this.incito = incito;
     _this.el = document.createElement('div');
@@ -676,6 +689,7 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     }
 
     if (typeof theme.line_spacing_multiplier === 'number') {
+      //@ts-expect-error
       this.el.style.lineHeight = theme.line_spacing_multiplier;
     } // By setting the language we help the browser with stuff like hyphenation.
 
@@ -768,18 +782,24 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     this.videoObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          var autoplayState = entry.target.dataset.autoplayState;
+          var autoplayState = // @ts-expect-error
+          entry.target.dataset.autoplayState;
 
           _this4.loadEl(entry.target);
 
           _this4.lazyObserver.unobserve(entry.target);
 
           if (!autoplayState || autoplayState === 'paused') {
-            entry.target.dataset.autoplayState = 'playing';
+            // @ts-expect-error
+            entry.target.dataset.autoplayState = 'playing'; // @ts-expect-error
+
             entry.target.play();
-          }
+          } // @ts-expect-error
+
         } else if (!entry.target.paused) {
-          entry.target.dataset.autoplayState = 'paused';
+          // @ts-expect-error
+          entry.target.dataset.autoplayState = 'paused'; // @ts-expect-error
+
           entry.target.pause();
         }
       });

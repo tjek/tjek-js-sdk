@@ -29,12 +29,14 @@ import 'core-js/modules/es.array.join.js';
 var Animation = /*#__PURE__*/function () {
   function Animation(el) {
     this.run = 0;
+    this.el = void 0;
     this.el = el;
   }
 
   var _proto = Animation.prototype;
 
-  _proto.animate = function animate(_temp, callback) {
+  _proto.animate = function animate( // @ts-expect-error
+  _temp, callback) {
     var _context,
         _context2,
         _this = this;
@@ -85,6 +87,7 @@ var Animation = /*#__PURE__*/function () {
 }();
 
 var PageSpread = /*#__PURE__*/function () {
+  // @ts-expect-error
   function PageSpread(el, options) {
     if (options === void 0) {
       options = {};
@@ -93,6 +96,14 @@ var PageSpread = /*#__PURE__*/function () {
     this.visibility = 'gone';
     this.positioned = false;
     this.active = false;
+    this.el = void 0;
+    this.options = void 0;
+    this.id = void 0;
+    this.type = void 0;
+    this.pageIds = void 0;
+    this.width = void 0;
+    this.left = void 0;
+    this.maxZoomScale = void 0;
     this.el = el;
     this.options = options;
     this.id = this.options.id;
@@ -146,19 +157,19 @@ var PageSpread = /*#__PURE__*/function () {
       var pageEl = pageEls[idx];
       var pageRect = pageEl.getBoundingClientRect();
 
-      if (pageRect.top < rect.top || rect.top == null) {
+      if (rect.top == null || pageRect.top < rect.top) {
         rect.top = pageRect.top;
       }
 
-      if (pageRect.left < rect.left || rect.left == null) {
+      if (rect.left == null || pageRect.left < rect.left) {
         rect.left = pageRect.left;
       }
 
-      if (pageRect.right > rect.right || rect.right == null) {
+      if (rect.right == null || pageRect.right > rect.right) {
         rect.right = pageRect.right;
       }
 
-      if (pageRect.bottom > rect.bottom || rect.bottom == null) {
+      if (rect.bottom == null || pageRect.bottom > rect.bottom) {
         rect.bottom = pageRect.bottom;
       }
     }
@@ -219,12 +230,14 @@ var PageSpread = /*#__PURE__*/function () {
   };
 
   _proto.activate = function activate() {
-    this.active = true;
+    this.active = true; // @ts-expect-error
+
     this.getEl().dataset.active = this.active;
   };
 
   _proto.deactivate = function deactivate() {
-    this.active = false;
+    this.active = false; // @ts-expect-error
+
     this.getEl().dataset.active = this.active;
   };
 
@@ -1912,6 +1925,37 @@ var PressRecognizer = /*#__PURE__*/function (_Recognizer) {
       this._input.timeStamp = Date.now();
       this.manager.emit(this.options.event, this._input);
     }
+  }
+  /**
+   * @private
+   * Check that all the require failure recognizers has failed,
+   * if true, it emits a gesture event,
+   * otherwise, setup the state to FAILED.
+   * @param {Object} input
+   */
+  ;
+
+  _proto.tryEmit = function tryEmit(input) {
+    if (this.canEmit()) return this.emit(input); // it's failing anyway
+
+    this.state = STATE_FAILED;
+  }
+  /**
+   * @private
+   * can we emit?
+   * @returns {boolean}
+   */
+  ;
+
+  _proto.canEmit = function canEmit() {
+    var i = 0;
+
+    while (i < this.requireFail.length) {
+      if (!(this.requireFail[i].state & (STATE_FAILED | STATE_POSSIBLE))) return false;
+      i++;
+    }
+
+    return true;
   };
 
   return _createClass(PressRecognizer);
@@ -2123,6 +2167,20 @@ var Verso = /*#__PURE__*/function () {
     this.started = false;
     this.destroyed = false;
     this._events = {};
+    this.el = void 0;
+    this.scrollerEl = void 0;
+    this.pageSpreadEls = void 0;
+    this.pageSpreads = void 0;
+    this.pageIds = void 0;
+    this.options = void 0;
+    this.swipeVelocity = void 0;
+    this.swipeThreshold = void 0;
+    this.navigationDuration = void 0;
+    this.navigationPanDuration = void 0;
+    this.zoomDuration = void 0;
+    this.tap = void 0;
+    this.animation = void 0;
+    this.hammer = void 0;
 
     this.onPanStart = function (e) {
       // Only allow panning if zoomed in or doing a horizontal pan.
@@ -2218,7 +2276,8 @@ var Verso = /*#__PURE__*/function () {
 
     this.onPinchStart = function () {
       if (!_this.getActivePageSpread().isZoomable()) return;
-      _this.pinching = true;
+      _this.pinching = true; // @ts-expect-error
+
       _this.el.dataset.pinching = true;
       _this.startTransform.scale = _this.transform.scale;
     };
@@ -2261,7 +2320,8 @@ var Verso = /*#__PURE__*/function () {
         scale: scale,
         duration: _this.zoomDuration
       }, function () {
-        _this.pinching = false;
+        _this.pinching = false; // @ts-expect-error
+
         _this.el.dataset.pinching = false;
       });
     };
@@ -2284,7 +2344,7 @@ var Verso = /*#__PURE__*/function () {
       if (!activePageSpread.isZoomable()) return; // see https://stackoverflow.com/a/23668035
 
       var deltaY = e.deltaY;
-      if (event.webkitDirectionInvertedFromDevice) deltaY = -deltaY;
+      if (e.webkitDirectionInvertedFromDevice) deltaY = -deltaY;
 
       var position = _this.getPosition();
 
@@ -2317,6 +2377,8 @@ var Verso = /*#__PURE__*/function () {
       var activePageSpread = _this.getActivePageSpread();
 
       var coordinateInfo = _this.getCoordinateInfo(e.center.x, e.center.y, activePageSpread);
+
+      _this.trigger('pointerdown', coordinateInfo);
 
       clearTimeout(_this.tap.timeout);
 
@@ -2392,7 +2454,8 @@ var Verso = /*#__PURE__*/function () {
     this.zoomDuration = (_this$options$zoomDur = this.options.zoomDuration) != null ? _this$options$zoomDur : 200;
     this.tap = {
       count: 0,
-      delay: (_this$options$doubleT = this.options.doubleTapDelay) != null ? _this$options$doubleT : 300
+      delay: (_this$options$doubleT = this.options.doubleTapDelay) != null ? _this$options$doubleT : 300,
+      timeout: undefined
     };
   }
 
@@ -2445,20 +2508,31 @@ var Verso = /*#__PURE__*/function () {
       }], [PinchRecognizer], [PressRecognizer, {
         time: 500
       }]]
-    });
-    this.hammer.on('panstart', this.onPanStart);
-    this.hammer.on('panmove', this.onPanMove);
-    this.hammer.on('panend', this.onPanEnd);
-    this.hammer.on('pancancel', this.onPanEnd);
-    this.hammer.on('singletap', this.onSingletap);
-    this.hammer.on('pinchstart', this.onPinchStart);
-    this.hammer.on('pinchmove', this.onPinchMove);
-    this.hammer.on('pinchend', this.onPinchEnd);
-    this.hammer.on('pinchcancel', this.onPinchEnd);
+    }); //@ts-expect-error
+
+    this.hammer.on('panstart', this.onPanStart); //@ts-expect-error
+
+    this.hammer.on('panmove', this.onPanMove); //@ts-expect-error
+
+    this.hammer.on('panend', this.onPanEnd); //@ts-expect-error
+
+    this.hammer.on('pancancel', this.onPanEnd); //@ts-expect-error
+
+    this.hammer.on('singletap', this.onSingletap); //@ts-expect-error
+
+    this.hammer.on('pinchstart', this.onPinchStart); //@ts-expect-error
+
+    this.hammer.on('pinchmove', this.onPinchMove); //@ts-expect-error
+
+    this.hammer.on('pinchend', this.onPinchEnd); //@ts-expect-error
+
+    this.hammer.on('pinchcancel', this.onPinchEnd); //@ts-expect-error
+
     this.hammer.on('press', this.onPress);
     this.scrollerEl.addEventListener('contextmenu', this.onContextmenu, false);
     this.scrollerEl.addEventListener('wheel', this.onWheel, false);
-    var pageId = (_this$getPageSpreadPo = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? _this$getPageSpreadPo : 0;
+    var pageId = (_this$getPageSpreadPo = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? _this$getPageSpreadPo : 0; //@ts-expect-error
+
     this.hammer.set({
       enable: true
     });
@@ -2487,7 +2561,8 @@ var Verso = /*#__PURE__*/function () {
     }
 
     this.scrollerEl.removeEventListener('contextmenu', this.onContextmenu);
-    this.scrollerEl.removeEventListener('wheel', this.onWheel);
+    this.scrollerEl.removeEventListener('wheel', this.onWheel); //@ts-expect-error
+
     this.hammer.destroy();
     this.el.removeEventListener('touchstart', this.onTouchStart);
     this.el.removeEventListener('touchend', this.onTouchEnd);
@@ -2523,7 +2598,7 @@ var Verso = /*#__PURE__*/function () {
         _this3 = this;
 
     if (this.destroyed) {
-      return console.warn("You've called a navigation method on a viewer that was previously destroyed, this is a no-op.\nPlease call viewer.start() again, if you want to reuse this Viewer instance.\n\nYou might have forgotten to remove an event handler that\ncalls first/prev/next/last/navigateTo on the viewer.");
+      return console.warn(" \nYou've called a navigation method on a viewer that was previously destroyed, this is a no-op.\nPlease call viewer.start() again, if you want to reuse this Viewer instance.\n\nYou might have forgotten to remove an event handler that\ncalls first/prev/next/last/navigateTo on the viewer.");
     }
 
     if (!this.started) {
@@ -2546,7 +2621,8 @@ var Verso = /*#__PURE__*/function () {
     activePageSpread.activate();
     carousel.visible.forEach(function (pageSpread) {
       pageSpread.position().setVisibility('visible');
-    });
+    }); //@ts-expect-error
+
     this.hammer.set({
       touchAction: touchAction
     });
@@ -2699,7 +2775,8 @@ var Verso = /*#__PURE__*/function () {
     }
   };
 
-  _proto.zoomTo = function zoomTo(_temp, callback) {
+  _proto.zoomTo = function zoomTo( //@ts-expect-error
+  _temp, callback) {
     var _ref = _temp === void 0 ? {} : _temp,
         duration = _ref.duration,
         easing = _ref.easing,

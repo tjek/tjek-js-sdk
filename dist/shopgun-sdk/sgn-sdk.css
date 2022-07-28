@@ -580,11 +580,19 @@
   font-weight: 600;
   font-size: 18px;
 }
-.sgn-menu-till {
+.sgn-menu-date {
   font-weight: 400;
   font-size: 16px;
   vertical-align: baseline;
   border-radius: 0.25em;
+}
+.sgn-menu-date span[data-validity-state="inactive"] {
+  color: #f00000;
+}
+.sgn-menu-date span[data-validity-state="expired"] {
+  color: #f00000;
+}
+.sgn-menu-date span[data-validity-state="active"] {
   color: #28af4c;
 }
 .sgn-menu-tab {
@@ -833,8 +841,6 @@
 }
 .sgn-offers-content-img {
   background-color: #ccc;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
   background-size: cover;
   background-position: center center;
   border-radius: 6px;
@@ -851,7 +857,9 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  inset: 0px;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 .sgn-offers-content-text {
   white-space: nowrap;
@@ -920,6 +928,143 @@
   .sgn-offers-list-items-container {
     height: 360px;
   }
+}
+.sgn-offer-overview-container {
+  height: 100%;
+}
+.sgn-offer-overview-popup {
+  position: relative;
+  background: #f3f3f9;
+  color: #202020;
+  border-radius: 12px;
+  padding: 10px;
+  width: 90%;
+  max-width: 666px;
+  max-height: calc(94% - 80px);
+  margin: auto;
+  margin-top: 80px;
+  overflow-y: auto;
+  -webkit-box-shadow: rgba(0,0,0,0.7) 0px 20px 55px, rgba(0,0,0,0.3) 0px 0px 1px;
+  box-shadow: rgba(0,0,0,0.7) 0px 20px 55px, rgba(0,0,0,0.3) 0px 0px 1px;
+  text-align: left;
+}
+.sgn-offer-overview-popup button {
+  background-color: #d3d3d3;
+  padding: 10px 14px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 0;
+  min-width: 70px;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  -ms-transition: 0.2s;
+  transition: 0.2s;
+}
+.sgn-offer-overview-popup button:hover {
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  cursor: pointer;
+}
+.sgn-offer-overview-popup .sgn-offer-img {
+  background-color: #ccc;
+  background-size: cover;
+  background-position: center center;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  border: 0px;
+  width: 100%;
+  height: auto;
+  padding-top: 86%;
+}
+.sgn-offer-overview-popup .sgn-offer-img > img {
+  position: absolute;
+  object-fit: cover;
+  object-position: center center;
+  top: 50%;
+  left: 50%;
+  max-width: 98%;
+  max-height: 98%;
+  height: auto;
+  width: auto;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.sgn-offer-overview-popup .sgn-popup-header {
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 18px;
+}
+.sgn-offer-overview-popup .sgn-popup-header .sgn-menu-popup-labels {
+  float: none;
+  padding: 0;
+  width: auto;
+}
+.sgn-offer-overview-popup .sgn-popup-content {
+  padding: 10px;
+}
+.sgn-offer-overview-popup .sgn-offer-texts-container {
+  overflow: hidden;
+  color: #202020;
+  padding: 10px 0px;
+  text-align: left;
+}
+.sgn-offer-overview-popup .sgn-offer-heading {
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+.sgn-offer-overview-popup .sgn-offer-description {
+  font-size: 0.9em;
+  line-height: 1.2;
+  opacity: 0.6;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+  filter: alpha(opacity=60);
+  color: inherit;
+}
+.sgn-offer-overview-popup .sgn-offer-price {
+  font-variant-numeric: tabular-nums;
+  color: #28af4c;
+  font-size: 2em;
+}
+.sgn-offer-overview-popup .sgn_modal_loader {
+  position: absolute;
+  top: calc(50% - 80px);
+  left: calc(50% - 40px);
+  border: 16px solid #2c2c2e;
+  border-top: 16px solid #8b8c8f;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite;
+  -moz-animation: spin 2s linear infinite;
+  -o-animation: spin 2s linear infinite;
+  -ms-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+.sgn__theme-dark .sgn-offer-overview-popup {
+  background: #1c1c1e;
+  color: #f3f3f9;
+}
+.sgn__theme-dark .sgn-offer-overview-popup button {
+  color: #f3f3f9;
+  background-color: #2c2c2e;
+}
+.sgn__theme-dark .sgn-offer-overview-popup .sgn-popup-header {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.sgn__theme-dark .sgn-offer-overview-popup .sgn-offer-img {
+  background-color: rgba(200,200,200,0.1);
 }
 .sgn-shopping-popup {
   position: relative;
@@ -1093,139 +1238,6 @@
     white-space: normal;
   }
 }
-.sgn-offer-overview-popup {
-  position: relative;
-  background: #f3f3f9;
-  color: #202020;
-  border-radius: 12px;
-  padding: 10px;
-  width: 90%;
-  max-width: 666px;
-  margin: auto;
-  margin-top: 80px;
-  -webkit-box-shadow: rgba(0,0,0,0.7) 0px 20px 55px, rgba(0,0,0,0.3) 0px 0px 1px;
-  box-shadow: rgba(0,0,0,0.7) 0px 20px 55px, rgba(0,0,0,0.3) 0px 0px 1px;
-  text-align: left;
-}
-.sgn-offer-overview-popup button {
-  background-color: #d3d3d3;
-  padding: 10px 14px;
-  font-size: 12px;
-  border-radius: 6px;
-  border: 0;
-  min-width: 70px;
-  -webkit-transition: 0.2s;
-  -moz-transition: 0.2s;
-  -o-transition: 0.2s;
-  -ms-transition: 0.2s;
-  transition: 0.2s;
-}
-.sgn-offer-overview-popup button:hover {
-  opacity: 0.8;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  filter: alpha(opacity=80);
-  cursor: pointer;
-}
-.sgn-offer-overview-popup .sgn-offer-img {
-  background-color: #ccc;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  background-position: center center;
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  border: 0px;
-  width: 100%;
-  height: auto;
-  padding-top: 86%;
-}
-.sgn-offer-overview-popup .sgn-offer-img > img {
-  position: absolute;
-  object-fit: cover;
-  object-position: center center;
-  top: 50%;
-  left: 50%;
-  max-width: 98%;
-  max-height: 98%;
-  height: auto;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-.sgn-offer-overview-popup .sgn-popup-header {
-  border-bottom: 1px solid #eee;
-  padding: 10px;
-  font-weight: 600;
-  font-size: 18px;
-}
-.sgn-offer-overview-popup .sgn-popup-header .sgn-menu-popup-labels {
-  float: none;
-  padding: 0;
-  width: auto;
-}
-.sgn-offer-overview-popup .sgn-popup-content {
-  padding: 10px;
-}
-.sgn-offer-overview-popup .sgn-offer-texts-container {
-  overflow: hidden;
-  color: #202020;
-  padding: 10px 0px;
-  text-align: left;
-}
-.sgn-offer-overview-popup .sgn-offer-heading {
-  font-weight: 600;
-  line-height: 1.5;
-  white-space: nowrap;
-  overflow: hidden;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
-  max-width: 300px;
-}
-.sgn-offer-overview-popup .sgn-offer-description {
-  font-size: 0.9em;
-  line-height: 1.2;
-  opacity: 0.6;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
-  filter: alpha(opacity=60);
-  color: inherit;
-}
-.sgn-offer-overview-popup .sgn-offer-price {
-  font-variant-numeric: tabular-nums;
-  color: #28af4c;
-  font-size: 2em;
-}
-.sgn-offer-overview-popup .sgn_modal_loader {
-  position: absolute;
-  top: calc(50% - 80px);
-  left: calc(50% - 40px);
-  border: 16px solid #2c2c2e;
-  border-top: 16px solid #8b8c8f;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: spin 2s linear infinite;
-  -moz-animation: spin 2s linear infinite;
-  -o-animation: spin 2s linear infinite;
-  -ms-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
-.sgn__theme-dark .sgn-offer-overview-popup {
-  background: #1c1c1e;
-  color: #f3f3f9;
-}
-.sgn__theme-dark .sgn-offer-overview-popup button {
-  color: #f3f3f9;
-  background-color: #2c2c2e;
-}
-.sgn__theme-dark .sgn-offer-overview-popup .sgn-popup-header {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-.sgn__theme-dark .sgn-offer-overview-popup .sgn-offer-img {
-  background-color: rgba(200,200,200,0.1);
-}
 .sgn-incito-publication--open {
   overflow: hidden !important;
 }
@@ -1368,7 +1380,7 @@
   background: rgba(0,0,0,0.3);
   left: 50%;
   width: auto;
-  height: 16px;
+  height: auto;
   padding: 6px 18px;
   font-size: 14px;
   border-radius: 6px;
@@ -1427,7 +1439,7 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  inset: 0px;
+  top: 0;
 }
 .sgn-publications-list-content-heading {
   font-weight: 600;
@@ -2078,8 +2090,6 @@
   }
 }
 .sgn-pp__page {
-  -webkit-background-size: contain;
-  -moz-background-size: contain;
   background-size: contain;
 }
 .sgn-pp-page__loader {

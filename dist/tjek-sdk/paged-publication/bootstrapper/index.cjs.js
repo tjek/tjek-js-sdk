@@ -1,55 +1,712 @@
 'use strict';
 
-var _createClass = require('@babel/runtime-corejs3/helpers/createClass');
-var _spliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/splice');
-require('core-js/modules/es.regexp.exec.js');
-require('core-js/modules/es.object.to-string.js');
 require('core-js/modules/web.dom-collections.for-each.js');
-require('core-js/modules/es.number.constructor.js');
-require('core-js/modules/es.string.split.js');
-var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
-var _mapInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/map');
-var _trimInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/trim');
-var _inherits = require('@babel/runtime-corejs3/helpers/inherits');
-var _Array$from = require('@babel/runtime-corejs3/core-js-stable/array/from');
-var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
-var _findIndexInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find-index');
 var _Object$keys = require('@babel/runtime-corejs3/core-js-stable/object/keys');
 var _Object$getOwnPropertySymbols = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols');
+var _filterInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/filter');
 var _Object$getOwnPropertyDescriptor = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor');
 var _Object$getOwnPropertyDescriptors = require('@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors');
+var _asyncToGenerator = require('@babel/runtime-corejs3/helpers/asyncToGenerator');
 var _defineProperty = require('@babel/runtime-corejs3/helpers/defineProperty');
-var _Object$assign = require('@babel/runtime-corejs3/core-js-stable/object/assign');
+var _createClass = require('@babel/runtime-corejs3/helpers/createClass');
+var _regeneratorRuntime = require('@babel/runtime-corejs3/regenerator');
+require('core-js/modules/es.object.to-string.js');
+require('core-js/modules/es.array.iterator.js');
+require('core-js/modules/es.promise.js');
+require('core-js/modules/es.string.iterator.js');
+require('core-js/modules/web.dom-collections.iterator.js');
+var _mapInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/map');
+var _Promise = require('@babel/runtime-corejs3/core-js-stable/promise');
+var _URL = require('@babel/runtime-corejs3/core-js-stable/url');
+var fetch = require('cross-fetch');
+require('core-js/modules/es.function.name.js');
+require('core-js/modules/es.regexp.constructor.js');
+require('core-js/modules/es.regexp.exec.js');
+require('core-js/modules/es.regexp.to-string.js');
+var _spliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/splice');
+require('core-js/modules/es.string.match.js');
+var _assertThisInitialized = require('@babel/runtime-corejs3/helpers/assertThisInitialized');
+var _inherits = require('@babel/runtime-corejs3/helpers/inherits');
 var _findInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find');
+var MicroEvent = require('microevent');
+var Mustache = require('mustache');
+require('core-js/modules/es.string.replace.js');
+require('core-js/modules/es.number.constructor.js');
+require('core-js/modules/es.array.join.js');
+require('core-js/modules/es.string.split.js');
+var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
+var _trimInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/trim');
+var _Array$from = require('@babel/runtime-corejs3/core-js-stable/array/from');
+var _findIndexInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/find-index');
+var _Object$assign = require('@babel/runtime-corejs3/core-js-stable/object/assign');
 var _sliceInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/slice');
 var _Object$entries = require('@babel/runtime-corejs3/core-js-stable/object/entries');
-require('core-js/modules/es.string.replace.js');
 var _slicedToArray = require('@babel/runtime-corejs3/helpers/slicedToArray');
 var _includesInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/includes');
-require('core-js/modules/es.array.join.js');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
-var _spliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_spliceInstanceProperty);
-var _concatInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_concatInstanceProperty);
-var _mapInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_mapInstanceProperty);
-var _trimInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_trimInstanceProperty);
-var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
-var _Array$from__default = /*#__PURE__*/_interopDefaultLegacy(_Array$from);
-var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
-var _findIndexInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findIndexInstanceProperty);
 var _Object$keys__default = /*#__PURE__*/_interopDefaultLegacy(_Object$keys);
 var _Object$getOwnPropertySymbols__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertySymbols);
+var _filterInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_filterInstanceProperty);
 var _Object$getOwnPropertyDescriptor__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertyDescriptor);
 var _Object$getOwnPropertyDescriptors__default = /*#__PURE__*/_interopDefaultLegacy(_Object$getOwnPropertyDescriptors);
+var _asyncToGenerator__default = /*#__PURE__*/_interopDefaultLegacy(_asyncToGenerator);
 var _defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_defineProperty);
-var _Object$assign__default = /*#__PURE__*/_interopDefaultLegacy(_Object$assign);
+var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
+var _regeneratorRuntime__default = /*#__PURE__*/_interopDefaultLegacy(_regeneratorRuntime);
+var _mapInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_mapInstanceProperty);
+var _Promise__default = /*#__PURE__*/_interopDefaultLegacy(_Promise);
+var _URL__default = /*#__PURE__*/_interopDefaultLegacy(_URL);
+var fetch__default = /*#__PURE__*/_interopDefaultLegacy(fetch);
+var _spliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_spliceInstanceProperty);
+var _assertThisInitialized__default = /*#__PURE__*/_interopDefaultLegacy(_assertThisInitialized);
+var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
 var _findInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findInstanceProperty);
+var MicroEvent__default = /*#__PURE__*/_interopDefaultLegacy(MicroEvent);
+var Mustache__default = /*#__PURE__*/_interopDefaultLegacy(Mustache);
+var _concatInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_concatInstanceProperty);
+var _trimInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_trimInstanceProperty);
+var _Array$from__default = /*#__PURE__*/_interopDefaultLegacy(_Array$from);
+var _findIndexInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_findIndexInstanceProperty);
+var _Object$assign__default = /*#__PURE__*/_interopDefaultLegacy(_Object$assign);
 var _sliceInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_sliceInstanceProperty);
 var _Object$entries__default = /*#__PURE__*/_interopDefaultLegacy(_Object$entries);
 var _slicedToArray__default = /*#__PURE__*/_interopDefaultLegacy(_slicedToArray);
 var _includesInstanceProperty__default = /*#__PURE__*/_interopDefaultLegacy(_includesInstanceProperty);
+
+var _getMatcher = function _getMatcher(element) {
+  return element.matches || element.webkitMatchesSelector || // @ts-expect-error
+  element.mozMatchesSelector || // @ts-expect-error
+  element.msMatchesSelector || // @ts-expect-error
+  element.oMatchesSelector || Function.prototype;
+};
+
+var _level = 0;
+
+function _matchesSelector(element, selector, boundElement) {
+  if (element === boundElement) return;
+  if (_getMatcher(element).call(element, selector)) return element;
+
+  if (element.parentElement) {
+    _level++;
+    return _matchesSelector(element.parentElement, selector, boundElement);
+  }
+}
+
+var handlersBySelectorByTypeByInstance = {};
+
+function _bind(events, selector, callback, remove) {
+  var _this = this;
+
+  if (!(events instanceof Array)) events = [events];
+  var id = this.id;
+  var handlersBySelectorByType = handlersBySelectorByTypeByInstance[this.id];
+
+  var _loop = function _loop(k) {
+    var type = events[k];
+
+    if (remove) {
+      // if there are no events tied to this element at all
+      // then don't do anything
+      if (!handlersBySelectorByType) return {
+        v: void 0
+      }; // if there is no event type specified then remove all events
+      // example: Gator(element).off()
+
+      if (!type) {
+        _Object$keys__default["default"](handlersBySelectorByType).forEach(function (handleType) {
+          handlersBySelectorByType[handleType] = {};
+        });
+
+        return {
+          v: void 0
+        };
+      } // if no callback or selector is specified remove all events of this type
+      // example: Gator(element).off('click')
+
+
+      if (!callback && !selector) {
+        handlersBySelectorByType[type] = {};
+        return {
+          v: void 0
+        };
+      } // if a selector is specified but no callback remove all events
+      // for this selector
+      // example: Gator(element).off('click', '.sub-element')
+
+
+      if (!callback) {
+        delete handlersBySelectorByType[type][selector];
+        return {
+          v: void 0
+        };
+      } // if we have specified an event type, selector, and callback then we
+      // need to make sure there are callbacks tied to this selector to
+      // begin with.  if there aren't then we can stop here
+
+
+      if (!handlersBySelectorByType[type][selector]) return {
+        v: void 0
+      }; // if there are then loop through all the callbacks and if we find
+      // one that matches remove it from the array
+
+      for (var i = 0; i < handlersBySelectorByType[type][selector].length; i++) {
+        var handlers = handlersBySelectorByType[type][selector];
+
+        if (handlers[i] === callback) {
+          _spliceInstanceProperty__default["default"](handlers).call(handlers, i, 1);
+
+          break;
+        }
+      }
+
+      return "continue";
+    }
+
+    if (!handlersBySelectorByType || !handlersBySelectorByType[type]) _this.element.addEventListener(type, function (e) {
+      var handlersBySelector = handlersBySelectorByType[type];
+      if (!handlersBySelector) return;
+      var target = e.target;
+      var matches = {}; // find all events that match
+
+      _level = 0;
+
+      _Object$keys__default["default"](handlersBySelector).forEach(function (handlerSelector) {
+        if (target instanceof HTMLElement) {
+          var match = _matchesSelector(target, handlerSelector, instances[id].element);
+
+          if (match) {
+            _level++;
+            handlersBySelector[handlerSelector].match = match;
+            matches[_level] = handlersBySelector[handlerSelector];
+          }
+        }
+      }); // stopPropagation() fails to set cancelBubble to true in Webkit
+      // @see http://code.google.com/p/chromium/issues/detail?id=162270
+
+
+      e.stopPropagation = function () {
+        e.cancelBubble = true;
+      };
+
+      for (var _i = 0; _i <= _level; _i++) {
+        if (matches[_i]) {
+          for (var j = 0; j < matches[_i].length; j++) {
+            if (matches[_i][j].call(matches[_i].match, e) === false) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+
+            if (e.cancelBubble) return;
+          }
+        }
+      }
+    }, type == 'blur' || type == 'focus');
+
+    if (!handlersBySelectorByType) {
+      handlersBySelectorByTypeByInstance[id] = {};
+      handlersBySelectorByType = handlersBySelectorByTypeByInstance[id];
+    }
+
+    if (!handlersBySelectorByType[type]) {
+      handlersBySelectorByType[type] = {};
+    }
+
+    if (!handlersBySelectorByType[type][selector]) handlersBySelectorByType[type][selector] = [];
+    handlersBySelectorByType[type][selector].push(callback);
+  };
+
+  for (var k = 0; k < events.length; k++) {
+    var _ret = _loop(k);
+
+    if (_ret === "continue") continue;
+    if (typeof _ret === "object") return _ret.v;
+  }
+}
+
+var _id = 0;
+var instances = {};
+
+function Gator(element, id) {
+  // called as function
+  if (!(this instanceof Gator)) {
+    // only keep one Gator instance per node to make sure that
+    // we don't create a ton of new objects if you want to delegate
+    // multiple events from the same node
+    //
+    // for example: Gator(document).on(...
+    for (var key in instances) {
+      if (instances[key].element === element) return instances[key];
+    }
+
+    _id++;
+    return instances[_id] = new Gator(element, _id);
+  }
+
+  this.element = element;
+  this.id = id;
+}
+
+Gator.prototype.on = function (events, selector, callback) {
+  _bind.call(this, events, selector, callback);
+};
+
+Gator.prototype.off = function (events, selector, callback) {
+  _bind.call(this, events, selector, callback, true);
+};
+
+function error(err, options) {
+  err.message = err.message;
+
+  if (typeof options === 'string') {
+    err.message = options;
+  } else if (typeof options === 'object' && options) {
+    for (var key in options) {
+      err[key] = options[key];
+    }
+
+    if (options.message) err.message = options.message;
+
+    if (options.code || options.message) {
+      err.code = options.code || options.name;
+    }
+
+    if (options.stack) err.stack = options.stack;
+    if (options.statusCode) err.statusCode = options.statusCode;
+  }
+
+  err.name = (options == null ? void 0 : options.name) || err.name || err.code || 'Error';
+  err.time = new Date();
+  return err;
+}
+function throttle(fn, threshold, scope) {
+  if (threshold === void 0) {
+    threshold = 250;
+  }
+
+  var last;
+  var deferTimer;
+  return function () {
+    var context = scope || this;
+    var now = new Date().getTime();
+    var args = arguments;
+
+    if (last && now < last + threshold) {
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
+var on = function on(el, events, selector, callback) {
+  return (//@ts-expect-error
+    Gator(el).on(events, selector, callback)
+  );
+};
+var off = function off(el, events, selector, callback) {
+  return (//@ts-expect-error
+    Gator(el).off(events, selector, callback)
+  );
+};
+
+function ownKeys$3(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$3(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$3(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$3(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
+
+function request(_x, _x2) {
+  return _request.apply(this, arguments);
+}
+
+function _request() {
+  _request = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee(_ref, callback) {
+    var coreUrl, _ref$url, rawUrl, apiKey, qs, _ref$method, method, headers, body, url, key, response, json;
+
+    return _regeneratorRuntime__default["default"].wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            coreUrl = _ref.coreUrl, _ref$url = _ref.url, rawUrl = _ref$url === void 0 ? '' : _ref$url, apiKey = _ref.apiKey, qs = _ref.qs, _ref$method = _ref.method, method = _ref$method === void 0 ? 'get' : _ref$method, headers = _ref.headers, body = _ref.body;
+            _context.prev = 1;
+            url = new _URL__default["default"](rawUrl, coreUrl);
+
+            if (apiKey) {
+              _context.next = 5;
+              break;
+            }
+
+            throw new Error('`apiKey` needs to be configured, please see README');
+
+          case 5:
+            // @ts-expect-error
+            for (key in qs) {
+              url.searchParams.append(key, qs[key]);
+            }
+
+            _context.next = 8;
+            return fetch__default["default"](String(url), {
+              method: method,
+              body: body,
+              headers: _objectSpread$3({
+                Accept: 'application/json'
+              }, headers, {
+                'X-Api-Key': apiKey
+              }),
+              credentials: 'same-origin'
+            });
+
+          case 8:
+            response = _context.sent;
+
+            if (!(response.status >= 200 && response.status < 300 || response.status === 304)) {
+              _context.next = 15;
+              break;
+            }
+
+            _context.next = 12;
+            return response.json();
+
+          case 12:
+            json = _context.sent;
+            callback == null ? void 0 : callback(null, json);
+            return _context.abrupt("return", json);
+
+          case 15:
+            throw error(new Error('Core API error'), {
+              code: 'CoreAPIError',
+              statusCode: response.status
+            });
+
+          case 18:
+            _context.prev = 18;
+            _context.t0 = _context["catch"](1);
+            callback == null ? void 0 : callback(_context.t0);
+            throw _context.t0;
+
+          case 22:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[1, 18]]);
+  }));
+  return _request.apply(this, arguments);
+}
+
+var pairs = {
+  'paged_publication.hotspot_picker.header': 'Which offer did you mean?',
+  'incito_publication.product_picker.header': 'Which product?'
+};
+function t(key, view) {
+  var _pairs$key;
+
+  var template = (_pairs$key = pairs[key]) != null ? _pairs$key : '';
+  return Mustache__default["default"].render(template, view);
+}
+
+var ESC = 27;
+var ARROW_RIGHT = 39;
+var ARROW_LEFT = 37;
+var SPACE = 32;
+var NUMBER_ONE = 49;
+
+var defaultTemplate = "<div class=\"sgn-popover__background\" data-close></div>\n<div class=\"sgn-popover__menu\">\n    {{#header}}\n        <div class=\"sgn-popover__header\">{{header}}</div>\n    {{/header}}\n    <div class=\"sgn-popover__content\">\n        <ul>\n            {{#singleChoiceItems}}\n                <li data-index=\"{{index}}\">\n                    <p class=\"sgn-popover-item__title\">{{item.title}}</p>\n                    {{#item.subtitle}}\n                        <p class=\"sgn-popover-item__subtitle\">{{item.subtitle}}</p>\n                    {{/item.subtitle}}\n                </li>\n            {{/singleChoiceItems}}\n        </ul>\n    </div>\n</div>";
+
+var Popover = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](Popover, _MicroEvent);
+
+  function Popover(options) {
+    var _this;
+
+    _this = _MicroEvent.call(this) || this;
+    _this.el = document.createElement('div');
+    _this.backgroundEl = document.createElement('div');
+    _this.options = void 0;
+
+    _this.keyUp = function (e) {
+      if (e.keyCode === ESC) _this.destroy();
+    };
+
+    _this.resize = function () {
+      _this.destroy();
+    };
+
+    _this.scroll = function () {
+      _this.destroy();
+    };
+
+    _this.options = options;
+    return _this;
+  }
+
+  var _proto = Popover.prototype;
+
+  _proto.render = function render() {
+    var _this$options = this.options,
+        header = _this$options.header,
+        singleChoiceItems = _this$options.singleChoiceItems,
+        template = _this$options.template;
+    this.el.className = 'sgn-popover';
+    this.el.setAttribute('tabindex', '-1');
+    this.el.innerHTML = Mustache__default["default"].render(template || defaultTemplate, {
+      header: header,
+      singleChoiceItems: singleChoiceItems == null ? void 0 : _mapInstanceProperty__default["default"](singleChoiceItems).call(singleChoiceItems, function (item, index) {
+        return {
+          item: item,
+          index: index
+        };
+      })
+    });
+    this.position();
+    this.addEventListeners();
+    return this;
+  };
+
+  _proto.destroy = function destroy() {
+    off(this.el);
+    window.removeEventListener('resize', this.resize, false);
+    window.removeEventListener('scroll', this.scroll, false);
+
+    if (this.el.parentNode) {
+      this.el.parentNode.removeChild(this.el);
+      this.trigger('destroyed');
+    }
+  };
+
+  _proto.position = function position() {
+    var top = this.options.y;
+    var left = this.options.x;
+    var menuEl = this.el.querySelector('.sgn-popover__menu');
+
+    if (menuEl && this.el.parentElement) {
+      var width = menuEl.offsetWidth;
+      var height = menuEl.offsetHeight;
+      var parentWidth = this.el.parentElement.offsetWidth;
+      var parentHeight = this.el.parentElement.offsetHeight;
+      var boundingRect = this.el.parentElement.getBoundingClientRect();
+      top -= boundingRect.top;
+      left -= boundingRect.left;
+      top -= window.pageYOffset;
+      left -= window.pageXOffset;
+      menuEl.style.top = top + height > parentHeight ? parentHeight - height + 'px' : top + 'px';
+      menuEl.style.left = left + width > parentWidth ? parentWidth - width + 'px' : left + 'px';
+    }
+  };
+
+  _proto.addEventListeners = function addEventListeners() {
+    var _this2 = this;
+
+    var trigger = this.trigger.bind(this);
+    this.el.addEventListener('keyup', this.keyUp);
+    on(this.el, 'click', '[data-index]', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      trigger('selected', {
+        index: this.dataset.index
+      });
+    });
+    on(this.el, 'click', '[data-close]', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      _this2.destroy();
+    });
+    on(this.el, 'click', '.sgn-popover__menu', function (e) {
+      e.stopPropagation();
+    });
+    window.addEventListener('resize', this.resize, false);
+    window.addEventListener('scroll', this.scroll, false);
+  };
+
+  return _createClass__default["default"](Popover);
+}(MicroEvent__default["default"]);
+
+function singleChoicePopover(_ref, callback) {
+  var items = _ref.items,
+      el = _ref.el,
+      header = _ref.header,
+      x = _ref.x,
+      y = _ref.y;
+  var popover;
+
+  if (items.length === 1) {
+    callback(items[0]);
+  } else if (items.length > 1) {
+    popover = new Popover({
+      header: header,
+      x: x,
+      y: y,
+      singleChoiceItems: items
+    });
+    popover.bind('selected', function (e) {
+      var _popover;
+
+      callback(items[e.index]);
+      (_popover = popover) == null ? void 0 : _popover.destroy();
+    });
+    popover.bind('destroyed', function () {
+      el.focus();
+    });
+    el.appendChild(popover.el);
+    popover.render().el.focus();
+  }
+
+  return {
+    destroy: function destroy() {
+      var _popover2;
+
+      (_popover2 = popover) == null ? void 0 : _popover2.destroy();
+    }
+  };
+}
+
+var visibilityClassName = 'sgn-pp--hidden';
+
+var PagedPublicationControls = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](PagedPublicationControls, _MicroEvent);
+
+  // @ts-expect-error
+  function PagedPublicationControls(el, options) {
+    var _this$prevControl2, _this$nextControl2, _this$close2;
+
+    var _this;
+
+    if (options === void 0) {
+      options = {};
+    }
+
+    _this = _MicroEvent.call(this) || this;
+    _this.options = void 0;
+    _this.root = void 0;
+    _this.progress = void 0;
+    _this.progressBar = void 0;
+    _this.progressLabel = void 0;
+    _this.prevControl = void 0;
+    _this.nextControl = void 0;
+    _this.close = void 0;
+    _this.keyDownHandler = void 0;
+
+    _this.destroy = function () {
+      var _this$prevControl, _this$nextControl, _this$close;
+
+      if (_this.options.keyboard === true) {
+        _this.root.removeEventListener('keydown', _this.keyDownHandler, false);
+      }
+
+      (_this$prevControl = _this.prevControl) == null ? void 0 : _this$prevControl.removeEventListener('mousedown', _this.prevClicked, false);
+      (_this$nextControl = _this.nextControl) == null ? void 0 : _this$nextControl.removeEventListener('mousedown', _this.nextClicked, false);
+      (_this$close = _this.close) == null ? void 0 : _this$close.removeEventListener('mousedown', _this.closeClicked, false);
+    };
+
+    _this.beforeNavigation = function (e) {
+      var showProgress = typeof e.progressLabel === 'string' && e.progressLabel.length > 0;
+
+      if (_this.progress && _this.progressBar) {
+        _this.progressBar.style.width = "".concat(e.progress, "%");
+
+        if (showProgress) {
+          _this.progress.classList.remove(visibilityClassName);
+        } else {
+          _this.progress.classList.add(visibilityClassName);
+        }
+      }
+
+      if (_this.progressLabel) {
+        if (showProgress) {
+          _this.progressLabel.textContent = e.progressLabel;
+
+          _this.progressLabel.classList.remove(visibilityClassName);
+        } else {
+          _this.progressLabel.classList.add(visibilityClassName);
+        }
+      }
+
+      if (_this.prevControl) {
+        if (e.verso.newPosition === 0) {
+          _this.prevControl.classList.add(visibilityClassName);
+        } else {
+          _this.prevControl.classList.remove(visibilityClassName);
+        }
+      }
+
+      if (_this.nextControl) {
+        if (e.verso.newPosition === e.pageSpreadCount - 1) {
+          _this.nextControl.classList.add(visibilityClassName);
+        } else {
+          _this.nextControl.classList.remove(visibilityClassName);
+        }
+      }
+    };
+
+    _this.prevClicked = function (e) {
+      e.preventDefault();
+
+      _this.trigger('prev');
+    };
+
+    _this.nextClicked = function (e) {
+      e.preventDefault();
+
+      _this.trigger('next');
+    };
+
+    _this.closeClicked = function (e) {
+      e.preventDefault();
+
+      _this.trigger('close');
+    };
+
+    _this.keyDown = function (e) {
+      var keyCode = e.keyCode;
+
+      if (ARROW_LEFT === keyCode) {
+        _this.trigger('prev', {
+          duration: 0
+        });
+      } else if (ARROW_RIGHT === keyCode || SPACE === keyCode) {
+        _this.trigger('next', {
+          duration: 0
+        });
+      } else if (NUMBER_ONE === keyCode) {
+        _this.trigger('first', {
+          duration: 0
+        });
+      }
+    };
+
+    _this.options = options;
+    _this.root = el;
+    _this.progress = el.querySelector('.sgn-pp__progress');
+    _this.progressBar = el.querySelector('.sgn-pp-progress__bar');
+    _this.progressLabel = el.querySelector('.sgn-pp__progress-label');
+    _this.prevControl = el.querySelector('.sgn-pp__control[data-direction=prev]');
+    _this.nextControl = el.querySelector('.sgn-pp__control[data-direction=next]');
+    _this.close = el.querySelector('.sgn-pp--close');
+    _this.keyDownHandler = throttle(_this.keyDown, 150, _assertThisInitialized__default["default"](_this));
+
+    if (_this.options.keyboard === true) {
+      _this.root.addEventListener('keydown', _this.keyDownHandler, false);
+    }
+
+    (_this$prevControl2 = _this.prevControl) == null ? void 0 : _this$prevControl2.addEventListener('mousedown', _this.prevClicked, false);
+    (_this$nextControl2 = _this.nextControl) == null ? void 0 : _this$nextControl2.addEventListener('mousedown', _this.nextClicked, false);
+    (_this$close2 = _this.close) == null ? void 0 : _this$close2.addEventListener('mousedown', _this.closeClicked, false);
+
+    _this.bind('beforeNavigation', _this.beforeNavigation);
+
+    _this.bind('destroyed', _this.destroy);
+
+    return _this;
+  }
+
+  return _createClass__default["default"](PagedPublicationControls);
+}(MicroEvent__default["default"]);
 
 var Animation = /*#__PURE__*/function () {
   function Animation(el) {
@@ -964,9 +1621,9 @@ var TouchMouseInput = /*#__PURE__*/function (_Input) {
   return _createClass__default["default"](TouchMouseInput);
 }(Input);
 
-function ownKeys$1(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$2(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
+function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$2(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$2(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
 
 var STATE_POSSIBLE = 1;
 var STATE_BEGAN = 2;
@@ -1041,7 +1698,7 @@ var Recognizer = /*#__PURE__*/function () {
     this.manager = null;
     this.state = STATE_POSSIBLE;
     this.simultaneous = {};
-    this.options = _objectSpread$1({}, this.defaults, options);
+    this.options = _objectSpread$2({}, this.defaults, options);
     this.options.enable = (_this$options$enable = this.options.enable) != null ? _this$options$enable : true;
   }
   /**
@@ -1109,7 +1766,7 @@ var Recognizer = /*#__PURE__*/function () {
       this.state = STATE_POSSIBLE;
     }
 
-    var inputDataClone = _objectSpread$1({}, inputData);
+    var inputDataClone = _objectSpread$2({}, inputData);
 
     this.state = this.process(inputDataClone); // the recognizer has recognized a gesture
     // so trigger an event
@@ -1304,9 +1961,9 @@ var TouchAction = /*#__PURE__*/function () {
   return _createClass__default["default"](TouchAction);
 }();
 
-function ownKeys(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$1(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
+function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
 var SUPPORT_TOUCH = typeof window !== 'undefined' && 'ontouchstart' in window;
 var SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && /mobile|tablet|ip(ad|hone|od)|android/i.test(navigator.userAgent);
 var SUPPORT_POINTER_EVENTS = typeof window !== 'undefined' && Boolean(prefixed(window, 'PointerEvent'));
@@ -1438,7 +2095,7 @@ var Manager = /*#__PURE__*/function () {
     this.session = {};
     this.recognizers = [];
     this.oldCssProps = {};
-    this.options = _objectSpread({}, defaults, options);
+    this.options = _objectSpread$1({}, defaults, options);
     this.options.inputTarget = this.options.inputTarget || element;
     this.element = element;
     this.input = createInputInstance(this);
@@ -2870,5 +3527,1509 @@ var Verso = /*#__PURE__*/function () {
   return _createClass__default["default"](Verso);
 }();
 
-module.exports = Verso;
-//# sourceMappingURL=verso.cjs.js.map
+var loadImage = function loadImage(src, callback) {
+  return _Object$assign__default["default"](new Image(), {
+    onload: function onload(_ref) {
+      var target = _ref.target;
+      callback(null, target);
+    },
+    onerror: function onerror() {
+      callback(new Error());
+    },
+    src: src
+  });
+};
+
+var PagedPublicationPageSpread = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](PagedPublicationPageSpread, _MicroEvent);
+
+  // @ts-expect-error
+  function PagedPublicationPageSpread(options) {
+    var _this;
+
+    if (options === void 0) {
+      options = {};
+    }
+
+    _this = _MicroEvent.call(this) || this;
+    _this.contentsRendered = false;
+    _this.hotspotsRendered = false;
+    _this.el = void 0;
+    _this.options = void 0;
+    _this.options = options;
+    _this.el = _this.renderEl();
+    return _this;
+  }
+
+  var _proto = PagedPublicationPageSpread.prototype;
+
+  _proto.getId = function getId() {
+    return this.options.id;
+  };
+
+  _proto.getEl = function getEl() {
+    return this.el;
+  };
+
+  _proto.getPages = function getPages() {
+    return this.options.pages;
+  };
+
+  _proto.renderEl = function renderEl() {
+    var _context;
+
+    var el = document.createElement('div');
+
+    var pageIds = _mapInstanceProperty__default["default"](_context = this.getPages()).call(_context, function (page) {
+      return page.id;
+    });
+
+    el.className = 'verso__page-spread sgn-pp__page-spread';
+    el.dataset.id = this.getId();
+    el.dataset.type = 'page';
+    el.dataset.width = String(this.options.width);
+    el.dataset.pageIds = pageIds.join(',');
+    el.dataset.maxZoomScale = String(this.options.maxZoomScale);
+    el.dataset.zoomable = String(false);
+    return el;
+  };
+
+  _proto.renderContents = function renderContents() {
+    var _this2 = this;
+
+    var pageSpreadId = this.getId();
+    var el = this.getEl();
+    var pages = this.getPages();
+    var pageCount = pages.length;
+    var imageLoads = 0;
+    var maxPageWidth = el.clientWidth * (window.devicePixelRatio || 1);
+    if (this.options.pageMode === 'double') maxPageWidth = maxPageWidth / 2;
+    var useLargeImage = maxPageWidth > 700;
+    pages.forEach(function (page, i) {
+      var image = useLargeImage ? page.images.large : page.images.medium;
+      var pageEl = document.createElement('div');
+      var loaderEl = document.createElement('div');
+      pageEl.className = 'sgn-pp__page verso__page';
+      if (page.id) pageEl.dataset.id = page.id;
+
+      if (pageCount === 2) {
+        pageEl.className += i === 0 ? ' verso-page--verso' : ' verso-page--recto';
+      }
+
+      pageEl.appendChild(loaderEl);
+      el.appendChild(pageEl);
+      loaderEl.className = 'sgn-pp-page__loader';
+      loaderEl.innerHTML = "<span>".concat(page.label, "</span>");
+      loadImage(image, function (err, img) {
+        if (err) {
+          loaderEl.innerHTML = '<span>!</span>';
+          return console.error(err);
+        }
+
+        var isComplete = ++imageLoads === pageCount;
+        pageEl.style.backgroundImage = "url(".concat(image, ")");
+        pageEl.dataset.width = img.width;
+        pageEl.dataset.height = img.height;
+        pageEl.innerHTML = '&nbsp;';
+        if (isComplete) el.dataset.zoomable = String(true);
+
+        _this2.trigger('pageLoaded', {
+          pageSpreadId: pageSpreadId,
+          page: page
+        });
+
+        if (isComplete) {
+          _this2.trigger('pagesLoaded', {
+            pageSpreadId: pageSpreadId,
+            pages: pages
+          });
+        }
+      });
+    });
+    this.contentsRendered = true;
+    return this;
+  };
+
+  _proto.clearContents = function clearContents() {
+    this.el.innerHTML = '';
+    this.contentsRendered = false;
+    return this;
+  };
+
+  _proto.zoomIn = function zoomIn() {
+    var _this3 = this;
+
+    var pages = this.getPages();
+    this.el.querySelectorAll('.sgn-pp__page').forEach(function (pageEl) {
+      var id = pageEl.dataset.id;
+
+      var image = _findInstanceProperty__default["default"](pages).call(pages, function (page) {
+        return page.id === id;
+      }).images.large;
+
+      loadImage(image, function (err) {
+        if (err) return console.error(err);
+
+        if (_this3.el.dataset.active === 'true') {
+          pageEl.dataset.image = pageEl.style.backgroundImage;
+          pageEl.style.backgroundImage = "url(".concat(image, ")");
+        }
+      });
+    });
+  };
+
+  _proto.zoomOut = function zoomOut() {
+    this.el.querySelectorAll('.sgn-pp__page[data-image]').forEach(function (pageEl) {
+      pageEl.style.backgroundImage = pageEl.dataset.image;
+      delete pageEl.dataset.image;
+    });
+  };
+
+  return _createClass__default["default"](PagedPublicationPageSpread);
+}(MicroEvent__default["default"]);
+
+function chunk(arr, size) {
+  var results = [];
+
+  while (arr.length) {
+    results.push(_spliceInstanceProperty__default["default"](arr).call(arr, 0, size));
+  }
+
+  return results;
+}
+
+var PagedPublicationPageSpreads = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](PagedPublicationPageSpreads, _MicroEvent);
+
+  function PagedPublicationPageSpreads(options) {
+    var _this;
+
+    _this = _MicroEvent.call(this) || this;
+    _this.collection = [];
+    _this.ids = {};
+    _this.options = void 0;
+    _this.options = options;
+    return _this;
+  }
+
+  var _proto = PagedPublicationPageSpreads.prototype;
+
+  _proto.get = function get(id) {
+    return this.ids[id];
+  };
+
+  _proto.getFrag = function getFrag() {
+    var frag = document.createDocumentFragment();
+    this.collection.forEach(function (pageSpread) {
+      frag.appendChild(pageSpread.el);
+    });
+    return frag;
+  };
+
+  _proto.update = function update(pageMode) {
+    var _context,
+        _this2 = this;
+
+    if (pageMode === void 0) {
+      pageMode = 'single';
+    }
+
+    var pageSpreads = [];
+    var ids = {};
+
+    var pages = _sliceInstanceProperty__default["default"](_context = this.options.pages).call(_context);
+
+    var _this$options = this.options,
+        width = _this$options.width,
+        maxZoomScale = _this$options.maxZoomScale;
+
+    if (pageMode === 'single') {
+      pages.forEach(function (page) {
+        pageSpreads.push([page]);
+      });
+    } else {
+      var firstPage = pages.shift();
+      var lastPage = pages.length % 2 === 1 ? pages.pop() : null;
+      var midstPageSpreads = chunk(pages, 2);
+      if (firstPage) pageSpreads.push([firstPage]);
+      midstPageSpreads.forEach(function (midstPages) {
+        pageSpreads.push(midstPages);
+      });
+      if (lastPage) pageSpreads.push([lastPage]);
+    }
+
+    this.collection = _mapInstanceProperty__default["default"](pageSpreads).call(pageSpreads, function (pages, i) {
+      var _context2;
+
+      var id = _concatInstanceProperty__default["default"](_context2 = "".concat(pageMode, "-")).call(_context2, i);
+
+      var pageSpread = new PagedPublicationPageSpread({
+        width: width,
+        pageMode: pageMode,
+        maxZoomScale: maxZoomScale,
+        pages: pages,
+        id: id
+      });
+      pageSpread.bind('pageLoaded', function (e) {
+        _this2.trigger('pageLoaded', e);
+      });
+      pageSpread.bind('pagesLoaded', function (e) {
+        _this2.trigger('pagesLoaded', e);
+      });
+      ids[id] = pageSpread;
+      return pageSpread;
+    });
+    this.ids = ids;
+    return this;
+  };
+
+  return _createClass__default["default"](PagedPublicationPageSpreads);
+}(MicroEvent__default["default"]);
+
+function getColorBrightness(color) {
+  color = color.replace('#', '');
+  var sum = 0;
+  var x = 0;
+
+  while (x < 3) {
+    sum += parseInt(color.substring(2 * x, 2), 16) || 0;
+    ++x;
+  }
+
+  return sum <= 381 ? 'dark' : 'light';
+}
+
+var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](PagedPublicationCore, _MicroEvent);
+
+  function PagedPublicationCore(el, options) {
+    var _this;
+
+    if (options === void 0) {
+      options = {};
+    }
+
+    _this = _MicroEvent.call(this) || this;
+    _this.defaults = {
+      pages: [],
+      pageSpreadWidth: 100,
+      pageSpreadMaxZoomScale: 2.3,
+      idleDelay: 1000,
+      resizeDelay: 400,
+      color: '#ffffff'
+    };
+    _this.rootEl = void 0;
+    _this.pagesEl = void 0;
+    _this.options = void 0;
+    _this.pageId = void 0;
+    _this.verso = void 0;
+    _this.pageMode = void 0;
+    _this.idleTimeout = void 0;
+    _this.pageSpreads = void 0;
+    _this.resizeListener = void 0;
+
+    _this.start = function () {
+      var verso = _this.getVerso();
+
+      verso.start();
+      verso.pageSpreads.forEach(_this.overridePageSpreadContentRect);
+      _this.resizeListener = throttle(_this.resize, _this.getOption('resizeDelay'));
+      window.addEventListener('resize', _this.resizeListener, false);
+      window.addEventListener('beforeunload', _this.unload, false);
+      _this.rootEl.dataset.started = '';
+
+      _this.rootEl.setAttribute('tabindex', '-1');
+
+      _this.rootEl.focus();
+    };
+
+    _this.destroy = function () {
+      var verso = _this.getVerso();
+
+      delete _this.rootEl.dataset.started;
+      delete _this.rootEl.dataset.idle;
+      delete _this.rootEl.dataset.navigating;
+      delete _this.rootEl.dataset.colorBrightness;
+      delete _this.rootEl.dataset.zoomedIn;
+      _this.rootEl.style.backgroundColor = '#ffffff';
+      verso.el.querySelectorAll('.sgn-pp__page-spread').forEach(function (pageSpreadEl) {
+        pageSpreadEl.parentNode.removeChild(pageSpreadEl);
+      });
+      verso.destroy();
+      window.removeEventListener('resize', _this.resizeListener, false);
+      window.removeEventListener('beforeunload', _this.unload, false);
+    };
+
+    _this.pageLoaded = function (e) {
+      _this.trigger('pageLoaded', e);
+    };
+
+    _this.pagesLoaded = function (e) {
+      _this.trigger('pagesLoaded', e);
+    };
+
+    _this.beforeNavigation = function (e) {
+      var position = e.newPosition;
+
+      var theVerso = _this.getVerso();
+
+      var versoPageSpread = theVerso.getPageSpreadFromPosition(position);
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
+      var pageSpreadCount = theVerso.getPageSpreadCount();
+      var newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
+      var progress = position / (pageSpreadCount - 1) * 100;
+
+      var progressLabel = _this.formatProgressLabel(pageSpread);
+
+      _this.rootEl.dataset.navigating = String(true);
+
+      _this.renderPageSpreads();
+
+      _this.resetIdleTimer();
+
+      _this.startIdleTimer();
+
+      _this.trigger('beforeNavigation', {
+        verso: e,
+        pageSpread: pageSpread,
+        newSpreadEl: newSpreadEl,
+        progress: progress,
+        progressLabel: progressLabel,
+        pageSpreadCount: pageSpreadCount,
+        newPositionIsEnd: e.newPosition + 1 === pageSpreadCount
+      });
+    };
+
+    _this.afterNavigation = function (e) {
+      var position = e.newPosition;
+
+      var theVerso = _this.getVerso();
+
+      var versoPageSpread = theVerso.getPageSpreadFromPosition(position);
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
+      var pageSpreadCount = theVerso.getPageSpreadCount();
+      var newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
+      _this.rootEl.dataset.navigating = String(false);
+
+      _this.trigger('afterNavigation', {
+        verso: e,
+        pageSpread: pageSpread,
+        pageSpreadCount: pageSpreadCount,
+        newSpreadEl: newSpreadEl,
+        newPositionIsEnd: e.newPosition + 1 === pageSpreadCount
+      });
+    };
+
+    _this.attemptedNavigation = function (e) {
+      _this.trigger('attemptedNavigation', {
+        verso: e
+      });
+    };
+
+    _this.pointerdown = function (e) {
+      if (e.isInsideContent) {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('pointerdown', {
+          verso: e,
+          page: page
+        });
+      }
+    };
+
+    _this.clicked = function (e) {
+      if (e.isInsideContent) {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('clicked', {
+          verso: e,
+          page: page
+        });
+      }
+    };
+
+    _this.doubleClicked = function (e) {
+      if (e.isInsideContent) {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('doubleClicked', {
+          verso: e,
+          page: page
+        });
+      }
+    };
+
+    _this.pressed = function (e) {
+      if (e.isInsideContent) {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('pressed', {
+          verso: e,
+          page: page
+        });
+      }
+    };
+
+    _this.contextmenu = function (e) {
+      if (e.isInsideContent) {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('contextmenu', {
+          verso: e,
+          page: page
+        });
+      }
+    };
+
+    _this.panStart = function () {
+      _this.resetIdleTimer();
+
+      _this.trigger('panStart', {
+        scale: _this.getVerso().transform.scale
+      });
+    };
+
+    _this.panEnd = function () {
+      _this.startIdleTimer();
+
+      _this.trigger('panEnd');
+    };
+
+    _this.zoomedIn = function (e) {
+      var position = e.position;
+
+      var versoPageSpread = _this.getVerso().getPageSpreadFromPosition(position);
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
+      pageSpread == null ? void 0 : pageSpread.zoomIn();
+      _this.rootEl.dataset.zoomedIn = String(true);
+
+      _this.trigger('zoomedIn', {
+        verso: e,
+        pageSpread: pageSpread
+      });
+    };
+
+    _this.zoomedOut = function (e) {
+      var position = e.position;
+
+      var versoPageSpread = _this.getVerso().getPageSpreadFromPosition(position);
+
+      var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
+
+      pageSpread == null ? void 0 : pageSpread.zoomOut();
+      _this.rootEl.dataset.zoomedIn = String(false);
+
+      _this.trigger('zoomedOut', {
+        verso: e,
+        pageSpread: pageSpread
+      });
+    };
+
+    _this.overridePageSpreadContentRect = function (pageSpread) {
+      if (pageSpread.getType() === 'page') {
+        return pageSpread.getContentRect = function () {
+          return _this.getContentRect(pageSpread);
+        };
+      }
+    };
+
+    _this.resize = function () {
+      var pageMode = _this.getPageMode();
+
+      if (!_this.getOption('pageMode') && pageMode !== _this.pageMode) {
+        _this.switchPageMode(pageMode);
+      } else {
+        _this.trigger('resized');
+      }
+    };
+
+    _this.unload = function () {
+      _this.trigger('disappeared');
+    };
+
+    _this.options = _this.makeOptions(options, _this.defaults);
+    _this.pageId = _this.getOption('pageId');
+    _this.rootEl = el;
+    _this.pagesEl = el.querySelector('.sgn-pp__pages');
+    _this.pageMode = _this.getPageMode();
+    _this.pageSpreads = new PagedPublicationPageSpreads({
+      pages: _this.getOption('pages'),
+      maxZoomScale: _this.getOption('pageSpreadMaxZoomScale'),
+      width: _this.getOption('pageSpreadWidth')
+    });
+
+    _this.pageSpreads.bind('pageLoaded', _this.pageLoaded);
+
+    _this.pageSpreads.bind('pagesLoaded', _this.pagesLoaded);
+
+    _this.setColor(_this.getOption('color')); // It's important to insert the page spreads before instantiating Verso.
+
+
+    _this.pagesEl.parentNode.insertBefore(_this.pageSpreads.update(_this.pageMode).getFrag(), _this.pagesEl);
+
+    _this.verso = _this.createVerso();
+
+    _this.bind('started', _this.start);
+
+    _this.bind('destroyed', _this.destroy);
+
+    return _this;
+  }
+
+  var _proto = PagedPublicationCore.prototype;
+
+  _proto.makeOptions = function makeOptions(options, defaults) {
+    var opts = {};
+
+    for (var key in options) {
+      var _options$key;
+
+      opts[key] = (_options$key = options[key]) != null ? _options$key : defaults[key];
+    }
+
+    return opts;
+  };
+
+  _proto.getOption = function getOption(key) {
+    return this.options[key];
+  };
+
+  _proto.setColor = function setColor(color) {
+    this.rootEl.dataset.colorBrightness = getColorBrightness(color);
+    this.rootEl.style.backgroundColor = color;
+  };
+
+  _proto.createVerso = function createVerso() {
+    var verso = new Verso(this.rootEl.querySelector('.verso'), {
+      pageId: this.pageId
+    });
+    verso.bind('beforeNavigation', this.beforeNavigation);
+    verso.bind('afterNavigation', this.afterNavigation);
+    verso.bind('attemptedNavigation', this.attemptedNavigation);
+    verso.bind('pointerdown', this.pointerdown);
+    verso.bind('clicked', this.clicked);
+    verso.bind('doubleClicked', this.doubleClicked);
+    verso.bind('pressed', this.pressed);
+    verso.bind('contextmenu', this.contextmenu);
+    verso.bind('panStart', this.panStart);
+    verso.bind('panEnd', this.panEnd);
+    verso.bind('zoomedIn', this.zoomedIn);
+    verso.bind('zoomedOut', this.zoomedOut);
+    return verso;
+  };
+
+  _proto.getVerso = function getVerso() {
+    return this.verso;
+  };
+
+  _proto.getContentRect = function getContentRect(pageSpread) {
+    var rect = {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: 0,
+      height: 0
+    };
+    var pageEls = pageSpread.getPageEls();
+    var pageEl = pageEls[0];
+    var pageCount = pageEls.length;
+    if (!pageCount) return rect;
+    var scale = this.getVerso().transform.scale;
+    var pageWidth = pageEl.offsetWidth * pageCount * scale;
+    var pageHeight = pageEl.offsetHeight * scale;
+    var imageRatio = Number(pageEl.dataset.height) / (Number(pageEl.dataset.width) * pageCount);
+    var actualHeight = pageHeight;
+    var actualWidth = actualHeight / imageRatio;
+    actualWidth = Math.min(pageWidth, actualWidth);
+    actualHeight = actualWidth * imageRatio;
+    var clientRect = pageEl.getBoundingClientRect();
+    rect.width = actualWidth;
+    rect.height = actualHeight;
+    rect.top = clientRect.top + (pageHeight - actualHeight) / 2;
+    rect.left = clientRect.left + (pageWidth - actualWidth) / 2;
+    rect.right = rect.width + rect.left;
+    rect.bottom = rect.height + rect.top;
+    return rect;
+  };
+
+  _proto.formatProgressLabel = function formatProgressLabel(pageSpread) {
+    var pages = (pageSpread == null ? void 0 : pageSpread.options.pages) || [];
+
+    var pageLabels = _mapInstanceProperty__default["default"](pages).call(pages, function (_ref) {
+      var label = _ref.label;
+      return label;
+    });
+
+    return pages.length > 0 ? pageLabels.join('-') + ' / ' + this.getOption('pages').length : null;
+  };
+
+  _proto.renderPageSpreads = function renderPageSpreads() {
+    var _this2 = this;
+
+    this.getVerso().pageSpreads.forEach(function (pageSpread) {
+      var visibility = pageSpread.getVisibility();
+
+      var match = _this2.pageSpreads.get(pageSpread.getId());
+
+      if (visibility === 'visible' && (match == null ? void 0 : match.contentsRendered) === false) {
+        setTimeout(match.renderContents.bind(match), 0);
+      }
+
+      if (visibility === 'gone' && (match == null ? void 0 : match.contentsRendered) === true) {
+        setTimeout(match.clearContents.bind(match), 0);
+      }
+    });
+    return this;
+  };
+
+  _proto.findPage = function findPage(pageId) {
+    var _context;
+
+    return _findInstanceProperty__default["default"](_context = this.getOption('pages')).call(_context, function (page) {
+      return page.id === pageId;
+    });
+  };
+
+  _proto.getPageMode = function getPageMode() {
+    return this.getOption('pageMode') || (this.rootEl.offsetHeight / this.rootEl.offsetWidth < 0.8 ? 'double' : 'single');
+  };
+
+  _proto.resetIdleTimer = function resetIdleTimer() {
+    clearTimeout(this.idleTimeout);
+    this.rootEl.dataset.idle = String(false);
+    return this;
+  };
+
+  _proto.startIdleTimer = function startIdleTimer() {
+    var _this3 = this;
+
+    this.idleTimeout = setTimeout(function () {
+      _this3.rootEl.dataset.idle = String(true);
+    }, this.getOption('idleDelay'));
+    return this;
+  };
+
+  _proto.switchPageMode = function switchPageMode(pageMode) {
+    if (this.pageMode === pageMode) return this;
+    var verso = this.getVerso();
+    var pageIds = verso.getPageSpreadFromPosition(verso.getPosition()).getPageIds();
+    this.pageMode = pageMode;
+    this.pageSpreads.update(this.pageMode);
+    this.getVerso().el.querySelectorAll('.sgn-pp__page-spread').forEach(function (pageSpreadEl) {
+      pageSpreadEl.parentNode.removeChild(pageSpreadEl);
+    });
+    this.pagesEl.parentNode.insertBefore(this.pageSpreads.getFrag(), this.pagesEl);
+    verso.refresh();
+    verso.navigateTo(verso.getPageSpreadPositionFromPageId(pageIds[0]), {
+      duration: 0
+    });
+    verso.pageSpreads.forEach(this.overridePageSpreadContentRect);
+    return this;
+  };
+
+  return _createClass__default["default"](PagedPublicationCore);
+}(MicroEvent__default["default"]);
+
+var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](PagedPublicationEventTracking, _MicroEvent);
+
+  function PagedPublicationEventTracking(eventTracker, id) {
+    var _this;
+
+    _this = _MicroEvent.call(this) || this;
+    _this.hidden = true;
+    _this.pageSpread = null;
+    _this.eventTracker = void 0;
+    _this.id = void 0;
+
+    _this.destroy = function () {
+      _this.pageSpreadDisappeared();
+    };
+
+    _this.appeared = function (e) {
+      _this.pageSpreadAppeared(e.pageSpread);
+    };
+
+    _this.disappeared = function () {
+      _this.pageSpreadDisappeared();
+    };
+
+    _this.beforeNavigation = function () {
+      _this.pageSpreadDisappeared();
+    };
+
+    _this.afterNavigation = function (e) {
+      _this.pageSpreadAppeared(e.pageSpread);
+    };
+
+    _this.attemptedNavigation = function (e) {
+      _this.pageSpreadAppeared(e.pageSpread);
+    };
+
+    _this.panStart = function (e) {
+      if (e.scale === 1) _this.pageSpreadDisappeared();
+    };
+
+    _this.eventTracker = eventTracker;
+    _this.id = id;
+
+    _this.bind('appeared', _this.appeared);
+
+    _this.bind('disappeared', _this.disappeared);
+
+    _this.bind('beforeNavigation', _this.beforeNavigation);
+
+    _this.bind('afterNavigation', _this.afterNavigation);
+
+    _this.bind('attemptedNavigation', _this.attemptedNavigation);
+
+    _this.bind('panStart', _this.panStart);
+
+    _this.bind('destroyed', _this.destroy);
+
+    return _this;
+  }
+
+  var _proto = PagedPublicationEventTracking.prototype;
+
+  _proto.trackOpened = function trackOpened() {
+    if (!this.eventTracker) return this;
+    this.eventTracker.trackPagedPublicationOpened({
+      'pp.id': this.id,
+      vt: this.eventTracker.createViewToken(this.id)
+    });
+    return this;
+  };
+
+  _proto.trackPageSpreadDisappeared = function trackPageSpreadDisappeared(pageNumbers) {
+    var _this2 = this;
+
+    if (!this.eventTracker) return this;
+    pageNumbers.forEach(function (pageNumber) {
+      _this2.eventTracker.trackPagedPublicationPageDisappeared({
+        'pp.id': _this2.id,
+        'ppp.n': pageNumber,
+        vt: _this2.eventTracker.createViewToken(_this2.id, pageNumber)
+      });
+    });
+    return this;
+  };
+
+  _proto.pageSpreadAppeared = function pageSpreadAppeared(pageSpread) {
+    if (pageSpread && this.hidden) {
+      this.pageSpread = pageSpread;
+      this.hidden = false;
+    }
+  };
+
+  _proto.pageSpreadDisappeared = function pageSpreadDisappeared() {
+    if (this.pageSpread && !this.hidden) {
+      var _context;
+
+      this.trackPageSpreadDisappeared(_mapInstanceProperty__default["default"](_context = this.pageSpread.getPages()).call(_context, function (page) {
+        return page.pageNumber;
+      }));
+      this.hidden = true;
+      this.pageSpread = null;
+    }
+  };
+
+  return _createClass__default["default"](PagedPublicationEventTracking);
+}(MicroEvent__default["default"]);
+
+function getPosition(pages, ratio, hotspot) {
+  var minX = null;
+  var minY = null;
+  var maxX = null;
+  var maxY = null;
+
+  var pageNumbers = _mapInstanceProperty__default["default"](pages).call(pages, function (page) {
+    return page.pageNumber;
+  });
+
+  var _loop = function _loop(pageNumber) {
+    if (pageNumbers.indexOf(Number(pageNumber)) === -1) return "continue";
+    hotspot.locations[pageNumber].forEach(function (_ref) {
+      var x = _ref[0],
+          y = _ref[1];
+      if (pages[1] && pageNumbers[1] === Number(pageNumber)) x += 1;
+      x /= pages.length;
+
+      if (minX == null) {
+        minX = maxX = x;
+        minY = maxY = y;
+      }
+
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    });
+  };
+
+  for (var pageNumber in hotspot.locations) {
+    var _ret = _loop(pageNumber);
+
+    if (_ret === "continue") continue;
+  }
+
+  var width = maxX - minX;
+  var height = maxY - minY;
+  return {
+    top: minY / ratio * 100,
+    left: minX * 100,
+    width: width * 100,
+    height: height / ratio * 100
+  };
+}
+
+function renderHotspot(hotspot, position, contentRect, boundingRect) {
+  var el = document.createElement('div');
+  var top = Math.round(contentRect.height / 100 * position.top);
+  var left = Math.round(contentRect.width / 100 * position.left);
+  var width = Math.round(contentRect.width / 100 * position.width);
+  var height = Math.round(contentRect.height / 100 * position.height);
+  top += Math.round(contentRect.top);
+  left += Math.round(contentRect.left);
+  top -= boundingRect.top;
+  left -= boundingRect.left;
+  el.className = 'sgn-pp__hotspot verso__overlay';
+  if (hotspot.id) el.dataset.id = hotspot.id;
+  if (hotspot.type) el.dataset.type = hotspot.type;
+  el.innerHTML = Mustache__default["default"].render('', hotspot);
+  el.style.top = "".concat(top, "px");
+  el.style.left = "".concat(left, "px");
+  el.style.width = "".concat(width, "px");
+  el.style.height = "".concat(height, "px");
+  return el;
+}
+
+var PagedPublicationHotspots = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](PagedPublicationHotspots, _MicroEvent);
+
+  function PagedPublicationHotspots() {
+    var _this;
+
+    _this = _MicroEvent.call(this) || this;
+    _this.currentPageSpreadId = null;
+    _this.pageSpreadsLoaded = {};
+    _this.cache = {};
+
+    _this.hotspotsReceived = function (e) {
+      _this.setCache(e.pageSpread.getId(), e);
+
+      _this.renderHotspots(e);
+    };
+
+    _this.afterNavigation = function (e) {
+      if (!e.pageSpread) return;
+      var id = e.pageSpread.getId();
+      _this.currentPageSpreadId = id;
+
+      if (_this.pageSpreadsLoaded[id]) {
+        _this.requestHotspots(id, e.pageSpread.getPages());
+      }
+    };
+
+    _this.pagesLoaded = function (e) {
+      _this.pageSpreadsLoaded[e.pageSpreadId] = true;
+
+      if (_this.currentPageSpreadId === e.pageSpreadId) {
+        _this.requestHotspots(e.pageSpreadId, e.pages);
+      }
+    };
+
+    _this.resized = function () {
+      var data = _this.getCache(_this.currentPageSpreadId);
+
+      if (data) _this.renderHotspots(data);
+    };
+
+    _this.bind('hotspotsReceived', _this.hotspotsReceived);
+
+    _this.bind('afterNavigation', _this.afterNavigation);
+
+    _this.bind('pagesLoaded', _this.pagesLoaded);
+
+    _this.bind('resized', _this.resized);
+
+    return _this;
+  }
+
+  var _proto = PagedPublicationHotspots.prototype;
+
+  _proto.renderHotspots = function renderHotspots(_ref2) {
+    var versoPageSpread = _ref2.versoPageSpread,
+        pageSpread = _ref2.pageSpread,
+        hotspots = _ref2.hotspots,
+        pages = _ref2.pages,
+        ratio = _ref2.ratio;
+    var contentRect = versoPageSpread.getContentRect();
+    var pageSpreadEl = pageSpread.getEl();
+    var boundingRect = pageSpreadEl.getBoundingClientRect();
+    pageSpreadEl.querySelectorAll('.sgn-pp__hotspot').forEach(function (hotspotEl) {
+      hotspotEl.parentNode.removeChild(hotspotEl);
+    });
+    var frag = document.createDocumentFragment();
+
+    for (var id in hotspots) {
+      var hotspot = hotspots[id];
+      var position = getPosition(pages, ratio, hotspot);
+      var el = renderHotspot(hotspot, position, contentRect, boundingRect);
+      frag.appendChild(el);
+    }
+
+    pageSpreadEl.appendChild(frag);
+    return this;
+  };
+
+  _proto.requestHotspots = function requestHotspots(id, pages) {
+    this.trigger('hotspotsRequested', {
+      id: id,
+      pages: pages
+    });
+  };
+
+  _proto.getCache = function getCache(pageSpreadId) {
+    return this.cache[pageSpreadId];
+  };
+
+  _proto.setCache = function setCache(pageSpreadId, data) {
+    this.cache[pageSpreadId] = data;
+    return this;
+  };
+
+  return _createClass__default["default"](PagedPublicationHotspots);
+}(MicroEvent__default["default"]);
+
+function defaultPickHotspot(hotspots, e, el, callback) {
+  var _context;
+
+  var popover = singleChoicePopover({
+    el: el,
+    header: t('paged_publication.hotspot_picker.header'),
+    x: e.verso.x,
+    y: e.verso.y,
+    items: _mapInstanceProperty__default["default"](_context = _filterInstanceProperty__default["default"](hotspots).call(hotspots, function (hotspot) {
+      return hotspot.type === 'offer';
+    })).call(_context, function (hotspot) {
+      return {
+        id: hotspot.id,
+        title: hotspot.offer.heading,
+        subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
+      };
+    })
+  }, function (picked) {
+    callback(_findInstanceProperty__default["default"](hotspots).call(hotspots, function (hotspot) {
+      return hotspot.id === picked.id;
+    }));
+  });
+  return popover.destroy;
+}
+
+var Viewer = /*#__PURE__*/function (_MicroEvent) {
+  _inherits__default["default"](Viewer, _MicroEvent);
+
+  // @ts-expect-error
+  function Viewer(el, _options) {
+    var _this;
+
+    if (_options === void 0) {
+      _options = {};
+    }
+
+    _this = _MicroEvent.call(this) || this;
+    _this._hotspots = new PagedPublicationHotspots();
+    _this.hotspots = null;
+    _this.hotspotQueue = [];
+    _this.popover = null;
+    _this.el = void 0;
+    _this._core = void 0;
+    _this._controls = void 0;
+    _this._eventTracking = void 0;
+    _this.options = void 0;
+
+    _this.destroy = function () {
+      _this._core.trigger('destroyed');
+
+      _this._hotspots.trigger('destroyed');
+
+      _this._controls.trigger('destroyed');
+
+      _this._eventTracking.trigger('destroyed');
+
+      _this.trigger('destroyed');
+
+      return _assertThisInitialized__default["default"](_this);
+    };
+
+    _this.first = function (options) {
+      _this._core.getVerso().first(options);
+
+      return _assertThisInitialized__default["default"](_this);
+    };
+
+    _this.prev = function (options) {
+      _this._core.getVerso().prev(options);
+
+      return _assertThisInitialized__default["default"](_this);
+    };
+
+    _this.next = function (options) {
+      _this._core.getVerso().next(options);
+
+      return _assertThisInitialized__default["default"](_this);
+    };
+
+    _this.last = function (options) {
+      _this._core.getVerso().last(options);
+
+      return _assertThisInitialized__default["default"](_this);
+    };
+
+    _this.hotspotsRequested = function (e) {
+      _this.hotspotQueue.push(e);
+
+      _this.processHotspotQueue();
+    };
+
+    _this.beforeNavigation = function () {
+      var _this$popover;
+
+      (_this$popover = _this.popover) == null ? void 0 : _this$popover.destroy == null ? void 0 : _this$popover.destroy();
+    };
+
+    _this.clicked = function (e) {
+      _this.pickHotspot(e, function (hotspot) {
+        _this.trigger('hotspotClicked', hotspot);
+      });
+    };
+
+    _this.pointerdown = function (e) {
+      var hotspots = _this.getPointerEventHotspots(e);
+
+      if (hotspots.length > 0) _this.trigger('hotspotsPointerdown', hotspots);
+    };
+
+    _this.contextmenu = function (e) {
+      _this.pickHotspot(e, function (hotspot) {
+        _this.trigger('hotspotContextmenu', hotspot);
+      });
+    };
+
+    _this.pressed = function (e) {
+      _this.pickHotspot(e, function (hotspot) {
+        _this.trigger('hotspotPressed', hotspot);
+      });
+    };
+
+    _this.el = el;
+    _this.options = _options;
+    _this._core = new PagedPublicationCore(_this.el, {
+      id: _this.options.id,
+      pages: _this.options.pages,
+      pageSpreadWidth: _this.options.pageSpreadWidth,
+      pageSpreadMaxZoomScale: _this.options.pageSpreadMaxZoomScale,
+      pageId: _this.options.pageId,
+      idleDelay: _this.options.idleDelay,
+      resizeDelay: _this.options.resizeDelay,
+      color: _this.options.color
+    });
+    _this._controls = new PagedPublicationControls(_this.el, {
+      keyboard: _this.options.keyboard
+    });
+    _this._eventTracking = new PagedPublicationEventTracking(_this.options.eventTracker, _this.options.id);
+
+    _this._controls.bind('prev', _this.prev);
+
+    _this._controls.bind('next', _this.next);
+
+    _this._controls.bind('first', _this.first);
+
+    _this._controls.bind('last', _this.last);
+
+    _this._controls.bind('close', _this.destroy);
+
+    _this._hotspots.bind('hotspotsRequested', function (e) {
+      _this.trigger('hotspotsRequested', e);
+    });
+
+    _this._core.bind('appeared', function (e) {
+      _this._eventTracking.trigger('appeared', e);
+
+      _this.trigger('appeared', e);
+    });
+
+    _this._core.bind('disappeared', function (e) {
+      _this._eventTracking.trigger('disappeared', e);
+
+      _this.trigger('disappeared', e);
+    });
+
+    _this._core.bind('beforeNavigation', function (e) {
+      _this._eventTracking.trigger('beforeNavigation', e);
+
+      _this._controls.trigger('beforeNavigation', e);
+
+      _this.trigger('beforeNavigation', e);
+    });
+
+    _this._core.bind('afterNavigation', function (e) {
+      _this._eventTracking.trigger('afterNavigation', e);
+
+      _this._hotspots.trigger('afterNavigation', e);
+
+      _this.trigger('afterNavigation', e);
+    });
+
+    _this._core.bind('attemptedNavigation', function (e) {
+      _this._eventTracking.trigger('attemptedNavigation', e);
+
+      _this.trigger('attemptedNavigation', e);
+    });
+
+    _this._core.bind('pointerdown', function (e) {
+      _this._eventTracking.trigger('pointerdown', e);
+
+      _this.trigger('pointerdown', e);
+    });
+
+    _this._core.bind('clicked', function (e) {
+      _this._eventTracking.trigger('clicked', e);
+
+      _this.trigger('clicked', e);
+    });
+
+    _this._core.bind('doubleClicked', function (e) {
+      _this._eventTracking.trigger('doubleClicked', e);
+
+      _this.trigger('doubleClicked', e);
+    });
+
+    _this._core.bind('contextmenu', function (e) {
+      _this.trigger('contextmenu', e);
+    });
+
+    _this._core.bind('pressed', function (e) {
+      _this._eventTracking.trigger('pressed', e);
+
+      _this.trigger('pressed', e);
+    });
+
+    _this._core.bind('panStart', function (e) {
+      _this._eventTracking.trigger('panStart', e);
+
+      _this.trigger('panStart', e);
+    });
+
+    _this._core.bind('zoomedIn', function (e) {
+      _this._eventTracking.trigger('zoomedIn', e);
+
+      _this.trigger('zoomedIn', e);
+    });
+
+    _this._core.bind('zoomedOut', function (e) {
+      _this._eventTracking.trigger('zoomedOut', e);
+
+      _this.trigger('zoomedOut', e);
+    });
+
+    _this._core.bind('pageLoaded', function (e) {
+      _this._eventTracking.trigger('pageLoaded', e);
+
+      _this.trigger('pageLoaded', e);
+    });
+
+    _this._core.bind('pagesLoaded', function (e) {
+      _this._hotspots.trigger('pagesLoaded', e);
+
+      _this.trigger('pagesLoaded', e);
+    });
+
+    _this._core.bind('resized', function (e) {
+      _this._hotspots.trigger('resized');
+
+      _this.trigger('resized', e);
+    });
+
+    _this.bind('hotspotsRequested', _this.hotspotsRequested);
+
+    _this.bind('beforeNavigation', _this.beforeNavigation);
+
+    _this.bind('clicked', _this.clicked);
+
+    _this.bind('pointerdown', _this.pointerdown);
+
+    _this.bind('contextmenu', _this.contextmenu);
+
+    _this.bind('pressed', _this.pressed);
+
+    return _this;
+  }
+
+  var _proto = Viewer.prototype;
+
+  _proto.start = function start() {
+    this._eventTracking.trackOpened();
+
+    this._core.trigger('started');
+
+    return this;
+  };
+
+  _proto.navigateTo = function navigateTo(position, options) {
+    return this.navigateToIndex(position, options);
+  };
+
+  _proto.navigateToIndex = function navigateToIndex(position, options) {
+    this._core.getVerso().navigateTo(position, options);
+
+    return this;
+  };
+
+  _proto.navigateToPageId = function navigateToPageId(pageId, options) {
+    var verso = this._core.getVerso();
+
+    var newPosition = verso.getPageSpreadPositionFromPageId(pageId);
+    verso.navigateTo(newPosition, options);
+    return this;
+  };
+
+  _proto.getPointerEventHotspots = function getPointerEventHotspots(e) {
+    var _context2;
+
+    var hotspots = this.hotspots;
+    if (!hotspots) return [];
+    return _mapInstanceProperty__default["default"](_context2 = e.verso.overlayEls).call(_context2, function (el) {
+      return hotspots[el.dataset.id];
+    });
+  };
+
+  _proto.pickHotspot = function pickHotspot(e, callback) {
+    if (this.popover) {
+      var _this$popover$destroy, _this$popover2;
+
+      (_this$popover$destroy = (_this$popover2 = this.popover).destroy) == null ? void 0 : _this$popover$destroy.call(_this$popover2);
+      this.popover = null;
+    }
+
+    var hotspots = this.getPointerEventHotspots(e);
+
+    if (hotspots.length === 1) {
+      callback(hotspots[0]);
+    } else if (hotspots.length > 1) {
+      this.popover = {
+        destroy: (this.options.pickHotspot || defaultPickHotspot)(hotspots, e, this.el, callback)
+      };
+    }
+  };
+
+  _proto.processHotspotQueue = function processHotspotQueue() {
+    var _context3,
+        _this2 = this;
+
+    if (!this.hotspots) return;
+    this.hotspotQueue = _filterInstanceProperty__default["default"](_context3 = this.hotspotQueue).call(_context3, function (hotspotRequest) {
+      var _context4;
+
+      var hotspots = {};
+
+      for (var hotspotId in _this2.hotspots) {
+        if (hotspots[hotspotId]) continue;
+        var _this2$hotspots$hotsp = _this2.hotspots[hotspotId],
+            id = _this2$hotspots$hotsp.id,
+            type = _this2$hotspots$hotsp.type,
+            locations = _this2$hotspots$hotsp.locations;
+
+        for (var idx = 0; idx < hotspotRequest.pages.length; idx++) {
+          var pageNumber = hotspotRequest.pages[idx].pageNumber;
+
+          if (locations[pageNumber]) {
+            hotspots[hotspotId] = {
+              type: type,
+              id: id,
+              locations: locations
+            };
+            break;
+          }
+        }
+      }
+
+      var versoPageSpread = _findInstanceProperty__default["default"](_context4 = _this2._core.getVerso().pageSpreads).call(_context4, function (pageSpread) {
+        return pageSpread.getId() === hotspotRequest.id;
+      });
+
+      _this2._hotspots.trigger('hotspotsReceived', {
+        pageSpread: _this2._core.pageSpreads.get(hotspotRequest.id),
+        versoPageSpread: versoPageSpread,
+        ratio: _this2.options.hotspotRatio,
+        pages: hotspotRequest.pages,
+        hotspots: hotspots
+      });
+
+      return false;
+    });
+  };
+
+  _proto.applyHotspots = function applyHotspots(hotspots) {
+    this.hotspots = hotspots;
+    this.processHotspotQueue();
+  };
+
+  return _createClass__default["default"](Viewer);
+}(MicroEvent__default["default"]);
+
+function ownKeys(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
+
+var Bootstrapper = /*#__PURE__*/function () {
+  function Bootstrapper(options) {
+    var _this = this;
+
+    if (options === void 0) {
+      options = {};
+    }
+
+    this.options = void 0;
+
+    this.fetchDetails = function (callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
+        url: "/v2/catalogs/".concat(_this.options.id)
+      }, callback);
+    };
+
+    this.fetchPages = function (callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
+        url: "/v2/catalogs/".concat(_this.options.id, "/pages")
+      }, callback);
+    };
+
+    this.fetchHotspots = function (callback) {
+      return request({
+        apiKey: _this.options.apiKey,
+        coreUrl: _this.options.coreUrl,
+        url: "/v2/catalogs/".concat(_this.options.id, "/hotspots")
+      }, callback);
+    };
+
+    //@ts-expect-error
+    this.options = options;
+  }
+
+  var _proto = Bootstrapper.prototype;
+
+  _proto.createViewer = function createViewer(data, viewerOptions) {
+    var _context;
+
+    return new Viewer(this.options.el, _objectSpread({
+      id: this.options.id,
+      ownedBy: data.details.dealer_id,
+      color: '#' + data.details.branding.pageflip.color,
+      hotspotRatio: data.details.dimensions.height,
+      keyboard: true,
+      pageId: this.options.pageId,
+      eventTracker: this.options.eventTracker,
+      pages: _mapInstanceProperty__default["default"](_context = data.pages).call(_context, function (_ref, i) {
+        var view = _ref.view,
+            zoom = _ref.zoom;
+        var pageNumber = i + 1;
+        return {
+          id: 'page' + pageNumber,
+          label: String(pageNumber),
+          pageNumber: pageNumber,
+          images: {
+            medium: view,
+            large: zoom
+          }
+        };
+      })
+    }, viewerOptions));
+  };
+
+  _proto.applyHotspots = function applyHotspots(viewer, hotspots) {
+    viewer.applyHotspots(hotspots.reduce(function (obj, hotspot) {
+      obj[hotspot.id] = hotspot;
+      return obj;
+    }, {}));
+  };
+
+  _proto.fetch = /*#__PURE__*/function () {
+    var _fetch = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee(callback) {
+      var _yield$Promise$all, details, pages, data;
+
+      return _regeneratorRuntime__default["default"].wrap(function _callee$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return _Promise__default["default"].all([this.fetchDetails(), this.fetchPages()]);
+
+            case 3:
+              _yield$Promise$all = _context2.sent;
+              details = _yield$Promise$all[0];
+              pages = _yield$Promise$all[1];
+
+              if (!(!details || !pages)) {
+                _context2.next = 8;
+                break;
+              }
+
+              throw new Error();
+
+            case 8:
+              data = {
+                details: details,
+                pages: pages
+              };
+              if (typeof callback === 'function') callback(null, data);
+              return _context2.abrupt("return", data);
+
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](0);
+
+              if (!(typeof callback === 'function')) {
+                _context2.next = 19;
+                break;
+              }
+
+              callback(_context2.t0);
+              _context2.next = 20;
+              break;
+
+            case 19:
+              throw _context2.t0;
+
+            case 20:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee, this, [[0, 13]]);
+    }));
+
+    function fetch(_x) {
+      return _fetch.apply(this, arguments);
+    }
+
+    return fetch;
+  }();
+
+  return _createClass__default["default"](Bootstrapper);
+}();
+
+module.exports = Bootstrapper;
+//# sourceMappingURL=index.cjs.js.map

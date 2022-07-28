@@ -157,6 +157,16 @@ Aside from the required data- attributes, the SDK still support a few more data 
 
 ## Changelog
 
+### Version 4.5.0
+
+-   `verso-browser`
+
+    -   Add `pointerdown` event
+
+-   `PagedPublicationKit Viewer`
+
+    -   Add new bindable `hotspotsPointerdown` event, the callback to which will receive an array of one or more hotspots under the down pointer. This is useful for doing work before the double-click delay confirms a single-click, such as prefetching.
+
 ### Version 4.0.2
 
 -   Remove `incito-browser` hyphenation behavior to prevent line-breaks in offer details

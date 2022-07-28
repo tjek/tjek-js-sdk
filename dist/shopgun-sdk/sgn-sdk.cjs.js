@@ -10,10 +10,10 @@ var _createClass = require('@babel/runtime-corejs3/helpers/createClass');
 var _assertThisInitialized = require('@babel/runtime-corejs3/helpers/assertThisInitialized');
 var _inherits = require('@babel/runtime-corejs3/helpers/inherits');
 var _classPrivateFieldGet = require('@babel/runtime-corejs3/helpers/classPrivateFieldGet');
-require('core-js/modules/es.object.to-string.js');
-require('core-js/modules/web.dom-collections.for-each.js');
 require('core-js/modules/es.array.iterator.js');
+require('core-js/modules/es.object.to-string.js');
 require('core-js/modules/web.dom-collections.iterator.js');
+require('core-js/modules/web.dom-collections.for-each.js');
 var _concatInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/concat');
 var _includesInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/includes');
 var _keysInstanceProperty = require('@babel/runtime-corejs3/core-js-stable/instance/keys');
@@ -122,6 +122,7 @@ var Config = /*#__PURE__*/function (_MicroEvent) {
     }
 
     _this = _MicroEvent.call.apply(_MicroEvent, _concatInstanceProperty__default["default"](_context = [this]).call(_context, args)) || this;
+    _this.keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'];
 
     _classPrivateFieldInitSpec(_assertThisInitialized__default["default"](_this), _attrs, {
       writable: true,
@@ -176,10 +177,11 @@ var Config = /*#__PURE__*/function (_MicroEvent) {
   return _createClass__default["default"](Config);
 }(MicroEvent__default["default"]);
 
-Config.prototype.keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'];
-
 var _getMatcher = function _getMatcher(element) {
-  return element.matches || element.webkitMatchesSelector || element.mozMatchesSelector || element.msMatchesSelector || element.oMatchesSelector || Function.prototype;
+  return element.matches || element.webkitMatchesSelector || // @ts-expect-error
+  element.mozMatchesSelector || // @ts-expect-error
+  element.msMatchesSelector || // @ts-expect-error
+  element.oMatchesSelector || Function.prototype;
 };
 
 var _level = 0;
@@ -364,7 +366,7 @@ var isNode = function isNode() {
   return typeof process === 'object';
 };
 function error(err, options) {
-  err.message = err.message || null;
+  err.message = err.message;
 
   if (typeof options === 'string') {
     err.message = options;
@@ -380,6 +382,7 @@ function error(err, options) {
     }
 
     if (options.stack) err.stack = options.stack;
+    if (options.statusCode) err.statusCode = options.statusCode;
   }
 
   err.name = (options == null ? void 0 : options.name) || err.name || err.code || 'Error';
@@ -416,10 +419,14 @@ function throttle(fn, threshold, scope) {
   };
 }
 var on = function on(el, events, selector, callback) {
-  return Gator(el).on(events, selector, callback);
+  return (//@ts-expect-error
+    Gator(el).on(events, selector, callback)
+  );
 };
 var off = function off(el, events, selector, callback) {
-  return Gator(el).off(events, selector, callback);
+  return (//@ts-expect-error
+    Gator(el).off(events, selector, callback)
+  );
 };
 
 var util = /*#__PURE__*/Object.freeze({
@@ -510,6 +517,7 @@ function _request() {
             throw new Error('`apiKey` needs to be configured, please see README');
 
           case 5:
+            // @ts-expect-error
             for (key in qs) {
               url.searchParams.append(key, qs[key]);
             }
@@ -539,7 +547,7 @@ function _request() {
 
           case 12:
             json = _context.sent;
-            if (typeof callback === 'function') callback(null, json);
+            callback == null ? void 0 : callback(null, json);
             return _context.abrupt("return", json);
 
           case 15:
@@ -551,18 +559,10 @@ function _request() {
           case 18:
             _context.prev = 18;
             _context.t0 = _context["catch"](1);
-
-            if (!(typeof callback === 'function')) {
-              _context.next = 22;
-              break;
-            }
-
-            return _context.abrupt("return", callback(_context.t0));
-
-          case 22:
+            callback == null ? void 0 : callback(_context.t0);
             throw _context.t0;
 
-          case 23:
+          case 22:
           case "end":
             return _context.stop();
         }
@@ -574,6 +574,9 @@ function _request() {
 
 var Controls = /*#__PURE__*/_createClass__default["default"](function Controls(viewer) {
   var _this = this;
+
+  this.viewer = void 0;
+  this.progressEl = void 0;
 
   this.destroy = function () {
     window.removeEventListener('scroll', _this.scroll, false);
@@ -667,10 +670,12 @@ function formatSpans(text, spans) {
   }, '');
 }
 
-var matches = typeof Element !== 'undefined' && (Element.prototype.matches || Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
+var matches = typeof Element !== 'undefined' && (Element.prototype.matches || // @ts-expect-error
+Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
 
 function closest(el, s) {
   do {
+    // @ts-expect-error
     if (matches.call(el, s)) return el;
     el = el.parentElement || el.parentNode;
   } while (el !== null && el.nodeType === 1);
@@ -844,7 +849,7 @@ function renderView(view, canLazyload) {
       {
         tagName = 'iframe';
         classNames.push('incito__html-embed-view');
-        attrs.sandbox = 'allow-scripts';
+        attrs.sandbox = 'allow-scripts allow-same-origin';
         attrs.allowfullscreen = '';
 
         var _src2 = String(new _URL__default["default"](view.src));
@@ -1190,12 +1195,23 @@ function renderView(view, canLazyload) {
 var Incito = /*#__PURE__*/function (_MicroEvent) {
   _inherits__default["default"](Incito, _MicroEvent);
 
-  function Incito(containerEl, _ref) {
+  //@ts-expect-error
+  function Incito(containerEl, _temp) {
     var _this;
 
-    var _ref$incito = _ref.incito,
-        incito = _ref$incito === void 0 ? {} : _ref$incito;
+    var _ref = _temp === void 0 ? {} : _temp,
+        incito = _ref.incito;
+
     _this = _MicroEvent.call(this) || this;
+    _this.containerEl = void 0;
+    _this.incito = void 0;
+    _this.el = void 0;
+    _this.ids = void 0;
+    _this.sections = void 0;
+    _this.canLazyload = void 0;
+    _this.styleEl = void 0;
+    _this.lazyObserver = void 0;
+    _this.videoObserver = void 0;
     _this.containerEl = containerEl;
     _this.incito = incito;
     _this.el = document.createElement('div');
@@ -1255,6 +1271,7 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     }
 
     if (typeof theme.line_spacing_multiplier === 'number') {
+      //@ts-expect-error
       this.el.style.lineHeight = theme.line_spacing_multiplier;
     } // By setting the language we help the browser with stuff like hyphenation.
 
@@ -1347,18 +1364,24 @@ var Incito = /*#__PURE__*/function (_MicroEvent) {
     this.videoObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          var autoplayState = entry.target.dataset.autoplayState;
+          var autoplayState = // @ts-expect-error
+          entry.target.dataset.autoplayState;
 
           _this4.loadEl(entry.target);
 
           _this4.lazyObserver.unobserve(entry.target);
 
           if (!autoplayState || autoplayState === 'paused') {
-            entry.target.dataset.autoplayState = 'playing';
+            // @ts-expect-error
+            entry.target.dataset.autoplayState = 'playing'; // @ts-expect-error
+
             entry.target.play();
-          }
+          } // @ts-expect-error
+
         } else if (!entry.target.paused) {
-          entry.target.dataset.autoplayState = 'paused';
+          // @ts-expect-error
+          entry.target.dataset.autoplayState = 'paused'; // @ts-expect-error
+
           entry.target.pause();
         }
       });
@@ -1416,6 +1439,8 @@ var IncitoPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
     var _this;
 
     _this = _MicroEvent.call(this) || this;
+    _this.eventTracker = void 0;
+    _this.details = void 0;
     _this.eventTracker = eventTracker;
     _this.details = details;
     return _this;
@@ -1439,6 +1464,7 @@ var IncitoPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
 var Viewer$1 = /*#__PURE__*/function (_MicroEvent) {
   _inherits__default["default"](Viewer, _MicroEvent);
 
+  // @ts-expect-error
   function Viewer(el, options) {
     var _this;
 
@@ -1447,6 +1473,10 @@ var Viewer$1 = /*#__PURE__*/function (_MicroEvent) {
     }
 
     _this = _MicroEvent.call(this) || this;
+    _this.el = void 0;
+    _this.options = void 0;
+    _this.incito = void 0;
+    _this._eventTracking = void 0;
     _this.el = el;
     _this.options = options;
     _this.incito = new Incito(_this.el, {
@@ -1495,7 +1525,10 @@ function getLocale() {
     localeChain.push.apply(localeChain, _toConsumableArray__default["default"](navigator.languages));
   } else if (typeof navigator.language === 'string' && navigator.language) {
     localeChain.push(navigator.language);
-  } else if (typeof navigator.browserLanguage === 'string' && navigator.browserLanguage) {
+  } else if ( // @ts-expect-error
+  typeof navigator.browserLanguage === 'string' && // @ts-expect-error
+  navigator.browserLanguage) {
+    // @ts-expect-error
     localeChain.push(navigator.browserLanguage);
   }
 
@@ -1508,6 +1541,7 @@ function getLocale() {
 }
 
 var Bootstrapper$1 = /*#__PURE__*/function () {
+  // @ts-expect-error
   function Bootstrapper(options) {
     var _this = this;
 
@@ -1523,6 +1557,8 @@ var Bootstrapper$1 = /*#__PURE__*/function () {
     this.locale = getLocale();
     this.featureLabels = this.getFeatureLabels();
     this.versionsSupported = ['1.0.0'];
+    this.options = void 0;
+    this.maxWidth = void 0;
 
     this.fetchDetails = function (id, callback) {
       return request({
@@ -1551,7 +1587,8 @@ var Bootstrapper$1 = /*#__PURE__*/function () {
           versions_supported: _this.versionsSupported,
           locale_code: _this.locale,
           time: _this.time,
-          feature_labels: _this.anonymizeFeatureLabels(_this.featureLabels)
+          feature_labels: _this.anonymizeFeatureLabels( // @ts-expect-error
+          _this.featureLabels)
         })
       }, callback);
     };
@@ -1691,6 +1728,11 @@ var da_DK = {
   publication_viewer_print_button: 'Print',
   publication_viewer_download_button: 'Hent',
   publication_viewer_until_label: 'Til og med',
+  publication_viewer_offer_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_menu_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_expires_in_days_label: '(Udløber om {{days}} dage)',
+  publication_viewer_valid_in_days_label: '(Gælder om {{days}} dage)',
+  publication_viewer_expired_label: '(Udløb)',
   publication_viewer_pages_button: 'Sider',
   publication_viewer_offers_button: 'Tilbud',
   publication_viewer_search_text: 'Søg',
@@ -1710,6 +1752,11 @@ var en_US = {
   publication_viewer_print_button: 'Print',
   publication_viewer_download_button: 'Download PDF',
   publication_viewer_until_label: 'Through',
+  publication_viewer_offer_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_menu_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_expires_in_days_label: '(Expires in {{days}} days)',
+  publication_viewer_valid_in_days_label: '(Valid in {{days}} days)',
+  publication_viewer_expired_label: '(Expired)',
   publication_viewer_pages_button: 'Pages',
   publication_viewer_offers_button: 'Offers',
   publication_viewer_search_text: 'Search',
@@ -1729,6 +1776,11 @@ var sv_SE = {
   publication_viewer_print_button: 'Skriva ut',
   publication_viewer_download_button: 'Ladda ner',
   publication_viewer_until_label: 'Till slut',
+  publication_viewer_offer_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_menu_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_expires_in_days_label: '(Går ut om {{days}} dagar)',
+  publication_viewer_valid_in_days_label: '(Gäller in {{days}} days)',
+  publication_viewer_expired_label: '(Utgånget)',
   publication_viewer_pages_button: 'Sidor',
   publication_viewer_offers_button: 'Erbjudanden',
   publication_viewer_search_text: 'Sök',
@@ -1748,6 +1800,11 @@ var nb_NO = {
   publication_viewer_print_button: 'Skrive ut',
   publication_viewer_download_button: 'nedlasting',
   publication_viewer_until_label: 'Igjennom',
+  publication_viewer_offer_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_menu_date_range: '{{{from}}} - {{{till}}}',
+  publication_viewer_expires_in_days_label: '(Utløper in {{days}} dager)',
+  publication_viewer_valid_in_days_label: '(Gyldig om {{days}} dager)',
+  publication_viewer_expired_label: '(Utløpt)',
   publication_viewer_pages_button: 'Sider',
   publication_viewer_offers_button: 'Tilbud',
   publication_viewer_search_text: 'Søk',
@@ -1770,8 +1827,8 @@ var locales = /*#__PURE__*/Object.freeze({
 var destroyModal = function destroyModal() {
   var pubContainer = document.querySelector('.sgn__pp') || document.querySelector('.sgn__incito');
   var modalContainer = document.querySelector('.sgn-modal-container');
-  modalContainer.classList.add('sgn-modal-container-on-destroy');
-  pubContainer.focus();
+  modalContainer == null ? void 0 : modalContainer.classList.add('sgn-modal-container-on-destroy');
+  pubContainer == null ? void 0 : pubContainer.focus();
   window.setTimeout(function () {
     var _modalContainer$paren;
 
@@ -1784,9 +1841,9 @@ var createModal = function createModal(container, destroyCallback) {
     var modalContainer = document.createElement('div');
     var blocker = document.createElement('div');
     blocker.className = 'sgn-blocker';
-    pubContainer.appendChild(modalContainer);
+    pubContainer == null ? void 0 : pubContainer.appendChild(modalContainer);
     modalContainer.className = 'sgn-modal-container';
-    modalContainer.tabIndex = '-1';
+    modalContainer.tabIndex = -1;
     modalContainer.appendChild(blocker);
     modalContainer.appendChild(container);
     modalContainer.focus();
@@ -1822,13 +1879,75 @@ var formatPrice = function formatPrice(price, localeCode, currency) {
     currency: currency
   }).format(price);
 };
-var formatDate = function formatDate(dateStr, localeCode, options) {
-  if (localeCode === void 0) {
-    localeCode = 'en_US';
+var parseDateStr = function parseDateStr(dateStr) {
+  var parts = dateStr.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:\.(\d{0,7}))?(?:Z|(.)(\d{2}):?(\d{2})?)?/);
+
+  if (parts) {
+    return new Date(Date.UTC(+parts[1], +parts[2] - 1, +parts[3], +parts[4] - (+parts[9] || 0) * (parts[8] == '-' ? -1 : 1), +parts[5] - (+parts[10] || 0) * (parts[8] == '-' ? -1 : 1), +parts[6], +((parts[7] || '0') + '00').substring(0, 3)));
   }
 
-  var date = new Date(dateStr);
-  return new Intl.DateTimeFormat(localeCode.replace('_', '-'), options).format(date);
+  return new Date(NaN);
+};
+var formatDate = function formatDate(dateStr, options) {
+  var scriptEl = document.getElementById('sgn-sdk');
+  var dataset = scriptEl == null ? void 0 : scriptEl.dataset;
+  var browserLocale = navigator.language || 'en-US';
+  var locale = dataset != null && dataset.localeCode ? dataset == null ? void 0 : dataset.localeCode.replace('_', '-') : browserLocale;
+  var date = parseDateStr(dateStr);
+  return new Intl.DateTimeFormat(locale, options).format(date);
+};
+var getDateRange = function getDateRange(fromDateStr, tillDateStr, templateKey) {
+  var from = formatDate(fromDateStr, {
+    day: '2-digit',
+    month: '2-digit'
+  });
+  var till = formatDate(tillDateStr, {
+    day: '2-digit',
+    month: '2-digit'
+  });
+  return translate(templateKey, {
+    from: from,
+    till: till
+  });
+};
+var getPubState = function getPubState(fromDateStr, tillDateStr) {
+  var fromDate = parseDateStr(fromDateStr).valueOf();
+  var tillDate = parseDateStr(tillDateStr).valueOf();
+  var todayDate = new Date().valueOf();
+
+  if (todayDate >= fromDate && todayDate < tillDate) {
+    return 'active';
+  } else if (todayDate > tillDate) {
+    return 'expired';
+  } else if (todayDate < fromDate) {
+    return 'inactive';
+  }
+
+  return null;
+};
+var getPubStateMessage = function getPubStateMessage(fromDateStr, tillDateStr) {
+  var oneDay = 24 * 60 * 60 * 1000;
+  var fromDate = parseDateStr(fromDateStr).valueOf();
+  var tillDate = parseDateStr(tillDateStr).valueOf();
+  var todayDate = new Date().valueOf();
+  var status = getPubState(fromDateStr, tillDateStr);
+
+  if (status === 'active') {
+    var diffDays = Math.ceil(Math.abs((tillDate - todayDate) / oneDay));
+    return translate('publication_viewer_expires_in_days_label', {
+      days: diffDays
+    });
+  } else if (status === 'inactive') {
+    var _diffDays = Math.ceil(Math.abs((fromDate - todayDate) / oneDay));
+
+    return translate('publication_viewer_valid_in_days_label', {
+      days: _diffDays
+    });
+  } else if (status === 'expired') {
+    return translate('publication_viewer_expired_label');
+  }
+
+  return null;
 };
 
 var getTranslationOverride = function getTranslationOverride(dataset) {
@@ -1858,8 +1977,12 @@ var translate = function translate(key, view) {
     key = '';
   }
 
+  if (view === void 0) {
+    view = {};
+  }
+
   var scriptEl = document.getElementById('sgn-sdk');
-  var dataset = scriptEl.dataset;
+  var dataset = scriptEl == null ? void 0 : scriptEl.dataset;
   var browserLocale = ((_navigator$language = navigator.language) == null ? void 0 : (_navigator$language$r = _navigator$language.replace('-', '_')) == null ? void 0 : _navigator$language$r.toLocaleLowerCase()) || 'en_us';
   var locale = dataset != null && dataset.localeCode ? dataset.localeCode.replace('-', '_').toLowerCase() : browserLocale;
   var translationOverride = getTranslationOverride(dataset);
@@ -1895,20 +2018,20 @@ var getColorBrightness$1 = function getColorBrightness(color) {
   return sum <= 381 ? 'dark' : 'light';
 };
 var pushQueryParam = function pushQueryParam(queryParams) {
-  var _Object$entries2;
-
   if (queryParams === void 0) {
     queryParams = {};
   }
 
   var newUrl = new _URL__default["default"](window.location.href);
-  (_Object$entries2 = _Object$entries__default["default"](queryParams)) == null ? void 0 : _Object$entries2.forEach(function (_ref3) {
+
+  _Object$entries__default["default"](queryParams).forEach(function (_ref3) {
     var _ref4 = _slicedToArray__default["default"](_ref3, 2),
         key = _ref4[0],
         val = _ref4[1];
 
-    newUrl.searchParams[val ? 'set' : 'delete'](key, val);
+    newUrl.searchParams[val ? 'set' : 'delete'](key, String(val));
   });
+
   window.history.pushState({
     path: String(newUrl)
   }, '', newUrl);
@@ -1933,8 +2056,6 @@ var defaultTemplate$a = "{{^disableHeader}}\n    <div class=\"sgn__header\">\n  
 var defaultShoppingListCounterTemplate = "{{#shoppingListCount}}\n    <div class=\"sgn__offer-shopping-list-counter\">\n        <span>{{shoppingListCount}}</span>\n    </div>\n{{/shoppingListCount}}";
 
 var Header = function Header(_ref) {
-  var _template;
-
   var publicationType = _ref.publicationType,
       template = _ref.template,
       shoppingListCounterTemplate = _ref.shoppingListCounterTemplate,
@@ -1942,7 +2063,6 @@ var Header = function Header(_ref) {
       scriptEls = _ref.scriptEls;
   var container = null;
   publicationType = publicationType || 'paged';
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$a;
   var translations = {
     close: translate('publication_viewer_close_label'),
     shoppingList: translate('publication_viewer_shopping_list_label'),
@@ -1950,7 +2070,9 @@ var Header = function Header(_ref) {
   };
 
   var renderShoppingListCounter = function renderShoppingListCounter() {
-    var shoppingListCountEl = container.querySelector('.sgn__offer-shopping-list-count');
+    var _container;
+
+    var shoppingListCountEl = (_container = container) == null ? void 0 : _container.querySelector('.sgn__offer-shopping-list-count');
 
     if (shoppingListCountEl) {
       var storedPublicationOffers = get('publication-saved-offers');
@@ -1961,7 +2083,9 @@ var Header = function Header(_ref) {
   };
 
   var setNavColor = function setNavColor(color) {
-    var sgnNav = container.querySelector('.sgn__nav');
+    var _container2;
+
+    var sgnNav = (_container2 = container) == null ? void 0 : _container2.querySelector('.sgn__nav');
 
     if (sgnNav) {
       sgnNav.style.backgroundColor = color || 'transparent';
@@ -1970,29 +2094,26 @@ var Header = function Header(_ref) {
   };
 
   var show = function show(data) {
-    var _data, _data$details, _data$details$brandin, _data2, _data2$details, _data2$details$brandi;
+    var _data, _data$details, _data$details$brandin, _container3, _container3$querySele;
 
     if (data === void 0) {
       data = {};
     }
 
-    var brandColor = (_data = data) != null && (_data$details = _data.details) != null && (_data$details$brandin = _data$details.branding) != null && _data$details$brandin.color ? "#".concat((_data2 = data) == null ? void 0 : (_data2$details = _data2.details) == null ? void 0 : (_data2$details$brandi = _data2$details.branding) == null ? void 0 : _data2$details$brandi.color) : '#2c2c2e';
-    var headerEl = container.querySelector('.sgn__header');
-    setNavColor(brandColor);
-
-    if (headerEl) {
-      headerEl.classList.add('sgn-animate-header');
-    }
+    setNavColor("#".concat(((_data = data) == null ? void 0 : (_data$details = _data.details) == null ? void 0 : (_data$details$brandin = _data$details.branding) == null ? void 0 : _data$details$brandin.color) || '2c2c2e'));
+    (_container3 = container) == null ? void 0 : (_container3$querySele = _container3.querySelector('.sgn__header')) == null ? void 0 : _container3$querySele.classList.add('sgn-animate-header');
   };
 
   var addClosePubListener = function addClosePubListener() {
-    var sgnContainer = publicationType === 'incito' ? el.querySelector('.sgn__incito') : el.querySelector('.sgn__pp');
-    var closeBtn = container.querySelector('.sgn__close-publication');
+    var _container4;
+
+    var sgnContainer = publicationType === 'incito' ? el == null ? void 0 : el.querySelector('.sgn__incito') : el == null ? void 0 : el.querySelector('.sgn__pp');
+    var closeBtn = (_container4 = container) == null ? void 0 : _container4.querySelector('.sgn__close-publication');
     closeBtn == null ? void 0 : closeBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       destroyPublication(sgnContainer);
     });
-    sgnContainer.addEventListener('keyup', function (e) {
+    sgnContainer == null ? void 0 : sgnContainer.addEventListener('keyup', function (e) {
       if (e.keyCode === ESC && closeBtn) {
         destroyPublication(sgnContainer);
       }
@@ -2023,7 +2144,7 @@ var Header = function Header(_ref) {
   var render = function render() {
     container = document.createElement('div');
     container.className = 'sgn__header-content';
-    container.innerHTML = Mustache__default["default"].render(template, {
+    container.innerHTML = Mustache__default["default"].render((template == null ? void 0 : template.innerHTML) || defaultTemplate$a, {
       translations: translations,
       disableHeader: scriptEls.disableHeader,
       disableShoppingList: scriptEls.disableShoppingList || scriptEls.offerClickBehavior === 'open_webshop_link_in_tab' || scriptEls.offerClickBehavior === 'redirect_to_webshop_link',
@@ -2049,8 +2170,7 @@ var defaultTemplate$9 = "    <div class=\"sgn-sections-content\">\n        <ol c
 var SectionList = function SectionList(_ref) {
   var _template;
 
-  var _ref$sgnData = _ref.sgnData,
-      sgnData = _ref$sgnData === void 0 ? {} : _ref$sgnData,
+  var sgnData = _ref.sgnData,
       template = _ref.template;
   var container = null;
   template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$9;
@@ -2085,7 +2205,9 @@ var SectionList = function SectionList(_ref) {
   }();
 
   var addSectionClickListener = function addSectionClickListener() {
-    container.querySelectorAll('.sgn-sections-list-item-container').forEach(function (itemEl) {
+    var _container;
+
+    (_container = container) == null ? void 0 : _container.querySelectorAll('.sgn-sections-list-item-container').forEach(function (itemEl) {
       itemEl.addEventListener('click', scrollToSection, false);
     });
   };
@@ -2095,10 +2217,11 @@ var SectionList = function SectionList(_ref) {
 
     var sectionId = (_e$currentTarget$data = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data.sectionId;
     var sectionCell = document.querySelector("[data-id=\"".concat(sectionId, "\"][data-role=\"section\"]"));
-    var incitoEl = document.querySelector('.sgn__incito');
+    var incitoEl = document.querySelector('.sgn__incito'); // @ts-expect-error
+
     var sectionOffset = sectionCell.offsetTop - 76 || 0;
     destroyModal();
-    incitoEl.scrollTo({
+    incitoEl == null ? void 0 : incitoEl.scrollTo({
       top: sectionOffset,
       behavior: 'smooth'
     });
@@ -2115,18 +2238,12 @@ function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { 
 var defaultTemplate$8 = "    <div class=\"sgn-pages-content\">\n        <ol class=\"sgn-pages-list-items-container\">\n            {{#pages}}\n            <li class=\"sgn-pages-list-item-container\">\n                <div class=\"sgn-pages-content-container\">\n                    <a href=\"#\" class=\"sgn-page-item\" data-page-id=\"{{pageId}}\" data-page-num=\"{{pageNum}}\">\n                        <div class=\"sgn-pages-list-item-container-div-text\">\n                            <div class=\"sgn-pages-img-container\">\n                                <img src=\"{{thumb}}\" loading=\"lazy\">\n                            </div>\n                            <div>\n                                <span>{{pageNum}}</span>\n                            </div>\n                        </div>\n                    </a>\n                </div>\n            </li>\n            {{/pages}}\n        </ol>\n    </div>";
 
 var PageList = function PageList(_ref) {
-  var _template;
-
-  var _ref$scriptEls = _ref.scriptEls,
-      scriptEls = _ref$scriptEls === void 0 ? {} : _ref$scriptEls,
-      _ref$configs = _ref.configs,
-      configs = _ref$configs === void 0 ? {} : _ref$configs,
-      _ref$sgnData = _ref.sgnData,
-      sgnData = _ref$sgnData === void 0 ? {} : _ref$sgnData,
+  var scriptEls = _ref.scriptEls,
+      configs = _ref.configs,
+      sgnData = _ref.sgnData,
       sgnViewer = _ref.sgnViewer,
       template = _ref.template;
   var container = null;
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$8;
 
   var render = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee() {
@@ -2139,10 +2256,10 @@ var PageList = function PageList(_ref) {
               container = document.createElement('div');
               container.className = 'sgn-pages-container';
               _context.t0 = Mustache__default["default"];
-              _context.t1 = template;
+              _context.t1 = (template == null ? void 0 : template.innerHTML) || defaultTemplate$8;
               _context.t2 = transformPages;
 
-              if (!((sgnData == null ? void 0 : (_sgnData$pages = sgnData.pages) == null ? void 0 : _sgnData$pages.length) > 0)) {
+              if (!(sgnData != null && (_sgnData$pages = sgnData.pages) != null && _sgnData$pages.length)) {
                 _context.next = 9;
                 break;
               }
@@ -2186,7 +2303,9 @@ var PageList = function PageList(_ref) {
   }();
 
   var addPageClickListener = function addPageClickListener() {
-    container.querySelectorAll('.sgn-page-item').forEach(function (itemEl) {
+    var _container;
+
+    (_container = container) == null ? void 0 : _container.querySelectorAll('.sgn-page-item').forEach(function (itemEl) {
       itemEl.addEventListener('click', navigateToPage, false);
     });
   };
@@ -2199,7 +2318,7 @@ var PageList = function PageList(_ref) {
         pageId = _e$currentTarget$data.pageId,
         pageNum = _e$currentTarget$data.pageNum;
     destroyModal();
-    sgnViewer.navigateToPageId(pageId);
+    sgnViewer == null ? void 0 : sgnViewer.navigateToPageId(pageId);
 
     if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
       var _pushQueryParam;
@@ -2233,17 +2352,15 @@ function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { 
 var defaultTemplate$7 = "    <div class=\"sgn-offers-content\">\n        <div class=\"sgn-offers-search-container\">\n            <input type=\"text\" id=\"sgn-offers-search-text\" class=\"sgn-offers-search-text\" name=\"sgn-offers-search-text\" placeholder=\"{{translations.searchText}}...\">\n        </div>\n        <ol class=\"sgn-offers-list-items-container\">\n            {{#offers}}\n            <li class=\"sgn-offers-list-item-container\">\n                <div class=\"sgn-offers-content-container\" data-page-id=\"{{pageId}}\" data-page-num=\"{{catalog_page}}\" data-view-id=\"{{catalog_view_id}}\">\n                    <div class=\"sgn-offers-content-img\">\n                        <img src=\"{{images.view}}\" alt=\"{{heading}}\">\n                    </div>\n                    <div class=\"sgn-offers-content-text\">\n                        <div class=\"sgn-offers-content-heading\">\n                            <span>{{heading}}</span>\n                        </div>\n                        <div class=\"sgn-offers-content-description\">\n                            <span>{{description}}&nbsp;</span>\n                        </div>\n                        <div class=\"sgn-offers-content-price\">\n                            <span>{{price}}</span>\n                        </div>\n                    </div>\n                    <div class=\"sgn-clearfix\"></div>\n                </div>\n            </li>\n            {{/offers}}\n        </ol>\n    </div>";
 
 var OfferList = function OfferList(_ref) {
-  var _template, _template$match;
+  var _match;
 
   var scriptEls = _ref.scriptEls,
       publicationType = _ref.publicationType,
-      _ref$configs = _ref.configs,
-      configs = _ref$configs === void 0 ? {} : _ref$configs,
+      configs = _ref.configs,
       sgnViewer = _ref.sgnViewer,
       template = _ref.template;
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$7;
   publicationType = publicationType || 'paged';
-  var offerTemplate = (_template$match = template.match(/(?=\{\{#offers\}\})[\s\S]*(\{\{\/offers\}\})/g)) == null ? void 0 : _template$match[0];
+  var offerTemplate = (_match = ((template == null ? void 0 : template.innerHTML) || defaultTemplate$7).match(/(?=\{\{#offers\}\})[\s\S]*(\{\{\/offers\}\})/g)) == null ? void 0 : _match[0];
   var container = null;
   var offersList = [];
   var offset = 0;
@@ -2334,6 +2451,7 @@ var OfferList = function OfferList(_ref) {
                   dealer_id: configs.businessId,
                   catalog_id: configs.id,
                   types: publicationType,
+                  order_by: 'page',
                   offset: offset,
                   limit: limit
                 }
@@ -2357,9 +2475,11 @@ var OfferList = function OfferList(_ref) {
   }();
 
   var transformOffers = function transformOffers(offers) {
+    var _context3;
+
     var localeCode = translations.localeCode,
         currency = translations.currency;
-    return _mapInstanceProperty__default["default"](offers).call(offers, function (offer) {
+    return _mapInstanceProperty__default["default"](_context3 = offers || []).call(_context3, function (offer) {
       var _offer$pricing, _offer$pricing2;
 
       return _objectSpread$6({}, offer, {
@@ -2372,24 +2492,24 @@ var OfferList = function OfferList(_ref) {
   var fetchOnScrollEnd = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee3(e) {
       var offerOl, offers;
-      return _regeneratorRuntime__default["default"].wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime__default["default"].wrap(function _callee3$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               offerOl = e.target;
 
               if (!(offerOl.scrollHeight - offerOl.scrollTop === offerOl.clientHeight && !searchKey)) {
-                _context3.next = 8;
+                _context4.next = 8;
                 break;
               }
 
-              _context3.next = 4;
+              _context4.next = 4;
               return fetchOffers(offset += limit, limit);
 
             case 4:
-              offers = _context3.sent;
+              offers = _context4.sent;
               offersList = _concatInstanceProperty__default["default"](offersList).call(offersList, offers);
-              offerOl.innerHTML += Mustache__default["default"].render(offerTemplate, {
+              if (offerTemplate) offerOl.innerHTML += Mustache__default["default"].render(offerTemplate, {
                 translations: translations,
                 offers: offers
               });
@@ -2397,7 +2517,7 @@ var OfferList = function OfferList(_ref) {
 
             case 8:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
       }, _callee3);
@@ -2410,45 +2530,55 @@ var OfferList = function OfferList(_ref) {
 
   var fetchOnSearch = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee4(e) {
+      var _container;
+
       var offerOl;
-      return _regeneratorRuntime__default["default"].wrap(function _callee4$(_context4) {
+      return _regeneratorRuntime__default["default"].wrap(function _callee4$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               searchKey = e.target.value || '';
-              offerOl = container.querySelector('.sgn-offers-list-items-container');
-              _context4.t0 = Mustache__default["default"];
-              _context4.t1 = offerTemplate;
-              _context4.t2 = translations;
+              offerOl = (_container = container) == null ? void 0 : _container.querySelector('.sgn-offers-list-items-container');
 
-              if (!searchKey) {
-                _context4.next = 11;
+              if (!(offerOl && offerTemplate)) {
+                _context5.next = 16;
                 break;
               }
 
-              _context4.next = 8;
+              _context5.t0 = Mustache__default["default"];
+              _context5.t1 = offerTemplate;
+              _context5.t2 = translations;
+
+              if (!searchKey) {
+                _context5.next = 12;
+                break;
+              }
+
+              _context5.next = 9;
               return fetchSearch(searchKey);
 
-            case 8:
-              _context4.t3 = _context4.sent;
-              _context4.next = 12;
+            case 9:
+              _context5.t3 = _context5.sent;
+              _context5.next = 13;
               break;
 
-            case 11:
-              _context4.t3 = offersList;
-
             case 12:
-              _context4.t4 = _context4.t3;
-              _context4.t5 = {
-                translations: _context4.t2,
-                offers: _context4.t4
+              _context5.t3 = offersList;
+
+            case 13:
+              _context5.t4 = _context5.t3;
+              _context5.t5 = {
+                translations: _context5.t2,
+                offers: _context5.t4
               };
-              offerOl.innerHTML = _context4.t0.render.call(_context4.t0, _context4.t1, _context4.t5);
-              addOfferClickListener();
+              offerOl.innerHTML = _context5.t0.render.call(_context5.t0, _context5.t1, _context5.t5);
 
             case 16:
+              addOfferClickListener();
+
+            case 17:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
         }
       }, _callee4);
@@ -2460,19 +2590,21 @@ var OfferList = function OfferList(_ref) {
   }();
 
   var addScrollListener = function addScrollListener() {
-    var _container$querySelec;
+    var _container2, _container2$querySele;
 
-    (_container$querySelec = container.querySelector('.sgn-offers-list-items-container')) == null ? void 0 : _container$querySelec.addEventListener('scroll', fetchOnScrollEnd);
+    (_container2 = container) == null ? void 0 : (_container2$querySele = _container2.querySelector('.sgn-offers-list-items-container')) == null ? void 0 : _container2$querySele.addEventListener('scroll', fetchOnScrollEnd);
   };
 
   var addSearchListener = function addSearchListener() {
-    var _container$querySelec2;
+    var _container3, _container3$querySele;
 
-    (_container$querySelec2 = container.querySelector('.sgn-offers-search-text')) == null ? void 0 : _container$querySelec2.addEventListener('input', fetchOnSearch);
+    (_container3 = container) == null ? void 0 : (_container3$querySele = _container3.querySelector('.sgn-offers-search-text')) == null ? void 0 : _container3$querySele.addEventListener('input', fetchOnSearch);
   };
 
   var addOfferClickListener = function addOfferClickListener() {
-    container.querySelectorAll('.sgn-offers-content-container').forEach(function (itemEl) {
+    var _container4;
+
+    (_container4 = container) == null ? void 0 : _container4.querySelectorAll('.sgn-offers-content-container').forEach(function (itemEl) {
       itemEl.addEventListener('click', publicationType === 'incito' ? scrollToOffer : navigateToPage, false);
     });
   };
@@ -2485,16 +2617,16 @@ var OfferList = function OfferList(_ref) {
         pageId = _e$currentTarget$data.pageId,
         pageNum = _e$currentTarget$data.pageNum;
     destroyModal();
-    sgnViewer.navigateToPageId(pageId);
+    sgnViewer == null ? void 0 : sgnViewer.navigateToPageId(pageId);
 
     if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
       var _pushQueryParam;
 
       pushQueryParam((_pushQueryParam = {}, _defineProperty__default["default"](_pushQueryParam, scriptEls.publicationIdParam, configs.id), _defineProperty__default["default"](_pushQueryParam, scriptEls.pageIdParam, pageNum), _pushQueryParam));
     } else if (((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
-      var _context5, _context6;
+      var _context6, _context7;
 
-      location.hash = _concatInstanceProperty__default["default"](_context5 = _concatInstanceProperty__default["default"](_context6 = "".concat(scriptEls.publicationHash, "/")).call(_context6, configs.id, "/")).call(_context5, pageNum);
+      location.hash = _concatInstanceProperty__default["default"](_context6 = _concatInstanceProperty__default["default"](_context7 = "".concat(scriptEls.publicationHash, "/")).call(_context7, configs.id, "/")).call(_context6, pageNum);
     }
   };
 
@@ -2504,36 +2636,36 @@ var OfferList = function OfferList(_ref) {
     var viewid = (_e$currentTarget$data2 = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data2.viewId;
     var offerCell = document.querySelector("[data-id=\"".concat(viewid, "\"][data-role=\"offer\"]"));
     destroyModal();
-    offerCell.scrollIntoView({
+    offerCell == null ? void 0 : offerCell.scrollIntoView({
       behavior: 'smooth'
     });
   };
 
   var render = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee5() {
-      return _regeneratorRuntime__default["default"].wrap(function _callee5$(_context7) {
+      return _regeneratorRuntime__default["default"].wrap(function _callee5$(_context8) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
-              _context7.next = 2;
+              _context8.next = 2;
               return fetchOffers(0, 24);
 
             case 2:
-              offersList = _context7.sent;
+              offersList = _context8.sent;
               container = document.createElement('div');
               container.className = 'sgn-offers-container';
-              container.innerHTML = Mustache__default["default"].render(template, {
+              container.innerHTML = Mustache__default["default"].render((template == null ? void 0 : template.innerHTML) || defaultTemplate$7, {
                 translations: translations,
                 offers: offersList
               });
               addSearchListener();
               addScrollListener();
               addOfferClickListener();
-              return _context7.abrupt("return", container);
+              return _context8.abrupt("return", container);
 
             case 10:
             case "end":
-              return _context7.stop();
+              return _context8.stop();
           }
         }
       }, _callee5);
@@ -2556,8 +2688,9 @@ var PublicationDownload = function PublicationDownload(_ref) {
       var _document$querySelect;
 
       (_document$querySelect = document.querySelector('.sgn__offer-download')) == null ? void 0 : _document$querySelect.addEventListener('click', /*#__PURE__*/_asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee() {
-        var _yield$request, pdf_url;
+        var _yield$request;
 
+        var pdf_url;
         return _regeneratorRuntime__default["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2570,11 +2703,25 @@ var PublicationDownload = function PublicationDownload(_ref) {
                 });
 
               case 2:
-                _yield$request = _context.sent;
-                pdf_url = _yield$request.pdf_url;
-                location.href = pdf_url;
+                _context.t0 = _yield$request = _context.sent;
 
-              case 5:
+                if (!(_context.t0 == null)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _context.t1 = void 0;
+                _context.next = 8;
+                break;
+
+              case 7:
+                _context.t1 = _yield$request.pdf_url;
+
+              case 8:
+                pdf_url = _context.t1;
+                if (pdf_url) location.href = pdf_url;
+
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -2585,7 +2732,7 @@ var PublicationDownload = function PublicationDownload(_ref) {
   };
 };
 
-var defaultTemplate$6 = "    <div class=\"sgn-popup-container sgn-menu-popup\">\n        <div class=\"sgn-menu-popup-labels\">\n            <div class=\"sgn-menu-label\">\n                <span>{{label}}</span>\n            </div>\n            <div class=\"sgn-menu-till\">\n                <span>{{translations.untilLabel}} {{till}}</span>\n            </div>\n        </div>\n        {{^disableDownload}}\n            <div class=\"sgn-menu-download\">\n                <button class=\"sgn__offer-download\">{{translations.downloadButton}}</button>\n            </div>\n        {{/disableDownload}}\n        <div class=\"sgn-clearfix\"></div>\n        {{#isIncito}}\n            {{#hasSections}}\n            <div class=\"sgn-menu-tab\">\n                <button class=\"sgn-menu-tab-btn sgn-menu-tab-btn-active\">{{translations.overviewButton}}</button>\n                <button class=\"sgn-menu-tab-btn\">{{translations.offersButton}}</button>\n            </div>\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-sections\"></div>\n                </div>\n                <div class=\"sgn-menu-tab-content\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n            </div>\n            {{/hasSections}}\n            {{^hasSections}}\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n            </div>\n            {{/hasSections}}\n        {{/isIncito}}\n        {{^isIncito}}\n            <div class=\"sgn-menu-tab\">\n                <button class=\"sgn-menu-tab-btn sgn-menu-tab-btn-active\">{{translations.pagesButton}}</button>\n                <button class=\"sgn-menu-tab-btn\">{{translations.offersButton}}</button>\n            </div>\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-pages\"></div>\n                </div>\n                <div class=\"sgn-menu-tab-content\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n        </div>\n        {{/isIncito}}\n    </div>";
+var defaultTemplate$6 = "    <div class=\"sgn-popup-container sgn-menu-popup\">\n        <div class=\"sgn-menu-popup-labels\">\n            <div class=\"sgn-menu-label\">\n                <span>{{label}}</span>\n            </div>\n            <div class=\"sgn-menu-date\">\n                <span data-validity-state=\"{{status}}\">{{dateRange}}</span>\n            </div>\n        </div>\n        {{^disableDownload}}\n            <div class=\"sgn-menu-download\">\n                <button class=\"sgn__offer-download\">{{translations.downloadButton}}</button>\n            </div>\n        {{/disableDownload}}\n        <div class=\"sgn-clearfix\"></div>\n        {{#isIncito}}\n            {{#hasSections}}\n            <div class=\"sgn-menu-tab\">\n                <button class=\"sgn-menu-tab-btn sgn-menu-tab-btn-active\">{{translations.overviewButton}}</button>\n                <button class=\"sgn-menu-tab-btn\">{{translations.offersButton}}</button>\n            </div>\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-sections\"></div>\n                </div>\n                <div class=\"sgn-menu-tab-content\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n            </div>\n            {{/hasSections}}\n            {{^hasSections}}\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n            </div>\n            {{/hasSections}}\n        {{/isIncito}}\n        {{^isIncito}}\n            <div class=\"sgn-menu-tab\">\n                <button class=\"sgn-menu-tab-btn sgn-menu-tab-btn-active\">{{translations.pagesButton}}</button>\n                <button class=\"sgn-menu-tab-btn\">{{translations.offersButton}}</button>\n            </div>\n            <div class=\"sgn-menu-tab-content-container\">\n                <div class=\"sgn-menu-tab-content sgn-menu-tab-content-active\">\n                    <div class=\"sgn-menu-tab-content-pages\"></div>\n                </div>\n                <div class=\"sgn-menu-tab-content\">\n                    <div class=\"sgn-menu-tab-content-offers\"></div>\n                </div>\n        </div>\n        {{/isIncito}}\n    </div>";
 
 var MenuPopup = function MenuPopup(_ref) {
   var publicationType = _ref.publicationType,
@@ -2597,7 +2744,6 @@ var MenuPopup = function MenuPopup(_ref) {
   publicationType = publicationType || 'paged';
   var translations = {
     localeCode: translate('locale_code'),
-    untilLabel: translate('publication_viewer_until_label'),
     pagesButton: translate('publication_viewer_pages_button'),
     overviewButton: translate('publication_viewer_overview_button'),
     offersButton: translate('publication_viewer_offers_button'),
@@ -2607,7 +2753,7 @@ var MenuPopup = function MenuPopup(_ref) {
 
   var render = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee() {
-      var _templates$menuContai, _sgnData$details, _sgnData$details2, _sgnData$details3, _sgnData$details4, _sgnData$incito, _sgnData$incito$table;
+      var _templates$menuContai, _sgnData$details, _sgnData$details2, _sgnData$details3, _sgnData$details4, _sgnData$details5, _sgnData$details6, _sgnData$details7, _sgnData$details8, _sgnData$incito, _sgnData$incito$table;
 
       return _regeneratorRuntime__default["default"].wrap(function _callee$(_context) {
         while (1) {
@@ -2618,13 +2764,10 @@ var MenuPopup = function MenuPopup(_ref) {
               container.innerHTML = Mustache__default["default"].render(((_templates$menuContai = templates.menuContainer) == null ? void 0 : _templates$menuContai.innerHTML) || defaultTemplate$6, {
                 translations: translations,
                 label: sgnData == null ? void 0 : (_sgnData$details = sgnData.details) == null ? void 0 : _sgnData$details.label,
-                from: formatDate(sgnData == null ? void 0 : (_sgnData$details2 = sgnData.details) == null ? void 0 : _sgnData$details2.run_from, translations.localeCode, {
-                  dateStyle: 'full'
-                }),
-                till: formatDate(sgnData == null ? void 0 : (_sgnData$details3 = sgnData.details) == null ? void 0 : _sgnData$details3.run_till, translations.localeCode, {
-                  dateStyle: 'full'
-                }),
-                disableDownload: sgnData != null && (_sgnData$details4 = sgnData.details) != null && _sgnData$details4.pdf_url ? scriptEls.disableDownload : true,
+                dateRange: getDateRange(sgnData == null ? void 0 : (_sgnData$details2 = sgnData.details) == null ? void 0 : _sgnData$details2.run_from, sgnData == null ? void 0 : (_sgnData$details3 = sgnData.details) == null ? void 0 : _sgnData$details3.run_till, 'publication_viewer_menu_date_range'),
+                status: getPubState(sgnData == null ? void 0 : (_sgnData$details4 = sgnData.details) == null ? void 0 : _sgnData$details4.run_from, sgnData == null ? void 0 : (_sgnData$details5 = sgnData.details) == null ? void 0 : _sgnData$details5.run_till),
+                statusMessage: getPubStateMessage(sgnData == null ? void 0 : (_sgnData$details6 = sgnData.details) == null ? void 0 : _sgnData$details6.run_from, sgnData == null ? void 0 : (_sgnData$details7 = sgnData.details) == null ? void 0 : _sgnData$details7.run_till),
+                disableDownload: sgnData != null && (_sgnData$details8 = sgnData.details) != null && _sgnData$details8.pdf_url ? scriptEls.disableDownload : true,
                 isIncito: publicationType === 'incito',
                 hasSections: (sgnData == null ? void 0 : (_sgnData$incito = sgnData.incito) == null ? void 0 : (_sgnData$incito$table = _sgnData$incito.table_of_contents) == null ? void 0 : _sgnData$incito$table.length) > 0
               });
@@ -2649,13 +2792,17 @@ var MenuPopup = function MenuPopup(_ref) {
   }();
 
   var addTabClickListener = function addTabClickListener() {
-    var tabContentItems = container.querySelectorAll('.sgn-menu-tab-content');
-    container.querySelectorAll('.sgn-menu-tab-btn').forEach(function (itemEl, index) {
+    var _container, _container2;
+
+    var tabContentItems = (_container = container) == null ? void 0 : _container.querySelectorAll('.sgn-menu-tab-content');
+    (_container2 = container) == null ? void 0 : _container2.querySelectorAll('.sgn-menu-tab-btn').forEach(function (itemEl, index) {
       itemEl.addEventListener('click', function (e) {
         hideTabContents();
 
-        if (tabContentItems[index]) {
-          e.currentTarget.classList.add('sgn-menu-tab-btn-active');
+        if (tabContentItems != null && tabContentItems[index]) {
+          var _e$currentTarget;
+
+          (_e$currentTarget = e.currentTarget) == null ? void 0 : _e$currentTarget.classList.add('sgn-menu-tab-btn-active');
           tabContentItems[index].classList.add('sgn-menu-tab-content-active');
         }
       }, false);
@@ -2663,34 +2810,46 @@ var MenuPopup = function MenuPopup(_ref) {
   };
 
   var hideTabContents = function hideTabContents() {
-    container.querySelectorAll('.sgn-menu-tab-btn').forEach(function (itemEl) {
+    var _container3, _container4;
+
+    (_container3 = container) == null ? void 0 : _container3.querySelectorAll('.sgn-menu-tab-btn').forEach(function (itemEl) {
       itemEl.classList.remove('sgn-menu-tab-btn-active');
     });
-    container.querySelectorAll('.sgn-menu-tab-content').forEach(function (itemEl) {
+    (_container4 = container) == null ? void 0 : _container4.querySelectorAll('.sgn-menu-tab-content').forEach(function (itemEl) {
       itemEl.classList.remove('sgn-menu-tab-content-active');
     });
   };
 
   var renderPageList = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee2() {
-      var _container$querySelec;
+      var _container5, _container5$querySele;
 
       return _regeneratorRuntime__default["default"].wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!((_container$querySelec = container.querySelector('.sgn-menu-tab-content-pages')) == null)) {
+              if (!((_container5 = container) == null)) {
                 _context2.next = 4;
                 break;
               }
 
               _context2.t0 = void 0;
-              _context2.next = 9;
+              _context2.next = 14;
               break;
 
             case 4:
-              _context2.t1 = _container$querySelec;
-              _context2.next = 7;
+              if (!((_container5$querySele = _container5.querySelector('.sgn-menu-tab-content-pages')) == null)) {
+                _context2.next = 8;
+                break;
+              }
+
+              _context2.t1 = void 0;
+              _context2.next = 13;
+              break;
+
+            case 8:
+              _context2.t2 = _container5$querySele;
+              _context2.next = 11;
               return PageList({
                 scriptEls: scriptEls,
                 configs: configs,
@@ -2699,14 +2858,17 @@ var MenuPopup = function MenuPopup(_ref) {
                 template: templates.pageList
               }).render();
 
-            case 7:
-              _context2.t2 = _context2.sent;
-              _context2.t0 = _context2.t1.appendChild.call(_context2.t1, _context2.t2);
+            case 11:
+              _context2.t3 = _context2.sent;
+              _context2.t1 = _context2.t2.appendChild.call(_context2.t2, _context2.t3);
 
-            case 9:
+            case 13:
+              _context2.t0 = _context2.t1;
+
+            case 14:
               return _context2.abrupt("return", _context2.t0);
 
-            case 10:
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -2721,37 +2883,50 @@ var MenuPopup = function MenuPopup(_ref) {
 
   var renderSectionList = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee3() {
-      var _container$querySelec2;
+      var _container6, _container6$querySele;
 
       return _regeneratorRuntime__default["default"].wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              if (!((_container$querySelec2 = container.querySelector('.sgn-menu-tab-content-sections')) == null)) {
+              if (!((_container6 = container) == null)) {
                 _context3.next = 4;
                 break;
               }
 
               _context3.t0 = void 0;
-              _context3.next = 9;
+              _context3.next = 14;
               break;
 
             case 4:
-              _context3.t1 = _container$querySelec2;
-              _context3.next = 7;
+              if (!((_container6$querySele = _container6.querySelector('.sgn-menu-tab-content-sections')) == null)) {
+                _context3.next = 8;
+                break;
+              }
+
+              _context3.t1 = void 0;
+              _context3.next = 13;
+              break;
+
+            case 8:
+              _context3.t2 = _container6$querySele;
+              _context3.next = 11;
               return SectionList({
                 sgnData: sgnData,
                 template: templates.sectionList
               }).render();
 
-            case 7:
-              _context3.t2 = _context3.sent;
-              _context3.t0 = _context3.t1.appendChild.call(_context3.t1, _context3.t2);
+            case 11:
+              _context3.t3 = _context3.sent;
+              _context3.t1 = _context3.t2.appendChild.call(_context3.t2, _context3.t3);
 
-            case 9:
+            case 13:
+              _context3.t0 = _context3.t1;
+
+            case 14:
               return _context3.abrupt("return", _context3.t0);
 
-            case 10:
+            case 15:
             case "end":
               return _context3.stop();
           }
@@ -2766,12 +2941,34 @@ var MenuPopup = function MenuPopup(_ref) {
 
   var renderOfferList = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee4() {
+      var _container7, _container7$querySele;
+
       return _regeneratorRuntime__default["default"].wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _context4.t0 = container.querySelector('.sgn-menu-tab-content-offers');
-              _context4.next = 3;
+              if (!((_container7 = container) == null)) {
+                _context4.next = 4;
+                break;
+              }
+
+              _context4.t0 = void 0;
+              _context4.next = 14;
+              break;
+
+            case 4:
+              if (!((_container7$querySele = _container7.querySelector('.sgn-menu-tab-content-offers')) == null)) {
+                _context4.next = 8;
+                break;
+              }
+
+              _context4.t1 = void 0;
+              _context4.next = 13;
+              break;
+
+            case 8:
+              _context4.t2 = _container7$querySele;
+              _context4.next = 11;
               return OfferList({
                 scriptEls: scriptEls,
                 publicationType: publicationType,
@@ -2780,11 +2977,17 @@ var MenuPopup = function MenuPopup(_ref) {
                 template: templates.offerList
               }).render();
 
-            case 3:
-              _context4.t1 = _context4.sent;
-              return _context4.abrupt("return", _context4.t0.appendChild.call(_context4.t0, _context4.t1));
+            case 11:
+              _context4.t3 = _context4.sent;
+              _context4.t1 = _context4.t2.appendChild.call(_context4.t2, _context4.t3);
 
-            case 5:
+            case 13:
+              _context4.t0 = _context4.t1;
+
+            case 14:
+              return _context4.abrupt("return", _context4.t0);
+
+            case 15:
             case "end":
               return _context4.stop();
           }
@@ -2811,240 +3014,24 @@ var MenuPopup = function MenuPopup(_ref) {
 function ownKeys$5(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$5(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
-var defaultTemplate$5 = "    <div class=\"sgn-shopping-popup sgn-show-print-section\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-popup-header-label\">\n                <span>{{translations.shoppingListLabel}}</span>\n            </div>            \n            <div class=\"sgn-menu-share\">\n                <button class=\"sgn-shopping-share-list-btn sgn-hide-print\">\n                    <svg \n                        aria-hidden=\"true\"\n                        class=\"sgn-share-icon-svg\"\n                        role=\"img\"\n                        viewBox=\"0 0 640 512\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                    >\n                        <path \n                            fill=\"currentColor\" \n                            d=\"M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z\"\n                        >\n                        </path>\n                    </svg>\n                </button>\n            </div>\n            <div class=\"sgn-clearfix\"></div>\n        </div>\n        <ol class=\"sgn-shopping-list-items-container\">\n            {{#offers}}\n            <li class=\"sgn-shopping-list-item-container\" data-id=\"{{index}}\">\n                <div class=\"sgn-shopping-list-content-container\">\n                    <div class=\"sgn-shopping-list-content\">\n                        <div class=\"sgn-shopping-list-content-heading sgn-truncate-elipsis\">\n                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/offers}}\n            {{#tickedOffers}}\n            <li class=\"sgn-shopping-list-item-container sgn-shopping-list-item-container-ticked\" data-id=\"{{index}}\">\n                <div class=\"sgn-shopping-list-content-container\">\n                    <div class=\"sgn-shopping-list-content\">\n                        <div class=\"sgn-shopping-list-content-heading sgn-truncate-elipsis\">\n                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/tickedOffers}}\n            {{#hasTicked}}\n            <li class=\"sgn-shopping-list-item-container-crossed sgn-hide-print\">\n                <button class=\"sgn-shopping-clear-ticked-list-btn sgn-hide-print\">{{translations.deleteCrossedOutButton}}</button>\n            </li>\n            {{/hasTicked}}\n        </ol>\n        <div>\n            <button class=\"sgn-shopping-clear-list-btn sgn-hide-print\">{{translations.clearListButton}}</button>\n            <button class=\"sgn-shopping-print-list-btn sgn-hide-print\">{{translations.printButton}}</button>\n        </div>\n    </div>";
-
-var ShoppingList = function ShoppingList(_ref) {
-  var _template;
-
-  var template = _ref.template;
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$5;
-  var shoppingListBtn = document.querySelector('.sgn__offer-shopping');
-  var container = null;
-  var translations = {
-    localeCode: translate('locale_code'),
-    shoppingListLabel: translate('publication_viewer_shopping_list_label'),
-    currency: translate('publication_viewer_currency'),
-    deleteCrossedOutButton: translate('publication_viewer_delete_crossed_out_button'),
-    clearListButton: translate('publication_viewer_shopping_list_clear_button'),
-    printButton: translate('publication_viewer_print_button')
-  };
-
-  var render = function render() {
-    shoppingListBtn == null ? void 0 : shoppingListBtn.addEventListener('click', showShoppingList, false);
-  };
-
-  var showShoppingList = function showShoppingList() {
-    var _transformSavedOffers, _transformSavedOffers2, _transformSavedOffers3;
-
-    var storedPublicationOffers = get('publication-saved-offers');
-    container = document.createElement('div');
-    container.className = 'sgn-shopping-list-container';
-    container.innerHTML = Mustache__default["default"].render(template, {
-      translations: translations,
-      offers: (_transformSavedOffers = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers).call(_transformSavedOffers, function (offer) {
-        return !offer.is_ticked;
-      }),
-      tickedOffers: (_transformSavedOffers2 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers2).call(_transformSavedOffers2, function (offer) {
-        return offer.is_ticked;
-      }),
-      hasTicked: ((_transformSavedOffers3 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers3).call(_transformSavedOffers3, function (offer) {
-        return offer.is_ticked;
-      }).length) > 0
-    });
-    createModal(container);
-    addEventListeners();
-  };
-
-  var transformSavedOffers = function transformSavedOffers(savedOffers) {
-    if (savedOffers === void 0) {
-      savedOffers = [];
-    }
-
-    var localeCode = translations.localeCode,
-        currency = translations.currency;
-    return _mapInstanceProperty__default["default"](savedOffers).call(savedOffers, function (offer, index) {
-      var _offer$pricing, _offer$pricing2, _offer$pricing3;
-
-      return _objectSpread$5({
-        index: index
-      }, offer, {
-        price: offer != null && (_offer$pricing = offer.pricing) != null && _offer$pricing.price ? formatPrice(offer == null ? void 0 : (_offer$pricing2 = offer.pricing) == null ? void 0 : _offer$pricing2.price, localeCode, (offer == null ? void 0 : (_offer$pricing3 = offer.pricing) == null ? void 0 : _offer$pricing3.currency) || currency) : null
-      });
-    });
-  };
-
-  var addTickerListener = function addTickerListener() {
-    container.querySelectorAll('.sgn-shopping-list-item-container').forEach(function (itemEl) {
-      itemEl.addEventListener('click', tickOffer, false);
-    });
-  };
-
-  var tickOffer = function tickOffer(e) {
-    var _e$currentTarget$data, _transformSavedOffers4, _transformSavedOffers5, _transformSavedOffers6;
-
-    var storedPublicationOffers = get('publication-saved-offers');
-    var index = (_e$currentTarget$data = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data.id;
-    storedPublicationOffers[index].is_ticked = !storedPublicationOffers[index].is_ticked;
-    setWithEvent('publication-saved-offers', storedPublicationOffers, 'tjek_shopping_list_update');
-    container.innerHTML = Mustache__default["default"].render(template, {
-      translations: translations,
-      offers: (_transformSavedOffers4 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers4).call(_transformSavedOffers4, function (offer) {
-        return !offer.is_ticked;
-      }),
-      tickedOffers: (_transformSavedOffers5 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers5).call(_transformSavedOffers5, function (offer) {
-        return offer.is_ticked;
-      }),
-      hasTicked: ((_transformSavedOffers6 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers6).call(_transformSavedOffers6, function (offer) {
-        return offer.is_ticked;
-      }).length) > 0
-    });
-    addEventListeners();
-    e.stopPropagation();
-  };
-
-  var addClearListListener = function addClearListListener() {
-    var _container$querySelec;
-
-    (_container$querySelec = container.querySelector('.sgn-shopping-clear-list-btn')) == null ? void 0 : _container$querySelec.addEventListener('click', function (e) {
-      e.stopPropagation();
-      setWithEvent('publication-saved-offers', [], 'tjek_shopping_list_update');
-      container.innerHTML = Mustache__default["default"].render(template, {
-        translations: translations,
-        offers: []
-      });
-      addEventListeners();
-    });
-  };
-
-  var addClearTickedListListener = function addClearTickedListListener() {
-    var clearTickedBtn = container.querySelector('.sgn-shopping-clear-ticked-list-btn');
-    var storedPublicationOffers = get('publication-saved-offers');
-    var validOffers = storedPublicationOffers == null ? void 0 : _filterInstanceProperty__default["default"](storedPublicationOffers).call(storedPublicationOffers, function (offer) {
-      return !offer.is_ticked;
-    });
-    clearTickedBtn == null ? void 0 : clearTickedBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      setWithEvent('publication-saved-offers', validOffers, 'tjek_shopping_list_update');
-      container.innerHTML = Mustache__default["default"].render(template, {
-        translations: translations,
-        offers: transformSavedOffers(validOffers)
-      });
-      addEventListeners();
-    });
-  };
-
-  var addPrintListener = function addPrintListener() {
-    var _container$querySelec2;
-
-    (_container$querySelec2 = container.querySelector('.sgn-shopping-print-list-btn')) == null ? void 0 : _container$querySelec2.addEventListener('click', function () {
-      window.print();
-    });
-  };
-
-  var addShareListener = function addShareListener() {
-    var _container$querySelec3;
-
-    (_container$querySelec3 = container.querySelector('.sgn-shopping-share-list-btn')) == null ? void 0 : _container$querySelec3.addEventListener('click', /*#__PURE__*/_asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee() {
-      var shareData, _context, shareEmailData, queryString;
-
-      return _regeneratorRuntime__default["default"].wrap(function _callee$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
-              shareData = {
-                title: translations.shoppingListLabel,
-                text: formatListToShare(transformSavedOffers(get('publication-saved-offers'))),
-                url: document.location.href
-              };
-              _context2.next = 4;
-              return navigator.share(shareData);
-
-            case 4:
-              _context2.next = 11;
-              break;
-
-            case 6:
-              _context2.prev = 6;
-              _context2.t0 = _context2["catch"](0);
-              shareEmailData = {
-                subject: translations.shoppingListLabel,
-                body: formatListToShare(transformSavedOffers(get('publication-saved-offers')), '%0d%0a')
-              };
-              queryString = _mapInstanceProperty__default["default"](_context = _Object$keys__default["default"](shareEmailData)).call(_context, function (key) {
-                return key + '=' + shareEmailData[key];
-              }).join('&');
-              window.location.href = "mailto:?".concat(queryString);
-
-            case 11:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee, null, [[0, 6]]);
-    })));
-  };
-
-  var formatListToShare = function formatListToShare(data, newLineDelimiter) {
-    var _data;
-
-    if (data === void 0) {
-      data = [];
-    }
-
-    if (newLineDelimiter === void 0) {
-      newLineDelimiter = "\n";
-    }
-
-    var offerStr = '';
-    (_data = data) == null ? void 0 : _data.forEach(function (offer) {
-      if (!offer.is_ticked) {
-        var _context3;
-
-        offerStr += offer.price ? _concatInstanceProperty__default["default"](_context3 = "".concat(offer.price, " - ")).call(_context3, offer.name) : "".concat(offer.name);
-        offerStr += newLineDelimiter;
-      }
-    });
-    return offerStr;
-  };
-
-  var addEventListeners = function addEventListeners() {
-    var _document$querySelect;
-
-    (_document$querySelect = document.querySelector('.sgn-modal-container')) == null ? void 0 : _document$querySelect.focus();
-    addTickerListener();
-    addClearTickedListListener();
-    addClearListListener();
-    addPrintListener();
-    addShareListener();
-  };
-
-  return {
-    render: render
-  };
-};
-
-function ownKeys$4(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$4(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
-var defaultTemplate$4 = "    <div class=\"sgn-offer-overview-popup\">\n        {{#offer}}\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>{{label}}</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>{{translations.untilLabel}} {{till}}</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <img src=\"{{images.zoom}}\" alt=\"{{heading}}\">\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>{{heading}}</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>{{description}}&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>{{price}}</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    {{^disableShoppingList}}\n                    <button class=\"sgn-shopping-add-to-list-btn\">{{translations.addToShoppingList}}</button>\n                    {{/disableShoppingList}}\n                    {{#webshop_link}}\n                    <button class=\"sgn-shopping-open-webshop-btn\">{{translations.visitWebshopLink}}</button>\n                    {{/webshop_link}}\n                </div>\n            </div>\n        </div>\n        {{/offer}} \n    </div>";
-var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>&nbsp;</span>\n                </div>\n                <div class=\"sgn-menu-till\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <div class=\"sgn_modal_loader\"></div>\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>&nbsp;</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n    </div>";
+var defaultTemplate$5 = "    <div class=\"sgn-offer-overview-popup\">\n        {{#offer}}\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>{{label}}</span>\n                </div>\n                <div class=\"sgn-menu-date\">\n                    <span data-validity-state=\"{{status}}\">{{dateRange}}</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <img src=\"{{images.zoom}}\" alt=\"{{heading}}\">\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>{{heading}}</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>{{description}}&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>{{price}}</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    {{^disableShoppingList}}\n                    <button class=\"sgn-shopping-add-to-list-btn\">{{translations.addToShoppingList}}</button>\n                    {{/disableShoppingList}}\n                    {{#webshop_link}}\n                    <button class=\"sgn-shopping-open-webshop-btn\">{{translations.visitWebshopLink}}</button>\n                    {{/webshop_link}}\n                </div>\n            </div>\n        </div>\n        {{/offer}} \n    </div>";
+var loaderTemplate = "    <div class=\"sgn-offer-overview-popup\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-menu-popup-labels\">\n                <div class=\"sgn-menu-label\">\n                    <span>&nbsp;</span>\n                </div>\n                <div class=\"sgn-menu-date\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"sgn-popup-content\">\n            <div class=\"sgn-popup-offer-container\">\n                <div class=\"sgn-offer-img\">\n                    <div class=\"sgn_modal_loader\"></div>\n                </div>\n                <div class=\"sgn-offer-texts-container\">\n                    <div class=\"sgn-offer-heading\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-description\">\n                        <span>&nbsp;</span>\n                    </div>\n                    <div class=\"sgn-offer-price\">\n                        <span>&nbsp;</span>\n                    </div>\n                </div>  \n                <div class=\"sgn-offer-buttons-container\">\n                    <span>&nbsp;</span>\n                </div>\n            </div>\n        </div>\n    </div>";
 
 var OfferOverview = function OfferOverview(_ref) {
   var _template;
 
   var template = _ref.template,
       configs = _ref.configs,
+      scriptEls = _ref.scriptEls,
       sgnData = _ref.sgnData,
       offer = _ref.offer,
       type = _ref.type,
       addToShoppingList = _ref.addToShoppingList;
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$4;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$5;
   var container = null;
   var translations = {
     localeCode: translate('locale_code'),
     currency: translate('publication_viewer_currency'),
-    untilLabel: translate('publication_viewer_until_label'),
     addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
     visitWebshopLink: translate('publication_viewer_visit_webshop_link')
   };
@@ -3087,9 +3074,10 @@ var OfferOverview = function OfferOverview(_ref) {
                 disableShoppingList: document.querySelector('.sgn__offer-shopping') ? false : true,
                 offer: transformedOffer
               });
+              dispatchOfferClickEvent(transformedOffer);
               addEventListeners();
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -3103,37 +3091,34 @@ var OfferOverview = function OfferOverview(_ref) {
   }();
 
   var transformIncitoOffer = function transformIncitoOffer(offer) {
-    var _offer$images, _offer$images$, _offer$validity, _offer$validity2;
+    var _offer$images, _offer$images$, _offer$validity, _offer$validity2, _offer$validity3, _offer$validity4, _offer$validity5, _offer$validity6;
 
     var localeCode = translations.localeCode,
         currency = translations.currency;
-    return _objectSpread$4({}, offer, {
+    return _objectSpread$5({}, offer, {
       heading: offer.name,
       price: formatPrice(offer == null ? void 0 : offer.price, localeCode, (offer == null ? void 0 : offer.currency_code) || currency),
       images: {
         zoom: offer == null ? void 0 : (_offer$images = offer.images) == null ? void 0 : (_offer$images$ = _offer$images[0]) == null ? void 0 : _offer$images$.url
       },
-      from: formatDate(offer == null ? void 0 : (_offer$validity = offer.validity) == null ? void 0 : _offer$validity.from, translations.localeCode, {
-        dateStyle: 'full'
-      }),
-      till: formatDate(offer == null ? void 0 : (_offer$validity2 = offer.validity) == null ? void 0 : _offer$validity2.to, translations.localeCode, {
-        dateStyle: 'full'
-      })
+      dateRange: getDateRange(offer == null ? void 0 : (_offer$validity = offer.validity) == null ? void 0 : _offer$validity.from, offer == null ? void 0 : (_offer$validity2 = offer.validity) == null ? void 0 : _offer$validity2.to, 'publication_viewer_offer_date_range'),
+      status: getPubState(offer == null ? void 0 : (_offer$validity3 = offer.validity) == null ? void 0 : _offer$validity3.from, offer == null ? void 0 : (_offer$validity4 = offer.validity) == null ? void 0 : _offer$validity4.to),
+      statusMessage: getPubStateMessage(offer == null ? void 0 : (_offer$validity5 = offer.validity) == null ? void 0 : _offer$validity5.from, offer == null ? void 0 : (_offer$validity6 = offer.validity) == null ? void 0 : _offer$validity6.to)
     });
   };
 
   var addOpenWebshopListener = function addOpenWebshopListener() {
-    var _container$querySelec;
+    var _container, _container$querySelec;
 
-    (_container$querySelec = container.querySelector('.sgn-shopping-open-webshop-btn')) == null ? void 0 : _container$querySelec.addEventListener('click', function () {
+    (_container = container) == null ? void 0 : (_container$querySelec = _container.querySelector('.sgn-shopping-open-webshop-btn')) == null ? void 0 : _container$querySelec.addEventListener('click', function () {
       window.open(offer.webshop_link);
     });
   };
 
   var addShoppingListListener = function addShoppingListListener() {
-    var _container$querySelec2;
+    var _container2, _container2$querySele;
 
-    (_container$querySelec2 = container.querySelector('.sgn-shopping-add-to-list-btn')) == null ? void 0 : _container$querySelec2.addEventListener('click', function () {
+    (_container2 = container) == null ? void 0 : (_container2$querySele = _container2.querySelector('.sgn-shopping-add-to-list-btn')) == null ? void 0 : _container2$querySele.addEventListener('click', function () {
       addToShoppingList(offer);
       destroyModal();
     });
@@ -3158,14 +3143,11 @@ var OfferOverview = function OfferOverview(_ref) {
 
             case 3:
               offer = _context2.sent;
-              return _context2.abrupt("return", _objectSpread$4({}, offer, {
+              return _context2.abrupt("return", _objectSpread$5({}, offer, {
                 price: formatPrice(offer == null ? void 0 : (_offer$pricing = offer.pricing) == null ? void 0 : _offer$pricing.price, localeCode, (offer == null ? void 0 : (_offer$pricing2 = offer.pricing) == null ? void 0 : _offer$pricing2.currency) || currency),
-                from: formatDate(offer == null ? void 0 : offer.run_from, translations.localeCode, {
-                  dateStyle: 'full'
-                }),
-                till: formatDate(offer == null ? void 0 : offer.run_till, translations.localeCode, {
-                  dateStyle: 'full'
-                })
+                dateRange: getDateRange(offer == null ? void 0 : offer.run_from, offer == null ? void 0 : offer.run_till, 'publication_viewer_offer_date_range'),
+                status: getPubState(offer == null ? void 0 : offer.run_from, offer == null ? void 0 : offer.run_till),
+                statusMessage: getPubStateMessage(offer == null ? void 0 : offer.run_from, offer == null ? void 0 : offer.run_till)
               }));
 
             case 5:
@@ -3181,6 +3163,13 @@ var OfferOverview = function OfferOverview(_ref) {
     };
   }();
 
+  var dispatchOfferClickEvent = function dispatchOfferClickEvent(detail) {
+    var mainContainerEl = document.querySelector(scriptEls.listPublicationsContainer || scriptEls.mainContainer);
+    mainContainerEl == null ? void 0 : mainContainerEl.dispatchEvent(new CustomEvent('publication:offer_modal_rendered', {
+      detail: detail
+    }));
+  };
+
   var addEventListeners = function addEventListeners() {
     var _document$querySelect;
 
@@ -3194,11 +3183,229 @@ var OfferOverview = function OfferOverview(_ref) {
   };
 };
 
+function ownKeys$4(object, enumerableOnly) { var keys = _Object$keys__default["default"](object); if (_Object$getOwnPropertySymbols__default["default"]) { var symbols = _Object$getOwnPropertySymbols__default["default"](object); enumerableOnly && (symbols = _filterInstanceProperty__default["default"](symbols).call(symbols, function (sym) { return _Object$getOwnPropertyDescriptor__default["default"](object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$4(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
+var defaultTemplate$4 = "    <div class=\"sgn-shopping-popup sgn-show-print-section\">\n        <div class=\"sgn-popup-header\">\n            <div class=\"sgn-popup-header-label\">\n                <span>{{translations.shoppingListLabel}}</span>\n            </div>            \n            <div class=\"sgn-menu-share\">\n                <button class=\"sgn-shopping-share-list-btn sgn-hide-print\">\n                    <svg \n                        aria-hidden=\"true\"\n                        class=\"sgn-share-icon-svg\"\n                        role=\"img\"\n                        viewBox=\"0 0 640 512\"\n                        xmlns=\"http://www.w3.org/2000/svg\"\n                    >\n                        <path \n                            fill=\"currentColor\" \n                            d=\"M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z\"\n                        >\n                        </path>\n                    </svg>\n                </button>\n            </div>\n            <div class=\"sgn-clearfix\"></div>\n        </div>\n        <ol class=\"sgn-shopping-list-items-container\">\n            {{#offers}}\n            <li class=\"sgn-shopping-list-item-container\" data-id=\"{{index}}\">\n                <div class=\"sgn-shopping-list-content-container\">\n                    <div class=\"sgn-shopping-list-content\">\n                        <div class=\"sgn-shopping-list-content-heading sgn-truncate-elipsis\">\n                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/offers}}\n            {{#tickedOffers}}\n            <li class=\"sgn-shopping-list-item-container sgn-shopping-list-item-container-ticked\" data-id=\"{{index}}\">\n                <div class=\"sgn-shopping-list-content-container\">\n                    <div class=\"sgn-shopping-list-content\">\n                        <div class=\"sgn-shopping-list-content-heading sgn-truncate-elipsis\">\n                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>\n                        </div>\n                    </div>\n                </div>\n            </li>\n            {{/tickedOffers}}\n            {{#hasTicked}}\n            <li class=\"sgn-shopping-list-item-container-crossed sgn-hide-print\">\n                <button class=\"sgn-shopping-clear-ticked-list-btn sgn-hide-print\">{{translations.deleteCrossedOutButton}}</button>\n            </li>\n            {{/hasTicked}}\n        </ol>\n        <div>\n            <button class=\"sgn-shopping-clear-list-btn sgn-hide-print\">{{translations.clearListButton}}</button>\n            <button class=\"sgn-shopping-print-list-btn sgn-hide-print\">{{translations.printButton}}</button>\n        </div>\n    </div>";
+
+var ShoppingList = function ShoppingList(_ref) {
+  var _template;
+
+  var template = _ref.template;
+  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$4;
+  var shoppingListBtn = document.querySelector('.sgn__offer-shopping');
+  var container = null;
+  var translations = {
+    localeCode: translate('locale_code'),
+    shoppingListLabel: translate('publication_viewer_shopping_list_label'),
+    currency: translate('publication_viewer_currency'),
+    deleteCrossedOutButton: translate('publication_viewer_delete_crossed_out_button'),
+    clearListButton: translate('publication_viewer_shopping_list_clear_button'),
+    printButton: translate('publication_viewer_print_button')
+  };
+
+  var render = function render() {
+    shoppingListBtn == null ? void 0 : shoppingListBtn.addEventListener('click', showShoppingList, false);
+  };
+
+  var showShoppingList = function showShoppingList() {
+    var _transformSavedOffers, _transformSavedOffers2, _transformSavedOffers3;
+
+    var storedPublicationOffers = get('publication-saved-offers');
+    container = document.createElement('div');
+    container.className = 'sgn-shopping-list-container';
+    container.innerHTML = Mustache__default["default"].render(template, {
+      translations: translations,
+      offers: (_transformSavedOffers = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers).call(_transformSavedOffers, function (offer) {
+        return !offer.is_ticked;
+      }),
+      tickedOffers: (_transformSavedOffers2 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers2).call(_transformSavedOffers2, function (offer) {
+        return offer.is_ticked;
+      }),
+      hasTicked: ((_transformSavedOffers3 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers3).call(_transformSavedOffers3, function (offer) {
+        return offer.is_ticked;
+      }).length) > 0
+    });
+    createModal(container);
+    addEventListeners();
+  };
+
+  var transformSavedOffers = function transformSavedOffers(savedOffers) {
+    var _context;
+
+    var localeCode = translations.localeCode,
+        currency = translations.currency;
+    return _mapInstanceProperty__default["default"](_context = savedOffers || []).call(_context, function (offer, index) {
+      var _offer$pricing, _offer$pricing2, _offer$pricing3;
+
+      return _objectSpread$4({
+        index: index
+      }, offer, {
+        price: offer != null && (_offer$pricing = offer.pricing) != null && _offer$pricing.price ? formatPrice(offer == null ? void 0 : (_offer$pricing2 = offer.pricing) == null ? void 0 : _offer$pricing2.price, localeCode, (offer == null ? void 0 : (_offer$pricing3 = offer.pricing) == null ? void 0 : _offer$pricing3.currency) || currency) : null
+      });
+    });
+  };
+
+  var addTickerListener = function addTickerListener() {
+    var _container;
+
+    (_container = container) == null ? void 0 : _container.querySelectorAll('.sgn-shopping-list-item-container').forEach(function (itemEl) {
+      itemEl.addEventListener('click', tickOffer, false);
+    });
+  };
+
+  var tickOffer = function tickOffer(e) {
+    var _e$currentTarget$data, _transformSavedOffers4, _transformSavedOffers5, _transformSavedOffers6;
+
+    var storedPublicationOffers = get('publication-saved-offers');
+    var index = (_e$currentTarget$data = e.currentTarget.dataset) == null ? void 0 : _e$currentTarget$data.id;
+    storedPublicationOffers[index].is_ticked = !storedPublicationOffers[index].is_ticked;
+    setWithEvent('publication-saved-offers', storedPublicationOffers, 'tjek_shopping_list_update');
+    if (container) container.innerHTML = Mustache__default["default"].render(template, {
+      translations: translations,
+      offers: (_transformSavedOffers4 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers4).call(_transformSavedOffers4, function (offer) {
+        return !offer.is_ticked;
+      }),
+      tickedOffers: (_transformSavedOffers5 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers5).call(_transformSavedOffers5, function (offer) {
+        return offer.is_ticked;
+      }),
+      hasTicked: ((_transformSavedOffers6 = transformSavedOffers(storedPublicationOffers)) == null ? void 0 : _filterInstanceProperty__default["default"](_transformSavedOffers6).call(_transformSavedOffers6, function (offer) {
+        return offer.is_ticked;
+      }).length) > 0
+    });
+    addEventListeners();
+    e.stopPropagation();
+  };
+
+  var addClearListListener = function addClearListListener() {
+    var _container2, _container2$querySele;
+
+    (_container2 = container) == null ? void 0 : (_container2$querySele = _container2.querySelector('.sgn-shopping-clear-list-btn')) == null ? void 0 : _container2$querySele.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setWithEvent('publication-saved-offers', [], 'tjek_shopping_list_update');
+      if (container) container.innerHTML = Mustache__default["default"].render(template, {
+        translations: translations,
+        offers: []
+      });
+      addEventListeners();
+    });
+  };
+
+  var addClearTickedListListener = function addClearTickedListListener() {
+    var _container3;
+
+    var clearTickedBtn = (_container3 = container) == null ? void 0 : _container3.querySelector('.sgn-shopping-clear-ticked-list-btn');
+    var storedPublicationOffers = get('publication-saved-offers');
+    var validOffers = storedPublicationOffers == null ? void 0 : _filterInstanceProperty__default["default"](storedPublicationOffers).call(storedPublicationOffers, function (offer) {
+      return !offer.is_ticked;
+    });
+    clearTickedBtn == null ? void 0 : clearTickedBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setWithEvent('publication-saved-offers', validOffers, 'tjek_shopping_list_update');
+      if (container) container.innerHTML = Mustache__default["default"].render(template, {
+        translations: translations,
+        offers: transformSavedOffers(validOffers)
+      });
+      addEventListeners();
+    });
+  };
+
+  var addPrintListener = function addPrintListener() {
+    var _container4, _container4$querySele;
+
+    (_container4 = container) == null ? void 0 : (_container4$querySele = _container4.querySelector('.sgn-shopping-print-list-btn')) == null ? void 0 : _container4$querySele.addEventListener('click', function () {
+      window.print();
+    });
+  };
+
+  var addShareListener = function addShareListener() {
+    var _container5, _container5$querySele;
+
+    (_container5 = container) == null ? void 0 : (_container5$querySele = _container5.querySelector('.sgn-shopping-share-list-btn')) == null ? void 0 : _container5$querySele.addEventListener('click', /*#__PURE__*/_asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee() {
+      var shareData, _context2, shareEmailData, queryString;
+
+      return _regeneratorRuntime__default["default"].wrap(function _callee$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              shareData = {
+                title: translations.shoppingListLabel,
+                text: formatListToShare(transformSavedOffers(get('publication-saved-offers'))),
+                url: document.location.href
+              };
+              _context3.next = 4;
+              return navigator.share(shareData);
+
+            case 4:
+              _context3.next = 9;
+              break;
+
+            case 6:
+              _context3.prev = 6;
+              _context3.t0 = _context3["catch"](0);
+
+              if ((_context3.t0 == null ? void 0 : _context3.t0.toString()) === 'TypeError: navigator.share is not a function') {
+                shareEmailData = {
+                  subject: translations.shoppingListLabel,
+                  body: formatListToShare(transformSavedOffers(get('publication-saved-offers')), '%0d%0a')
+                };
+                queryString = _mapInstanceProperty__default["default"](_context2 = _Object$keys__default["default"](shareEmailData)).call(_context2, function (key) {
+                  return key + '=' + shareEmailData[key];
+                }).join('&');
+                window.location.href = "mailto:?".concat(queryString);
+              } else {
+                console.log(_context3.t0);
+              }
+
+            case 9:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee, null, [[0, 6]]);
+    })));
+  };
+
+  var formatListToShare = function formatListToShare(data, newLineDelimiter) {
+    if (newLineDelimiter === void 0) {
+      newLineDelimiter = "\n";
+    }
+
+    var offerStr = '';
+    data == null ? void 0 : data.forEach(function (offer) {
+      if (!offer.is_ticked) {
+        var _context4;
+
+        offerStr += offer.price ? _concatInstanceProperty__default["default"](_context4 = "".concat(offer.price, " - ")).call(_context4, offer.name) : "".concat(offer.name);
+        offerStr += newLineDelimiter;
+      }
+    });
+    return offerStr;
+  };
+
+  var addEventListeners = function addEventListeners() {
+    var _document$querySelect;
+
+    (_document$querySelect = document.querySelector('.sgn-modal-container')) == null ? void 0 : _document$querySelect.focus();
+    addTickerListener();
+    addClearTickedListListener();
+    addClearListListener();
+    addPrintListener();
+    addShareListener();
+  };
+
+  return {
+    render: render
+  };
+};
+
 var transformScriptData = function transformScriptData(scriptEl, mainContainer) {
   var dataset = scriptEl.dataset;
   return {
     businessId: dataset.businessId,
     mainContainer: dataset.componentPublicationContainer || mainContainer,
+    listPublicationsContainer: dataset.componentListPublicationsContainer || mainContainer,
     publicationId: dataset.componentPublicationId,
     publicationIdParam: dataset.publicationIdQueryParam || 'publicationid',
     pageIdParam: dataset.publicationPageQueryParam || 'publicationpage',
@@ -3222,22 +3429,20 @@ var transformScriptData = function transformScriptData(scriptEl, mainContainer) 
 var defaultTemplate$3 = "    <div class=\"sgn_loader-container\">\n        <div class=\"sgn_loader\"></div>\n    </div>\n    <div class=\"sgn__incito\" data-component-template=\"true\" tabindex=\"-1\" data-component-template-disable-header=\"{{disableHeader}}\">\n        <div class=\"sgn__header-container\"></div>\n        {{#disableHeader}}\n        <div class=\"sgn-incito__scroll-progress\">\n            <div class=\"sgn-incito__scroll-progress-bar\"></div>\n            <span class=\"sgn-incito__scroll-progress-text\"></span>\n        </div>\n        {{/disableHeader}}\n    </div>";
 
 var MainContainer$2 = function MainContainer(_ref) {
-  var _template;
-
   var template = _ref.template,
       el = _ref.el,
       scriptEls = _ref.scriptEls;
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate$3;
 
   var setCustomStyles = function setCustomStyles() {
-    var sgnIncito = el.querySelector('.sgn__incito');
-    sgnIncito.classList.add("sgn__theme-".concat(scriptEls.theme || 'light'));
+    var sgnIncito = el == null ? void 0 : el.querySelector('.sgn__incito');
+    sgnIncito == null ? void 0 : sgnIncito.classList.add("sgn__theme-".concat(scriptEls.theme || 'light'));
   };
 
   var render = function render() {
     var _el$querySelector;
 
-    el.innerHTML = Mustache__default["default"].render(template, {
+    if (!el) return;
+    el.innerHTML = Mustache__default["default"].render((template == null ? void 0 : template.innerHTML) || defaultTemplate$3, {
       disableHeader: scriptEls.disableHeader,
       disableShoppingList: scriptEls.disableShoppingList || scriptEls.offerClickBehavior !== 'shopping_list',
       disableMenu: scriptEls.disableMenu,
@@ -3252,20 +3457,18 @@ var MainContainer$2 = function MainContainer(_ref) {
   };
 };
 
-var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
+var IncitoPublication = function IncitoPublication(scriptEl, _ref) {
   var _document$querySelect;
 
-  var _ref = _temp === void 0 ? {} : _temp,
-      _ref$mainContainer = _ref.mainContainer,
+  var _ref$mainContainer = _ref.mainContainer,
       mainContainer = _ref$mainContainer === void 0 ? '' : _ref$mainContainer,
       apiKey = _ref.apiKey,
       coreUrl = _ref.coreUrl,
       eventTracker = _ref.eventTracker;
-
-  var options = {};
-  var sgnData = {};
-  var sgnViewer = null;
-  var bootstrapper = null;
+  var options;
+  var sgnData;
+  var sgnViewer;
+  var bootstrapper;
   var scriptEls = transformScriptData(scriptEl, mainContainer);
   var customTemplates = {
     mainContainer: document.getElementById('sgn-sdk-incito-publication-viewer-template'),
@@ -3279,7 +3482,6 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
   };
   MainContainer$2({
     template: customTemplates.mainContainer,
-    shoppingListCounterTemplate: customTemplates.shoppingListCounter,
     el: document.querySelector(scriptEls.mainContainer),
     scriptEls: scriptEls
   }).render();
@@ -3298,7 +3500,7 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_Object$keys__default["default"](options).length === 0)) {
+              if (!(_Object$keys__default["default"](options || {}).length === 0)) {
                 _context.next = 3;
                 break;
               }
@@ -3307,12 +3509,17 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
               return setOptions();
 
             case 3:
-              start();
+              _context.next = 5;
+              return start();
+
+            case 5:
               addScrollListener();
               renderShoppingList();
               renderMenuPopup();
+              dispatchPublicationData();
+              return _context.abrupt("return", sgnData);
 
-            case 7:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -3404,24 +3611,27 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
 
   var start = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee4() {
-      var _sgnLoader$parentNode;
+      var _options, _sgnLoader$parentNode;
 
-      var sgnLoader, data;
+      var sgnLoader, data, _document$querySelect3;
+
       return _regeneratorRuntime__default["default"].wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              sgnLoader = document.querySelector('.sgn_loader-container');
+              sgnLoader = document.querySelector('.sgn_loader-container'); // @ts-expect-error
+
               bootstrapper = new Bootstrapper$1(options);
               _context4.next = 4;
               return bootstrapper.fetch();
 
             case 4:
               data = _context4.sent;
-              sgnData = data;
+              sgnData = data; // @ts-expect-error
+
               sgnViewer = bootstrapper.createViewer(data);
               header.show(sgnData);
-              on(options.el, 'click', '.incito__view[data-role="offer"]', /*#__PURE__*/_asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee3(e) {
+              if ((_options = options) != null && _options.el) on(options.el, 'click', '.incito__view[data-role="offer"]', /*#__PURE__*/_asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee3(e) {
                 var viewId, publicationId;
                 return _regeneratorRuntime__default["default"].wrap(function _callee3$(_context3) {
                   while (1) {
@@ -3442,7 +3652,7 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
               sgnViewer.start();
 
               if (scriptEls.disableGlobalScrollbar) {
-                document.querySelector('html').classList.add('sgn-incito-publication--open');
+                (_document$querySelect3 = document.querySelector('html')) == null ? void 0 : _document$querySelect3.classList.add('sgn-incito-publication--open');
               }
 
               sgnLoader == null ? void 0 : (_sgnLoader$parentNode = sgnLoader.parentNode) == null ? void 0 : _sgnLoader$parentNode.removeChild(sgnLoader);
@@ -3461,13 +3671,23 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
   }();
 
   var dispatchOfferClickEvent = function dispatchOfferClickEvent(detail) {
-    window.dispatchEvent(new CustomEvent('tjek-incito-publication-view-clicked', {
+    var mainContainerEl = document.querySelector(scriptEls.listPublicationsContainer || scriptEls.mainContainer);
+    mainContainerEl == null ? void 0 : mainContainerEl.dispatchEvent(new CustomEvent('publication:offer_clicked', {
       detail: detail
+    }));
+  };
+
+  var dispatchPublicationData = function dispatchPublicationData() {
+    var mainContainerEl = document.querySelector(scriptEls.listPublicationsContainer || scriptEls.mainContainer);
+    mainContainerEl == null ? void 0 : mainContainerEl.dispatchEvent(new CustomEvent('publication:rendered', {
+      detail: sgnData
     }));
   };
 
   var clickOfferCell = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee5(viewId, publicationId) {
+      var _options$el;
+
       var shoppingBtn, _yield$fetchOffer, offer, newWindowRef, _yield$fetchOffer2, _offer, _yield$fetchOffer3, _offer2, _yield$fetchOffer4, _offer3;
 
       return _regeneratorRuntime__default["default"].wrap(function _callee5$(_context5) {
@@ -3479,7 +3699,7 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
                 viewId: viewId,
                 publicationId: publicationId
               });
-              shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
+              shoppingBtn = (_options$el = options.el) == null ? void 0 : _options$el.querySelector('.sgn__offer-shopping');
 
               if (!(scriptEls.offerClickBehavior === 'overview_modal')) {
                 _context5.next = 10;
@@ -3498,6 +3718,7 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
               OfferOverview({
                 template: customTemplates.offerOverview,
                 configs: options,
+                scriptEls: scriptEls,
                 sgnData: sgnData,
                 offer: offer,
                 type: 'incito',
@@ -3523,10 +3744,12 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
               _yield$fetchOffer2 = _context5.sent;
               _offer = _yield$fetchOffer2.offer;
 
-              if (_offer.webshop_link) {
-                newWindowRef.location = _offer.webshop_link;
-              } else {
-                newWindowRef.close();
+              if (newWindowRef) {
+                if (_offer.webshop_link) {
+                  newWindowRef.location = _offer.webshop_link;
+                } else {
+                  newWindowRef.close();
+                }
               }
 
               _context5.next = 33;
@@ -3607,6 +3830,7 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
   };
 
   var addScrollListener = function addScrollListener() {
+    if (!options.el) return;
     var isContainerFixed = window.getComputedStyle(options.el).position === 'fixed';
     var progressContainer = options.el.querySelector('.sgn-incito__scroll-progress');
     var progressBar = options.el.querySelector('.sgn-incito__scroll-progress-bar');
@@ -3616,8 +3840,11 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
       progressText.innerHTML = '0%';
       options.el.addEventListener('scroll', function () {
         var scrollValue = getContainerScrollValue();
-        progressBar.style.transform = "scaleX(".concat(scrollValue / 100, ")");
-        progressText.innerHTML = "".concat(Math.round(scrollValue), "%");
+
+        if (scrollValue) {
+          if (progressBar) progressBar.style.transform = "scaleX(".concat(scrollValue / 100, ")");
+          progressText.innerHTML = "".concat(Math.round(scrollValue), "%");
+        }
       });
     } else {
       var _progressContainer$pa;
@@ -3627,7 +3854,7 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
   };
 
   var getContainerScrollValue = function getContainerScrollValue() {
-    return 100 * options.el.scrollTop / (options.el.scrollHeight - options.el.clientHeight);
+    return options.el && 100 * options.el.scrollTop / (options.el.scrollHeight - options.el.clientHeight);
   };
 
   var fetchLatestPublicationId = /*#__PURE__*/function () {
@@ -3683,15 +3910,14 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
   }();
 
   var fetchOffer = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee7(_ref8, callback) {
+    var _ref9 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee7(_ref8) {
       var viewId, publicationId, res;
       return _regeneratorRuntime__default["default"].wrap(function _callee7$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
               viewId = _ref8.viewId, publicationId = _ref8.publicationId;
-              _context7.prev = 1;
-              _context7.next = 4;
+              _context7.next = 3;
               return request({
                 apiKey: apiKey,
                 coreUrl: coreUrl,
@@ -3706,9 +3932,17 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
                 })
               });
 
-            case 4:
+            case 3:
               res = _context7.sent;
 
+              if (res) {
+                _context7.next = 6;
+                break;
+              }
+
+              throw new Error();
+
+            case 6:
               if (res.offer.id) {
                 eventTracker == null ? void 0 : eventTracker.trackOfferOpened({
                   'of.id': res.offer.id,
@@ -3716,34 +3950,17 @@ var IncitoPublication = function IncitoPublication(scriptEl, _temp) {
                 });
               }
 
-              if (typeof callback === 'function') callback(null, res);
               return _context7.abrupt("return", res);
 
-            case 10:
-              _context7.prev = 10;
-              _context7.t0 = _context7["catch"](1);
-
-              if (!(typeof callback === 'function')) {
-                _context7.next = 16;
-                break;
-              }
-
-              callback(_context7.t0);
-              _context7.next = 17;
-              break;
-
-            case 16:
-              throw _context7.t0;
-
-            case 17:
+            case 8:
             case "end":
               return _context7.stop();
           }
         }
-      }, _callee7, null, [[1, 10]]);
+      }, _callee7);
     }));
 
-    return function fetchOffer(_x5, _x6) {
+    return function fetchOffer(_x5) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -3802,13 +4019,10 @@ var Popover = /*#__PURE__*/function (_MicroEvent) {
   function Popover(options) {
     var _this;
 
-    if (options === void 0) {
-      options = {};
-    }
-
     _this = _MicroEvent.call(this) || this;
     _this.el = document.createElement('div');
     _this.backgroundEl = document.createElement('div');
+    _this.options = void 0;
 
     _this.keyUp = function (e) {
       if (e.keyCode === ESC) _this.destroy();
@@ -3834,7 +4048,7 @@ var Popover = /*#__PURE__*/function (_MicroEvent) {
         singleChoiceItems = _this$options.singleChoiceItems,
         template = _this$options.template;
     this.el.className = 'sgn-popover';
-    this.el.setAttribute('tabindex', -1);
+    this.el.setAttribute('tabindex', '-1');
     this.el.innerHTML = Mustache__default["default"].render(template || defaultTemplate$1, {
       header: header,
       singleChoiceItems: singleChoiceItems == null ? void 0 : _mapInstanceProperty__default["default"](singleChoiceItems).call(singleChoiceItems, function (item, index) {
@@ -3864,17 +4078,20 @@ var Popover = /*#__PURE__*/function (_MicroEvent) {
     var top = this.options.y;
     var left = this.options.x;
     var menuEl = this.el.querySelector('.sgn-popover__menu');
-    var width = menuEl.offsetWidth;
-    var height = menuEl.offsetHeight;
-    var parentWidth = this.el.parentNode.offsetWidth;
-    var parentHeight = this.el.parentNode.offsetHeight;
-    var boundingRect = this.el.parentNode.getBoundingClientRect();
-    top -= boundingRect.top;
-    left -= boundingRect.left;
-    top -= window.pageYOffset;
-    left -= window.pageXOffset;
-    menuEl.style.top = top + height > parentHeight ? parentHeight - height + 'px' : top + 'px';
-    menuEl.style.left = left + width > parentWidth ? parentWidth - width + 'px' : left + 'px';
+
+    if (menuEl && this.el.parentElement) {
+      var width = menuEl.offsetWidth;
+      var height = menuEl.offsetHeight;
+      var parentWidth = this.el.parentElement.offsetWidth;
+      var parentHeight = this.el.parentElement.offsetHeight;
+      var boundingRect = this.el.parentElement.getBoundingClientRect();
+      top -= boundingRect.top;
+      left -= boundingRect.left;
+      top -= window.pageYOffset;
+      left -= window.pageXOffset;
+      menuEl.style.top = top + height > parentHeight ? parentHeight - height + 'px' : top + 'px';
+      menuEl.style.left = left + width > parentWidth ? parentWidth - width + 'px' : left + 'px';
+    }
   };
 
   _proto.addEventListeners = function addEventListeners() {
@@ -3911,7 +4128,7 @@ function singleChoicePopover(_ref, callback) {
       header = _ref.header,
       x = _ref.x,
       y = _ref.y;
-  var popover = null;
+  var popover;
 
   if (items.length === 1) {
     callback(items[0]);
@@ -3923,8 +4140,10 @@ function singleChoicePopover(_ref, callback) {
       singleChoiceItems: items
     });
     popover.bind('selected', function (e) {
+      var _popover;
+
       callback(items[e.index]);
-      popover.destroy();
+      (_popover = popover) == null ? void 0 : _popover.destroy();
     });
     popover.bind('destroyed', function () {
       el.focus();
@@ -3935,9 +4154,9 @@ function singleChoicePopover(_ref, callback) {
 
   return {
     destroy: function destroy() {
-      var _popover;
+      var _popover2;
 
-      (_popover = popover) == null ? void 0 : _popover.destroy();
+      (_popover2 = popover) == null ? void 0 : _popover2.destroy();
     }
   };
 }
@@ -3947,6 +4166,7 @@ var visibilityClassName = 'sgn-pp--hidden';
 var PagedPublicationControls = /*#__PURE__*/function (_MicroEvent) {
   _inherits__default["default"](PagedPublicationControls, _MicroEvent);
 
+  // @ts-expect-error
   function PagedPublicationControls(el, options) {
     var _this$prevControl2, _this$nextControl2, _this$close2;
 
@@ -3957,6 +4177,15 @@ var PagedPublicationControls = /*#__PURE__*/function (_MicroEvent) {
     }
 
     _this = _MicroEvent.call(this) || this;
+    _this.options = void 0;
+    _this.root = void 0;
+    _this.progress = void 0;
+    _this.progressBar = void 0;
+    _this.progressLabel = void 0;
+    _this.prevControl = void 0;
+    _this.nextControl = void 0;
+    _this.close = void 0;
+    _this.keyDownHandler = void 0;
 
     _this.destroy = function () {
       var _this$prevControl, _this$nextControl, _this$close;
@@ -4077,12 +4306,14 @@ var PagedPublicationControls = /*#__PURE__*/function (_MicroEvent) {
 var Animation = /*#__PURE__*/function () {
   function Animation(el) {
     this.run = 0;
+    this.el = void 0;
     this.el = el;
   }
 
   var _proto = Animation.prototype;
 
-  _proto.animate = function animate(_temp, callback) {
+  _proto.animate = function animate( // @ts-expect-error
+  _temp, callback) {
     var _context,
         _context2,
         _this = this;
@@ -4133,6 +4364,7 @@ var Animation = /*#__PURE__*/function () {
 }();
 
 var PageSpread = /*#__PURE__*/function () {
+  // @ts-expect-error
   function PageSpread(el, options) {
     if (options === void 0) {
       options = {};
@@ -4141,6 +4373,14 @@ var PageSpread = /*#__PURE__*/function () {
     this.visibility = 'gone';
     this.positioned = false;
     this.active = false;
+    this.el = void 0;
+    this.options = void 0;
+    this.id = void 0;
+    this.type = void 0;
+    this.pageIds = void 0;
+    this.width = void 0;
+    this.left = void 0;
+    this.maxZoomScale = void 0;
     this.el = el;
     this.options = options;
     this.id = this.options.id;
@@ -4194,19 +4434,19 @@ var PageSpread = /*#__PURE__*/function () {
       var pageEl = pageEls[idx];
       var pageRect = pageEl.getBoundingClientRect();
 
-      if (pageRect.top < rect.top || rect.top == null) {
+      if (rect.top == null || pageRect.top < rect.top) {
         rect.top = pageRect.top;
       }
 
-      if (pageRect.left < rect.left || rect.left == null) {
+      if (rect.left == null || pageRect.left < rect.left) {
         rect.left = pageRect.left;
       }
 
-      if (pageRect.right > rect.right || rect.right == null) {
+      if (rect.right == null || pageRect.right > rect.right) {
         rect.right = pageRect.right;
       }
 
-      if (pageRect.bottom > rect.bottom || rect.bottom == null) {
+      if (rect.bottom == null || pageRect.bottom > rect.bottom) {
         rect.bottom = pageRect.bottom;
       }
     }
@@ -4267,12 +4507,14 @@ var PageSpread = /*#__PURE__*/function () {
   };
 
   _proto.activate = function activate() {
-    this.active = true;
+    this.active = true; // @ts-expect-error
+
     this.getEl().dataset.active = this.active;
   };
 
   _proto.deactivate = function deactivate() {
-    this.active = false;
+    this.active = false; // @ts-expect-error
+
     this.getEl().dataset.active = this.active;
   };
 
@@ -5960,6 +6202,37 @@ var PressRecognizer = /*#__PURE__*/function (_Recognizer) {
       this._input.timeStamp = Date.now();
       this.manager.emit(this.options.event, this._input);
     }
+  }
+  /**
+   * @private
+   * Check that all the require failure recognizers has failed,
+   * if true, it emits a gesture event,
+   * otherwise, setup the state to FAILED.
+   * @param {Object} input
+   */
+  ;
+
+  _proto.tryEmit = function tryEmit(input) {
+    if (this.canEmit()) return this.emit(input); // it's failing anyway
+
+    this.state = STATE_FAILED;
+  }
+  /**
+   * @private
+   * can we emit?
+   * @returns {boolean}
+   */
+  ;
+
+  _proto.canEmit = function canEmit() {
+    var i = 0;
+
+    while (i < this.requireFail.length) {
+      if (!(this.requireFail[i].state & (STATE_FAILED | STATE_POSSIBLE))) return false;
+      i++;
+    }
+
+    return true;
   };
 
   return _createClass__default["default"](PressRecognizer);
@@ -6171,6 +6444,20 @@ var Verso = /*#__PURE__*/function () {
     this.started = false;
     this.destroyed = false;
     this._events = {};
+    this.el = void 0;
+    this.scrollerEl = void 0;
+    this.pageSpreadEls = void 0;
+    this.pageSpreads = void 0;
+    this.pageIds = void 0;
+    this.options = void 0;
+    this.swipeVelocity = void 0;
+    this.swipeThreshold = void 0;
+    this.navigationDuration = void 0;
+    this.navigationPanDuration = void 0;
+    this.zoomDuration = void 0;
+    this.tap = void 0;
+    this.animation = void 0;
+    this.hammer = void 0;
 
     this.onPanStart = function (e) {
       // Only allow panning if zoomed in or doing a horizontal pan.
@@ -6266,7 +6553,8 @@ var Verso = /*#__PURE__*/function () {
 
     this.onPinchStart = function () {
       if (!_this.getActivePageSpread().isZoomable()) return;
-      _this.pinching = true;
+      _this.pinching = true; // @ts-expect-error
+
       _this.el.dataset.pinching = true;
       _this.startTransform.scale = _this.transform.scale;
     };
@@ -6309,7 +6597,8 @@ var Verso = /*#__PURE__*/function () {
         scale: scale,
         duration: _this.zoomDuration
       }, function () {
-        _this.pinching = false;
+        _this.pinching = false; // @ts-expect-error
+
         _this.el.dataset.pinching = false;
       });
     };
@@ -6332,7 +6621,7 @@ var Verso = /*#__PURE__*/function () {
       if (!activePageSpread.isZoomable()) return; // see https://stackoverflow.com/a/23668035
 
       var deltaY = e.deltaY;
-      if (event.webkitDirectionInvertedFromDevice) deltaY = -deltaY;
+      if (e.webkitDirectionInvertedFromDevice) deltaY = -deltaY;
 
       var position = _this.getPosition();
 
@@ -6365,6 +6654,8 @@ var Verso = /*#__PURE__*/function () {
       var activePageSpread = _this.getActivePageSpread();
 
       var coordinateInfo = _this.getCoordinateInfo(e.center.x, e.center.y, activePageSpread);
+
+      _this.trigger('pointerdown', coordinateInfo);
 
       clearTimeout(_this.tap.timeout);
 
@@ -6440,7 +6731,8 @@ var Verso = /*#__PURE__*/function () {
     this.zoomDuration = (_this$options$zoomDur = this.options.zoomDuration) != null ? _this$options$zoomDur : 200;
     this.tap = {
       count: 0,
-      delay: (_this$options$doubleT = this.options.doubleTapDelay) != null ? _this$options$doubleT : 300
+      delay: (_this$options$doubleT = this.options.doubleTapDelay) != null ? _this$options$doubleT : 300,
+      timeout: undefined
     };
   }
 
@@ -6493,20 +6785,31 @@ var Verso = /*#__PURE__*/function () {
       }], [PinchRecognizer], [PressRecognizer, {
         time: 500
       }]]
-    });
-    this.hammer.on('panstart', this.onPanStart);
-    this.hammer.on('panmove', this.onPanMove);
-    this.hammer.on('panend', this.onPanEnd);
-    this.hammer.on('pancancel', this.onPanEnd);
-    this.hammer.on('singletap', this.onSingletap);
-    this.hammer.on('pinchstart', this.onPinchStart);
-    this.hammer.on('pinchmove', this.onPinchMove);
-    this.hammer.on('pinchend', this.onPinchEnd);
-    this.hammer.on('pinchcancel', this.onPinchEnd);
+    }); //@ts-expect-error
+
+    this.hammer.on('panstart', this.onPanStart); //@ts-expect-error
+
+    this.hammer.on('panmove', this.onPanMove); //@ts-expect-error
+
+    this.hammer.on('panend', this.onPanEnd); //@ts-expect-error
+
+    this.hammer.on('pancancel', this.onPanEnd); //@ts-expect-error
+
+    this.hammer.on('singletap', this.onSingletap); //@ts-expect-error
+
+    this.hammer.on('pinchstart', this.onPinchStart); //@ts-expect-error
+
+    this.hammer.on('pinchmove', this.onPinchMove); //@ts-expect-error
+
+    this.hammer.on('pinchend', this.onPinchEnd); //@ts-expect-error
+
+    this.hammer.on('pinchcancel', this.onPinchEnd); //@ts-expect-error
+
     this.hammer.on('press', this.onPress);
     this.scrollerEl.addEventListener('contextmenu', this.onContextmenu, false);
     this.scrollerEl.addEventListener('wheel', this.onWheel, false);
-    var pageId = (_this$getPageSpreadPo = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? _this$getPageSpreadPo : 0;
+    var pageId = (_this$getPageSpreadPo = this.getPageSpreadPositionFromPageId(this.options.pageId)) != null ? _this$getPageSpreadPo : 0; //@ts-expect-error
+
     this.hammer.set({
       enable: true
     });
@@ -6535,7 +6838,8 @@ var Verso = /*#__PURE__*/function () {
     }
 
     this.scrollerEl.removeEventListener('contextmenu', this.onContextmenu);
-    this.scrollerEl.removeEventListener('wheel', this.onWheel);
+    this.scrollerEl.removeEventListener('wheel', this.onWheel); //@ts-expect-error
+
     this.hammer.destroy();
     this.el.removeEventListener('touchstart', this.onTouchStart);
     this.el.removeEventListener('touchend', this.onTouchEnd);
@@ -6571,7 +6875,7 @@ var Verso = /*#__PURE__*/function () {
         _this3 = this;
 
     if (this.destroyed) {
-      return console.warn("You've called a navigation method on a viewer that was previously destroyed, this is a no-op.\nPlease call viewer.start() again, if you want to reuse this Viewer instance.\n\nYou might have forgotten to remove an event handler that\ncalls first/prev/next/last/navigateTo on the viewer.");
+      return console.warn(" \nYou've called a navigation method on a viewer that was previously destroyed, this is a no-op.\nPlease call viewer.start() again, if you want to reuse this Viewer instance.\n\nYou might have forgotten to remove an event handler that\ncalls first/prev/next/last/navigateTo on the viewer.");
     }
 
     if (!this.started) {
@@ -6594,7 +6898,8 @@ var Verso = /*#__PURE__*/function () {
     activePageSpread.activate();
     carousel.visible.forEach(function (pageSpread) {
       pageSpread.position().setVisibility('visible');
-    });
+    }); //@ts-expect-error
+
     this.hammer.set({
       touchAction: touchAction
     });
@@ -6747,7 +7052,8 @@ var Verso = /*#__PURE__*/function () {
     }
   };
 
-  _proto.zoomTo = function zoomTo(_temp, callback) {
+  _proto.zoomTo = function zoomTo( //@ts-expect-error
+  _temp, callback) {
     var _ref = _temp === void 0 ? {} : _temp,
         duration = _ref.duration,
         easing = _ref.easing,
@@ -6832,6 +7138,7 @@ var loadImage = function loadImage(src, callback) {
 var PagedPublicationPageSpread = /*#__PURE__*/function (_MicroEvent) {
   _inherits__default["default"](PagedPublicationPageSpread, _MicroEvent);
 
+  // @ts-expect-error
   function PagedPublicationPageSpread(options) {
     var _this;
 
@@ -6842,6 +7149,8 @@ var PagedPublicationPageSpread = /*#__PURE__*/function (_MicroEvent) {
     _this = _MicroEvent.call(this) || this;
     _this.contentsRendered = false;
     _this.hotspotsRendered = false;
+    _this.el = void 0;
+    _this.options = void 0;
     _this.options = options;
     _this.el = _this.renderEl();
     return _this;
@@ -6873,10 +7182,10 @@ var PagedPublicationPageSpread = /*#__PURE__*/function (_MicroEvent) {
     el.className = 'verso__page-spread sgn-pp__page-spread';
     el.dataset.id = this.getId();
     el.dataset.type = 'page';
-    el.dataset.width = this.options.width;
+    el.dataset.width = String(this.options.width);
     el.dataset.pageIds = pageIds.join(',');
-    el.dataset.maxZoomScale = this.options.maxZoomScale;
-    el.dataset.zoomable = false;
+    el.dataset.maxZoomScale = String(this.options.maxZoomScale);
+    el.dataset.zoomable = String(false);
     return el;
   };
 
@@ -6917,7 +7226,7 @@ var PagedPublicationPageSpread = /*#__PURE__*/function (_MicroEvent) {
         pageEl.dataset.width = img.width;
         pageEl.dataset.height = img.height;
         pageEl.innerHTML = '&nbsp;';
-        if (isComplete) el.dataset.zoomable = true;
+        if (isComplete) el.dataset.zoomable = String(true);
 
         _this2.trigger('pageLoaded', {
           pageSpreadId: pageSpreadId,
@@ -6993,6 +7302,7 @@ var PagedPublicationPageSpreads = /*#__PURE__*/function (_MicroEvent) {
     _this = _MicroEvent.call(this) || this;
     _this.collection = [];
     _this.ids = {};
+    _this.options = void 0;
     _this.options = options;
     return _this;
   }
@@ -7095,6 +7405,23 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
     }
 
     _this = _MicroEvent.call(this) || this;
+    _this.defaults = {
+      pages: [],
+      pageSpreadWidth: 100,
+      pageSpreadMaxZoomScale: 2.3,
+      idleDelay: 1000,
+      resizeDelay: 400,
+      color: '#ffffff'
+    };
+    _this.rootEl = void 0;
+    _this.pagesEl = void 0;
+    _this.options = void 0;
+    _this.pageId = void 0;
+    _this.verso = void 0;
+    _this.pageMode = void 0;
+    _this.idleTimeout = void 0;
+    _this.pageSpreads = void 0;
+    _this.resizeListener = void 0;
 
     _this.start = function () {
       var verso = _this.getVerso();
@@ -7151,7 +7478,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
 
       var progressLabel = _this.formatProgressLabel(pageSpread);
 
-      _this.rootEl.dataset.navigating = true;
+      _this.rootEl.dataset.navigating = String(true);
 
       _this.renderPageSpreads();
 
@@ -7181,7 +7508,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
 
       var pageSpreadCount = theVerso.getPageSpreadCount();
       var newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
-      _this.rootEl.dataset.navigating = false;
+      _this.rootEl.dataset.navigating = String(false);
 
       _this.trigger('afterNavigation', {
         verso: e,
@@ -7196,6 +7523,17 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
       _this.trigger('attemptedNavigation', {
         verso: e
       });
+    };
+
+    _this.pointerdown = function (e) {
+      if (e.isInsideContent) {
+        var page = _this.findPage(e.pageEl.dataset.id);
+
+        _this.trigger('pointerdown', {
+          verso: e,
+          page: page
+        });
+      }
     };
 
     _this.clicked = function (e) {
@@ -7264,7 +7602,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
       var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
 
       pageSpread == null ? void 0 : pageSpread.zoomIn();
-      _this.rootEl.dataset.zoomedIn = true;
+      _this.rootEl.dataset.zoomedIn = String(true);
 
       _this.trigger('zoomedIn', {
         verso: e,
@@ -7280,7 +7618,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
       var pageSpread = _this.pageSpreads.get(versoPageSpread.getId());
 
       pageSpread == null ? void 0 : pageSpread.zoomOut();
-      _this.rootEl.dataset.zoomedIn = false;
+      _this.rootEl.dataset.zoomedIn = String(false);
 
       _this.trigger('zoomedOut', {
         verso: e,
@@ -7369,6 +7707,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
     verso.bind('beforeNavigation', this.beforeNavigation);
     verso.bind('afterNavigation', this.afterNavigation);
     verso.bind('attemptedNavigation', this.attemptedNavigation);
+    verso.bind('pointerdown', this.pointerdown);
     verso.bind('clicked', this.clicked);
     verso.bind('doubleClicked', this.doubleClicked);
     verso.bind('pressed', this.pressed);
@@ -7459,7 +7798,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
 
   _proto.resetIdleTimer = function resetIdleTimer() {
     clearTimeout(this.idleTimeout);
-    this.rootEl.dataset.idle = false;
+    this.rootEl.dataset.idle = String(false);
     return this;
   };
 
@@ -7467,7 +7806,7 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
     var _this3 = this;
 
     this.idleTimeout = setTimeout(function () {
-      _this3.rootEl.dataset.idle = true;
+      _this3.rootEl.dataset.idle = String(true);
     }, this.getOption('idleDelay'));
     return this;
   };
@@ -7493,15 +7832,6 @@ var PagedPublicationCore = /*#__PURE__*/function (_MicroEvent) {
   return _createClass__default["default"](PagedPublicationCore);
 }(MicroEvent__default["default"]);
 
-PagedPublicationCore.prototype.defaults = {
-  pages: [],
-  pageSpreadWidth: 100,
-  pageSpreadMaxZoomScale: 2.3,
-  idleDelay: 1000,
-  resizeDelay: 400,
-  color: '#ffffff'
-};
-
 var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
   _inherits__default["default"](PagedPublicationEventTracking, _MicroEvent);
 
@@ -7511,6 +7841,8 @@ var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
     _this = _MicroEvent.call(this) || this;
     _this.hidden = true;
     _this.pageSpread = null;
+    _this.eventTracker = void 0;
+    _this.id = void 0;
 
     _this.destroy = function () {
       _this.pageSpreadDisappeared();
@@ -7800,6 +8132,7 @@ function defaultPickHotspot(hotspots, e, el, callback) {
 var Viewer = /*#__PURE__*/function (_MicroEvent) {
   _inherits__default["default"](Viewer, _MicroEvent);
 
+  // @ts-expect-error
   function Viewer(el, _options) {
     var _this;
 
@@ -7812,6 +8145,11 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
     _this.hotspots = null;
     _this.hotspotQueue = [];
     _this.popover = null;
+    _this.el = void 0;
+    _this._core = void 0;
+    _this._controls = void 0;
+    _this._eventTracking = void 0;
+    _this.options = void 0;
 
     _this.destroy = function () {
       _this._core.trigger('destroyed');
@@ -7867,6 +8205,12 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
       _this.pickHotspot(e, function (hotspot) {
         _this.trigger('hotspotClicked', hotspot);
       });
+    };
+
+    _this.pointerdown = function (e) {
+      var hotspots = _this.getPointerEventHotspots(e);
+
+      if (hotspots.length > 0) _this.trigger('hotspotsPointerdown', hotspots);
     };
 
     _this.contextmenu = function (e) {
@@ -7946,6 +8290,12 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
       _this.trigger('attemptedNavigation', e);
     });
 
+    _this._core.bind('pointerdown', function (e) {
+      _this._eventTracking.trigger('pointerdown', e);
+
+      _this.trigger('pointerdown', e);
+    });
+
     _this._core.bind('clicked', function (e) {
       _this._eventTracking.trigger('clicked', e);
 
@@ -8010,6 +8360,8 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
 
     _this.bind('clicked', _this.clicked);
 
+    _this.bind('pointerdown', _this.pointerdown);
+
     _this.bind('contextmenu', _this.contextmenu);
 
     _this.bind('pressed', _this.pressed);
@@ -8045,12 +8397,17 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
     return this;
   };
 
+  _proto.getPointerEventHotspots = function getPointerEventHotspots(e) {
+    var _context2;
+
+    var hotspots = this.hotspots;
+    if (!hotspots) return [];
+    return _mapInstanceProperty__default["default"](_context2 = e.verso.overlayEls).call(_context2, function (el) {
+      return hotspots[el.dataset.id];
+    });
+  };
+
   _proto.pickHotspot = function pickHotspot(e, callback) {
-    var _context2,
-        _this2 = this;
-
-    if (!this.hotspots) return;
-
     if (this.popover) {
       var _this$popover$destroy, _this$popover2;
 
@@ -8058,9 +8415,7 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
       this.popover = null;
     }
 
-    var hotspots = _mapInstanceProperty__default["default"](_context2 = e.verso.overlayEls).call(_context2, function (overlayEl) {
-      return _this2.hotspots[overlayEl.dataset.id];
-    });
+    var hotspots = this.getPointerEventHotspots(e);
 
     if (hotspots.length === 1) {
       callback(hotspots[0]);
@@ -8073,7 +8428,7 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
 
   _proto.processHotspotQueue = function processHotspotQueue() {
     var _context3,
-        _this3 = this;
+        _this2 = this;
 
     if (!this.hotspots) return;
     this.hotspotQueue = _filterInstanceProperty__default["default"](_context3 = this.hotspotQueue).call(_context3, function (hotspotRequest) {
@@ -8081,12 +8436,12 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
 
       var hotspots = {};
 
-      for (var hotspotId in _this3.hotspots) {
+      for (var hotspotId in _this2.hotspots) {
         if (hotspots[hotspotId]) continue;
-        var _this3$hotspots$hotsp = _this3.hotspots[hotspotId],
-            id = _this3$hotspots$hotsp.id,
-            type = _this3$hotspots$hotsp.type,
-            locations = _this3$hotspots$hotsp.locations;
+        var _this2$hotspots$hotsp = _this2.hotspots[hotspotId],
+            id = _this2$hotspots$hotsp.id,
+            type = _this2$hotspots$hotsp.type,
+            locations = _this2$hotspots$hotsp.locations;
 
         for (var idx = 0; idx < hotspotRequest.pages.length; idx++) {
           var pageNumber = hotspotRequest.pages[idx].pageNumber;
@@ -8102,14 +8457,14 @@ var Viewer = /*#__PURE__*/function (_MicroEvent) {
         }
       }
 
-      var versoPageSpread = _findInstanceProperty__default["default"](_context4 = _this3._core.getVerso().pageSpreads).call(_context4, function (pageSpread) {
+      var versoPageSpread = _findInstanceProperty__default["default"](_context4 = _this2._core.getVerso().pageSpreads).call(_context4, function (pageSpread) {
         return pageSpread.getId() === hotspotRequest.id;
       });
 
-      _this3._hotspots.trigger('hotspotsReceived', {
-        pageSpread: _this3._core.pageSpreads.get(hotspotRequest.id),
+      _this2._hotspots.trigger('hotspotsReceived', {
+        pageSpread: _this2._core.pageSpreads.get(hotspotRequest.id),
         versoPageSpread: versoPageSpread,
-        ratio: _this3.options.hotspotRatio,
+        ratio: _this2.options.hotspotRatio,
         pages: hotspotRequest.pages,
         hotspots: hotspots
       });
@@ -8138,6 +8493,8 @@ var Bootstrapper = /*#__PURE__*/function () {
       options = {};
     }
 
+    this.options = void 0;
+
     this.fetchDetails = function (callback) {
       return request({
         apiKey: _this.options.apiKey,
@@ -8162,6 +8519,7 @@ var Bootstrapper = /*#__PURE__*/function () {
       }, callback);
     };
 
+    //@ts-expect-error
     this.options = options;
   }
 
@@ -8271,20 +8629,19 @@ var Bootstrapper = /*#__PURE__*/function () {
 var defaultTemplate = "    <div class=\"sgn__pp\" data-layout-fixed=\"true\" data-component-template=\"true\" {{#disableHeader}}data-component-template-disable-header=\"true\"{{/disableHeader}}>\n        <div class=\"sgn__header-container\"></div>\n\n        <div class=\"verso\">\n            <div class=\"verso__scroller\">\n                <div class=\"sgn-pp__pages\"></div>\n            </div>\n        </div>\n\n        {{#disableHeader}}\n            <div class=\"sgn-pp__progress\">\n                <div class=\"sgn-pp-progress__bar\"></div>\n            </div>\n            <div class=\"sgn-pp__progress-label\"></div>\n        {{/disableHeader}}\n        <button\n            class=\"sgn-pp__control\"\n            data-direction=\"prev\"\n        >\n            &lsaquo;\n        </button>\n        <button\n            class=\"sgn-pp__control\"\n            data-direction=\"next\"\n        >\n            &rsaquo;\n        </button>\n        <button\n            class=\"sgn-pp__control sgn-pp--hidden\"\n            data-direction=\"first\"\n        >\n            &laquo;\n        </button>\n        <button\n            class=\"sgn-pp__control sgn-pp--hidden\"\n            data-direction=\"last\"\n        >\n            &raquo;\n        </button>\n    </div>";
 
 var MainContainer = function MainContainer(_ref) {
-  var _template;
-
   var template = _ref.template,
       el = _ref.el,
       scriptEls = _ref.scriptEls;
-  template = ((_template = template) == null ? void 0 : _template.innerHTML) || defaultTemplate;
 
   var setCustomStyles = function setCustomStyles() {
+    // @ts-expect-error
     var sgnPp = el.querySelector('.sgn__pp');
-    sgnPp.classList.add("sgn__theme-".concat(scriptEls.theme || 'light'));
+    sgnPp == null ? void 0 : sgnPp.classList.add("sgn__theme-".concat(scriptEls.theme || 'light'));
   };
 
   var render = function render() {
-    el.innerHTML = Mustache__default["default"].render(template, {
+    // @ts-expect-error
+    el.innerHTML = Mustache__default["default"].render((template == null ? void 0 : template.innerHTML) || defaultTemplate, {
       disableHeader: scriptEls.disableHeader
     });
     setCustomStyles();
@@ -8295,19 +8652,17 @@ var MainContainer = function MainContainer(_ref) {
   };
 };
 
-var PagedPublication = function PagedPublication(scriptEl, _temp) {
+var PagedPublication = function PagedPublication(scriptEl, _ref) {
   var _document$querySelect;
 
-  var _ref = _temp === void 0 ? {} : _temp,
-      _ref$mainContainer = _ref.mainContainer,
+  var _ref$mainContainer = _ref.mainContainer,
       mainContainer = _ref$mainContainer === void 0 ? '' : _ref$mainContainer,
       apiKey = _ref.apiKey,
       coreUrl = _ref.coreUrl,
       eventTracker = _ref.eventTracker;
-
-  var options = {};
+  var options;
   var sgnData = {};
-  var sgnViewer = null;
+  var sgnViewer;
   var scriptEls = transformScriptData(scriptEl, mainContainer);
   var customTemplates = {
     mainContainer: document.getElementById('sgn-sdk-paged-publication-viewer-template'),
@@ -8321,7 +8676,6 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
   };
   MainContainer({
     template: customTemplates.mainContainer,
-    shoppingListCounterTemplate: customTemplates.shoppingListCounter,
     el: document.querySelector(scriptEls.mainContainer),
     scriptEls: scriptEls
   }).render();
@@ -8340,7 +8694,7 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_Object$keys__default["default"](options).length === 0)) {
+              if (!(_Object$keys__default["default"](options || {}).length === 0)) {
                 _context.next = 3;
                 break;
               }
@@ -8349,11 +8703,15 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
               return setOptions();
 
             case 3:
-              start();
+              _context.next = 5;
+              return start();
+
+            case 5:
               renderShoppingList();
               renderMenuPopup();
+              dispatchPublicationData();
 
-            case 6:
+            case 8:
             case "end":
               return _context.stop();
           }
@@ -8448,7 +8806,8 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
 
   var start = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee3() {
-      var bootstrapper, data, hotspots;
+      var bootstrapper, data, _document$querySelect3, hotspots;
+
       return _regeneratorRuntime__default["default"].wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -8459,7 +8818,8 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
 
             case 3:
               data = _context3.sent;
-              sgnData = data;
+              sgnData = data; // @ts-expect-error
+
               sgnViewer = bootstrapper.createViewer(data);
               update({
                 'paged_publication.hotspot_picker.header': translate('paged_publication_viewer_hotspot_picker_header')
@@ -8471,7 +8831,7 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
               sgnViewer.start();
 
               if (scriptEls.disableGlobalScrollbar) {
-                document.querySelector('html').classList.add('sgn-paged-publication--open');
+                (_document$querySelect3 = document.querySelector('html')) == null ? void 0 : _document$querySelect3.classList.add('sgn-paged-publication--open');
               }
 
               _context3.next = 13;
@@ -8504,16 +8864,14 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
     var controlDirectionObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         if (mutation.type === 'attributes') {
-          var _element$dataset, _element$dataset2;
-
           var element = mutation.target;
 
-          if ((element == null ? void 0 : (_element$dataset = element.dataset) == null ? void 0 : _element$dataset.direction) === 'prev') {
-            element != null && element.classList.contains('sgn-pp--hidden') ? firstControl.classList.add('sgn-pp--hidden') : firstControl.classList.remove('sgn-pp--hidden');
+          if (element.dataset.direction === 'prev') {
+            element.classList.contains('sgn-pp--hidden') ? firstControl.classList.add('sgn-pp--hidden') : firstControl.classList.remove('sgn-pp--hidden');
           }
 
-          if ((element == null ? void 0 : (_element$dataset2 = element.dataset) == null ? void 0 : _element$dataset2.direction) === 'next') {
-            element != null && element.classList.contains('sgn-pp--hidden') ? lastControl.classList.add('sgn-pp--hidden') : lastControl.classList.remove('sgn-pp--hidden');
+          if (element.dataset.direction === 'next') {
+            element.classList.contains('sgn-pp--hidden') ? lastControl.classList.add('sgn-pp--hidden') : lastControl.classList.remove('sgn-pp--hidden');
           }
         }
       });
@@ -8521,10 +8879,14 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
     prevBtn != null && prevBtn.classList.contains('sgn-pp--hidden') ? firstControl.classList.add('sgn-pp--hidden') : firstControl.classList.remove('sgn-pp--hidden');
     nextBtn != null && nextBtn.classList.contains('sgn-pp--hidden') ? lastControl.classList.add('sgn-pp--hidden') : lastControl.classList.remove('sgn-pp--hidden');
     firstControl == null ? void 0 : firstControl.addEventListener('click', function () {
-      sgnViewer.first();
+      var _sgnViewer;
+
+      (_sgnViewer = sgnViewer) == null ? void 0 : _sgnViewer.first();
     });
     lastControl == null ? void 0 : lastControl.addEventListener('click', function () {
-      sgnViewer.last();
+      var _sgnViewer2;
+
+      (_sgnViewer2 = sgnViewer) == null ? void 0 : _sgnViewer2.last();
     });
     controlDirectionObserver.observe(prevBtn, {
       attributes: true
@@ -8555,6 +8917,7 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
       OfferOverview({
         template: customTemplates.offerOverview,
         configs: options,
+        scriptEls: scriptEls,
         sgnData: sgnData,
         offer: hotspot,
         type: 'paged',
@@ -8597,7 +8960,14 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              _context6.next = 2;
+              _context6.t0 = scriptEls.businessId;
+
+              if (!_context6.t0) {
+                _context6.next = 11;
+                break;
+              }
+
+              _context6.next = 4;
               return request({
                 apiKey: apiKey,
                 coreUrl: coreUrl,
@@ -8609,25 +8979,28 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
                 }
               });
 
-            case 2:
-              _context6.t0 = _yield$request = _context6.sent;
+            case 4:
+              _context6.t1 = _yield$request = _context6.sent;
 
-              if (!(_context6.t0 == null)) {
-                _context6.next = 7;
+              if (!(_context6.t1 == null)) {
+                _context6.next = 9;
                 break;
               }
 
-              _context6.t1 = void 0;
-              _context6.next = 8;
+              _context6.t2 = void 0;
+              _context6.next = 10;
               break;
 
-            case 7:
-              _context6.t1 = (_yield$request$ = _yield$request[0]) == null ? void 0 : _yield$request$.id;
-
-            case 8:
-              return _context6.abrupt("return", _context6.t1);
-
             case 9:
+              _context6.t2 = (_yield$request$ = _yield$request[0]) == null ? void 0 : _yield$request$.id;
+
+            case 10:
+              _context6.t0 = _context6.t2;
+
+            case 11:
+              return _context6.abrupt("return", _context6.t0);
+
+            case 12:
             case "end":
               return _context6.stop();
           }
@@ -8640,6 +9013,13 @@ var PagedPublication = function PagedPublication(scriptEl, _temp) {
     };
   }();
 
+  var dispatchPublicationData = function dispatchPublicationData() {
+    var mainContainerEl = document.querySelector(scriptEls.listPublicationsContainer || scriptEls.mainContainer);
+    mainContainerEl == null ? void 0 : mainContainerEl.dispatchEvent(new CustomEvent('publication:rendered', {
+      detail: sgnData
+    }));
+  };
+
   return {
     render: render,
     setOptions: setOptions
@@ -8650,9 +9030,8 @@ function ownKeys(object, enumerableOnly) { var keys = _Object$keys__default["def
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : _Object$getOwnPropertyDescriptors__default["default"] ? Object.defineProperties(target, _Object$getOwnPropertyDescriptors__default["default"](source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, _Object$getOwnPropertyDescriptor__default["default"](source, key)); }); } return target; }
 
-var ListPublications = function ListPublications(scriptEl, _temp) {
-  var _ref = _temp === void 0 ? {} : _temp,
-      _ref$mainContainer = _ref.mainContainer,
+var ListPublications = function ListPublications(scriptEl, _ref) {
+  var _ref$mainContainer = _ref.mainContainer,
       mainContainer = _ref$mainContainer === void 0 ? '' : _ref$mainContainer,
       apiKey = _ref.apiKey,
       coreUrl = _ref.coreUrl,
@@ -8686,23 +9065,25 @@ var ListPublications = function ListPublications(scriptEl, _temp) {
   var publications = [];
 
   var clickPublicationItem = function clickPublicationItem(e) {
-    var _scriptEls$displayUrl, _scriptEls$displayUrl2;
-
     var _ref2 = e.currentTarget.dataset || {},
         id = _ref2.id;
 
     var publication = findPublicationById(id);
 
-    if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
-      pushQueryParam(_defineProperty__default["default"]({}, scriptEls.publicationIdParam, id));
-    } else if (((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
-      var _context;
+    if (publication) {
+      var _scriptEls$displayUrl, _scriptEls$displayUrl2;
 
-      location.hash = _concatInstanceProperty__default["default"](_context = "".concat(scriptEls.publicationHash, "/")).call(_context, id);
+      if (((_scriptEls$displayUrl = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl.toLowerCase()) === 'query') {
+        pushQueryParam(_defineProperty__default["default"]({}, scriptEls.publicationIdParam, id));
+      } else if (((_scriptEls$displayUrl2 = scriptEls.displayUrlParams) == null ? void 0 : _scriptEls$displayUrl2.toLowerCase()) === 'hash') {
+        var _context;
+
+        location.hash = _concatInstanceProperty__default["default"](_context = "".concat(scriptEls.publicationHash, "/")).call(_context, id);
+      }
+
+      dispatchPublicationClickEvent(publication);
+      renderPublicationViewer(publication);
     }
-
-    dispatchPublicationClickEvent(publication);
-    renderPublicationViewer(publication);
   };
 
   var findPublicationById = function findPublicationById(id) {
@@ -8751,7 +9132,9 @@ var ListPublications = function ListPublications(scriptEl, _temp) {
   };
 
   var dispatchPublicationClickEvent = function dispatchPublicationClickEvent(detail) {
-    window.dispatchEvent(new CustomEvent('tjek-publication-list-item-clicked', {
+    var _document$querySelect;
+
+    (_document$querySelect = document.querySelector(scriptEls.mainContainer)) == null ? void 0 : _document$querySelect.dispatchEvent(new CustomEvent('publication:clicked', {
       detail: detail
     }));
   };
@@ -8795,11 +9178,10 @@ var ListPublications = function ListPublications(scriptEl, _temp) {
   }();
 
   var transformPublications = function transformPublications(publications) {
-    var _context3;
+    var _context3, _context4;
 
-    var localeCode = translate('locale_code');
     var filters = transformFilter(options.clientFilter);
-    return _mapInstanceProperty__default["default"](_context3 = _filterInstanceProperty__default["default"](publications).call(publications, function (publication) {
+    return _mapInstanceProperty__default["default"](_context3 = _filterInstanceProperty__default["default"](_context4 = publications || []).call(_context4, function (publication) {
       return _Object$entries__default["default"](filters).reduce(function (prev, _ref4) {
         var key = _ref4[0],
             value = _ref4[1];
@@ -8807,8 +9189,8 @@ var ListPublications = function ListPublications(scriptEl, _temp) {
       }, {});
     })).call(_context3, function (publication) {
       return _objectSpread({}, publication, {
-        dateFrom: formatDate(publication == null ? void 0 : publication.run_from, localeCode),
-        dateTill: formatDate(publication == null ? void 0 : publication.run_till, localeCode)
+        dateFrom: formatDate(publication == null ? void 0 : publication.run_from),
+        dateTill: formatDate(publication == null ? void 0 : publication.run_till)
       });
     });
   };
@@ -8817,31 +9199,36 @@ var ListPublications = function ListPublications(scriptEl, _temp) {
     var _ref5 = _asyncToGenerator__default["default"]( /*#__PURE__*/_regeneratorRuntime__default["default"].mark(function _callee2() {
       var _getHashFragments;
 
-      return _regeneratorRuntime__default["default"].wrap(function _callee2$(_context4) {
+      var paramPublicationId, hashPulicationId, publication;
+      return _regeneratorRuntime__default["default"].wrap(function _callee2$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
-              _context4.next = 2;
+              _context5.next = 2;
               return fetchPublications();
 
             case 2:
-              publications = _context4.sent;
+              publications = _context5.sent;
               MainContainer$1({
                 publications: publications,
                 template: customTemplates.mainContainer,
                 el: document.querySelector(scriptEls.mainContainer)
               }).render();
               addPublicationListener();
+              paramPublicationId = getQueryParam(scriptEls.publicationIdParam);
+              hashPulicationId = (_getHashFragments = getHashFragments(scriptEls.publicationHash)) == null ? void 0 : _getHashFragments.publicationId;
 
-              if (getQueryParam(scriptEls.publicationIdParam)) {
-                renderPublicationViewer(findPublicationById(getQueryParam(scriptEls.publicationIdParam)));
-              } else if ((_getHashFragments = getHashFragments(scriptEls.publicationHash)) != null && _getHashFragments.publicationId) {
-                renderPublicationViewer(findPublicationById(getHashFragments(scriptEls.publicationHash).publicationId));
+              if (paramPublicationId) {
+                publication = findPublicationById(paramPublicationId);
+              } else if (hashPulicationId) {
+                publication = findPublicationById(hashPulicationId);
               }
 
-            case 6:
+              if (publication) renderPublicationViewer(publication);
+
+            case 9:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
         }
       }, _callee2);
@@ -8867,6 +9254,12 @@ var OfferDetails = /*#__PURE__*/function () {
         maxWidth = _ref$maxWidth === void 0 ? '100vw' : _ref$maxWidth,
         anchorEl = _ref.anchorEl,
         contentEl = _ref.contentEl;
+    this.el = void 0;
+    this.elInner = void 0;
+    this.contentEl = void 0;
+    this.anchorEl = void 0;
+    this.minWidth = void 0;
+    this.maxWidth = void 0;
 
     this.resize = function () {
       _this.position();
@@ -8880,7 +9273,7 @@ var OfferDetails = /*#__PURE__*/function () {
     this.elInner.className = 'sgn-offer-details-inner';
     this.el = document.createElement('div');
     this.el.className = 'sgn-offer-details';
-    this.el.setAttribute('tabindex', -1);
+    this.el.setAttribute('tabindex', '-1');
     this.el.appendChild(this.elInner);
     this.el.appendChild(this.contentEl);
     this.position();
@@ -8902,8 +9295,10 @@ var OfferDetails = /*#__PURE__*/function () {
   };
 
   _proto.destroy = function destroy() {
+    var _this$el$parentNode;
+
     window.removeEventListener('resize', this.resize, false);
-    this.el.parentNode.removeChild(this.el);
+    (_this$el$parentNode = this.el.parentNode) == null ? void 0 : _this$el$parentNode.removeChild(this.el);
   };
 
   _proto.position = function position() {
@@ -8920,16 +9315,16 @@ var OfferDetails = /*#__PURE__*/function () {
       this.el.style.left = 'auto';
       this.el.style.right = right + 'px';
       this.elInner.style.left = 'auto';
-      this.elInner.style.right = 0;
+      this.elInner.style.right = '0';
     } else {
       this.el.style.left = left + 'px';
       this.el.style.right = 'auto';
-      this.elInner.style.left = 0;
+      this.elInner.style.left = '0';
       this.elInner.style.right = 'auto';
     }
 
     this.el.style.minWidth = typeof this.minWidth === 'number' ? Math.max(width, this.minWidth) + 'px' : this.minWidth;
-    this.el.style.maxWidth = this.maxWidth;
+    this.el.style.maxWidth = String(this.maxWidth);
     this.elInner.style.width = width - 8 + 'px';
   };
 
@@ -8993,6 +9388,10 @@ var Tracker = /*#__PURE__*/function () {
       time: null,
       country: null
     };
+    this.trackId = null;
+    this.poolLimit = 1000;
+    this.client = void 0;
+    this.eventsTrackUrl = void 0;
 
     if (!pool) {
       pool = getPool();
@@ -9003,10 +9402,8 @@ var Tracker = /*#__PURE__*/function () {
       }
     }
 
-    for (var key in this.defaultOptions) {
-      this[key] = (options == null ? void 0 : options[key]) || this.defaultOptions[key];
-    }
-
+    this.trackId = (options == null ? void 0 : options.trackId) || this.trackId;
+    this.poolLimit = (options == null ? void 0 : options.poolLimit) || this.poolLimit;
     this.client = (options == null ? void 0 : options.client) || createTrackerClient();
     this.eventsTrackUrl = (options == null ? void 0 : options.eventsTrackUrl) || eventsTrackUrl;
 
@@ -9098,11 +9495,6 @@ var Tracker = /*#__PURE__*/function () {
 
   return _createClass__default["default"](Tracker);
 }();
-
-Tracker.prototype.defaultOptions = {
-  trackId: null,
-  poolLimit: 1000
-};
 var dispatching = false;
 var dispatchLimit = 100;
 var dispatchRetryInterval = null;
@@ -9139,7 +9531,6 @@ var dispatch = throttle( /*#__PURE__*/_asyncToGenerator__default["default"]( /*#
           _context3.next = 11;
           return fetch__default["default"](eventsTrackUrl, {
             method: 'post',
-            timeout: 1000 * 20,
             headers: {
               'Content-Type': 'application/json; charset=utf-8'
             },
@@ -9218,32 +9609,32 @@ var config = new Config();
 var SGN = {
   config: config,
   util: util,
-  translations: translations
-}; // Expose storage backends.
-
-SGN.storage = {
-  local: clientLocal
-}; // Expose the different kits.
-
-SGN.EventsKit = EventsKit;
-SGN.CoreKit = {
-  request: function request$1(options, callback) {
-    return request(config.shadow(options), callback);
-  }
-};
-SGN.PagedPublicationKit = {
-  Bootstrapper: function Bootstrapper$1(options) {
-    return new Bootstrapper(config.shadow(options));
+  translations: translations,
+  // Expose storage backends.
+  storage: {
+    local: clientLocal
   },
-  Viewer: Viewer
-};
-SGN.IncitoPublicationKit = {
-  Bootstrapper: function Bootstrapper(options) {
-    return new Bootstrapper$1(config.shadow(options));
+  // Expose the different kits.
+  EventsKit: EventsKit,
+  CoreKit: {
+    request: function request$1(options, callback) {
+      return request(config.shadow(options), callback);
+    }
   },
-  Viewer: Viewer$1
+  PagedPublicationKit: {
+    Bootstrapper: function Bootstrapper$1(options) {
+      return new Bootstrapper(config.shadow(options));
+    },
+    Viewer: Viewer
+  },
+  IncitoPublicationKit: {
+    Bootstrapper: function Bootstrapper(options) {
+      return new Bootstrapper$1(config.shadow(options));
+    },
+    Viewer: Viewer$1
+  },
+  CoreUIKit: CoreUIKit
 };
-SGN.CoreUIKit = CoreUIKit;
 config.bind('change', function (changedAttributes) {
   var _ref;
 
@@ -9286,11 +9677,7 @@ if (isBrowser()) {
     }
 
     if (component === 'incito-publication-viewer') {
-      IncitoPublication(scriptEl, {
-        apiKey: config.get('apiKey'),
-        coreUrl: config.get('coreUrl'),
-        eventTracker: config.get('eventTracker')
-      }).render();
+      IncitoPublication(scriptEl, config.shadow()).render();
     }
 
     if (component === 'list-publications') {
