@@ -89,6 +89,7 @@
                 var zoom = SGN.util.getQueryParam('zoom');
                 var lat = SGN.util.getQueryParam('lat');
                 var lng = SGN.util.getQueryParam('lng');
+                var radius = SGN.util.getQueryParam('radius');
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: zoom ? Number(zoom) : 7,
                     disableDefaultUI: true,
@@ -114,7 +115,7 @@
                         fillOpacity: 0.8,
                         map: map,
                         center: center,
-                        radius: 7000
+                        radius: radius ? Number(radius) : 7000
                     });
 
                     setTimeout(function () {
