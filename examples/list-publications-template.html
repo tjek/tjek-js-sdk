@@ -18,6 +18,7 @@
             }
         </style>
     </head>
+
     <body>
         <div id="list-publications"></div>
 
@@ -49,27 +50,36 @@
             data-component-publication-show-header-labels="true"
             data-component-publication-viewer-offer-click-behavior="overview_modal"
             data-translation-keys--publication-viewer-download-button="Download PDF"
+            data-translation-keys--publication-viewer-offer-date-range="Tilbuddet gælder fra d. {{{from}}} - {{{till}}}"
+            data-translation-keys--publication-viewer-menu-date-range="Tilbudsavisen gælder fra d. {{{from}}} - {{{till}}}"
             defer
         ></script>
 
         <!--   Sample event listener on Incito offer -->
         <script>
-            window.addEventListener(
-                'tjek-incito-publication-view-clicked',
-                (e) => {
+            document
+                .querySelector('#list-publications')
+                .addEventListener('publication:offer_clicked', (e) => {
                     console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: f}
-                }
-            );
+                });
         </script>
 
-        <!--   Sample event listener on Incito offer -->
+        <!--   Sample event listener on Incito click -->
         <script>
-            window.addEventListener(
-                'tjek-publication-list-item-clicked',
-                (e) => {
-                    console.log('e.detail', e.detail); // {publication}
-                }
-            );
+            document
+                .querySelector('#list-publications')
+                .addEventListener('publication:clicked', (e) => {
+                    console.log(e.detail); // {publication}
+                });
+        </script>
+
+        <!--   Sample event listener on Publication onload -->
+        <script>
+            document
+                .querySelector('#list-publications')
+                .addEventListener('publication:rendered', (e) => {
+                    console.log(e.detail); // {details: {…}, incito: {…}}
+                });
         </script>
     </body>
 </html>

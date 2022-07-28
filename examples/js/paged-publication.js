@@ -11,6 +11,9 @@
             if (!err) {
                 var viewer = bootstrapper.createViewer(data);
 
+                viewer.bind('hotspotsPointerdown', function (hotspots) {
+                    console.log('hotspotsPointerdown', hotspots);
+                });
                 viewer.bind('hotspotClicked', function (hotspot) {
                     console.log('Hotspot clicked', hotspot);
 
