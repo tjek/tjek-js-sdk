@@ -42,8 +42,10 @@ const MainContainer = ({
             disableMenu: scriptEls.disableMenu,
             disableClose: scriptEls.disableClose,
             isOfferClickable:
-                !scriptEls.disableShoppingList &&
-                scriptEls.offerClickBehavior !== 'shopping_list'
+                (!scriptEls.disableShoppingList ||
+                    scriptEls.offerClickBehavior !== 'shopping_list') &&
+                (!scriptEls.disableHeader ||
+                    scriptEls.offerClickBehavior !== 'shopping_list')
         });
 
         el.querySelector<HTMLDivElement>('.sgn__incito')?.focus();
