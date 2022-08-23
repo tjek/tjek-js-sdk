@@ -6,7 +6,7 @@ const defaultTemplate = `\
     <div class="sgn_loader-container">
         <div class="sgn_loader"></div>
     </div>
-    <div class="sgn__incito" data-component-template="true" tabindex="-1" data-component-template-disable-header="{{disableHeader}}">
+    <div class="sgn__incito" data-component-template="true" tabindex="-1" data-component-template-disable-header="{{disableHeader}}" data-offer-clickable="{{isOfferClickable}}">
         <div class="sgn__header-container"></div>
         {{#disableHeader}}
         <div class="sgn-incito__scroll-progress">
@@ -40,7 +40,12 @@ const MainContainer = ({
                 scriptEls.disableShoppingList ||
                 scriptEls.offerClickBehavior !== 'shopping_list',
             disableMenu: scriptEls.disableMenu,
-            disableClose: scriptEls.disableClose
+            disableClose: scriptEls.disableClose,
+            isOfferClickable:
+                (!scriptEls.disableShoppingList ||
+                    scriptEls.offerClickBehavior !== 'shopping_list') &&
+                (!scriptEls.disableHeader ||
+                    scriptEls.offerClickBehavior !== 'shopping_list')
         });
 
         el.querySelector<HTMLDivElement>('.sgn__incito')?.focus();

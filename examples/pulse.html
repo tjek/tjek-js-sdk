@@ -2,7 +2,9 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Pulse: Snippet of real-time activity in the Tjek shopping apps</title>
+        <title>
+            Pulse: Snippet of real-time activity in the Tjek shopping apps
+        </title>
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, user-scalable=no"
@@ -84,10 +86,17 @@
             }
 
             function initialize() {
+                var zoom = SGN.util.getQueryParam('zoom');
+                var lat = SGN.util.getQueryParam('lat');
+                var lng = SGN.util.getQueryParam('lng');
+                var radius = SGN.util.getQueryParam('radius');
                 var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 7,
+                    zoom: zoom ? Number(zoom) : 7,
                     disableDefaultUI: true,
-                    center: {lat: 58, lng: 12},
+                    center: {
+                        lat: lat ? Number(lat) : 58,
+                        lng: lng ? Number(lng) : 12
+                    },
                     styles: styles
                 });
 
@@ -106,7 +115,7 @@
                         fillOpacity: 0.8,
                         map: map,
                         center: center,
-                        radius: 7000
+                        radius: radius ? Number(radius) : 7000
                     });
 
                     setTimeout(function () {
