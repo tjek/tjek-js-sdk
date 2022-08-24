@@ -116,7 +116,7 @@ class Tracker {
         return this.trackEvent(1, properties, version);
     }
 
-    trackPagedPublicationPageDisappeared(properties, version?: number) {
+    trackPagedPublicationPageOpened(properties, version?: number) {
         return this.trackEvent(2, properties, version);
     }
 
