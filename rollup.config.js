@@ -216,6 +216,12 @@ if (process.env.NODE_ENV === 'development') {
                     config.output.format === 'umd'
             )
         );
+    // Only output bundles that get tested in CI
+} else if (process.env.CI) {
+    configs = configs.filter(
+        (config) =>
+            bundles.find((bundle) => bundle.input === config.input)?.name
+    );
 }
 
 export default configs;
