@@ -36,11 +36,11 @@ class PagedPublicationEventTracking extends MicroEvent {
         return this;
     }
 
-    trackPageSpreadDisappeared(pageNumbers: number[]) {
+    trackPageSpreadAppeared(pageNumbers: number[]) {
         if (!this.eventTracker) return this;
 
         pageNumbers.forEach((pageNumber) => {
-            this.eventTracker.trackPagedPublicationPageDisappeared({
+            this.eventTracker.trackPagedPublicationPageOpened({
                 'pp.id': this.id,
                 'ppp.n': pageNumber,
                 vt: this.eventTracker.createViewToken(this.id, pageNumber)
@@ -78,15 +78,15 @@ class PagedPublicationEventTracking extends MicroEvent {
         if (pageSpread && this.hidden) {
             this.pageSpread = pageSpread;
             this.hidden = false;
+
+            this.trackPageSpreadAppeared(
+                pageSpread.getPages().map((page) => page.pageNumber)
+            );
         }
     }
 
     pageSpreadDisappeared() {
         if (this.pageSpread && !this.hidden) {
-            this.trackPageSpreadDisappeared(
-                this.pageSpread.getPages().map((page) => page.pageNumber)
-            );
-
             this.hidden = true;
             this.pageSpread = null;
         }
