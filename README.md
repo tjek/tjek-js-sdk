@@ -157,6 +157,11 @@ Aside from the required data- attributes, the SDK still support a few more data 
 
 ## Changelog
 
+### Version 4.6.0
+
+- `PagedPublicationKit`
+    - Page opens are now tracked upon the open rather than upon the close
+
 ### Version 4.5.0
 
 -   `verso-browser`
