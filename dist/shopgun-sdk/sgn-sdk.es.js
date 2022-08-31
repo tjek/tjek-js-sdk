@@ -3386,7 +3386,7 @@ var transformScriptData = function transformScriptData(scriptEl, mainContainer) 
   };
 };
 
-var defaultTemplate$3 = "    <div class=\"sgn_loader-container\">\n        <div class=\"sgn_loader\"></div>\n    </div>\n    <div class=\"sgn__incito\" data-component-template=\"true\" tabindex=\"-1\" data-component-template-disable-header=\"{{disableHeader}}\">\n        <div class=\"sgn__header-container\"></div>\n        {{#disableHeader}}\n        <div class=\"sgn-incito__scroll-progress\">\n            <div class=\"sgn-incito__scroll-progress-bar\"></div>\n            <span class=\"sgn-incito__scroll-progress-text\"></span>\n        </div>\n        {{/disableHeader}}\n    </div>";
+var defaultTemplate$3 = "    <div class=\"sgn_loader-container\">\n        <div class=\"sgn_loader\"></div>\n    </div>\n    <div class=\"sgn__incito\" data-component-template=\"true\" tabindex=\"-1\" data-component-template-disable-header=\"{{disableHeader}}\" data-offer-clickable=\"{{isOfferClickable}}\">\n        <div class=\"sgn__header-container\"></div>\n        {{#disableHeader}}\n        <div class=\"sgn-incito__scroll-progress\">\n            <div class=\"sgn-incito__scroll-progress-bar\"></div>\n            <span class=\"sgn-incito__scroll-progress-text\"></span>\n        </div>\n        {{/disableHeader}}\n    </div>";
 
 var MainContainer$2 = function MainContainer(_ref) {
   var template = _ref.template,
@@ -3406,7 +3406,8 @@ var MainContainer$2 = function MainContainer(_ref) {
       disableHeader: scriptEls.disableHeader,
       disableShoppingList: scriptEls.disableShoppingList || scriptEls.offerClickBehavior !== 'shopping_list',
       disableMenu: scriptEls.disableMenu,
-      disableClose: scriptEls.disableClose
+      disableClose: scriptEls.disableClose,
+      isOfferClickable: (!scriptEls.disableShoppingList || scriptEls.offerClickBehavior !== 'shopping_list') && (!scriptEls.disableHeader || scriptEls.offerClickBehavior !== 'shopping_list')
     });
     (_el$querySelector = el.querySelector('.sgn__incito')) == null ? void 0 : _el$querySelector.focus();
     setCustomStyles();
@@ -5253,6 +5254,7 @@ var Recognizer = /*#__PURE__*/function () {
     this.manager = null;
     this.state = STATE_POSSIBLE;
     this.simultaneous = {};
+    this.requireFail = [];
     this.options = _objectSpread$3({}, this.defaults, options);
     this.options.enable = (_this$options$enable = this.options.enable) != null ? _this$options$enable : true;
   }
@@ -7863,12 +7865,12 @@ var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
     return this;
   };
 
-  _proto.trackPageSpreadDisappeared = function trackPageSpreadDisappeared(pageNumbers) {
+  _proto.trackPageSpreadAppeared = function trackPageSpreadAppeared(pageNumbers) {
     var _this2 = this;
 
     if (!this.eventTracker) return this;
     pageNumbers.forEach(function (pageNumber) {
-      _this2.eventTracker.trackPagedPublicationPageDisappeared({
+      _this2.eventTracker.trackPagedPublicationPageOpened({
         'pp.id': _this2.id,
         'ppp.n': pageNumber,
         vt: _this2.eventTracker.createViewToken(_this2.id, pageNumber)
@@ -7879,18 +7881,18 @@ var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
 
   _proto.pageSpreadAppeared = function pageSpreadAppeared(pageSpread) {
     if (pageSpread && this.hidden) {
+      var _context;
+
       this.pageSpread = pageSpread;
       this.hidden = false;
+      this.trackPageSpreadAppeared(_mapInstanceProperty(_context = pageSpread.getPages()).call(_context, function (page) {
+        return page.pageNumber;
+      }));
     }
   };
 
   _proto.pageSpreadDisappeared = function pageSpreadDisappeared() {
     if (this.pageSpread && !this.hidden) {
-      var _context;
-
-      this.trackPageSpreadDisappeared(_mapInstanceProperty(_context = this.pageSpread.getPages()).call(_context, function (page) {
-        return page.pageNumber;
-      }));
       this.hidden = true;
       this.pageSpread = null;
     }
@@ -9425,7 +9427,7 @@ var Tracker = /*#__PURE__*/function () {
     return this.trackEvent(1, properties, version);
   };
 
-  _proto.trackPagedPublicationPageDisappeared = function trackPagedPublicationPageDisappeared(properties, version) {
+  _proto.trackPagedPublicationPageOpened = function trackPagedPublicationPageOpened(properties, version) {
     return this.trackEvent(2, properties, version);
   };
 

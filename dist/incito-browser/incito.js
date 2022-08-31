@@ -215,7 +215,7 @@
 	var fails$u = fails$x;
 
 	// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
-	var nativeSymbol$1 = !!Object.getOwnPropertySymbols && !fails$u(function () {
+	var nativeSymbol = !!Object.getOwnPropertySymbols && !fails$u(function () {
 	  var symbol = Symbol();
 	  // Chrome 38 Symbol has incorrect toString conversion
 	  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
@@ -226,7 +226,7 @@
 
 	/* eslint-disable es/no-symbol -- required for testing */
 
-	var NATIVE_SYMBOL$3 = nativeSymbol$1;
+	var NATIVE_SYMBOL$3 = nativeSymbol;
 
 	var useSymbolAsUid$1 = NATIVE_SYMBOL$3
 	  && !Symbol.sham
@@ -368,7 +368,7 @@
 	var shared$7 = shared$8.exports;
 	var hasOwn$h = hasOwnProperty_1$1;
 	var uid$4 = uid$5;
-	var NATIVE_SYMBOL$2 = nativeSymbol$1;
+	var NATIVE_SYMBOL$2 = nativeSymbol;
 	var USE_SYMBOL_AS_UID$2 = useSymbolAsUid$1;
 
 	var WellKnownSymbolsStore$1 = shared$7('wks');
@@ -1284,14 +1284,14 @@
 	  };
 	}
 
-	var inspectSource$6 = store$5.inspectSource;
+	var inspectSource$5 = store$5.inspectSource;
 
 	var uncurryThis$v = functionUncurryThis$1;
 	var fails$q = fails$x;
 	var isCallable$j = isCallable$u;
 	var classof$c = classof$d;
 	var getBuiltIn$8 = getBuiltIn$c;
-	var inspectSource$5 = inspectSource$6;
+	var inspectSource$4 = inspectSource$5;
 
 	var noop$1 = function () { /* empty */ };
 	var empty$1 = [];
@@ -1321,7 +1321,7 @@
 	    // we can't check .prototype since constructors produced by .bind haven't it
 	    // `Function#toString` throws on some built-it function in some legacy engines
 	    // (for example, `DOMQuad` and similar in FF41-)
-	    return INCORRECT_TO_STRING$1 || !!exec$6(constructorRegExp$1, inspectSource$5(argument));
+	    return INCORRECT_TO_STRING$1 || !!exec$6(constructorRegExp$1, inspectSource$4(argument));
 	  } catch (error) {
 	    return true;
 	  }
@@ -1494,13 +1494,13 @@
 
 	var global$r = global$O;
 	var isCallable$i = isCallable$u;
-	var inspectSource$4 = inspectSource$6;
+	var inspectSource$3 = inspectSource$5;
 
 	var WeakMap$3 = global$r.WeakMap;
 
-	var nativeWeakMap$1 = isCallable$i(WeakMap$3) && /native code/.test(inspectSource$4(WeakMap$3));
+	var nativeWeakMap = isCallable$i(WeakMap$3) && /native code/.test(inspectSource$3(WeakMap$3));
 
-	var NATIVE_WEAK_MAP$1 = nativeWeakMap$1;
+	var NATIVE_WEAK_MAP$1 = nativeWeakMap;
 	var global$q = global$O;
 	var uncurryThis$t = functionUncurryThis$1;
 	var isObject$b = isObject$i;
@@ -4361,12 +4361,20 @@
 	  return classof$7(it) == 'String' ? split(it, '') : $Object$3(it);
 	} : $Object$3;
 
+	// we can't use just `it == null` since of `document.all` special case
+	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
+	var isNullOrUndefined$5 = function (it) {
+	  return it === null || it === undefined;
+	};
+
+	var isNullOrUndefined$4 = isNullOrUndefined$5;
+
 	var $TypeError$7 = TypeError;
 
 	// `RequireObjectCoercible` abstract operation
 	// https://tc39.es/ecma262/#sec-requireobjectcoercible
 	var requireObjectCoercible$6 = function (it) {
-	  if (it == undefined) throw $TypeError$7("Can't call method on " + it);
+	  if (isNullOrUndefined$4(it)) throw $TypeError$7("Can't call method on " + it);
 	  return it;
 	};
 
@@ -4386,7 +4394,14 @@
 
 	var isCallable$d = isCallable$e;
 
-	var isObject$7 = function (it) {
+	var documentAll = typeof document == 'object' && document.all;
+
+	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+	var SPECIAL_DOCUMENT_ALL = typeof documentAll == 'undefined' && documentAll !== undefined;
+
+	var isObject$7 = SPECIAL_DOCUMENT_ALL ? function (it) {
+	  return typeof it == 'object' ? it !== null : isCallable$d(it) || it === documentAll;
+	} : function (it) {
 	  return typeof it == 'object' ? it !== null : isCallable$d(it);
 	};
 
@@ -4443,7 +4458,7 @@
 	var fails$d = fails$h;
 
 	// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- required for testing
-	var nativeSymbol = !!Object.getOwnPropertySymbols && !fails$d(function () {
+	var symbolConstructorDetection = !!Object.getOwnPropertySymbols && !fails$d(function () {
 	  var symbol = Symbol();
 	  // Chrome 38 Symbol has incorrect toString conversion
 	  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
@@ -4454,7 +4469,7 @@
 
 	/* eslint-disable es-x/no-symbol -- required for testing */
 
-	var NATIVE_SYMBOL$1 = nativeSymbol;
+	var NATIVE_SYMBOL$1 = symbolConstructorDetection;
 
 	var useSymbolAsUid = NATIVE_SYMBOL$1
 	  && !Symbol.sham
@@ -4496,12 +4511,13 @@
 	};
 
 	var aCallable$1 = aCallable$2;
+	var isNullOrUndefined$3 = isNullOrUndefined$5;
 
 	// `GetMethod` abstract operation
 	// https://tc39.es/ecma262/#sec-getmethod
 	var getMethod$3 = function (V, P) {
 	  var func = V[P];
-	  return func == null ? undefined : aCallable$1(func);
+	  return isNullOrUndefined$3(func) ? undefined : aCallable$1(func);
 	};
 
 	var call$7 = functionCall;
@@ -4548,10 +4564,10 @@
 	(shared$4.exports = function (key, value) {
 	  return store$2[key] || (store$2[key] = value !== undefined ? value : {});
 	})('versions', []).push({
-	  version: '3.24.0',
+	  version: '3.25.0',
 	  mode: 'global',
 	  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-	  license: 'https://github.com/zloirock/core-js/blob/v3.24.0/LICENSE',
+	  license: 'https://github.com/zloirock/core-js/blob/v3.25.0/LICENSE',
 	  source: 'https://github.com/zloirock/core-js'
 	});
 
@@ -4591,7 +4607,7 @@
 	var shared$3 = shared$4.exports;
 	var hasOwn$6 = hasOwnProperty_1;
 	var uid$1 = uid$2;
-	var NATIVE_SYMBOL = nativeSymbol;
+	var NATIVE_SYMBOL = symbolConstructorDetection;
 	var USE_SYMBOL_AS_UID = useSymbolAsUid;
 
 	var WellKnownSymbolsStore = shared$3('wks');
@@ -4808,15 +4824,14 @@
 	  };
 	}
 
-	var inspectSource$3 = store$1.inspectSource;
+	var inspectSource$2 = store$1.inspectSource;
 
 	var global$7 = global$e;
 	var isCallable$7 = isCallable$e;
-	var inspectSource$2 = inspectSource$3;
 
 	var WeakMap$1 = global$7.WeakMap;
 
-	var nativeWeakMap = isCallable$7(WeakMap$1) && /native code/.test(inspectSource$2(WeakMap$1));
+	var weakMapBasicDetection = isCallable$7(WeakMap$1) && /native code/.test(String(WeakMap$1));
 
 	var shared$2 = shared$4.exports;
 	var uid = uid$2;
@@ -4829,7 +4844,7 @@
 
 	var hiddenKeys$4 = {};
 
-	var NATIVE_WEAK_MAP = nativeWeakMap;
+	var NATIVE_WEAK_MAP = weakMapBasicDetection;
 	var global$6 = global$e;
 	var uncurryThis$e = functionUncurryThis;
 	var isObject$2 = isObject$7;
@@ -4863,7 +4878,7 @@
 	  var wmhas = uncurryThis$e(store.has);
 	  var wmset = uncurryThis$e(store.set);
 	  set = function (it, metadata) {
-	    if (wmhas(store, it)) throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
+	    if (wmhas(store, it)) throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
 	    metadata.facade = it;
 	    wmset(store, it, metadata);
 	    return metadata;
@@ -4878,7 +4893,7 @@
 	  var STATE = sharedKey$1('state');
 	  hiddenKeys$3[STATE] = true;
 	  set = function (it, metadata) {
-	    if (hasOwn$3(it, STATE)) throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
+	    if (hasOwn$3(it, STATE)) throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
 	    metadata.facade = it;
 	    createNonEnumerableProperty$3(it, STATE, metadata);
 	    return metadata;
@@ -4904,7 +4919,7 @@
 	var hasOwn$2 = hasOwnProperty_1;
 	var DESCRIPTORS$2 = descriptors;
 	var CONFIGURABLE_FUNCTION_NAME = functionName.CONFIGURABLE;
-	var inspectSource$1 = inspectSource$3;
+	var inspectSource$1 = inspectSource$2;
 	var InternalStateModule = internalState;
 
 	var enforceInternalState = InternalStateModule.enforce;
@@ -5794,6 +5809,7 @@
 	var fails$4 = fails$h;
 	var anObject$2 = anObject$9;
 	var isCallable$1 = isCallable$e;
+	var isNullOrUndefined$2 = isNullOrUndefined$5;
 	var toIntegerOrInfinity = toIntegerOrInfinity$4;
 	var toLength$1 = toLength$3;
 	var toString$3 = toString$6;
@@ -5851,7 +5867,7 @@
 	    // https://tc39.es/ecma262/#sec-string.prototype.replace
 	    function replace(searchValue, replaceValue) {
 	      var O = requireObjectCoercible$2(this);
-	      var replacer = searchValue == undefined ? undefined : getMethod$1(searchValue, REPLACE);
+	      var replacer = isNullOrUndefined$2(searchValue) ? undefined : getMethod$1(searchValue, REPLACE);
 	      return replacer
 	        ? call$1(replacer, searchValue, O, replaceValue)
 	        : call$1(nativeReplace, toString$3(O), searchValue, replaceValue);
@@ -5986,7 +6002,7 @@
 	var isCallable = isCallable$e;
 	var classof$1 = classof$6;
 	var getBuiltIn = getBuiltIn$5;
-	var inspectSource = inspectSource$3;
+	var inspectSource = inspectSource$2;
 
 	var noop = function () { /* empty */ };
 	var empty = [];
@@ -6047,6 +6063,7 @@
 
 	var anObject$1 = anObject$9;
 	var aConstructor = aConstructor$1;
+	var isNullOrUndefined$1 = isNullOrUndefined$5;
 	var wellKnownSymbol$1 = wellKnownSymbol$8;
 
 	var SPECIES$1 = wellKnownSymbol$1('species');
@@ -6056,7 +6073,7 @@
 	var speciesConstructor$1 = function (O, defaultConstructor) {
 	  var C = anObject$1(O).constructor;
 	  var S;
-	  return C === undefined || (S = anObject$1(C)[SPECIES$1]) == undefined ? defaultConstructor : aConstructor(S);
+	  return C === undefined || isNullOrUndefined$1(S = anObject$1(C)[SPECIES$1]) ? defaultConstructor : aConstructor(S);
 	};
 
 	var toPropertyKey = toPropertyKey$3;
@@ -6090,8 +6107,9 @@
 	var call = functionCall;
 	var uncurryThis$4 = functionUncurryThis;
 	var fixRegExpWellKnownSymbolLogic = fixRegexpWellKnownSymbolLogic;
-	var isRegExp = isRegexp;
 	var anObject = anObject$9;
+	var isNullOrUndefined = isNullOrUndefined$5;
+	var isRegExp = isRegexp;
 	var requireObjectCoercible$1 = requireObjectCoercible$6;
 	var speciesConstructor = speciesConstructor$1;
 	var advanceStringIndex = advanceStringIndex$2;
@@ -6183,7 +6201,7 @@
 	    // https://tc39.es/ecma262/#sec-string.prototype.split
 	    function split(separator, limit) {
 	      var O = requireObjectCoercible$1(this);
-	      var splitter = separator == undefined ? undefined : getMethod(separator, SPLIT);
+	      var splitter = isNullOrUndefined(separator) ? undefined : getMethod(separator, SPLIT);
 	      return splitter
 	        ? call(splitter, separator, O, limit)
 	        : call(internalSplit, toString$1(O), separator, limit);
@@ -6258,7 +6276,7 @@
 	var toIndexedObject = toIndexedObject$5;
 	var arrayMethodIsStrict$1 = arrayMethodIsStrict$2;
 
-	var un$Join = uncurryThis$3([].join);
+	var nativeJoin = uncurryThis$3([].join);
 
 	var ES3_STRINGS = IndexedObject$1 != Object;
 	var STRICT_METHOD$1 = arrayMethodIsStrict$1('join', ',');
@@ -6267,7 +6285,7 @@
 	// https://tc39.es/ecma262/#sec-array.prototype.join
 	$$1({ target: 'Array', proto: true, forced: ES3_STRINGS || !STRICT_METHOD$1 }, {
 	  join: function join(separator) {
-	    return un$Join(toIndexedObject(this), separator === undefined ? ',' : separator);
+	    return nativeJoin(toIndexedObject(this), separator === undefined ? ',' : separator);
 	  }
 	});
 

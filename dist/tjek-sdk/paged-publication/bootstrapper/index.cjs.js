@@ -1698,6 +1698,7 @@ var Recognizer = /*#__PURE__*/function () {
     this.manager = null;
     this.state = STATE_POSSIBLE;
     this.simultaneous = {};
+    this.requireFail = [];
     this.options = _objectSpread$2({}, this.defaults, options);
     this.options.enable = (_this$options$enable = this.options.enable) != null ? _this$options$enable : true;
   }
@@ -4308,12 +4309,12 @@ var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
     return this;
   };
 
-  _proto.trackPageSpreadDisappeared = function trackPageSpreadDisappeared(pageNumbers) {
+  _proto.trackPageSpreadAppeared = function trackPageSpreadAppeared(pageNumbers) {
     var _this2 = this;
 
     if (!this.eventTracker) return this;
     pageNumbers.forEach(function (pageNumber) {
-      _this2.eventTracker.trackPagedPublicationPageDisappeared({
+      _this2.eventTracker.trackPagedPublicationPageOpened({
         'pp.id': _this2.id,
         'ppp.n': pageNumber,
         vt: _this2.eventTracker.createViewToken(_this2.id, pageNumber)
@@ -4324,18 +4325,18 @@ var PagedPublicationEventTracking = /*#__PURE__*/function (_MicroEvent) {
 
   _proto.pageSpreadAppeared = function pageSpreadAppeared(pageSpread) {
     if (pageSpread && this.hidden) {
+      var _context;
+
       this.pageSpread = pageSpread;
       this.hidden = false;
+      this.trackPageSpreadAppeared(_mapInstanceProperty__default["default"](_context = pageSpread.getPages()).call(_context, function (page) {
+        return page.pageNumber;
+      }));
     }
   };
 
   _proto.pageSpreadDisappeared = function pageSpreadDisappeared() {
     if (this.pageSpread && !this.hidden) {
-      var _context;
-
-      this.trackPageSpreadDisappeared(_mapInstanceProperty__default["default"](_context = this.pageSpread.getPages()).call(_context, function (page) {
-        return page.pageNumber;
-      }));
       this.hidden = true;
       this.pageSpread = null;
     }

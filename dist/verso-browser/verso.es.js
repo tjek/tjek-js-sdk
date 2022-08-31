@@ -1016,6 +1016,7 @@ var Recognizer = /*#__PURE__*/function () {
     this.manager = null;
     this.state = STATE_POSSIBLE;
     this.simultaneous = {};
+    this.requireFail = [];
     this.options = _objectSpread$1({}, this.defaults, options);
     this.options.enable = (_this$options$enable = this.options.enable) != null ? _this$options$enable : true;
   }

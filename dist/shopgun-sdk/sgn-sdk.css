@@ -1022,7 +1022,7 @@
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  max-width: 300px;
+  max-width: 100%;
 }
 .sgn-offer-overview-popup .sgn-offer-description {
   font-size: 0.9em;
@@ -1357,7 +1357,7 @@
   z-index: 1;
   white-space: nowrap;
 }
-.sgn__incito[data-component-template="true"] .incito__view[data-role="offer"] {
+.sgn__incito[data-offer-clickable="true"] .incito__view[data-role="offer"] {
   cursor: pointer;
 }
 .sgn__incito[data-component-template-disable-header="true"] .incito {

@@ -226,7 +226,7 @@ var Tracker = /*#__PURE__*/function () {
     return this.trackEvent(1, properties, version);
   };
 
-  _proto.trackPagedPublicationPageDisappeared = function trackPagedPublicationPageDisappeared(properties, version) {
+  _proto.trackPagedPublicationPageOpened = function trackPagedPublicationPageOpened(properties, version) {
     return this.trackEvent(2, properties, version);
   };
 
