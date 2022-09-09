@@ -1,13 +1,13 @@
 {
   "name": "shopgun-sdk",
   "main": "dist/sgn-sdk.js",
-  "homepage": "https://github.com/shopgun/shopgun-js-sdk",
+  "homepage": "https://github.com/tjek/tjek-js-sdk",
   "authors": [
-    "Morten Bo Rønsholdt <mr@shopgun.com>"
+    "Morten Bo Rønsholdt <mr@tjek.com>"
   ],
-  "description": "ShopGun SDK for JavaScript.",
+  "description": "Tjek SDK for JavaScript.",
   "keywords": [
-    "shopgun",
+    "tjek",
     "shopping"
   ],
   "license": "MIT",
