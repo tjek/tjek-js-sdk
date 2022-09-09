@@ -1,13 +1,13 @@
-# ShopGun JavaScript SDK
+# Tjek JavaScript SDK
 
-[![Build Status](https://travis-ci.org/shopgun/shopgun-js-sdk.svg?branch=develop)](https://travis-ci.org/shopgun/shopgun-js-sdk)
+[![Build Status](https://travis-ci.org/tjek/tjek-js-sdk.svg?branch=develop)](https://travis-ci.org/tjek/tjek-js-sdk)
 [![npm version](https://badge.fury.io/js/shopgun-sdk.svg)](https://badge.fury.io/js/shopgun-sdk)
 
 This SDK works both client-side in your browser but also server-side in a Node.js environment.
 
 ## Creating an App
 
-First, you need to [create a ShopGun app](https://shopgun.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
+First, you need to [create an app](https://eleaflet.com/developers/apps) allowing you to make API requests. You will be prompted to create a new user first.
 
 > We recommend creating 2 apps: 1 for production and another for development. This ensures environments aren't mixed.
 
@@ -31,7 +31,7 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 ></script>
 ```
 
-By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://shopgun.com/developers/apps).
+By defining your app key and track identifier as data attributes when including the JavaScript file the SDK auto-configures itself. You can find the app key and track identifier in the [developer console](https://eleaflet.com/developers/apps).
 
 ### In Node.js
 
@@ -61,14 +61,14 @@ SGN.config.set({
 
 ## Paged Publications
 
-To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](https://shopgun.github.io/shopgun-js-sdk/examples/paged-publication.html) that shows how it can work.
+To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](https://tjek.github.io/tjek-js-sdk/examples/paged-publication.html) that shows how it can work.
 
 ## More Platforms
 
 To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
 
--   [ShopGun iOS SDK](https://github.com/shopgun/shopgun-ios-sdk)
--   [ShopGun Android SDK](https://github.com/shopgun/shopgun-android-sdk)
+-   [Tjek iOS SDK](https://github.com/tjek/tjek-swift-sdk)
+-   [Tjek Android SDK](https://github.com/tjek/tjek-android-sdk)
 
 ## Core UI
 
@@ -159,8 +159,8 @@ Aside from the required data- attributes, the SDK still support a few more data 
 
 ### Version 4.6.0
 
-- `PagedPublicationKit`
-    - Page opens are now tracked upon the open rather than upon the close
+-   `PagedPublicationKit`
+    -   Page opens are now tracked upon the open rather than upon the close
 
 ### Version 4.5.0
 
@@ -265,7 +265,7 @@ var viewer = bootstrapper.createViewer(data, {
 
 ### Version 2.3.15
 
--   Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/shopgun/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
+-   Update dependencies, including a fix for PagedPublicationViewer multiple starts via verso-browser https://github.com/tjek/verso-browser/commit/81d95da1b1d0b26685fffd968bbbea8694252997
 
 ### Version 2.3.8
 
@@ -305,7 +305,7 @@ var viewer = bootstrapper.createViewer(data, {
 
 ### Version 2.2.0
 
--   Changed the event tracker to use the new private event format. This also means you need to update your track identifier, which is now visible in the developer console on shopgun.com/developers.
+-   Changed the event tracker to use the new private event format. This also means you need to update your track identifier, which is now visible in the developer console on eleaflet.com/developers.
 
 ### Version 2.1.0
 

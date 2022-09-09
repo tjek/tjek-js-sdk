@@ -7,14 +7,14 @@ const newIncognitoPage = async (route) => {
 };
 
 describe('Chrome: Paged Publication', () => {
-    it('Should display "Make your PDF alive with ShopGun." text on page', async () => {
+    it('Should display "Make your PDF alive with Tjek." text on page', async () => {
         const page = await newIncognitoPage(PPPath);
 
         await new Promise((r) => setTimeout(r, 3000));
 
         expect(
             await page.$eval('body', (el) =>
-                /Make your PDF alive with ShopGun./.test(el.innerText)
+                /Make your PDF alive with Tjek./.test(el.innerText)
             )
         ).toBe(true);
     });
