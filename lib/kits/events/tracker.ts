@@ -43,11 +43,11 @@ let pool: any[];
 class Tracker {
     hasMadeInitialDispatch = false;
     location = {geohash: null, time: null, country: null};
-    trackId = null;
+    trackId: string | null = null;
     poolLimit = 1000;
     client: TrackerClient;
     eventsTrackUrl: string;
-    eventsTrackHeaders: Headers;
+    eventsTrackHeaders: Record<string, string>;
     constructor(options) {
         if (!pool) {
             pool = getPool();
@@ -63,11 +63,10 @@ class Tracker {
         this.client = options?.client || createTrackerClient();
         this.eventsTrackUrl = options?.eventsTrackUrl || defaultEventsTrackUrl;
 
-        this.eventsTrackHeaders = new Headers(options?.eventsTrackHeaders);
-        this.eventsTrackHeaders.set(
-            'Content-Type',
-            'application/json; charset=utf-8'
-        );
+        this.eventsTrackHeaders = {
+            ...options?.eventsTrackHeaders,
+            'Content-Type': 'application/json; charset=utf-8'
+        };
 
         if (this.eventsTrackUrl) {
             dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
@@ -158,7 +157,10 @@ const dispatchLimit = 100;
 
 let dispatchRetryInterval: NodeJS.Timeout | null | void = null;
 const dispatch = throttle(
-    async (eventsTrackUrl: string, eventsTrackHeaders: HeadersInit) => {
+    async (
+        eventsTrackUrl: string,
+        eventsTrackHeaders: Record<string, string>
+    ) => {
         if (!pool) {
             console.warn('Tracker: dispatch called with no active event pool.');
             return;
