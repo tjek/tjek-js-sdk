@@ -43,10 +43,11 @@ let pool: any[];
 class Tracker {
     hasMadeInitialDispatch = false;
     location = {geohash: null, time: null, country: null};
-    trackId = null;
+    trackId: string | null = null;
     poolLimit = 1000;
     client: TrackerClient;
     eventsTrackUrl: string;
+    eventsTrackHeaders: Record<string, string>;
     constructor(options) {
         if (!pool) {
             pool = getPool();
@@ -62,15 +63,20 @@ class Tracker {
         this.client = options?.client || createTrackerClient();
         this.eventsTrackUrl = options?.eventsTrackUrl || defaultEventsTrackUrl;
 
+        this.eventsTrackHeaders = {
+            ...options?.eventsTrackHeaders,
+            'Content-Type': 'application/json; charset=utf-8'
+        };
+
         if (this.eventsTrackUrl) {
-            dispatch(this.eventsTrackUrl);
+            dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
             this.hasMadeInitialDispatch = true;
         }
     }
     setEventsTrackUrl(eventsTrackUrl: string) {
         this.eventsTrackUrl = eventsTrackUrl;
         if (!this.hasMadeInitialDispatch) {
-            dispatch(this.eventsTrackUrl);
+            dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
             this.hasMadeInitialDispatch = true;
         }
     }
@@ -101,7 +107,7 @@ class Tracker {
         pool.push(evt);
         while (pool.length > this.poolLimit) pool.shift();
 
-        dispatch(this.eventsTrackUrl);
+        dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
 
         return this;
     }
@@ -150,55 +156,62 @@ let dispatching = false;
 const dispatchLimit = 100;
 
 let dispatchRetryInterval: NodeJS.Timeout | null | void = null;
-const dispatch = throttle(async (eventsTrackUrl: string) => {
-    if (!pool) {
-        console.warn('Tracker: dispatch called with no active event pool.');
-        return;
-    }
-
-    if (dispatching || !pool?.length) return;
-
-    const events = pool.slice(0, dispatchLimit);
-    let nacks = 0;
-    dispatching = true;
-
-    try {
-        const response = await fetch(eventsTrackUrl, {
-            method: 'post',
-            headers: {'Content-Type': 'application/json; charset=utf-8'},
-            body: JSON.stringify({events})
-        });
-        const json = await response.json();
-
-        if (dispatchRetryInterval) {
-            dispatchRetryInterval = clearInterval(dispatchRetryInterval);
+const dispatch = throttle(
+    async (
+        eventsTrackUrl: string,
+        eventsTrackHeaders: Record<string, string>
+    ) => {
+        if (!pool) {
+            console.warn('Tracker: dispatch called with no active event pool.');
+            return;
         }
 
-        for (let i = 0; i < json.events.length; i++) {
-            const {status, id} = json.events[i];
+        if (dispatching || !pool?.length) return;
 
-            if (status === 'validation_error' || status === 'ack') {
-                pool = pool.filter(({_i}) => _i !== id);
-            } else {
-                nacks++;
+        const events = pool.slice(0, dispatchLimit);
+        let nacks = 0;
+        dispatching = true;
+
+        try {
+            const response = await fetch(eventsTrackUrl, {
+                method: 'post',
+                headers: eventsTrackHeaders,
+                body: JSON.stringify({events})
+            });
+            const json = await response.json();
+
+            if (dispatchRetryInterval) {
+                dispatchRetryInterval = clearInterval(dispatchRetryInterval);
             }
-        }
 
-        // Keep dispatching until the pool size reaches a sane level.
-        if (pool.length >= dispatchLimit && !nacks) dispatch(eventsTrackUrl);
-    } catch (err) {
-        // Try dispatching again in 20 seconds, if we aren't already trying
-        if (!dispatchRetryInterval) {
-            console.warn(
-                "We're gonna keep trying, but there was an error while dispatching events:",
-                err
-            );
+            for (let i = 0; i < json.events.length; i++) {
+                const {status, id} = json.events[i];
 
-            dispatchRetryInterval = setInterval(() => {
-                dispatch(eventsTrackUrl);
-            }, 20000);
+                if (status === 'validation_error' || status === 'ack') {
+                    pool = pool.filter(({_i}) => _i !== id);
+                } else {
+                    nacks++;
+                }
+            }
+
+            // Keep dispatching until the pool size reaches a sane level.
+            if (pool.length >= dispatchLimit && !nacks)
+                dispatch(eventsTrackUrl, eventsTrackHeaders);
+        } catch (err) {
+            // Try dispatching again in 20 seconds, if we aren't already trying
+            if (!dispatchRetryInterval) {
+                console.warn(
+                    "We're gonna keep trying, but there was an error while dispatching events:",
+                    err
+                );
+
+                dispatchRetryInterval = setInterval(() => {
+                    dispatch(eventsTrackUrl, eventsTrackHeaders);
+                }, 20000);
+            }
+        } finally {
+            dispatching = false;
         }
-    } finally {
-        dispatching = false;
-    }
-}, 4000);
+    },
+    4000
+);
