@@ -10,18 +10,20 @@
     animation-iteration-count 1
     animation-name sgn-animate-sidebar
     animation-timing-function ease
-    background #ffffff
 
     > .sgn__nav
         position relative !important
         overflow hidden
+        height 86px
         text-align center
         color inherit
         -webkit-transform none !important
         transform none !important
+        box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
 
         .sgn__nav-content
             padding 8px 8px 2px
+            transform translateY(30%)
 
             > button
                 color inherit
@@ -94,11 +96,17 @@
 
 
     .sgn-sections-list-items-container
-        height calc(100vh - 49px)
+        height calc(100vh - 86px)
         display inline-block
         margin-block-start 0
         overflow-y auto
-        background #ffffff
+        padding 0
+        padding-inline-start 0
+        margin-block-end 0
+        text-align left
+
+        .sgn-sections-content-container
+            border 0
 
 
 .sgn-animate-sidebar

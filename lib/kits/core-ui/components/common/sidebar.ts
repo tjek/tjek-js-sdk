@@ -138,6 +138,16 @@ const Sidebar = ({
             sgnNav.style.color =
                 getColorBrightness(color) === 'dark' ? '#ffffff' : '#000000';
         }
+
+        const sidebar = container?.querySelector<HTMLDivElement>(
+            '.sgn__sidebar-content-container'
+        );
+
+        if (sidebar) {
+            sidebar.style.backgroundColor = color || 'transparent';
+            sidebar.style.color =
+                getColorBrightness(color) === 'dark' ? '#ffffff' : '#000000';
+        }
     };
 
     const show = (data: {details?: V2Catalog} = {}) => {
