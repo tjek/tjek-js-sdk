@@ -28,10 +28,14 @@ export const transformScriptData = (
         disableClose: dataset.componentPublicationDisableClose === 'true',
         disableMenu: dataset.componentPublicationDisableMenu === 'true',
         disableDownload: dataset.componentPublicationDisableDownload === 'true',
-        disableHeader: dataset.componentPublicationDisableHeader === 'true',
+        disableHeader:
+            dataset.componentPublicationDisableHeader === 'true' ||
+            dataset.componentPublicationEnableSidebar === 'true',
         disableGlobalScrollbar:
             dataset.componentPublicationDisableGlobalScrollbar === 'true',
         showHeaderLabels:
-            dataset.componentPublicationShowHeaderLabels === 'true'
+            dataset.componentPublicationShowHeaderLabels === 'true',
+        enableSidebar: dataset.componentPublicationEnableSidebar === 'true',
+        sidebarPosition: dataset.componentPublicationSidebarPosition || 'left'
     };
 };

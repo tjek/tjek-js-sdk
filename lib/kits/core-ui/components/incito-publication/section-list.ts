@@ -51,8 +51,9 @@ const SectionList = ({sgnData, template}) => {
             `[data-id="${sectionId}"][data-role="section"]`
         );
         const incitoEl = document.querySelector('.sgn__incito');
+        const headerOffset = document.querySelector('.sgn__header') ? 76 : 0;
         // @ts-expect-error
-        const sectionOffset = sectionCell.offsetTop - 76 || 0;
+        const sectionOffset = sectionCell.offsetTop - headerOffset || 0;
 
         destroyModal();
 

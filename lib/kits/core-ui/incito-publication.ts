@@ -7,11 +7,13 @@ import type {Tracker} from '../events';
 import type {Viewer} from '../incito-publication';
 import Bootstrapper from '../incito-publication/bootstrapper';
 import Header from './components/common/header';
+import Sidebar from './components/common/sidebar';
 import MenuPopup from './components/common/menu-popup';
 import OfferOverview from './components/common/offer-overview';
 import ShoppingList from './components/common/shopping-list';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/incito-publication/main-container';
+import SectionList from './components/incito-publication/section-list';
 
 const IncitoPublication = (
     scriptEl: HTMLScriptElement,
@@ -48,6 +50,9 @@ const IncitoPublication = (
         headerContainer: document.getElementById(
             'sgn-sdk-incito-publication-viewer-header-template'
         ),
+        sidebarContainer: document.getElementById(
+            'sgn-sdk-incito-publication-viewer-sidebar-template'
+        ),
         offerList: document.getElementById(
             'sgn-sdk-incito-publication-viewer-offer-list-template'
         ),
@@ -74,6 +79,8 @@ const IncitoPublication = (
         scriptEls
     }).render();
 
+    console.log(scriptEls);
+
     const header = Header({
         publicationType: 'incito',
         template: customTemplates.headerContainer,
@@ -82,9 +89,11 @@ const IncitoPublication = (
         scriptEls
     });
 
-    document
-        .querySelector('.sgn__header-container')
-        ?.appendChild(header.render());
+    if (!scriptEls.disableHeader) {
+        document
+            .querySelector('.sgn__header-container')
+            ?.appendChild(header.render());
+    }
 
     const render = async () => {
         if (Object.keys(options || {}).length === 0) await setOptions();
@@ -95,12 +104,21 @@ const IncitoPublication = (
         renderShoppingList();
         renderMenuPopup();
         dispatchPublicationData();
+        renderSectionList();
 
         return sgnData;
     };
 
     const renderShoppingList = () =>
         ShoppingList({template: customTemplates.shoppingList}).render();
+
+    const renderSectionList = async () =>
+        document.querySelector('.sgn__menu-sidebar-container')?.appendChild(
+            await SectionList({
+                sgnData,
+                template: customTemplates.sectionList
+            }).render()
+        );
 
     const renderMenuPopup = () =>
         document

@@ -33,7 +33,7 @@
             id="sgn-sdk"
             data-api-key="GL0wU8"
             data-track-id="2N2Gib"
-            data-business-id="11deC"
+            data-business-id="0c200g"
             data-component="list-publications"
             data-locale-code="da_DK"
             data-component-publication-display-url-params="hash"
@@ -49,6 +49,8 @@
             data-component-publication-disable-global-scrollbar="false"
             data-component-publication-show-header-labels="true"
             data-component-publication-viewer-offer-click-behavior="overview_modal"
+            data-component-publication-enable-sidebar="false"
+            data-component-publication-sidebar-position="left"
             data-translation-keys--publication-viewer-download-button="Download PDF"
             data-translation-keys--publication-viewer-offer-date-range="Tilbuddet gælder fra d. {{{from}}} - {{{till}}}"
             data-translation-keys--publication-viewer-menu-date-range="Tilbudsavisen gælder fra d. {{{from}}} - {{{till}}}"
@@ -78,7 +80,7 @@
             document
                 .querySelector('#list-publications')
                 .addEventListener('publication:rendered', (e) => {
-                    console.log(e.detail); // {details: {…}, incito: {…}}
+                    console.log('e detail:::', e.detail); // {details: {…}, incito: {…}}
                 });
         </script>
     </body>
