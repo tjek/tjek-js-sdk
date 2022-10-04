@@ -95,6 +95,20 @@ const IncitoPublication = (
             ?.appendChild(header.render());
     }
 
+    const sidebar = Sidebar({
+        publicationType: 'incito',
+        template: customTemplates.sidebarContainer,
+        shoppingListCounterTemplate: customTemplates.shoppingListCounter,
+        el: document.querySelector(scriptEls.mainContainer),
+        scriptEls
+    });
+
+    if (scriptEls.enableSidebar) {
+        document
+            .querySelector('.sgn__menu-sidebar-container')
+            ?.appendChild(sidebar.render());
+    }
+
     const render = async () => {
         if (Object.keys(options || {}).length === 0) await setOptions();
 
@@ -113,7 +127,7 @@ const IncitoPublication = (
         ShoppingList({template: customTemplates.shoppingList}).render();
 
     const renderSectionList = async () =>
-        document.querySelector('.sgn__menu-sidebar-container')?.appendChild(
+        document.querySelector('.sgn__sidebar-content-container')?.appendChild(
             await SectionList({
                 sgnData,
                 template: customTemplates.sectionList
@@ -173,6 +187,7 @@ const IncitoPublication = (
         sgnViewer = bootstrapper.createViewer(data);
 
         header.show(sgnData);
+        sidebar.show(sgnData);
 
         if (options?.el)
             on(

@@ -1,0 +1,113 @@
+.sgn__sidebar
+    position absolute
+    display none
+    z-index 99
+    height 80px
+    margin auto
+    width 100%
+    text-align center
+    animation-duration .3s
+    animation-iteration-count 1
+    animation-name sgn-animate-sidebar
+    animation-timing-function ease
+    background #ffffff
+
+    > .sgn__nav
+        position relative !important
+        overflow hidden
+        text-align center
+        color inherit
+        -webkit-transform none !important
+        transform none !important
+
+        .sgn__nav-content
+            padding 8px 8px 2px
+
+            > button
+                color inherit
+                background-color transparent
+                display inline-block
+                vertical-align middle
+                padding 2px
+                border 0
+                cursor pointer
+                width 50px
+
+                > svg
+                    width 25px
+                    height 25px
+                
+                .sgn__nav-label
+                    display none
+                    font-size 10px
+
+                .sgn__offer-shopping-list-counter
+                    display block
+                    position absolute
+                    margin-left 30px
+                    margin-top -34px
+                    padding 1px
+                    background #f3f3f9
+                    color #202020
+                    border-radius 10px
+                    font-size 11px
+                    box-shadow 1px 2px rgba(0, 0, 0, 0.3)
+                    width 17px
+                    height 17px
+                    line-height 1.5
+                    animation-duration .25s
+                    animation-iteration-count 1
+            
+            &[data-show-labels="true"]
+                padding 4px 8px 2px
+
+                > button
+                    width 66px
+
+                .sgn__offer-shopping-list-counter
+                    margin-left 40px
+
+                .sgn__nav-label
+                    display block
+
+        .sgn-pp__progress
+            height 16px
+            position relative
+            background-color rgba(0,0,0,0.1)
+            animation none !important
+            z-index 0
+
+            .sgn-pp-progress__bar
+                height 16px
+                background-color rgba(0,0,0,0.2)
+
+            .sgn-pp__progress-label
+                display block
+                font-family inherit
+                bottom 2px
+                font-size 11px
+                margin-top 16px
+                padding 0
+                background transparent
+                animation none !important
+                color inherit
+
+
+    .sgn-sections-list-items-container
+        height calc(100vh - 49px)
+        display inline-block
+        margin-block-start 0
+        overflow-y auto
+        background #ffffff
+
+
+.sgn-animate-sidebar
+    display block
+    animation-name sgn-animate-sidebar
+    animation-timing-function ease
+
+@keyframes sgn-animate-sidebar
+    0%
+        transform translateX(-100px)
+    100%
+        transform translateX(0)

@@ -138,7 +138,9 @@ const MenuPopup = ({
                     ? scriptEls.disableDownload
                     : true,
                 isIncito: publicationType === 'incito',
-                hasSections: sgnData?.incito?.table_of_contents?.length > 0
+                hasSections:
+                    sgnData?.incito?.table_of_contents?.length > 0 &&
+                    !scriptEls.enableSidebar
             }
         );
 
