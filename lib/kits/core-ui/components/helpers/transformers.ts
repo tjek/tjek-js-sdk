@@ -36,6 +36,9 @@ export const transformScriptData = (
         showHeaderLabels:
             dataset.componentPublicationShowHeaderLabels === 'true',
         enableSidebar: dataset.componentPublicationEnableSidebar === 'true',
-        sidebarPosition: dataset.componentPublicationSidebarPosition || 'left'
+        sidebarPosition:
+            dataset.componentPublicationSidebarPosition === 'right'
+                ? 'right'
+                : 'left'
     };
 };

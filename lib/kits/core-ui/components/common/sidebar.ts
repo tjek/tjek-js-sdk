@@ -155,7 +155,7 @@ const Sidebar = ({
 
         container
             ?.querySelector('.sgn__sidebar')
-            ?.classList.add('sgn-animate-sidebar');
+            ?.classList.add(`sgn-animate-sidebar-${scriptEls.sidebarPosition}`);
     };
 
     const addClosePubListener = () => {
