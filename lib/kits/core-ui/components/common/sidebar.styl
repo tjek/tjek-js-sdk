@@ -1,3 +1,15 @@
+.sgn__incito
+    &[data-component-template-enable-sidebar="true"]        
+        &[data-component-template-sidebar-position="left"]
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width 80vw
+                margin-left auto
+            
+        &[data-component-template-sidebar-position="right"]
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width 80vw
+                margin-right auto
+
 .sgn__sidebar
     position absolute
     display none
@@ -94,19 +106,19 @@
                 animation none !important
                 color inherit
 
-
     .sgn-sections-list-items-container
-        height calc(100vh - 86px)
+        height calc(100vh - 100px)
         margin-block-start 0
         overflow-y auto
-        padding 0
         padding-inline-start 0
+        padding 0
+        padding-top 14px
         margin-block-end 0
         text-align left
 
         .sgn-sections-content-container
             border 0
-
+            padding 10px 20px
 
 .sgn-animate-sidebar-left
     display block

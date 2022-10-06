@@ -37,8 +37,8 @@ export const transformScriptData = (
             dataset.componentPublicationShowHeaderLabels === 'true',
         enableSidebar: dataset.componentPublicationEnableSidebar === 'true',
         sidebarPosition:
-            dataset.componentPublicationSidebarPosition === 'right'
-                ? 'right'
-                : 'left'
+            dataset.componentPublicationSidebarPosition === 'left'
+                ? 'left'
+                : 'right'
     };
 };
