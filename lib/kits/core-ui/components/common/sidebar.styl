@@ -1,11 +1,39 @@
 .sgn__incito
-    &[data-component-template-enable-sidebar="true"]        
+    &[data-component-template-enable-sidebar="true"]
+        -ms-overflow-style none
+        scrollbar-width none
+
+        &::-webkit-scrollbar
+            display none
+
         &[data-component-template-sidebar-position="left"]
+            left 20vw
+
+            .sgn__menu-sidebar-container
+                position fixed
+                width 20vw
+                left 0
+                top 0
+                bottom 0
+                z-index 9
+                background-color #ffffff
+
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
                 width 80vw
                 margin-left auto
             
         &[data-component-template-sidebar-position="right"]
+            right 20vw
+            
+            .sgn__menu-sidebar-container
+                position fixed
+                width 20vw
+                right 0
+                top 0
+                bottom 0
+                z-index 9
+                background-color #ffffff
+
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
                 width 80vw
                 margin-right auto
@@ -141,3 +169,45 @@
         transform translateX(100px)
     100%
         transform translateX(0)
+
+
+@media (max-width 1023px)
+    .sgn__incito
+        &[data-component-template-enable-sidebar="true"]
+            -ms-overflow-style none
+            scrollbar-width none
+
+            &::-webkit-scrollbar
+                display none
+
+            &[data-component-template-sidebar-position="left"]
+                left 20vw
+
+                .sgn__menu-sidebar-container
+                    position fixed
+                    width 20vw
+                    left 0
+                    top 0
+                    bottom 0
+                    z-index 9
+                    background-color #ffffff
+
+                .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                    width 80vw
+                    margin-left auto
+                
+            &[data-component-template-sidebar-position="right"]
+                right 0
+                
+                .sgn__menu-sidebar-container
+                    position fixed
+                    width 20vw
+                    right 0
+                    top 0
+                    bottom 0
+                    z-index 9
+                    background-color #ffffff
+
+                .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                    width 80vw
+                    margin-right auto
