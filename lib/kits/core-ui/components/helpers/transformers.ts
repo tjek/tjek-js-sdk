@@ -28,9 +28,7 @@ export const transformScriptData = (
         disableClose: dataset.componentPublicationDisableClose === 'true',
         disableMenu: dataset.componentPublicationDisableMenu === 'true',
         disableDownload: dataset.componentPublicationDisableDownload === 'true',
-        disableHeader:
-            dataset.componentPublicationDisableHeader === 'true' ||
-            dataset.componentPublicationEnableSidebar === 'true',
+        disableHeader: dataset.componentPublicationDisableHeader === 'true',
         disableGlobalScrollbar:
             dataset.componentPublicationDisableGlobalScrollbar === 'true',
         showHeaderLabels:

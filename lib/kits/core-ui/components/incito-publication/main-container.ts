@@ -38,7 +38,7 @@ const MainContainer = ({
         if (!el) return;
 
         el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
-            disableHeader: scriptEls.disableHeader,
+            disableHeader: scriptEls.disableHeader || scriptEls.enableSidebar,
             disableShoppingList:
                 scriptEls.disableShoppingList ||
                 scriptEls.offerClickBehavior !== 'shopping_list',

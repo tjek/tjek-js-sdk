@@ -12,7 +12,7 @@ import './sidebar.styl';
 
 const defaultTemplate = `\
 {{#enableSidebar}}
-    <div class="sgn__sidebar">
+    <div class="sgn__sidebar sgn__sidebar--open">
         <div class="sgn__nav">
             <div class="sgn__nav-content" data-show-labels="{{showHeaderLabels}}">
             {{^disableClose}}
@@ -78,7 +78,14 @@ const defaultTemplate = `\
             </div>
         </div>
         <div class="sgn__sidebar-content-container"></div>
+    
     </div>
+    <button
+        class="sgn__sidebar-control"
+        data-direction="gt"
+    >
+        &rsaquo;
+    </button>
 {{/enableSidebar}}\
 `;
 
@@ -128,6 +135,21 @@ const Sidebar = ({
                 {shoppingListCount: storedPublicationOffers?.length}
             );
         }
+    };
+
+    const toggleSidebar = () => {
+        const sidebarControl = container?.querySelector<HTMLDivElement>(
+            '.sgn__sidebar-control'
+        );
+        const sgnIncito = el?.querySelector('.sgn__incito');
+
+        if (sgnIncito && sgnIncito?.clientWidth < 840) {
+            sgnIncito?.classList.toggle('sgn__sidebar--close');
+        }
+
+        sidebarControl?.addEventListener('click', (e) => {
+            sgnIncito?.classList.toggle('sgn__sidebar--close');
+        });
     };
 
     const setNavColor = (color) => {
@@ -232,6 +254,7 @@ const Sidebar = ({
         renderShoppingListCounter();
         addStorageListener();
         addClosePubListener();
+        toggleSidebar();
 
         return container;
     };

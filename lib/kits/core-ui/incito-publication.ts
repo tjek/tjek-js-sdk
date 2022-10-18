@@ -79,8 +79,6 @@ const IncitoPublication = (
         scriptEls
     }).render();
 
-    console.log(scriptEls);
-
     const header = Header({
         publicationType: 'incito',
         template: customTemplates.headerContainer,
@@ -89,7 +87,7 @@ const IncitoPublication = (
         scriptEls
     });
 
-    if (!scriptEls.disableHeader) {
+    if (!scriptEls.disableHeader && !scriptEls.enableSidebar) {
         document
             .querySelector('.sgn__header-container')
             ?.appendChild(header.render());

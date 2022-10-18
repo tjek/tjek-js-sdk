@@ -217,7 +217,9 @@ const Header = ({
             template?.innerHTML || defaultTemplate,
             {
                 translations,
-                disableHeader: scriptEls.disableHeader,
+                disableHeader:
+                    scriptEls.disableHeader ||
+                    (scriptEls.enableSidebar && publicationType === 'incito'),
                 disableShoppingList:
                     scriptEls.disableShoppingList ||
                     scriptEls.offerClickBehavior ===

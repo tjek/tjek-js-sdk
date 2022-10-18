@@ -1,4 +1,4 @@
-.sgn__incito
+.sgn__incito 
     &[data-component-template-enable-sidebar="true"]
         -ms-overflow-style none
         scrollbar-width none
@@ -9,13 +9,10 @@
         &[data-component-template-sidebar-position="left"]
             left 20vw
 
-            .sgn__menu-sidebar-container
+            .sgn__sidebar
                 position fixed
                 width 20vw
                 left 0
-                top 0
-                bottom 0
-                z-index 9
                 background-color #ffffff
 
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
@@ -25,18 +22,44 @@
         &[data-component-template-sidebar-position="right"]
             right 20vw
             
-            .sgn__menu-sidebar-container
+            .sgn__sidebar
                 position fixed
                 width 20vw
                 right 0
-                top 0
-                bottom 0
-                z-index 9
                 background-color #ffffff
 
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
                 width 80vw
                 margin-right auto
+
+            .sgn__sidebar-control
+                display block
+                background transparent
+                border 0
+                position fixed
+                cursor pointer
+                font-size 60px
+                top 50%
+                height 50px
+                margin-top -25px
+                line-height 0.5
+                text-align center
+                color #fff
+                text-shadow 0 0 18px rgba(#000, 0.24), -1px -1px 1px rgba(#000, 0.3), 1px -1px 1px rgba(#000, 0.3), -1px 1px 1px rgba(#000, 0.3), 1px 1px 1px rgba(#000, 0.3)
+                opacity 0.5
+                z-index 999
+                
+                &:hover,
+                &:focus
+                    color #fff
+                    text-decoration none
+                
+                &:hover,
+                &:active
+                    opacity 1
+
+                &[data-direction="gt"]
+                    right 20vw
 
 .sgn__sidebar
     position absolute
@@ -148,6 +171,20 @@
             border 0
             padding 10px 20px
 
+.sgn__sidebar--close
+    &[data-component-template-sidebar-position="right"]
+        right 0 !important
+
+        .sgn__sidebar            
+            display none
+            animation sgn-animate-sidebar-right-close .3s
+
+        .sgn__sidebar-control
+            &[data-direction="gt"]
+                    right 0!important
+
+
+
 .sgn-animate-sidebar-left
     display block
     animation-name sgn-animate-sidebar-left
@@ -160,54 +197,21 @@
 
 @keyframes sgn-animate-sidebar-left
     0%
-        transform translateX(-100px)
+        transform translateX(-20vw)
     100%
         transform translateX(0)
 
 @keyframes sgn-animate-sidebar-right
     0%
-        transform translateX(100px)
+        transform translateX(20vw)
     100%
         transform translateX(0)
 
-
-@media (max-width 1023px)
-    .sgn__incito
-        &[data-component-template-enable-sidebar="true"]
-            -ms-overflow-style none
-            scrollbar-width none
-
-            &::-webkit-scrollbar
-                display none
-
-            &[data-component-template-sidebar-position="left"]
-                left 20vw
-
-                .sgn__menu-sidebar-container
-                    position fixed
-                    width 20vw
-                    left 0
-                    top 0
-                    bottom 0
-                    z-index 9
-                    background-color #ffffff
-
-                .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
-                    width 80vw
-                    margin-left auto
-                
-            &[data-component-template-sidebar-position="right"]
-                right 0
-                
-                .sgn__menu-sidebar-container
-                    position fixed
-                    width 20vw
-                    right 0
-                    top 0
-                    bottom 0
-                    z-index 9
-                    background-color #ffffff
-
-                .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
-                    width 80vw
-                    margin-right auto
+@keyframes sgn-animate-sidebar-right-close
+    0%
+        transform translateX(0)
+        opacity 1
+    100%
+        transform translateX(20vh)
+        opacity 0
+        display none
