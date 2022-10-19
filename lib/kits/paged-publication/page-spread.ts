@@ -7,7 +7,7 @@ const loadImage = (src, callback) =>
             callback(null, target);
         },
         onerror: () => {
-            callback(new Error());
+            callback(new Error("Failed to load page image"));
         },
         src
     });
