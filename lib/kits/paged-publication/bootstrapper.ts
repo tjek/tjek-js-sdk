@@ -1,4 +1,4 @@
-import {request, V2Catalog, V2Hotspot, V2Page} from '../core';
+import {request, V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
 import {Tracker} from '../events';
 import Viewer, {ViewerInit} from './viewer';
 
@@ -18,7 +18,11 @@ export default class Bootstrapper {
     }
 
     createViewer(
-        data: {details: V2Catalog; pages: V2Page[]},
+        data: {
+            details: V2Catalog;
+            pages: V2Page[];
+            pageDecorations: V2PageDecoration[];
+        },
         viewerOptions?: Partial<ViewerInit>
     ) {
         return new Viewer(this.options.el!, {
@@ -29,6 +33,7 @@ export default class Bootstrapper {
             keyboard: true,
             pageId: this.options.pageId,
             eventTracker: this.options.eventTracker,
+            pageDecorations: data.pageDecorations,
             pages: data.pages.map(({view, zoom}, i) => {
                 const pageNumber = i + 1;
 
@@ -55,14 +60,19 @@ export default class Bootstrapper {
 
     async fetch(callback?: Parameters<typeof request>[1]) {
         try {
-            const {0: details, 1: pages} = await Promise.all([
+            const {
+                0: details,
+                1: pages,
+                2: pageDecorations
+            } = await Promise.all([
                 this.fetchDetails(),
-                this.fetchPages()
+                this.fetchPages(),
+                this.fetchPageDecorations()
             ]);
 
             if (!details || !pages) throw new Error();
 
-            const data = {details, pages};
+            const data = {details, pages, pageDecorations};
             if (typeof callback === 'function') callback(null, data);
 
             return data;
@@ -101,6 +111,16 @@ export default class Bootstrapper {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
                 url: `/v2/catalogs/${this.options.id}/hotspots`
+            },
+            callback
+        );
+
+    fetchPageDecorations = (callback?: Parameters<typeof request>[1]) =>
+        request<V2Hotspot>(
+            {
+                apiKey: this.options.apiKey,
+                coreUrl: this.options.coreUrl,
+                url: `/v2/catalogs/${this.options.id}/page_decorations`
             },
             callback
         );

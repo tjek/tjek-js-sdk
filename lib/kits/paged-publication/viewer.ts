@@ -1,7 +1,7 @@
 import MicroEvent from 'microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
-import {V2Hotspot} from '../core';
+import {V2Hotspot, V2PageDecoration} from '../core';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
 import Controls from './controls';
@@ -55,6 +55,7 @@ export interface ViewerInit {
     keyboard: boolean;
     hotspotRatio: unknown;
     pickHotspot?: typeof defaultPickHotspot;
+    pageDecorations: V2PageDecoration[];
 }
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
@@ -125,10 +126,6 @@ class Viewer extends MicroEvent {
             this._eventTracking.trigger('pointerdown', e);
             this.trigger('pointerdown', e);
         });
-        this._core.bind('clicked', (e) => {
-            this._eventTracking.trigger('clicked', e);
-            this.trigger('clicked', e);
-        });
         this._core.bind('doubleClicked', (e) => {
             this._eventTracking.trigger('doubleClicked', e);
             this.trigger('doubleClicked', e);
@@ -164,6 +161,7 @@ class Viewer extends MicroEvent {
             this._hotspots.trigger('resized');
             this.trigger('resized', e);
         });
+        this._core.bind('clicked', this.pageClicked);
 
         this.bind('hotspotsRequested', this.hotspotsRequested);
         this.bind('beforeNavigation', this.beforeNavigation);
@@ -335,6 +333,19 @@ class Viewer extends MicroEvent {
         this.pickHotspot(e, (hotspot) => {
             this.trigger('hotspotPressed', hotspot);
         });
+    };
+
+    pageClicked = (e) => {
+        const pageDecorations = this.options.pageDecorations;
+        const pageNumber = e.page.pageNumber;
+        const pageDecoration = pageDecorations?.find(
+            (pd) => pd.page_number === pageNumber
+        );
+
+        console.log('pageDecoration::::', pageDecoration);
+
+        this._eventTracking.trigger('clicked', e);
+        this.trigger('clicked', e);
     };
 }
 
