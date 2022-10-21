@@ -22,6 +22,7 @@ interface PagedPublicationCoreInit {}
 class PagedPublicationCore extends MicroEvent {
     defaults = {
         pages: [],
+        pageDecorations: [],
         pageSpreadWidth: 100,
         pageSpreadMaxZoomScale: 2.3,
         idleDelay: 1000,
@@ -30,6 +31,7 @@ class PagedPublicationCore extends MicroEvent {
     };
     rootEl: HTMLElement;
     pagesEl: HTMLElement | null;
+    pageDecorationEl: HTMLElement | null;
     options: PagedPublicationCoreInit;
     pageId: string;
     verso: Verso;
@@ -43,6 +45,7 @@ class PagedPublicationCore extends MicroEvent {
         this.pageId = this.getOption('pageId');
         this.rootEl = el;
         this.pagesEl = el.querySelector('.sgn-pp__pages');
+        this.pageDecorationEl = el.querySelector('.sgn-pp__page-decoration');
 
         this.pageMode = this.getPageMode();
         this.pageSpreads = new PageSpreads({
@@ -201,6 +204,17 @@ class PagedPublicationCore extends MicroEvent {
             : null;
     }
 
+    getPageDecorations(pageSpread) {
+        const pages = pageSpread?.options.pages || [];
+        const pageDecorations = this.getOption('pageDecorations');
+
+        return pages.map(({pageNumber}) =>
+            pageDecorations?.find(
+                (pageDecor) => pageDecor.page_number == pageNumber
+            )
+        );
+    }
+
     renderPageSpreads() {
         this.getVerso().pageSpreads.forEach((pageSpread) => {
             const visibility = pageSpread.getVisibility();
@@ -238,6 +252,9 @@ class PagedPublicationCore extends MicroEvent {
         const newSpreadEl = theVerso.pageSpreadEls[e.newPosition];
         const progress = (position / (pageSpreadCount - 1)) * 100;
         const progressLabel = this.formatProgressLabel(pageSpread);
+        const pageDecorations = this.getPageDecorations(pageSpread);
+
+        console.log('pageDecorations', pageDecorations);
 
         this.rootEl.dataset.navigating = String(true);
 

@@ -81,7 +81,8 @@ class Viewer extends MicroEvent {
             pageId: this.options.pageId,
             idleDelay: this.options.idleDelay,
             resizeDelay: this.options.resizeDelay,
-            color: this.options.color
+            color: this.options.color,
+            pageDecorations: this.options.pageDecorations
         });
         this._controls = new Controls(this.el, {
             keyboard: this.options.keyboard
