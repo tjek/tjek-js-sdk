@@ -1,5 +1,7 @@
 import MicroEvent from 'microevent';
 import {Page, PageMode} from './page-spreads';
+import {V2PageDecoration} from '../core';
+import PageDecoration from '../core-ui/page-decoration';
 
 const loadImage = (src, callback) =>
     Object.assign(new Image(), {
@@ -7,7 +9,7 @@ const loadImage = (src, callback) =>
             callback(null, target);
         },
         onerror: () => {
-            callback(new Error("Failed to load page image"));
+            callback(new Error('Failed to load page image'));
         },
         src
     });
@@ -15,6 +17,7 @@ const loadImage = (src, callback) =>
 interface PagedPublicationPageSpreadInit {
     id: string;
     pages: Page[];
+    pageDecorations: V2PageDecoration[];
     maxZoomScale: number;
     width: number;
     pageMode: PageMode;
@@ -101,11 +104,16 @@ class PagedPublicationPageSpread extends MicroEvent {
                 }
 
                 const isComplete = ++imageLoads === pageCount;
-
                 pageEl.style.backgroundImage = `url(${image})`;
                 pageEl.dataset.width = img.width;
                 pageEl.dataset.height = img.height;
                 pageEl.innerHTML = '&nbsp;';
+
+                const pageDecoration = this.getPageDecoration(page.pageNumber);
+                const pageDecorationEl =
+                    this.renderPageDecoration(pageDecoration);
+
+                pageEl.appendChild(pageDecorationEl);
 
                 if (isComplete) el.dataset.zoomable = String(true);
 
@@ -157,6 +165,30 @@ class PagedPublicationPageSpread extends MicroEvent {
 
                 delete pageEl.dataset.image;
             });
+    }
+
+    getPageDecorations() {
+        return this.options.pageDecorations;
+    }
+
+    getPageDecoration(pageNumber) {
+        const pageDecorations = this.getPageDecorations();
+
+        return pageDecorations?.find(
+            (pageDecor) => pageDecor?.page_number === pageNumber
+        );
+    }
+
+    renderPageDecoration(pageDecoration) {
+        const pageDecorationEl = PageDecoration({
+            header: 'See more...',
+            template: '',
+            x: 0,
+            y: 0,
+            pageDecoration
+        });
+
+        return pageDecorationEl.render();
     }
 }
 
