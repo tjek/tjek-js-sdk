@@ -19,7 +19,7 @@ const defaultTemplate = `\
 {{/pageDecoration.website_link}}\
 `;
 
-const MainContainer = ({
+const PageDecoration = ({
     header,
     template,
     x,
@@ -34,6 +34,7 @@ const MainContainer = ({
 }) => {
     const render = () => {
         const el = document.createElement('div');
+
         el.className = 'sgn-pagedecoration';
         el.setAttribute('tabindex', '-1');
         el.innerHTML = Mustache.render(template || defaultTemplate, {
@@ -60,4 +61,4 @@ const MainContainer = ({
     return {render};
 };
 
-export default MainContainer;
+export default PageDecoration;
