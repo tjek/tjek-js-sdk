@@ -322,8 +322,15 @@ class Viewer extends MicroEvent {
                             pageDecoration.page_number == pageNumber
                     )
             );
-            this.trigger('pageDecorationsLoaded', pageDecors);
+            this.trigger('pageDecorationsLoaded', {
+                pages: e.pageSpread?.options?.pages,
+                pageDecorations: pageDecors
+            });
         });
+    }
+
+    getPageDecorations() {
+        return this.pageDecorations;
     }
 
     beforeNavigation = () => {

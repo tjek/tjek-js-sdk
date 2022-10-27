@@ -8,8 +8,7 @@ const defaultTemplate = `\
         <ul>
             <li data-index="0">
                 <a href="{{pageDecoration.website_link}}" rel="noreferrer noopener" target="_blank">
-                    <p class="sgn-pagedecoration-item__header">{{header}}</p>
-                    <p class="sgn-pagedecoration-item__domain">{{pageDecoration.urlOrigin}}</p>
+                    <p class="sgn-pagedecoration-item__domain">{{pageDecoration.hostname}}</p>
                 </a>
             </li>
         </ul>
@@ -19,16 +18,12 @@ const defaultTemplate = `\
 `;
 
 const PageDecoration = ({
-    header,
     template,
-    x,
-    y,
+    pages,
     pageDecoration
 }: {
-    header?: string;
     template?: string;
-    x: number;
-    y: number;
+    pages: [];
     pageDecoration: {
         page_number: number;
         title: string;
@@ -37,25 +32,31 @@ const PageDecoration = ({
 }) => {
     const render = () => {
         const el = document.createElement('div');
+        const position =
+            pages?.length <= 1
+                ? 'center'
+                : pageDecoration.page_number % 2 == 0
+                ? 'left'
+                : 'right';
 
-        el.className = 'sgn-pagedecoration';
+        el.classList.add('sgn-pagedecoration');
+        el.classList.add(`sgn-pagedecoration-${position}`);
         el.setAttribute('tabindex', '-1');
         el.innerHTML = Mustache.render(template || defaultTemplate, {
-            header,
             pageDecoration: {
                 ...pageDecoration,
-                urlOrigin: getUrlOrigin(pageDecoration?.website_link)
+                hostname: getHostname(pageDecoration?.website_link)
             }
         });
 
         return el;
     };
 
-    const getUrlOrigin = (link = '') => {
+    const getHostname = (link = '') => {
         try {
             const url = new URL(link);
 
-            return url.origin;
+            return url.hostname;
         } catch (e) {
             return '';
         }

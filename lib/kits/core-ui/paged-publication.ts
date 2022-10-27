@@ -93,23 +93,28 @@ const PagedPublication = (
         dispatchPublicationData();
     };
 
-    const renderPageDecorations = (pageDecorations: V2PageDecoration[]) => {
-        pageDecorations
+    const renderPageDecorations = (data) => {
+        const pageDecorationsEl = document.querySelector<HTMLDivElement>(
+            '.sgn-page_decorations'
+        );
+        if (pageDecorationsEl?.innerHTML) {
+            pageDecorationsEl.innerHTML = '';
+        }
+
+        data.pageDecorations
             ?.filter((pageDecoration) => pageDecoration)
             ?.forEach((pageDecoration) => {
                 const pageDecorationEl = PageDecoration({
-                    header: 'See more...',
                     template: '',
-                    x: 0,
-                    y: 0,
+                    pages: data.pages,
                     pageDecoration
                 });
 
-                const pageEl = document.querySelector(
-                    `.sgn-pp__page[data-id="page${pageDecoration?.page_number}"]`
-                );
-
-                pageEl?.appendChild(pageDecorationEl.render());
+                const pageDecorationsEl =
+                    document.querySelector<HTMLDivElement>(
+                        '.sgn-page_decorations'
+                    );
+                pageDecorationsEl?.appendChild(pageDecorationEl.render());
             });
     };
 
@@ -186,6 +191,10 @@ const PagedPublication = (
 
             sgnViewer.bind('pageDecorationsLoaded', (e) => {
                 renderPageDecorations(e);
+            });
+
+            sgnViewer.bind('beforeNavigation', (e) => {
+                console.log('beforeNavigation', e);
             });
         }
 
