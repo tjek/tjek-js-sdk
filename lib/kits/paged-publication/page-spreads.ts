@@ -1,6 +1,5 @@
 import MicroEvent from 'microevent';
 import PageSpread from './page-spread';
-import {V2PageDecoration} from '../core';
 
 function chunk<I extends any>(arr: I[], size: number) {
     const results: I[][] = [];
@@ -18,7 +17,6 @@ export interface Page {
 export type PageMode = 'single' | 'double';
 interface PagedPublicationPageSpreadsInit {
     pages: Page[];
-    pageDecorations: V2PageDecoration[];
     width: number;
     maxZoomScale: number;
 }
@@ -71,13 +69,11 @@ class PagedPublicationPageSpreads extends MicroEvent {
 
         this.collection = pageSpreads.map((pages, i) => {
             const id = `${pageMode}-${i}`;
-            const pageDecorations = this.getPageDecorations(pages);
             const pageSpread = new PageSpread({
                 width,
                 pageMode,
                 maxZoomScale,
                 pages,
-                pageDecorations,
                 id
             });
 
@@ -95,16 +91,6 @@ class PagedPublicationPageSpreads extends MicroEvent {
         this.ids = ids;
 
         return this;
-    }
-
-    getPageDecorations(pages) {
-        const pageDecorations = this.options.pageDecorations;
-
-        return pages.map(({pageNumber}) =>
-            pageDecorations?.find(
-                (pageDecor) => pageDecor.page_number == pageNumber
-            )
-        );
     }
 }
 

@@ -48,7 +48,6 @@ export interface ViewerInit {
     pageSpreadWidth?: number;
     pageSpreadMaxZoomScale?: number;
     pageId: unknown;
-    pageDecorations: V2PageDecoration[];
     idleDelay?: number;
     resizeDelay?: number;
     color?: string;
@@ -67,6 +66,7 @@ class Viewer extends MicroEvent {
     _core: Core;
     _controls: Controls;
     _eventTracking: EventTracking;
+    pageDecorations: V2PageDecoration[];
     options: ViewerInit;
     // @ts-expect-error
     constructor(el: HTMLElement, options: ViewerInit = {}) {
@@ -81,8 +81,7 @@ class Viewer extends MicroEvent {
             pageId: this.options.pageId,
             idleDelay: this.options.idleDelay,
             resizeDelay: this.options.resizeDelay,
-            color: this.options.color,
-            pageDecorations: this.options.pageDecorations
+            color: this.options.color
         });
         this._controls = new Controls(this.el, {
             keyboard: this.options.keyboard
@@ -310,6 +309,21 @@ class Viewer extends MicroEvent {
         this.hotspots = hotspots;
 
         this.processHotspotQueue();
+    }
+
+    applyPageDecorations(pageDecorations) {
+        this.pageDecorations = pageDecorations;
+
+        this.bind('beforeNavigation', (e) => {
+            const pageDecors = e?.pageSpread?.options?.pages?.map(
+                ({pageNumber}) =>
+                    this.pageDecorations?.find(
+                        (pageDecoration) =>
+                            pageDecoration.page_number == pageNumber
+                    )
+            );
+            this.trigger('pageDecorationsLoaded', pageDecors);
+        });
     }
 
     beforeNavigation = () => {

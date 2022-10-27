@@ -18,11 +18,7 @@ export default class Bootstrapper {
     }
 
     createViewer(
-        data: {
-            details: V2Catalog;
-            pages: V2Page[];
-            pageDecorations: V2PageDecoration[];
-        },
+        data: {details: V2Catalog; pages: V2Page[]},
         viewerOptions?: Partial<ViewerInit>
     ) {
         return new Viewer(this.options.el!, {
@@ -33,7 +29,6 @@ export default class Bootstrapper {
             keyboard: true,
             pageId: this.options.pageId,
             eventTracker: this.options.eventTracker,
-            pageDecorations: data.pageDecorations,
             pages: data.pages.map(({view, zoom}, i) => {
                 const pageNumber = i + 1;
 
@@ -60,19 +55,14 @@ export default class Bootstrapper {
 
     async fetch(callback?: Parameters<typeof request>[1]) {
         try {
-            const {
-                0: details,
-                1: pages,
-                2: pageDecorations
-            } = await Promise.all([
+            const {0: details, 1: pages} = await Promise.all([
                 this.fetchDetails(),
-                this.fetchPages(),
-                this.fetchPageDecorations()
+                this.fetchPages()
             ]);
 
             if (!details || !pages) throw new Error();
 
-            const data = {details, pages, pageDecorations};
+            const data = {details, pages};
             if (typeof callback === 'function') callback(null, data);
 
             return data;
@@ -124,4 +114,8 @@ export default class Bootstrapper {
             },
             callback
         );
+
+    applyPageDecorations(viewer, pageDecorations) {
+        viewer.applyPageDecorations(pageDecorations);
+    }
 }

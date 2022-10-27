@@ -31,6 +31,8 @@ export const transformScriptData = (
         disableHeader: dataset.componentPublicationDisableHeader === 'true',
         disableGlobalScrollbar:
             dataset.componentPublicationDisableGlobalScrollbar === 'true',
+        disablePageDecorations:
+            dataset.componentPublicationDisablePagedecorations === 'true',
         showHeaderLabels:
             dataset.componentPublicationShowHeaderLabels === 'true'
     };

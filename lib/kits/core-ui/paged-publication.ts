@@ -7,6 +7,7 @@ import Header from './components/common/header';
 import MenuPopup from './components/common/menu-popup';
 import ShoppingList from './components/common/shopping-list';
 import OfferOverview from './components/common/offer-overview';
+import PageDecoration from './components/paged-publication/page-decoration';
 import {
     translate,
     pushQueryParam,
@@ -15,7 +16,7 @@ import {
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
 import {Viewer} from '../paged-publication';
-import {V2Catalog, V2Hotspot, V2Page} from '../core';
+import {V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
 import type {Tracker} from '../events';
 
 const PagedPublication = (
@@ -92,6 +93,26 @@ const PagedPublication = (
         dispatchPublicationData();
     };
 
+    const renderPageDecorations = (pageDecorations: V2PageDecoration[]) => {
+        pageDecorations
+            ?.filter((pageDecoration) => pageDecoration)
+            ?.forEach((pageDecoration) => {
+                const pageDecorationEl = PageDecoration({
+                    header: 'See more...',
+                    template: '',
+                    x: 0,
+                    y: 0,
+                    pageDecoration
+                });
+
+                const pageEl = document.querySelector(
+                    `.sgn-pp__page[data-id="page${pageDecoration?.page_number}"]`
+                );
+
+                pageEl?.appendChild(pageDecorationEl.render());
+            });
+    };
+
     const renderShoppingList = () =>
         ShoppingList({template: customTemplates.shoppingList}).render();
 
@@ -159,6 +180,15 @@ const PagedPublication = (
 
         header.show(sgnData);
 
+        if (!scriptEls.disablePageDecorations) {
+            const pageDecorations = await bootstrapper.fetchPageDecorations();
+            bootstrapper.applyPageDecorations(sgnViewer, pageDecorations);
+
+            sgnViewer.bind('pageDecorationsLoaded', (e) => {
+                renderPageDecorations(e);
+            });
+        }
+
         sgnViewer.bind('hotspotClicked', (hotspot) => {
             clickHotspot(hotspot);
         });
@@ -173,6 +203,7 @@ const PagedPublication = (
 
         const hotspots = await bootstrapper.fetchHotspots();
         bootstrapper.applyHotspots(sgnViewer, hotspots);
+
         displayUrlParams();
         addFirstLastControlListener();
     };

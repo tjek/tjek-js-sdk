@@ -1,5 +1,4 @@
 import Mustache from 'mustache';
-import {V2PageDecoration} from '../core';
 import './page-decoration.styl';
 
 const defaultTemplate = `\
@@ -30,7 +29,11 @@ const PageDecoration = ({
     template?: string;
     x: number;
     y: number;
-    pageDecoration: V2PageDecoration;
+    pageDecoration: {
+        page_number: number;
+        title: string;
+        website_link: string;
+    };
 }) => {
     const render = () => {
         const el = document.createElement('div');
