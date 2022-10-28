@@ -60,6 +60,9 @@ const PagedPublication = (
         offerOverview: document.getElementById(
             'sgn-sdk-paged-publication-viewer-offer-overview-template'
         ),
+        pageDecoration: document.getElementById(
+            'sgn-sdk-paged-publication-viewer-page-decoration-template'
+        ),
         menuContainer: document.getElementById(
             'sgn-sdk-paged-publication-viewer-menu-container-template'
         )
@@ -93,7 +96,7 @@ const PagedPublication = (
         dispatchPublicationData();
     };
 
-    const renderPageDecorations = (data) => {
+    const renderPageDecorations = (e) => {
         const pageDecorationsEl = document.querySelector<HTMLDivElement>(
             '.sgn-page_decorations'
         );
@@ -101,12 +104,12 @@ const PagedPublication = (
             pageDecorationsEl.innerHTML = '';
         }
 
-        data.pageDecorations
+        e.pageDecorations
             ?.filter((pageDecoration) => pageDecoration)
             ?.forEach((pageDecoration) => {
                 const pageDecorationEl = PageDecoration({
-                    template: '',
-                    pages: data.pages,
+                    template: customTemplates.pageDecoration,
+                    pages: e.pages,
                     pageDecoration
                 });
 
@@ -116,6 +119,20 @@ const PagedPublication = (
                     );
                 pageDecorationsEl?.appendChild(pageDecorationEl.render());
             });
+    };
+
+    const hidePageDecorations = (e) => {
+        const pageDecorationsEl = document.querySelector<HTMLDivElement>(
+            '.sgn-page_decorations'
+        );
+        pageDecorationsEl?.classList.add('sgn-pagedecoration-hidden');
+    };
+
+    const showPageDecorations = (e) => {
+        const pageDecorationsEl = document.querySelector<HTMLDivElement>(
+            '.sgn-page_decorations'
+        );
+        pageDecorationsEl?.classList.remove('sgn-pagedecoration-hidden');
     };
 
     const renderShoppingList = () =>
@@ -189,18 +206,12 @@ const PagedPublication = (
             const pageDecorations = await bootstrapper.fetchPageDecorations();
             bootstrapper.applyPageDecorations(sgnViewer, pageDecorations);
 
-            sgnViewer.bind('pageDecorationsLoaded', (e) => {
-                renderPageDecorations(e);
-            });
-
-            sgnViewer.bind('beforeNavigation', (e) => {
-                console.log('beforeNavigation', e);
-            });
+            sgnViewer.bind('pageDecorationsLoaded', renderPageDecorations);
+            sgnViewer.bind('zoomedIn', hidePageDecorations);
+            sgnViewer.bind('zoomedOut', showPageDecorations);
         }
 
-        sgnViewer.bind('hotspotClicked', (hotspot) => {
-            clickHotspot(hotspot);
-        });
+        sgnViewer.bind('hotspotClicked', clickHotspot);
 
         sgnViewer.start();
 

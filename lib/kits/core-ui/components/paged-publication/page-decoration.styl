@@ -1,35 +1,40 @@
-.sgn-pagedecoration
-    position absolute
-    z-index 4
-    outline 0
-    background-color #fff
-    color #000
-    border-radius 12px
-    min-width 170px
-    box-shadow 0 0 8px rgba(#000, 0.2)
-    bottom 50px
-    left 50%
-    transform translateX(-50%)
+.sgn__pp
+    .sgn-pagedecoration
+        position absolute
+        z-index 4
+        outline 0
+        background-color #fff
+        color #000
+        border-radius 12px
+        min-width 170px
+        padding 8px 12px
+        box-shadow 0 0 8px rgba(#000, 0.6)
+        top 90px
+        left 50%
+        transform translateX(-50%)
 
-    ul
-        list-style-type none
-        padding 0 14px
-        margin 6px 0
+        a
+            text-decoration none
+            color inherit
+            
+            .sgn-pagedecoration-item__domain
+                font-size 14px
+                margin 0
+                opacity .8
+                text-align center
 
-    a
-        text-decoration none
-        color inherit
-        
-        .sgn-pagedecoration-item__domain
-            font-size 14px
-            margin 0
-            opacity .6
-            text-align center
+    .sgn-pagedecoration-left
+        left 36%
 
-.sgn-pagedecoration-left
-    left 36%
+    .sgn-pagedecoration-right
+        right 36%
+        left unset
+        transform translateX(50%)
 
-.sgn-pagedecoration-right
-    right 36%
-    left unset
-    transform translateX(50%)
+    .sgn-pagedecoration-hidden
+        display none
+
+.sgn__pp
+    &[data-component-template-disable-header="true"]
+        .sgn-pagedecoration
+            top 10px

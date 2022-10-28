@@ -3,16 +3,10 @@ import './page-decoration.styl';
 
 const defaultTemplate = `\
 {{#pageDecoration.website_link}}
-<div class="sgn-pagedecoration__menu">
-    <div class="sgn-pagedecoration__content">
-        <ul>
-            <li data-index="0">
-                <a href="{{pageDecoration.website_link}}" rel="noreferrer noopener" target="_blank">
-                    <p class="sgn-pagedecoration-item__domain">{{pageDecoration.hostname}}</p>
-                </a>
-            </li>
-        </ul>
-    </div>
+<div class="sgn-pagedecoration__content">
+    <a href="{{pageDecoration.website_link}}" rel="noreferrer noopener" target="_blank">
+        <p class="sgn-pagedecoration-item__domain">{{pageDecoration.hostname}}</p>
+    </a>
 </div>
 {{/pageDecoration.website_link}}\
 `;
@@ -22,7 +16,7 @@ const PageDecoration = ({
     pages,
     pageDecoration
 }: {
-    template?: string;
+    template: HTMLElement | null;
     pages: [];
     pageDecoration: {
         page_number: number;
@@ -41,8 +35,7 @@ const PageDecoration = ({
 
         el.classList.add('sgn-pagedecoration');
         el.classList.add(`sgn-pagedecoration-${position}`);
-        el.setAttribute('tabindex', '-1');
-        el.innerHTML = Mustache.render(template || defaultTemplate, {
+        el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
             pageDecoration: {
                 ...pageDecoration,
                 hostname: getHostname(pageDecoration?.website_link)
