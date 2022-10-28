@@ -106,7 +106,7 @@ export default class Bootstrapper {
         );
 
     fetchPageDecorations = (callback?: Parameters<typeof request>[1]) =>
-        request<V2PageDecoration>(
+        request<V2PageDecoration[]>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,

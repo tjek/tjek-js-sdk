@@ -36,6 +36,7 @@ const PagedPublication = (
     let options;
     let sgnData: {details: V2Catalog; pages: V2Page[]} | undefined | {} = {};
     let sgnViewer: Viewer;
+    let sgnPageDecorations: V2PageDecoration[];
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -188,11 +189,9 @@ const PagedPublication = (
     const start = async () => {
         const bootstrapper = new Bootstrapper(options);
 
-        const data = await bootstrapper.fetch();
-
-        sgnData = data;
+        sgnData = await bootstrapper.fetch();
         // @ts-expect-error
-        sgnViewer = bootstrapper.createViewer(data);
+        sgnViewer = bootstrapper.createViewer(sgnData);
 
         updateViewerTranslation({
             'paged_publication.hotspot_picker.header': translate(
@@ -203,8 +202,8 @@ const PagedPublication = (
         header.show(sgnData);
 
         if (!scriptEls.disablePageDecorations) {
-            const pageDecorations = await bootstrapper.fetchPageDecorations();
-            bootstrapper.applyPageDecorations(sgnViewer, pageDecorations);
+            sgnPageDecorations = await bootstrapper.fetchPageDecorations();
+            bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
 
             sgnViewer.bind('pageDecorationsLoaded', renderPageDecorations);
             sgnViewer.bind('zoomedIn', hidePageDecorations);
@@ -383,7 +382,9 @@ const PagedPublication = (
 
         mainContainerEl?.dispatchEvent(
             new CustomEvent('publication:rendered', {
-                detail: sgnData
+                detail: scriptEls.disablePageDecorations
+                    ? sgnData
+                    : {...sgnData, pageDecorations: sgnPageDecorations}
             })
         );
     };
