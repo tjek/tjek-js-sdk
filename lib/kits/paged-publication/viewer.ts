@@ -9,6 +9,7 @@ import Core from './core';
 import EventTracking from './event-tracking';
 import Hotspots from './hotspots';
 import {Page} from './page-spreads';
+import PageDecorations from '../core-ui/page-decorations';
 import './viewer.styl';
 
 function defaultPickHotspot(
@@ -312,9 +313,13 @@ class Viewer extends MicroEvent {
     }
 
     applyPageDecorations(pageDecorations) {
+        if (!pageDecorations?.length) return;
+
         this.pageDecorations = pageDecorations;
 
         this.bind('beforeNavigation', (e) => {
+            PageDecorations().show();
+
             const pageDecors = e?.pageSpread?.options?.pages?.map(
                 ({pageNumber}) =>
                     this.pageDecorations?.find(
@@ -322,11 +327,15 @@ class Viewer extends MicroEvent {
                             pageDecoration.page_number == pageNumber
                     )
             );
-            this.trigger('pageDecorationsLoaded', {
-                pages: e.pageSpread?.options?.pages,
+
+            PageDecorations().render({
                 pageDecorations: pageDecors
             });
         });
+        this.bind('zoomedIn', PageDecorations().hide);
+        this.bind('zoomedOut', PageDecorations().show);
+        this.bind('panStart', PageDecorations().hide);
+        this.bind('attemptedNavigation', PageDecorations().show);
     }
 
     getPageDecorations() {

@@ -7,7 +7,6 @@ import Header from './components/common/header';
 import MenuPopup from './components/common/menu-popup';
 import ShoppingList from './components/common/shopping-list';
 import OfferOverview from './components/common/offer-overview';
-import PageDecoration from './components/paged-publication/page-decoration';
 import {
     translate,
     pushQueryParam,
@@ -97,45 +96,6 @@ const PagedPublication = (
         dispatchPublicationData();
     };
 
-    const renderPageDecorations = (e) => {
-        const pageDecorationsEl = document.querySelector<HTMLDivElement>(
-            '.sgn-page_decorations'
-        );
-        if (pageDecorationsEl?.innerHTML) {
-            pageDecorationsEl.innerHTML = '';
-        }
-
-        e.pageDecorations
-            ?.filter((pageDecoration) => pageDecoration)
-            ?.forEach((pageDecoration) => {
-                const pageDecorationEl = PageDecoration({
-                    template: customTemplates.pageDecoration,
-                    pages: e.pages,
-                    pageDecoration
-                });
-
-                const pageDecorationsEl =
-                    document.querySelector<HTMLDivElement>(
-                        '.sgn-page_decorations'
-                    );
-                pageDecorationsEl?.appendChild(pageDecorationEl.render());
-            });
-    };
-
-    const hidePageDecorations = (e) => {
-        const pageDecorationsEl = document.querySelector<HTMLDivElement>(
-            '.sgn-page_decorations'
-        );
-        pageDecorationsEl?.classList.add('sgn-pagedecoration-hidden');
-    };
-
-    const showPageDecorations = (e) => {
-        const pageDecorationsEl = document.querySelector<HTMLDivElement>(
-            '.sgn-page_decorations'
-        );
-        pageDecorationsEl?.classList.remove('sgn-pagedecoration-hidden');
-    };
-
     const renderShoppingList = () =>
         ShoppingList({template: customTemplates.shoppingList}).render();
 
@@ -204,10 +164,6 @@ const PagedPublication = (
         if (!scriptEls.disablePageDecorations) {
             sgnPageDecorations = await bootstrapper.fetchPageDecorations();
             bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
-
-            sgnViewer.bind('pageDecorationsLoaded', renderPageDecorations);
-            sgnViewer.bind('zoomedIn', hidePageDecorations);
-            sgnViewer.bind('zoomedOut', showPageDecorations);
         }
 
         sgnViewer.bind('hotspotClicked', clickHotspot);
