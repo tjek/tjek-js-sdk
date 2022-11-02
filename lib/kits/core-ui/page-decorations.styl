@@ -12,6 +12,9 @@
         top 90px
         left 50%
         transform translateX(-50%)
+        animation-name sgn-animate-pagedecoration
+        animation-timing-function ease
+        animation-duration .3s
 
         a
             text-decoration none
@@ -25,15 +28,26 @@
 
     .sgn-pagedecoration-left
         left 36%
+        top 40px
+        z-index 99
 
     .sgn-pagedecoration-right
         right 36%
+        top 40px
+        z-index 99
         left unset
         transform translateX(50%)
 
     .sgn-pagedecoration-hidden
         display none
 
+
+@keyframes sgn-animate-pagedecoration
+    0%
+        opacity 0
+    100%
+        opacity 1
+        
 .sgn__pp
     &[data-component-template-disable-header="true"]
         .sgn-pagedecoration
