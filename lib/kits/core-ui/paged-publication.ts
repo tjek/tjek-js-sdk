@@ -60,9 +60,6 @@ const PagedPublication = (
         offerOverview: document.getElementById(
             'sgn-sdk-paged-publication-viewer-offer-overview-template'
         ),
-        pageDecoration: document.getElementById(
-            'sgn-sdk-paged-publication-viewer-page-decoration-template'
-        ),
         menuContainer: document.getElementById(
             'sgn-sdk-paged-publication-viewer-menu-container-template'
         )
