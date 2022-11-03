@@ -5,6 +5,32 @@
 
         &::-webkit-scrollbar
             display none
+        
+        .sgn__sidebar-control
+            display block
+            background transparent
+            border 0
+            position fixed
+            cursor pointer
+            font-size 60px
+            top 50%
+            height 50px
+            margin-top -25px
+            line-height 0.5
+            text-align center
+            color #fff
+            text-shadow 0 0 18px rgba(#000, 0.24), -1px -1px 1px rgba(#000, 0.3), 1px -1px 1px rgba(#000, 0.3), -1px 1px 1px rgba(#000, 0.3), 1px 1px 1px rgba(#000, 0.3)
+            opacity 0.5
+            z-index 999
+            
+            &:hover,
+            &:focus
+                color #fff
+                text-decoration none
+            
+            &:hover,
+            &:active
+                opacity 1
 
         &[data-component-template-sidebar-position="left"]
             left 20vw
@@ -19,6 +45,10 @@
                 width 80vw
                 margin-left auto
             
+            .sgn__sidebar-control
+                left 20vw
+                transform rotate(180deg)
+            
         &[data-component-template-sidebar-position="right"]
             right 20vw
             
@@ -31,35 +61,10 @@
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
                 width 80vw
                 margin-right auto
-
+            
             .sgn__sidebar-control
-                display block
-                background transparent
-                border 0
-                position fixed
-                cursor pointer
-                font-size 60px
-                top 50%
-                height 50px
-                margin-top -25px
-                line-height 0.5
-                text-align center
-                color #fff
-                text-shadow 0 0 18px rgba(#000, 0.24), -1px -1px 1px rgba(#000, 0.3), 1px -1px 1px rgba(#000, 0.3), -1px 1px 1px rgba(#000, 0.3), 1px 1px 1px rgba(#000, 0.3)
-                opacity 0.5
-                z-index 999
-                
-                &:hover,
-                &:focus
-                    color #fff
-                    text-decoration none
-                
-                &:hover,
-                &:active
-                    opacity 1
+                right 20vw
 
-                &[data-direction="gt"]
-                    right 20vw
 
 .sgn__sidebar
     position absolute
@@ -180,8 +185,19 @@
             animation sgn-animate-sidebar-right-close .3s
 
         .sgn__sidebar-control
-            &[data-direction="gt"]
-                    right 0!important
+            right 0!important
+            transform rotate(180deg)
+    
+    &[data-component-template-sidebar-position="left"]
+        left 0 !important
+
+        .sgn__sidebar            
+            display none
+            animation sgn-animate-sidebar-left-close .3s
+
+        .sgn__sidebar-control
+            left 0 !important
+            transform rotate(0) !important
 
 
 

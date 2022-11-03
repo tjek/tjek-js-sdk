@@ -80,10 +80,7 @@ const defaultTemplate = `\
         <div class="sgn__sidebar-content-container"></div>
     
     </div>
-    <button
-        class="sgn__sidebar-control"
-        data-direction="gt"
-    >
+    <button class="sgn__sidebar-control">
         &rsaquo;
     </button>
 {{/enableSidebar}}\
