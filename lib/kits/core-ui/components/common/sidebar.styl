@@ -21,7 +21,7 @@
             color #fff
             text-shadow 0 0 18px rgba(#000, 0.24), -1px -1px 1px rgba(#000, 0.3), 1px -1px 1px rgba(#000, 0.3), -1px 1px 1px rgba(#000, 0.3), 1px 1px 1px rgba(#000, 0.3)
             opacity 0.5
-            z-index 999
+            z-index 99
             
             &:hover,
             &:focus
@@ -33,37 +33,37 @@
                 opacity 1
 
         &[data-component-template-sidebar-position="left"]
-            left 20vw
+            left 350px
 
             .sgn__sidebar
                 position fixed
-                width 20vw
+                width 350px
                 left 0
                 background-color #ffffff
 
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
-                width 80vw
+                width calc(100vw - 350px)
                 margin-left auto
             
             .sgn__sidebar-control
-                left 20vw
+                left 350px
                 transform rotate(180deg)
             
         &[data-component-template-sidebar-position="right"]
-            right 20vw
+            right 350px
             
             .sgn__sidebar
                 position fixed
-                width 20vw
+                width 350px
                 right 0
                 background-color #ffffff
 
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
-                width 80vw
+                width calc(100vw - 350px)
                 margin-right auto
             
             .sgn__sidebar-control
-                right 20vw
+                right 350px
 
 
 .sgn__sidebar
@@ -221,13 +221,13 @@
 
 @keyframes sgn-animate-sidebar-left
     0%
-        transform translateX(-20vw)
+        transform translateX(-350px)
     100%
         transform translateX(0)
 
 @keyframes sgn-animate-sidebar-right
     0%
-        transform translateX(20vw)
+        transform translateX(350px)
     100%
         transform translateX(0)
 
