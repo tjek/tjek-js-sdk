@@ -1,15 +1,13 @@
 .sgn__pp
     .sgn-pagedecoration
         position absolute
-        z-index 4
         outline 0
         background-color #fff
-        color #000
+        color #3e3e3e
         border-radius 12px
-        min-width 170px
-        padding 8px 12px
+        padding 8px 16px
         box-shadow rgba(0, 0, 0,  0.4) 0px 5px 16px, rgba(0, 0, 0, 0.2) 0px 0px 1px
-        top 90px
+        bottom 26px
         left 50%
         transform translateX(-50%)
         animation-name sgn-animate-pagedecoration
@@ -24,16 +22,7 @@
             .sgn-pagedecoration-item__domain
                 font-size 14px
                 margin 0
-                opacity .8
                 text-align center
-
-    .sgn-pagedecoration-left
-        box-shadow rgba(0 0 0 0.4) 2px 2px 5px, rgba(0 0 0 0.2) 0px 0px 0px
-        border-radius 0px 0px 12px 0px
-
-    .sgn-pagedecoration-right, .sgn-pagedecoration-center
-        box-shadow rgba(0 0 0 0.4) -2px 2px 5px, rgba(0 0 0 0.2) 0px 0px 0px
-        border-radius 0px 0px 0px 12px
 
     .sgn-pagedecoration-hidden
         display none
@@ -46,8 +35,8 @@
         opacity 0
     100%
         opacity 1
-        
+
 .sgn__pp
     &[data-component-template-disable-header="true"]
-        .sgn-pagedecoration
-            top 10px
+        .sgn-pagedecoration-center
+            bottom 50px

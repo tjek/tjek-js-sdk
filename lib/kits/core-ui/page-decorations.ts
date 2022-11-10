@@ -52,6 +52,11 @@ const PageDecorations = () => {
                         : pageDecoration.page_number % 2 == 0
                         ? 'left'
                         : 'right';
+                const bgImgDimension = getPubImageDimension(
+                    aspectRatio,
+                    pageSpreadEls,
+                    pageDecorations.length
+                );
 
                 el.classList.add('sgn-pagedecoration');
                 el.classList.add(`sgn-pagedecoration-${position}`);
@@ -65,45 +70,10 @@ const PageDecorations = () => {
                     }
                 );
 
-                const bgImgDimension = getPubImageDimension(
-                    aspectRatio,
-                    pageSpreadEls,
-                    pageDecorations.length
-                );
-
                 if (position === 'left') {
-                    el.style.left = `calc(50% - ${bgImgDimension.width}px)`;
-                    el.style.top = `calc(100% - ${
-                        bgImgDimension.height < bgImgDimension.pageElHeight
-                            ? bgImgDimension.height +
-                              (bgImgDimension.pageElHeight -
-                                  bgImgDimension.height) /
-                                  2
-                            : bgImgDimension.height
-                    }px)`;
-                    el.style.transform = 'unset';
+                    el.style.left = `calc(50% - ${bgImgDimension.width / 2}px)`;
                 } else if (position === 'right') {
-                    el.style.left = `calc(50% + ${bgImgDimension.width}px)`;
-                    el.style.top = `calc(100% - ${
-                        bgImgDimension.height < bgImgDimension.pageElHeight
-                            ? bgImgDimension.height +
-                              (bgImgDimension.pageElHeight -
-                                  bgImgDimension.height) /
-                                  2
-                            : bgImgDimension.height
-                    }px)`;
-                    el.style.transform = 'translateX(-100%)';
-                } else {
                     el.style.left = `calc(50% + ${bgImgDimension.width / 2}px)`;
-                    el.style.top = `calc(100% - ${
-                        bgImgDimension.height < bgImgDimension.pageElHeight
-                            ? bgImgDimension.height +
-                              (bgImgDimension.pageElHeight -
-                                  bgImgDimension.height) /
-                                  2
-                            : bgImgDimension.height
-                    }px)`;
-                    el.style.transform = 'translateX(-100%)';
                 }
 
                 pageDecorationsEls?.appendChild(el);
@@ -125,7 +95,12 @@ const PageDecorations = () => {
         try {
             const url = new URL(link);
 
-            return url.hostname;
+            const hostnameArr = url.hostname.split('.');
+            const [subDomain, secondDomain, topDomain] = hostnameArr;
+
+            return hostnameArr.length >= 3
+                ? [secondDomain, topDomain].join('.')
+                : url.hostname;
         } catch (e) {
             console.log('Error:', e?.message);
 
@@ -139,21 +114,16 @@ const PageDecorations = () => {
         const aspectRatioWidth = pageElHeight / aspectRatio;
         const aspectRatioHeight = pageElWidth * aspectRatio;
 
-        if (aspectRatioWidth < pageElWidth) {
-            return {
-                width: aspectRatioWidth,
-                height: pageElHeight,
-                pageElWidth,
-                pageElHeight
-            };
-        } else {
-            return {
-                width: pageElWidth,
-                height: aspectRatioHeight,
-                pageElWidth,
-                pageElHeight
-            };
-        }
+        return {
+            width:
+                aspectRatioWidth < pageElWidth ? aspectRatioWidth : pageElWidth,
+            height:
+                aspectRatioWidth < pageElWidth
+                    ? pageElHeight
+                    : aspectRatioHeight,
+            pageElWidth,
+            pageElHeight
+        };
     };
 
     return {render, hide, show};
