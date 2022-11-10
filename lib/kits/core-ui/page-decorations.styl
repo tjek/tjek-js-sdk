@@ -14,7 +14,8 @@
         transform translateX(-50%)
         animation-name sgn-animate-pagedecoration
         animation-timing-function ease
-        animation-duration .3s
+        animation-duration .5s
+        z-index 99
 
         a
             text-decoration none
@@ -27,16 +28,12 @@
                 text-align center
 
     .sgn-pagedecoration-left
-        left unset
-        right 55%
-        top 40px
-        z-index 99
+        box-shadow rgba(0 0 0 0.4) 2px 2px 5px, rgba(0 0 0 0.2) 0px 0px 0px
+        border-radius 0px 0px 12px 0px
 
-    .sgn-pagedecoration-right
-        left 55%
-        top 40px
-        z-index 99
-        transform translateX(50%)
+    .sgn-pagedecoration-right, .sgn-pagedecoration-center
+        box-shadow rgba(0 0 0 0.4) -2px 2px 5px, rgba(0 0 0 0.2) 0px 0px 0px
+        border-radius 0px 0px 0px 12px
 
     .sgn-pagedecoration-hidden
         display none
@@ -44,6 +41,8 @@
 
 @keyframes sgn-animate-pagedecoration
     0%
+        opacity 0
+    10%
         opacity 0
     100%
         opacity 1

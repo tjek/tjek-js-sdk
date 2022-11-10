@@ -21,9 +21,13 @@ const PageDecorations = () => {
     );
 
     const render = ({
-        pageDecorations
+        pageDecorations,
+        aspectRatio,
+        pageSpreadEls
     }: {
         pageDecorations: V2PageDecoration[];
+        aspectRatio: {};
+        pageSpreadEls: NodeListOf<HTMLElement>;
     }) => {
         if (pageDecorationsContainer?.innerHTML) {
             pageDecorationsContainer.innerHTML = '';
@@ -61,6 +65,47 @@ const PageDecorations = () => {
                     }
                 );
 
+                const bgImgDimension = getPubImageDimension(
+                    aspectRatio,
+                    pageSpreadEls,
+                    pageDecorations.length
+                );
+
+                if (position === 'left') {
+                    el.style.left = `calc(50% - ${bgImgDimension.width}px)`;
+                    el.style.top = `calc(100% - ${
+                        bgImgDimension.height < bgImgDimension.pageElHeight
+                            ? bgImgDimension.height +
+                              (bgImgDimension.pageElHeight -
+                                  bgImgDimension.height) /
+                                  2
+                            : bgImgDimension.height
+                    }px)`;
+                    el.style.transform = 'unset';
+                } else if (position === 'right') {
+                    el.style.left = `calc(50% + ${bgImgDimension.width}px)`;
+                    el.style.top = `calc(100% - ${
+                        bgImgDimension.height < bgImgDimension.pageElHeight
+                            ? bgImgDimension.height +
+                              (bgImgDimension.pageElHeight -
+                                  bgImgDimension.height) /
+                                  2
+                            : bgImgDimension.height
+                    }px)`;
+                    el.style.transform = 'translateX(-100%)';
+                } else {
+                    el.style.left = `calc(50% + ${bgImgDimension.width / 2}px)`;
+                    el.style.top = `calc(100% - ${
+                        bgImgDimension.height < bgImgDimension.pageElHeight
+                            ? bgImgDimension.height +
+                              (bgImgDimension.pageElHeight -
+                                  bgImgDimension.height) /
+                                  2
+                            : bgImgDimension.height
+                    }px)`;
+                    el.style.transform = 'translateX(-100%)';
+                }
+
                 pageDecorationsEls?.appendChild(el);
             }
         });
@@ -85,6 +130,29 @@ const PageDecorations = () => {
             console.log('Error:', e?.message);
 
             return null;
+        }
+    };
+
+    const getPubImageDimension = (aspectRatio, pageSpreadEls, pageCount) => {
+        const pageElWidth = (pageSpreadEls[0]?.offsetWidth || 0) / pageCount;
+        const pageElHeight = pageSpreadEls[0]?.offsetHeight || 0;
+        const aspectRatioWidth = pageElHeight / aspectRatio;
+        const aspectRatioHeight = pageElWidth * aspectRatio;
+
+        if (aspectRatioWidth < pageElWidth) {
+            return {
+                width: aspectRatioWidth,
+                height: pageElHeight,
+                pageElWidth,
+                pageElHeight
+            };
+        } else {
+            return {
+                width: pageElWidth,
+                height: aspectRatioHeight,
+                pageElWidth,
+                pageElHeight
+            };
         }
     };
 

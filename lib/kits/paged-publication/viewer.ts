@@ -329,7 +329,17 @@ class Viewer extends MicroEvent {
             );
 
             PageDecorations().render({
-                pageDecorations: pageDecors
+                pageDecorations: pageDecors,
+                aspectRatio: this.options?.hotspotRatio || 1,
+                pageSpreadEls: this._core.getVerso().pageSpreadEls
+            });
+
+            this._core.bind('resized', (e) => {
+                PageDecorations().render({
+                    pageDecorations: pageDecors,
+                    aspectRatio: this.options?.hotspotRatio || 1,
+                    pageSpreadEls: this._core.getVerso().pageSpreadEls
+                });
             });
         });
         this.bind('zoomedIn', PageDecorations().hide);
