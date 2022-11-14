@@ -1,7 +1,7 @@
 import MicroEvent from 'microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
-import {V2Hotspot} from '../core';
+import {V2Hotspot, V2PageDecoration} from '../core';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
 import Controls from './controls';
@@ -9,6 +9,7 @@ import Core from './core';
 import EventTracking from './event-tracking';
 import Hotspots from './hotspots';
 import {Page} from './page-spreads';
+import PageDecorations from '../core-ui/page-decorations';
 import './viewer.styl';
 
 function defaultPickHotspot(
@@ -66,6 +67,7 @@ class Viewer extends MicroEvent {
     _core: Core;
     _controls: Controls;
     _eventTracking: EventTracking;
+    pageDecorations: V2PageDecoration[];
     options: ViewerInit;
     // @ts-expect-error
     constructor(el: HTMLElement, options: ViewerInit = {}) {
@@ -308,6 +310,46 @@ class Viewer extends MicroEvent {
         this.hotspots = hotspots;
 
         this.processHotspotQueue();
+    }
+
+    applyPageDecorations(pageDecorations) {
+        if (!pageDecorations?.length) return;
+
+        this.pageDecorations = pageDecorations;
+
+        this.bind('beforeNavigation', (e) => {
+            PageDecorations().show();
+
+            const pageDecors = e?.pageSpread?.options?.pages?.map(
+                ({pageNumber}) =>
+                    this.pageDecorations?.find(
+                        (pageDecoration) =>
+                            pageDecoration.page_number == pageNumber
+                    )
+            );
+
+            PageDecorations().render({
+                pageDecorations: pageDecors,
+                aspectRatio: this.options?.hotspotRatio || 1,
+                pageSpreadEls: this._core.getVerso().pageSpreadEls
+            });
+
+            this._core.bind('resized', (e) => {
+                PageDecorations().render({
+                    pageDecorations: pageDecors,
+                    aspectRatio: this.options?.hotspotRatio || 1,
+                    pageSpreadEls: this._core.getVerso().pageSpreadEls
+                });
+            });
+        });
+        this.bind('zoomedIn', PageDecorations().hide);
+        this.bind('zoomedOut', PageDecorations().show);
+        this.bind('panStart', PageDecorations().hide);
+        this.bind('attemptedNavigation', PageDecorations().show);
+    }
+
+    getPageDecorations() {
+        return this.pageDecorations;
     }
 
     beforeNavigation = () => {

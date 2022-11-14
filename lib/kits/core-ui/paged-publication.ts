@@ -15,7 +15,7 @@ import {
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
 import {Viewer} from '../paged-publication';
-import {V2Catalog, V2Hotspot, V2Page} from '../core';
+import {V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
 import type {Tracker} from '../events';
 
 const PagedPublication = (
@@ -35,6 +35,7 @@ const PagedPublication = (
     let options;
     let sgnData: {details: V2Catalog; pages: V2Page[]} | undefined | {} = {};
     let sgnViewer: Viewer;
+    let sgnPageDecorations: V2PageDecoration[];
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -145,11 +146,9 @@ const PagedPublication = (
     const start = async () => {
         const bootstrapper = new Bootstrapper(options);
 
-        const data = await bootstrapper.fetch();
-
-        sgnData = data;
+        sgnData = await bootstrapper.fetch();
         // @ts-expect-error
-        sgnViewer = bootstrapper.createViewer(data);
+        sgnViewer = bootstrapper.createViewer(sgnData);
 
         updateViewerTranslation({
             'paged_publication.hotspot_picker.header': translate(
@@ -159,9 +158,12 @@ const PagedPublication = (
 
         header.show(sgnData);
 
-        sgnViewer.bind('hotspotClicked', (hotspot) => {
-            clickHotspot(hotspot);
-        });
+        if (!scriptEls.disablePageDecorations) {
+            sgnPageDecorations = await bootstrapper.fetchPageDecorations();
+            bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
+        }
+
+        sgnViewer.bind('hotspotClicked', clickHotspot);
 
         sgnViewer.start();
 
@@ -173,6 +175,7 @@ const PagedPublication = (
 
         const hotspots = await bootstrapper.fetchHotspots();
         bootstrapper.applyHotspots(sgnViewer, hotspots);
+
         displayUrlParams();
         addFirstLastControlListener();
     };
@@ -332,7 +335,9 @@ const PagedPublication = (
 
         mainContainerEl?.dispatchEvent(
             new CustomEvent('publication:rendered', {
-                detail: sgnData
+                detail: scriptEls.disablePageDecorations
+                    ? sgnData
+                    : {...sgnData, pageDecorations: sgnPageDecorations}
             })
         );
     };

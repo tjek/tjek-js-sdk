@@ -42,6 +42,7 @@ const defaultTemplate = `\
         >
             &raquo;
         </button>
+        <div class="sgn-page_decorations"></div>
     </div>\
 `;
 
