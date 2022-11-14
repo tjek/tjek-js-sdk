@@ -1,0 +1,42 @@
+.sgn__pp
+    .sgn-pagedecoration
+        position absolute
+        outline 0
+        background-color #fff
+        color #3e3e3e
+        border-radius 12px
+        padding 8px 16px
+        box-shadow rgba(0, 0, 0,  0.4) 0px 5px 16px, rgba(0, 0, 0, 0.2) 0px 0px 1px
+        bottom 26px
+        left 50%
+        transform translateX(-50%)
+        animation-name sgn-animate-pagedecoration
+        animation-timing-function ease
+        animation-duration .5s
+        z-index 99
+
+        a
+            text-decoration none
+            color inherit
+            
+            .sgn-pagedecoration-item__domain
+                font-size 14px
+                margin 0
+                text-align center
+
+    .sgn-pagedecoration-hidden
+        display none
+
+
+@keyframes sgn-animate-pagedecoration
+    0%
+        opacity 0
+    10%
+        opacity 0
+    100%
+        opacity 1
+
+.sgn__pp
+    &[data-component-template-disable-header="true"]
+        .sgn-pagedecoration-center
+            bottom 50px
