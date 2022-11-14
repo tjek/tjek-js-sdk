@@ -109,8 +109,11 @@ const PageDecorations = () => {
     };
 
     const getPubImageDimension = (aspectRatio, pageSpreadEls, pageCount) => {
-        const pageElWidth = (pageSpreadEls[0]?.offsetWidth || 0) / pageCount;
-        const pageElHeight = pageSpreadEls[0]?.offsetHeight || 0;
+        const pageElWidth =
+            (pageSpreadEls[pageSpreadEls.length - 1]?.offsetWidth || 0) /
+            pageCount;
+        const pageElHeight =
+            pageSpreadEls[pageSpreadEls.length - 1]?.offsetHeight || 0;
         const aspectRatioWidth = pageElHeight / aspectRatio;
         const aspectRatioHeight = pageElWidth * aspectRatio;
 
