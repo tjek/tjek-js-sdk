@@ -32,8 +32,6 @@ const ListPublications = (
             scriptEl.dataset.componentListPublicationsContainer ||
             mainContainer,
         orderBy: scriptEl.dataset.componentListPublicationsOrderBy,
-        requestFilter: scriptEl.dataset.componentListPublicationsRequestFilter,
-        clientFilter: scriptEl.dataset.componentListPublicationsClientFilter,
         preferredViewer:
             scriptEl.dataset.componentPublicationsViewerPreferredType
     };
