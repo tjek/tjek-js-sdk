@@ -11,6 +11,8 @@ import generatePackageJson from 'rollup-plugin-generate-package-json';
 import {terser} from 'rollup-plugin-terser';
 import {createFilter} from 'rollup-pluginutils';
 import stylus from 'stylus';
+import * as url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const libDir = path.join(__dirname, 'lib');
 const distDir = path.join(__dirname, 'dist');
@@ -244,14 +246,20 @@ function stylusPlugin({
             filter(id) ? {code: '', moduleSideEffects: 'no-treeshake'} : null,
         async generateBundle(_, bundle) {
             for (const file of Object.values(bundle)) {
+                if (!file.modules) continue;
                 const fileName = file.fileName.slice(
                     0,
                     -path.extname(file.fileName).length
                 );
-                const stylusCode = Object.keys(file.modules)
-                    .filter((id) => filter(id))
-                    .map((id) => `@require '${id}'`)
-                    .join(EOL);
+                const stylusCode = Object.keys(file.modules).reduce(
+                    (code, id) =>
+                        filter(id)
+                            ? code
+                                ? `${code}${EOL}@require '${id}'`
+                                : `@require '${id}'`
+                            : code,
+                    ''
+                );
                 if (!stylusCode) return;
                 const cssCode = await new Promise((y, n) =>
                     stylus(
