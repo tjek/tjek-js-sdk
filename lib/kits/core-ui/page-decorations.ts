@@ -96,7 +96,7 @@ const PageDecorations = () => {
             const hostnameArr = url.hostname.split('.');
             const [subDomain, secondDomain, topDomain] = hostnameArr;
 
-            return hostnameArr.length >= 3
+            return subDomain === 'www'
                 ? [secondDomain, topDomain].join('.')
                 : url.hostname;
         } catch (e) {
