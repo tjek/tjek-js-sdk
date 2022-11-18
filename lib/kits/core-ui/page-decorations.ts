@@ -22,12 +22,10 @@ const PageDecorations = () => {
 
     const render = ({
         pageDecorations,
-        aspectRatio,
-        pageSpreadEls
+        aspectRatio
     }: {
         pageDecorations: V2PageDecoration[];
         aspectRatio: {};
-        pageSpreadEls: NodeListOf<HTMLElement>;
     }) => {
         if (pageDecorationsContainer?.innerHTML) {
             pageDecorationsContainer.innerHTML = '';
@@ -47,14 +45,14 @@ const PageDecorations = () => {
             if (pageDecoration && getHostname(pageDecoration?.website_link)) {
                 const el = document.createElement('div');
                 const position =
-                    filteredPageDecorations?.length <= 1
+                    pageDecorations?.length <= 1
                         ? 'center'
                         : pageDecoration.page_number % 2 == 0
                         ? 'left'
                         : 'right';
+
                 const bgImgDimension = getPubImageDimension(
                     aspectRatio,
-                    pageSpreadEls,
                     pageDecorations.length
                 );
 
@@ -108,12 +106,11 @@ const PageDecorations = () => {
         }
     };
 
-    const getPubImageDimension = (aspectRatio, pageSpreadEls, pageCount) => {
-        const pageElWidth =
-            (pageSpreadEls[pageSpreadEls.length - 1]?.offsetWidth || 0) /
-            pageCount;
-        const pageElHeight =
-            pageSpreadEls[pageSpreadEls.length - 1]?.offsetHeight || 0;
+    const getPubImageDimension = (aspectRatio, pageCount) => {
+        const versoPageSpreadEl =
+            document.querySelector<HTMLElement>('.verso__scroller');
+        const pageElWidth = (versoPageSpreadEl?.offsetWidth || 0) / pageCount;
+        const pageElHeight = versoPageSpreadEl?.offsetHeight || 0;
         const aspectRatioWidth = pageElHeight / aspectRatio;
         const aspectRatioHeight = pageElWidth * aspectRatio;
 

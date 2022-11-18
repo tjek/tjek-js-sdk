@@ -330,15 +330,13 @@ class Viewer extends MicroEvent {
 
             PageDecorations().render({
                 pageDecorations: pageDecors,
-                aspectRatio: this.options?.hotspotRatio || 1,
-                pageSpreadEls: this._core.getVerso().pageSpreadEls
+                aspectRatio: this.options?.hotspotRatio || 1
             });
 
             this._core.bind('resized', (e) => {
                 PageDecorations().render({
                     pageDecorations: pageDecors,
-                    aspectRatio: this.options?.hotspotRatio || 1,
-                    pageSpreadEls: this._core.getVerso().pageSpreadEls
+                    aspectRatio: this.options?.hotspotRatio || 1
                 });
             });
         });
