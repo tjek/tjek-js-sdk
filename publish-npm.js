@@ -1,26 +1,22 @@
 #!/usr/bin/env node
 'use strict';
 
-const glob = require('glob');
-const {promises: fs, createReadStream} = require('fs');
-
-const chalk = require('chalk');
-const path = require('path');
-const {prompt} = require('inquirer');
-const {spawn, execSync} = require('child_process');
-const {isBinaryFile} = require('isbinaryfile');
-const jsdiff = require('diff');
-const ora = require('ora');
-const libnpm = require('libnpm');
-
-const semver = require('semver');
-
-const tmp = require('tmp-promise');
-const tar = require('tar');
-const zlib = require('zlib');
-const recursive = require('recursive-readdir');
-
-const {fromBuffer: fileType} = require('file-type');
+import chalk from 'chalk';
+import {execSync, spawn} from 'child_process';
+import {createPatch, parsePatch} from 'diff';
+import {fileTypeFromBuffer} from 'file-type';
+import {createReadStream, promises as fs} from 'fs';
+import glob from 'glob';
+import inquirer from 'inquirer';
+import {isBinaryFile} from 'isbinaryfile';
+import libnpm from 'libnpm';
+import ora from 'ora';
+import {join, relative, resolve} from 'path';
+import recursive from 'recursive-readdir';
+import {inc} from 'semver';
+import {extract as _extract} from 'tar';
+import {dirSync} from 'tmp-promise';
+import {createUnzip} from 'zlib';
 
 if (!process.env.GOOD) {
     throw new Error('Please use `npm run publish` to publish to npm.');
@@ -30,7 +26,8 @@ class NotFoundError extends Error {}
 
 // Use heuristics to detect if buffer is binary file.
 const isBinary = async (buffer) =>
-    (await isBinaryFile(buffer, buffer.length)) || !!(await fileType(buffer));
+    (await isBinaryFile(buffer, buffer.length)) ||
+    Boolean(await fileTypeFromBuffer(buffer));
 
 const run = (...args) =>
     new Promise((resolve, reject) => {
@@ -46,7 +43,7 @@ const run = (...args) =>
 async function npmPack(pkg, cwd) {
     let pack;
     try {
-        pack = path.join(cwd, await run('npm', ['pack', pkg], {cwd}));
+        pack = join(cwd, await run('npm', ['pack', pkg], {cwd}));
     } catch (error) {
         if (
             error.startsWith('npm ERR! code E404') ||
@@ -59,15 +56,15 @@ async function npmPack(pkg, cwd) {
     return pack;
 }
 async function extract(pkg) {
-    const tmpDir = tmp.dirSync().name;
+    const tmpDir = dirSync().name;
     const pack = await npmPack(pkg, tmpDir);
-    const extractedDir = path.resolve(tmpDir, 'extracted');
+    const extractedDir = resolve(tmpDir, 'extracted');
 
     await fs.mkdir(extractedDir);
     return await new Promise((resolve, reject) =>
         createReadStream(pack)
-            .pipe(zlib.createUnzip())
-            .pipe(tar.extract({cwd: extractedDir, strip: 1}))
+            .pipe(createUnzip())
+            .pipe(_extract({cwd: extractedDir, strip: 1}))
             .on('error', reject)
             .on('close', () => resolve(extractedDir))
     );
@@ -83,7 +80,7 @@ async function getFiles(filesPath) {
     );
     const obj = {};
     for (const [fullPath, buf] of results) {
-        const relPath = path.relative(filesPath, fullPath);
+        const relPath = relative(filesPath, fullPath);
         const isBin = await isBinary(buf);
 
         obj[relPath] = {
@@ -155,7 +152,7 @@ async function diff(oldPath, newPath) {
 
                 return [
                     key,
-                    jsdiff.createPatch(
+                    createPatch(
                         key,
                         binDiff ? '' : oldFile.contents || '',
                         binDiff ? '' : newFile.contents || '',
@@ -190,7 +187,7 @@ async function npmDiff(packageJsonPath, tag) {
         }
     }
     const newFiles = await extract(
-        path.resolve(packageJsonPath.replace('package.json', ''))
+        resolve(packageJsonPath.replace('package.json', ''))
     );
 
     ind.start(
@@ -242,7 +239,7 @@ async function publish() {
         .split('T')[0]
         .replaceAll('-', '');
 
-    const {tag} = await prompt([
+    const {tag} = await inquirer.prompt([
         {
             type: 'list',
             name: 'tag',
@@ -279,7 +276,7 @@ async function publish() {
                             {
                                 hunks: [hunk]
                             }
-                        ] = jsdiff.parsePatch(diff);
+                        ] = parsePatch(diff);
                         if (hunk) {
                             memo.addCount = memo.addCount + hunk.newLines;
                             memo.removeCount = memo.removeCount + hunk.oldLines;
@@ -298,7 +295,7 @@ async function publish() {
         process.exit();
     }
 
-    const answers = await prompt([
+    const answers = await inquirer.prompt([
         {
             type: 'checkbox',
             name: 'packagesToPublish',
@@ -333,7 +330,7 @@ async function publish() {
         ora().info(`You've chosen not to publish anything`);
         process.exit();
     }
-    const answers2 = await prompt(
+    const answers2 = await inquirer.prompt(
         answers.packagesToPublish.map((packageJsonPath) => {
             const [pkg] = packageDiffs[packageJsonPath];
             const version = pkg.version || '0.0.0';
@@ -355,21 +352,21 @@ async function publish() {
                 )}? (currently ${chalk.bold(pkg.version || 'unpublished')})`,
                 choices: [
                     pre && {
-                        name: `Prerelease (beta): ${semver.inc(
+                        name: `Prerelease (beta): ${inc(
                             version,
                             'prerelease',
                             'beta'
                         )}`,
-                        value: String(semver.inc(version, 'prerelease', 'beta'))
+                        value: String(inc(version, 'prerelease', 'beta'))
                     },
                     {
-                        name: `Patch (Bug fix): ${semver.inc(
+                        name: `Patch (Bug fix): ${inc(
                             version,
                             pre ? 'prepatch' : 'patch',
                             pre ? 'beta' : undefined
                         )}`,
                         value: String(
-                            semver.inc(
+                            inc(
                                 version,
                                 pre ? 'prepatch' : 'patch',
                                 pre ? 'beta' : undefined
@@ -377,13 +374,13 @@ async function publish() {
                         )
                     },
                     {
-                        name: `Minor (Features add): ${semver.inc(
+                        name: `Minor (Features add): ${inc(
                             version,
                             pre ? 'preminor' : 'minor',
                             pre ? 'beta' : undefined
                         )}`,
                         value: String(
-                            semver.inc(
+                            inc(
                                 version,
                                 pre ? 'preminor' : 'minor',
                                 pre ? 'beta' : undefined
@@ -391,13 +388,13 @@ async function publish() {
                         )
                     },
                     {
-                        name: `Major (Breaking changes): ${semver.inc(
+                        name: `Major (Breaking changes): ${inc(
                             version,
                             pre ? 'premajor' : 'major',
                             pre ? 'beta' : undefined
                         )}`,
                         value: String(
-                            semver.inc(
+                            inc(
                                 version,
                                 pre ? 'premajor' : 'major',
                                 pre ? 'beta' : undefined
@@ -436,19 +433,22 @@ async function publish() {
         process.chdir(cwd);
     }
 
-    const {uploadS3} = await prompt([
-        {
-            type: 'confirm',
-            name: 'uploadS3',
-            message: 'Would you like to upload sgn-sdk to S3? (Requires auth)',
-            default: false
-        }
-    ]);
+    if (tag === 'latest') {
+        const {uploadS3} = await inquirer.prompt([
+            {
+                type: 'confirm',
+                name: 'uploadS3',
+                message:
+                    'Would you like to upload sgn-sdk to S3? (Requires auth)',
+                default: false
+            }
+        ]);
 
-    if (uploadS3) {
-        const s3Ind = ora(`Uploading to S3`).start();
-        console.log(await run('node', ['./upload-s3.js']));
-        s3Ind.succeed(`Uploaded to S3`);
+        if (uploadS3) {
+            const s3Ind = ora(`Uploading to S3`).start();
+            console.log(await run('node', ['./upload-s3.js']));
+            s3Ind.succeed(`Uploaded to S3`);
+        }
     }
 }
 
