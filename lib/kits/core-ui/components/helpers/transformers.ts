@@ -34,6 +34,8 @@ export const transformScriptData = (
         disablePageDecorations:
             dataset.componentPublicationDisablePagedecorations === 'true',
         showHeaderLabels:
-            dataset.componentPublicationShowHeaderLabels === 'true'
+            dataset.componentPublicationShowHeaderLabels === 'true',
+        requestFilter: dataset.componentListPublicationsRequestFilter,
+        clientFilter: dataset.componentListPublicationsClientFilter
     };
 };

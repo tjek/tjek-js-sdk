@@ -10,7 +10,8 @@ import OfferOverview from './components/common/offer-overview';
 import {
     translate,
     pushQueryParam,
-    getHashFragments
+    getHashFragments,
+    transformFilter
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
@@ -323,9 +324,17 @@ const PagedPublication = (
                 qs: {
                     dealer_id: scriptEls.businessId,
                     order_by: '-publication_date',
-                    limit: 1
+                    types: 'paged',
+                    limit: 24,
+                    ...transformFilter(scriptEls.requestFilter)
                 }
             })
+        )?.filter((publication) =>
+            Object.entries(transformFilter(scriptEls.clientFilter)).reduce(
+                (prev, {0: key, 1: value}) =>
+                    publication[key] === value && prev,
+                {}
+            )
         )?.[0]?.id;
 
     const dispatchPublicationData = () => {
