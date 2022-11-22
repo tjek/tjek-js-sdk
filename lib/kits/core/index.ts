@@ -185,3 +185,9 @@ export interface V2Dealerfront {
     catalogs: V2Catalog[];
     dealer: V2Dealer;
 }
+
+export interface V2PageDecoration {
+    page_number: number;
+    title: string;
+    website_link: string;
+}

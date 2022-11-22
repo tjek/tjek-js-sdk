@@ -1,7 +1,8 @@
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const path = require('path');
-const pkg = require('./dist/shopgun-sdk/package.json');
+import AWS from 'aws-sdk';
+import fs from 'fs';
+import path from 'path';
+import pkg from './dist/shopgun-sdk/package.json' assert {type: 'json'};
+
 const bucket = 'sgn-js-sdk';
 const distribution = 'EKE7310HEBVSP';
 
@@ -73,48 +74,39 @@ const putVersion = async (version) => {
 
 const versionRE = /(\d)\.(\d)\.(\d)/;
 
-(async () => {
-    const Items = (
-        await Promise.all([
-            // Exact version
-            putVersion(pkg.version),
-            // Patch mask
-            putVersion(
-                pkg.version.replace(
-                    versionRE,
-                    (_, maj, min) => `${maj}.${min}.x`
-                )
-            ),
-            // Minor mask
-            putVersion(
-                pkg.version.replace(versionRE, (_, maj) => `${maj}.x.x`)
-            ),
-            // Major mask
-            putVersion(pkg.version.replace(versionRE, 'x.x.x'))
-        ])
-    ).flat();
+const Items = (
+    await Promise.all([
+        // Exact version
+        putVersion(pkg.version),
+        // Patch mask
+        putVersion(
+            pkg.version.replace(versionRE, (_, maj, min) => `${maj}.${min}.x`)
+        ),
+        // Minor mask
+        putVersion(pkg.version.replace(versionRE, (_, maj) => `${maj}.x.x`)),
+        // Major mask
+        putVersion(pkg.version.replace(versionRE, 'x.x.x'))
+    ])
+).flat();
 
-    try {
-        await new Promise((resolve, reject) =>
-            new AWS.CloudFront().createInvalidation(
-                {
-                    DistributionId: distribution,
-                    InvalidationBatch: {
-                        CallerReference: String(Date.now()),
-                        Paths: {Quantity: Items.length, Items}
-                    }
-                },
-                (error, result) => (error ? reject(error) : resolve(result))
-            )
-        );
-        console.log(
-            'CloudFront: Invalidation In Progress: ' +
-                new Intl.ListFormat().format(Items)
-        );
-    } catch (invalidationError) {
-        console.error(invalidationError);
-        console.log(
-            'CloudFront: Could not invalidate ' + JSON.stringify(Items)
-        );
-    }
-})();
+try {
+    await new Promise((resolve, reject) =>
+        new AWS.CloudFront().createInvalidation(
+            {
+                DistributionId: distribution,
+                InvalidationBatch: {
+                    CallerReference: String(Date.now()),
+                    Paths: {Quantity: Items.length, Items}
+                }
+            },
+            (error, result) => (error ? reject(error) : resolve(result))
+        )
+    );
+    console.log(
+        'CloudFront: Invalidation In Progress: ' +
+            new Intl.ListFormat().format(Items)
+    );
+} catch (invalidationError) {
+    console.error(invalidationError);
+    console.log('CloudFront: Could not invalidate ' + JSON.stringify(Items));
+}

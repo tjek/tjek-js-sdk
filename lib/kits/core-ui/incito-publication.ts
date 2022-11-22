@@ -12,6 +12,7 @@ import MenuPopup from './components/common/menu-popup';
 import OfferOverview from './components/common/offer-overview';
 import ShoppingList from './components/common/shopping-list';
 import {transformScriptData} from './components/helpers/transformers';
+import {transformFilter} from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
 
@@ -357,9 +358,16 @@ const IncitoPublication = (
                     dealer_id: scriptEls.businessId,
                     order_by: '-publication_date',
                     types: 'incito',
-                    limit: 1
+                    limit: 24,
+                    ...transformFilter(scriptEls.requestFilter)
                 }
             })
+        )?.filter((publication) =>
+            Object.entries(transformFilter(scriptEls.clientFilter)).reduce(
+                (prev, {0: key, 1: value}) =>
+                    publication[key] === value && prev,
+                {}
+            )
         )?.[0]?.id;
 
     const fetchOffer = async ({viewId, publicationId}) => {

@@ -31,12 +31,16 @@ export const transformScriptData = (
         disableHeader: dataset.componentPublicationDisableHeader === 'true',
         disableGlobalScrollbar:
             dataset.componentPublicationDisableGlobalScrollbar === 'true',
+        disablePageDecorations:
+            dataset.componentPublicationDisablePagedecorations === 'true',
         showHeaderLabels:
             dataset.componentPublicationShowHeaderLabels === 'true',
         enableSidebar: dataset.componentPublicationEnableSidebar === 'true',
         sidebarPosition:
             dataset.componentPublicationSidebarPosition === 'left'
                 ? 'left'
-                : 'right'
+                : 'right',
+        requestFilter: dataset.componentListPublicationsRequestFilter,
+        clientFilter: dataset.componentListPublicationsClientFilter
     };
 };

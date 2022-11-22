@@ -1,4 +1,4 @@
-import {request, V2Catalog, V2Hotspot, V2Page} from '../core';
+import {request, V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
 import {Tracker} from '../events';
 import Viewer, {ViewerInit} from './viewer';
 
@@ -104,4 +104,18 @@ export default class Bootstrapper {
             },
             callback
         );
+
+    fetchPageDecorations = (callback?: Parameters<typeof request>[1]) =>
+        request<V2PageDecoration[]>(
+            {
+                apiKey: this.options.apiKey,
+                coreUrl: this.options.coreUrl,
+                url: `/v2/catalogs/${this.options.id}/page_decorations`
+            },
+            callback
+        );
+
+    applyPageDecorations(viewer, pageDecorations) {
+        viewer.applyPageDecorations(pageDecorations);
+    }
 }
