@@ -4,6 +4,7 @@ import {getQueryParam} from '../../util';
 import request from '../core/request';
 import Bootstrapper from '../paged-publication/bootstrapper';
 import Header from './components/common/header';
+import Sidebar from './components/common/sidebar';
 import MenuPopup from './components/common/menu-popup';
 import ShoppingList from './components/common/shopping-list';
 import OfferOverview from './components/common/offer-overview';
@@ -18,6 +19,7 @@ import MainContainer from './components/paged-publication/main-container';
 import {Viewer} from '../paged-publication';
 import {V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
 import type {Tracker} from '../events';
+import PageList from './components/paged-publication/page-list';
 
 const PagedPublication = (
     scriptEl: HTMLScriptElement,
@@ -45,6 +47,9 @@ const PagedPublication = (
         ),
         headerContainer: document.getElementById(
             'sgn-sdk-paged-publication-viewer-header-template'
+        ),
+        sidebarContainer: document.getElementById(
+            'sgn-sdk-incito-publication-viewer-sidebar-template'
         ),
         offerList: document.getElementById(
             'sgn-sdk-paged-publication-viewer-offer-list-template'
@@ -80,9 +85,25 @@ const PagedPublication = (
         scriptEls
     });
 
-    document
-        .querySelector('.sgn__header-container')
-        ?.appendChild(header.render());
+    if (!scriptEls.disableHeader && !scriptEls.enableSidebar) {
+        document
+            .querySelector('.sgn__header-container')
+            ?.appendChild(header.render());
+    }
+
+    const sidebar = Sidebar({
+        publicationType: 'paged',
+        template: customTemplates.sidebarContainer,
+        shoppingListCounterTemplate: customTemplates.shoppingListCounter,
+        el: document.querySelector(scriptEls.mainContainer),
+        scriptEls
+    });
+
+    if (scriptEls.enableSidebar) {
+        document
+            .querySelector('.sgn__menu-sidebar-container')
+            ?.appendChild(sidebar.render());
+    }
 
     const render = async () => {
         if (Object.keys(options || {}).length === 0) await setOptions();
@@ -92,7 +113,19 @@ const PagedPublication = (
         renderShoppingList();
         renderMenuPopup();
         dispatchPublicationData();
+        renderPageList();
     };
+
+    const renderPageList = async () =>
+        document?.querySelector('.sgn__sidebar-content-container')?.appendChild(
+            await PageList({
+                scriptEls,
+                configs: options,
+                sgnData,
+                sgnViewer,
+                template: customTemplates.pageList
+            }).render()
+        );
 
     const renderShoppingList = () =>
         ShoppingList({template: customTemplates.shoppingList}).render();
@@ -158,6 +191,7 @@ const PagedPublication = (
         });
 
         header.show(sgnData);
+        sidebar.show(sgnData);
 
         if (!scriptEls.disablePageDecorations) {
             sgnPageDecorations = await bootstrapper.fetchPageDecorations();
