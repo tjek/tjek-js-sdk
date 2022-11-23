@@ -158,7 +158,7 @@ export default class Verso {
 
     start() {
         this.coarsePointerQuery =
-            typeof window !== 'undefined'
+            typeof window !== 'undefined' && window.matchMedia
                 ? window.matchMedia('(pointer: coarse)')
                 : null;
         this.scrollerEl = this.el.querySelector('.verso__scroller')!;
