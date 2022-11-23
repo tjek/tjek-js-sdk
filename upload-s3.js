@@ -2,6 +2,8 @@ import AWS from 'aws-sdk';
 import fs from 'fs';
 import path from 'path';
 import pkg from './dist/shopgun-sdk/package.json' assert {type: 'json'};
+import * as url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const bucket = 'sgn-js-sdk';
 const distribution = 'EKE7310HEBVSP';
