@@ -80,9 +80,13 @@ const defaultTemplate = `\
         <div class="sgn__sidebar-content-container"></div>
     
     </div>
-    <button class="sgn__sidebar-control">
-        &rsaquo;
-    </button>
+    <div class="sgn__sidebar-control">
+        <div class="sgn__sidebar-control-bars">
+            <div class="sgn__sidebar-control-bar1"></div>
+            <div class="sgn__sidebar-control-bar2"></div>
+            <div class="sgn__sidebar-control-bar3"></div>
+        </div>
+    </div>
 {{/enableSidebar}}\
 `;
 
@@ -138,14 +142,21 @@ const Sidebar = ({
         const sidebarControl = container?.querySelector<HTMLDivElement>(
             '.sgn__sidebar-control'
         );
-        const sgnIncito = el?.querySelector('.sgn__incito');
+        const sgnContainer =
+            publicationType === 'incito'
+                ? el?.querySelector('.sgn__incito')
+                : el?.querySelector('.sgn__pp');
 
-        if (sgnIncito && sgnIncito?.clientWidth < 840) {
-            sgnIncito?.classList.toggle('sgn__sidebar--close');
+        console.log('sgnContainer', sgnContainer);
+
+        if (sgnContainer && sgnContainer?.clientWidth < 840) {
+            sgnContainer?.classList.toggle('sgn__sidebar--close');
         }
 
         sidebarControl?.addEventListener('click', (e) => {
-            sgnIncito?.classList.toggle('sgn__sidebar--close');
+            sgnContainer?.classList.toggle('sgn__sidebar--close');
+            sgnContainer?.classList.toggle('sgn__sidebar--open');
+            sidebarControl?.classList.toggle('sgn__sidebar-control-open');
         });
     };
 

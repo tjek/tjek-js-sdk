@@ -1,36 +1,10 @@
-.sgn__incito 
+.sgn__incito, .sgn__pp
     &[data-component-template-enable-sidebar="true"]
         -ms-overflow-style none
         scrollbar-width none
 
         &::-webkit-scrollbar
             display none
-        
-        .sgn__sidebar-control
-            display block
-            background transparent
-            border 0
-            position fixed
-            cursor pointer
-            font-size 60px
-            top 50%
-            height 50px
-            margin-top -25px
-            line-height 0.5
-            text-align center
-            color #fff
-            text-shadow 0 0 18px rgba(#000, 0.24), -1px -1px 1px rgba(#000, 0.3), 1px -1px 1px rgba(#000, 0.3), -1px 1px 1px rgba(#000, 0.3), 1px 1px 1px rgba(#000, 0.3)
-            opacity 0.5
-            z-index 99
-            
-            &:hover,
-            &:focus
-                color #fff
-                text-decoration none
-            
-            &:hover,
-            &:active
-                opacity 1
 
         &[data-component-template-sidebar-position="left"]
             left 350px
@@ -47,7 +21,6 @@
             
             .sgn__sidebar-control
                 left 350px
-                transform rotate(180deg)
             
         &[data-component-template-sidebar-position="right"]
             right 350px
@@ -64,7 +37,75 @@
             
             .sgn__sidebar-control
                 right 350px
+        
+        .sgn__sidebar-control
+            display none
+            position fixed
+            cursor pointer
+            top 0
+            opacity 0.5
+            z-index 99
+            margin 18px 10px
+            
+            &:hover,
+            &:active
+                opacity 1
 
+            .sgn__sidebar-control-bar1, .sgn__sidebar-control-bar2, .sgn__sidebar-control-bar3
+                width 25px
+                height 2px
+                background #ffffff
+                margin-bottom 8px
+
+            .sgn__sidebar-control-bars
+                list-style none
+                cursor pointer
+                width 25px
+                background rgba(0, 0, 0, 0.4)
+                padding 15px 15px 10px
+            
+                & .sgn__sidebar-control-bar1 
+                    -webkit-transition all 0.3s ease-in-out
+                    -moz-transition all 0.3s ease-in-out
+                    -o-transition all 0.3s ease-in-out
+                    transition all 0.3s ease-in-out
+
+                & .sgn__sidebar-control-bar2
+                    -webkit-transition all 0.3s ease-in-out
+                    -moz-transition all 0.3s ease-in-out
+                    -o-transition all 0.3s ease-in-out
+                    transition all 0.3s ease-in-out
+
+                & .sgn__sidebar-control-bar3
+                    -webkit-transition all 0.3s ease-in-out
+                    -moz-transition all 0.3s ease-in-out
+                    -o-transition all 0.3s ease-in-out
+                    transition all 0.3s ease-in-out;
+            
+        .sgn__sidebar-control-open 
+            -webkit-transition all 0.3s ease-in-out
+            -moz-transition all 0.3s ease-in-out
+            -o-transition all 0.3s ease-in-out
+            transition all 0.3s ease-in-out
+
+            & .sgn__sidebar-control-bar1 
+                -moz-transform rotate(45deg) translate(8px, 7px)
+                -o-transform rotate(45deg) translate(8px, 7px)
+                -ms-transform rotate(45deg) translate(8px, 7px)
+                -webkit-transform rotate(45deg) translate(8px, 7px)
+                transform rotate(45deg) translate(8px, 7px)
+            
+
+            & .sgn__sidebar-control-bar2 
+                opacity 0
+            
+
+            & .sgn__sidebar-control-bar3 
+                -moz-transform rotate(-45deg) translate(7px, -6px)
+                -o-transform rotate(-45deg) translate(7px, -6px)
+                -ms-transform rotate(-45deg) translate(7px, -6px)
+                -webkit-transform rotate(-45deg) translate(7px, -6px)
+                transform rotate(-45deg) translate(7px, -6px)
 
 .sgn__sidebar
     position absolute
@@ -74,10 +115,12 @@
     margin auto
     width 100%
     text-align center
-    animation-duration .3s
     animation-iteration-count 1
     animation-name sgn-animate-sidebar
     animation-timing-function ease
+
+    .sgn__sidebar-content-container
+        box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
 
     > .sgn__nav
         position relative !important
@@ -162,7 +205,7 @@
                 animation none !important
                 color inherit
 
-    .sgn-sections-list-items-container
+    .sgn-sections-list-items-container, .sgn-pages-list-items-container
         height calc(100vh - 100px)
         margin-block-start 0
         overflow-y auto
@@ -172,21 +215,32 @@
         margin-block-end 0
         text-align left
 
-        .sgn-sections-content-container
+        .sgn-sections-content-container, .sgn-pages-content-container
             border 0
             padding 10px 20px
 
+.sgn__sidebar-control-open
+    display block !important
+
+.sgn__sidebar--open
+    &[data-component-template-sidebar-position="right"]
+        right 0 !important
+    
+    &[data-component-template-sidebar-position="left"]
+        left 0 !important
+
 .sgn__sidebar--close
+    .sgn__sidebar-control
+        display block !important
+
     &[data-component-template-sidebar-position="right"]
         right 0 !important
 
-        .sgn__sidebar            
-            display none
-            animation sgn-animate-sidebar-right-close .3s
+        .sgn__sidebar
+            transform translateX(350px)
 
         .sgn__sidebar-control
             right 0!important
-            transform rotate(180deg)
         
         .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
             width unset !important
@@ -195,29 +249,27 @@
     &[data-component-template-sidebar-position="left"]
         left 0 !important
 
-        .sgn__sidebar            
-            display none
-            animation sgn-animate-sidebar-left-close .3s
+        .sgn__sidebar
+            transform translateX(-350px)
 
         .sgn__sidebar-control
             left 0 !important
-            transform rotate(0) !important
         
         .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
             width unset !important
             margin-left unset!important
 
-
-
 .sgn-animate-sidebar-left
     display block
     animation-name sgn-animate-sidebar-left
     animation-timing-function ease
+    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
 
 .sgn-animate-sidebar-right
     display block
     animation-name sgn-animate-sidebar-right
     animation-timing-function ease
+    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
 
 @keyframes sgn-animate-sidebar-left
     0%
@@ -234,8 +286,11 @@
 @keyframes sgn-animate-sidebar-right-close
     0%
         transform translateX(0)
-        opacity 1
     100%
-        transform translateX(20vh)
-        opacity 0
-        display none
+        transform translateX(350px)
+
+@keyframes sgn-animate-sidebar-left-close
+    0%
+        transform translateX(0)
+    100%
+        transform translateX(-350px)
