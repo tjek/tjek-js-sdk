@@ -13,13 +13,6 @@ import PressRecognizer from './vendor/hammer/recognizers/press';
 import TapRecognizer from './vendor/hammer/recognizers/tap';
 import './verso.styl';
 
-const getHammerInputClass = () =>
-    typeof window !== 'undefined' &&
-    'ontouchstart' in window &&
-    /mobile|tablet|ip(ad|hone|od)|android/i.test(navigator.userAgent)
-        ? TouchInput
-        : null;
-
 const buildPageIds = (pageSpreads: PageSpread[]) =>
     pageSpreads.reduce<Record<PageSpread['pageIds'][number], PageSpread>>(
         (pageIds, pageSpread) => {
@@ -127,6 +120,7 @@ export default class Verso {
     tap: {count: number; delay: number; timeout?: NodeJS.Timeout};
     animation: Animation;
     hammer: Manager;
+    coarsePointerQuery: MediaQueryList | null;
     constructor(el: HTMLElement, options: VersoInit = {}) {
         this.el = el;
         this.options = options;
@@ -163,6 +157,10 @@ export default class Verso {
     }
 
     start() {
+        this.coarsePointerQuery =
+            typeof window !== 'undefined'
+                ? window.matchMedia('(pointer: coarse)')
+                : null;
         this.scrollerEl = this.el.querySelector('.verso__scroller')!;
         this.pageSpreadEls = this.el.querySelectorAll('.verso__page-spread');
         this.pageSpreads = traversePageSpreads(this.pageSpreadEls);
@@ -171,7 +169,7 @@ export default class Verso {
         this.hammer = new Manager(this.scrollerEl, {
             touchAction: 'none',
             enable: false,
-            inputClass: getHammerInputClass(),
+            inputClass: this.coarsePointerQuery?.matches ? TouchInput : null,
             recognizers: [
                 [PanRecognizer, {threshold: 5, direction: DIRECTION_ALL}],
                 [TapRecognizer, {event: 'singletap', interval: 0}],
@@ -179,26 +177,19 @@ export default class Verso {
                 [PressRecognizer, {time: 500}]
             ]
         });
+        this.coarsePointerQuery?.addEventListener('change', ({matches}) => {
+            this.hammer.set({inputClass: matches ? TouchInput : null});
+        });
 
-        //@ts-expect-error
         this.hammer.on('panstart', this.onPanStart);
-        //@ts-expect-error
         this.hammer.on('panmove', this.onPanMove);
-        //@ts-expect-error
         this.hammer.on('panend', this.onPanEnd);
-        //@ts-expect-error
         this.hammer.on('pancancel', this.onPanEnd);
-        //@ts-expect-error
         this.hammer.on('singletap', this.onSingletap);
-        //@ts-expect-error
         this.hammer.on('pinchstart', this.onPinchStart);
-        //@ts-expect-error
         this.hammer.on('pinchmove', this.onPinchMove);
-        //@ts-expect-error
         this.hammer.on('pinchend', this.onPinchEnd);
-        //@ts-expect-error
         this.hammer.on('pinchcancel', this.onPinchEnd);
-        //@ts-expect-error
         this.hammer.on('press', this.onPress);
 
         this.scrollerEl.addEventListener(
@@ -210,7 +201,6 @@ export default class Verso {
         const pageId =
             this.getPageSpreadPositionFromPageId(this.options.pageId!) ?? 0;
 
-        //@ts-expect-error
         this.hammer.set({enable: true});
         this.started = true;
         this.destroyed = false;
@@ -240,7 +230,6 @@ export default class Verso {
         this.scrollerEl.removeEventListener('contextmenu', this.onContextmenu);
         this.scrollerEl.removeEventListener('wheel', this.onWheel);
 
-        //@ts-expect-error
         this.hammer.destroy();
 
         this.el.removeEventListener('touchstart', this.onTouchStart);
@@ -314,7 +303,6 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
         carousel.visible.forEach((pageSpread) => {
             pageSpread.position().setVisibility('visible');
         });
-        //@ts-expect-error
         this.hammer.set({touchAction});
 
         this.transform.left = this.getLeftTransformFromPageSpread(
