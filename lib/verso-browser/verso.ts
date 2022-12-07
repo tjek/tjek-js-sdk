@@ -177,10 +177,17 @@ export default class Verso {
                 [PressRecognizer, {time: 500}]
             ]
         });
-        this.coarsePointerQuery?.addEventListener('change', ({matches}) => {
-            this.hammer.set({inputClass: matches ? TouchInput : null});
-        });
+        if (this.coarsePointerQuery) {
+            const onMedia = ({matches}) => {
+                this.hammer.set({inputClass: matches ? TouchInput : null});
+            };
 
+            if (this.coarsePointerQuery.addEventListener) {
+                this.coarsePointerQuery.addEventListener('change', onMedia);
+            } else if (this.coarsePointerQuery.addListener) {
+                this.coarsePointerQuery.addListener(onMedia);
+            }
+        }
         this.hammer.on('panstart', this.onPanStart);
         this.hammer.on('panmove', this.onPanMove);
         this.hammer.on('panend', this.onPanEnd);
