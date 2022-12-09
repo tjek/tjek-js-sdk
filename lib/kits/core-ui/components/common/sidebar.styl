@@ -271,6 +271,18 @@
     animation-timing-function ease
     transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
 
+@media (max-width 840px)
+    .sgn__sidebar--open
+        &[data-component-template-sidebar-position="right"]
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width unset !important
+                margin-right unset!important
+
+        &[data-component-template-sidebar-position="left"]
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width unset !important
+                margin-left unset!important
+
 @keyframes sgn-animate-sidebar-left
     0%
         transform translateX(-350px)
