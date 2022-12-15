@@ -233,13 +233,8 @@ function renderView(view, canLazyload) {
             const src = String(new URL(view.src));
 
             if (isDefinedStr(view.src)) {
-                if (canLazyload) {
-                    classNames.push('incito--lazy');
-
-                    attrs['data-src'] = src;
-                } else {
-                    attrs.src = src;
-                }
+                attrs.loading = 'lazy';
+                attrs.src = src;
             }
 
             if (isDefinedStr(view.label)) attrs['alt'] = view.label;
@@ -260,6 +255,7 @@ function renderView(view, canLazyload) {
             if (canLazyload) {
                 attrs['data-src'] = src;
                 attrs['data-mime'] = view.mime;
+                classNames.push('incito--lazy');
 
                 if (view.autoplay === true) {
                     attrs['data-autoplay'] = true;
@@ -276,8 +272,6 @@ function renderView(view, canLazyload) {
                 attrs.src = src;
                 attrs.controls = '';
             }
-
-            if (canLazyload) classNames.push('incito--lazy');
 
             break;
         }
@@ -305,7 +299,10 @@ function renderView(view, canLazyload) {
 
             const src = String(new URL(view.src));
 
-            if (canLazyload) {
+            if ('loading' in HTMLIFrameElement.prototype) {
+                attrs.loading = 'lazy';
+                attrs.src = src;
+            } else if (canLazyload) {
                 classNames.push('incito--lazy');
                 attrs['data-src'] = src;
             } else {
@@ -732,7 +729,9 @@ export default class Incito extends MicroEvent {
 
         this.containerEl.appendChild(this.el);
 
-        if (this.canLazyload) this.enableLazyloading();
+        if (this.canLazyload) {
+            this.enableLazyloading();
+        }
     }
 
     start() {
@@ -746,7 +745,9 @@ export default class Incito extends MicroEvent {
             if (isDefinedStr(link)) window.open(link!, '_blank');
         });
 
-        if (this.canLazyload) this.observeElements(this.el);
+        if (this.canLazyload) {
+            this.observeElements(this.el);
+        }
 
         this.trigger('started', 'a', 'b', 'c');
     }
