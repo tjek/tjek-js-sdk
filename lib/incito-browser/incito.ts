@@ -247,7 +247,7 @@ function renderView(view, canLazyload) {
 
             attrs.muted = '';
             attrs.playsinline = '';
-            attrs.preload = 'none';
+            attrs.preload = 'metadata';
             attrs.poster = 'noposter';
 
             const src = String(new URL(view.src));
@@ -850,7 +850,7 @@ export default class Incito extends MicroEvent {
                     }
                 });
             },
-            {threshold: 0.25}
+            {threshold: 0}
         );
     }
 
