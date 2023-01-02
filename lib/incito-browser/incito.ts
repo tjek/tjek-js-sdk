@@ -247,13 +247,13 @@ function renderView(view, canLazyload) {
 
             attrs.muted = '';
             attrs.playsinline = '';
-            attrs.preload = 'none';
+            attrs.preload = 'metadata';
             attrs.poster = 'noposter';
 
             const src = String(new URL(view.src));
 
             if (canLazyload) {
-                attrs['data-src'] = src;
+                attrs['data-src'] = `${src}#t=0.1`;
                 attrs['data-mime'] = view.mime;
                 classNames.push('incito--lazy');
 
@@ -269,7 +269,7 @@ function renderView(view, canLazyload) {
                     attrs['loop'] = '';
                 }
             } else {
-                attrs.src = src;
+                attrs.src = `${src}#t=0.1`;
                 attrs.controls = '';
             }
 
@@ -753,13 +753,19 @@ export default class Incito extends MicroEvent {
     }
 
     destroy() {
-        if (this.lazyObserver) this.lazyObserver.disconnect();
+        if (this.lazyObserver) {
+            this.lazyObserver.disconnect();
+        }
 
-        if (this.videoObserver) this.videoObserver.disconnect();
+        if (this.videoObserver) {
+            this.videoObserver.disconnect();
+        }
 
         this.containerEl.removeChild(this.el);
 
-        if (this.styleEl) this.styleEl.parentNode!.removeChild(this.styleEl);
+        if (this.styleEl) {
+            this.styleEl.parentNode!.removeChild(this.styleEl);
+        }
 
         this.trigger('destroyed');
     }
@@ -823,12 +829,11 @@ export default class Incito extends MicroEvent {
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        const autoplayState =
-                            // @ts-expect-error
-                            entry.target.dataset.autoplayState;
+                        // @ts-expect-error
+                        const autoplayState = entry.target.dataset.autoplayState;
 
                         this.loadEl(entry.target);
-                        this.lazyObserver.unobserve(entry.target);
+                        this.videoObserver.unobserve(entry.target);
 
                         if (!autoplayState || autoplayState === 'paused') {
                             // @ts-expect-error
@@ -845,7 +850,7 @@ export default class Incito extends MicroEvent {
                     }
                 });
             },
-            {threshold: 0.25}
+            {threshold: 0}
         );
     }
 
@@ -861,7 +866,9 @@ export default class Incito extends MicroEvent {
 
             if (id != null && typeof meta === 'object') this.ids[id] = meta;
 
-            if (role === 'section') this.sections.push({id, meta});
+            if (role === 'section') {
+                this.sections.push({id, meta});
+            }
 
             html += '<' + tagName;
 
