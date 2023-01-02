@@ -1,30 +1,38 @@
 <html>
-<title>Incito</title>
-<link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css" rel='stylesheet' />
-<link href="./css/incito.css" rel='stylesheet' />
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous">
-</script>
+    <title>Incito</title>
+    <link
+        href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
+        rel="stylesheet"
+    />
+    <link href="./css/incito.css" rel="stylesheet" />
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"
+    ></script>
 
-<body>
-    <!--TODO: Set YOUR_APP_KEY & YOUR_TRACK_ID -->
-    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js" id="sgn-sdk"
-        data-app-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
-    <script src="/js/incito.js"></script>
-    <script>
-        window.onload = () => window.shopgun.loadIncito();
-    </script>
-    <div id="incito__publication" class="sgn__incito">
-        <div id="incito-publication__top"></div>
-        <div class="sgn-incito__progress"></div>
-        <div id="incito__details">
-            <div class="incito__details__title"></div>
-            <div class="incito__details__description"></div>
-            <a class="incito__details__button" target="_blank">VIEW OFFER >></a>
+    <body>
+        <!--TODO: Set YOUR_APP_KEY & YOUR_TRACK_ID -->
+        <script
+            src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
+            id="sgn-sdk"
+            data-app-key="YOUR_APP_KEY"
+            data-track-id="YOUR_TRACK_ID"
+        ></script>
+        <script src="/js/incito.js"></script>
+        <script>
+            window.onload = () => window.shopgun.loadIncito();
+        </script>
+        <div id="incito__publication" class="sgn__incito">
+            <div id="incito-publication__top"></div>
+            <div class="sgn-incito__progress"></div>
+            <div id="incito__details">
+                <div class="incito__details__title"></div>
+                <div class="incito__details__description"></div>
+                <a class="incito__details__button" target="_blank"
+                    >VIEW OFFER >></a
+                >
+            </div>
         </div>
-    </div>
-</body>
-
+    </body>
 </html>

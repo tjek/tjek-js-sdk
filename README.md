@@ -19,12 +19,12 @@ The SDK makes use of both JavaScript and CSS so you need to load two resources i
 
 ```html
 <link
-    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
     rel="stylesheet"
     type="text/css"
 />
 <script
-    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
     id="sgn-sdk"
     data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
@@ -80,7 +80,7 @@ The setup is almost the same from above, you need to include the CSS and Javascr
 
 ```html
 <link
-    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
     rel="stylesheet"
     type="text/css"
 />
@@ -89,7 +89,7 @@ The setup is almost the same from above, you need to include the CSS and Javascr
 
 <script
     data-readme="API's and SDK's by Tjek (https://tjek.com)"
-    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
     id="sgn-sdk"
     data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
@@ -104,7 +104,7 @@ Below is another example which will render the list of active publications. It w
 
 ```html
 <link
-    href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css"
+    href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
     rel="stylesheet"
     type="text/css"
 />
@@ -113,7 +113,7 @@ Below is another example which will render the list of active publications. It w
 
 <script
     data-readme="API's and SDK's by Tjek (https://tjek.com)"
-    src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js"
+    src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
     id="sgn-sdk"
     data-api-key="YOUR_API_KEY"
     data-track-id="YOUR_TRACK_ID"
@@ -180,7 +180,7 @@ Aside from the required data- attributes, the SDK still support a few more data 
 
 ### Version 4.0.1
 
--   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js
+-   Semanatic masked versions are now published on our CDN, this means that you can get all versions of the SDK until we make a breaking change and change the major version like so: https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js
 -   Update dependencies
 -   Fix Incito `data-link` behavior.
 
