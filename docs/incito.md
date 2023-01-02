@@ -4,9 +4,9 @@
 
 Incitos are generated via code utilizing [Shopgun SDK](https://www.npmjs.com/package/shopgun-sdk). In short, the integration code consists of two major steps:
 
-- Fetch catalog model/payload to display from our API
-- Generate Incito (view) under specified HTML element
-- Handle Incito interactivity
+-   Fetch catalog model/payload to display from our API
+-   Generate Incito (view) under specified HTML element
+-   Handle Incito interactivity
 
 _**Note:** Our implementation does **not** generate `<iframe>` elements making integration way easier for web developers. This, of course, presents challenges that are discussed bellow._
 
@@ -38,9 +38,9 @@ You may choose to either include the project from `npm` _or_ use our CloudFront 
     If you include our code from separate nodes you may want to include your app key & track id as seen below. The example below uses our CloudFront distribution where all the versions are hosted:
 
     ```HTML
-    <link href="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.css" rel='stylesheet' />
+    <link href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css" rel='stylesheet' />
 
-    <script src="https://d21oefkcnoen8i.cloudfront.net/sgn-sdk-4.x.x.min.js" id="sgn-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
+    <script src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js" id="sgn-sdk" data-api-key="YOUR_APP_KEY" data-track-id="YOUR_TRACK_ID"></script>
     ```
 
     You may use our distribution or choose to host the code yourself. Should you choose to use our distribution remember to point to the latest working version.
@@ -58,7 +58,7 @@ const catalog = await SGN.CoreKit.request({
 });
 ```
 
-Another option is to fetch the latest catalogs and choose using your logic, or just get the first element which will be the latest catalog, *meaning the catalog that is valid from the latest date, and secondary created the latest.*
+Another option is to fetch the latest catalogs and choose using your logic, or just get the first element which will be the latest catalog, _meaning the catalog that is valid from the latest date, and secondary created the latest._
 
 ```JS
 const catalogs = await SGN.CoreKit.request({
@@ -142,12 +142,12 @@ Under [the examples folder](./incito_examples/) are two HTML files ([index.html]
 When configured, the HTML files can be tested locally, as long as they are served by a local server.
 
 1. **index.html:**
-    This provides a stripped down version of integration. It will fetch the latest incito publication and display it.
+   This provides a stripped down version of integration. It will fetch the latest incito publication and display it.
 
 2. **index-pro.html:**
-    This is a version with a few features, plus some comments in the JS file on adding other features. To provide a different example, we fetch a specific, hardcoded, incito publication in this one.
-    Clicking on offers display a view under them with the provided description and a button link to open the offer url (if available).
+   This is a version with a few features, plus some comments in the JS file on adding other features. To provide a different example, we fetch a specific, hardcoded, incito publication in this one.
+   Clicking on offers display a view under them with the provided description and a button link to open the offer url (if available).
 
 ### On integrating Incito to your website
 
-We strongly recommend that you use the files only for testing purposes and integrate the code into your application as you see fit. The only real requirement is that the page has loaded and nodes (#incito__publication etc) found in the HTML files are in the DOM tree and accessible before running the loadIncito function (or your customized function).
+We strongly recommend that you use the files only for testing purposes and integrate the code into your application as you see fit. The only real requirement is that the page has loaded and nodes (#incito\_\_publication etc) found in the HTML files are in the DOM tree and accessible before running the loadIncito function (or your customized function).

@@ -22,9 +22,7 @@ const putObject = async ({key, bodyPath, contentType}) => {
                 (error, result) => (error ? reject(error) : resolve(result))
             )
         );
-        console.log(
-            'S3: Uploaded https://d21oefkcnoen8i.cloudfront.net/' + key
-        );
+        console.log('S3: Uploaded https://js-sdk.tjek.com/' + key);
 
         return result;
     } catch (uploadError) {
