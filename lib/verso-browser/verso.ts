@@ -126,7 +126,7 @@ export default class Verso {
         this.options = options;
         this.swipeVelocity = this.options.swipeVelocity ?? 0.3;
         this.swipeThreshold = this.options.swipeThreshold ?? 10;
-        this.navigationDuration = this.options.navigationDuration ?? 240;
+        this.navigationDuration = this.options.navigationDuration ?? window.matchMedia('(prefers-reduced-motion: reduce)')?.matches ? 0 : 240;
         this.navigationPanDuration = this.options.navigationPanDuration ?? 200;
         this.zoomDuration = this.options.zoomDuration ?? 200;
 
