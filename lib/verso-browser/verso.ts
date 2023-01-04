@@ -735,7 +735,7 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
     };
 
     onPrefersReducedMotionChange = (e) => {
-        this.prefersReducedMotion = !!e.matches;
+        this.prefersReducedMotion = Boolean(e.matches);
     };
 
     onWheel = (e: WheelEvent) => {
