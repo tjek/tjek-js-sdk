@@ -115,14 +115,13 @@ export default class Verso {
     swipeVelocity: number;
     swipeThreshold: number;
     navigationDuration: number;
-    prefersReducedMotion: boolean;
-    prefersReducedMotionMediaList: MediaQueryList | null;
     navigationPanDuration: number;
     zoomDuration: number;
     tap: {count: number; delay: number; timeout?: NodeJS.Timeout};
     animation: Animation;
     hammer: Manager;
     coarsePointerQuery: MediaQueryList | null;
+    prefersReducedMotionQuery: MediaQueryList | null;
     constructor(el: HTMLElement, options: VersoInit = {}) {
         this.el = el;
         this.options = options;
@@ -131,7 +130,6 @@ export default class Verso {
         this.navigationDuration = this.options.navigationDuration ?? 240;
         this.navigationPanDuration = this.options.navigationPanDuration ?? 200;
         this.zoomDuration = this.options.zoomDuration ?? 200;
-        this.prefersReducedMotion = false;
         this.tap = {
             count: 0,
             delay: this.options.doubleTapDelay ?? 300,
@@ -222,25 +220,10 @@ export default class Verso {
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', this.onResize, false);
 
-            this.prefersReducedMotionMediaList =
+            this.prefersReducedMotionQuery =
                 typeof window !== 'undefined' && window.matchMedia
                     ? window.matchMedia('(prefers-reduced-motion: reduce)')
                     : null;
-            if (this.prefersReducedMotionMediaList) {
-                this.prefersReducedMotion =
-                    this.prefersReducedMotionMediaList.matches;
-
-                if (this.prefersReducedMotionMediaList.addEventListener) {
-                    this.prefersReducedMotionMediaList.addEventListener(
-                        'change',
-                        this.onPrefersReducedMotionChange
-                    );
-                } else if (this.prefersReducedMotionMediaList.addListener) {
-                    this.prefersReducedMotionMediaList.addListener(
-                        this.onPrefersReducedMotionChange
-                    );
-                }
-            }
         }
 
         return this;
@@ -267,19 +250,6 @@ export default class Verso {
 
         if (typeof window !== 'undefined') {
             window.removeEventListener('resize', this.onResize);
-        }
-
-        if (this.prefersReducedMotionMediaList) {
-            if (this.prefersReducedMotionMediaList.removeEventListener) {
-                this.prefersReducedMotionMediaList.removeEventListener(
-                    'change',
-                    this.onPrefersReducedMotionChange
-                );
-            } else if (this.prefersReducedMotionMediaList.removeListener) {
-                this.prefersReducedMotionMediaList.removeListener(
-                    this.onPrefersReducedMotionChange
-                );
-            }
         }
 
         this.started = false;
@@ -339,12 +309,10 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
         const velocity = options?.velocity ?? 1;
         let duration = options?.duration ?? this.navigationDuration;
 
-        if (duration > 0) {
-            if (this.prefersReducedMotion) {
-                duration = 0;
-            } else {
-                duration = duration / Math.abs(velocity);
-            }
+        if (this.prefersReducedMotionQuery?.matches) {
+            duration = 0;
+        } else if (duration > 0) {
+            duration = duration / Math.abs(velocity);
         }
 
         currentPageSpread?.deactivate();
@@ -757,10 +725,6 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
         );
 
         return false;
-    };
-
-    onPrefersReducedMotionChange = (e) => {
-        this.prefersReducedMotion = e.matches;
     };
 
     onWheel = (e: WheelEvent) => {
