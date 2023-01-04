@@ -5,8 +5,8 @@ import {
     DIRECTION_LEFT,
     DIRECTION_RIGHT
 } from './vendor/hammer/Input';
-import TouchInput from './vendor/hammer/input/touch';
 import Manager from './vendor/hammer/Manager';
+import TouchInput from './vendor/hammer/input/touch';
 import PanRecognizer from './vendor/hammer/recognizers/pan';
 import PinchRecognizer from './vendor/hammer/recognizers/pinch';
 import PressRecognizer from './vendor/hammer/recognizers/press';
@@ -222,9 +222,25 @@ export default class Verso {
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', this.onResize, false);
 
-            this.prefersReducedMotionMediaList = window.matchMedia('(prefers-reduced-motion: reduce)');
-            this.prefersReducedMotion = !!this.prefersReducedMotionMediaList.matches;
-            this.prefersReducedMotionMediaList.addEventListener('change', this.onPrefersReducedMotionChange, false);
+            this.prefersReducedMotionMediaList =
+                typeof window !== 'undefined' && window.matchMedia
+                    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+                    : null;
+            if (this.prefersReducedMotionMediaList) {
+                this.prefersReducedMotion = Boolean(
+                    this.prefersReducedMotionMediaList.matches
+                );
+                if (this.prefersReducedMotionMediaList.addEventListener) {
+                    this.prefersReducedMotionMediaList.addEventListener(
+                        'change',
+                        this.onPrefersReducedMotionChange
+                    );
+                } else if (this.prefersReducedMotionMediaList.addListener) {
+                    this.prefersReducedMotionMediaList.addListener(
+                        this.onPrefersReducedMotionChange
+                    );
+                }
+            }
         }
 
         return this;
@@ -254,7 +270,16 @@ export default class Verso {
         }
 
         if (this.prefersReducedMotionMediaList) {
-            this.prefersReducedMotionMediaList.removeEventListener('change', this.onPrefersReducedMotionChange);
+            if (this.prefersReducedMotionMediaList.removeEventListener) {
+                this.prefersReducedMotionMediaList.removeEventListener(
+                    'change',
+                    this.onPrefersReducedMotionChange
+                );
+            } else if (this.prefersReducedMotionMediaList.removeListener) {
+                this.prefersReducedMotionMediaList.removeListener(
+                    this.onPrefersReducedMotionChange
+                );
+            }
         }
 
         this.started = false;
