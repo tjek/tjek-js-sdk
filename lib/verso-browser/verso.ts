@@ -115,6 +115,8 @@ export default class Verso {
     swipeVelocity: number;
     swipeThreshold: number;
     navigationDuration: number;
+    prefersReducedMotion: boolean;
+    prefersReducedMotionMediaList: MediaQueryList | null;
     navigationPanDuration: number;
     zoomDuration: number;
     tap: {count: number; delay: number; timeout?: NodeJS.Timeout};
@@ -126,16 +128,17 @@ export default class Verso {
         this.options = options;
         this.swipeVelocity = this.options.swipeVelocity ?? 0.3;
         this.swipeThreshold = this.options.swipeThreshold ?? 10;
-        this.navigationDuration = this.options.navigationDuration ?? window.matchMedia('(prefers-reduced-motion: reduce)')?.matches ? 0 : 240;
+        this.navigationDuration = this.options.navigationDuration ?? 240;
         this.navigationPanDuration = this.options.navigationPanDuration ?? 200;
         this.zoomDuration = this.options.zoomDuration ?? 200;
-
+        this.prefersReducedMotion = false;
         this.tap = {
             count: 0,
             delay: this.options.doubleTapDelay ?? 300,
             timeout: undefined
         };
     }
+
     bind(event, fn) {
         this._events[event] = this._events[event] || [];
         return this._events[event].push(fn);
@@ -218,6 +221,10 @@ export default class Verso {
 
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', this.onResize, false);
+
+            this.prefersReducedMotionMediaList = window.matchMedia('(prefers-reduced-motion: reduce)');
+            this.prefersReducedMotion = !!this.prefersReducedMotionMediaList.matches;
+            this.prefersReducedMotionMediaList.addEventListener('change', this.onPrefersReducedMotionChange, false);
         }
 
         return this;
@@ -244,6 +251,10 @@ export default class Verso {
 
         if (typeof window !== 'undefined') {
             window.removeEventListener('resize', this.onResize);
+        }
+
+        if (this.prefersReducedMotionMediaList) {
+            this.prefersReducedMotionMediaList.removeEventListener('change', this.onPrefersReducedMotionChange);
         }
 
         this.started = false;
@@ -298,11 +309,18 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
         const currentPageSpread =
             this.getPageSpreadFromPosition(currentPosition);
         const activePageSpread = this.getPageSpreadFromPosition(newPosition);
+        const touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
         let carousel = this.getCarouselFromPageSpread(activePageSpread);
         const velocity = options?.velocity ?? 1;
         let duration = options?.duration ?? this.navigationDuration;
-        duration = duration / Math.abs(velocity);
-        const touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
+
+        if (duration > 0) {
+            if (this.prefersReducedMotion) {
+                duration = 0;
+            } else {
+                duration = duration / Math.abs(velocity);
+            }
+        }
 
         currentPageSpread?.deactivate();
         activePageSpread.activate();
@@ -714,6 +732,10 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
         );
 
         return false;
+    };
+
+    onPrefersReducedMotionChange = (e) => {
+        this.prefersReducedMotion = !!e.matches;
     };
 
     onWheel = (e: WheelEvent) => {
