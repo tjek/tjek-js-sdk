@@ -227,9 +227,9 @@ export default class Verso {
                     ? window.matchMedia('(prefers-reduced-motion: reduce)')
                     : null;
             if (this.prefersReducedMotionMediaList) {
-                this.prefersReducedMotion = Boolean(
-                    this.prefersReducedMotionMediaList.matches
-                );
+                this.prefersReducedMotion =
+                    this.prefersReducedMotionMediaList.matches;
+
                 if (this.prefersReducedMotionMediaList.addEventListener) {
                     this.prefersReducedMotionMediaList.addEventListener(
                         'change',
@@ -760,7 +760,7 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
     };
 
     onPrefersReducedMotionChange = (e) => {
-        this.prefersReducedMotion = Boolean(e.matches);
+        this.prefersReducedMotion = e.matches;
     };
 
     onWheel = (e: WheelEvent) => {
