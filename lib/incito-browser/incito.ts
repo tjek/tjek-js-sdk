@@ -821,7 +821,7 @@ export default class Incito extends MicroEvent {
                     }
                 });
             },
-            {rootMargin: '500px 0px', threshold: 0}
+            {rootMargin: '500px 0px'}
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {
