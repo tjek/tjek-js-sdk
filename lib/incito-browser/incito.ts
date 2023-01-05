@@ -788,7 +788,9 @@ export default class Incito extends MicroEvent {
             sourceEl.setAttribute('type', el.dataset.mime);
 
             el.appendChild(sourceEl);
-            el.load();
+
+            // Check if media isn't already being loaded.
+            if (el.networkState !== 2) el.load();
         } else if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', body} = el.dataset;
 
@@ -825,31 +827,23 @@ export default class Incito extends MicroEvent {
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    // @ts-expect-error
-                    if (entry.isIntersecting && entry.target.paused) {
-                        // @ts-expect-error
-                        const currentTime = entry.target.dataset.currentTime;
-
-                        if (currentTime) {
-                            // @ts-expect-error
-                            entry.target.currentTime = Number(currentTime);
+                entries.forEach(async (entry) => {
+                    if (entry.target instanceof HTMLVideoElement) {
+                        if (entry.isIntersecting && entry.target.paused) {
+                            entry.target.play();
                         }
+                        if (!entry.isIntersecting && !entry.target.paused) {
+                            // If loading is ongoing, we _have to_ wait for play() to be ready before pausing.
+                            if (entry.target.networkState === 2) {
+                                await entry.target.play();
+                            }
 
-                        // @ts-expect-error
-                        entry.target.play();
-                    
-                    // @ts-expect-error
-                    } else if (!entry.isIntersecting && !entry.target.paused) {
-                        // @ts-expect-error                        
-                        entry.target.dataset.currentTime = entry.target.currentTime;
-                        // @ts-expect-error
-                        entry.target.pause();
+                            entry.target.pause();
+                        }
                     }
                 });
-            }, {
-                threshold: 0.1
-            }
+            },
+            {threshold: 0.1}
         );
     }
 
