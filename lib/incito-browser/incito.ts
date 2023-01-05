@@ -247,8 +247,7 @@ function renderView(view, canLazyload) {
 
             attrs.muted = '';
             attrs.playsinline = '';
-            attrs.preload = 'metadata';
-            attrs.poster = 'noposter';
+            attrs.preload = 'auto';
 
             const src = String(new URL(view.src));
 
@@ -782,7 +781,7 @@ export default class Incito extends MicroEvent {
     }
 
     loadEl(el) {
-        if (el.tagName.toLowerCase() === 'video' && !el.dataset.isLazyloaded) {
+        if (el.tagName.toLowerCase() === 'video') {
             const sourceEl = document.createElement('source');
 
             sourceEl.setAttribute('src', el.dataset.src);
@@ -790,7 +789,6 @@ export default class Incito extends MicroEvent {
 
             el.appendChild(sourceEl);
             el.load();
-            el.dataset.isLazyloaded = true;
         } else if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', body} = el.dataset;
 
@@ -823,34 +821,35 @@ export default class Incito extends MicroEvent {
                     }
                 });
             },
-            {rootMargin: '500px 0px'}
+            {rootMargin: '500px 0px', threshold: 0}
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
+                    // @ts-expect-error
+                    if (entry.isIntersecting && entry.target.paused) {
                         // @ts-expect-error
-                        const autoplayState = entry.target.dataset.autoplayState;
+                        const currentTime = entry.target.dataset.currentTime;
 
-                        this.loadEl(entry.target);
-                        this.videoObserver.unobserve(entry.target);
-
-                        if (!autoplayState || autoplayState === 'paused') {
+                        if (currentTime) {
                             // @ts-expect-error
-                            entry.target.dataset.autoplayState = 'playing';
-                            // @ts-expect-error
-                            entry.target.play();
+                            entry.target.currentTime = Number(currentTime);
                         }
+
                         // @ts-expect-error
-                    } else if (!entry.target.paused) {
-                        // @ts-expect-error
-                        entry.target.dataset.autoplayState = 'paused';
+                        entry.target.play();
+                    
+                    // @ts-expect-error
+                    } else if (!entry.isIntersecting && !entry.target.paused) {
+                        // @ts-expect-error                        
+                        entry.target.dataset.currentTime = entry.target.currentTime;
                         // @ts-expect-error
                         entry.target.pause();
                     }
                 });
-            },
-            {threshold: 0}
+            }, {
+                threshold: 0.1
+            }
         );
     }
 
