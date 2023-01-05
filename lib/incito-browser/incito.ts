@@ -17,7 +17,7 @@ function escapeAttrValue(value) {
     return typeof value === 'string' ? value.replace(/"/g, '&quot;') : value;
 }
 
-function isDefinedStr(value) {
+function isDefinedStr(value: unknown): value is string {
     return typeof value === 'string' && value.length > 0;
 }
 
@@ -699,17 +699,17 @@ export default class Incito extends MicroEvent {
         }
 
         if (isDefinedStr(theme.background_color)) {
-            this.el.style.backgroundColor = theme.background_color!;
+            this.el.style.backgroundColor = theme.background_color;
         }
 
         if (isDefinedStr(theme.text_color)) {
-            this.el.style.color = theme.text_color!;
+            this.el.style.color = theme.text_color;
         }
 
         if (isDefinedStr(theme.style)) {
             this.styleEl = document.createElement('style');
 
-            this.styleEl.innerText = theme.style!;
+            this.styleEl.innerText = theme.style;
 
             document.head.appendChild(this.styleEl);
         }
@@ -781,11 +781,11 @@ export default class Incito extends MicroEvent {
     }
 
     loadEl(el) {
-        if (el.tagName.toLowerCase() === 'video') {
+        if (el instanceof HTMLMediaElement) {
             const sourceEl = document.createElement('source');
 
-            sourceEl.setAttribute('src', el.dataset.src);
-            sourceEl.setAttribute('type', el.dataset.mime);
+            if (el.dataset.src) sourceEl.setAttribute('src', el.dataset.src);
+            if (el.dataset.mime) sourceEl.setAttribute('type', el.dataset.mime);
 
             el.appendChild(sourceEl);
 
@@ -829,10 +829,9 @@ export default class Incito extends MicroEvent {
             (entries) => {
                 entries.forEach(async (entry) => {
                     if (entry.target instanceof HTMLVideoElement) {
-                        if (entry.isIntersecting && entry.target.paused) {
+                        if (entry.isIntersecting) {
                             entry.target.play();
-                        }
-                        if (!entry.isIntersecting && !entry.target.paused) {
+                        } else {
                             // If loading is ongoing, we _have to_ wait for play() to be ready before pausing.
                             if (entry.target.networkState === 2) {
                                 await entry.target.play();
