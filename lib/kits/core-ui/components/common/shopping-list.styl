@@ -108,52 +108,54 @@
         height 400px
 
 @media print
-    .sgn__pp
-        overflow inherit !important
-        position relative !important
-        z-index 9
-        visibility hidden
-        height auto
-
-    .sgn__incito
-        overflow inherit !important
-        position relative !important
-        z-index 9
-        visibility hidden
-        height auto
-
     .sgn__header
         overflow visible
         position relative !important
         visibility hidden
         height auto
+    
+    .sgn__incito
+        overflow inherit !important
+        position relative !important
+        z-index 9
+        height auto
 
-    body *
+    .sgn-body-print *
         visibility hidden
         height 0
 
-    .sgn-modal-container
-        position relative !important
+        .sgn__pp
+            overflow inherit !important
+            position relative !important
+            z-index 9
+            visibility hidden
+            height auto
 
-    .sgn-show-print-section *
-        visibility visible
-        height auto
+        .sgn__incito
+            visibility hidden
 
-    .sgn-hide-print
-        display none !important
-        visibility hidden !important
+        .sgn-modal-container
+            position relative !important
 
-    .sgn-shopping-popup
-        box-shadow none
-        color #000000 !important
-        margin-top 0px
+        .sgn-show-print-section *
+            visibility visible
+            height auto
 
-    .sgn-shopping-list-items-container
-        overflow visible
-        height 100%
-        position relative
-        color #000000 !important
-    
-    .sgn-shopping-list-content
-        width 100%
-        white-space normal
+        .sgn-hide-print
+            display none !important
+            visibility hidden !important
+
+        .sgn-shopping-popup
+            box-shadow none
+            color #000000 !important
+            margin-top 0px
+
+        .sgn-shopping-list-items-container
+            overflow visible
+            height 100%
+            position relative
+            color #000000 !important
+        
+        .sgn-shopping-list-content
+            width 100%
+            white-space normal
