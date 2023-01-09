@@ -108,8 +108,12 @@ const ShoppingList = ({template}) => {
                 ).length > 0
         });
 
-        createModal(container);
+        createModal(container, destroyModal);
         addEventListeners();
+    };
+
+    const destroyModal = () => {
+        window.removeEventListener('afterprint', afterPrintEvent);
     };
 
     const transformSavedOffers = (savedOffers) => {
@@ -221,8 +225,15 @@ const ShoppingList = ({template}) => {
         container
             ?.querySelector('.sgn-shopping-print-list-btn')
             ?.addEventListener('click', () => {
+                document.body.classList.add('sgn-body-print');
                 window.print();
             });
+
+        window.addEventListener('afterprint', afterPrintEvent);
+    };
+
+    const afterPrintEvent = () => {
+        document.body.classList.remove('sgn-body-print');
     };
 
     const addShareListener = () => {
