@@ -114,7 +114,7 @@ const ShoppingList = ({template}) => {
     };
 
     const destroyModal = () => {
-        window.removeEventListener('afterprint', afterPrintEvent);
+        document.body.classList.remove('sgn-body-print');
     };
 
     const transformSavedOffers = (savedOffers) => {
@@ -228,12 +228,6 @@ const ShoppingList = ({template}) => {
             ?.addEventListener('click', () => {
                 window.print();
             });
-
-        window.addEventListener('afterprint', afterPrintEvent);
-    };
-
-    const afterPrintEvent = () => {
-        document.body.classList.remove('sgn-body-print');
     };
 
     const addShareListener = () => {
