@@ -91,6 +91,7 @@ const ShoppingList = ({template}) => {
             'publication-saved-offers'
         );
 
+        document.body.classList.add('sgn-body-print');
         container = document.createElement('div');
         container.className = 'sgn-shopping-list-container';
 
@@ -225,7 +226,6 @@ const ShoppingList = ({template}) => {
         container
             ?.querySelector('.sgn-shopping-print-list-btn')
             ?.addEventListener('click', () => {
-                document.body.classList.add('sgn-body-print');
                 window.print();
             });
 
