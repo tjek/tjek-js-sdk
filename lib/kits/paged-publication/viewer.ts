@@ -316,6 +316,20 @@ class Viewer extends MicroEvent {
         if (!pageDecorations?.length) return;
 
         this.pageDecorations = pageDecorations;
+        const currentPageNumber = this._core.findPage(
+            this._core.pageId
+        )?.pageNumber;
+        if (currentPageNumber) {
+            const currentPageDecorations = this.pageDecorations?.filter(
+                ({page_number}) => page_number == currentPageNumber
+            );
+            if (currentPageDecorations) {
+                PageDecorations().render({
+                    pageDecorations: currentPageDecorations,
+                    aspectRatio: this.options?.hotspotRatio || 1
+                });
+            }
+        }
 
         this.bind('beforeNavigation', (e) => {
             PageDecorations().show();
@@ -323,8 +337,7 @@ class Viewer extends MicroEvent {
             const pageDecors = e?.pageSpread?.options?.pages?.map(
                 ({pageNumber}) =>
                     this.pageDecorations?.find(
-                        (pageDecoration) =>
-                            pageDecoration.page_number == pageNumber
+                        ({page_number}) => page_number == pageNumber
                     )
             );
 
@@ -340,6 +353,7 @@ class Viewer extends MicroEvent {
                 });
             });
         });
+
         this.bind('zoomedIn', PageDecorations().hide);
         this.bind('zoomedOut', PageDecorations().show);
         this.bind('panStart', PageDecorations().hide);
