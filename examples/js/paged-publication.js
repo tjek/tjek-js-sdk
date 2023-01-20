@@ -39,6 +39,13 @@
                         bootstrapper.applyHotspots(viewer, hotspots);
                     }
                 });
+
+                // Optionally fetch and apply decorations after rendering the viewer as they are not critical for initial render.
+                bootstrapper.fetchPageDecorations(function (err3, decorations) {
+                    if (!err3) {
+                        bootstrapper.applyPageDecorations(viewer, decorations);
+                    }
+                });
             } else {
                 console.error(err);
             }

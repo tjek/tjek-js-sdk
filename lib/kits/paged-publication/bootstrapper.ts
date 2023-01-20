@@ -43,7 +43,7 @@ export default class Bootstrapper {
         });
     }
 
-    applyHotspots(viewer, hotspots) {
+    applyHotspots(viewer: Viewer, hotspots: V2Hotspot[]) {
         viewer.applyHotspots(
             hotspots.reduce((obj, hotspot) => {
                 obj[hotspot.id] = hotspot;
@@ -115,7 +115,7 @@ export default class Bootstrapper {
             callback
         );
 
-    applyPageDecorations(viewer, pageDecorations) {
+    applyPageDecorations(viewer: Viewer, pageDecorations: V2PageDecoration[]) {
         viewer.applyPageDecorations(pageDecorations);
     }
 }

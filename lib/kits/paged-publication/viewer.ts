@@ -2,6 +2,7 @@ import MicroEvent from 'microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
 import {V2Hotspot, V2PageDecoration} from '../core';
+import PageDecorations from '../core-ui/page-decorations';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
 import Controls from './controls';
@@ -9,7 +10,6 @@ import Core from './core';
 import EventTracking from './event-tracking';
 import Hotspots from './hotspots';
 import {Page} from './page-spreads';
-import PageDecorations from '../core-ui/page-decorations';
 import './viewer.styl';
 
 function defaultPickHotspot(
@@ -312,7 +312,7 @@ class Viewer extends MicroEvent {
         this.processHotspotQueue();
     }
 
-    applyPageDecorations(pageDecorations) {
+    applyPageDecorations(pageDecorations?: V2PageDecoration[]) {
         if (!pageDecorations?.length) return;
 
         this.pageDecorations = pageDecorations;
