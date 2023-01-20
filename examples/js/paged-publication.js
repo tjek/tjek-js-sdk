@@ -1,5 +1,6 @@
 (function () {
     var id = SGN.util.getQueryParam('id');
+    var pageNo = SGN.util.getQueryParam('pageNo');
     var options = {
         el: document.querySelector('.sgn__pp'),
         eventTracker: SGN.config.get('eventTracker')
@@ -9,7 +10,9 @@
 
         bootstrapper.fetch(function (err, data) {
             if (!err) {
-                var viewer = bootstrapper.createViewer(data);
+                var viewer = bootstrapper.createViewer(data, {
+                    pageId: pageNo ? 'page' + pageNo : undefined
+                });
 
                 viewer.bind('hotspotsPointerdown', function (hotspots) {
                     console.log('hotspotsPointerdown', hotspots);
