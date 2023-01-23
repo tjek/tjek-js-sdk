@@ -48,7 +48,7 @@ export interface ViewerInit {
     pages?: Page[];
     pageSpreadWidth?: number;
     pageSpreadMaxZoomScale?: number;
-    pageId: unknown;
+    pageId?: string;
     idleDelay?: number;
     resizeDelay?: number;
     color?: string;
@@ -61,7 +61,7 @@ class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
     hotspots: Record<string, {type: string; id: string; locations}> | null =
         null;
-    hotspotQueue: {id: unknown; pages: Page[]}[] = [];
+    hotspotQueue: {id: string; pages: Page[]}[] = [];
     popover: null | {destroy: () => void} = null;
     el: HTMLElement;
     _core: Core;

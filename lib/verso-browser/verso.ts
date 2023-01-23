@@ -72,6 +72,7 @@ function traversePageSpreads(els: NodeListOf<HTMLElement>) {
         const el = els[i];
         const width = Number(el.dataset.width ?? 100);
         const pageSpread = new PageSpread(el, {
+            // @ts-expect-error - io: I don't understand how a lot of this works downstream when data-id is missing, but it does
             id: el.dataset.id,
             type: el.dataset.type,
             pageIds: el.dataset.pageIds?.split(',') || [],
@@ -207,7 +208,9 @@ export default class Verso {
         );
         this.scrollerEl.addEventListener('wheel', this.onWheel, false);
         const pageId =
-            this.getPageSpreadPositionFromPageId(this.options.pageId!) ?? 0;
+            (this.options.pageId &&
+                this.getPageSpreadPositionFromPageId(this.options.pageId)) ||
+            0;
 
         this.hammer.set({enable: true});
         this.started = true;
