@@ -24,8 +24,7 @@ class PagedPublicationPageSpread extends MicroEvent {
     hotspotsRendered = false;
     el: HTMLElement;
     options: PagedPublicationPageSpreadInit;
-    // @ts-expect-error
-    constructor(options: PagedPublicationPageSpreadInit = {}) {
+    constructor(options: PagedPublicationPageSpreadInit) {
         super();
         this.options = options;
         this.el = this.renderEl();
