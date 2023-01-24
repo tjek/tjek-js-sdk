@@ -1,13 +1,7 @@
 import './page_spread.styl';
 
-type Complete<T> = {
-    [P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>>
-        ? T[P]
-        : T[P] | undefined;
-};
-
 interface PageSpreadInit {
-    id?: string;
+    id: string;
     type?: string;
     pageIds: string[];
     width: number;
@@ -20,14 +14,13 @@ export default class PageSpread {
     active = false;
     el: HTMLElement;
     options: PageSpreadInit;
-    id?: string;
+    id: string;
     type?: string;
     pageIds: string[];
     width: number;
     left: number;
     maxZoomScale: number;
-    // @ts-expect-error
-    constructor(el: HTMLElement, options: PageSpreadInit = {}) {
+    constructor(el: HTMLElement, options: PageSpreadInit) {
         this.el = el;
         this.options = options;
         this.id = this.options.id;

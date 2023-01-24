@@ -1,5 +1,6 @@
 (function () {
     var id = SGN.util.getQueryParam('id');
+    var pageNo = SGN.util.getQueryParam('pageNo');
     var options = {
         el: document.querySelector('.sgn__pp'),
         eventTracker: SGN.config.get('eventTracker')
@@ -9,7 +10,9 @@
 
         bootstrapper.fetch(function (err, data) {
             if (!err) {
-                var viewer = bootstrapper.createViewer(data);
+                var viewer = bootstrapper.createViewer(data, {
+                    pageId: pageNo ? 'page' + pageNo : undefined
+                });
 
                 viewer.bind('hotspotsPointerdown', function (hotspots) {
                     console.log('hotspotsPointerdown', hotspots);
@@ -37,6 +40,13 @@
                 bootstrapper.fetchHotspots(function (err2, hotspots) {
                     if (!err2) {
                         bootstrapper.applyHotspots(viewer, hotspots);
+                    }
+                });
+
+                // Optionally fetch and apply decorations after rendering the viewer as they are not critical for initial render.
+                bootstrapper.fetchPageDecorations(function (err3, decorations) {
+                    if (!err3) {
+                        bootstrapper.applyPageDecorations(viewer, decorations);
                     }
                 });
             } else {

@@ -1,5 +1,5 @@
 import MicroEvent from 'microevent';
-import PageSpread from './page-spread';
+import PagedPublicationPageSpread from './page-spread';
 
 function chunk<I extends any>(arr: I[], size: number) {
     const results: I[][] = [];
@@ -21,15 +21,15 @@ interface PagedPublicationPageSpreadsInit {
     maxZoomScale: number;
 }
 class PagedPublicationPageSpreads extends MicroEvent {
-    collection: PageSpread[] = [];
-    ids = {};
+    collection: PagedPublicationPageSpread[] = [];
+    ids: Record<string, PagedPublicationPageSpread> = {};
     options: PagedPublicationPageSpreadsInit;
     constructor(options: PagedPublicationPageSpreadsInit) {
         super();
         this.options = options;
     }
 
-    get(id) {
+    get(id: string) {
         return this.ids[id];
     }
 
@@ -45,7 +45,7 @@ class PagedPublicationPageSpreads extends MicroEvent {
 
     update(pageMode: PageMode = 'single') {
         const pageSpreads: Page[][] = [];
-        const ids = {};
+        const ids: typeof this.ids = {};
         const pages = this.options.pages.slice();
         const {width, maxZoomScale} = this.options;
 
@@ -69,7 +69,7 @@ class PagedPublicationPageSpreads extends MicroEvent {
 
         this.collection = pageSpreads.map((pages, i) => {
             const id = `${pageMode}-${i}`;
-            const pageSpread = new PageSpread({
+            const pageSpread = new PagedPublicationPageSpread({
                 width,
                 pageMode,
                 maxZoomScale,

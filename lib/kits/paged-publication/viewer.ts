@@ -2,6 +2,7 @@ import MicroEvent from 'microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
 import {V2Hotspot, V2PageDecoration} from '../core';
+import PageDecorations from '../core-ui/page-decorations';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
 import Controls from './controls';
@@ -9,7 +10,6 @@ import Core from './core';
 import EventTracking from './event-tracking';
 import Hotspots from './hotspots';
 import {Page} from './page-spreads';
-import PageDecorations from '../core-ui/page-decorations';
 import './viewer.styl';
 
 function defaultPickHotspot(
@@ -48,7 +48,7 @@ export interface ViewerInit {
     pages?: Page[];
     pageSpreadWidth?: number;
     pageSpreadMaxZoomScale?: number;
-    pageId: unknown;
+    pageId?: string;
     idleDelay?: number;
     resizeDelay?: number;
     color?: string;
@@ -61,7 +61,7 @@ class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
     hotspots: Record<string, {type: string; id: string; locations}> | null =
         null;
-    hotspotQueue: {id: unknown; pages: Page[]}[] = [];
+    hotspotQueue: {id: string; pages: Page[]}[] = [];
     popover: null | {destroy: () => void} = null;
     el: HTMLElement;
     _core: Core;
@@ -312,10 +312,24 @@ class Viewer extends MicroEvent {
         this.processHotspotQueue();
     }
 
-    applyPageDecorations(pageDecorations) {
+    applyPageDecorations(pageDecorations?: V2PageDecoration[]) {
         if (!pageDecorations?.length) return;
 
         this.pageDecorations = pageDecorations;
+        const currentPageNumber = this._core.findPage(
+            this._core.pageId
+        )?.pageNumber;
+        if (currentPageNumber) {
+            const currentPageDecorations = this.pageDecorations?.filter(
+                ({page_number}) => page_number == currentPageNumber
+            );
+            if (currentPageDecorations) {
+                PageDecorations().render({
+                    pageDecorations: currentPageDecorations,
+                    aspectRatio: this.options?.hotspotRatio || 1
+                });
+            }
+        }
 
         this.bind('beforeNavigation', (e) => {
             PageDecorations().show();
@@ -323,8 +337,7 @@ class Viewer extends MicroEvent {
             const pageDecors = e?.pageSpread?.options?.pages?.map(
                 ({pageNumber}) =>
                     this.pageDecorations?.find(
-                        (pageDecoration) =>
-                            pageDecoration.page_number == pageNumber
+                        ({page_number}) => page_number == pageNumber
                     )
             );
 
@@ -340,6 +353,7 @@ class Viewer extends MicroEvent {
                 });
             });
         });
+
         this.bind('zoomedIn', PageDecorations().hide);
         this.bind('zoomedOut', PageDecorations().show);
         this.bind('panStart', PageDecorations().hide);

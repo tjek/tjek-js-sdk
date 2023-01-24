@@ -91,6 +91,7 @@ const ShoppingList = ({template}) => {
             'publication-saved-offers'
         );
 
+        document.body.classList.add('sgn-body-print');
         container = document.createElement('div');
         container.className = 'sgn-shopping-list-container';
 
@@ -108,8 +109,12 @@ const ShoppingList = ({template}) => {
                 ).length > 0
         });
 
-        createModal(container);
+        createModal(container, destroyModal);
         addEventListeners();
+    };
+
+    const destroyModal = () => {
+        document.body.classList.remove('sgn-body-print');
     };
 
     const transformSavedOffers = (savedOffers) => {

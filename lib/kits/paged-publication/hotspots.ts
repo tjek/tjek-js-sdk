@@ -75,9 +75,18 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
 }
 
 class PagedPublicationHotspots extends MicroEvent {
-    currentPageSpreadId = null;
+    currentPageSpreadId: null | string = null;
     pageSpreadsLoaded = {};
-    cache = {};
+    cache: Record<
+        string,
+        {
+            versoPageSpread: PageSpread;
+            pageSpread: PagedPublicationPageSpread;
+            hotspots: V2Hotspot[];
+            pages: Page[];
+            ratio: number;
+        }
+    > = {};
     constructor() {
         super();
 
@@ -129,7 +138,7 @@ class PagedPublicationHotspots extends MicroEvent {
         return this;
     }
 
-    requestHotspots(id, pages) {
+    requestHotspots(id: string, pages: Page[]) {
         this.trigger('hotspotsRequested', {id, pages});
     }
 
@@ -138,11 +147,14 @@ class PagedPublicationHotspots extends MicroEvent {
         this.renderHotspots(e);
     };
 
-    getCache(pageSpreadId) {
+    getCache(pageSpreadId: string) {
         return this.cache[pageSpreadId];
     }
 
-    setCache(pageSpreadId, data) {
+    setCache(
+        pageSpreadId: string,
+        data: typeof this.cache[keyof typeof this.cache]
+    ) {
         this.cache[pageSpreadId] = data;
 
         return this;
@@ -150,12 +162,12 @@ class PagedPublicationHotspots extends MicroEvent {
 
     afterNavigation = (e) => {
         if (!e.pageSpread) return;
-
-        const id = e.pageSpread.getId();
+        const pageSpread: PagedPublicationPageSpread = e.pageSpread;
+        const id: string = pageSpread.getId();
 
         this.currentPageSpreadId = id;
         if (this.pageSpreadsLoaded[id]) {
-            this.requestHotspots(id, e.pageSpread.getPages());
+            this.requestHotspots(id, pageSpread.getPages());
         }
     };
 
@@ -167,9 +179,13 @@ class PagedPublicationHotspots extends MicroEvent {
     };
 
     resized = () => {
-        const data = this.getCache(this.currentPageSpreadId);
+        if (this.currentPageSpreadId) {
+            const data = this.getCache(this.currentPageSpreadId);
 
-        if (data) this.renderHotspots(data);
+            if (data) {
+                this.renderHotspots(data);
+            }
+        }
     };
 }
 

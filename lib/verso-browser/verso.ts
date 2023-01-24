@@ -5,8 +5,8 @@ import {
     DIRECTION_LEFT,
     DIRECTION_RIGHT
 } from './vendor/hammer/Input';
-import TouchInput from './vendor/hammer/input/touch';
 import Manager from './vendor/hammer/Manager';
+import TouchInput from './vendor/hammer/input/touch';
 import PanRecognizer from './vendor/hammer/recognizers/pan';
 import PinchRecognizer from './vendor/hammer/recognizers/pinch';
 import PressRecognizer from './vendor/hammer/recognizers/press';
@@ -72,6 +72,7 @@ function traversePageSpreads(els: NodeListOf<HTMLElement>) {
         const el = els[i];
         const width = Number(el.dataset.width ?? 100);
         const pageSpread = new PageSpread(el, {
+            // @ts-expect-error - io: I don't understand how a lot of this works downstream when data-id is missing, but it does
             id: el.dataset.id,
             type: el.dataset.type,
             pageIds: el.dataset.pageIds?.split(',') || [],
@@ -121,6 +122,7 @@ export default class Verso {
     animation: Animation;
     hammer: Manager;
     coarsePointerQuery: MediaQueryList | null;
+    prefersReducedMotionQuery: MediaQueryList | null;
     constructor(el: HTMLElement, options: VersoInit = {}) {
         this.el = el;
         this.options = options;
@@ -129,13 +131,13 @@ export default class Verso {
         this.navigationDuration = this.options.navigationDuration ?? 240;
         this.navigationPanDuration = this.options.navigationPanDuration ?? 200;
         this.zoomDuration = this.options.zoomDuration ?? 200;
-
         this.tap = {
             count: 0,
             delay: this.options.doubleTapDelay ?? 300,
             timeout: undefined
         };
     }
+
     bind(event, fn) {
         this._events[event] = this._events[event] || [];
         return this._events[event].push(fn);
@@ -206,7 +208,9 @@ export default class Verso {
         );
         this.scrollerEl.addEventListener('wheel', this.onWheel, false);
         const pageId =
-            this.getPageSpreadPositionFromPageId(this.options.pageId!) ?? 0;
+            (this.options.pageId &&
+                this.getPageSpreadPositionFromPageId(this.options.pageId)) ||
+            0;
 
         this.hammer.set({enable: true});
         this.started = true;
@@ -218,6 +222,11 @@ export default class Verso {
 
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', this.onResize, false);
+
+            this.prefersReducedMotionQuery =
+                typeof window !== 'undefined' && window.matchMedia
+                    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+                    : null;
         }
 
         return this;
@@ -298,11 +307,16 @@ calls .first()/.prev()/.next()/.last()/.navigateTo() on the viewer.
         const currentPageSpread =
             this.getPageSpreadFromPosition(currentPosition);
         const activePageSpread = this.getPageSpreadFromPosition(newPosition);
+        const touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
         let carousel = this.getCarouselFromPageSpread(activePageSpread);
         const velocity = options?.velocity ?? 1;
         let duration = options?.duration ?? this.navigationDuration;
-        duration = duration / Math.abs(velocity);
-        const touchAction = activePageSpread.isScrollable() ? 'pan-y' : 'none';
+
+        if (this.prefersReducedMotionQuery?.matches) {
+            duration = 0;
+        } else if (duration > 0) {
+            duration = duration / Math.abs(velocity);
+        }
 
         currentPageSpread?.deactivate();
         activePageSpread.activate();

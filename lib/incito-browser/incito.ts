@@ -17,7 +17,7 @@ function escapeAttrValue(value) {
     return typeof value === 'string' ? value.replace(/"/g, '&quot;') : value;
 }
 
-function isDefinedStr(value) {
+function isDefinedStr(value: unknown): value is string {
     return typeof value === 'string' && value.length > 0;
 }
 
@@ -247,13 +247,12 @@ function renderView(view, canLazyload) {
 
             attrs.muted = '';
             attrs.playsinline = '';
-            attrs.preload = 'none';
-            attrs.poster = 'noposter';
+            attrs.preload = 'auto';
 
             const src = String(new URL(view.src));
 
             if (canLazyload) {
-                attrs['data-src'] = src;
+                attrs['data-src'] = `${src}#t=0.1`;
                 attrs['data-mime'] = view.mime;
                 classNames.push('incito--lazy');
 
@@ -269,7 +268,7 @@ function renderView(view, canLazyload) {
                     attrs['loop'] = '';
                 }
             } else {
-                attrs.src = src;
+                attrs.src = `${src}#t=0.1`;
                 attrs.controls = '';
             }
 
@@ -700,17 +699,17 @@ export default class Incito extends MicroEvent {
         }
 
         if (isDefinedStr(theme.background_color)) {
-            this.el.style.backgroundColor = theme.background_color!;
+            this.el.style.backgroundColor = theme.background_color;
         }
 
         if (isDefinedStr(theme.text_color)) {
-            this.el.style.color = theme.text_color!;
+            this.el.style.color = theme.text_color;
         }
 
         if (isDefinedStr(theme.style)) {
             this.styleEl = document.createElement('style');
 
-            this.styleEl.innerText = theme.style!;
+            this.styleEl.innerText = theme.style;
 
             document.head.appendChild(this.styleEl);
         }
@@ -753,13 +752,19 @@ export default class Incito extends MicroEvent {
     }
 
     destroy() {
-        if (this.lazyObserver) this.lazyObserver.disconnect();
+        if (this.lazyObserver) {
+            this.lazyObserver.disconnect();
+        }
 
-        if (this.videoObserver) this.videoObserver.disconnect();
+        if (this.videoObserver) {
+            this.videoObserver.disconnect();
+        }
 
         this.containerEl.removeChild(this.el);
 
-        if (this.styleEl) this.styleEl.parentNode!.removeChild(this.styleEl);
+        if (this.styleEl) {
+            this.styleEl.parentNode!.removeChild(this.styleEl);
+        }
 
         this.trigger('destroyed');
     }
@@ -776,15 +781,16 @@ export default class Incito extends MicroEvent {
     }
 
     loadEl(el) {
-        if (el.tagName.toLowerCase() === 'video' && !el.dataset.isLazyloaded) {
+        if (el instanceof HTMLMediaElement) {
             const sourceEl = document.createElement('source');
 
-            sourceEl.setAttribute('src', el.dataset.src);
-            sourceEl.setAttribute('type', el.dataset.mime);
+            if (el.dataset.src) sourceEl.setAttribute('src', el.dataset.src);
+            if (el.dataset.mime) sourceEl.setAttribute('type', el.dataset.mime);
 
             el.appendChild(sourceEl);
-            el.load();
-            el.dataset.isLazyloaded = true;
+
+            // Check if media isn't already being loaded.
+            if (el.networkState !== 2) el.load();
         } else if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', body} = el.dataset;
 
@@ -821,31 +827,22 @@ export default class Incito extends MicroEvent {
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const autoplayState =
-                            // @ts-expect-error
-                            entry.target.dataset.autoplayState;
-
-                        this.loadEl(entry.target);
-                        this.lazyObserver.unobserve(entry.target);
-
-                        if (!autoplayState || autoplayState === 'paused') {
-                            // @ts-expect-error
-                            entry.target.dataset.autoplayState = 'playing';
-                            // @ts-expect-error
+                entries.forEach(async (entry) => {
+                    if (entry.target instanceof HTMLVideoElement) {
+                        if (entry.isIntersecting) {
                             entry.target.play();
+                        } else {
+                            // If loading is ongoing, we _have to_ wait for play() to be ready before pausing.
+                            if (entry.target.networkState === 2) {
+                                await entry.target.play();
+                            }
+
+                            entry.target.pause();
                         }
-                        // @ts-expect-error
-                    } else if (!entry.target.paused) {
-                        // @ts-expect-error
-                        entry.target.dataset.autoplayState = 'paused';
-                        // @ts-expect-error
-                        entry.target.pause();
                     }
                 });
             },
-            {threshold: 0.25}
+            {threshold: 0.1}
         );
     }
 
@@ -861,7 +858,9 @@ export default class Incito extends MicroEvent {
 
             if (id != null && typeof meta === 'object') this.ids[id] = meta;
 
-            if (role === 'section') this.sections.push({id, meta});
+            if (role === 'section') {
+                this.sections.push({id, meta});
+            }
 
             html += '<' + tagName;
 

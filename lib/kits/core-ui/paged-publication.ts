@@ -1,24 +1,24 @@
 import * as clientLocalStorage from '../../storage/client-local';
 import {update as updateViewerTranslation} from '../../translations';
 import {getQueryParam} from '../../util';
+import type {V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
 import request from '../core/request';
+import type {Tracker} from '../events';
+import type {Viewer} from '../paged-publication';
 import Bootstrapper from '../paged-publication/bootstrapper';
 import Header from './components/common/header';
 import Sidebar from './components/common/sidebar';
 import MenuPopup from './components/common/menu-popup';
-import ShoppingList from './components/common/shopping-list';
 import OfferOverview from './components/common/offer-overview';
+import ShoppingList from './components/common/shopping-list';
 import {
-    translate,
-    pushQueryParam,
     getHashFragments,
-    transformFilter
+    pushQueryParam,
+    transformFilter,
+    translate
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
-import {Viewer} from '../paged-publication';
-import {V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
-import type {Tracker} from '../events';
 import PageList from './components/paged-publication/page-list';
 
 const PagedPublication = (

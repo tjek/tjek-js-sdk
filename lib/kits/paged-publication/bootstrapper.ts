@@ -1,5 +1,5 @@
 import {request, V2Catalog, V2Hotspot, V2Page, V2PageDecoration} from '../core';
-import {Tracker} from '../events';
+import type {Tracker} from '../events';
 import Viewer, {ViewerInit} from './viewer';
 
 interface BootstrapperInit {
@@ -43,7 +43,7 @@ export default class Bootstrapper {
         });
     }
 
-    applyHotspots(viewer, hotspots) {
+    applyHotspots(viewer: Viewer, hotspots: V2Hotspot[]) {
         viewer.applyHotspots(
             hotspots.reduce((obj, hotspot) => {
                 obj[hotspot.id] = hotspot;
@@ -96,7 +96,7 @@ export default class Bootstrapper {
         );
 
     fetchHotspots = (callback?: Parameters<typeof request>[1]) =>
-        request<V2Hotspot>(
+        request<V2Hotspot[]>(
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
@@ -115,7 +115,7 @@ export default class Bootstrapper {
             callback
         );
 
-    applyPageDecorations(viewer, pageDecorations) {
+    applyPageDecorations(viewer: Viewer, pageDecorations: V2PageDecoration[]) {
         viewer.applyPageDecorations(pageDecorations);
     }
 }
