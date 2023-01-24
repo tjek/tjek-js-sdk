@@ -54,6 +54,14 @@ const defaultTemplate = `\
             {{/hasSections}}
         {{/isIncito}}
         {{^isIncito}}
+            {{#enableSidebar}}
+            <div class="sgn-menu-tab-content-container">
+                <div class="sgn-menu-tab-content sgn-menu-tab-content-active">
+                    <div class="sgn-menu-tab-content-offers"></div>
+                </div>
+            </div>
+            {{/enableSidebar}}
+            {{^enableSidebar}}
             <div class="sgn-menu-tab">
                 <button class="sgn-menu-tab-btn sgn-menu-tab-btn-active">{{translations.pagesButton}}</button>
                 <button class="sgn-menu-tab-btn">{{translations.offersButton}}</button>
@@ -65,7 +73,8 @@ const defaultTemplate = `\
                 <div class="sgn-menu-tab-content">
                     <div class="sgn-menu-tab-content-offers"></div>
                 </div>
-        </div>
+            </div>
+            {{/enableSidebar}}
         {{/isIncito}}
     </div>\
 `;
@@ -140,7 +149,8 @@ const MenuPopup = ({
                 isIncito: publicationType === 'incito',
                 hasSections:
                     sgnData?.incito?.table_of_contents?.length > 0 &&
-                    !scriptEls.enableSidebar
+                    !scriptEls.enableSidebar,
+                enableSidebar: scriptEls.enableSidebar
             }
         );
 
