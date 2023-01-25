@@ -7,7 +7,6 @@ import type {Tracker} from '../events';
 import type {Viewer} from '../incito-publication';
 import Bootstrapper from '../incito-publication/bootstrapper';
 import Header from './components/common/header';
-import Sidebar from './components/common/sidebar';
 import MenuPopup from './components/common/menu-popup';
 import OfferOverview from './components/common/offer-overview';
 import ShoppingList from './components/common/shopping-list';
@@ -82,31 +81,16 @@ const IncitoPublication = (
 
     const header = Header({
         publicationType: 'incito',
-        template: customTemplates.headerContainer,
+        template: scriptEls.enableSidebar
+            ? customTemplates.sidebarContainer
+            : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     });
-
-    if (!scriptEls.disableHeader && !scriptEls.enableSidebar) {
-        document
-            .querySelector('.sgn__header-container')
-            ?.appendChild(header.render());
-    }
-
-    const sidebar = Sidebar({
-        publicationType: 'incito',
-        template: customTemplates.sidebarContainer,
-        shoppingListCounterTemplate: customTemplates.shoppingListCounter,
-        el: document.querySelector(scriptEls.mainContainer),
-        scriptEls
-    });
-
-    if (scriptEls.enableSidebar) {
-        document
-            .querySelector('.sgn__menu-sidebar-container')
-            ?.appendChild(sidebar.render());
-    }
+    document
+        .querySelector('.sgn__header-container')
+        ?.appendChild(header.render());
 
     const render = async () => {
         if (Object.keys(options || {}).length === 0) await setOptions();
@@ -186,7 +170,6 @@ const IncitoPublication = (
         sgnViewer = bootstrapper.createViewer(data);
 
         header.show(sgnData);
-        sidebar.show(sgnData);
 
         if (options?.el)
             on(
@@ -199,7 +182,7 @@ const IncitoPublication = (
                     const viewId = this.dataset.id;
                     const publicationId = options.id;
 
-                    clickOfferCell(viewId, publicationId);
+                    clickOfferCell(viewId, publicationId, sgnViewer);
                 }
             );
 
@@ -238,8 +221,10 @@ const IncitoPublication = (
         );
     };
 
-    const clickOfferCell = async (viewId, publicationId) => {
-        dispatchOfferClickEvent({fetchOffer, viewId, publicationId});
+    const clickOfferCell = async (viewId, publicationId, sgnViewer) => {
+        const {products} =
+            sgnViewer.incito?.ids?.[viewId]?.['tjek.offer.v1'] || {};
+        dispatchOfferClickEvent({fetchOffer, viewId, publicationId, products});
 
         const shoppingBtn = options.el?.querySelector('.sgn__offer-shopping');
 

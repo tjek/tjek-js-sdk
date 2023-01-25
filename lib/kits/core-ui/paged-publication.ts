@@ -7,7 +7,6 @@ import type {Tracker} from '../events';
 import type {Viewer} from '../paged-publication';
 import Bootstrapper from '../paged-publication/bootstrapper';
 import Header from './components/common/header';
-import Sidebar from './components/common/sidebar';
 import MenuPopup from './components/common/menu-popup';
 import OfferOverview from './components/common/offer-overview';
 import ShoppingList from './components/common/shopping-list';
@@ -79,31 +78,16 @@ const PagedPublication = (
 
     const header = Header({
         publicationType: 'paged',
-        template: customTemplates.headerContainer,
+        template: scriptEls.enableSidebar
+            ? customTemplates.sidebarContainer
+            : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     });
-
-    if (!scriptEls.disableHeader && !scriptEls.enableSidebar) {
-        document
-            .querySelector('.sgn__header-container')
-            ?.appendChild(header.render());
-    }
-
-    const sidebar = Sidebar({
-        publicationType: 'paged',
-        template: customTemplates.sidebarContainer,
-        shoppingListCounterTemplate: customTemplates.shoppingListCounter,
-        el: document.querySelector(scriptEls.mainContainer),
-        scriptEls
-    });
-
-    if (scriptEls.enableSidebar) {
-        document
-            .querySelector('.sgn__menu-sidebar-container')
-            ?.appendChild(sidebar.render());
-    }
+    document
+        .querySelector('.sgn__header-container')
+        ?.appendChild(header.render());
 
     const render = async () => {
         if (Object.keys(options || {}).length === 0) await setOptions();
@@ -191,7 +175,6 @@ const PagedPublication = (
         });
 
         header.show(sgnData);
-        sidebar.show(sgnData);
 
         if (!scriptEls.disablePageDecorations) {
             sgnPageDecorations = await bootstrapper.fetchPageDecorations();
