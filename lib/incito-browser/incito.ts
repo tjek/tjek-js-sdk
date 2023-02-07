@@ -737,7 +737,7 @@ export default class Incito extends MicroEvent {
             this.el.setAttribute('lang', this.incito.locale);
         }
 
-        this.el.innerHTML = this.renderHtml(this.incito.root_view, 0);
+        this.el.innerHTML = this.renderHtml(this.incito.root_view);
 
         this.containerEl.appendChild(this.el);
 
@@ -815,7 +815,7 @@ export default class Incito extends MicroEvent {
                     if (res.status === 200) return res.json();
                 })
                 .then((res) => {
-                    el.innerHTML = this.renderHtml(res, 0);
+                    el.innerHTML = this.renderHtml(res);
 
                     this.observeElements(el);
                 });
