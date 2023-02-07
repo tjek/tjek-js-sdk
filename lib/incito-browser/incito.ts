@@ -93,6 +93,7 @@ const matches =
     (Element.prototype.matches || // @ts-expect-error
         Element.prototype.msMatchesSelector ||
         Element.prototype.webkitMatchesSelector);
+
 function closest(el: HTMLElement, s: string) {
     do {
         // @ts-expect-error
@@ -235,10 +236,21 @@ function renderView(view, canLazyload) {
             if (isDefinedStr(view.src)) {
                 attrs.loading = 'lazy';
                 attrs.decoding = 'async';
+                attrs.fetchpriority = 'high';
                 attrs.src = src;
             }
 
-            if (isDefinedStr(view.label)) attrs['alt'] = view.label;
+            if (isDefinedStr(view.label)) {
+                attrs['alt'] = view.label;
+            }
+
+            if (typeof view.layout_width === 'number') {
+                attrs.width = view.layout_width;
+            }
+
+            if (typeof view.layout_height === 'number') {
+                attrs.height = view.layout_height;
+            }
 
             break;
         }
@@ -725,7 +737,7 @@ export default class Incito extends MicroEvent {
             this.el.setAttribute('lang', this.incito.locale);
         }
 
-        this.el.innerHTML = this.renderHtml(this.incito.root_view);
+        this.el.innerHTML = this.renderHtml(this.incito.root_view, 0);
 
         this.containerEl.appendChild(this.el);
 
@@ -803,7 +815,7 @@ export default class Incito extends MicroEvent {
                     if (res.status === 200) return res.json();
                 })
                 .then((res) => {
-                    el.innerHTML = this.renderHtml(res);
+                    el.innerHTML = this.renderHtml(res, 0);
 
                     this.observeElements(el);
                 });
