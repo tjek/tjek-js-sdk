@@ -10,36 +10,36 @@
             display none
 
         &[data-component-template-sidebar-position="left"]
-            left 350px
+            left 290px
 
             .sgn__sidebar
                 position fixed
-                width 350px
+                width 290px
                 left 0
                 background-color #ffffff
 
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
-                width calc(100vw - 350px)
+                width calc(100vw - 290px)
                 margin-left auto
             
             .sgn__sidebar-control
-                left 350px
+                left 290px
             
         &[data-component-template-sidebar-position="right"]
-            right 350px
+            right 290px
             
             .sgn__sidebar
                 position fixed
-                width 350px
+                width 290px
                 right 0
                 background-color #ffffff
 
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
-                width calc(100vw - 350px)
+                width calc(100vw - 290px)
                 margin-right auto
             
             .sgn__sidebar-control
-                right 350px
+                right 290px
         
         .sgn__sidebar-control
             display none
@@ -218,6 +218,9 @@
         margin-block-end 0
         text-align left
 
+        a
+            text-decoration none
+
         .sgn-sections-content-container, .sgn-pages-content-container
             border 0
             padding 10px 20px
@@ -240,7 +243,7 @@
         right 0 !important
 
         .sgn__sidebar
-            transform translateX(350px)
+            transform translateX(290px)
 
         .sgn__sidebar-control
             right 0!important
@@ -253,7 +256,7 @@
         left 0 !important
 
         .sgn__sidebar
-            transform translateX(-350px)
+            transform translateX(-290px)
 
         .sgn__sidebar-control
             left 0 !important
@@ -276,6 +279,10 @@
 
 @media (max-width 840px)
     .sgn__sidebar--open
+
+        .sgn-sections-list-items-container, .sgn-pages-list-items-container
+            text-align center
+
         &[data-component-template-sidebar-position="right"]
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
                 width unset !important
@@ -288,13 +295,13 @@
 
 @keyframes sgn-animate-sidebar-left
     0%
-        transform translateX(-350px)
+        transform translateX(-290px)
     100%
         transform translateX(0)
 
 @keyframes sgn-animate-sidebar-right
     0%
-        transform translateX(350px)
+        transform translateX(290px)
     100%
         transform translateX(0)
 
@@ -302,10 +309,10 @@
     0%
         transform translateX(0)
     100%
-        transform translateX(350px)
+        transform translateX(290px)
 
 @keyframes sgn-animate-sidebar-left-close
     0%
         transform translateX(0)
     100%
-        transform translateX(-350px)
+        transform translateX(-290px)
