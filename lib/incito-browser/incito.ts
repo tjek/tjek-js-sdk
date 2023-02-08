@@ -234,6 +234,7 @@ function renderView(view, canLazyload) {
 
             if (isDefinedStr(view.src)) {
                 attrs.loading = 'lazy';
+                attrs.decoding = 'async';
                 attrs.src = src;
             }
 
