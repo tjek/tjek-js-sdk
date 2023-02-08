@@ -188,7 +188,7 @@ export default class Bootstrapper {
         });
         const controls = new Controls(viewer);
 
-        viewer.incito.bind('destroy', controls.destroy);
+        viewer.incito.bind('destroyed', controls.destroy);
 
         // Persist clicks on feature labels for later anonymization.
         on(
