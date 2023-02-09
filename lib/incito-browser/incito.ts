@@ -648,7 +648,7 @@ function renderView(view, canLazyload) {
     return {tagName, contents, attrs};
 }
 
-interface IncitoEventMap {
+export interface IncitoEventMap {
     started: [];
     destroyed: [];
     sectionVisible: [{sectionId: string; sectionPosition: number}];
@@ -846,6 +846,19 @@ export default class Incito extends MicroEvent {
         }
     }
 
+    triggerSectionVisibility(sectionEl: HTMLElement, visible: boolean) {
+        const sectionId = sectionEl.dataset.id;
+        if (!sectionId) return;
+
+        const sectionPosition =
+            Array.prototype.slice
+                .call(sectionEl.parentElement!.children)
+                .indexOf(sectionEl) + 1;
+        if (!sectionPosition) return;
+
+        const visibility = visible ? 'sectionVisible' : 'sectionHidden';
+        this.trigger(visibility, {sectionId, sectionPosition});
+    }
     visibility: DocumentVisibilityState = 'visible';
     onVisibilityChange(newVisibility: DocumentVisibilityState) {
         if (newVisibility === this.visibility) return;
@@ -855,19 +868,7 @@ export default class Incito extends MicroEvent {
         this.sectionVisibility.forEach((visible, target) => {
             if (!visible) return;
 
-            const sectionId = target.dataset.id;
-            if (!sectionId) return;
-
-            const sectionPosition = Array.from(
-                target.parentElement?.children ?? []
-            ).indexOf(target);
-
-            this.trigger(
-                newVisibility === 'visible'
-                    ? 'sectionVisible'
-                    : 'sectionHidden',
-                {sectionId, sectionPosition}
-            );
+            this.triggerSectionVisibility(target, newVisibility === 'visible');
         });
     }
     handleBlur = () => this.onVisibilityChange('hidden');
@@ -882,27 +883,15 @@ export default class Incito extends MicroEvent {
 
         this.sectionObserver = new IntersectionObserver(
             (entries) =>
-                entries.forEach(({target, isIntersecting}) => {
+                entries.forEach(({target, isIntersecting: newVisibility}) => {
                     if (!(target instanceof HTMLElement)) return;
 
                     const previousVisibility =
                         this.sectionVisibility.get(target);
-                    const newVisibility = isIntersecting;
                     if (newVisibility === previousVisibility) return;
 
                     this.sectionVisibility.set(target, newVisibility);
-
-                    const sectionId = target.dataset.id;
-                    if (!sectionId) return;
-
-                    const sectionPosition = Array.from(
-                        target.parentElement?.children ?? []
-                    ).indexOf(target);
-
-                    this.trigger(
-                        newVisibility ? 'sectionVisible' : 'sectionHidden',
-                        {sectionId, sectionPosition}
-                    );
+                    this.triggerSectionVisibility(target, newVisibility);
                 }),
             {rootMargin: '5px 0px'}
         );
