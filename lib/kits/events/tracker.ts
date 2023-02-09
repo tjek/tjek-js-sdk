@@ -48,7 +48,13 @@ class Tracker {
     client: TrackerClient;
     eventsTrackUrl: string;
     eventsTrackHeaders: Record<string, string>;
-    constructor(options) {
+    constructor(options?: {
+        trackId?: string;
+        poolLimit?: number;
+        client?: TrackerClient;
+        eventsTrackUrl?: string;
+        eventsTrackHeaders?: Record<string, string>;
+    }) {
         if (!pool) {
             pool = getPool();
 
@@ -158,7 +164,7 @@ class Tracker {
         return this.trackEvent(13, properties, version);
     }
 
-    createViewToken(...parts) {
+    createViewToken(...parts: string[]) {
         return btoa(
             String.fromCharCode.apply(
                 null,
