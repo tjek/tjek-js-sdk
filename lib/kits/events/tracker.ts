@@ -81,7 +81,7 @@ class Tracker {
         }
     }
     trackEvent(
-        type: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
+        type: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13,
         properties: Record<string, string | number>,
         version = 2
     ) {
@@ -136,6 +136,26 @@ class Tracker {
 
     trackIncitoPublicationOpened(properties, version?: number) {
         return this.trackEvent(11, properties, version);
+    }
+
+    trackIncitoPublicationSectionOpened(
+        properties: {
+            //  Incito Publication ID
+            'ip.id': string;
+            //  Incito Publication Section ID
+            'ips.id': string;
+            //  Incito Publication Section Position
+            'ips.p': number;
+            //  Milliseconds On Screen
+            mos: number;
+            // Viewtoken
+            vt: string;
+            //
+            _t: number;
+        },
+        version?: number
+    ) {
+        return this.trackEvent(13, properties, version);
     }
 
     createViewToken(...parts) {
