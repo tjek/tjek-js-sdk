@@ -138,7 +138,7 @@ class Tracker {
         return this.trackEvent(11, properties, version);
     }
 
-    createViewToken(...parts) {
+    createViewToken(...parts: string[]) {
         return btoa(
             String.fromCharCode.apply(
                 null,
