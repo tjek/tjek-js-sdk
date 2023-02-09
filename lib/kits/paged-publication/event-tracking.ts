@@ -43,7 +43,10 @@ class PagedPublicationEventTracking extends MicroEvent {
             this.eventTracker.trackPagedPublicationPageOpened({
                 'pp.id': this.id,
                 'ppp.n': pageNumber,
-                vt: this.eventTracker.createViewToken(this.id, pageNumber)
+                vt: this.eventTracker.createViewToken(
+                    this.id,
+                    String(pageNumber)
+                )
             });
         });
 
