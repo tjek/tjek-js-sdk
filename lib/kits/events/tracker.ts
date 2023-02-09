@@ -48,7 +48,13 @@ class Tracker {
     client: TrackerClient;
     eventsTrackUrl: string;
     eventsTrackHeaders: Record<string, string>;
-    constructor(options) {
+    constructor(options?: {
+        trackId?: string;
+        poolLimit?: number;
+        client?: TrackerClient;
+        eventsTrackUrl?: string;
+        eventsTrackHeaders?: Record<string, string>;
+    }) {
         if (!pool) {
             pool = getPool();
 
