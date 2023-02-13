@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
 import {V2Hotspot, V2PageDecoration} from '../core';

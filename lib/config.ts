@@ -1,7 +1,7 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../vendor/microevent';
 import * as configDefaults from './config-defaults';
 
-class Config extends MicroEvent {
+class Config extends MicroEvent<{change: [Record<string, any>]}> {
     keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'] as const;
     #attrs = {...configDefaults};
 

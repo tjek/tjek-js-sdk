@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import {throttle} from '../../util';
 import PageSpread from '../../verso-browser/page_spread';
 import Verso from '../../verso-browser/verso';
