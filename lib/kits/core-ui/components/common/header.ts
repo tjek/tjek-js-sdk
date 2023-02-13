@@ -97,6 +97,7 @@ const defaultTemplate = `\
 const sidebarTemplate = `\
 {{#enableSidebar}}
     <div class="sgn__sidebar sgn__sidebar--open">
+        {{^disableHeader}}
         <div class="sgn__nav">
             <div class="sgn__nav-content" data-show-labels="{{showHeaderLabels}}">
             {{^disableClose}}
@@ -161,6 +162,7 @@ const sidebarTemplate = `\
             {{/disableMenu}}
             </div>
         </div>
+        {{/disableHeader}}
         <div class="sgn__sidebar-content-container"></div>
     
     </div>
@@ -345,9 +347,7 @@ const Header = ({
             {
                 enableSidebar: scriptEls.enableSidebar,
                 translations,
-                disableHeader:
-                    scriptEls.disableHeader ||
-                    (scriptEls.enableSidebar && publicationType === 'incito'),
+                disableHeader: scriptEls.disableHeader,
                 disableShoppingList:
                     scriptEls.disableShoppingList ||
                     scriptEls.offerClickBehavior ===
