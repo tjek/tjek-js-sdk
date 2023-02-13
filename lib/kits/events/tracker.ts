@@ -315,7 +315,7 @@ class Tracker {
     }
 
     trackIncitoPublicationOpened(
-        properties: Omit<IncitoPublicationOpenedV2Event, '_e'>,
+        properties: IncitoPublicationOpenedV2Event,
         version?: number
     ) {
         return this.trackEvent(11, properties, version);
