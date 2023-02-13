@@ -1,5 +1,5 @@
-import MicroEvent from 'microevent';
 import Mustache from 'mustache';
+import MicroEvent from '../../../vendor/microevent';
 import PageSpread from '../../verso-browser/page_spread';
 import {V2Hotspot} from '../core';
 import PagedPublicationPageSpread from './page-spread';

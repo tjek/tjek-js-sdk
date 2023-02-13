@@ -1,5 +1,5 @@
-import MicroEvent from 'microevent';
 import Mustache from 'mustache';
+import MicroEvent from '../../../vendor/microevent';
 import * as keyCodes from '../../key-codes';
 import {off, on} from '../../util';
 import './popover.styl';

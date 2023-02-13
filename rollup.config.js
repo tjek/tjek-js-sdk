@@ -86,7 +86,6 @@ const external = [
     /core-js/,
     'cross-fetch',
     'md5',
-    'microevent',
     'mustache'
 ];
 

@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import MicroEvent from 'microevent';
+import MicroEvent from '../../vendor/microevent';
 import './incito.styl';
 import {IIncito, TextView} from './types';
 
@@ -648,7 +648,7 @@ function renderView(view, canLazyload) {
     return {tagName, contents, attrs};
 }
 
-export default class Incito extends MicroEvent {
+export default class Incito extends MicroEvent<{started: []; destroyed: []}> {
     containerEl: HTMLElement;
     incito: IIncito;
     el: HTMLDivElement;
@@ -749,7 +749,7 @@ export default class Incito extends MicroEvent {
             this.observeElements(this.el);
         }
 
-        this.trigger('started', 'a', 'b', 'c');
+        this.trigger('started');
     }
 
     destroy() {

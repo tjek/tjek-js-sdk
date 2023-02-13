@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import {Page, PageMode} from './page-spreads';
 
 const loadImage = (src, callback) =>
@@ -19,7 +19,10 @@ interface PagedPublicationPageSpreadInit {
     width: number;
     pageMode: PageMode;
 }
-class PagedPublicationPageSpread extends MicroEvent {
+class PagedPublicationPageSpread extends MicroEvent<{
+    pageLoaded: [{pageSpreadId: string; page: Page}];
+    pagesLoaded: [{pageSpreadId: string; pages: Page[]}];
+}> {
     contentsRendered = false;
     hotspotsRendered = false;
     el: HTMLElement;

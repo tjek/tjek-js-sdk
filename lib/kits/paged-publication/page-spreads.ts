@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import PagedPublicationPageSpread from './page-spread';
 
 function chunk<I extends any>(arr: I[], size: number) {
@@ -20,7 +20,10 @@ interface PagedPublicationPageSpreadsInit {
     width: number;
     maxZoomScale: number;
 }
-class PagedPublicationPageSpreads extends MicroEvent {
+class PagedPublicationPageSpreads extends MicroEvent<{
+    pageLoaded: [{pageSpreadId: string; page: Page}];
+    pagesLoaded: [{pageSpreadId: string; pages: Page[]}];
+}> {
     collection: PagedPublicationPageSpread[] = [];
     ids: Record<string, PagedPublicationPageSpread> = {};
     options: PagedPublicationPageSpreadsInit;

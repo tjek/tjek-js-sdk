@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import {V2Catalog} from '../core';
 import {Tracker} from '../events';
 
