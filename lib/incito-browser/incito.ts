@@ -648,13 +648,12 @@ function renderView(view, canLazyload) {
     return {tagName, contents, attrs};
 }
 
-export type IncitoEventMap = {
+export default class Incito extends MicroEvent<{
     started: [];
     destroyed: [];
     sectionVisible: [{sectionId: string; sectionPosition: number}];
     sectionHidden: [{sectionId: string; sectionPosition: number}];
-};
-export default class Incito extends MicroEvent<IncitoEventMap> {
+}> {
     containerEl: HTMLElement;
     incito: IIncito;
     el: HTMLDivElement;

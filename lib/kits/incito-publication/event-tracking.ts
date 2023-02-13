@@ -1,7 +1,7 @@
-import MicroEvent from '../../../vendor/microevent';
-import {IncitoEventMap} from '../../incito-browser/incito';
-import {V2Catalog} from '../core';
-import {Tracker} from '../events';
+import MicroEvent, {EventArg} from '../../../vendor/microevent';
+import Incito from '../../incito-browser/incito';
+import type {V2Catalog} from '../core';
+import type {Tracker} from '../events';
 
 class IncitoPublicationEventTracking extends MicroEvent {
     eventTracker: Tracker | undefined;
@@ -28,7 +28,7 @@ class IncitoPublicationEventTracking extends MicroEvent {
     onSectionVisible = ({
         sectionId,
         sectionPosition
-    }: IncitoEventMap['sectionVisible'][0]) => {
+    }: EventArg<Incito, 'sectionVisible'>) => {
         if (!this.eventTracker || !this.details) return this;
 
         const sectionKey = `${sectionId}-${sectionPosition}`;
@@ -37,7 +37,7 @@ class IncitoPublicationEventTracking extends MicroEvent {
     onSectionHidden = ({
         sectionId,
         sectionPosition
-    }: IncitoEventMap['sectionHidden'][0]) => {
+    }: EventArg<Incito, 'sectionVisible'>) => {
         if (!this.eventTracker || !this.details) return this;
 
         const sectionKey = `${sectionId}-${sectionPosition}`;
