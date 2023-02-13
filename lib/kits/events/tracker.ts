@@ -39,7 +39,183 @@ const unloadHandler = () => {
     clientLocalStorage.set('event-tracker-pool', pool.concat(getPool()));
 };
 
-let pool: any[];
+interface BaseEvent {
+    // Event version
+    _v: number;
+    // Event type
+    // _e: number;
+    // UUID
+    _i: string;
+    // Track ID
+    _a: string;
+    // UNIX timestamp
+    _t: number;
+    // Location geohash (4 digit precision)
+    'l.h'?: string;
+    // Location obtained at UNIX timestamp
+    'l.ht'?: number;
+    'l.c'?: string;
+    // A map from a scenario (string) to a placement group (string)
+    ab?: Record<string, string>;
+}
+interface PagedPublicationOpenedEvent {
+    _e: 1;
+    // ID of the Paged Publication
+    'pp.id': string;
+    // View token unique for this event data
+    vt: string;
+}
+interface PagedPublicationPageOpenedEvent {
+    _e: 2;
+    // ID of the Paged Publication
+    'pp.id': string;
+    // Paged Publication Page Number
+    'ppp.n': number;
+    // View token unique for this event data
+    vt: string;
+}
+interface OfferOpenedEvent {
+    _e: 3;
+    // ID of the offer
+    'of.id': string;
+    s?: string;
+    a?: string;
+    // View token unique for this event data
+    vt: string;
+}
+interface ClientSessionOpenedEvent {
+    _e: 4;
+}
+interface SearchedEvent {
+    _e: 5;
+    // Search Query
+    'sea.q': string;
+    // Search Language
+    'sea.l'?: string;
+    // View token unique for this event data
+    vt: string;
+}
+interface FirstOfferClickedAfterSearchEvent {
+    _e: 6;
+    // Search Query
+    'sea.q': string;
+    // Search Language
+    'sea.l'?: string;
+    // ID of the offer
+    'of.id': string;
+    // Preceding offer IDs
+    'of.ids': string[];
+}
+interface AnyOfferClickedAfterSearchEvent {
+    _e: 7;
+    // Search Query
+    'sea.q': string;
+    // Search Language
+    'sea.l'?: string;
+    // ID of the offer
+    'of.id': string;
+}
+interface IncitoPublicationOpenedEvent {
+    _e: 8;
+    // Offer ID
+    'ip.id': string;
+    // If an Incito publication has a corresponding paged publication, note the view token of the paged publication here.
+    // This allows us to see if a person has read both the Incito and paged publication.
+    'pp.vt'?: string;
+    // View token unique for this event data
+    vt: string;
+}
+interface ViewedSearchResultsThenLeftEvent {
+    _e: 9;
+    // Search Query
+    'sea.q': string;
+    // Search Language
+    'sea.l'?: string;
+    'sea.v': number;
+}
+interface PotentialLocalBusinessVisitEvent {
+    _e: 10;
+    // The horizontal accuracy of a device's geolocation in meters
+    'l.hac': number;
+    // ID of the store aka local business
+    'lb.id': string;
+    // Distance between things in meters
+    'lb.dis': number;
+    // ID of the business aka dealer
+    'lb.bid': string;
+    'b.cin': boolean;
+    'b.cint': number;
+    // View token unique for this event data
+    vt: string;
+}
+interface IncitoPublicationOpenedV2Event {
+    _e: 11;
+    // ID of the Incito Publication
+    'ip.id': string;
+    // Set true if the publication is presentable as a paged publication as well, otherwise false
+    'ip.paged': boolean;
+    // View token unique for this event data
+    vt: string;
+}
+interface AnalyticsV2Event {
+    _e: 12;
+    // Device model
+    d?: string;
+    // Operating system
+    os?: string;
+    // Operating system version
+    osv?: string;
+    // Application version
+    _av: string;
+    // Category
+    c: string;
+    // Action
+    a: string;
+    // Current screen name
+    s?: string;
+    // Previous screen name
+    ps?: string;
+    // Label
+    l?: string;
+    // Numeric value
+    v?: number;
+    // Flags/tags
+    f?: string[];
+    // View token unique for this event data
+    vt: string;
+}
+interface IncitoPublicationSectionViewedEvent {
+    _e: 13;
+    //  Incito Publication ID
+    'ip.id': string;
+    //  Incito Publication Section ID
+    'ips.id': string;
+    //  Incito Publication Section Position
+    'ips.p': number;
+    //  Milliseconds On Screen
+    mos: number;
+    // View token unique for this event data
+    vt: string;
+}
+type WolfEvent =
+    | PagedPublicationOpenedEvent
+    | PagedPublicationPageOpenedEvent
+    | OfferOpenedEvent
+    | ClientSessionOpenedEvent
+    | SearchedEvent
+    | FirstOfferClickedAfterSearchEvent
+    | AnyOfferClickedAfterSearchEvent
+    | IncitoPublicationOpenedEvent
+    | ViewedSearchResultsThenLeftEvent
+    | PotentialLocalBusinessVisitEvent
+    | IncitoPublicationOpenedV2Event
+    | AnalyticsV2Event
+    | IncitoPublicationSectionViewedEvent;
+
+type WolfEventType = WolfEvent['_e'];
+
+let pool: (BaseEvent & WolfEvent)[];
+
 class Tracker {
     hasMadeInitialDispatch = false;
     location = {geohash: null, time: null, country: null};
@@ -87,8 +263,8 @@ class Tracker {
         }
     }
     trackEvent(
-        type: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13,
-        properties: Record<string, string | number>,
+        type: WolfEventType,
+        properties: Omit<WolfEvent, '_e'>,
         version = 2
     ) {
         if (typeof type !== 'number')
@@ -96,13 +272,14 @@ class Tracker {
 
         if (!this.trackId) return;
 
-        const evt = Object.assign({}, properties, {
+        const evt = {
+            ...properties,
             _e: type,
             _v: version,
             _i: uuid(),
             _t: Math.round(new Date().getTime() / 1000),
             _a: this.trackId
-        });
+        } as WolfEvent & BaseEvent; // TODO: avoid type assertion,
 
         if (this.location.geohash) evt['l.h'] = this.location.geohash;
 
@@ -124,23 +301,35 @@ class Tracker {
         return this;
     }
 
-    trackPagedPublicationOpened(properties, version?: number) {
+    trackPagedPublicationOpened(
+        properties: Omit<PagedPublicationOpenedEvent, '_e'>,
+        version?: number
+    ) {
         return this.trackEvent(1, properties, version);
     }
 
-    trackPagedPublicationPageOpened(properties, version?: number) {
+    trackPagedPublicationPageOpened(
+        properties: Omit<PagedPublicationPageOpenedEvent, '_e'>,
+        version?: number
+    ) {
         return this.trackEvent(2, properties, version);
     }
 
-    trackOfferOpened(properties, version?: number) {
+    trackOfferOpened(
+        properties: Omit<OfferOpenedEvent, '_e'>,
+        version?: number
+    ) {
         return this.trackEvent(3, properties, version);
     }
 
-    trackSearched(properties, version?: number) {
+    trackSearched(properties: Omit<SearchedEvent, '_e'>, version?: number) {
         return this.trackEvent(5, properties, version);
     }
 
-    trackIncitoPublicationOpened(properties, version?: number) {
+    trackIncitoPublicationOpened(
+        properties: Omit<IncitoPublicationOpenedV2Event, '_e'>,
+        version?: number
+    ) {
         return this.trackEvent(11, properties, version);
     }
 
