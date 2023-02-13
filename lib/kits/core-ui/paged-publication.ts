@@ -19,6 +19,7 @@ import {
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
 import PageList from './components/paged-publication/page-list';
+import PageDecorationList from './components/paged-publication/page-decoration-list';
 
 const PagedPublication = (
     scriptEl: HTMLScriptElement,
@@ -94,10 +95,15 @@ const PagedPublication = (
 
         await start();
 
+        if (sgnPageDecorations.length && !scriptEls.disablePageDecorations) {
+            renderPageDecorationList();
+        } else {
+            renderPageList();
+        }
+
         renderShoppingList();
         renderMenuPopup();
         dispatchPublicationData();
-        renderPageList();
     };
 
     const renderPageList = async () =>
@@ -106,6 +112,17 @@ const PagedPublication = (
                 scriptEls,
                 configs: options,
                 sgnData,
+                sgnViewer,
+                template: customTemplates.pageList
+            }).render()
+        );
+
+    const renderPageDecorationList = async () =>
+        document?.querySelector('.sgn__sidebar-content-container')?.appendChild(
+            await PageDecorationList({
+                scriptEls,
+                configs: options,
+                sgnPageDecorations,
                 sgnViewer,
                 template: customTemplates.pageList
             }).render()
