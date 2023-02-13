@@ -1,7 +1,7 @@
-import MicroEvent from 'microevent';
-import type {IncitoEventMap} from '../../incito-browser/incito';
-import type {V2Catalog} from '../core';
-import type {Tracker} from '../events';
+import MicroEvent from '../../../vendor/microevent';
+import {IncitoEventMap} from '../../incito-browser/incito';
+import {V2Catalog} from '../core';
+import {Tracker} from '../events';
 
 class IncitoPublicationEventTracking extends MicroEvent {
     eventTracker: Tracker | undefined;

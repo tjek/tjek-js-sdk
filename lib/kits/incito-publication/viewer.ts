@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import Incito from '../../incito-browser/incito';
 import {IIncito} from '../../incito-browser/types';
 import {V2Catalog} from '../core';

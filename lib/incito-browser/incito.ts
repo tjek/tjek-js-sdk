@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import MicroEvent from 'microevent';
+import MicroEvent from '../../vendor/microevent';
 import './incito.styl';
 import {IIncito, TextView} from './types';
 
@@ -648,26 +648,13 @@ function renderView(view, canLazyload) {
     return {tagName, contents, attrs};
 }
 
-export interface IncitoEventMap {
+export type IncitoEventMap = {
     started: [];
     destroyed: [];
     sectionVisible: [{sectionId: string; sectionPosition: number}];
     sectionHidden: [{sectionId: string; sectionPosition: number}];
-}
-export default class Incito extends MicroEvent {
-    declare bind: <N extends keyof IncitoEventMap>(
-        name: N,
-        cb: (...args: IncitoEventMap[N]) => void
-    ) => void;
-    declare unbind: <N extends keyof IncitoEventMap>(
-        name: N,
-        cb: (...args: IncitoEventMap[N]) => any
-    ) => void;
-    declare trigger: <N extends keyof IncitoEventMap>(
-        name: N,
-        ...args: IncitoEventMap[N]
-    ) => void;
-
+};
+export default class Incito extends MicroEvent<IncitoEventMap> {
     containerEl: HTMLElement;
     incito: IIncito;
     el: HTMLDivElement;
