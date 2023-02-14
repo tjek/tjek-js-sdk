@@ -167,8 +167,11 @@ const IncitoPublication = (
 
                     const viewId = this.dataset.id;
                     const publicationId = options.id;
-
-                    clickOfferCell(viewId, publicationId);
+                    clickOfferCell(
+                        viewId,
+                        publicationId,
+                        sgnViewer?.incito.ids[this.dataset.id]
+                    );
                 }
             );
 
@@ -207,7 +210,7 @@ const IncitoPublication = (
         );
     };
 
-    const clickOfferCell = async (viewId, publicationId) => {
+    const clickOfferCell = async (viewId, publicationId, products) => {
         dispatchOfferClickEvent({fetchOffer, viewId, publicationId});
 
         const shoppingBtn = options.el?.querySelector('.sgn__offer-shopping');
@@ -222,7 +225,8 @@ const IncitoPublication = (
                 sgnData,
                 offer,
                 type: 'incito',
-                addToShoppingList
+                addToShoppingList,
+                products
             }).render();
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'

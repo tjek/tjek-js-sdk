@@ -97,7 +97,8 @@ const OfferOverview = ({
     sgnData,
     offer,
     type,
-    addToShoppingList
+    addToShoppingList,
+    products
 }) => {
     template = template?.innerHTML || defaultTemplate;
     let container: HTMLDivElement | null = null;
@@ -114,9 +115,13 @@ const OfferOverview = ({
         container.className = 'sgn-offer-overview-container';
 
         createModal(container);
-
+        console.log('offer.id', offer.id);
         container.innerHTML = Mustache.render(loaderTemplate, {});
-
+        console.log('products', products);
+        console.log(
+            'productTransformer',
+            productTransformer(products['tjek.offer.v1'].products)
+        );
         const transformedOffer =
             type === 'paged'
                 ? await fetchOffer(offer.id)
@@ -133,6 +138,18 @@ const OfferOverview = ({
 
         dispatchOfferClickEvent(transformedOffer);
         addEventListeners();
+    };
+
+    const productTransformer = async (products) => {
+        let productList: object[] = [];
+        if (products.length >= 1) {
+            for (let i = 1; i < products.length; i++) {
+                console.log('products[i].id', products[i].id);
+                productList.push(await fetchOffer(products[i].id));
+            }
+        }
+
+        return productList;
     };
 
     const transformIncitoOffer = (offer) => {
