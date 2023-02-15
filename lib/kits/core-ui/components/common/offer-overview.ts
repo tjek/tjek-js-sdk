@@ -163,6 +163,13 @@ const OfferOverview = ({
                     heading: products[i].title,
                     description: transformedOffer.description
                 });
+
+                containterEl
+                    ?.querySelector('.sgn-shopping-add-to-list-btn')
+                    ?.addEventListener('click', () => {
+                        addToShoppingList(offer);
+                        destroyModal();
+                    });
             }
         }
     };
