@@ -11,6 +11,28 @@ import {
 import {request, V2Offer} from '../../../core';
 import './offer-overview.styl';
 
+const offerTextContainer = `\
+    <div class="sgn-offer-texts-container">
+        <div class="sgn-offer-heading">
+            <span>{{heading}}</span>
+        </div>
+        <div class="sgn-offer-description">
+            <span>{{description}}&nbsp;</span>
+        </div>
+        <div class="sgn-offer-price">
+            <span>{{price}}</span>
+        </div>
+    </div>
+    <div class="sgn-offer-buttons-container">
+        {{^disableShoppingList}}
+        <button class="sgn-shopping-add-to-list-btn">{{translations.addToShoppingList}}</button>
+        {{/disableShoppingList}}
+        {{#webshop_link}}
+        <button class="sgn-shopping-open-webshop-btn">{{translations.visitWebshopLink}}</button>
+        {{/webshop_link}}
+    </div>\  
+`;
+
 const defaultTemplate = `\
     <div class="sgn-offer-overview-popup">
         {{#offer}}
@@ -29,25 +51,7 @@ const defaultTemplate = `\
                 <div class="sgn-offer-img">
                     <img src="{{images.zoom}}" alt="{{heading}}">
                 </div>
-                <div class="sgn-offer-texts-container">
-                    <div class="sgn-offer-heading">
-                        <span>{{heading}}</span>
-                    </div>
-                    <div class="sgn-offer-description">
-                        <span>{{description}}&nbsp;</span>
-                    </div>
-                    <div class="sgn-offer-price">
-                        <span>{{price}}</span>
-                    </div>
-                </div>  
-                <div class="sgn-offer-buttons-container">
-                    {{^disableShoppingList}}
-                    <button class="sgn-shopping-add-to-list-btn">{{translations.addToShoppingList}}</button>
-                    {{/disableShoppingList}}
-                    {{#webshop_link}}
-                    <button class="sgn-shopping-open-webshop-btn">{{translations.visitWebshopLink}}</button>
-                    {{/webshop_link}}
-                </div>
+                ${offerTextContainer}
             </div>
         </div>
         {{/offer}} 
@@ -115,13 +119,7 @@ const OfferOverview = ({
         container.className = 'sgn-offer-overview-container';
 
         createModal(container);
-        console.log('offer.id', offer.id);
         container.innerHTML = Mustache.render(loaderTemplate, {});
-        console.log('products', products);
-        console.log(
-            'productTransformer',
-            productTransformer(products['tjek.offer.v1'].products)
-        );
         const transformedOffer =
             type === 'paged'
                 ? await fetchOffer(offer.id)
@@ -136,20 +134,37 @@ const OfferOverview = ({
             offer: transformedOffer
         });
 
+        productTransformer(
+            products['tjek.offer.v1'].products,
+            transformedOffer
+        );
         dispatchOfferClickEvent(transformedOffer);
         addEventListeners();
     };
 
-    const productTransformer = async (products) => {
-        let productList: object[] = [];
+    const productTransformer = async (products, transformedOffer) => {
         if (products.length >= 1) {
             for (let i = 1; i < products.length; i++) {
-                console.log('products[i].id', products[i].id);
-                productList.push(await fetchOffer(products[i].id));
+                const el: HTMLElement | null = document.querySelector(
+                    '.sgn-popup-offer-container'
+                );
+
+                const containterEl = document.createElement('div');
+                containterEl.className = 'sgn-popup-offer-container';
+                if (el) el.after(containterEl);
+
+                containterEl.innerHTML = Mustache.render(offerTextContainer, {
+                    translations,
+                    disableShoppingList: document.querySelector(
+                        '.sgn__offer-shopping'
+                    )
+                        ? false
+                        : true,
+                    heading: products[i].title,
+                    description: transformedOffer.description
+                });
             }
         }
-
-        return productList;
     };
 
     const transformIncitoOffer = (offer) => {
