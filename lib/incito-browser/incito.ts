@@ -281,10 +281,18 @@ function renderView(view, canLazyload) {
                     .trim()
                     .split(';')
                     .forEach((style) => {
-                        const {0: key, 1: value} = style.trim().split(':');
+                        let {0: key, 1: value} = style.trim().split(':');
+
+                        if (key) {
+                            key = key.trim();
+                        }
+
+                        if (value) {
+                            value = value.trim();
+                        }
 
                         if (key && key.length && value && value.length) {
-                            styles[key] = value.trim();
+                            styles[key] = value;
                         }
                     });
             }
