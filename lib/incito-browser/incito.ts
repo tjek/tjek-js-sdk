@@ -6,7 +6,7 @@ import {IIncito, TextView} from './types';
 function formatUnit(unit) {
     if (!unit) return 0;
 
-    if (typeof unit === 'number') return unit + 'px';
+    if (typeof unit === 'number') return Math.round(unit) + 'px';
 
     if (typeof unit === 'string') return unit.replace('dp', 'px');
 
@@ -158,7 +158,7 @@ function renderView(view, canLazyload) {
             }
 
             if (view.text_size != null) {
-                styles['font-size'] = `${view.text_size}px`;
+                styles['font-size'] = `${Math.round(view.text_size)}px`;
             }
 
             if (view.line_spacing_multiplier != null) {
@@ -283,7 +283,9 @@ function renderView(view, canLazyload) {
                     .forEach((style) => {
                         const {0: key, 1: value} = style.trim().split(':');
 
-                        styles[key] = value;
+                        if (key && key.length && value && value.length) {
+                            styles[key] = value.trim();
+                        }
                     });
             }
 
