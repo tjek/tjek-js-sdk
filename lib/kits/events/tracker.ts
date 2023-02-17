@@ -315,10 +315,30 @@ class Tracker {
     }
 
     trackIncitoPublicationOpened(
-        properties: Omit<IncitoPublicationOpenedV2Event, '_e'>,
+        properties: IncitoPublicationOpenedV2Event,
         version?: number
     ) {
         return this.trackEvent(11, properties, version);
+    }
+
+    trackIncitoPublicationSectionOpened(
+        properties: {
+            //  Incito Publication ID
+            'ip.id': string;
+            //  Incito Publication Section ID
+            'ips.id': string;
+            //  Incito Publication Section Position
+            'ips.p': number;
+            //  Milliseconds On Screen
+            mos: number;
+            // Viewtoken
+            vt: string;
+            //
+            _t: number;
+        },
+        version?: number
+    ) {
+        return this.trackEvent(13, properties, version);
     }
 
     createViewToken(...parts: string[]) {

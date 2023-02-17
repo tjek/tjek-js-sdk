@@ -34,6 +34,11 @@ class Viewer extends MicroEvent {
     }
 
     start() {
+        this.incito.bind(
+            'sectionVisible',
+            this._eventTracking.onSectionVisible
+        );
+        this.incito.bind('sectionHidden', this._eventTracking.onSectionHidden);
         this.incito.start();
         this.el.classList.add('sgn-incito--started');
         this._eventTracking.trackOpened();

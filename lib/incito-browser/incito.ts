@@ -648,7 +648,12 @@ function renderView(view, canLazyload) {
     return {tagName, contents, attrs};
 }
 
-export default class Incito extends MicroEvent<{started: []; destroyed: []}> {
+export default class Incito extends MicroEvent<{
+    started: [];
+    destroyed: [];
+    sectionVisible: [{sectionId: string; sectionPosition: number}];
+    sectionHidden: [{sectionId: string; sectionPosition: number}];
+}> {
     containerEl: HTMLElement;
     incito: IIncito;
     el: HTMLDivElement;
@@ -658,8 +663,9 @@ export default class Incito extends MicroEvent<{started: []; destroyed: []}> {
     styleEl: HTMLStyleElement;
     lazyObserver: IntersectionObserver;
     videoObserver: IntersectionObserver;
-    //@ts-expect-error
-    constructor(containerEl: HTMLElement, {incito}: {incito: IIncito} = {}) {
+    sectionObserver: IntersectionObserver;
+    sectionVisibility: Map<HTMLElement, boolean>;
+    constructor(containerEl: HTMLElement, {incito}: {incito: IIncito}) {
         super();
 
         this.containerEl = containerEl;
@@ -767,10 +773,22 @@ export default class Incito extends MicroEvent<{started: []; destroyed: []}> {
             this.styleEl.parentNode!.removeChild(this.styleEl);
         }
 
+        window.removeEventListener('visibilitychange', this.handleVisibility);
+        window.removeEventListener('blur', this.handleBlur);
+        window.removeEventListener('focus', this.handleFocus);
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+
         this.trigger('destroyed');
     }
 
-    observeElements(el) {
+    observeElements(el: HTMLDivElement) {
+        this.sectionVisibility = new Map();
+        el.querySelectorAll('[data-role="section"]').forEach(
+            (el: HTMLDivElement) => {
+                this.sectionVisibility.set(el, false);
+                this.sectionObserver.observe(el);
+            }
+        );
         el.querySelectorAll('.incito--lazy').forEach((el) => {
             this.lazyObserver.observe(el);
         });
@@ -814,7 +832,55 @@ export default class Incito extends MicroEvent<{started: []; destroyed: []}> {
         }
     }
 
+    triggerSectionVisibility(sectionEl: HTMLElement, visible: boolean) {
+        const sectionId = sectionEl.dataset.id;
+        if (!sectionId) return;
+
+        const sectionPosition =
+            Array.prototype.slice
+                .call(sectionEl.parentElement!.children)
+                .indexOf(sectionEl) + 1;
+        if (!sectionPosition) return;
+
+        const visibility = visible ? 'sectionVisible' : 'sectionHidden';
+        this.trigger(visibility, {sectionId, sectionPosition});
+    }
+    visibility: DocumentVisibilityState = 'visible';
+    onVisibilityChange(newVisibility: DocumentVisibilityState) {
+        if (newVisibility === this.visibility) return;
+
+        this.visibility = newVisibility;
+
+        this.sectionVisibility.forEach((visible, target) => {
+            if (!visible) return;
+
+            this.triggerSectionVisibility(target, newVisibility === 'visible');
+        });
+    }
+    handleBlur = () => this.onVisibilityChange('hidden');
+    handleFocus = () => this.onVisibilityChange('visible');
+    handleVisibility = () => this.onVisibilityChange(document.visibilityState);
+    handleBeforeUnload = () => this.onVisibilityChange('hidden');
     enableLazyloading() {
+        window.addEventListener('visibilitychange', this.handleVisibility);
+        window.addEventListener('blur', this.handleBlur);
+        window.addEventListener('focus', this.handleFocus);
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
+
+        this.sectionObserver = new IntersectionObserver(
+            (entries) =>
+                entries.forEach(({target, isIntersecting: newVisibility}) => {
+                    if (!(target instanceof HTMLElement)) return;
+
+                    const previousVisibility =
+                        this.sectionVisibility.get(target);
+                    if (newVisibility === previousVisibility) return;
+
+                    this.sectionVisibility.set(target, newVisibility);
+                    this.triggerSectionVisibility(target, newVisibility);
+                }),
+            {rootMargin: '5px 0px'}
+        );
         this.lazyObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
