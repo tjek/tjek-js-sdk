@@ -1,6 +1,7 @@
-import MicroEvent from '../../../vendor/microevent';
-import {V2Catalog} from '../core';
-import {Tracker} from '../events';
+import MicroEvent, {EventArg} from '../../../vendor/microevent';
+import Incito from '../../incito-browser/incito';
+import type {V2Catalog} from '../core';
+import type {Tracker} from '../events';
 
 class IncitoPublicationEventTracking extends MicroEvent {
     eventTracker: Tracker | undefined;
@@ -22,6 +23,40 @@ class IncitoPublicationEventTracking extends MicroEvent {
 
         return this;
     }
+    trackIncitoPublicationOpenedMinimumMosMs = 500;
+    sectionVisibility: Map<string, number> = new Map();
+    onSectionVisible = ({
+        sectionId,
+        sectionPosition
+    }: EventArg<Incito, 'sectionVisible'>) => {
+        if (!this.eventTracker || !this.details) return this;
+
+        const sectionKey = `${sectionId}-${sectionPosition}`;
+        this.sectionVisibility.set(sectionKey, Date.now());
+    };
+    onSectionHidden = ({
+        sectionId,
+        sectionPosition
+    }: EventArg<Incito, 'sectionVisible'>) => {
+        if (!this.eventTracker || !this.details) return this;
+
+        const sectionKey = `${sectionId}-${sectionPosition}`;
+        const visibleFrom = this.sectionVisibility.get(sectionKey);
+        this.sectionVisibility.delete(sectionKey);
+        if (!visibleFrom) return;
+
+        const mos = Date.now() - visibleFrom;
+        if (mos <= this.trackIncitoPublicationOpenedMinimumMosMs) return;
+
+        this.eventTracker.trackIncitoPublicationSectionOpened({
+            'ip.id': this.details.id,
+            'ips.id': sectionId,
+            'ips.p': sectionPosition,
+            _t: Math.round(visibleFrom / 1000),
+            mos,
+            vt: this.eventTracker.createViewToken(this.details.id, sectionId)
+        });
+    };
 }
 
 export default IncitoPublicationEventTracking;
