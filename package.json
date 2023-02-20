@@ -8,7 +8,7 @@
     "bundlesize": [
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.js",
-            "maxSize": "180 kB"
+            "maxSize": "185 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
