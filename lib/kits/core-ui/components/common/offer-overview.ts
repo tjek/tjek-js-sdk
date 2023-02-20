@@ -6,7 +6,8 @@ import {
     translate,
     getDateRange,
     getPubState,
-    getPubStateMessage
+    getPubStateMessage,
+    parseDateStr
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import './offer-overview.styl';
