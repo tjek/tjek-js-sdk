@@ -151,13 +151,16 @@ const OfferOverview = ({
             },
             dateRange: getDateRange(
                 offer?.validity?.from,
-                offer?.validity?.to,
+                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
                 'publication_viewer_offer_date_range'
             ),
-            status: getPubState(offer?.validity?.from, offer?.validity?.to),
+            status: getPubState(
+                offer?.validity?.from,
+                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+            ),
             statusMessage: getPubStateMessage(
                 offer?.validity?.from,
-                offer?.validity?.to
+                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
             )
         };
     };
