@@ -144,7 +144,7 @@ const OfferOverview = ({
 
     const productTransformer = async (products, transformedOffer) => {
         if (products.length >= 1) {
-            for (let i = 1; i < products.length; i++) {
+            for (let i = 0; i < products.length; i++) {
                 const el: HTMLElement | null = document.querySelector(
                     '.sgn-popup-offer-container'
                 );
@@ -161,9 +161,9 @@ const OfferOverview = ({
                         ? false
                         : true,
                     heading: products[i].title,
-                    description: transformedOffer.description
                 });
 
+                containterEl.querySelector(".sgn-offer-description")?.remove(); 
                 containterEl
                     ?.querySelector('.sgn-shopping-add-to-list-btn')
                     ?.addEventListener('click', () => {
