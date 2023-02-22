@@ -1,3 +1,4 @@
+import MicroEvent from '../../vendor/microevent';
 import Animation from './animation';
 import PageSpread from './page_spread';
 import {
@@ -98,7 +99,7 @@ interface VersoInit {
     doubleTapDelay?: number;
     pageId?: string;
 }
-export default class Verso {
+export default class Verso extends MicroEvent {
     position = -1;
     pinching = false;
     panning = false;
@@ -124,6 +125,8 @@ export default class Verso {
     coarsePointerQuery: MediaQueryList | null;
     prefersReducedMotionQuery: MediaQueryList | null;
     constructor(el: HTMLElement, options: VersoInit = {}) {
+        super();
+
         this.el = el;
         this.options = options;
         this.swipeVelocity = this.options.swipeVelocity ?? 0.3;
@@ -136,26 +139,6 @@ export default class Verso {
             delay: this.options.doubleTapDelay ?? 300,
             timeout: undefined
         };
-    }
-
-    bind(event, fn) {
-        this._events[event] = this._events[event] || [];
-        return this._events[event].push(fn);
-    }
-
-    unbind(event, fn) {
-        if (this._events[event]) {
-            return this._events[event].splice(
-                this._events[event].indexOf(fn),
-                1
-            );
-        }
-    }
-
-    trigger(event, ...args) {
-        this._events[event]?.forEach((e) => {
-            e.apply(this, args);
-        });
     }
 
     start() {
