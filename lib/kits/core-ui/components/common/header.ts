@@ -233,9 +233,21 @@ const Header = ({
                 publicationType === 'incito'
                     ? el?.querySelector('.sgn__incito')
                     : el?.querySelector('.sgn__pp');
+            const matchedMedia = window.matchMedia('(max-width: 840px)');
 
-            if (sgnContainer && sgnContainer?.clientWidth < 840) {
-                sgnContainer?.classList.toggle('sgn__sidebar--close');
+            const sidebarToggle = ({matches}) => {
+                if (matches) {
+                    sgnContainer?.classList.add('sgn__sidebar--close');
+                } else {
+                    sgnContainer?.classList.remove('sgn__sidebar--close');
+                }
+            };
+            sidebarToggle(matchedMedia);
+
+            if (matchedMedia.addEventListener) {
+                matchedMedia.addEventListener('change', sidebarToggle);
+            } else if (matchedMedia.addListener) {
+                matchedMedia.addListener(sidebarToggle);
             }
 
             sidebarControl?.addEventListener('click', (e) => {
