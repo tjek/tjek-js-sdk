@@ -1,16 +1,19 @@
 import MicroEvent from '../../../vendor/microevent';
 import {Page, PageMode} from './page-spreads';
 
-const loadImage = (src, callback) =>
-    Object.assign(new Image(), {
-        onload: ({target}) => {
-            callback(null, target);
-        },
-        onerror: () => {
-            callback(new Error('Failed to load page image'));
-        },
-        src
-    });
+const loadImage = (
+    src: string,
+    callback: (error: Error | null, element?: HTMLImageElement) => void
+) => {
+    const img = new Image();
+    img.onload = ({target}) => callback(null, target as HTMLImageElement);
+    img.onerror = () => {
+        callback(new Error('Failed to load page image'));
+    };
+    img.src = src;
+
+    return img;
+};
 
 interface PagedPublicationPageSpreadInit {
     id: string;
@@ -96,7 +99,7 @@ class PagedPublicationPageSpread extends MicroEvent<{
             loaderEl.innerHTML = `<span>${page.label}</span>`;
 
             loadImage(image, (err, img) => {
-                if (err) {
+                if (err || !img) {
                     loaderEl.innerHTML = '<span>!</span>';
 
                     return console.error(err);
@@ -105,8 +108,8 @@ class PagedPublicationPageSpread extends MicroEvent<{
                 const isComplete = ++imageLoads === pageCount;
 
                 pageEl.style.backgroundImage = `url(${image})`;
-                pageEl.dataset.width = img.width;
-                pageEl.dataset.height = img.height;
+                pageEl.dataset.width = String(img.width);
+                pageEl.dataset.height = String(img.height);
                 pageEl.innerHTML = '&nbsp;';
 
                 if (isComplete) el.dataset.zoomable = String(true);
