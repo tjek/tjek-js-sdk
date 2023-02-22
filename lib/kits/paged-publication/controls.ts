@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import * as keyCodes from '../../key-codes';
 import {throttle} from '../../util';
 

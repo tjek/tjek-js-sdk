@@ -1,4 +1,4 @@
-import MicroEvent from 'microevent';
+import MicroEvent from '../../../vendor/microevent';
 import Tracker from '../events/tracker';
 import PagedPublicationPageSpread from './page-spread';
 

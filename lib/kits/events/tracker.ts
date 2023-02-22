@@ -43,7 +43,7 @@ interface BaseEvent {
     // Event version
     _v: number;
     // Event type
-    // _e: number;
+    _e: keyof WolfEventTypeMap;
     // UUID
     _i: string;
     // Track ID
@@ -59,14 +59,12 @@ interface BaseEvent {
     ab?: Record<string, string>;
 }
 interface PagedPublicationOpenedEvent {
-    _e: 1;
     // ID of the Paged Publication
     'pp.id': string;
     // View token unique for this event data
     vt: string;
 }
 interface PagedPublicationPageOpenedEvent {
-    _e: 2;
     // ID of the Paged Publication
     'pp.id': string;
     // Paged Publication Page Number
@@ -75,7 +73,6 @@ interface PagedPublicationPageOpenedEvent {
     vt: string;
 }
 interface OfferOpenedEvent {
-    _e: 3;
     // ID of the offer
     'of.id': string;
     s?: string;
@@ -83,11 +80,8 @@ interface OfferOpenedEvent {
     // View token unique for this event data
     vt: string;
 }
-interface ClientSessionOpenedEvent {
-    _e: 4;
-}
+interface ClientSessionOpenedEvent {}
 interface SearchedEvent {
-    _e: 5;
     // Search Query
     'sea.q': string;
     // Search Language
@@ -96,7 +90,6 @@ interface SearchedEvent {
     vt: string;
 }
 interface FirstOfferClickedAfterSearchEvent {
-    _e: 6;
     // Search Query
     'sea.q': string;
     // Search Language
@@ -107,7 +100,6 @@ interface FirstOfferClickedAfterSearchEvent {
     'of.ids': string[];
 }
 interface AnyOfferClickedAfterSearchEvent {
-    _e: 7;
     // Search Query
     'sea.q': string;
     // Search Language
@@ -116,7 +108,6 @@ interface AnyOfferClickedAfterSearchEvent {
     'of.id': string;
 }
 interface IncitoPublicationOpenedEvent {
-    _e: 8;
     // Offer ID
     'ip.id': string;
     // If an Incito publication has a corresponding paged publication, note the view token of the paged publication here.
@@ -126,7 +117,6 @@ interface IncitoPublicationOpenedEvent {
     vt: string;
 }
 interface ViewedSearchResultsThenLeftEvent {
-    _e: 9;
     // Search Query
     'sea.q': string;
     // Search Language
@@ -134,7 +124,6 @@ interface ViewedSearchResultsThenLeftEvent {
     'sea.v': number;
 }
 interface PotentialLocalBusinessVisitEvent {
-    _e: 10;
     // The horizontal accuracy of a device's geolocation in meters
     'l.hac': number;
     // ID of the store aka local business
@@ -149,7 +138,6 @@ interface PotentialLocalBusinessVisitEvent {
     vt: string;
 }
 interface IncitoPublicationOpenedV2Event {
-    _e: 11;
     // ID of the Incito Publication
     'ip.id': string;
     // Set true if the publication is presentable as a paged publication as well, otherwise false
@@ -158,7 +146,6 @@ interface IncitoPublicationOpenedV2Event {
     vt: string;
 }
 interface AnalyticsV2Event {
-    _e: 12;
     // Device model
     d?: string;
     // Operating system
@@ -185,7 +172,8 @@ interface AnalyticsV2Event {
     vt: string;
 }
 interface IncitoPublicationSectionViewedEvent {
-    _e: 13;
+    // Time section entered screen
+    _t: BaseEvent['_t'];
     //  Incito Publication ID
     'ip.id': string;
     //  Incito Publication Section ID
@@ -197,22 +185,22 @@ interface IncitoPublicationSectionViewedEvent {
     // View token unique for this event data
     vt: string;
 }
-type WolfEvent =
-    | PagedPublicationOpenedEvent
-    | PagedPublicationPageOpenedEvent
-    | OfferOpenedEvent
-    | ClientSessionOpenedEvent
-    | SearchedEvent
-    | FirstOfferClickedAfterSearchEvent
-    | AnyOfferClickedAfterSearchEvent
-    | IncitoPublicationOpenedEvent
-    | ViewedSearchResultsThenLeftEvent
-    | PotentialLocalBusinessVisitEvent
-    | IncitoPublicationOpenedV2Event
-    | AnalyticsV2Event
-    | IncitoPublicationSectionViewedEvent;
-
-type WolfEventType = WolfEvent['_e'];
+interface WolfEventTypeMap {
+    1: PagedPublicationOpenedEvent;
+    2: PagedPublicationPageOpenedEvent;
+    3: OfferOpenedEvent;
+    4: ClientSessionOpenedEvent;
+    5: SearchedEvent;
+    6: FirstOfferClickedAfterSearchEvent;
+    7: AnyOfferClickedAfterSearchEvent;
+    8: IncitoPublicationOpenedEvent;
+    9: ViewedSearchResultsThenLeftEvent;
+    10: PotentialLocalBusinessVisitEvent;
+    11: IncitoPublicationOpenedV2Event;
+    12: AnalyticsV2Event;
+    13: IncitoPublicationSectionViewedEvent;
+}
+type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
 
 let pool: (BaseEvent & WolfEvent)[];
 
@@ -262,9 +250,9 @@ class Tracker {
             this.hasMadeInitialDispatch = true;
         }
     }
-    trackEvent(
-        type: WolfEventType,
-        properties: Omit<WolfEvent, '_e'>,
+    trackEvent<T extends keyof WolfEventTypeMap = keyof WolfEventTypeMap>(
+        type: T,
+        properties: WolfEventTypeMap[T],
         version = 2
     ) {
         if (typeof type !== 'number')
@@ -277,9 +265,12 @@ class Tracker {
             _e: type,
             _v: version,
             _i: uuid(),
-            _t: Math.round(new Date().getTime() / 1000),
+            _t:
+                '_t' in properties
+                    ? properties._t
+                    : Math.round(new Date().getTime() / 1000),
             _a: this.trackId
-        } as WolfEvent & BaseEvent; // TODO: avoid type assertion,
+        };
 
         if (this.location.geohash) evt['l.h'] = this.location.geohash;
 
@@ -302,35 +293,52 @@ class Tracker {
     }
 
     trackPagedPublicationOpened(
-        properties: Omit<PagedPublicationOpenedEvent, '_e'>,
+        properties: PagedPublicationOpenedEvent,
         version?: number
     ) {
         return this.trackEvent(1, properties, version);
     }
 
     trackPagedPublicationPageOpened(
-        properties: Omit<PagedPublicationPageOpenedEvent, '_e'>,
+        properties: PagedPublicationPageOpenedEvent,
         version?: number
     ) {
         return this.trackEvent(2, properties, version);
     }
 
-    trackOfferOpened(
-        properties: Omit<OfferOpenedEvent, '_e'>,
-        version?: number
-    ) {
+    trackOfferOpened(properties: OfferOpenedEvent, version?: number) {
         return this.trackEvent(3, properties, version);
     }
 
-    trackSearched(properties: Omit<SearchedEvent, '_e'>, version?: number) {
+    trackSearched(properties: SearchedEvent, version?: number) {
         return this.trackEvent(5, properties, version);
     }
 
     trackIncitoPublicationOpened(
-        properties: Omit<IncitoPublicationOpenedV2Event, '_e'>,
+        properties: IncitoPublicationOpenedV2Event,
         version?: number
     ) {
         return this.trackEvent(11, properties, version);
+    }
+
+    trackIncitoPublicationSectionOpened(
+        properties: {
+            //  Incito Publication ID
+            'ip.id': string;
+            //  Incito Publication Section ID
+            'ips.id': string;
+            //  Incito Publication Section Position
+            'ips.p': number;
+            //  Milliseconds On Screen
+            mos: number;
+            // Viewtoken
+            vt: string;
+            //
+            _t: number;
+        },
+        version?: number
+    ) {
+        return this.trackEvent(13, properties, version);
     }
 
     createViewToken(...parts: string[]) {

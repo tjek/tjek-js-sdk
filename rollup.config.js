@@ -72,7 +72,7 @@ const bundles = [
             'bootstrapper'
         )
     }
-];
+].filter((_, i) => (process.env.CI ? i === 0 : true));
 
 const getBabelPlugin = () =>
     babel({
@@ -86,7 +86,6 @@ const external = [
     /core-js/,
     'cross-fetch',
     'md5',
-    'microevent',
     'mustache'
 ];
 

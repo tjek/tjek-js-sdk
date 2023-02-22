@@ -82,6 +82,106 @@
                 }
 
                 viewer.start();
+
+                if (
+                    new URL(window.location).searchParams.get(
+                        'debug-section-events'
+                    ) !== undefined
+                ) {
+                    const sectionsStatuses = document.createElement('div');
+                    sectionsStatuses.style.position = 'fixed';
+                    sectionsStatuses.style.top = '16px';
+                    sectionsStatuses.style.left = '16px';
+                    sectionsStatuses.style.padding = '4px';
+                    sectionsStatuses.style.background =
+                        'rgba(255, 105, 180, 0.9)';
+                    sectionsStatuses.style.color = 'white';
+                    sectionsStatuses.style.zIndex = '420';
+
+                    const pendingHeader = document.createElement('header');
+                    pendingHeader.textContent = 'Pending section impressions:';
+                    pendingHeader.style.fontSize = '24px';
+                    sectionsStatuses.appendChild(pendingHeader);
+
+                    const pendingUl = document.createElement('ul');
+                    pendingUl.style.fontSize = '16px';
+                    pendingUl.style.marginTop = '0';
+                    sectionsStatuses.appendChild(pendingUl);
+
+                    let trackedUl;
+
+                    document.body.appendChild(sectionsStatuses);
+
+                    viewer.incito.bind(
+                        'sectionVisible',
+                        ({sectionId, sectionPosition}) => {
+                            const li = document.createElement('li');
+                            li.id = `pos${sectionPosition}section${sectionId}`;
+
+                            const sectionPositionEl =
+                                document.createElement('span');
+                            li.appendChild(sectionPositionEl);
+                            sectionPositionEl.textContent = `Position: ${sectionPosition}`;
+
+                            const sectionIdEl = document.createElement('span');
+                            sectionIdEl.textContent = ` Section: "${sectionId}"`;
+                            li.appendChild(sectionIdEl);
+                            li.appendChild(document.createElement('br'));
+                            const sectionTimerEl =
+                                document.createElement('span');
+                            li.dataset.timestamp = String(Number(new Date()));
+                            li.dataset.intervalId = String(
+                                setInterval(() => {
+                                    sectionTimerEl.textContent = ` Time: ${(
+                                        (new Date().valueOf() -
+                                            Number(li.dataset.timestamp)) /
+                                        1000
+                                    ).toFixed(2)}s`;
+                                }, 50)
+                            );
+                            li.appendChild(sectionTimerEl);
+
+                            pendingUl.appendChild(li);
+                        }
+                    );
+                    viewer.incito.bind(
+                        'sectionHidden',
+                        ({sectionId, sectionPosition}) => {
+                            const li = pendingUl.querySelector(
+                                `#pos${sectionPosition}section${sectionId}`
+                            );
+                            if (li instanceof HTMLLIElement) {
+                                clearInterval(Number(li.dataset.intervalId));
+                                pendingUl.removeChild(li);
+
+                                if (
+                                    new Date().valueOf() -
+                                        Number(li.dataset.timestamp) >
+                                    500
+                                ) {
+                                    if (!trackedUl) {
+                                        const trackedHeader =
+                                            document.createElement('header');
+                                        trackedHeader.textContent =
+                                            'Tracked section impressions:';
+                                        trackedHeader.style.fontSize = '24px';
+                                        sectionsStatuses.appendChild(
+                                            trackedHeader
+                                        );
+
+                                        trackedUl =
+                                            document.createElement('ul');
+                                        trackedUl.style.fontSize = '16px';
+                                        trackedUl.style.marginTop = '0';
+                                        sectionsStatuses.appendChild(trackedUl);
+                                    }
+
+                                    trackedUl.appendChild(li);
+                                }
+                            }
+                        }
+                    );
+                }
             });
         </script>
     </body>
