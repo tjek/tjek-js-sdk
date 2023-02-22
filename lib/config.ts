@@ -3,7 +3,7 @@ import * as configDefaults from './config-defaults';
 
 class Config extends MicroEvent<{change: [Record<string, any>]}> {
     keys = ['apiKey', 'eventTracker', 'coreUrl', 'eventsTrackUrl'] as const;
-    #attrs = {...configDefaults};
+    _attrs = {...configDefaults};
 
     set(config: Record<string, any>) {
         const changedAttributes = {};
@@ -11,7 +11,7 @@ class Config extends MicroEvent<{change: [Record<string, any>]}> {
         for (let key in config) {
             if (key === 'appKey') key = 'apiKey';
             if (this.keys.includes(key as typeof this.keys[number])) {
-                this.#attrs[key] = config[key];
+                this._attrs[key] = config[key];
                 changedAttributes[key] = config[key];
             }
         }
@@ -21,7 +21,7 @@ class Config extends MicroEvent<{change: [Record<string, any>]}> {
 
     get<T>(option: string): T {
         if (option === 'appKey') option = 'apiKey';
-        return this.#attrs[option];
+        return this._attrs[option];
     }
 
     shadow<T extends Record<string, any> = {}>(
