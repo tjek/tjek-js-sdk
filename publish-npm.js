@@ -22,6 +22,8 @@ if (!process.env.GOOD) {
     throw new Error('Please use `npm run publish` to publish to npm.');
 }
 
+const DRY_RUN = process.env.DRY_RUN;
+
 class NotFoundError extends Error {}
 
 // Use heuristics to detect if buffer is binary file.
@@ -418,12 +420,14 @@ async function publish() {
         const [{name}] = packageDiffs[packageJsonPath];
         const nextVersion = await run('npm', ['version', version]);
         const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
-        await run('npm', [
-            'publish',
-            '--access',
-            'public',
-            `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
-        ]);
+        if (!DRY_RUN) {
+            await run('npm', [
+                'publish',
+                '--access',
+                'public',
+                `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
+            ]);
+        }
         pubInd.succeed(
             `Published ${name}@${
                 tag.startsWith('experimental') ? 'experimental' : tag
@@ -446,7 +450,9 @@ async function publish() {
 
         if (uploadS3) {
             const s3Ind = ora(`Uploading to S3`).start();
-            console.log(await run('node', ['./upload-s3.js']));
+            if (!DRY_RUN) {
+                console.log(await run('node', ['./upload-s3.js']));
+            }
             s3Ind.succeed(`Uploaded to S3`);
         }
     }
