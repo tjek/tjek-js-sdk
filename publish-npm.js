@@ -232,11 +232,13 @@ const printDiffPackage = (diffObj) =>
 
 async function publish() {
     console.clear();
+    if (DRY_RUN) console.info('Dry run! 🌵');
 
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
     }).trim();
-    const shortdate = new Date()
+    const publishDate = new Date();
+    const shortdate = publishDate
         .toISOString()
         .split('T')[0]
         .replaceAll('-', '');
@@ -414,11 +416,16 @@ async function publish() {
         ]
     );
     const cwd = process.cwd();
+    const publishLog = [];
     for (const [packageJsonPath, version] of targetVersions) {
         process.chdir(packageJsonPath.replace('/package.json', ''));
 
         const [{name}] = packageDiffs[packageJsonPath];
-        const nextVersion = await run('npm', ['version', version]);
+        const nextVersion = await run('npm', [
+            'version',
+            version,
+            '--allow-same-version'
+        ]);
         const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
         if (!DRY_RUN) {
             await run('npm', [
@@ -433,11 +440,33 @@ async function publish() {
                 tag.startsWith('experimental') ? 'experimental' : tag
             } ${nextVersion}`
         );
+        publishLog.push(
+            `Published ${name}@${
+                tag.startsWith('experimental') ? 'experimental' : tag
+            } ${nextVersion}`
+        );
 
         process.chdir(cwd);
     }
 
     if (tag === 'latest') {
+        const releaseTag = `release-${publishDate.toLocaleDateString('da', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        })}-${publishDate.toLocaleTimeString('da', {
+            hour: '2-digit',
+            minute: '2-digit'
+        })}`;
+
+        if (!DRY_RUN) {
+            execSync(
+                `gh release create ${releaseTag} --notes '${publishLog.join(
+                    '\n\n'
+                )}'`
+            );
+        }
+
         const {uploadS3} = await inquirer.prompt([
             {
                 type: 'confirm',
