@@ -235,19 +235,19 @@ const Header = ({
                     : el?.querySelector('.sgn__pp');
             const matchedMedia = window.matchMedia('(max-width: 840px)');
 
-            const sidebarToggle = ({matches}) => {
+            const toggleClasslist = ({matches}) => {
                 if (matches) {
                     sgnContainer?.classList.add('sgn__sidebar--close');
                 } else {
                     sgnContainer?.classList.remove('sgn__sidebar--close');
                 }
             };
-            sidebarToggle(matchedMedia);
+            toggleClasslist(matchedMedia);
 
             if (matchedMedia.addEventListener) {
-                matchedMedia.addEventListener('change', sidebarToggle);
+                matchedMedia.addEventListener('change', toggleClasslist);
             } else if (matchedMedia.addListener) {
-                matchedMedia.addListener(sidebarToggle);
+                matchedMedia.addListener(toggleClasslist);
             }
 
             sidebarControl?.addEventListener('click', (e) => {
