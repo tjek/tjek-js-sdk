@@ -11,6 +11,6 @@
         "moduleResolution": "node",
         "strictNullChecks": true
     },
-    "include": ["lib/**/*.ts", "lib/**/*.js", "global.d.ts"],
+    "include": ["lib/**/*.ts", "lib/**/*.tsx", "lib/**/*.js", "global.d.ts"],
     "exclude": ["node_modules", "dist", "__tests__", "**/*.test-jsdom.js"]
 }

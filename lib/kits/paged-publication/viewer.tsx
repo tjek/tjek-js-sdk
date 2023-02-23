@@ -1,3 +1,4 @@
+import {createRef, h, render} from 'preact';
 import MicroEvent from '../../../vendor/microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
@@ -54,7 +55,7 @@ export interface ViewerInit {
     color?: string;
     eventTracker: Tracker;
     keyboard: boolean;
-    hotspotRatio: unknown;
+    hotspotRatio?: number;
     pickHotspot?: typeof defaultPickHotspot;
 }
 class Viewer extends MicroEvent {
@@ -312,8 +313,12 @@ class Viewer extends MicroEvent {
         this.processHotspotQueue();
     }
 
+    pageDecorationsRef = createRef<{show: () => void; hide: () => void}>();
     applyPageDecorations(pageDecorations?: V2PageDecoration[]) {
-        if (!pageDecorations?.length) return;
+        const pageDecorationsContainer = document.querySelector<HTMLDivElement>(
+            '.sgn-page_decorations'
+        );
+        if (!pageDecorationsContainer || !pageDecorations?.length) return;
 
         this.pageDecorations = pageDecorations;
         const currentPageSpread = this._core.pageSpreads.collection.find(
@@ -328,42 +333,56 @@ class Viewer extends MicroEvent {
                         .getPages()
                         .some((page) => page.pageNumber === page_number)
             );
-            
             if (currentPageDecorations) {
-                PageDecorations().render({
-                    pageDecorations: currentPageDecorations,
-                    aspectRatio: this.options?.hotspotRatio || 1
-                });
+                render(
+                    <PageDecorations
+                        pageDecorations={currentPageDecorations}
+                        aspectRatio={this.options?.hotspotRatio || 1}
+                        handleRef={this.pageDecorationsRef}
+                    />,
+                    pageDecorationsContainer
+                );
             }
         }
 
         this.bind('beforeNavigation', (e) => {
-            PageDecorations().show();
-
-            const pageDecors = e?.pageSpread?.options?.pages?.map(
-                ({pageNumber}) =>
+            const pageDecors =
+                e?.pageSpread?.options?.pages?.map(({pageNumber}) =>
                     this.pageDecorations?.find(
                         ({page_number}) => page_number == pageNumber
                     )
+                ) ?? [];
+
+            render(
+                <PageDecorations
+                    pageDecorations={pageDecors}
+                    aspectRatio={this.options?.hotspotRatio || 1}
+                    handleRef={this.pageDecorationsRef}
+                />,
+                pageDecorationsContainer
             );
 
-            PageDecorations().render({
-                pageDecorations: pageDecors,
-                aspectRatio: this.options?.hotspotRatio || 1
-            });
-
-            this._core.bind('resized', (e) => {
-                PageDecorations().render({
-                    pageDecorations: pageDecors,
-                    aspectRatio: this.options?.hotspotRatio || 1
-                });
+            this._core.bind('resized', () => {
+                render(
+                    <PageDecorations
+                        pageDecorations={pageDecors}
+                        aspectRatio={this.options?.hotspotRatio || 1}
+                        handleRef={this.pageDecorationsRef}
+                    />,
+                    pageDecorationsContainer
+                );
             });
         });
 
-        this.bind('zoomedIn', PageDecorations().hide);
-        this.bind('zoomedOut', PageDecorations().show);
-        this.bind('panStart', PageDecorations().hide);
-        this.bind('attemptedNavigation', PageDecorations().show);
+        if (this.pageDecorationsRef.current) {
+            this.bind('zoomedIn', this.pageDecorationsRef.current.hide);
+            this.bind('zoomedOut', this.pageDecorationsRef.current.show);
+            this.bind('panStart', this.pageDecorationsRef.current.hide);
+            this.bind(
+                'attemptedNavigation',
+                this.pageDecorationsRef.current.show
+            );
+        }
     }
 
     getPageDecorations() {

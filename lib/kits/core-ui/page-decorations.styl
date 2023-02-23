@@ -14,6 +14,7 @@
         animation-timing-function ease
         animation-duration .5s
         z-index 99
+        transition opacity ease .2s
 
         a
             text-decoration none
@@ -25,7 +26,8 @@
                 text-align center
 
     .sgn-pagedecoration-hidden
-        display none
+        opacity 0
+        pointer-events none
 
 
 @keyframes sgn-animate-pagedecoration
