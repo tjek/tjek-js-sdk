@@ -1,34 +1,11 @@
-import Mustache from 'mustache';
+import {Fragment, h, render} from 'preact';
 import MicroEvent from '../../../vendor/microevent';
 import * as keyCodes from '../../key-codes';
-import {off, on} from '../../util';
 import './popover.styl';
-
-const defaultTemplate = `\
-<div class="sgn-popover__background" data-close></div>
-<div class="sgn-popover__menu">
-    {{#header}}
-        <div class="sgn-popover__header">{{header}}</div>
-    {{/header}}
-    <div class="sgn-popover__content">
-        <ul>
-            {{#singleChoiceItems}}
-                <li data-index="{{index}}">
-                    <p class="sgn-popover-item__title">{{item.title}}</p>
-                    {{#item.subtitle}}
-                        <p class="sgn-popover-item__subtitle">{{item.subtitle}}</p>
-                    {{/item.subtitle}}
-                </li>
-            {{/singleChoiceItems}}
-        </ul>
-    </div>
-</div>\
-`;
 
 interface PopoverOptions {
     header?: string;
     singleChoiceItems?: any;
-    template?: string;
     x: number;
     y: number;
 }
@@ -42,17 +19,43 @@ class Popover extends MicroEvent {
     }
 
     render() {
-        const {header, singleChoiceItems, template} = this.options;
+        const {header, singleChoiceItems} = this.options;
 
         this.el.className = 'sgn-popover';
         this.el.setAttribute('tabindex', '-1');
-        this.el.innerHTML = Mustache.render(template || defaultTemplate, {
-            header,
-            singleChoiceItems: singleChoiceItems?.map((item, index) => ({
-                item,
-                index
-            }))
-        });
+
+        render(
+            <>
+                <div
+                    class="sgn-popover__background"
+                    onClick={() => this.destroy()}
+                ></div>
+                <div class="sgn-popover__menu">
+                    {header && <div class="sgn-popover__header">{header}</div>}
+                    <div class="sgn-popover__content">
+                        <ul>
+                            {singleChoiceItems.map((item, index) => (
+                                <li
+                                    onClick={() =>
+                                        this.trigger('selected', {index})
+                                    }
+                                >
+                                    <p class="sgn-popover-item__title">
+                                        {item.title}
+                                    </p>
+                                    {item.subtitle && (
+                                        <p class="sgn-popover-item__subtitle">
+                                            {item.subtitle}
+                                        </p>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </>,
+            this.el
+        );
 
         this.position();
         this.addEventListeners();
@@ -61,8 +64,6 @@ class Popover extends MicroEvent {
     }
 
     destroy() {
-        off(this.el);
-
         window.removeEventListener('resize', this.resize, false);
         window.removeEventListener('scroll', this.scroll, false);
 
@@ -106,27 +107,7 @@ class Popover extends MicroEvent {
     }
 
     addEventListeners() {
-        const trigger = this.trigger.bind(this);
-
         this.el.addEventListener('keyup', this.keyUp);
-
-        on(this.el, 'click', '[data-index]', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            trigger('selected', {index: this.dataset.index});
-        });
-
-        on(this.el, 'click', '[data-close]', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            this.destroy();
-        });
-
-        on(this.el, 'click', '.sgn-popover__menu', (e) => {
-            e.stopPropagation();
-        });
 
         window.addEventListener('resize', this.resize, false);
         window.addEventListener('scroll', this.scroll, false);

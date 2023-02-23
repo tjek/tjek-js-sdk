@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "jsx": "react",
+        "jsxFactory": "h",
+        "jsxFragmentFactory": "Fragment",
         "target": "ESNext",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
