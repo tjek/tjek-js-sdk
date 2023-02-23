@@ -318,12 +318,15 @@ async function publish() {
                         pkg.version || 'unpublished'
                     )})`;
                     if (changeCount) {
-                        name += ': ' + chalk.bold`${changeCount} changed files`;
+                        name +=
+                            ': ' + chalk.bold(`${changeCount} changed files`);
                     } else {
                         disabled = 'No changes.';
                     }
                     if (addCount || removeCount) {
-                        name += ` with ${chalk.bold`${addCount} additions`} and ${chalk.bold`${removeCount} deletions`}`;
+                        name += ` with ${chalk.bold(
+                            `${addCount} additions`
+                        )} and ${chalk.bold(`${removeCount} deletions`)}`;
                     }
                     return {name, value: packageJsonPath, disabled};
                 }
