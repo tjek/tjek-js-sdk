@@ -73,6 +73,14 @@ export function throttle<F extends (...args) => void>(
     } as F;
 }
 
+export function chunk<I extends any>(arr: I[], size: number) {
+    const results: I[][] = [];
+
+    while (arr.length) results.push(arr.splice(0, size));
+
+    return results;
+}
+
 export const on = (
     el: HTMLElement,
     events: string | string[],
