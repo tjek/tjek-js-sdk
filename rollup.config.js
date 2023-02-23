@@ -86,7 +86,8 @@ const external = [
     /core-js/,
     'cross-fetch',
     'md5',
-    'mustache'
+    'mustache',
+    'preact'
 ];
 
 let configs = bundles
