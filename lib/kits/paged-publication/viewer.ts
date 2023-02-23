@@ -316,13 +316,19 @@ class Viewer extends MicroEvent {
         if (!pageDecorations?.length) return;
 
         this.pageDecorations = pageDecorations;
-        const currentPageNumber = this._core.findPage(
-            this._core.pageId
-        )?.pageNumber;
-        if (currentPageNumber) {
+        const currentPageSpread = this._core.pageSpreads.collection.find(
+            (spread) =>
+                spread.getPages().some((page) => page.id === this._core.pageId)
+        );
+
+        if (currentPageSpread) {
             const currentPageDecorations = this.pageDecorations?.filter(
-                ({page_number}) => page_number == currentPageNumber
+                ({page_number}) =>
+                    currentPageSpread
+                        .getPages()
+                        .some((page) => page.pageNumber === page_number)
             );
+            
             if (currentPageDecorations) {
                 PageDecorations().render({
                     pageDecorations: currentPageDecorations,
