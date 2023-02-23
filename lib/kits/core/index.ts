@@ -188,6 +188,6 @@ export interface V2Dealerfront {
 
 export interface V2PageDecoration {
     page_number: number;
-    title: string;
-    website_link: string;
+    title: string | null;
+    website_link: string | null;
 }
