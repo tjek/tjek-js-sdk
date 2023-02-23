@@ -3,6 +3,33 @@ import MicroEvent from '../../../vendor/microevent';
 import * as keyCodes from '../../key-codes';
 import './popover.styl';
 
+const Template = ({
+    header,
+    singleChoiceItems,
+    onItemClick,
+    onBackgroundClick
+}) => (
+    <div class="sgn-popover__background" onClick={onBackgroundClick}>
+        <div class="sgn-popover__menu" onClick={(e) => e.stopPropagation()}>
+            {header && <div class="sgn-popover__header">{header}</div>}
+            <div class="sgn-popover__content">
+                <ul>
+                    {singleChoiceItems.map((item, index) => (
+                        <li onClick={() => onItemClick(index)}>
+                            <p class="sgn-popover-item__title">{item.title}</p>
+                            {item.subtitle && (
+                                <p class="sgn-popover-item__subtitle">
+                                    {item.subtitle}
+                                </p>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+);
+
 interface PopoverOptions {
     header?: string;
     singleChoiceItems?: any;
@@ -25,35 +52,12 @@ class Popover extends MicroEvent {
         this.el.setAttribute('tabindex', '-1');
 
         render(
-            <>
-                <div
-                    class="sgn-popover__background"
-                    onClick={() => this.destroy()}
-                ></div>
-                <div class="sgn-popover__menu">
-                    {header && <div class="sgn-popover__header">{header}</div>}
-                    <div class="sgn-popover__content">
-                        <ul>
-                            {singleChoiceItems.map((item, index) => (
-                                <li
-                                    onClick={() =>
-                                        this.trigger('selected', {index})
-                                    }
-                                >
-                                    <p class="sgn-popover-item__title">
-                                        {item.title}
-                                    </p>
-                                    {item.subtitle && (
-                                        <p class="sgn-popover-item__subtitle">
-                                            {item.subtitle}
-                                        </p>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </>,
+            <Template
+                header={header}
+                singleChoiceItems={singleChoiceItems}
+                onItemClick={(index) => this.trigger('selected', {index})}
+                onBackgroundClick={() => this.destroy()}
+            />,
             this.el
         );
 
