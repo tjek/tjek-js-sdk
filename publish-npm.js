@@ -419,7 +419,7 @@ async function publish() {
         ]
     );
     const cwd = process.cwd();
-    const publishLog = [];
+    const publishLog = ['# Packages'];
     for (const [packageJsonPath, version] of targetVersions) {
         process.chdir(packageJsonPath.replace('/package.json', ''));
 
@@ -443,11 +443,7 @@ async function publish() {
                 tag.startsWith('experimental') ? 'experimental' : tag
             } ${nextVersion}`
         );
-        publishLog.push(
-            `Published ${name}@${
-                tag.startsWith('experimental') ? 'experimental' : tag
-            } ${nextVersion}`
-        );
+        publishLog.push(`* ${name}@${nextVersion.replace(/^v/g, '')}`);
 
         process.chdir(cwd);
     }
@@ -464,7 +460,7 @@ async function publish() {
 
         if (!DRY_RUN) {
             execSync(
-                `gh release create ${releaseTag} --notes '${publishLog.join(
+                `gh release create ${releaseTag} --generate-notes --notes '${publishLog.join(
                     '\n\n'
                 )}'`
             );
