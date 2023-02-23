@@ -72,7 +72,7 @@ const putVersion = async (version) => {
     ];
 };
 
-const versionRE = /(\d)\.(\d)\.(\d)/;
+const versionRE = /(\d+)\.(\d+)\.(\d+)/;
 
 const Items = (
     await Promise.all([
