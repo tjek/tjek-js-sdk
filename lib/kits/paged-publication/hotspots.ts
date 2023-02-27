@@ -1,4 +1,3 @@
-import Mustache from 'mustache';
 import MicroEvent from '../../../vendor/microevent';
 import PageSpread from '../../verso-browser/page_spread';
 import {V2Hotspot} from '../core';
@@ -64,7 +63,7 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
 
     if (hotspot.type) el.dataset.type = hotspot.type;
 
-    el.innerHTML = Mustache.render('', hotspot);
+    el.innerHTML = '';
 
     el.style.top = `${top}px`;
     el.style.left = `${left}px`;

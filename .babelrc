@@ -11,20 +11,9 @@
         "setPublicClassFields": true,
         "superIsCallableConstructor": true
     },
-    "targets": {"browsers": ["> 3%", "IE 11"], "node": 10},
-    "presets": [
-        [
-            "@babel/preset-env",
-            {
-                "targets": {"browsers": ["> 3%", "IE 11"], "node": 10},
-                "corejs": 3,
-                "useBuiltIns": "usage",
-                "exclude": ["transform-typeof-symbol"]
-            }
-        ]
-    ],
+    "presets": ["@babel/preset-env"],
     "plugins": [
         "@babel/plugin-syntax-import-assertions",
-        ["@babel/plugin-transform-runtime", {"corejs": 3}]
+        "@babel/plugin-transform-runtime"
     ]
 }

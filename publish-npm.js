@@ -22,6 +22,8 @@ if (!process.env.GOOD) {
     throw new Error('Please use `npm run publish` to publish to npm.');
 }
 
+const DRY_RUN = process.env.DRY_RUN;
+
 class NotFoundError extends Error {}
 
 // Use heuristics to detect if buffer is binary file.
@@ -230,11 +232,13 @@ const printDiffPackage = (diffObj) =>
 
 async function publish() {
     console.clear();
+    if (DRY_RUN) console.info('Dry run! 🌵');
 
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
     }).trim();
-    const shortdate = new Date()
+    const publishDate = new Date();
+    const shortdate = publishDate
         .toISOString()
         .split('T')[0]
         .replaceAll('-', '');
@@ -314,12 +318,15 @@ async function publish() {
                         pkg.version || 'unpublished'
                     )})`;
                     if (changeCount) {
-                        name += ': ' + chalk.bold`${changeCount} changed files`;
+                        name +=
+                            ': ' + chalk.bold(`${changeCount} changed files`);
                     } else {
                         disabled = 'No changes.';
                     }
                     if (addCount || removeCount) {
-                        name += ` with ${chalk.bold`${addCount} additions`} and ${chalk.bold`${removeCount} deletions`}`;
+                        name += ` with ${chalk.bold(
+                            `${addCount} additions`
+                        )} and ${chalk.bold(`${removeCount} deletions`)}`;
                     }
                     return {name, value: packageJsonPath, disabled};
                 }
@@ -412,28 +419,53 @@ async function publish() {
         ]
     );
     const cwd = process.cwd();
+    const publishLog = ['# Packages'];
     for (const [packageJsonPath, version] of targetVersions) {
         process.chdir(packageJsonPath.replace('/package.json', ''));
 
         const [{name}] = packageDiffs[packageJsonPath];
-        const nextVersion = await run('npm', ['version', version]);
-        const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
-        await run('npm', [
-            'publish',
-            '--access',
-            'public',
-            `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
+        const nextVersion = await run('npm', [
+            'version',
+            version,
+            '--allow-same-version'
         ]);
+        const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
+        if (!DRY_RUN) {
+            await run('npm', [
+                'publish',
+                '--access',
+                'public',
+                `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
+            ]);
+        }
         pubInd.succeed(
             `Published ${name}@${
                 tag.startsWith('experimental') ? 'experimental' : tag
             } ${nextVersion}`
         );
+        publishLog.push(`* ${name}@${nextVersion.replace(/^v/g, '')}`);
 
         process.chdir(cwd);
     }
 
     if (tag === 'latest') {
+        const releaseTag = `release-${publishDate.toLocaleDateString('da', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        })}-${publishDate.toLocaleTimeString('da', {
+            hour: '2-digit',
+            minute: '2-digit'
+        })}`;
+
+        if (!DRY_RUN) {
+            execSync(
+                `gh release create ${releaseTag} --generate-notes --notes '${publishLog.join(
+                    '\n\n'
+                )}'`
+            );
+        }
+
         const {uploadS3} = await inquirer.prompt([
             {
                 type: 'confirm',
@@ -446,7 +478,9 @@ async function publish() {
 
         if (uploadS3) {
             const s3Ind = ora(`Uploading to S3`).start();
-            console.log(await run('node', ['./upload-s3.js']));
+            if (!DRY_RUN) {
+                console.log(await run('node', ['./upload-s3.js']));
+            }
             s3Ind.succeed(`Uploaded to S3`);
         }
     }

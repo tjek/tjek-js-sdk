@@ -1,4 +1,5 @@
 import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from './Input';
+import Manager from './Manager';
 import prefixed from './utils/prefixed';
 
 const PREFIXED_TOUCH_ACTION =
@@ -19,7 +20,7 @@ const actions = [
     'pan-x',
     'pan-x pan-y',
     'none'
-];
+] as const;
 const cssSupports = typeof window !== 'undefined' && window.CSS?.supports;
 const TOUCH_ACTION_MAP =
     PREFIXED_TOUCH_ACTION &&
@@ -31,12 +32,12 @@ const TOUCH_ACTION_MAP =
         return touchMap;
     }, {});
 
-function cleanTouchActions(actions) {
+function cleanTouchActions(actionsToClean: typeof actions) {
     // none
-    if (actions.includes(TOUCH_ACTION_NONE)) return TOUCH_ACTION_NONE;
+    if (actionsToClean.includes(TOUCH_ACTION_NONE)) return TOUCH_ACTION_NONE;
 
-    const hasPanX = actions.includes(TOUCH_ACTION_PAN_X);
-    const hasPanY = actions.includes(TOUCH_ACTION_PAN_Y);
+    const hasPanX = actionsToClean.includes(TOUCH_ACTION_PAN_X);
+    const hasPanY = actionsToClean.includes(TOUCH_ACTION_PAN_Y);
 
     // if both pan-x and pan-y are set (different recognizers
     // for different directions, e.g. horizontal pan but vertical swipe?)
@@ -50,39 +51,35 @@ function cleanTouchActions(actions) {
     if (hasPanY) return TOUCH_ACTION_PAN_Y;
 
     // manipulation
-    const hasManipulation = actions.includes(TOUCH_ACTION_MANIPULATION);
+    const hasManipulation = actionsToClean.includes(TOUCH_ACTION_MANIPULATION);
     if (hasManipulation) return TOUCH_ACTION_MANIPULATION;
 
     return TOUCH_ACTION_AUTO;
 }
 
 /**
- * @private
  * Touch Action
  * sets the touchAction property or uses the js alternative
- * @param {Manager} manager
- * @param {String} value
- * @constructor
  */
 export default class TouchAction {
-    constructor(manager, value) {
+    manager: Manager;
+    actions: string;
+    constructor(manager: Manager, value: string) {
         this.manager = manager;
         this.set(value);
     }
 
     /**
-     * @private
      * set the touchAction value on the element or enable the polyfill
-     * @param {String} value
      */
-    set(value) {
+    set(value: string) {
         // find out the touch-action by the event handlers
         if (value === TOUCH_ACTION_COMPUTE) value = this.compute();
 
         if (
             PREFIXED_TOUCH_ACTION &&
             this.manager.element.style &&
-            TOUCH_ACTION_MAP[value]
+            TOUCH_ACTION_MAP?.[value]
         ) {
             this.manager.element.style[PREFIXED_TOUCH_ACTION] = value;
         }
@@ -90,7 +87,6 @@ export default class TouchAction {
     }
 
     /**
-     * @private
      * just re-set the touchAction value
      */
     update() {
@@ -100,7 +96,6 @@ export default class TouchAction {
     /**
      * @private
      * compute the value for the touchAction property based on the recognizer's settings
-     * @returns {String} value
      */
     compute() {
         return cleanTouchActions(
@@ -117,9 +112,7 @@ export default class TouchAction {
     }
 
     /**
-     * @private
      * this method is called on each input cycle and provides the preventing of the browser behavior
-     * @param {Object} input
      */
     preventDefaults({
         srcEvent,
@@ -133,7 +126,7 @@ export default class TouchAction {
 
         const hasNone =
             this.actions.includes(TOUCH_ACTION_NONE) &&
-            !TOUCH_ACTION_MAP[TOUCH_ACTION_NONE];
+            !TOUCH_ACTION_MAP?.[TOUCH_ACTION_NONE];
 
         // do not prevent defaults if this is a tap gesture
         if (hasNone && pointers.length === 1 && distance < 2 && deltaTime < 250)
@@ -141,10 +134,10 @@ export default class TouchAction {
 
         const hasPanY =
             this.actions.includes(TOUCH_ACTION_PAN_Y) &&
-            !TOUCH_ACTION_MAP[TOUCH_ACTION_PAN_Y];
+            !TOUCH_ACTION_MAP?.[TOUCH_ACTION_PAN_Y];
         const hasPanX =
             this.actions.includes(TOUCH_ACTION_PAN_X) &&
-            !TOUCH_ACTION_MAP[TOUCH_ACTION_PAN_X];
+            !TOUCH_ACTION_MAP?.[TOUCH_ACTION_PAN_X];
 
         // `pan-x pan-y` means browser handles all scrolling/panning, do not prevent
         if (hasPanX && hasPanY) return;

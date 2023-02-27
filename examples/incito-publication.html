@@ -83,11 +83,7 @@
 
                 viewer.start();
 
-                if (
-                    new URL(window.location).searchParams.get(
-                        'debug-section-events'
-                    ) !== undefined
-                ) {
+                if (SGN.util.getQueryParam('debug-section-events')) {
                     const sectionsStatuses = document.createElement('div');
                     sectionsStatuses.style.position = 'fixed';
                     sectionsStatuses.style.top = '16px';
@@ -112,75 +108,71 @@
 
                     document.body.appendChild(sectionsStatuses);
 
-                    viewer.incito.bind(
-                        'sectionVisible',
-                        ({sectionId, sectionPosition}) => {
-                            const li = document.createElement('li');
-                            li.id = `pos${sectionPosition}section${sectionId}`;
+                    viewer.incito.bind('sectionVisible', function (e) {
+                        const li = document.createElement('li');
+                        li.id =
+                            'pos' + e.sectionPosition + 'section' + e.sectionId;
 
-                            const sectionPositionEl =
-                                document.createElement('span');
-                            li.appendChild(sectionPositionEl);
-                            sectionPositionEl.textContent = `Position: ${sectionPosition}`;
+                        const sectionPositionEl =
+                            document.createElement('span');
+                        li.appendChild(sectionPositionEl);
+                        sectionPositionEl.textContent =
+                            'Position: ' + e.sectionPosition;
 
-                            const sectionIdEl = document.createElement('span');
-                            sectionIdEl.textContent = ` Section: "${sectionId}"`;
-                            li.appendChild(sectionIdEl);
-                            li.appendChild(document.createElement('br'));
-                            const sectionTimerEl =
-                                document.createElement('span');
-                            li.dataset.timestamp = String(Number(new Date()));
-                            li.dataset.intervalId = String(
-                                setInterval(() => {
-                                    sectionTimerEl.textContent = ` Time: ${(
+                        const sectionIdEl = document.createElement('span');
+                        sectionIdEl.textContent =
+                            ' Section: "' + e.sectionId + '"';
+                        li.appendChild(sectionIdEl);
+                        li.appendChild(document.createElement('br'));
+                        const sectionTimerEl = document.createElement('span');
+                        li.dataset.timestamp = String(Number(new Date()));
+                        li.dataset.intervalId = String(
+                            setInterval(function () {
+                                sectionTimerEl.textContent =
+                                    ' Time: ' +
+                                    (
                                         (new Date().valueOf() -
                                             Number(li.dataset.timestamp)) /
                                         1000
-                                    ).toFixed(2)}s`;
-                                }, 50)
-                            );
-                            li.appendChild(sectionTimerEl);
+                                    ).toFixed(2) +
+                                    's';
+                            }, 50)
+                        );
+                        li.appendChild(sectionTimerEl);
 
-                            pendingUl.appendChild(li);
-                        }
-                    );
-                    viewer.incito.bind(
-                        'sectionHidden',
-                        ({sectionId, sectionPosition}) => {
-                            const li = pendingUl.querySelector(
-                                `#pos${sectionPosition}section${sectionId}`
-                            );
-                            if (li instanceof HTMLLIElement) {
-                                clearInterval(Number(li.dataset.intervalId));
-                                pendingUl.removeChild(li);
+                        pendingUl.appendChild(li);
+                    });
+                    viewer.incito.bind('sectionHidden', function (e) {
+                        const li = pendingUl.querySelector(
+                            '#pos' + e.sectionPosition + 'section' + e.sectionId
+                        );
+                        if (li instanceof HTMLLIElement) {
+                            clearInterval(Number(li.dataset.intervalId));
+                            pendingUl.removeChild(li);
 
-                                if (
-                                    new Date().valueOf() -
-                                        Number(li.dataset.timestamp) >
-                                    500
-                                ) {
-                                    if (!trackedUl) {
-                                        const trackedHeader =
-                                            document.createElement('header');
-                                        trackedHeader.textContent =
-                                            'Tracked section impressions:';
-                                        trackedHeader.style.fontSize = '24px';
-                                        sectionsStatuses.appendChild(
-                                            trackedHeader
-                                        );
+                            if (
+                                new Date().valueOf() -
+                                    Number(li.dataset.timestamp) >
+                                500
+                            ) {
+                                if (!trackedUl) {
+                                    const trackedHeader =
+                                        document.createElement('header');
+                                    trackedHeader.textContent =
+                                        'Tracked section impressions:';
+                                    trackedHeader.style.fontSize = '24px';
+                                    sectionsStatuses.appendChild(trackedHeader);
 
-                                        trackedUl =
-                                            document.createElement('ul');
-                                        trackedUl.style.fontSize = '16px';
-                                        trackedUl.style.marginTop = '0';
-                                        sectionsStatuses.appendChild(trackedUl);
-                                    }
-
-                                    trackedUl.appendChild(li);
+                                    trackedUl = document.createElement('ul');
+                                    trackedUl.style.fontSize = '16px';
+                                    trackedUl.style.marginTop = '0';
+                                    sectionsStatuses.appendChild(trackedUl);
                                 }
+
+                                trackedUl.appendChild(li);
                             }
                         }
-                    );
+                    });
                 }
             });
         </script>

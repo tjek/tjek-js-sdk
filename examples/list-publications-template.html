@@ -62,7 +62,7 @@
         <script>
             document
                 .querySelector('#list-publications')
-                .addEventListener('publication:offer_clicked', (e) => {
+                .addEventListener('publication:offer_clicked', function (e) {
                     console.log(e.detail); // {viewId: '45302035570', publicationId: 'K6x40dWM', fetchOffer: f}
                 });
         </script>
@@ -71,7 +71,7 @@
         <script>
             document
                 .querySelector('#list-publications')
-                .addEventListener('publication:clicked', (e) => {
+                .addEventListener('publication:clicked', function (e) {
                     console.log(e.detail); // {publication}
                 });
         </script>
@@ -80,8 +80,8 @@
         <script>
             document
                 .querySelector('#list-publications')
-                .addEventListener('publication:rendered', (e) => {
-                    console.log('e detail:::', e.detail); // {details: {…}, incito: {…}}
+                .addEventListener('publication:rendered', function (e) {
+                    console.log(e.detail); // {details: {…}, incito: {…}}
                 });
         </script>
     </body>
