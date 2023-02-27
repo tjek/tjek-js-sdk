@@ -1,4 +1,3 @@
-import fetch from 'cross-fetch';
 import md5 from 'md5';
 import {eventsTrackUrl as defaultEventsTrackUrl} from '../../config-defaults';
 import * as clientLocalStorage from '../../storage/client-local';
@@ -199,7 +198,6 @@ class Tracker {
     pool: (BaseEvent & WolfEvent)[] = [];
     client: TrackerClient;
     eventsTrackUrl: string;
-    eventsTrackHeaders: Record<string, string>;
 
     handleVisibility = () => {
         if (document.visibilityState === 'hidden') this.dispatchBeacon();
@@ -213,7 +211,6 @@ class Tracker {
         poolLimit?: number;
         client?: TrackerClient;
         eventsTrackUrl?: string;
-        eventsTrackHeaders?: Record<string, string>;
     }) {
         // Handle legacy event pools
         const localPool = clientLocalStorage.get('event-tracker-pool');
@@ -235,11 +232,6 @@ class Tracker {
 
         this.client = options?.client || createTrackerClient();
         this.eventsTrackUrl = options?.eventsTrackUrl || defaultEventsTrackUrl;
-
-        this.eventsTrackHeaders = {
-            ...options?.eventsTrackHeaders,
-            'Content-Type': 'application/json; charset=utf-8'
-        };
 
         if (this.eventsTrackUrl) {
             this.dispatch();
@@ -357,63 +349,12 @@ class Tracker {
 
     dispatching = false;
     dispatchLimit = 100;
-    dispatchRetryInterval: NodeJS.Timeout | null | void = null;
-    dispatch = throttle(async () => {
-        if (this.dispatching || !this.pool?.length) return;
-
-        const events = this.pool.slice(0, this.dispatchLimit);
-        let nacks = 0;
-        this.dispatching = true;
-
-        try {
-            const response = await fetch(this.eventsTrackUrl, {
-                method: 'post',
-                headers: this.eventsTrackHeaders,
-                body: JSON.stringify({events})
-            });
-            const json = await response.json();
-
-            if (this.dispatchRetryInterval) {
-                this.dispatchRetryInterval = clearInterval(
-                    this.dispatchRetryInterval
-                );
-            }
-
-            for (let i = 0; i < json.events.length; i++) {
-                const {status, id} = json.events[i];
-
-                if (status === 'validation_error' || status === 'ack') {
-                    this.pool = this.pool.filter(({_i}) => _i !== id);
-                } else {
-                    nacks++;
-                }
-            }
-
-            // Keep dispatching until the pool size reaches a sane level.
-            if (this.pool.length >= this.dispatchLimit && !nacks) {
-                this.dispatch();
-            }
-        } catch (err) {
-            // Try dispatching again in 20 seconds, if we aren't already trying
-            if (!this.dispatchRetryInterval) {
-                console.warn(
-                    "We're gonna keep trying, but there was an error while dispatching events:",
-                    err
-                );
-
-                this.dispatchRetryInterval = setInterval(() => {
-                    this.dispatch();
-                }, 20000);
-            }
-        } finally {
-            this.dispatching = false;
-        }
-    }, 4000);
+    dispatch = throttle(this.dispatchBeacon, 4000);
     dispatchBeacon() {
-        const eventsChunks = chunk(this.pool, this.dispatchLimit);
-        eventsChunks.forEach((events) => {
+        for (const events of chunk(this.pool, this.dispatchLimit)) {
             navigator.sendBeacon(this.eventsTrackUrl, JSON.stringify({events}));
-        });
+        }
+        this.pool = [];
     }
 }
 
