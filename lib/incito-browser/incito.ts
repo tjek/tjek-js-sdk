@@ -76,7 +76,8 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
 
             return (
                 memo +
-                '<span style="font-family:inherit;" ' +
+                '<span style="' +
+                'font-family:inherit;color:inherit;" ' +
                 'data-name="' +
                 item.span.name +
                 '">' +
