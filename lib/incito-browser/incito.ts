@@ -32,11 +32,7 @@ function escapeHTML(unsafe) {
         : '';
 }
 
-function formatSpans(
-    text: string,
-    spans: NonNullable<TextView['spans']>,
-    styles
-) {
+function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
     const result: {
         text?: string;
         span?: NonNullable<TextView['spans']>[number];
@@ -80,14 +76,8 @@ function formatSpans(
 
             return (
                 memo +
-                '<span style="' +
-                'font-family:' +
-                styles['font-family'] +
-                ';' +
-                'color:' +
-                styles['color'] +
-                ';' +
-                '" data-name="' +
+                '<span style="font-family:inherit;" ' +
+                'data-name="' +
                 item.span.name +
                 '">' +
                 escapedText +
@@ -147,6 +137,19 @@ function renderView(view, canLazyload) {
 
             const textStyles = (view.text_style || '').split('|');
             let {text} = view;
+
+            text =
+                Array.isArray(view.spans) && view.spans.length > 0
+                    ? formatSpans(text, view.spans)
+                    : escapeHTML(text);
+
+            if (view.text_prevent_widow) {
+                text = text
+                    .replace(/&nbsp;([^\s]+)$/, ' $1')
+                    .replace(/\s([^\s]+)\s*$/, '&nbsp;$1');
+            }
+
+            contents = text.replace(/\n/g, '<br>');
 
             if (
                 Array.isArray(view.font_family) &&
@@ -219,19 +222,6 @@ function renderView(view, canLazyload) {
             if (view.text_all_caps === true) {
                 styles['text-transform'] = 'uppercase';
             }
-
-            text =
-                Array.isArray(view.spans) && view.spans.length > 0
-                    ? formatSpans(text, view.spans, styles)
-                    : escapeHTML(text);
-
-            if (view.text_prevent_widow) {
-                text = text
-                    .replace(/&nbsp;([^\s]+)$/, ' $1')
-                    .replace(/\s([^\s]+)\s*$/, '&nbsp;$1');
-            }
-
-            contents = text.replace(/\n/g, '<br>');
 
             break;
         }
