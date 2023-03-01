@@ -1,26 +1,30 @@
-import AWS from 'aws-sdk';
+import {
+    CloudFrontClient,
+    CreateInvalidationCommand
+} from '@aws-sdk/client-cloudfront';
+import {PutObjectCommand, S3Client} from '@aws-sdk/client-s3';
 import fs from 'fs';
 import path from 'path';
-import pkg from './dist/shopgun-sdk/package.json' assert {type: 'json'};
 import * as url from 'url';
+import pkg from './dist/shopgun-sdk/package.json' assert {type: 'json'};
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+const s3Client = new S3Client();
+const cfClient = new CloudFrontClient();
 
 const bucket = 'sgn-js-sdk';
 const distribution = 'EKE7310HEBVSP';
 
 const putObject = async ({key, bodyPath, contentType}) => {
     try {
-        const result = await new Promise((resolve, reject) =>
-            new AWS.S3().putObject(
-                {
-                    Bucket: bucket,
-                    Key: key,
-                    Body: fs.readFileSync(bodyPath).toString(),
-                    ACL: 'public-read',
-                    ContentType: contentType
-                },
-                (error, result) => (error ? reject(error) : resolve(result))
-            )
+        const result = await s3Client.send(
+            new PutObjectCommand({
+                Bucket: bucket,
+                Key: key,
+                Body: fs.readFileSync(bodyPath).toString(),
+                ACL: 'public-read',
+                ContentType: contentType
+            })
         );
         console.log('S3: Uploaded https://js-sdk.tjek.com/' + key);
 
@@ -90,17 +94,18 @@ const Items = (
 ).flat();
 
 try {
-    await new Promise((resolve, reject) =>
-        new AWS.CloudFront().createInvalidation(
-            {
-                DistributionId: distribution,
-                InvalidationBatch: {
-                    CallerReference: String(Date.now()),
-                    Paths: {Quantity: Items.length, Items}
-                }
-            },
-            (error, result) => (error ? reject(error) : resolve(result))
-        )
+    console.log(
+        'CloudFront: Submitting for invalidation: ' +
+            new Intl.ListFormat().format(Items)
+    );
+    await cfClient.send(
+        new CreateInvalidationCommand({
+            DistributionId: distribution,
+            InvalidationBatch: {
+                CallerReference: String(Date.now()),
+                Paths: {Quantity: Items.length, Items}
+            }
+        })
     );
     console.log(
         'CloudFront: Invalidation In Progress: ' +
@@ -108,5 +113,8 @@ try {
     );
 } catch (invalidationError) {
     console.error(invalidationError);
-    console.log('CloudFront: Could not invalidate ' + JSON.stringify(Items));
+    console.log(
+        'CloudFront: Could not invalidate ' +
+            new Intl.ListFormat().format(Items)
+    );
 }
