@@ -84,11 +84,9 @@ config.bind('change', (changedAttributes) => {
 
 if (isBrowser()) {
     // Autoconfigure the SDK.
-    const scriptEl = document.getElementById(
-        'sgn-sdk'
-    ) as HTMLScriptElement | null;
+    const scriptEl = document.currentScript;
 
-    if (scriptEl) {
+    if (scriptEl instanceof HTMLScriptElement) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
         const trackId = scriptEl.dataset.trackId;
         const component = scriptEl.dataset.component;
