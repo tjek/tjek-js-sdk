@@ -236,7 +236,6 @@ function renderView(view, canLazyload) {
 
             if (isDefinedStr(view.src)) {
                 attrs.loading = 'lazy';
-                attrs.decoding = 'async';
                 attrs.src = src;
             }
 
@@ -325,10 +324,14 @@ function renderView(view, canLazyload) {
                     attrs['data-method'] = view.method;
                 }
 
-                if (view.body) {
-                    attrs['data-body'] = encodeURIComponent(
-                        JSON.stringify(view.body)
+                if (view.headers) {
+                    attrs['data-headers'] = encodeURIComponent(
+                        JSON.stringify(view.headers)
                     );
+                }
+
+                if (typeof view.body === 'string') {
+                    attrs['data-body'] = encodeURIComponent(view.body);
                 }
             }
 
@@ -813,19 +816,24 @@ export default class Incito extends MicroEvent<{
             // Check if media isn't already being loaded.
             if (el.networkState !== 2) el.load();
         } else if (el.classList.contains('incito__incito-embed-view')) {
-            const {src: url, method = 'get', body} = el.dataset;
+            const {src: url, method = 'get', headers, body} = el.dataset;
 
             fetch(url, {
                 method,
-                body: body ? JSON.parse(decodeURIComponent(body)) : null
+                headers: headers
+                    ? JSON.parse(decodeURIComponent(headers))
+                    : null,
+                body: body ? decodeURIComponent(body) : null
             })
                 .then((res) => {
                     if (res.status === 200) return res.json();
                 })
                 .then((res) => {
-                    el.innerHTML = this.renderHtml(res);
+                    const parentNode = el.parentNode;
 
-                    this.observeElements(el);
+                    el.outerHTML = this.renderHtml(res);
+
+                    this.observeElements(parentNode);
                 });
         } else if (el.dataset.bg) {
             el.style.backgroundImage = `url(${el.dataset.bg})`;
