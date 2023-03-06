@@ -113,7 +113,8 @@ const IncitoPublication = (
         document.querySelector('.sgn__sidebar-content-container')?.appendChild(
             await SectionList({
                 sgnData,
-                template: customTemplates.sectionList
+                template: customTemplates.sectionList,
+                scriptEls
             }).render()
         );
 
@@ -310,11 +311,29 @@ const IncitoPublication = (
             '.sgn-incito__scroll-progress-text'
         );
 
-        if (progressText && isContainerFixed) {
+        if (progressText && isContainerFixed && !scriptEls.enableSidebar) {
             progressText.innerHTML = '0%';
 
             options.el.addEventListener('scroll', () => {
-                const scrollValue = getContainerScrollValue();
+                const scrollValue = getContainerScrollValue(options.el);
+                if (scrollValue) {
+                    if (progressBar)
+                        progressBar.style.transform = `scaleX(${
+                            scrollValue / 100
+                        })`;
+                    progressText.innerHTML = `${Math.round(scrollValue)}%`;
+                }
+            });
+        } else if (
+            progressText &&
+            isContainerFixed &&
+            scriptEls.enableSidebar
+        ) {
+            progressText.innerHTML = '0%';
+            const incitoContainer = document.querySelector('.incito');
+
+            incitoContainer?.addEventListener('scroll', () => {
+                const scrollValue = getContainerScrollValue(incitoContainer);
                 if (scrollValue) {
                     if (progressBar)
                         progressBar.style.transform = `scaleX(${
@@ -328,10 +347,10 @@ const IncitoPublication = (
         }
     };
 
-    const getContainerScrollValue = () =>
-        options.el &&
-        (100 * options.el.scrollTop) /
-            (options.el.scrollHeight - options.el.clientHeight);
+    const getContainerScrollValue = (element) =>
+        element &&
+        (100 * element.scrollTop) /
+            (element.scrollHeight - element.clientHeight);
 
     const fetchLatestPublicationId = async () =>
         (

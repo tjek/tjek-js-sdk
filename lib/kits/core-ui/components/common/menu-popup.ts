@@ -216,7 +216,8 @@ const MenuPopup = ({
         container?.querySelector('.sgn-menu-tab-content-sections')?.appendChild(
             await SectionList({
                 sgnData,
-                template: templates.sectionList
+                template: templates.sectionList,
+                scriptEls
             }).render()
         );
 
