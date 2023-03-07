@@ -3,6 +3,17 @@ import MicroEvent from '../../vendor/microevent';
 import './incito.styl';
 import {IIncito, TextView} from './types';
 
+async function fetchWithTimeout(resource, options = {}, timeout = 8000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    const response = await fetch(resource, {
+        ...options,
+        signal: controller.signal
+    });
+    clearTimeout(id);
+    return response;
+}
+
 function formatUnit(unit) {
     if (!unit) return 0;
 
@@ -819,7 +830,8 @@ export default class Incito extends MicroEvent<{
         } else if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', headers, body} = el.dataset;
 
-            fetch(url, {
+            fetchWithTimeout(url, {
+                timeout: 10000,
                 method,
                 headers: headers
                     ? JSON.parse(decodeURIComponent(headers))
@@ -830,15 +842,13 @@ export default class Incito extends MicroEvent<{
                     if (res.status === 200) return res.json();
                 })
                 .then((res) => {
-                    const parentNode = el.parentNode;
+                    el.innerHTML = this.renderHtml(res);
 
-                    el.outerHTML = this.renderHtml(res);
-
-                    this.observeElements(parentNode);
+                    this.observeElements(el);
                     this.trigger('incitoEmbedLoaded', {el});
                 })
                 .catch(() => {
-                    el.outerHTML = this.renderHtml({});
+                    el.innerHTML = this.renderHtml({});
                 });
         } else if (el.dataset.bg) {
             el.style.backgroundImage = `url(${el.dataset.bg})`;
