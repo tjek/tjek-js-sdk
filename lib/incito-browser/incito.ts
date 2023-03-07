@@ -76,7 +76,9 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
 
             return (
                 memo +
-                '<span data-name="' +
+                '<span style="' +
+                'font-family:inherit;color:inherit;" ' +
+                'data-name="' +
                 item.span.name +
                 '">' +
                 escapedText +
