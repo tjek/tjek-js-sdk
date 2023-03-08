@@ -171,7 +171,6 @@ const ListPublications = (
 
         MainContainer({
             publications,
-            template: customTemplates.mainContainer,
             el: document.querySelector(scriptEls.mainContainer)
         }).render();
 

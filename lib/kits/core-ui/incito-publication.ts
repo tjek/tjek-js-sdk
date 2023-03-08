@@ -70,7 +70,6 @@ const IncitoPublication = (
     };
 
     MainContainer({
-        template: customTemplates.mainContainer,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     }).render();
