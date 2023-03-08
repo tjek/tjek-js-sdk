@@ -20,7 +20,7 @@ const defaultTemplate = `\
     </div>\
 `;
 
-const SectionList = ({sgnData, template}) => {
+const SectionList = ({sgnData, template, scriptEls}) => {
     let container: HTMLDivElement | null = null;
 
     template = template?.innerHTML || defaultTemplate;
@@ -50,9 +50,12 @@ const SectionList = ({sgnData, template}) => {
         const sectionCell = document.querySelector(
             `[data-id="${sectionId}"][data-role="section"]`
         );
-        const incitoEl = document.querySelector('.sgn__incito');
+        const incitoEl = scriptEls.enableSidebar
+            ? document.querySelector('.incito')
+            : document.querySelector('.sgn__incito');
+        const headerOffset = document.querySelector('.sgn__header') ? 76 : 0;
         // @ts-expect-error
-        const sectionOffset = sectionCell.offsetTop - 76 || 0;
+        const sectionOffset = sectionCell.offsetTop - headerOffset || 0;
 
         destroyModal();
 
