@@ -67,6 +67,7 @@ export default class Bootstrapper {
     locale = getLocale();
     featureLabels = this.getFeatureLabels();
     versionsSupported = ['1.0.0'];
+    enableLazyLoading = false;
     options: BootstrapperInit;
     maxWidth: number;
     // @ts-expect-error
@@ -163,7 +164,8 @@ export default class Bootstrapper {
                     feature_labels: this.anonymizeFeatureLabels(
                         // @ts-expect-error
                         this.featureLabels
-                    )
+                    ),
+                    enable_lazy_loading: this.enableLazyLoading
                 })
             },
             callback
