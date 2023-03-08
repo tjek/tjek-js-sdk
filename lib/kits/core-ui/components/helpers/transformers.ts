@@ -35,6 +35,11 @@ export const transformScriptData = (
             dataset.componentPublicationDisablePagedecorations === 'true',
         showHeaderLabels:
             dataset.componentPublicationShowHeaderLabels === 'true',
+        enableSidebar: dataset.componentPublicationEnableSidebar === 'true',
+        sidebarPosition:
+            dataset.componentPublicationSidebarPosition === 'left'
+                ? 'left'
+                : 'right',
         requestFilter: dataset.componentListPublicationsRequestFilter,
         clientFilter: dataset.componentListPublicationsClientFilter
     };

@@ -18,6 +18,8 @@ import {
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
+import PageList from './components/paged-publication/page-list';
+import PageDecorationList from './components/paged-publication/page-decoration-list';
 
 const PagedPublication = (
     scriptEl: HTMLScriptElement,
@@ -45,6 +47,9 @@ const PagedPublication = (
         ),
         headerContainer: document.getElementById(
             'sgn-sdk-paged-publication-viewer-header-template'
+        ),
+        sidebarContainer: document.getElementById(
+            'sgn-sdk-incito-publication-viewer-sidebar-template'
         ),
         offerList: document.getElementById(
             'sgn-sdk-paged-publication-viewer-offer-list-template'
@@ -74,12 +79,13 @@ const PagedPublication = (
 
     const header = Header({
         publicationType: 'paged',
-        template: customTemplates.headerContainer,
+        template: scriptEls.enableSidebar
+            ? customTemplates.sidebarContainer
+            : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     });
-
     document
         .querySelector('.sgn__header-container')
         ?.appendChild(header.render());
@@ -89,10 +95,38 @@ const PagedPublication = (
 
         await start();
 
+        if (sgnPageDecorations.length && !scriptEls.disablePageDecorations) {
+            renderPageDecorationList();
+        } else {
+            renderPageList();
+        }
+
         renderShoppingList();
         renderMenuPopup();
         dispatchPublicationData();
     };
+
+    const renderPageList = async () =>
+        document?.querySelector('.sgn__sidebar-content-container')?.appendChild(
+            await PageList({
+                scriptEls,
+                configs: options,
+                sgnData,
+                sgnViewer,
+                template: customTemplates.pageList
+            }).render()
+        );
+
+    const renderPageDecorationList = async () =>
+        document?.querySelector('.sgn__sidebar-content-container')?.appendChild(
+            await PageDecorationList({
+                scriptEls,
+                configs: options,
+                sgnPageDecorations,
+                sgnViewer,
+                template: customTemplates.pageList
+            }).render()
+        );
 
     const renderShoppingList = () =>
         ShoppingList({template: customTemplates.shoppingList}).render();
