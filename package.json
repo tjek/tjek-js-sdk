@@ -70,6 +70,7 @@
         "test:lint": "eslint lib __tests__",
         "test:ci": "jest",
         "test:size": "bundlesize",
+        "test:types": "tsc -noEmit",
         "build": "rollup -c -m --environment NODE_ENV:production",
         "dev:js": "rollup -c -m inline --environment NODE_ENV:development --watch",
         "dev": "run-p -l dev:js serve",
