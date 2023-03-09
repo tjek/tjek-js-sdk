@@ -72,7 +72,7 @@ const bundles = [
             'bootstrapper'
         )
     }
-].filter((_, i) => (process.env.CI ? i === 0 : true));
+];
 
 const getBabelPlugin = () =>
     babel({
