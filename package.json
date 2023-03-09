@@ -66,7 +66,7 @@
     ],
     "scripts": {
         "clean": "rimraf -r dist",
-        "test": "npm run test:lint && npm run test:ci && npm run test:size",
+        "test": "run-p -l -c test:*",
         "test:lint": "eslint lib __tests__",
         "test:ci": "jest",
         "test:size": "bundlesize",
