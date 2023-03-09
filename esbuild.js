@@ -1,35 +1,42 @@
 import {analyzeMetafile, build, context} from 'esbuild';
 import {stylusLoader} from 'esbuild-stylus-loader';
+import {writeFile} from 'fs/promises';
 import nib from 'nib';
 import path from 'path';
 import * as url from 'url';
+import packageJson from './package.json' assert {type: 'json'};
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const libDir = path.join(__dirname, 'lib');
 const distDir = path.join(__dirname, 'dist');
 
+const version = '0.0.0-unreleased.0';
 const bundles = [
     {
         name: 'SGN',
         input: 'sgn-sdk.ts',
-        output: path.join('shopgun-sdk', 'sgn-sdk')
+        output: path.join('shopgun-sdk', 'sgn-sdk'),
+        pkg: {version, name: '@tjek/sdk', sideEffects: false}
     },
     {
         name: 'Incito',
         input: path.join('incito-browser', 'incito.ts'),
-        output: path.join('incito-browser', 'incito')
+        output: path.join('incito-browser', 'incito'),
+        pkg: {version, name: 'incito-browser'}
     },
     {
         name: 'Verso',
         fileName: 'verso',
         input: path.join('verso-browser', 'verso.ts'),
-        output: path.join('verso-browser', 'index')
+        output: path.join('verso-browser', 'verso'),
+        pkg: {version, name: 'verso-browser'}
     },
     {
         name: 'Tjek',
         input: 'tjek-sdk.ts',
-        output: path.join('tjek-sdk', 'index')
+        output: path.join('tjek-sdk', 'index'),
+        pkg: {version, name: '@tjek/sdk', sideEffects: false}
     }
 ];
 
@@ -44,10 +51,12 @@ const commonOptions = {
         'ios11.1',
         'node12'
     ],
-    plugins: [
-        stylusLoader({stylusOptions: {import: [nib.path + '/nib/index.styl']}})
-    ]
+    loader: {'.styl': 'empty'},
+    metafile: true
 };
+const stylus = stylusLoader({
+    stylusOptions: {import: [nib.path + '/nib/index.styl']}
+});
 
 switch (process.argv[2]) {
     case 'watch': {
@@ -58,6 +67,7 @@ switch (process.argv[2]) {
             outfile: path.join(distDir, output + '.js'),
             platform: 'browser',
             globalName: `self[${JSON.stringify(name)}]`,
+            plugins: [stylus],
             metafile: true,
             banner: {
                 js: "new EventSource('/esbuild').addEventListener('change', () => location.reload());"
@@ -85,7 +95,7 @@ switch (process.argv[2]) {
                         outfile: path.join(distDir, output + '.js'),
                         platform: 'browser',
                         globalName: `self[${JSON.stringify(name)}]`,
-                        metafile: true
+                        plugins: [stylus]
                     }),
                     build({
                         ...commonOptions,
@@ -93,7 +103,8 @@ switch (process.argv[2]) {
                         minify: true,
                         outfile: path.join(distDir, output + '.min.js'),
                         platform: 'browser',
-                        globalName: `self[${JSON.stringify(name)}]`
+                        globalName: `self[${JSON.stringify(name)}]`,
+                        plugins: [stylus]
                     }),
                     build({
                         ...commonOptions,
@@ -114,6 +125,56 @@ switch (process.argv[2]) {
                 ])
                 .flat()
         );
+
+        const modulePackageJsons = {};
+
+        for (const {warnings, errors, metafile} of buildResults) {
+            if (warnings.length) {
+                for (const warning of warnings) console.warn(warning);
+            }
+            if (errors.length) {
+                for (const error of errors) console.error(error);
+                break;
+            }
+            for (const [path, output] of Object.entries(metafile.outputs)) {
+                if (!output.entryPoint) continue;
+                const moduleDir = path.match(/dist\/(.+)\//)[1];
+
+                const bundle = bundles.find(
+                    (bundle) =>
+                        bundle.input === output.entryPoint.replace('lib/', '')
+                );
+                if (!(moduleDir in modulePackageJsons)) {
+                    modulePackageJsons[moduleDir] = {...bundle.pkg};
+                }
+                const moduleJson = modulePackageJsons[moduleDir];
+
+                const fileName = path.match(/dist\/(.+)\/(.+)/)[2];
+                if (fileName.endsWith('.cjs.js')) moduleJson.main = fileName;
+                if (fileName.endsWith('.es.js')) {
+                    moduleJson.module = fileName;
+                    moduleJson['jsnext:main'] = fileName;
+                }
+
+                const externalsSet = new Set();
+                for (const impor of output.imports) {
+                    if (impor.external) externalsSet.add(impor.path);
+                }
+
+                for (const external of externalsSet) {
+                    if (!moduleJson.dependencies) moduleJson.dependencies = {};
+                    moduleJson.dependencies[external] =
+                        packageJson.dependencies[external];
+                }
+            }
+        }
+        for (const [moduleDir, pkg] of Object.entries(modulePackageJsons)) {
+            await writeFile(
+                path.join(distDir, moduleDir, 'package.json'),
+                JSON.stringify(pkg, null, 2)
+            );
+        }
+        break;
         console.log(
             (
                 await Promise.all(
