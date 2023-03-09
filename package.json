@@ -71,7 +71,7 @@
         "test:ci": "jest",
         "test:size": "bundlesize",
         "test:types": "tsc -noEmit",
-        "build": "rollup -c -m --environment NODE_ENV:production",
+        "build": "node --max-old-space-size=8192 node_modules/rollup/bin/rollup -c -m --environment NODE_ENV:production",
         "dev:js": "rollup -c -m inline --environment NODE_ENV:development --watch",
         "dev": "run-p -l dev:js serve",
         "serve": "serve",
