@@ -1,7 +1,10 @@
 import Config from './config';
-import * as CoreUIKit from './kits/core-ui';
+import {
+    IncitoPublication,
+    ListPublications,
+    PagedPublication
+} from './kits/core-ui';
 import request from './kits/core/request';
-import * as EventsKit from './kits/events';
 import Tracker from './kits/events/tracker';
 import {
     Bootstrapper as IncitoBootstrapper,
@@ -13,47 +16,9 @@ import {
 } from './kits/paged-publication';
 import * as clientLocal from './storage/client-local';
 import './stylus/sgn.styl';
-import * as translations from './translations';
-import * as util from './util';
 import {error, isBrowser} from './util';
 
-const config = new Config();
-
-const SGN = {
-    config,
-    util,
-    translations,
-
-    // Expose storage backends.
-    storage: {local: clientLocal},
-
-    // Expose the different kits.
-    EventsKit,
-    CoreKit: {
-        request: (
-            options: Parameters<typeof request>[0],
-            callback: Parameters<typeof request>[1]
-        ) => request(config.shadow(options), callback)
-    },
-    PagedPublicationKit: {
-        Bootstrapper: function (
-            options: ConstructorParameters<typeof PagedBootstrapper>[0]
-        ) {
-            return new PagedBootstrapper(config.shadow(options));
-        },
-        Viewer: PagedViewer
-    },
-    IncitoPublicationKit: {
-        Bootstrapper: function (
-            options: ConstructorParameters<typeof IncitoBootstrapper>[0]
-        ) {
-            return new IncitoBootstrapper(config.shadow(options));
-        },
-        Viewer: IncitoViewer
-    },
-    CoreUIKit
-};
-
+export const config = new Config();
 config.bind('change', (changedAttributes) => {
     const newEventTracker: Tracker | undefined = changedAttributes.eventTracker;
     const newApiKey: string | undefined = changedAttributes.apiKey;
@@ -97,23 +62,48 @@ if (isBrowser()) {
 
         if (apiKey) scriptConfig.apiKey = apiKey;
 
-        if (trackId)
-            scriptConfig.eventTracker = new EventsKit.Tracker({trackId});
+        if (trackId) scriptConfig.eventTracker = new Tracker({trackId});
 
         config.set(scriptConfig);
 
         if (component === 'paged-publication-viewer') {
-            CoreUIKit.PagedPublication(scriptEl, config.shadow()).render();
+            PagedPublication(scriptEl, config.shadow()).render();
         }
 
         if (component === 'incito-publication-viewer') {
-            CoreUIKit.IncitoPublication(scriptEl, config.shadow()).render();
+            IncitoPublication(scriptEl, config.shadow()).render();
         }
 
         if (component === 'list-publications') {
-            CoreUIKit.ListPublications(scriptEl, config.shadow()).render();
+            ListPublications(scriptEl, config.shadow()).render();
         }
     }
 }
 
-export default SGN;
+export * as CoreUIKit from './kits/core-ui';
+export * as EventsKit from './kits/events';
+export * as translations from './translations';
+export * as util from './util';
+export const storage = {local: clientLocal};
+export const CoreKit = {
+    request: (
+        options: Parameters<typeof request>[0],
+        callback: Parameters<typeof request>[1]
+    ) => request(config.shadow(options), callback)
+};
+export const PagedPublicationKit = {
+    Bootstrapper: function (
+        options: ConstructorParameters<typeof PagedBootstrapper>[0]
+    ) {
+        return new PagedBootstrapper(config.shadow(options));
+    },
+    Viewer: PagedViewer
+};
+export const IncitoPublicationKit = {
+    Bootstrapper: function (
+        options: ConstructorParameters<typeof IncitoBootstrapper>[0]
+    ) {
+        return new IncitoBootstrapper(config.shadow(options));
+    },
+    Viewer: IncitoViewer
+};
