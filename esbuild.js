@@ -17,7 +17,7 @@ const bundles = [
         name: 'SGN',
         input: 'sgn-sdk.ts',
         output: path.join('shopgun-sdk', 'sgn-sdk'),
-        pkg: {version, name: '@tjek/sdk', sideEffects: false}
+        pkg: {version, name: 'shopgun-sdk', sideEffects: false}
     },
     {
         name: 'Incito',
