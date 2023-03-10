@@ -1,8 +1,7 @@
 name: CI
 on: [push]
 jobs:
-    build:
-        name: Test
+    lint:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -10,9 +9,54 @@ jobs:
               with:
                   node-version: 18
             - run: npm ci
-            - run: npx playwright install --with-deps
-            - run: npm run build
             - run: npm run test:lint
-            - run: npm run test:ci
+    types:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - run: npm ci
             - run: npm run test:types
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - run: npm ci
+            - run: npm run build
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: built
+                  path: ./dist
+                  retention-days: 1
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - uses: actions/download-artifact@v2
+              with:
+                  name: built
+                  path: ./dist
+            - run: npm ci
+            - run: npx playwright install --with-deps
+            - run: npm run test:ci
+    size:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - uses: actions/download-artifact@v2
+              with:
+                  name: built
+                  path: ./dist
+            - run: npm ci
             - run: npm run test:size
