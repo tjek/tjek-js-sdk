@@ -1,28 +1,18 @@
 name: CI
 on: [push]
 jobs:
-  build:
-    name: Test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node-version }}-
-      - run: npm install
-      - run: npx playwright install --with-deps
-      - run: npm run build
-      - run: npm run test:lint
-      - run: npm run test:ci
-      - run: npm run test:types
-      - run: npm run test:size
+    build:
+        name: Test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - run: npm ci
+            - run: npx playwright install --with-deps
+            - run: npm run build
+            - run: npm run test:lint
+            - run: npm run test:ci
+            - run: npm run test:types
+            - run: npm run test:size
