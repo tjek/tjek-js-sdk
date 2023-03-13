@@ -13,6 +13,7 @@ import ShoppingList from './components/common/shopping-list';
 import {transformScriptData} from './components/helpers/transformers';
 import {transformFilter} from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
+import SectionList from './components/incito-publication/section-list';
 
 const IncitoPublication = (
     scriptEl: HTMLScriptElement,
@@ -49,6 +50,9 @@ const IncitoPublication = (
         headerContainer: document.getElementById(
             'sgn-sdk-incito-publication-viewer-header-template'
         ),
+        sidebarContainer: document.getElementById(
+            'sgn-sdk-incito-publication-viewer-sidebar-template'
+        ),
         offerList: document.getElementById(
             'sgn-sdk-incito-publication-viewer-offer-list-template'
         ),
@@ -77,12 +81,13 @@ const IncitoPublication = (
 
     const header = Header({
         publicationType: 'incito',
-        template: customTemplates.headerContainer,
+        template: scriptEls.enableSidebar
+            ? customTemplates.sidebarContainer
+            : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
         scriptEls
     });
-
     document
         .querySelector('.sgn__header-container')
         ?.appendChild(header.render());
@@ -96,12 +101,22 @@ const IncitoPublication = (
         renderShoppingList();
         renderMenuPopup();
         dispatchPublicationData();
+        renderSectionList();
 
         return sgnData;
     };
 
     const renderShoppingList = () =>
         ShoppingList({template: customTemplates.shoppingList}).render();
+
+    const renderSectionList = async () =>
+        document.querySelector('.sgn__sidebar-content-container')?.appendChild(
+            await SectionList({
+                sgnData,
+                template: customTemplates.sectionList,
+                scriptEls
+            }).render()
+        );
 
     const renderMenuPopup = () =>
         document
@@ -168,7 +183,7 @@ const IncitoPublication = (
                     const viewId = this.dataset.id;
                     const publicationId = options.id;
 
-                    clickOfferCell(viewId, publicationId);
+                    clickOfferCell(viewId, publicationId, sgnViewer);
                 }
             );
 
@@ -207,8 +222,10 @@ const IncitoPublication = (
         );
     };
 
-    const clickOfferCell = async (viewId, publicationId) => {
-        dispatchOfferClickEvent({fetchOffer, viewId, publicationId});
+    const clickOfferCell = async (viewId, publicationId, sgnViewer) => {
+        const {products} =
+            sgnViewer.incito?.ids?.[viewId]?.['tjek.offer.v1'] || {};
+        dispatchOfferClickEvent({fetchOffer, viewId, publicationId, products});
 
         const shoppingBtn = options.el?.querySelector('.sgn__offer-shopping');
 
@@ -294,11 +311,29 @@ const IncitoPublication = (
             '.sgn-incito__scroll-progress-text'
         );
 
-        if (progressText && isContainerFixed) {
+        if (progressText && isContainerFixed && !scriptEls.enableSidebar) {
             progressText.innerHTML = '0%';
 
             options.el.addEventListener('scroll', () => {
-                const scrollValue = getContainerScrollValue();
+                const scrollValue = getContainerScrollValue(options.el);
+                if (scrollValue) {
+                    if (progressBar)
+                        progressBar.style.transform = `scaleX(${
+                            scrollValue / 100
+                        })`;
+                    progressText.innerHTML = `${Math.round(scrollValue)}%`;
+                }
+            });
+        } else if (
+            progressText &&
+            isContainerFixed &&
+            scriptEls.enableSidebar
+        ) {
+            progressText.innerHTML = '0%';
+            const incitoContainer = document.querySelector('.incito');
+
+            incitoContainer?.addEventListener('scroll', () => {
+                const scrollValue = getContainerScrollValue(incitoContainer);
                 if (scrollValue) {
                     if (progressBar)
                         progressBar.style.transform = `scaleX(${
@@ -312,10 +347,10 @@ const IncitoPublication = (
         }
     };
 
-    const getContainerScrollValue = () =>
-        options.el &&
-        (100 * options.el.scrollTop) /
-            (options.el.scrollHeight - options.el.clientHeight);
+    const getContainerScrollValue = (element) =>
+        element &&
+        (100 * element.scrollTop) /
+            (element.scrollHeight - element.clientHeight);
 
     const fetchLatestPublicationId = async () =>
         (

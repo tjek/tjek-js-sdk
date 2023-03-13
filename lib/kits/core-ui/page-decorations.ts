@@ -42,7 +42,11 @@ const PageDecorations = () => {
         );
 
         filteredPageDecorations?.forEach((pageDecoration) => {
-            if (pageDecoration && getHostname(pageDecoration?.website_link)) {
+            if (
+                pageDecoration &&
+                pageDecoration.website_link &&
+                getHostname(pageDecoration.website_link)
+            ) {
                 const el = document.createElement('div');
                 const position =
                     pageDecorations?.length <= 1
@@ -63,7 +67,7 @@ const PageDecorations = () => {
                     {
                         pageDecoration: {
                             ...pageDecoration,
-                            hostname: getHostname(pageDecoration?.website_link)
+                            hostname: getHostname(pageDecoration.website_link)
                         }
                     }
                 );
