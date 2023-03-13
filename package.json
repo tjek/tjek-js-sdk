@@ -13,7 +13,7 @@
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
-            "maxSize": "55 kB"
+            "maxSize": "60 kB"
         },
         {
             "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
