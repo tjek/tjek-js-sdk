@@ -240,6 +240,7 @@ export default class Verso extends MicroEvent {
 
         this.started = false;
         this.destroyed = true;
+
         return this;
     }
 

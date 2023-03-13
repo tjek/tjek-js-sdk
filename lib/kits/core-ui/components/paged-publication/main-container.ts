@@ -3,8 +3,12 @@ import {transformScriptData} from '../helpers/transformers';
 import './main-container.styl';
 
 const defaultTemplate = `\
-    <div class="sgn__pp" data-layout-fixed="true" data-component-template="true" {{#disableHeader}}data-component-template-disable-header="true"{{/disableHeader}}>
+    <div class="sgn__pp" data-layout-fixed="true" data-component-template="true" data-component-template-disable-header="{{disableHeader}}" data-component-template-enable-sidebar="{{enableSidebar}}" data-component-template-sidebar-position="{{sidebarPosition}}">
         <div class="sgn__header-container"></div>
+        
+        {{#enableSidebar}}
+        <div class="sgn__menu-sidebar-container"></div>
+        {{/enableSidebar}}
 
         <div class="verso">
             <div class="verso__scroller">
@@ -64,7 +68,9 @@ const MainContainer = ({
     const render = () => {
         // @ts-expect-error
         el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
-            disableHeader: scriptEls.disableHeader
+            disableHeader: scriptEls.disableHeader || scriptEls.enableSidebar,
+            enableSidebar: scriptEls.enableSidebar,
+            sidebarPosition: scriptEls.sidebarPosition
         });
 
         setCustomStyles();

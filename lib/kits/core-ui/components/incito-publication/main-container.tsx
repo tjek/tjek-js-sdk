@@ -2,7 +2,12 @@ import {Fragment, h, render as pRender} from 'preact';
 import {transformScriptData} from '../helpers/transformers';
 import './main-container.styl';
 
-const Template = ({disableHeader, isOfferClickable}) => {
+const Template = ({
+    disableHeader,
+    isOfferClickable,
+    enableSidebar,
+    sidebarPosition
+}) => {
     return (
         <>
             <div class="sgn_loader-container">
@@ -14,8 +19,13 @@ const Template = ({disableHeader, isOfferClickable}) => {
                 tabindex="-1"
                 data-component-template-disable-header={disableHeader}
                 data-offer-clickable={isOfferClickable}
+                data-component-template-enable-sidebar={enableSidebar}
+                data-component-template-sidebar-position={sidebarPosition}
             >
                 <div class="sgn__header-container"></div>
+                {enableSidebar && (
+                    <div class="sgn__menu-sidebar-container"></div>
+                )}
                 {disableHeader && (
                     <div class="sgn-incito__scroll-progress">
                         <div class="sgn-incito__scroll-progress-bar"></div>
@@ -45,13 +55,17 @@ const MainContainer = ({
 
         pRender(
             <Template
-                disableHeader={scriptEls.disableHeader}
+                disableHeader={
+                    scriptEls.disableHeader || scriptEls.enableSidebar
+                }
                 isOfferClickable={
                     (!scriptEls.disableShoppingList ||
                         scriptEls.offerClickBehavior !== 'shopping_list') &&
                     (!scriptEls.disableHeader ||
                         scriptEls.offerClickBehavior !== 'shopping_list')
                 }
+                enableSidebar={scriptEls.enableSidebar}
+                sidebarPosition={scriptEls.sidebarPosition}
             />,
             el
         );

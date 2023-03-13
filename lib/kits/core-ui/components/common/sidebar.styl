@@ -1,0 +1,326 @@
+.sgn__incito, .sgn__pp
+    &[data-component-template-enable-sidebar="true"]
+        -ms-overflow-style none
+        scrollbar-width none
+
+        .sgn-pages-list-item-container
+            width 48%
+
+        &::-webkit-scrollbar
+            display none
+
+        .incito
+            height 100vh
+            overflow-y auto
+
+        &[data-component-template-sidebar-position="left"]
+            left 290px
+
+            .sgn__sidebar
+                position fixed
+                width 290px
+                left 0
+                background-color #ffffff
+
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width calc(100vw - 290px)
+                margin-left auto
+            
+            .sgn__sidebar-control
+                left 290px
+            
+        &[data-component-template-sidebar-position="right"]
+            right 290px
+            
+            .sgn__sidebar
+                position fixed
+                width 290px
+                right 0
+                background-color #ffffff
+
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width calc(100vw - 290px)
+                margin-right auto
+            
+            .sgn__sidebar-control
+                right 290px
+        
+        .sgn__sidebar-control
+            display none
+            position fixed
+            cursor pointer
+            top 0
+            opacity 0.5
+            z-index 99
+            margin 18px 10px
+            
+            &:hover,
+            &:active
+                opacity 1
+
+            .sgn__sidebar-control-bar1, .sgn__sidebar-control-bar2, .sgn__sidebar-control-bar3
+                width 25px
+                height 2px
+                background #ffffff
+                margin-bottom 8px
+
+            .sgn__sidebar-control-bars
+                list-style none
+                cursor pointer
+                width 25px
+                background rgba(0, 0, 0, 0.4)
+                padding 10px 10px 2px
+            
+                & .sgn__sidebar-control-bar1 
+                    -webkit-transition all 0.3s ease-in-out
+                    -moz-transition all 0.3s ease-in-out
+                    -o-transition all 0.3s ease-in-out
+                    transition all 0.3s ease-in-out
+
+                & .sgn__sidebar-control-bar2
+                    -webkit-transition all 0.3s ease-in-out
+                    -moz-transition all 0.3s ease-in-out
+                    -o-transition all 0.3s ease-in-out
+                    transition all 0.3s ease-in-out
+
+                & .sgn__sidebar-control-bar3
+                    -webkit-transition all 0.3s ease-in-out
+                    -moz-transition all 0.3s ease-in-out
+                    -o-transition all 0.3s ease-in-out
+                    transition all 0.3s ease-in-out;
+            
+        .sgn__sidebar-control-open 
+            -webkit-transition all 0.3s ease-in-out
+            -moz-transition all 0.3s ease-in-out
+            -o-transition all 0.3s ease-in-out
+            transition all 0.3s ease-in-out
+
+            & .sgn__sidebar-control-bar1 
+                -moz-transform rotate(45deg) translate(8px, 7px)
+                -o-transform rotate(45deg) translate(8px, 7px)
+                -ms-transform rotate(45deg) translate(8px, 7px)
+                -webkit-transform rotate(45deg) translate(8px, 7px)
+                transform rotate(45deg) translate(8px, 7px)
+            
+
+            & .sgn__sidebar-control-bar2 
+                opacity 0
+            
+
+            & .sgn__sidebar-control-bar3 
+                -moz-transform rotate(-45deg) translate(7px, -6px)
+                -o-transform rotate(-45deg) translate(7px, -6px)
+                -ms-transform rotate(-45deg) translate(7px, -6px)
+                -webkit-transform rotate(-45deg) translate(7px, -6px)
+                transform rotate(-45deg) translate(7px, -6px)
+
+    &[data-component-template-disable-header="true"]
+        .sgn-sections-list-items-container, .sgn-pages-list-items-container, .sgn-page-decoration-list-items-container
+            height 100vh !important
+
+.sgn__sidebar
+    position absolute
+    display none
+    z-index 99
+    height 80px
+    margin auto
+    width 100%
+    text-align center
+    animation-iteration-count 1
+    animation-name sgn-animate-sidebar
+    animation-timing-function ease
+
+    .sgn__sidebar-content-container
+        box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
+
+    > .sgn__nav
+        position relative !important
+        overflow hidden
+        height 86px
+        text-align center
+        color inherit
+        -webkit-transform none !important
+        transform none !important
+        box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
+
+        .sgn__nav-content
+            padding 8px 8px 2px
+            transform translateY(30%)
+
+            > button
+                color inherit
+                background-color transparent
+                display inline-block
+                vertical-align middle
+                padding 2px
+                border 0
+                cursor pointer
+                width 50px
+
+                > svg
+                    width 25px
+                    height 25px
+                
+                .sgn__nav-label
+                    display none
+                    font-size 10px
+
+                .sgn__offer-shopping-list-counter
+                    display block
+                    position absolute
+                    margin-left 30px
+                    margin-top -34px
+                    padding 1px
+                    background #f3f3f9
+                    color #202020
+                    border-radius 10px
+                    font-size 11px
+                    box-shadow 1px 2px rgba(0, 0, 0, 0.3)
+                    width 17px
+                    height 17px
+                    line-height 1.5
+                    animation-duration .25s
+                    animation-iteration-count 1
+            
+            &[data-show-labels="true"]
+                padding 4px 8px 2px
+
+                > button
+                    width 66px
+
+                .sgn__offer-shopping-list-counter
+                    margin-left 40px
+
+                .sgn__nav-label
+                    display block
+
+        .sgn-pp__progress
+            height 16px
+            position relative
+            background-color rgba(0,0,0,0.1)
+            animation none !important
+            z-index 0
+
+            .sgn-pp-progress__bar
+                height 16px
+                background-color rgba(0,0,0,0.2)
+
+            .sgn-pp__progress-label
+                display block
+                font-family inherit
+                bottom 2px
+                font-size 11px
+                margin-top 16px
+                padding 0
+                background transparent
+                animation none !important
+                color inherit
+
+    .sgn-sections-list-items-container, .sgn-pages-list-items-container, .sgn-page-decoration-list-items-container
+        height calc(100vh - 100px)
+        margin-block-start 0
+        overflow-y auto
+        padding-inline-start 0
+        padding 0
+        padding-top 14px
+        margin-block-end 0
+        text-align left
+
+        a
+            text-decoration none
+
+        .sgn-sections-content-container, .sgn-pages-content-container, .sgn-page-decoration-content-container
+            border 0
+            padding 10px 20px
+
+.sgn__sidebar-control-open
+    display block !important
+
+.sgn__sidebar--open
+    &[data-component-template-sidebar-position="right"]
+        right 0 !important
+    
+    &[data-component-template-sidebar-position="left"]
+        left 0 !important
+
+.sgn__sidebar--close
+    .sgn__sidebar-control
+        display block !important
+
+    &[data-component-template-sidebar-position="right"]
+        right 0 !important
+
+        .sgn__sidebar
+            transform translateX(290px)
+
+        .sgn__sidebar-control
+            right 0!important
+        
+        .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+            width unset !important
+            margin-right unset!important
+    
+    &[data-component-template-sidebar-position="left"]
+        left 0 !important
+
+        .sgn__sidebar
+            transform translateX(-290px)
+
+        .sgn__sidebar-control
+            left 0 !important
+        
+        .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+            width unset !important
+            margin-left unset!important
+
+.sgn-animate-sidebar-left
+    display block
+    animation-name sgn-animate-sidebar-left
+    animation-timing-function ease
+    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
+
+.sgn-animate-sidebar-right
+    display block
+    animation-name sgn-animate-sidebar-right
+    animation-timing-function ease
+    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
+
+@media (max-width 840px)
+    .sgn__sidebar--open
+
+        .sgn-sections-list-items-container, .sgn-pages-list-items-container, .sgn-page-decoration-list-items-container
+            text-align center
+
+        &[data-component-template-sidebar-position="right"]
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width unset !important
+                margin-right unset!important
+
+        &[data-component-template-sidebar-position="left"]
+            .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
+                width unset !important
+                margin-left unset!important
+
+@keyframes sgn-animate-sidebar-left
+    0%
+        transform translateX(-290px)
+    100%
+        transform translateX(0)
+
+@keyframes sgn-animate-sidebar-right
+    0%
+        transform translateX(290px)
+    100%
+        transform translateX(0)
+
+@keyframes sgn-animate-sidebar-right-close
+    0%
+        transform translateX(0)
+    100%
+        transform translateX(290px)
+
+@keyframes sgn-animate-sidebar-left-close
+    0%
+        transform translateX(0)
+    100%
+        transform translateX(-290px)

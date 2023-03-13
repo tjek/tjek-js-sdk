@@ -1,6 +1,6 @@
 const webpackCompiler = require('../../__tests_utils__/webpack-compiler');
 const each = require('jest-each').default;
-const glob = require('glob');
+const {globSync} = require('glob');
 const {readFile} = require('fs/promises');
 const {resolve, dirname} = require('path');
 
@@ -15,7 +15,7 @@ function buildMatrix(options, index = 0, results = [], current = []) {
     return results;
 }
 
-const packages = glob.sync('./dist/**/*/package.json');
+const packages = globSync('./dist/**/*/package.json');
 
 each(buildMatrix([packages, ['development', 'production']])).test(
     'Webpack + Chrome: %s %s',

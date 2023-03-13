@@ -14,7 +14,8 @@
     "parser": "@babel/eslint-parser",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 12
+        "ecmaVersion": 12,
+        "babelOptions": {"parserOpts": {"plugins": ["importAssertions"]}}
     },
     "ignorePatterns": ["examples", "docs", "dist"],
     "rules": {

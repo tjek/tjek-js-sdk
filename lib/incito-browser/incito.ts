@@ -3,6 +3,17 @@ import MicroEvent from '../../vendor/microevent';
 import './incito.styl';
 import {IIncito, TextView} from './types';
 
+async function fetchWithTimeout(resource, options = {}, timeout = 8000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    const response = await fetch(resource, {
+        ...options,
+        signal: controller.signal
+    });
+    clearTimeout(id);
+    return response;
+}
+
 function formatUnit(unit) {
     if (!unit) return 0;
 
@@ -76,7 +87,9 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
 
             return (
                 memo +
-                '<span data-name="' +
+                '<span style="' +
+                'font-family:inherit;color:inherit;" ' +
+                'data-name="' +
                 item.span.name +
                 '">' +
                 escapedText +
@@ -234,7 +247,6 @@ function renderView(view, canLazyload) {
 
             if (isDefinedStr(view.src)) {
                 attrs.loading = 'lazy';
-                attrs.decoding = 'async';
                 attrs.src = src;
             }
 
@@ -323,10 +335,14 @@ function renderView(view, canLazyload) {
                     attrs['data-method'] = view.method;
                 }
 
-                if (view.body) {
-                    attrs['data-body'] = encodeURIComponent(
-                        JSON.stringify(view.body)
+                if (view.headers) {
+                    attrs['data-headers'] = encodeURIComponent(
+                        JSON.stringify(view.headers)
                     );
+                }
+
+                if (typeof view.body === 'string') {
+                    attrs['data-body'] = encodeURIComponent(view.body);
                 }
             }
 
@@ -651,6 +667,7 @@ function renderView(view, canLazyload) {
 export default class Incito extends MicroEvent<{
     started: [];
     destroyed: [];
+    incitoEmbedLoaded: [{el: HTMLElement}];
     sectionVisible: [{sectionId: string; sectionPosition: number}];
     sectionHidden: [{sectionId: string; sectionPosition: number}];
 }> {
@@ -811,11 +828,15 @@ export default class Incito extends MicroEvent<{
             // Check if media isn't already being loaded.
             if (el.networkState !== 2) el.load();
         } else if (el.classList.contains('incito__incito-embed-view')) {
-            const {src: url, method = 'get', body} = el.dataset;
+            const {src: url, method = 'get', headers, body} = el.dataset;
 
-            fetch(url, {
+            fetchWithTimeout(url, {
+                timeout: 10000,
                 method,
-                body: body ? JSON.parse(decodeURIComponent(body)) : null
+                headers: headers
+                    ? JSON.parse(decodeURIComponent(headers))
+                    : null,
+                body: body ? decodeURIComponent(body) : null
             })
                 .then((res) => {
                     if (res.status === 200) return res.json();
@@ -824,6 +845,10 @@ export default class Incito extends MicroEvent<{
                     el.innerHTML = this.renderHtml(res);
 
                     this.observeElements(el);
+                    this.trigger('incitoEmbedLoaded', {el});
+                })
+                .catch(() => {
+                    el.innerHTML = this.renderHtml({});
                 });
         } else if (el.dataset.bg) {
             el.style.backgroundImage = `url(${el.dataset.bg})`;
