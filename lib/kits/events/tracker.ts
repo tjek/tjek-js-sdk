@@ -3,6 +3,54 @@ import {eventsTrackUrl as defaultEventsTrackUrl} from '../../config-defaults';
 import * as clientLocalStorage from '../../storage/client-local';
 import {chunk, error, isBrowser, throttle} from '../../util';
 
+let sendBeacon: typeof navigator.sendBeacon;
+if (
+    typeof navigator === 'object' &&
+    typeof navigator.sendBeacon === 'function'
+) {
+    sendBeacon = navigator.sendBeacon.bind(navigator);
+} else if (typeof XMLHttpRequest === 'function') {
+    sendBeacon = (url: string, body: string) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, false);
+        xhr.withCredentials = true;
+        xhr.setRequestHeader('Accept', '*/*');
+        xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+
+        try {
+            xhr.send(body);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+} else if (typeof fetch === 'function') {
+    sendBeacon = (url: string, body: string) => {
+        try {
+            fetch(url, {
+                method: 'POST',
+                body,
+                headers: {
+                    Accept: '*/*',
+                    'Content-Type': 'text/plain;charset=UTF-8'
+                }
+            });
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+} else {
+    sendBeacon = () => {
+        console.warn(
+            `[Tjek SDK] Events: Tracker tried to dispatch events, but this is an unsupported environment.
+    
+    Ensure that your environment has \`navigator.sendBeacon\`, \`XMLHttpRequest\` or \`fetch\` support to track events.`
+        );
+        return false;
+    };
+}
+
 const uuid = () =>
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         const r = (Math.random() * 16) | 0;
@@ -352,7 +400,7 @@ class Tracker {
     dispatch = throttle(this.dispatchBeacon, 4000);
     dispatchBeacon() {
         for (const events of chunk(this.pool, this.dispatchLimit)) {
-            navigator.sendBeacon(this.eventsTrackUrl, JSON.stringify({events}));
+            sendBeacon(this.eventsTrackUrl, JSON.stringify({events}));
         }
         this.pool = [];
     }
