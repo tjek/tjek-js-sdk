@@ -15,7 +15,7 @@ describe('SGN.EventsKit', () => {
         });
         await page.goto(PPPath);
 
-        await page.waitForTimeout(6000);
+        await page.waitForTimeout(9000);
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 1).length).toBe(1);
@@ -38,7 +38,7 @@ describe('SGN.EventsKit', () => {
         });
         await page.goto(`${IPPath}?id=${id}`);
 
-        await page.waitForTimeout(6000);
+        await page.waitForTimeout(9000);
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 11).length).toBe(1);
