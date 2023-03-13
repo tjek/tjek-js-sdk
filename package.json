@@ -137,6 +137,7 @@
         "jest-cli": "29.5.0",
         "jest-each": "29.5.0",
         "jest-environment-jsdom": "29.5.0",
+        "jest-esbuild": "^0.2.9",
         "jest-playwright-preset": "^3.0.1",
         "jest-test-matrix": "^1.2.0",
         "libnpm": "^3.0.1",
@@ -158,7 +159,6 @@
         "tar": "^6.1.13",
         "thenify": "^3.3.1",
         "tmp-promise": "^3.0.3",
-        "ts-jest": "29.0.5",
         "typescript": "^4.9.5",
         "webpack": "^5.76.1"
     },
