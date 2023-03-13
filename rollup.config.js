@@ -87,7 +87,8 @@ const external = [
     'cross-fetch',
     'md5',
     'mustache',
-    'preact'
+    'preact',
+    'preact/hooks'
 ];
 
 let configs = bundles
