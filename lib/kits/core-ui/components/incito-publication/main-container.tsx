@@ -16,7 +16,7 @@ const Template = ({
             <div
                 class="sgn__incito"
                 data-component-template="true"
-                tabIndex="-1"
+                tabIndex={-1}
                 data-component-template-disable-header={disableHeader}
                 data-offer-clickable={isOfferClickable}
                 data-component-template-enable-sidebar={enableSidebar}
