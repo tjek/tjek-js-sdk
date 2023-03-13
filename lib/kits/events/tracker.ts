@@ -251,7 +251,7 @@ class Tracker {
         if (document.visibilityState === 'hidden') this.dispatchBeacon();
     };
     handleBeforeUnload = () => {
-        if (document.visibilityState === 'hidden') this.dispatchBeacon();
+        this.dispatchBeacon();
     };
 
     constructor(options?: {
