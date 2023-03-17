@@ -1,7 +1,7 @@
-const {JSDOM} = require('jsdom');
-const {default: Verso} = require('../verso');
+import {JSDOM} from 'jsdom';
+import Verso from '../verso';
 
-test("it doesn't break node", () => expect(true).beTruthy);
+test("it doesn't break node", () => expect(true).toBeTruthy());
 
 test('it can generate html with jsdom', () => {
     const {document} = new JSDOM(`
@@ -24,11 +24,12 @@ test('it can generate html with jsdom', () => {
         </div>
     `).window;
 
-    const verso = new Verso(document.querySelector('.verso')).start();
+    const versoEl = document.querySelector<HTMLDivElement>('.verso')!;
+    const verso = new Verso(versoEl).start();
     verso.navigateTo(0, {duration: 0});
-    expect(document.querySelector('.verso').outerHTML).toMatchSnapshot();
+    expect(versoEl.outerHTML).toMatchSnapshot();
     verso.navigateTo(2, {duration: 0});
-    expect(document.querySelector('.verso').outerHTML).toMatchSnapshot();
+    expect(versoEl.outerHTML).toMatchSnapshot();
     verso.navigateTo(1, {duration: 0});
-    expect(document.querySelector('.verso').outerHTML).toMatchSnapshot();
+    expect(versoEl.outerHTML).toMatchSnapshot();
 });
