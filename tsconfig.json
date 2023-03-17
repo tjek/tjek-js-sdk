@@ -8,6 +8,11 @@
         "moduleResolution": "node",
         "strictNullChecks": true
     },
-    "include": ["lib/**/*.ts", "lib/**/*.js", "global.d.ts"],
-    "exclude": ["node_modules", "dist", "__tests__", "**/*.test-jsdom.js"]
+    "include": [
+        "__tests__/**/*.ts",
+        "lib/**/*.ts",
+        "lib/**/*.js",
+        "global.d.ts"
+    ],
+    "exclude": ["node_modules", "dist"]
 }

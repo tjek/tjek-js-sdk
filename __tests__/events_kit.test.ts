@@ -1,4 +1,4 @@
-const SGN = require('../');
+import SGN from '../';
 
 describe('SGN.EventsKit', () => {
     test('Can create a view token', () => {
