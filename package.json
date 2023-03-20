@@ -139,7 +139,6 @@
         "jest-environment-jsdom": "29.5.0",
         "jest-esbuild": "^0.2.9",
         "jest-playwright-preset": "^3.0.1",
-        "jest-test-matrix": "^1.2.0",
         "libnpm": "^3.0.1",
         "memfs": "^3.4.13",
         "memory-fs": "^0.5.0",
