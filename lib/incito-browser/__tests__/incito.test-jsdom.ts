@@ -8,9 +8,11 @@ describe('Incito', () => {
 
         const main = document.getElementById('main')!;
 
-        const incito = new Incito(main, {incito: data as IIncito});
+        // @ts-expect-error can't treat the json import as const 🤷‍♀️
+        const incito: IIncito = data;
+        const incitoViewer = new Incito(main, {incito});
 
-        expect(() => incito.start()).not.toThrow();
+        expect(() => incitoViewer.start()).not.toThrow();
 
         done();
     });
