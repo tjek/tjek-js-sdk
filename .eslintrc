@@ -10,13 +10,9 @@
         "page": true
     },
     "extends": ["eslint:recommended", "prettier"],
-    "plugins": ["playwright"],
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 12,
-        "babelOptions": {"parserOpts": {"plugins": ["importAssertions"]}}
-    },
+    "plugins": ["@typescript-eslint", "playwright"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {"project": ["./tsconfig.json"]},
     "ignorePatterns": ["examples", "docs", "dist"],
     "rules": {
         "no-empty": ["error", {"allowEmptyCatch": true}],
@@ -25,5 +21,58 @@
         "no-var": "warn",
         "prefer-const": "warn",
         "no-else-return": "warn"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {"project": ["./tsconfig.json"]},
+            "extends": [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@typescript-eslint/recommended-requiring-type-checking",
+                "plugin:@typescript-eslint/strict"
+            ],
+            "rules": {
+                "no-useless-escape": "off",
+                "@typescript-eslint/ban-ts-comment": "off",
+                "@typescript-eslint/prefer-for-of": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off",
+                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-non-null-assertion": "off",
+                "@typescript-eslint/no-explicit-any": "off",
+                "@typescript-eslint/restrict-plus-operands": "off",
+                "@typescript-eslint/no-unnecessary-type-assertion": "off",
+                "@typescript-eslint/prefer-nullish-coalescing": "off",
+                "@typescript-eslint/no-unnecessary-condition": "off",
+                "@typescript-eslint/prefer-includes": "off",
+                "@typescript-eslint/no-unsafe-return": "off",
+                "@typescript-eslint/no-dynamic-delete": "off",
+                "no-self-assign": "off",
+                "@typescript-eslint/ban-types": "off",
+                "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
+                "@typescript-eslint/no-for-in-array": "off",
+                "@typescript-eslint/no-empty-interface": "off",
+                "@typescript-eslint/restrict-template-expressions": "off",
+                "@typescript-eslint/no-empty-function": "off",
+                "@typescript-eslint/consistent-generic-constructors": "off",
+                "@typescript-eslint/consistent-type-definitions": "off",
+                "@typescript-eslint/no-this-alias": "off",
+                "@typescript-eslint/prefer-optional-chain": "off",
+                "@typescript-eslint/no-misused-promises": "off",
+                "@typescript-eslint/no-floating-promises": "off",
+                "@typescript-eslint/require-await": "off",
+                "@typescript-eslint/no-unnecessary-type-constraint": "off",
+                "@typescript-eslint/no-unused-vars": "off",
+                "@typescript-eslint/no-invalid-void-type": "off",
+                "@typescript-eslint/consistent-indexed-object-style": "off",
+                "@typescript-eslint/dot-notation": "off",
+                "@typescript-eslint/unbound-method": "off",
+                "prefer-rest-params": "off",
+                "object-shorthand": "off"
+            }
+        }
+    ]
 }
