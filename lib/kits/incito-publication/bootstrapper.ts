@@ -183,7 +183,6 @@ export default class Bootstrapper {
         }
 
         const viewer = new Viewer(this.options.el, {
-            id: this.options.id,
             details,
             incito,
             eventTracker: this.options.eventTracker

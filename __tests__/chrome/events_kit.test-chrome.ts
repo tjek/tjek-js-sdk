@@ -1,9 +1,9 @@
-const PPPath = `file:${__dirname}/../../examples/paged-publication.html`;
-const IPPath = `file:${__dirname}/../../examples/incito-publication.html`;
+/// <reference types="jest-playwright-preset" />
+/// <reference types="expect-playwright" />
 
 describe('SGN.EventsKit', () => {
     test('Dispatched Paged Publication Opened events become /sync requests', async () => {
-        const eventsSent = [];
+        const eventsSent: any[] = [];
         const page = await (await browser.newContext()).newPage();
         page.on('request', (interceptedRequest) => {
             if (
@@ -13,7 +13,9 @@ describe('SGN.EventsKit', () => {
                 eventsSent.push(...interceptedRequest.postDataJSON().events);
             }
         });
-        await page.goto(PPPath);
+        await page.goto(
+            `file:${__dirname}/../../examples/paged-publication.html`
+        );
 
         await page.waitForTimeout(9000);
 
@@ -26,7 +28,7 @@ describe('SGN.EventsKit', () => {
         );
         const id = (await response.json())?.[0]?.id;
 
-        const eventsSent = [];
+        const eventsSent: any[] = [];
         const page = await (await browser.newContext()).newPage();
         page.on('request', (interceptedRequest) => {
             if (
@@ -36,7 +38,9 @@ describe('SGN.EventsKit', () => {
                 eventsSent.push(...interceptedRequest.postDataJSON().events);
             }
         });
-        await page.goto(`${IPPath}?id=${id}`);
+        await page.goto(
+            `file:${__dirname}/../../examples/incito-publication.html?id=${id}`
+        );
 
         await page.waitForTimeout(9000);
 

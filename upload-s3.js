@@ -9,8 +9,8 @@ import * as url from 'url';
 import pkg from './dist/shopgun-sdk/package.json' assert {type: 'json'};
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-const s3Client = new S3Client();
-const cfClient = new CloudFrontClient();
+const s3Client = new S3Client({region: 'eu-west-1'});
+const cfClient = new CloudFrontClient({region: 'eu-west-1'});
 
 const bucket = 'sgn-js-sdk';
 const distribution = 'EKE7310HEBVSP';

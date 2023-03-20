@@ -7,7 +7,6 @@ import EventTracking from './event-tracking';
 import './viewer.styl';
 
 interface ViewerInit {
-    id: string;
     incito: IIncito;
     eventTracker: Tracker;
     details: V2Catalog;
@@ -18,8 +17,7 @@ class Viewer extends MicroEvent {
     options: ViewerInit;
     incito: Incito;
     _eventTracking: EventTracking;
-    // @ts-expect-error
-    constructor(el: HTMLElement, options: ViewerInit = {}) {
+    constructor(el: HTMLElement, options: ViewerInit) {
         super();
 
         this.el = el;

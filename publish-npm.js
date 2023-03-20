@@ -6,7 +6,7 @@ import {execSync, spawn} from 'child_process';
 import {createPatch, parsePatch} from 'diff';
 import {fileTypeFromBuffer} from 'file-type';
 import {createReadStream, promises as fs} from 'fs';
-import glob from 'glob';
+import {globSync} from 'glob';
 import inquirer from 'inquirer';
 import {isBinaryFile} from 'isbinaryfile';
 import libnpm from 'libnpm';
@@ -258,7 +258,7 @@ async function publish() {
             ]
         }
     ]);
-    const packageJsonPaths = glob.sync('./dist/*/package.json');
+    const packageJsonPaths = globSync('./dist/*/package.json');
 
     const packageDiffs = {};
     for (const packageJsonPath of packageJsonPaths) {
@@ -299,40 +299,37 @@ async function publish() {
         process.exit();
     }
 
-    const answers = await inquirer.prompt([
-        {
-            type: 'checkbox',
-            name: 'packagesToPublish',
-            message: 'Which would you like to publish today?',
-            validate: (packagesToPublish) =>
-                packagesToPublish.length ? true : 'Please pick at least one',
-            choices: Object.entries(packageDiffs).map(
-                ([
-                    packageJsonPath,
-                    [pkg, , {addCount, removeCount, changeCount}]
-                ]) => {
-                    let disabled = !changeCount;
-                    let name = `${chalk.blue.bold(
-                        `${pkg.name}@${tag}`
-                    )} (currently ${chalk.blue.bold(
-                        pkg.version || 'unpublished'
-                    )})`;
-                    if (changeCount) {
-                        name +=
-                            ': ' + chalk.bold(`${changeCount} changed files`);
-                    } else {
-                        disabled = 'No changes.';
-                    }
-                    if (addCount || removeCount) {
-                        name += ` with ${chalk.bold(
-                            `${addCount} additions`
-                        )} and ${chalk.bold(`${removeCount} deletions`)}`;
-                    }
-                    return {name, value: packageJsonPath, disabled};
+    const answers = await inquirer.prompt({
+        type: 'checkbox',
+        name: 'packagesToPublish',
+        message: 'Which would you like to publish today?',
+        validate: (packagesToPublish) =>
+            packagesToPublish.length ? true : 'Please pick at least one',
+        choices: Object.entries(packageDiffs).map(
+            ([
+                packageJsonPath,
+                [pkg, , {addCount, removeCount, changeCount}]
+            ]) => {
+                let disabled = !changeCount;
+                let name = `${chalk.blue.bold(
+                    `${pkg.name}@${tag}`
+                )} (currently ${chalk.blue.bold(
+                    pkg.version || 'unpublished'
+                )})`;
+                if (changeCount) {
+                    name += ': ' + chalk.bold(`${changeCount} changed files`);
+                } else {
+                    disabled = 'No changes.';
                 }
-            )
-        }
-    ]);
+                if (addCount || removeCount) {
+                    name += ` with ${chalk.bold(
+                        `${addCount} additions`
+                    )} and ${chalk.bold(`${removeCount} deletions`)}`;
+                }
+                return {name, value: packageJsonPath, disabled};
+            }
+        )
+    });
     if (!answers.packagesToPublish.length) {
         ora().info(`You've chosen not to publish anything`);
         process.exit();
@@ -412,9 +409,9 @@ async function publish() {
             };
         })
     );
-    const targetVersions = Object.entries(answers2['']).map(
+    const targetVersions = Object.entries(answers2).map(
         ([packageJsonPath, {json: version}]) => [
-            '.' + packageJsonPath + '.json',
+            packageJsonPath + '.json',
             version
         ]
     );
@@ -486,8 +483,4 @@ async function publish() {
     }
 }
 
-publish().catch((e) => {
-    console.error(e);
-    console.log('oops');
-    process.exit(1);
-});
+await publish();
