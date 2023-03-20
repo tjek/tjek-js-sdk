@@ -1,4 +1,4 @@
-import SGN from '../';
+import * as SGN from '../';
 
 describe('SGN.EventsKit', () => {
     test('Can create a view token', () => {
