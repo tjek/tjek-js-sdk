@@ -1,6 +1,11 @@
-const path = require('path');
+import {join} from 'path';
+import type {EventTracker} from '../../lib/tjek-sdk';
 
-const sgnPath = `file:${path.join(__dirname, './sgn.test-chrome.html')}`;
+declare global {
+    interface Window {
+        SGN: typeof import('./../../lib/sgn-sdk');
+    }
+}
 
 describe('Chrome: SGN singleton behavior', () => {
     let page;
@@ -13,11 +18,13 @@ describe('Chrome: SGN singleton behavior', () => {
             console.log('Page error:', err.toString())
         );
         page.on('error', (err) => console.log('Error:', err.toString()));
-        await page.goto(sgnPath);
+        await page.goto(`file:${join(__dirname, './sgn.test-chrome.html')}`);
     });
     it('Magic API key config from script tag', async () => {
         const srcAppKey = await page.evaluate(
-            () => document.querySelector('[data-api-key]').dataset.apiKey
+            () =>
+                document.querySelector<HTMLElement>('[data-api-key]')?.dataset
+                    .apiKey
         );
         const cfgAppKey = await page.evaluate(() =>
             window.SGN.config.get('appKey')
@@ -26,10 +33,12 @@ describe('Chrome: SGN singleton behavior', () => {
     });
     it('Magic EventTracker creation & config from script tag', async () => {
         const srcTrackId = await page.evaluate(
-            () => document.querySelector('[data-track-id]').dataset.trackId
+            () =>
+                document.querySelector<HTMLElement>('[data-track-id]')?.dataset
+                    .trackId
         );
         const cfgTrackId = await page.evaluate(
-            () => window.SGN.config.get('eventTracker').trackId
+            () => window.SGN.config.get<EventTracker>('eventTracker')?.trackId
         );
 
         expect(srcTrackId).toMatch(cfgTrackId);
