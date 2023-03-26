@@ -682,7 +682,7 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
-    constructor(containerEl: HTMLElement, {incito, canLazyload}: {incito: IIncito, canLazyload: boolean}) {
+    constructor(containerEl: HTMLElement, {incito, canLazyload}: {incito: IIncito, canLazyload?: boolean}) {
         super();
 
         this.containerEl = containerEl;
