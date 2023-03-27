@@ -246,7 +246,10 @@ function renderView(view, canLazyload) {
             const src = String(new URL(view.src));
 
             if (isDefinedStr(view.src)) {
-                attrs.loading = 'lazy';
+                if (canLazyload) {
+                    attrs.loading = 'lazy';
+                }
+
                 attrs.src = src;
             }
 
