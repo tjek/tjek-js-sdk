@@ -246,7 +246,10 @@ function renderView(view, canLazyload) {
             const src = String(new URL(view.src));
 
             if (isDefinedStr(view.src)) {
-                attrs.loading = 'lazy';
+                if (canLazyload) {
+                    attrs.loading = 'lazy';
+                }
+
                 attrs.src = src;
             }
 
@@ -682,7 +685,7 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
-    constructor(containerEl: HTMLElement, {incito}: {incito: IIncito}) {
+    constructor(containerEl: HTMLElement, {incito, canLazyload}: {incito: IIncito, canLazyload?: boolean}) {
         super();
 
         this.containerEl = containerEl;
@@ -690,7 +693,7 @@ export default class Incito extends MicroEvent<{
         this.el = document.createElement('div');
         this.ids = {};
         this.sections = [];
-        this.canLazyload = 'IntersectionObserver' in window;
+        this.canLazyload = canLazyload !== undefined ? canLazyload : 'IntersectionObserver' in window;
         this.render();
     }
 
