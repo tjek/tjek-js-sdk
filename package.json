@@ -1,6 +1,5 @@
 {
     "description": "Tjek SDK for JavaScript.",
-    "type": "module",
     "browserslist": "supports css-grid",
     "main": "dist/shopgun-sdk/sgn-sdk.cjs.js",
     "browser": "dist/shopgun-sdk/sgn-sdk.js",
@@ -76,7 +75,7 @@
         "dev": "run-p -l dev:js serve",
         "serve": "serve",
         "prepublishOnly": "npm run clean && npm run build && npm run test",
-        "publish": "GOOD=1 node publish-npm.js",
+        "publish": "GOOD=1 node publish-npm.mjs",
         "publish-pages": "gh-pages -d examples -e examples && gh-pages -d dist -e dist"
     },
     "repository": {
