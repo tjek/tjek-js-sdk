@@ -1,12 +1,14 @@
 // This implemenation llifted from https://stackoverflow.com/q/38779924
 
-const webpack = require('webpack');
-const {createFsFromVolume, Volume} = require('memfs');
-const thenify = require('thenify');
-const path = require('path');
+import root from 'app-root-path';
+import fs from 'fs';
+import {createFsFromVolume} from 'memfs';
+import {Volume} from 'memfs/lib/volume';
+import path from 'path';
+import webpack, {Configuration, Stats} from 'webpack';
+
 const memFs = createFsFromVolume(new Volume());
-const fs = require('fs');
-const root = require('app-root-path');
+
 /*
  * Provide webpack with an instance of MemoryFS for
  * in-memory compilation. We're currently overriding
@@ -16,16 +18,34 @@ const root = require('app-root-path');
  * or import statements will fail. When that happens, our wrapper
  * functions will then check fs for the requested file.
  */
-const stat = memFs.stat.bind(memFs);
-const readFile = memFs.readFile.bind(memFs);
-memFs.stat = (path, cb) =>
-    stat(path, (err, res) => (err ? fs.stat(path, cb) : cb(err, res)));
+const stat: Volume['stat'] = memFs.stat.bind(memFs);
+const readFile: Volume['readFile'] = memFs.readFile.bind(memFs);
 
-memFs.readFile = (path, cb) =>
-    readFile(path, (err, res) => (err ? fs.readFile(path, cb) : cb(err, res)));
+// @ts-expect-error Whiny tiny mismatch in a private property
+memFs.stat = (
+    path: string,
+    callback: (err: NodeJS.ErrnoException | null, stats: fs.Stats) => void
+) =>
+    stat(path, (err, res) =>
+        err || !res
+            ? fs.stat(path, callback)
+            : callback(err || null, res as fs.Stats)
+    );
+
+// @ts-expect-error
+memFs.readFile = (
+    path: string,
+    cb: (err: NodeJS.ErrnoException | null, data: Buffer) => void
+) =>
+    readFile(path, (err, res) =>
+        err || !res ? fs.readFile(path, cb) : cb(err || null, res as Buffer)
+    );
 
 const filename = 'file.js';
-module.exports = async function compile(code, config = {}) {
+export default async function compile(
+    code: string,
+    config: Configuration = {}
+): Promise<string> {
     // Setup webpack
     //create a directory structure in MemoryFS that matches
     //the real filesystem
@@ -41,15 +61,21 @@ module.exports = async function compile(code, config = {}) {
         ...config,
         output: {filename, ...config.output}
     });
-    compiler.run = thenify(compiler.run);
 
     //direct webpack to use memoryfs
     compiler.inputFileSystem = compiler.outputFileSystem = memFs;
 
-    const errors = (await compiler.run()).compilation.errors;
+    const errors = (
+        await new Promise<Stats>((y, n) =>
+            compiler.run((e, r) => (e || !r ? n(e) : y(r)))
+        )
+    ).compilation.errors;
+
     //if there are errors, throw the first one
     if (errors?.length) throw errors[0];
 
     //retrieve the output of the compilation
-    return memFs.readFileSync(path.join(rootDir, 'dist', filename), 'utf8');
-};
+    return String(
+        memFs.readFileSync(path.join(rootDir, 'dist', filename), 'utf8')
+    );
+}

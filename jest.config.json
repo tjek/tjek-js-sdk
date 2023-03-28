@@ -22,6 +22,7 @@
         },
         {
             "preset": "jest-playwright-preset",
+            "transform": {"\\.(j|t)s$": "jest-esbuild"},
             "testRegex": "((\\.|/)(test-chrome))\\.(j|t)s$"
         }
     ]

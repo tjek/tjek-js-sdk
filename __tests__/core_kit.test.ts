@@ -1,4 +1,5 @@
-const SGN = require('../');
+import * as SGN from '../';
+
 const apiKey = '00j4o5wpwptl84fuubdig2s6ej5uyna8';
 
 SGN.config.set({

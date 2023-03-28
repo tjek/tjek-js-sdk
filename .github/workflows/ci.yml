@@ -11,16 +11,6 @@ jobs:
                   cache: 'npm'
             - run: npm ci
             - run: npm run test:lint
-    types:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 18
-                  cache: 'npm'
-            - run: npm ci
-            - run: npm run test:types
     build:
         runs-on: ubuntu-latest
         steps:
@@ -36,6 +26,21 @@ jobs:
                   name: built
                   path: ./dist
                   retention-days: 1
+    types:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: 'npm'
+            - uses: actions/download-artifact@v2
+              with:
+                  name: built
+                  path: ./dist
+            - run: npm ci
+            - run: npm run test:types
     test:
         needs: build
         runs-on: ubuntu-latest
