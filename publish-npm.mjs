@@ -476,7 +476,7 @@ async function publish() {
         if (uploadS3) {
             const s3Ind = ora(`Uploading to S3`).start();
             if (!DRY_RUN) {
-                console.log(await run('node', ['./upload-s3.js']));
+                console.log(await run('node', ['./upload-s3.mjs']));
             }
             s3Ind.succeed(`Uploaded to S3`);
         }
