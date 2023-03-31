@@ -45,11 +45,11 @@ export function getQueryParam(field, url?: string) {
     return string ? string[1] : undefined;
 }
 
-export function throttle<F extends (...args) => void>(
-    fn: F,
+export function throttle<A extends unknown[]>(
+    fn: (...args: A) => unknown,
     threshold = 250,
     scope?: Object
-): F {
+): (...args: A) => void {
     let last: number | undefined;
     let deferTimer: NodeJS.Timeout;
 
@@ -70,7 +70,24 @@ export function throttle<F extends (...args) => void>(
             last = now;
             fn.apply(context, args);
         }
-    } as F;
+    };
+}
+
+export function debounce<A extends unknown[]>(
+    fn: (...args: A) => unknown,
+    threshold = 250,
+    scope?: Object
+): (...args: A) => void {
+    let deferTimer: NodeJS.Timeout;
+
+    return function () {
+        const context = scope || this;
+        const args = arguments;
+
+        if (deferTimer) clearTimeout(deferTimer);
+
+        deferTimer = setTimeout(() => fn.apply(context, args), threshold);
+    };
 }
 
 export function chunk<I extends any>(arr: I[], size: number) {
