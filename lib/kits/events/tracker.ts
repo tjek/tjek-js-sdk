@@ -238,9 +238,22 @@ interface WolfEventTypeMap {
 }
 type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
 
+const locationSources = ['gps', 'geoip', 'manual', 'fallback'] as const;
+interface TrackerLocation {
+    geohash: string | null;
+    source: typeof locationSources[number] | null;
+    time: number | null;
+    country: string | null;
+}
+
 class Tracker {
     hasMadeInitialDispatch = false;
-    location = {geohash: null, time: null, country: null};
+    location: TrackerLocation = {
+        geohash: null,
+        time: null,
+        country: null,
+        source: null
+    };
     trackId: string | null = null;
     poolLimit = 1000;
     pool: (BaseEvent & WolfEvent)[] = [];
@@ -317,6 +330,8 @@ class Tracker {
 
         if (this.location.geohash) evt['l.h'] = this.location.geohash;
 
+        if (this.location.source) evt['l.hs'] = this.location.source;
+
         if (this.location.time) evt['l.ht'] = this.location.time;
 
         if (this.location.country) evt['l.c'] = this.location.country;
@@ -329,8 +344,19 @@ class Tracker {
         return this;
     }
 
-    setLocation(location) {
-        for (const key in location) this.location[key] = location[key];
+    setLocation(location: Partial<TrackerLocation>) {
+        for (const key in location) {
+            const value = location[key];
+            if (key === 'source' && value && !locationSources.includes(value)) {
+                throw new Error(
+                    `Tracker.setLocation: "source" must be one of: ${locationSources.join(
+                        ', '
+                    )}`
+                );
+            }
+
+            this.location[key] = value;
+        }
 
         return this;
     }
