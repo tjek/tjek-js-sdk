@@ -38,6 +38,21 @@ const putObject = async ({key, bodyPath, contentType}) => {
 const putVersion = async (version) => {
     await Promise.all([
         putObject({
+            key: 'sgn-sdk-' + version + '.js',
+            bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.js'),
+            contentType: 'application/javascript'
+        }),
+        putObject({
+            key: 'sgn-sdk-' + version + '.js.map',
+            bodyPath: path.join(
+                __dirname,
+                'dist',
+                'shopgun-sdk',
+                'sgn-sdk.min.js.map'
+            ),
+            contentType: 'application/json'
+        }),
+        putObject({
             key: 'sgn-sdk-' + version + '.min.js',
             bodyPath: path.join(
                 __dirname,
@@ -58,6 +73,16 @@ const putVersion = async (version) => {
             contentType: 'application/json'
         }),
         putObject({
+            key: 'sgn-sdk-' + version + '.css',
+            bodyPath: path.join(
+                __dirname,
+                'dist',
+                'shopgun-sdk',
+                'sgn-sdk.css'
+            ),
+            contentType: 'text/css'
+        }),
+        putObject({
             key: 'sgn-sdk-' + version + '.min.css',
             bodyPath: path.join(
                 __dirname,
@@ -70,8 +95,11 @@ const putVersion = async (version) => {
     ]);
 
     return [
+        '/sgn-sdk-' + version + '.js',
+        '/sgn-sdk-' + version + '.js.map',
         '/sgn-sdk-' + version + '.min.js',
         '/sgn-sdk-' + version + '.min.js.map',
+        '/sgn-sdk-' + version + '.css',
         '/sgn-sdk-' + version + '.min.css'
     ];
 };
