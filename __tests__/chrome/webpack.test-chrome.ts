@@ -1,6 +1,5 @@
 import {readFile} from 'fs/promises';
 import {globSync} from 'glob';
-import each from 'jest-each';
 import {dirname, resolve} from 'path';
 import webpackCompiler from '../../__tests_utils__/webpack-compiler';
 
@@ -21,14 +20,15 @@ const buildMatrix = <A>(
 };
 
 const packages = globSync('./dist/**/*/package.json');
+const modes = ['development', 'production'] as const;
+for (const path of packages) {
+    for (const mode of modes) {
+        test(`Webpack + Chrome: ${path} ${mode}`, async () => {
+            const packageJson = JSON.parse(await readFile(path, 'utf-8'));
+            const scriptPath = resolve(dirname(path), packageJson.module);
+            const code = `import * as A from '${scriptPath}'; console.log(A)`;
 
-each(buildMatrix([packages, ['development', 'production']])).test(
-    'Webpack + Chrome: %s %s',
-    async (path, mode) => {
-        const packageJson = JSON.parse(await readFile(path, 'utf-8'));
-        const scriptPath = resolve(dirname(path), packageJson.module);
-        const code = `import * as A from '${scriptPath}'; console.log(A)`;
-
-        await page.evaluate(await webpackCompiler(code, {mode}));
+            await page.evaluate(await webpackCompiler(code, {mode}));
+        });
     }
-);
+}

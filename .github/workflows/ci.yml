@@ -11,16 +11,6 @@ jobs:
                   cache: 'npm'
             - run: npm ci
             - run: npm run test:lint
-    types:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 18
-                  cache: 'npm'
-            - run: npm ci
-            - run: npm run test:types
     build:
         runs-on: ubuntu-latest
         steps:
@@ -36,7 +26,7 @@ jobs:
                   name: built
                   path: ./dist
                   retention-days: 1
-    test:
+    types:
         needs: build
         runs-on: ubuntu-latest
         steps:
@@ -50,7 +40,33 @@ jobs:
                   name: built
                   path: ./dist
             - run: npm ci
-            - run: npx playwright install --with-deps
+            - run: npm run test:types
+    test:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: 'npm'
+            - uses: actions/download-artifact@v2
+              with:
+                  name: built
+                  path: ./dist
+
+            - run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').dependencies['@playwright/test'].version)")" >> $GITHUB_ENV
+            - name: Cache playwright binaries
+              uses: actions/cache@v3
+              id: playwright-cache
+              with:
+                  path: |
+                      ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+            - run: npm ci
+            - run: npx playwright install --with-deps chromium
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+
             - run: npm run test:ci
     size:
         needs: build
