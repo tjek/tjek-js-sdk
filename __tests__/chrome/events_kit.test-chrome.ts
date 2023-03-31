@@ -59,7 +59,7 @@ describe('SGN.EventsKit', () => {
         );
         await page.waitForLoadState('load');
         await page.waitForTimeout(1000);
-        await page.close({runBeforeUnload: true});
+        await page.goto('about:blank');
         await new Promise((y) => setTimeout(y, 1000));
 
         expect(eventsSent.length).toBeGreaterThan(0);
@@ -83,7 +83,7 @@ describe('SGN.EventsKit', () => {
         );
         await page.waitForLoadState('load');
         await page.waitForTimeout(1000);
-        await page.close({runBeforeUnload: true});
+        await page.goto('about:blank');
         await new Promise((y) => setTimeout(y, 1000));
 
         expect(eventsSent.length).toBeGreaterThan(0);
