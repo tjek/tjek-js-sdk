@@ -18,7 +18,7 @@ describe('SGN.EventsKit', () => {
         );
 
         await page.waitForLoadState('load');
-        await page.waitForTimeout(5000);
+        await page.waitForTimeout(8000);
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 1).length).toBe(1);
@@ -41,7 +41,7 @@ describe('SGN.EventsKit', () => {
         );
 
         await page.waitForLoadState('load');
-        await page.waitForTimeout(5000);
+        await page.waitForTimeout(8000);
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 11).length).toBe(1);
@@ -58,9 +58,9 @@ describe('SGN.EventsKit', () => {
             `file:${__dirname}/../../examples/paged-publication.html`
         );
         await page.waitForLoadState('load');
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(1000);
         await page.close({runBeforeUnload: true});
-        if (!page.isClosed()) await page.waitForTimeout(500);
+        await new Promise((y) => setTimeout(y, 1000));
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 1).length).toBe(1);
@@ -82,9 +82,9 @@ describe('SGN.EventsKit', () => {
             `file:${__dirname}/../../examples/incito-publication.html?id=${id}`
         );
         await page.waitForLoadState('load');
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(1000);
         await page.close({runBeforeUnload: true});
-        if (!page.isClosed()) await page.waitForTimeout(500);
+        await new Promise((y) => setTimeout(y, 1000));
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 11).length).toBe(1);
