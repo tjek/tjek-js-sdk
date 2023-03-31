@@ -59,7 +59,7 @@ describe('SGN.EventsKit', () => {
         );
         await page.waitForLoadState('networkidle');
         await page.close({runBeforeUnload: true});
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(500);
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 1).length).toBe(1);
@@ -82,7 +82,7 @@ describe('SGN.EventsKit', () => {
         );
         await page.waitForLoadState('networkidle');
         await page.close({runBeforeUnload: true});
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(500);
 
         expect(eventsSent.length).toBeGreaterThan(0);
         expect(eventsSent.filter(({_e}) => _e === 11).length).toBe(1);
