@@ -17,7 +17,7 @@ describe('SGN.EventsKit', () => {
             `file:${__dirname}/../../examples/paged-publication.html`
         );
 
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('load');
         await page.waitForTimeout(5000);
 
         expect(eventsSent.length).toBeGreaterThan(0);
@@ -40,7 +40,7 @@ describe('SGN.EventsKit', () => {
             `file:${__dirname}/../../examples/incito-publication.html?id=${id}`
         );
 
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('load');
         await page.waitForTimeout(5000);
 
         expect(eventsSent.length).toBeGreaterThan(0);
@@ -57,7 +57,8 @@ describe('SGN.EventsKit', () => {
         await page.goto(
             `file:${__dirname}/../../examples/paged-publication.html`
         );
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('load');
+        await page.waitForTimeout(500);
         await page.close({runBeforeUnload: true});
         if (!page.isClosed()) await page.waitForTimeout(500);
 
@@ -80,7 +81,8 @@ describe('SGN.EventsKit', () => {
         await page.goto(
             `file:${__dirname}/../../examples/incito-publication.html?id=${id}`
         );
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('load');
+        await page.waitForTimeout(500);
         await page.close({runBeforeUnload: true});
         if (!page.isClosed()) await page.waitForTimeout(500);
 
