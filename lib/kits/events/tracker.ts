@@ -75,7 +75,7 @@ const createTrackerClient = (): TrackerClient => {
     return {id};
 };
 
-interface BaseEvent {
+export interface BaseEvent {
     // Event version
     _v: number;
     // Event type
@@ -236,7 +236,7 @@ interface WolfEventTypeMap {
     12: AnalyticsV2Event;
     13: IncitoPublicationSectionViewedEvent;
 }
-type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
+export type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
 
 const locationSources = ['gps', 'geoip', 'manual', 'fallback'] as const;
 interface TrackerLocation {
