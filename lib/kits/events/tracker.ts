@@ -421,7 +421,6 @@ class Tracker {
         );
     }
 
-    dispatching = false;
     dispatchLimit = 100;
     dispatch = debounce(this.dispatchBeacon, 4000);
     dispatchBeacon() {
