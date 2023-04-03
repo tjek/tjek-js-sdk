@@ -1,7 +1,7 @@
 import md5 from 'md5';
 import {eventsTrackUrl as defaultEventsTrackUrl} from '../../config-defaults';
 import * as clientLocalStorage from '../../storage/client-local';
-import {chunk, debounce, error, isBrowser} from '../../util';
+import {chunk, error, isBrowser} from '../../util';
 
 let sendBeacon: typeof navigator.sendBeacon;
 if (
@@ -422,12 +422,18 @@ class Tracker {
     }
 
     dispatchLimit = 100;
-    dispatch = debounce(this.dispatchBeacon, 4000);
+    dispatchTimeout: ReturnType<typeof setTimeout> | null = null;
+    dispatch() {
+        if (this.dispatchTimeout) return;
+        // Queue up a dispatch if none is queued
+        this.dispatchTimeout = setTimeout(() => this.dispatchBeacon(), 4000);
+    }
     dispatchBeacon() {
         for (const events of chunk(this.pool, this.dispatchLimit)) {
             sendBeacon(this.eventsTrackUrl, JSON.stringify({events}));
         }
         this.pool = [];
+        this.dispatchTimeout = null;
     }
 }
 
