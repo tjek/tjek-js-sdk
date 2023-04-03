@@ -54,7 +54,7 @@ class IncitoPublicationEventTracking extends MicroEvent {
             'ips.p': sectionPosition,
             _t: Math.round(visibleFrom / 1000),
             mos,
-            vt: this.eventTracker.createViewToken(this.details.id, sectionId)
+            vt: this.eventTracker.createViewToken(this.details.id, sectionKey)
         });
     };
 }
