@@ -66,7 +66,7 @@ class PagedPublicationEventTracking extends MicroEvent {
     };
 
     afterNavigation = (e) => {
-        this.pageSpreadAppeared(e.pageSpread);
+        this.pageSpreadAppeared(e.pageSpread, e.verso);
     };
 
     attemptedNavigation = (e) => {
@@ -77,14 +77,19 @@ class PagedPublicationEventTracking extends MicroEvent {
         if (e.scale === 1) this.pageSpreadDisappeared();
     };
 
-    pageSpreadAppeared(pageSpread: PagedPublicationPageSpread) {
+    pageSpreadAppeared(
+        pageSpread: PagedPublicationPageSpread,
+        verso?: {newPosition: number; previousPosition: number}
+    ) {
         if (pageSpread && this.hidden) {
             this.pageSpread = pageSpread;
             this.hidden = false;
 
-            this.trackPageSpreadAppeared(
-                pageSpread.getPages().map((page) => page.pageNumber)
-            );
+            if (verso && verso.newPosition !== verso.previousPosition) {
+                this.trackPageSpreadAppeared(
+                    pageSpread.getPages().map((page) => page.pageNumber)
+                );
+            }
         }
     }
 
