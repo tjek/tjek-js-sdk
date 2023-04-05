@@ -263,9 +263,9 @@ class Tracker {
     handleVisibility = () => {
         if (document.visibilityState === 'hidden') this.dispatchBeacon();
     };
-    handleBeforeUnload = () => {
-        this.dispatchBeacon();
-    };
+    handleBlur = () => this.dispatchBeacon();
+    handlePageHide = () => this.dispatchBeacon();
+    handleBeforeUnload = () => this.dispatchBeacon();
 
     constructor(options?: {
         trackId?: string;
@@ -281,11 +281,10 @@ class Tracker {
         }
 
         if (typeof window !== 'undefined') {
-            window.addEventListener(
-                'beforeunload',
-                this.handleBeforeUnload,
-                false
-            );
+            window.addEventListener('visibilitychange', this.handleVisibility);
+            window.addEventListener('blur', this.handleBeforeUnload);
+            window.addEventListener('pagehide', this.handleBeforeUnload);
+            window.addEventListener('beforeunload', this.handleBeforeUnload);
         }
 
         this.trackId = options?.trackId || this.trackId;

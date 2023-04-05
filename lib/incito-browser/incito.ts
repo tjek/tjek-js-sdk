@@ -685,7 +685,10 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
-    constructor(containerEl: HTMLElement, {incito, canLazyload}: {incito: IIncito, canLazyload?: boolean}) {
+    constructor(
+        containerEl: HTMLElement,
+        {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean}
+    ) {
         super();
 
         this.containerEl = containerEl;
@@ -693,7 +696,10 @@ export default class Incito extends MicroEvent<{
         this.el = document.createElement('div');
         this.ids = {};
         this.sections = [];
-        this.canLazyload = canLazyload !== undefined ? canLazyload : 'IntersectionObserver' in window;
+        this.canLazyload =
+            canLazyload !== undefined
+                ? canLazyload
+                : 'IntersectionObserver' in window;
         this.render();
     }
 
@@ -796,6 +802,7 @@ export default class Incito extends MicroEvent<{
         window.removeEventListener('visibilitychange', this.handleVisibility);
         window.removeEventListener('blur', this.handleBlur);
         window.removeEventListener('focus', this.handleFocus);
+        window.removeEventListener('pagehide', this.handlePageHide);
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
 
         this.trigger('destroyed');
@@ -888,11 +895,13 @@ export default class Incito extends MicroEvent<{
     handleBlur = () => this.onVisibilityChange('hidden');
     handleFocus = () => this.onVisibilityChange('visible');
     handleVisibility = () => this.onVisibilityChange(document.visibilityState);
+    handlePageHide = () => this.onVisibilityChange('hidden');
     handleBeforeUnload = () => this.onVisibilityChange('hidden');
     enableLazyloading() {
         window.addEventListener('visibilitychange', this.handleVisibility);
         window.addEventListener('blur', this.handleBlur);
         window.addEventListener('focus', this.handleFocus);
+        window.addEventListener('pagehide', this.handlePageHide);
         window.addEventListener('beforeunload', this.handleBeforeUnload);
 
         this.sectionObserver = new IntersectionObserver(
