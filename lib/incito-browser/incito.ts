@@ -135,9 +135,9 @@ const flexDirectionModes = ['row', 'column'];
 const backgroundTileModes = ['repeat_x', 'repeat_y', 'repeat'];
 const strokeStyles = ['solid', 'dotted', 'dashed'];
 
-function renderView(view, canLazyload) {
+function renderView(view, canLazyload: boolean) {
     let tagName = 'div';
-    let contents;
+    let contents: string | undefined;
     const classNames = ['incito__view'];
     const styles: Record<string, any> = {};
     const attrs: Record<string, any> = {};
@@ -785,19 +785,13 @@ export default class Incito extends MicroEvent<{
     }
 
     destroy() {
-        if (this.lazyObserver) {
-            this.lazyObserver.disconnect();
-        }
+        this.lazyObserver?.disconnect();
 
-        if (this.videoObserver) {
-            this.videoObserver.disconnect();
-        }
+        this.videoObserver?.disconnect();
 
         this.containerEl.removeChild(this.el);
 
-        if (this.styleEl) {
-            this.styleEl.parentNode!.removeChild(this.styleEl);
-        }
+        this.styleEl?.parentNode?.removeChild(this.styleEl);
 
         window.removeEventListener('visibilitychange', this.handleVisibility);
         window.removeEventListener('blur', this.handleBlur);
