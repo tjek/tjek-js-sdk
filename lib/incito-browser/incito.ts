@@ -724,7 +724,7 @@ export default class Incito extends MicroEvent<{
             document.head.appendChild(styleEl);
         }
 
-        this.el.dataset.readme = 'Incito by Tjek (https://incito.io)';
+        this.el.dataset.readme = 'Incito by Tjek (https://tjek.com/incito)';
         this.el.className = 'incito';
 
         if (Array.isArray(theme.font_family)) {
