@@ -135,9 +135,9 @@ const flexDirectionModes = ['row', 'column'];
 const backgroundTileModes = ['repeat_x', 'repeat_y', 'repeat'];
 const strokeStyles = ['solid', 'dotted', 'dashed'];
 
-function renderView(view, canLazyload) {
+function renderView(view, canLazyload: boolean) {
     let tagName = 'div';
-    let contents;
+    let contents: string | undefined;
     const classNames = ['incito__view'];
     const styles: Record<string, any> = {};
     const attrs: Record<string, any> = {};
@@ -685,7 +685,10 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
-    constructor(containerEl: HTMLElement, {incito, canLazyload}: {incito: IIncito, canLazyload?: boolean}) {
+    constructor(
+        containerEl: HTMLElement,
+        {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean}
+    ) {
         super();
 
         this.containerEl = containerEl;
@@ -693,7 +696,10 @@ export default class Incito extends MicroEvent<{
         this.el = document.createElement('div');
         this.ids = {};
         this.sections = [];
-        this.canLazyload = canLazyload !== undefined ? canLazyload : 'IntersectionObserver' in window;
+        this.canLazyload =
+            canLazyload !== undefined
+                ? canLazyload
+                : 'IntersectionObserver' in window;
         this.render();
     }
 
@@ -718,7 +724,7 @@ export default class Incito extends MicroEvent<{
             document.head.appendChild(styleEl);
         }
 
-        this.el.dataset.readme = 'Incito by Tjek (https://incito.io)';
+        this.el.dataset.readme = 'Incito by Tjek (https://tjek.com/incito)';
         this.el.className = 'incito';
 
         if (Array.isArray(theme.font_family)) {
@@ -779,23 +785,18 @@ export default class Incito extends MicroEvent<{
     }
 
     destroy() {
-        if (this.lazyObserver) {
-            this.lazyObserver.disconnect();
-        }
+        this.lazyObserver?.disconnect();
 
-        if (this.videoObserver) {
-            this.videoObserver.disconnect();
-        }
+        this.videoObserver?.disconnect();
 
         this.containerEl.removeChild(this.el);
 
-        if (this.styleEl) {
-            this.styleEl.parentNode!.removeChild(this.styleEl);
-        }
+        this.styleEl?.parentNode?.removeChild(this.styleEl);
 
         window.removeEventListener('visibilitychange', this.handleVisibility);
         window.removeEventListener('blur', this.handleBlur);
         window.removeEventListener('focus', this.handleFocus);
+        window.removeEventListener('pagehide', this.handlePageHide);
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
 
         this.trigger('destroyed');
@@ -888,11 +889,13 @@ export default class Incito extends MicroEvent<{
     handleBlur = () => this.onVisibilityChange('hidden');
     handleFocus = () => this.onVisibilityChange('visible');
     handleVisibility = () => this.onVisibilityChange(document.visibilityState);
+    handlePageHide = () => this.onVisibilityChange('hidden');
     handleBeforeUnload = () => this.onVisibilityChange('hidden');
     enableLazyloading() {
         window.addEventListener('visibilitychange', this.handleVisibility);
         window.addEventListener('blur', this.handleBlur);
         window.addEventListener('focus', this.handleFocus);
+        window.addEventListener('pagehide', this.handlePageHide);
         window.addEventListener('beforeunload', this.handleBeforeUnload);
 
         this.sectionObserver = new IntersectionObserver(

@@ -1,13 +1,7 @@
 import MicroEvent from '../../../vendor/microevent';
+import {chunk} from '../../util';
 import PagedPublicationPageSpread from './page-spread';
 
-function chunk<I extends any>(arr: I[], size: number) {
-    const results: I[][] = [];
-
-    while (arr.length) results.push(arr.splice(0, size));
-
-    return results;
-}
 export interface Page {
     id: string;
     label: string;

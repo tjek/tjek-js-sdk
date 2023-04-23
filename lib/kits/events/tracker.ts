@@ -1,8 +1,55 @@
-import fetch from 'cross-fetch';
 import md5 from 'md5';
 import {eventsTrackUrl as defaultEventsTrackUrl} from '../../config-defaults';
 import * as clientLocalStorage from '../../storage/client-local';
-import {error, isBrowser, throttle} from '../../util';
+import {chunk, error, isBrowser} from '../../util';
+
+let sendBeacon: typeof navigator.sendBeacon;
+if (
+    typeof navigator === 'object' &&
+    typeof navigator.sendBeacon === 'function'
+) {
+    sendBeacon = navigator.sendBeacon.bind(navigator);
+} else if (typeof XMLHttpRequest === 'function') {
+    sendBeacon = (url: string, body: string) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, false);
+        xhr.withCredentials = true;
+        xhr.setRequestHeader('Accept', '*/*');
+        xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+
+        try {
+            xhr.send(body);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+} else if (typeof fetch === 'function') {
+    sendBeacon = (url: string, body: string) => {
+        try {
+            fetch(url, {
+                method: 'POST',
+                body,
+                headers: {
+                    Accept: '*/*',
+                    'Content-Type': 'text/plain;charset=UTF-8'
+                }
+            });
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+} else {
+    sendBeacon = () => {
+        console.warn(
+            `[Tjek SDK] Events: Tracker tried to dispatch events, but this is an unsupported environment.
+    
+    Ensure that your environment has \`navigator.sendBeacon\`, \`XMLHttpRequest\` or \`fetch\` support to track events.`
+        );
+        return false;
+    };
+}
 
 const uuid = () =>
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -27,19 +74,8 @@ const createTrackerClient = (): TrackerClient => {
 
     return {id};
 };
-function getPool() {
-    const data = clientLocalStorage.get('event-tracker-pool');
 
-    return Array.isArray(data)
-        ? data.filter(({_i}) => typeof _i === 'string')
-        : [];
-}
-
-const unloadHandler = () => {
-    clientLocalStorage.set('event-tracker-pool', pool.concat(getPool()));
-};
-
-interface BaseEvent {
+export interface BaseEvent {
     // Event version
     _v: number;
     // Event type
@@ -200,9 +236,7 @@ interface WolfEventTypeMap {
     12: AnalyticsV2Event;
     13: IncitoPublicationSectionViewedEvent;
 }
-type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
-
-let pool: (BaseEvent & WolfEvent)[];
+export type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
 
 const locationSources = ['gps', 'geoip', 'manual', 'fallback'] as const;
 interface TrackerLocation {
@@ -222,44 +256,52 @@ class Tracker {
     };
     trackId: string | null = null;
     poolLimit = 1000;
+    pool: (BaseEvent & WolfEvent)[] = [];
     client: TrackerClient;
     eventsTrackUrl: string;
-    eventsTrackHeaders: Record<string, string>;
+
+    handleVisibility = () => {
+        if (document.visibilityState === 'hidden') this.dispatchBeacon();
+    };
+    handleBlur = () => this.dispatchBeacon();
+    handlePageHide = () => this.dispatchBeacon();
+    handleBeforeUnload = () => this.dispatchBeacon();
+
     constructor(options?: {
         trackId?: string;
         poolLimit?: number;
         client?: TrackerClient;
         eventsTrackUrl?: string;
-        eventsTrackHeaders?: Record<string, string>;
     }) {
-        if (!pool) {
-            pool = getPool();
-
-            clientLocalStorage.set('event-tracker-pool', []);
-            if (typeof window !== 'undefined') {
-                window.addEventListener('beforeunload', unloadHandler, false);
-            }
+        // Handle legacy event pools
+        const localPool = clientLocalStorage.get('event-tracker-pool');
+        if (Array.isArray(localPool)) {
+            this.pool = localPool.filter(({_i}) => typeof _i === 'string');
+            clientLocalStorage.remove('event-tracker-pool');
         }
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('visibilitychange', this.handleVisibility);
+            window.addEventListener('blur', this.handleBeforeUnload);
+            window.addEventListener('pagehide', this.handleBeforeUnload);
+            window.addEventListener('beforeunload', this.handleBeforeUnload);
+        }
+
         this.trackId = options?.trackId || this.trackId;
         this.poolLimit = options?.poolLimit || this.poolLimit;
 
         this.client = options?.client || createTrackerClient();
         this.eventsTrackUrl = options?.eventsTrackUrl || defaultEventsTrackUrl;
 
-        this.eventsTrackHeaders = {
-            ...options?.eventsTrackHeaders,
-            'Content-Type': 'application/json; charset=utf-8'
-        };
-
         if (this.eventsTrackUrl) {
-            dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
+            this.dispatch();
             this.hasMadeInitialDispatch = true;
         }
     }
     setEventsTrackUrl(eventsTrackUrl: string) {
         this.eventsTrackUrl = eventsTrackUrl;
         if (!this.hasMadeInitialDispatch) {
-            dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
+            this.dispatch();
             this.hasMadeInitialDispatch = true;
         }
     }
@@ -293,10 +335,10 @@ class Tracker {
 
         if (this.location.country) evt['l.c'] = this.location.country;
 
-        pool.push(evt);
-        while (pool.length > this.poolLimit) pool.shift();
+        this.pool.push(evt);
+        while (this.pool.length > this.poolLimit) this.pool.shift();
 
-        dispatch(this.eventsTrackUrl, this.eventsTrackHeaders);
+        this.dispatch();
 
         return this;
     }
@@ -377,70 +419,21 @@ class Tracker {
             )
         );
     }
+
+    dispatchLimit = 100;
+    dispatchTimeout: ReturnType<typeof setTimeout> | null = null;
+    dispatch() {
+        if (this.dispatchTimeout) return;
+        // Queue up a dispatch if none is queued
+        this.dispatchTimeout = setTimeout(() => this.dispatchBeacon(), 4000);
+    }
+    dispatchBeacon() {
+        for (const events of chunk(this.pool, this.dispatchLimit)) {
+            sendBeacon(this.eventsTrackUrl, JSON.stringify({events}));
+        }
+        this.pool = [];
+        this.dispatchTimeout = null;
+    }
 }
 
 export default Tracker;
-
-let dispatching = false;
-const dispatchLimit = 100;
-
-let dispatchRetryInterval: NodeJS.Timeout | null | void = null;
-const dispatch = throttle(
-    async (
-        eventsTrackUrl: string,
-        eventsTrackHeaders: Record<string, string>
-    ) => {
-        if (!pool) {
-            console.warn('Tracker: dispatch called with no active event pool.');
-            return;
-        }
-
-        if (dispatching || !pool?.length) return;
-
-        const events = pool.slice(0, dispatchLimit);
-        let nacks = 0;
-        dispatching = true;
-
-        try {
-            const response = await fetch(eventsTrackUrl, {
-                method: 'post',
-                headers: eventsTrackHeaders,
-                body: JSON.stringify({events})
-            });
-            const json = await response.json();
-
-            if (dispatchRetryInterval) {
-                dispatchRetryInterval = clearInterval(dispatchRetryInterval);
-            }
-
-            for (let i = 0; i < json.events.length; i++) {
-                const {status, id} = json.events[i];
-
-                if (status === 'validation_error' || status === 'ack') {
-                    pool = pool.filter(({_i}) => _i !== id);
-                } else {
-                    nacks++;
-                }
-            }
-
-            // Keep dispatching until the pool size reaches a sane level.
-            if (pool.length >= dispatchLimit && !nacks)
-                dispatch(eventsTrackUrl, eventsTrackHeaders);
-        } catch (err) {
-            // Try dispatching again in 20 seconds, if we aren't already trying
-            if (!dispatchRetryInterval) {
-                console.warn(
-                    "We're gonna keep trying, but there was an error while dispatching events:",
-                    err
-                );
-
-                dispatchRetryInterval = setInterval(() => {
-                    dispatch(eventsTrackUrl, eventsTrackHeaders);
-                }, 20000);
-            }
-        } finally {
-            dispatching = false;
-        }
-    },
-    4000
-);
