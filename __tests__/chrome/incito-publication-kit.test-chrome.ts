@@ -17,13 +17,13 @@ describe('Chrome: Incito Publication', () => {
         id = (await response.json())?.[0]?.id;
     });
     it('Example html loads', async () => {
-        const page = newIncognitoPage(`${IPPath}?id=${id}`);
+        const page = await newIncognitoPage(`${IPPath}?id=${id}`);
 
         await expect(page).toHaveSelector('.sgn__incito');
     });
     it('Viewer mounts', async () => {
-        const page = newIncognitoPage(`${IPPath}?id=${id}`);
+        const page = await newIncognitoPage(`${IPPath}?id=${id}`);
 
         await expect(page).toHaveSelector('.incito__view');
-    }, 10000);
+    });
 });
