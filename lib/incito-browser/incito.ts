@@ -854,10 +854,11 @@ export default class Incito extends MicroEvent<{
                 .catch(() => {
                     el.innerHTML = this.renderHtml({});
                 });
-        } else if (el.dataset.bg) {
-            el.style.backgroundImage = `url(${el.dataset.bg})`;
         } else if (el.dataset.src) {
             el.src = el.dataset.src;
+        }
+        if (el.dataset.bg) {
+            el.style.backgroundImage = `url(${el.dataset.bg})`;
         }
     }
 
