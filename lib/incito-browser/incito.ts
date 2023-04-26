@@ -724,7 +724,7 @@ export default class Incito extends MicroEvent<{
             document.head.appendChild(styleEl);
         }
 
-        this.el.dataset.readme = 'Incito by Tjek (https://incito.io)';
+        this.el.dataset.readme = 'Incito by Tjek (https://tjek.com/incito)';
         this.el.className = 'incito';
 
         if (Array.isArray(theme.font_family)) {
@@ -864,10 +864,11 @@ export default class Incito extends MicroEvent<{
                 .catch(() => {
                     el.innerHTML = this.renderHtml({});
                 });
-        } else if (el.dataset.bg) {
-            el.style.backgroundImage = `url(${el.dataset.bg})`;
         } else if (el.dataset.src) {
             el.src = el.dataset.src;
+        }
+        if (el.dataset.bg) {
+            el.style.backgroundImage = `url(${el.dataset.bg})`;
         }
     }
 
