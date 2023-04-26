@@ -783,6 +783,21 @@ export default class Incito extends MicroEvent<{
 
         this.trigger('started');
     }
+    pause() {
+        // Stop receiving events that could cause further section visibility logging
+        this.removeWindowEventListeners();
+        this.sectionObserver.disconnect();
+        // Dispatch any actively visible sections
+        this.onVisibilityChange('hidden');
+
+        // Reset section visiblity tracking
+        this.sectionVisibility = new Map();
+    }
+    unpause() {
+        this.onVisibilityChange('visible');
+        this.addWindowEventListeners();
+        if (this.canLazyload) this.observeElements(this.el);
+    }
 
     destroy() {
         this.lazyObserver?.disconnect();
@@ -793,15 +808,10 @@ export default class Incito extends MicroEvent<{
 
         this.styleEl?.parentNode?.removeChild(this.styleEl);
 
-        window.removeEventListener('visibilitychange', this.handleVisibility);
-        window.removeEventListener('blur', this.handleBlur);
-        window.removeEventListener('focus', this.handleFocus);
-        window.removeEventListener('pagehide', this.handlePageHide);
-        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+        this.removeWindowEventListeners();
 
         this.trigger('destroyed');
     }
-
     observeElements(el: HTMLDivElement) {
         this.sectionVisibility = new Map();
         el.querySelectorAll('[data-role="section"]').forEach(
@@ -892,12 +902,22 @@ export default class Incito extends MicroEvent<{
     handleVisibility = () => this.onVisibilityChange(document.visibilityState);
     handlePageHide = () => this.onVisibilityChange('hidden');
     handleBeforeUnload = () => this.onVisibilityChange('hidden');
-    enableLazyloading() {
+    addWindowEventListeners() {
         window.addEventListener('visibilitychange', this.handleVisibility);
         window.addEventListener('blur', this.handleBlur);
         window.addEventListener('focus', this.handleFocus);
         window.addEventListener('pagehide', this.handlePageHide);
         window.addEventListener('beforeunload', this.handleBeforeUnload);
+    }
+    removeWindowEventListeners() {
+        window.removeEventListener('visibilitychange', this.handleVisibility);
+        window.removeEventListener('blur', this.handleBlur);
+        window.removeEventListener('focus', this.handleFocus);
+        window.removeEventListener('pagehide', this.handlePageHide);
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    }
+    enableLazyloading() {
+        this.addWindowEventListeners();
 
         this.sectionObserver = new IntersectionObserver(
             (entries) =>
