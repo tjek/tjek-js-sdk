@@ -4,7 +4,7 @@ import {throttle} from '../../util';
 
 const visibilityClassName = 'sgn-pp--hidden';
 interface PagedPublicationControlsInit {
-    keyboard: boolean;
+    keyboard: 'disabled' | 'enabled' | 'global';
 }
 class PagedPublicationControls extends MicroEvent {
     options: PagedPublicationControlsInit;
@@ -33,9 +33,12 @@ class PagedPublicationControls extends MicroEvent {
         this.close = el.querySelector('.sgn-pp--close');
 
         this.keyDownHandler = throttle(this.keyDown, 150, this);
-        if (this.options.keyboard === true) {
+        if (this.options.keyboard === 'enabled') {
             this.root.addEventListener('keydown', this.keyDownHandler, false);
+        } else if (this.options.keyboard === 'global') {
+            window.addEventListener('keydown', this.keyDownHandler, false);
         }
+
         this.prevControl?.addEventListener(
             'mousedown',
             this.prevClicked,
@@ -53,13 +56,16 @@ class PagedPublicationControls extends MicroEvent {
     }
 
     destroy = () => {
-        if (this.options.keyboard === true) {
+        if (this.options.keyboard === 'enabled') {
             this.root.removeEventListener(
                 'keydown',
                 this.keyDownHandler,
                 false
             );
+        } else if (this.options.keyboard === 'global') {
+            window.removeEventListener('keydown', this.keyDownHandler, false);
         }
+
         this.prevControl?.removeEventListener(
             'mousedown',
             this.prevClicked,
