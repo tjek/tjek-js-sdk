@@ -33,8 +33,40 @@ const SectionList = ({sgnData, template, scriptEls}) => {
         });
 
         addSectionClickListener();
+        addSectionScrollListener();
 
         return container;
+    };
+
+    const addSectionScrollListener = () => {
+        const toc = sgnData?.incito?.table_of_contents;
+        const scrollContainer = document.querySelector('.incito');
+
+        toc.forEach(({view_id}) => {
+            scrollContainer?.addEventListener('scroll', () => {
+                const sectionEl = document.querySelector(
+                    `[data-id="${view_id}"][data-role="section"]`
+                );
+                const listItem = container?.querySelector(
+                    `.sgn-sections-list-item-container[data-section-id="${view_id}"]`
+                );
+
+                const rect = sectionEl?.getBoundingClientRect();
+                const viewportHeight =
+                    window.innerHeight || document.documentElement.clientHeight;
+
+                if ((rect?.top || 0) <= viewportHeight / 2) {
+                    container
+                        ?.querySelectorAll('.sgn-sections-list-item-container')
+                        ?.forEach((itemEl) => {
+                            itemEl.classList.remove(
+                                'sgn-sections-list-item-active'
+                            );
+                        });
+                    listItem?.classList.add('sgn-sections-list-item-active');
+                }
+            });
+        });
     };
 
     const addSectionClickListener = () => {

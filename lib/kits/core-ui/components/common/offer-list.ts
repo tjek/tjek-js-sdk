@@ -50,7 +50,12 @@ const OfferList = ({
 }: {
     scriptEls: ReturnType<typeof transformScriptData>;
     publicationType?: string;
-    configs: {apiKey: string; coreUrl: string; id?: string; businessId?: string};
+    configs: {
+        apiKey: string;
+        coreUrl: string;
+        id?: string;
+        businessId?: string;
+    };
     sgnViewer?: Viewer;
     template?: Element | null;
 }) => {
