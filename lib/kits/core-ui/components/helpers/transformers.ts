@@ -11,6 +11,7 @@ export const transformScriptData = (
             dataset.componentListPublicationsContainer || mainContainer,
         publicationId: dataset.componentPublicationId,
         publicationIdParam: dataset.publicationIdQueryParam || 'publicationid',
+        sectionIdParam: dataset.publicationSectionQueryParam || 'sectionid',
         pageIdParam: dataset.publicationPageQueryParam || 'publicationpage',
         publicationHash: dataset.publicationHash || 'publication',
         displayUrlParams: dataset.componentPublicationDisplayUrlParams,
