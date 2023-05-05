@@ -112,16 +112,16 @@ const IncitoPublication = (
 
     const scrollToSection = () => {
         const sectionId = decodeURI(
-            getQueryParam(scriptEls.sectionIdParam) ||
+            getQueryParam(scriptEls.sectionIdParam)?.replace(/\+/g, '%20') ||
                 getHashFragments(scriptEls.publicationHash)?.pageNum ||
                 ''
         );
 
-        if (sectionId) {
-            console.log('sectionId:::', sectionId);
-            const sectionCell = document.querySelector(
-                `[data-id="${sectionId}"][data-role="section"]`
-            );
+        const sectionCell = document.querySelector(
+            `[data-id="${sectionId}"][data-role="section"]`
+        );
+
+        if (sectionCell) {
             const incitoEl = scriptEls.enableSidebar
                 ? document.querySelector('.incito')
                 : document.querySelector('.sgn__incito');

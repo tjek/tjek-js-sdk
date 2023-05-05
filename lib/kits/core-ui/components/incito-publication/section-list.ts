@@ -1,5 +1,5 @@
 import Mustache from 'mustache';
-import {destroyModal} from '../helpers/component';
+import {destroyModal, pushQueryParam} from '../helpers/component';
 import './section-list.styl';
 
 const defaultTemplate = `\
@@ -55,7 +55,10 @@ const SectionList = ({sgnData, template, scriptEls}) => {
                 const viewportHeight =
                     window.innerHeight || document.documentElement.clientHeight;
 
-                if ((rect?.top || 0) <= viewportHeight / 2) {
+                if (
+                    (rect?.top || 0) <= viewportHeight / 2 &&
+                    (rect?.bottom || 0) >= viewportHeight / 2
+                ) {
                     container
                         ?.querySelectorAll('.sgn-sections-list-item-container')
                         ?.forEach((itemEl) => {
@@ -64,6 +67,16 @@ const SectionList = ({sgnData, template, scriptEls}) => {
                             );
                         });
                     listItem?.classList.add('sgn-sections-list-item-active');
+
+                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                        pushQueryParam({
+                            [scriptEls.sectionIdParam]: view_id
+                        });
+                    } else if (
+                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
+                    ) {
+                        location.hash = `${scriptEls.publicationHash}/${sgnData.details.id}/${view_id}`;
+                    }
                 }
             });
         });
