@@ -111,7 +111,7 @@ const IncitoPublication = (
     };
 
     const scrollToSection = () => {
-        const sectionId = decodeURI(
+        const sectionId = decodeURIComponent(
             getQueryParam(scriptEls.sectionIdParam)?.replace(/\+/g, '%20') ||
                 getHashFragments(scriptEls.publicationHash)?.pageNum ||
                 ''

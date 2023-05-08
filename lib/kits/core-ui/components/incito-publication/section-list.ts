@@ -75,7 +75,9 @@ const SectionList = ({sgnData, template, scriptEls}) => {
                     } else if (
                         scriptEls.displayUrlParams?.toLowerCase() === 'hash'
                     ) {
-                        location.hash = `${scriptEls.publicationHash}/${sgnData.details.id}/${view_id}`;
+                        location.hash = `${scriptEls.publicationHash}/${
+                            sgnData.details.id
+                        }/${encodeURIComponent(view_id)}`;
                     }
                 }
             });
