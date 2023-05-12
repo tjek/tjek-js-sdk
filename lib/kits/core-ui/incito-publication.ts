@@ -11,7 +11,10 @@ import MenuPopup from './components/common/menu-popup';
 import OfferOverview from './components/common/offer-overview';
 import ShoppingList from './components/common/shopping-list';
 import {transformScriptData} from './components/helpers/transformers';
-import {transformFilter} from './components/helpers/component';
+import {
+    transformFilter,
+    getHashFragments
+} from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
 
@@ -97,6 +100,7 @@ const IncitoPublication = (
 
         await start();
 
+        scrollToSection();
         addScrollListener();
         renderShoppingList();
         renderMenuPopup();
@@ -104,6 +108,31 @@ const IncitoPublication = (
         renderSectionList();
 
         return sgnData;
+    };
+
+    const scrollToSection = () => {
+        const sectionId = decodeURIComponent(
+            getQueryParam(scriptEls.sectionIdParam)?.replace(/\+/g, '%20') ||
+                getHashFragments(scriptEls.publicationHash)?.pageNum ||
+                ''
+        );
+
+        const sectionCell = document.querySelector(
+            `[data-id="${sectionId}"][data-role="section"]`
+        );
+
+        if (sectionCell) {
+            const incitoEl = scriptEls.enableSidebar
+                ? document.querySelector('.incito')
+                : document.querySelector('.sgn__incito');
+            const headerOffset = document.querySelector('.sgn__header')
+                ? 76
+                : 0;
+            // @ts-expect-error
+            const sectionOffset = sectionCell.offsetTop - headerOffset || 0;
+
+            incitoEl?.scrollTo({top: sectionOffset});
+        }
     };
 
     const renderShoppingList = () =>
@@ -153,6 +182,7 @@ const IncitoPublication = (
             id:
                 opts?.id ||
                 getQueryParam(scriptEls.publicationIdParam) ||
+                getHashFragments(scriptEls.publicationHash)?.publicationId ||
                 scriptEls.publicationId ||
                 (await fetchLatestPublicationId()),
             businessId: opts?.businessId || scriptEls.businessId
