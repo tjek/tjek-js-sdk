@@ -326,7 +326,8 @@ const Header = ({
 
         pushQueryParam({
             [scriptEls.publicationIdParam]: null,
-            [scriptEls.pageIdParam]: null
+            [scriptEls.pageIdParam]: null,
+            [scriptEls.sectionIdParam]: null
         });
         location.hash = '';
     };
