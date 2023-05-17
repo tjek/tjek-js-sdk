@@ -37,6 +37,23 @@ const bundles = [
         input: 'tjek-sdk.ts',
         output: path.join('tjek-sdk', 'index'),
         pkg: {version, name: '@tjek/sdk', sideEffects: false}
+    },
+    {
+        input: path.join('kits', 'events', 'tracker.ts'),
+        output: path.join('tjek-sdk', 'events', 'tracker', 'index')
+    },
+    {
+        input: path.join('incito-browser', 'incito.ts'),
+        output: path.join('tjek-sdk', 'incito-publication', 'incito', 'index')
+    },
+    {
+        input: path.join('kits', 'paged-publication', 'bootstrapper.ts'),
+        output: path.join(
+            'tjek-sdk',
+            'paged-publication',
+            'bootstrapper',
+            'index'
+        )
     }
 ];
 
@@ -66,7 +83,7 @@ switch (process.argv[2]) {
             entryPoints: [path.join(libDir, input)],
             outfile: path.join(distDir, output + '.js'),
             platform: 'browser',
-            globalName: `self[${JSON.stringify(name)}]`,
+            globalName: name && `self[${JSON.stringify(name)}]`,
             plugins: [stylus],
             metafile: true,
             banner: {
@@ -89,23 +106,25 @@ switch (process.argv[2]) {
         const buildResults = await Promise.all(
             bundles
                 .map(({name, input, output}) => [
-                    build({
-                        ...commonOptions,
-                        entryPoints: [path.join(libDir, input)],
-                        outfile: path.join(distDir, output + '.js'),
-                        platform: 'browser',
-                        globalName: `self[${JSON.stringify(name)}]`,
-                        plugins: [stylus]
-                    }),
-                    build({
-                        ...commonOptions,
-                        entryPoints: [path.join(libDir, input)],
-                        minify: true,
-                        outfile: path.join(distDir, output + '.min.js'),
-                        platform: 'browser',
-                        globalName: `self[${JSON.stringify(name)}]`,
-                        plugins: [stylus]
-                    }),
+                    name &&
+                        build({
+                            ...commonOptions,
+                            entryPoints: [path.join(libDir, input)],
+                            outfile: path.join(distDir, output + '.js'),
+                            platform: 'browser',
+                            globalName: `self[${JSON.stringify(name)}]`,
+                            plugins: [stylus]
+                        }),
+                    name &&
+                        build({
+                            ...commonOptions,
+                            entryPoints: [path.join(libDir, input)],
+                            minify: true,
+                            outfile: path.join(distDir, output + '.min.js'),
+                            platform: 'browser',
+                            globalName: `self[${JSON.stringify(name)}]`,
+                            plugins: [stylus]
+                        }),
                     build({
                         ...commonOptions,
                         entryPoints: [path.join(libDir, input)],
@@ -124,6 +143,7 @@ switch (process.argv[2]) {
                     })
                 ])
                 .flat()
+                .filter(Boolean)
         );
 
         const modulePackageJsons = {};
