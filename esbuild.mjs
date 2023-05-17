@@ -1,4 +1,4 @@
-import {analyzeMetafile, build, context} from 'esbuild';
+import {build, context} from 'esbuild';
 import {stylusLoader} from 'esbuild-stylus-loader';
 import {writeFile} from 'fs/promises';
 import nib from 'nib';
@@ -194,21 +194,6 @@ switch (process.argv[2]) {
                 JSON.stringify(pkg, null, 2)
             );
         }
-        break;
-        console.log(
-            (
-                await Promise.all(
-                    buildResults.map(
-                        async ({metafile}) =>
-                            metafile &&
-                            (await analyzeMetafile(metafile, {color: true}))
-                    )
-                )
-            )
-                .join('\n')
-                .trim()
-        );
-
         break;
     }
 }
