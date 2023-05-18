@@ -53,7 +53,7 @@ export interface ViewerInit {
     resizeDelay?: number;
     color?: string;
     eventTracker: Tracker;
-    keyboard: boolean;
+    keyboard: 'disabled' | 'enabled' | 'global';
     hotspotRatio: unknown;
     pickHotspot?: typeof defaultPickHotspot;
 }
@@ -328,7 +328,7 @@ class Viewer extends MicroEvent {
                         .getPages()
                         .some((page) => page.pageNumber === page_number)
             );
-            
+
             if (currentPageDecorations) {
                 PageDecorations().render({
                     pageDecorations: currentPageDecorations,

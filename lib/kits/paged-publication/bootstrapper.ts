@@ -9,6 +9,7 @@ interface BootstrapperInit {
     eventTracker: Tracker;
     apiKey: string;
     coreUrl: string;
+    keyboard: 'disabled' | 'enabled' | 'global';
 }
 export default class Bootstrapper {
     options: BootstrapperInit;
@@ -26,7 +27,7 @@ export default class Bootstrapper {
             ownedBy: data.details.dealer_id,
             color: '#' + data.details.branding.pageflip.color,
             hotspotRatio: data.details.dimensions.height,
-            keyboard: true,
+            keyboard: this.options.keyboard ?? 'enabled',
             pageId: this.options.pageId,
             eventTracker: this.options.eventTracker,
             pages: data.pages.map(({view, zoom}, i) => {
