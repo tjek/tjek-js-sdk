@@ -333,10 +333,10 @@ const IncitoPublication = (
         const scrollContainer = document.querySelector(
             `${scriptEls.enableSidebar ? '.incito' : '.sgn__incito'}`
         );
-
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
         );
+        let currentSection;
 
         toc?.forEach((section) => {
             scrollContainer?.addEventListener('scroll', () => {
@@ -350,8 +350,11 @@ const IncitoPublication = (
 
                 if (
                     (rect?.top || 0) <= viewportHeight / 2 &&
-                    (rect?.bottom || 0) >= viewportHeight / 2
+                    (rect?.bottom || 0) >= viewportHeight / 2 &&
+                    currentSection !== section.view_id
                 ) {
+                    currentSection = section.view_id;
+
                     mainContainerEl?.dispatchEvent(
                         new CustomEvent('section:show', {
                             detail: section
