@@ -1,5 +1,5 @@
 import Mustache from 'mustache';
-import {destroyModal, pushQueryParam} from '../helpers/component';
+import {destroyModal} from '../helpers/component';
 import './section-list.styl';
 
 const defaultTemplate = `\
@@ -39,48 +39,24 @@ const SectionList = ({sgnData, template, scriptEls}) => {
     };
 
     const addSectionScrollListener = () => {
-        const toc = sgnData?.incito?.table_of_contents;
-        const scrollContainer = document.querySelector('.incito');
+        const mainContainerEl = document.querySelector(
+            scriptEls.listPublicationsContainer || scriptEls.mainContainer
+        );
 
-        toc.forEach(({view_id}) => {
-            scrollContainer?.addEventListener('scroll', () => {
-                const sectionEl = document.querySelector(
-                    `[data-id="${view_id}"][data-role="section"]`
-                );
-                const listItem = container?.querySelector(
-                    `.sgn-sections-list-item-container[data-section-id="${view_id}"]`
-                );
+        mainContainerEl.addEventListener('section:show', (e) => {
+            const {view_id} = e.detail;
 
-                const rect = sectionEl?.getBoundingClientRect();
-                const viewportHeight =
-                    window.innerHeight || document.documentElement.clientHeight;
+            const listItem = container?.querySelector(
+                `.sgn-sections-list-item-container[data-section-id="${view_id}"]`
+            );
 
-                if (
-                    (rect?.top || 0) <= viewportHeight / 2 &&
-                    (rect?.bottom || 0) >= viewportHeight / 2
-                ) {
-                    container
-                        ?.querySelectorAll('.sgn-sections-list-item-container')
-                        ?.forEach((itemEl) => {
-                            itemEl.classList.remove(
-                                'sgn-sections-list-item-active'
-                            );
-                        });
-                    listItem?.classList.add('sgn-sections-list-item-active');
+            container
+                ?.querySelectorAll('.sgn-sections-list-item-container')
+                ?.forEach((itemEl) => {
+                    itemEl.classList.remove('sgn-sections-list-item-active');
+                });
 
-                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                        pushQueryParam({
-                            [scriptEls.sectionIdParam]: view_id
-                        });
-                    } else if (
-                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
-                    ) {
-                        location.hash = `${scriptEls.publicationHash}/${
-                            sgnData.details.id
-                        }/${encodeURIComponent(view_id)}`;
-                    }
-                }
-            });
+            listItem?.classList.add('sgn-sections-list-item-active');
         });
     };
 

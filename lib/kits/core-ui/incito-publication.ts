@@ -13,7 +13,8 @@ import ShoppingList from './components/common/shopping-list';
 import {transformScriptData} from './components/helpers/transformers';
 import {
     transformFilter,
-    getHashFragments
+    getHashFragments,
+    pushQueryParam
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -106,6 +107,7 @@ const IncitoPublication = (
         renderMenuPopup();
         dispatchPublicationData();
         renderSectionList();
+        addSectionScrollListener();
 
         return sgnData;
     };
@@ -324,6 +326,55 @@ const IncitoPublication = (
         }
 
         animateShoppingListCounter();
+    };
+
+    const addSectionScrollListener = () => {
+        const toc = sgnData?.incito?.table_of_contents;
+        const scrollContainer = document.querySelector(
+            `${scriptEls.enableSidebar ? '.incito' : '.sgn__incito'}`
+        );
+        const mainContainerEl = document.querySelector(
+            scriptEls.listPublicationsContainer || scriptEls.mainContainer
+        );
+        let currentSection;
+
+        toc?.forEach((section) => {
+            scrollContainer?.addEventListener('scroll', () => {
+                const sectionEl = document.querySelector(
+                    `[data-id="${section.view_id}"][data-role="section"]`
+                );
+
+                const rect = sectionEl?.getBoundingClientRect();
+                const viewportHeight =
+                    window.innerHeight || document.documentElement.clientHeight;
+
+                if (
+                    (rect?.top || 0) <= viewportHeight / 2 &&
+                    (rect?.bottom || 0) >= viewportHeight / 2 &&
+                    currentSection !== section.view_id
+                ) {
+                    currentSection = section.view_id;
+
+                    mainContainerEl?.dispatchEvent(
+                        new CustomEvent('section:show', {
+                            detail: section
+                        })
+                    );
+
+                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                        pushQueryParam({
+                            [scriptEls.sectionIdParam]: section.view_id
+                        });
+                    } else if (
+                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
+                    ) {
+                        location.hash = `${scriptEls.publicationHash}/${
+                            sgnData?.details?.id
+                        }/${encodeURIComponent(section.view_id)}`;
+                    }
+                }
+            });
+        });
     };
 
     const addScrollListener = () => {
