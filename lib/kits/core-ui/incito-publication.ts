@@ -195,6 +195,7 @@ const IncitoPublication = (
         const sgnLoader = document.querySelector('.sgn_loader-container');
         // @ts-expect-error
         bootstrapper = new Bootstrapper(options);
+        bootstrapper.enableLazyLoading = scriptEls.enableLazyload;
 
         const data = await bootstrapper.fetch();
 
