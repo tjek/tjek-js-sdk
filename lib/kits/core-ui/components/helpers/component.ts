@@ -223,7 +223,13 @@ export const pushQueryParam = (queryParams = {}) => {
         newUrl.searchParams[val ? 'set' : 'delete'](key, String(val));
     });
 
-    window.history.pushState({path: String(newUrl)}, '', newUrl);
+    try {
+        window.history.pushState({path: String(newUrl)}, '', newUrl);
+    } catch (e) {
+        console.log('Error:', e?.message);
+
+        return null;
+    }
 };
 
 export const getHashFragments = (hashParam) => {
