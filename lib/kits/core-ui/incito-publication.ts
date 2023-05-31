@@ -271,6 +271,7 @@ const IncitoPublication = (
                 scriptEls,
                 sgnData,
                 offer,
+                products,
                 type: 'incito',
                 addToShoppingList
             }).render();

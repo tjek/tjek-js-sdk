@@ -97,6 +97,7 @@ const OfferOverview = ({
     scriptEls,
     sgnData,
     offer,
+    products,
     type,
     addToShoppingList
 }) => {
@@ -121,7 +122,7 @@ const OfferOverview = ({
         const transformedOffer =
             type === 'paged'
                 ? await fetchOffer(offer.id)
-                : transformIncitoOffer(offer);
+                : transformIncitoOffer(offer, products);
 
         container.innerHTML = Mustache.render(template, {
             translations,
@@ -136,11 +137,12 @@ const OfferOverview = ({
         addEventListeners();
     };
 
-    const transformIncitoOffer = (offer) => {
+    const transformIncitoOffer = (offer, products = []) => {
         const {localeCode, currency} = translations;
 
         return {
             ...offer,
+            products,
             heading: offer.name,
             price: formatPrice(
                 offer?.price,
@@ -152,16 +154,22 @@ const OfferOverview = ({
             },
             dateRange: getDateRange(
                 offer?.validity?.from,
-                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+                new Date(
+                    Number(parseDateStr(offer?.validity?.to)) - 1000
+                ).toISOString(),
                 'publication_viewer_offer_date_range'
             ),
             status: getPubState(
                 offer?.validity?.from,
-                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+                new Date(
+                    Number(parseDateStr(offer?.validity?.to)) - 1000
+                ).toISOString()
             ),
             statusMessage: getPubStateMessage(
                 offer?.validity?.from,
-                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+                new Date(
+                    Number(parseDateStr(offer?.validity?.to)) - 1000
+                ).toISOString()
             )
         };
     };
