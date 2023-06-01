@@ -302,7 +302,6 @@ const PagedPublication = (
                 scriptEls,
                 sgnData,
                 offer: hotspot,
-                products: [],
                 type: 'paged',
                 addToShoppingList
             }).render();

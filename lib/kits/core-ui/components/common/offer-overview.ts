@@ -97,7 +97,6 @@ const OfferOverview = ({
     scriptEls,
     sgnData,
     offer,
-    products,
     type,
     addToShoppingList
 }) => {
@@ -122,7 +121,7 @@ const OfferOverview = ({
         const transformedOffer =
             type === 'paged'
                 ? await fetchOffer(offer.id)
-                : transformIncitoOffer(offer, products);
+                : await transformIncitoOffer(offer);
 
         container.innerHTML = Mustache.render(template, {
             translations,
@@ -137,8 +136,15 @@ const OfferOverview = ({
         addEventListeners();
     };
 
-    const transformIncitoOffer = (offer, products = []) => {
+    const transformIncitoOffer = async ({
+        fetchOffer,
+        viewId,
+        publicationId,
+        products
+    }) => {
         const {localeCode, currency} = translations;
+        const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
+        offer = incitoOffer;
 
         return {
             ...offer,
