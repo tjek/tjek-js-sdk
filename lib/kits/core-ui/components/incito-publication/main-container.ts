@@ -11,12 +11,12 @@ const defaultTemplate = `\
         {{#enableSidebar}}
         <div class="sgn__menu-sidebar-container"></div>
         {{/enableSidebar}}
-        {{#disableHeader}}
+        {{#displayBottomScrollProgress}}
         <div class="sgn-incito__scroll-progress">
             <div class="sgn-incito__scroll-progress-bar"></div>
             <span class="sgn-incito__scroll-progress-text"></span>
         </div>
-        {{/disableHeader}}
+        {{/displayBottomScrollProgress}}
     </div>\
 `;
 
@@ -38,7 +38,7 @@ const MainContainer = ({
         if (!el) return;
 
         el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
-            disableHeader: scriptEls.disableHeader || scriptEls.enableSidebar,
+            disableHeader: scriptEls.disableHeader,
             disableShoppingList:
                 scriptEls.disableShoppingList ||
                 scriptEls.offerClickBehavior !== 'shopping_list',
@@ -46,6 +46,8 @@ const MainContainer = ({
             disableClose: scriptEls.disableClose,
             enableSidebar: scriptEls.enableSidebar,
             sidebarPosition: scriptEls.sidebarPosition,
+            displayBottomScrollProgress:
+                scriptEls.disableHeader || scriptEls.enableSidebar,
             isOfferClickable:
                 (!scriptEls.disableShoppingList ||
                     scriptEls.offerClickBehavior !== 'shopping_list') &&
