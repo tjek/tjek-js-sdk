@@ -211,7 +211,7 @@ const OfferList = ({
         );
 
         destroyModal();
-        offerCell?.scrollIntoView({behavior: 'smooth'});
+        offerCell?.scrollIntoView();
     };
 
     const render = async () => {
