@@ -205,6 +205,13 @@ const OfferOverview = ({
             url: `/v2/offers/${id}`
         });
 
+        if (offer.id && configs.eventTracker) {
+            configs.eventTracker?.trackOfferOpened({
+                'of.id': offer.id,
+                vt: configs.eventTracker.createViewToken(offer.id)
+            });
+        }
+
         return {
             ...offer,
             price: formatPrice(
