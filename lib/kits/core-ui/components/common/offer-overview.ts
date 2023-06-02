@@ -152,16 +152,22 @@ const OfferOverview = ({
             },
             dateRange: getDateRange(
                 offer?.validity?.from,
-                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+                new Date(
+                    Number(parseDateStr(offer?.validity?.to)) - 1000
+                ).toISOString(),
                 'publication_viewer_offer_date_range'
             ),
             status: getPubState(
                 offer?.validity?.from,
-                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+                new Date(
+                    Number(parseDateStr(offer?.validity?.to)) - 1000
+                ).toISOString()
             ),
             statusMessage: getPubStateMessage(
                 offer?.validity?.from,
-                new Date(Number(parseDateStr(offer?.validity?.to)) - 1000).toISOString(),
+                new Date(
+                    Number(parseDateStr(offer?.validity?.to)) - 1000
+                ).toISOString()
             )
         };
     };
@@ -190,6 +196,13 @@ const OfferOverview = ({
             coreUrl: configs.coreUrl,
             url: `/v2/offers/${id}`
         });
+
+        if (offer.id && configs.eventTracker) {
+            configs.eventTracker?.trackOfferOpened({
+                'of.id': offer.id,
+                vt: configs.eventTracker.createViewToken(offer.id)
+            });
+        }
 
         return {
             ...offer,
