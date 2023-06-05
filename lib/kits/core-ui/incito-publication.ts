@@ -263,14 +263,12 @@ const IncitoPublication = (
         const shoppingBtn = options.el?.querySelector('.sgn__offer-shopping');
 
         if (scriptEls.offerClickBehavior === 'overview_modal') {
-            const {offer} = await fetchOffer({viewId, publicationId});
-
             OfferOverview({
                 template: customTemplates.offerOverview,
                 configs: options,
                 scriptEls,
                 sgnData,
-                offer,
+                offer: {fetchOffer, viewId, publicationId, products},
                 type: 'incito',
                 addToShoppingList
             }).render();
