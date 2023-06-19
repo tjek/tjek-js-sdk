@@ -190,8 +190,10 @@ export const translate = (key = '', view = {}) => {
     return Mustache.render(template, view);
 };
 
-export const transformFilter = (filter) =>
-    (filter || '')?.split(',').reduce((queries, filter) => {
+export const transformFilter = (filter) => {
+    const delimiter = filter?.includes(';') ? ';' : ',';
+
+    return (filter || '')?.split(delimiter).reduce((queries, filter) => {
         const {0: key, 1: val} = filter.split(':');
 
         if (key) {
@@ -201,6 +203,7 @@ export const transformFilter = (filter) =>
 
         return queries;
     }, {});
+};
 
 export const getColorBrightness = (color) => {
     color = color.replace('#', '');
