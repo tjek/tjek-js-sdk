@@ -217,19 +217,16 @@ export const getColorBrightness = (color) => {
 };
 
 export const pushQueryParam = (queryParams = {}) => {
+    // Don't push query params if in iframe
+    if (window.self !== window.top) return null;
+
     const newUrl = new URL(window.location.href);
 
     Object.entries(queryParams).forEach(([key, val]) => {
         newUrl.searchParams[val ? 'set' : 'delete'](key, String(val));
     });
 
-    try {
-        window.history.pushState({path: String(newUrl)}, '', newUrl);
-    } catch (e) {
-        console.log('Error:', e?.message);
-
-        return null;
-    }
+    window.history.pushState({path: String(newUrl)}, '', newUrl);
 };
 
 export const getHashFragments = (hashParam) => {
