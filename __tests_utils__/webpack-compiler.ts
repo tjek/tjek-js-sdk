@@ -50,7 +50,7 @@ export default async function compile(
     //create a directory structure in MemoryFS that matches
     //the real filesystem
     const rootDir = root.toString();
-    if (!memFs.existsSync(rootDir)) memFs.mkdirpSync(rootDir);
+    if (!memFs.existsSync(rootDir)) memFs.mkdirSync(rootDir, {recursive: true});
 
     const entry = path.join(rootDir, filename);
     //write code snippet to memoryfs
