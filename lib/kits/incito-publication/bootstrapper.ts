@@ -78,6 +78,10 @@ export default class Bootstrapper {
             Math.abs(window.orientation) === 90
                 ? Math.min(this.options.el.offsetWidth, screen.width)
                 : this.options.el.offsetWidth;
+
+        if (['AFQp2t', 'zUnx3b', 'x1rYHE'].includes(this.options.apiKey)) {
+            this.displayBranding = false;
+        }
     }
 
     getFeatureLabels() {
