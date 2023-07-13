@@ -19,7 +19,8 @@ describe('SGN.IncitoPublicationKit.Viewer', () => {
         const viewer = new Viewer(mountPoint, {
             details: {id: 'incito-id', types: ['paged', 'incito']} as V2Catalog,
             incito: dummyIncito,
-            eventTracker: fakeEventTracker as any
+            eventTracker: fakeEventTracker as any,
+            displayBranding: true
         });
 
         viewer.start();
