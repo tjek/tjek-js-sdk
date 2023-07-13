@@ -48,6 +48,7 @@
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
+            bootstrapper.displayBranding = true;
 
             this.bootstrapper.fetch(function (error, res) {
                 if (error) return console.error(error);

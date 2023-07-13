@@ -196,6 +196,7 @@ const IncitoPublication = (
         // @ts-expect-error
         bootstrapper = new Bootstrapper(options);
         bootstrapper.enableLazyLoading = scriptEls.enableLazyload;
+        bootstrapper.displayBranding = scriptEls.displayBranding;
 
         const data = await bootstrapper.fetch();
 

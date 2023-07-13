@@ -68,6 +68,7 @@ export default class Bootstrapper {
     featureLabels = this.getFeatureLabels();
     versionsSupported = ['1.0.0'];
     enableLazyLoading = false;
+    displayBranding = true;
     options: BootstrapperInit;
     maxWidth: number;
     // @ts-expect-error
@@ -185,7 +186,8 @@ export default class Bootstrapper {
         const viewer = new Viewer(this.options.el, {
             details,
             incito,
-            eventTracker: this.options.eventTracker
+            eventTracker: this.options.eventTracker,
+            displayBranding: this.displayBranding
         });
         const controls = new Controls(viewer);
 

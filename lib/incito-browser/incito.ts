@@ -685,9 +685,14 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
+    displayBranding: boolean;
     constructor(
         containerEl: HTMLElement,
-        {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean}
+        {
+            incito,
+            canLazyload,
+            displayBranding
+        }: {incito: IIncito; canLazyload?: boolean; displayBranding?: boolean}
     ) {
         super();
 
@@ -700,6 +705,8 @@ export default class Incito extends MicroEvent<{
             canLazyload !== undefined
                 ? canLazyload
                 : 'IntersectionObserver' in window;
+        this.displayBranding =
+            displayBranding !== undefined ? displayBranding : true;
         this.render();
     }
 
@@ -755,6 +762,41 @@ export default class Incito extends MicroEvent<{
         // By setting the language we help the browser with stuff like hyphenation.
         if (this.incito.locale) {
             this.el.setAttribute('lang', this.incito.locale);
+        }
+
+        // Inject Powered by Incito logo
+        if (this.displayBranding) {
+            const breakpoints = {
+                sm: 420,
+                md: 834,
+                lg: 1200
+            };
+            const paddings = {
+                sm: 8,
+                md: 10,
+                lg: 12
+            };
+            const breakpoint =
+                Object.keys(breakpoints).find(
+                    (name) =>
+                        (this.incito.root_view?.layout_width || 1200) <=
+                        breakpoints[name]
+                ) || 'lg';
+            const padding = paddings[breakpoint];
+
+            this.incito.root_view?.child_views?.push({
+                view_name: 'FlexLayout',
+                layout_flex_justify_content: 'flex-end',
+                padding,
+                child_views: [
+                    {
+                        view_name: 'ImageView',
+                        link: 'https://incito.io/',
+                        src: `https://d3qnoxvhi29qvt.cloudfront.net/various/powered-by-incito.svg`,
+                        layout_height: padding * 4
+                    }
+                ]
+            });
         }
 
         this.el.innerHTML = this.renderHtml(this.incito.root_view);

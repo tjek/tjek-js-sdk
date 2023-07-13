@@ -10,6 +10,7 @@ interface ViewerInit {
     incito: IIncito;
     eventTracker: Tracker;
     details: V2Catalog;
+    displayBranding: boolean;
 }
 class Viewer extends MicroEvent {
     static Incito = Incito;
@@ -23,7 +24,8 @@ class Viewer extends MicroEvent {
         this.el = el;
         this.options = options;
         this.incito = new Incito(this.el, {
-            incito: this.options.incito
+            incito: this.options.incito,
+            displayBranding: this.options.displayBranding
         });
         this._eventTracking = new EventTracking(
             this.options.eventTracker,

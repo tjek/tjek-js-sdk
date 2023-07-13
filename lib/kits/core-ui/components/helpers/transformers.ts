@@ -43,6 +43,7 @@ export const transformScriptData = (
                 : 'right',
         enableLazyload: dataset.componentPublicationEnableLazyload === 'true',
         requestFilter: dataset.componentListPublicationsRequestFilter,
-        clientFilter: dataset.componentListPublicationsClientFilter
+        clientFilter: dataset.componentListPublicationsClientFilter,
+        displayBranding: dataset.componentPublicationDisplayBranding !== 'false'
     };
 };
