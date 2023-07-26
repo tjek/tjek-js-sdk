@@ -4,7 +4,10 @@ import './main-container.styl';
 
 const defaultTemplate = `\
     <div class="sgn_loader-container">
-        <div class="sgn_loader"></div>
+        <div class="powered-by-incito-container">
+            <img src="https://d3qnoxvhi29qvt.cloudfront.net/various/powered-by-incito-text.svg" height="24px" class="powered-by-incito-logo" />
+        </div>
+        <div class="dot-flashing"></div>
     </div>
     <div class="sgn__incito" data-component-template="true" tabindex="-1" data-component-template-disable-header="{{disableHeader}}" data-offer-clickable="{{isOfferClickable}}" data-component-template-enable-sidebar="{{enableSidebar}}" data-component-template-sidebar-position="{{sidebarPosition}}">
         <div class="sgn__header-container"></div>

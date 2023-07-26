@@ -8,7 +8,63 @@
     left 0
     right 0
     bottom 0
+    margin 0
+    min-height 100vh
+    display grid
+    place-content: center
 
+    .powered-by-incito-container
+        position absolute
+        margin auto
+        left calc(50% - 26px)
+        top calc(50% - 36px)
+        text-align center
+    
+    .dot-flashing 
+        position relative
+        width 8px
+        height 8px
+        border-radius 5px
+        background-color #bbbbbb
+        color #bbbbbb
+        animation dot-flashing 1s infinite linear alternate
+        animation-delay 0.5s
+    
+    .dot-flashing::before
+    .dot-flashing::after 
+        content ""
+        display inline-block
+        position absolute
+        top 0
+    
+    .dot-flashing::before 
+        left -15px
+        width 8px
+        height 8px
+        border-radius 5px
+        background-color #bbbbbb
+        color #bbbbbb
+        animation dot-flashing 1s infinite alternate
+        animation-delay 0s
+        
+    .dot-flashing::after 
+        left 15px
+        width 8px
+        height 8px
+        border-radius 5px
+        background-color #bbbbbb
+        color #bbbbbb
+        animation: dot-flashing 1s infinite alternate
+        animation-delay 1s
+
+    @keyframes dot-flashing 
+        0% 
+            background-color: #bbbbbb;
+        
+        50%
+        100% 
+            background-color: #000000;
+        
     .sgn_loader 
         position absolute
         top calc(50% - 80px)
