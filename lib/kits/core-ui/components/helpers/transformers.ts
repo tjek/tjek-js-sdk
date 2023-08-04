@@ -24,6 +24,9 @@ export const transformScriptData = (
         offerClickBehavior:
             dataset.componentPublicationViewerOfferClickBehavior ||
             'shopping_list',
+        offerModalVersion: +(
+            dataset.componentPublicationViewerOfferModalVersion || 1
+        ),
         disableShoppingList:
             dataset.componentPublicationDisableShoppingList === 'true',
         disableClose: dataset.componentPublicationDisableClose === 'true',

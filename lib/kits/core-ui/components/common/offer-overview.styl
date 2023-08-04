@@ -1,5 +1,11 @@
-.sgn-offer-overview-container
-    height 100%
+.sgn__incito
+    .sgn-offer-overview-container
+        height 100%
+        overflow-y scroll
+
+.sgn__pp
+    .sgn-offer-overview-container
+        height 100%
 
 .sgn-offer-overview-popup
     position relative
@@ -101,6 +107,84 @@
         width 60px
         height 60px
         animation spin 2s linear infinite
+
+.sgn-offer-overview-popup-v2
+    max-width 100%
+    width 100%
+    border-radius unset
+    box-shadow unset
+    border-radius 0
+    background rgba(255,255,255, 0.9)
+    margin-top 0
+    max-height 100vh
+    height 100vh
+    padding 0
+
+    .sgn-popup-header
+        padding 10px 20px
+        margin-top 80px
+
+    .sgn-popup-content
+        padding 10px 20px
+
+    .sgn-popup-offer-container
+        display grid
+        grid-template-columns repeat(auto-fit, minmax(220px, 2fr))
+        gap 8px
+
+    .sgn-products-texts-container
+        margin-top 10px
+            
+    .sgn-offer-heading
+        font-size 1.5em
+
+    .sgn-offer-img
+        background-color unset
+
+    .sgn-offer-img-v2
+        padding-top 40%
+
+    .sgn-product-details
+        padding 16px 12px
+        box-shadow rgba(0, 0, 0, 0.3) 0px 1px 3px
+        margin-bottom 16px
+        border-radius 4px
+        background #ffffff
+
+        &:hover
+            background-color #f3f3f3
+    
+    .sgn-product-heading
+        width 70%
+        float left
+        padding 6px 0
+
+    .sgn-offer-product-quantity
+        width 20%
+        float left
+
+        button
+            min-width 0
+            padding 4px 8px
+            border-radius 80%
+        
+        input
+            color #202020
+            border unset
+            background unset
+            width 30px
+            padding 8px 0
+            text-align center
+
+    .sgn-offer-product-basket
+        width 10%
+        float left
+
+        button
+            padding 6px 14px
+            min-width 0
+            background transparent
+
 
 .sgn__theme-dark
     .sgn-offer-overview-popup
