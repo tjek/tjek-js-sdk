@@ -303,11 +303,27 @@ const IncitoPublication = (
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
-        const shopListOffer = {
+        let shopListOffer = {
             name: offer.name,
             pricing: {price: offer.price, currency: offer.currency_code},
             is_ticked: false
         };
+
+        if (offer.basket?.productId) {
+            const product = offer.products?.find(
+                ({id}) => id == offer.basket?.productId
+            );
+            if (product) {
+                shopListOffer = {
+                    name: product.title,
+                    pricing: {
+                        price: offer.price,
+                        currency: offer.currency_code
+                    },
+                    is_ticked: false
+                };
+            }
+        }
 
         if (!storedPublicationOffers) {
             clientLocalStorage.setWithEvent(
@@ -316,7 +332,9 @@ const IncitoPublication = (
                 'tjek_shopping_list_update'
             );
         } else {
-            storedPublicationOffers.push(shopListOffer);
+            for (let i = 1; i <= (offer.basket?.quantity || 1); i++) {
+                storedPublicationOffers.push(shopListOffer);
+            }
             clientLocalStorage.setWithEvent(
                 'publication-saved-offers',
                 storedPublicationOffers,

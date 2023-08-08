@@ -190,10 +190,10 @@ const OfferOverview = ({
         const {localeCode, currency} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
+        offer.products = products;
 
         return {
             ...offer,
-            products,
             heading: offer.name,
             price: formatPrice(
                 offer?.price,
@@ -286,10 +286,11 @@ const OfferOverview = ({
         );
     };
 
-    const addQuantityListener = () => {
+    const addProductListener = () => {
         const productEls = document.querySelectorAll('.sgn-product-details');
 
         productEls.forEach((productEl: HTMLElement) => {
+            const productId = productEl.dataset.offerProductId;
             const minusBtn = productEl.querySelector<HTMLElement>(
                 '.sgn-offer-product-quantity-minus'
             );
@@ -314,7 +315,13 @@ const OfferOverview = ({
             });
 
             basketBtn?.addEventListener('click', () => {
-                addToShoppingList(offer);
+                addToShoppingList({
+                    ...offer,
+                    basket: {
+                        productId,
+                        quantity
+                    }
+                });
             });
         });
     };
@@ -324,7 +331,7 @@ const OfferOverview = ({
 
         addOpenWebshopListener();
         addShoppingListListener();
-        addQuantityListener();
+        addProductListener();
     };
 
     return {render};
