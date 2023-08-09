@@ -300,12 +300,13 @@ const IncitoPublication = (
     };
 
     const addToShoppingList = (offer) => {
-        const storedPublicationOffers = clientLocalStorage.get(
-            'publication-saved-offers'
-        );
+        const storedPublicationOffers =
+            clientLocalStorage.get('publication-saved-offers') || [];
         let shopListOffer = {
+            id: offer.id,
             name: offer.name,
             pricing: {price: offer.price, currency: offer.currency_code},
+            quantity: 1,
             is_ticked: false
         };
 
@@ -314,33 +315,44 @@ const IncitoPublication = (
                 ({id}) => id == offer.basket?.productId
             );
             if (product) {
+                console.log('id:::', product.id, offer);
                 shopListOffer = {
+                    id: product.id,
                     name: product.title,
                     pricing: {
                         price: offer.price,
                         currency: offer.currency_code
                     },
+                    quantity: offer.basket?.quantity || 1,
                     is_ticked: false
                 };
             }
         }
 
-        if (!storedPublicationOffers) {
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                [shopListOffer],
-                'tjek_shopping_list_update'
-            );
-        } else {
-            for (let i = 1; i <= (offer.basket?.quantity || 1); i++) {
-                storedPublicationOffers.push(shopListOffer);
-            }
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                storedPublicationOffers,
-                'tjek_shopping_list_update'
-            );
-        }
+        storedPublicationOffers.push(shopListOffer);
+
+        const mergedOffers = storedPublicationOffers.reduce(
+            (acc, currentOffer) => {
+                const existingOffer = acc.find(
+                    (offer) => offer.id === currentOffer.id
+                );
+
+                if (existingOffer) {
+                    existingOffer.quantity += currentOffer.quantity;
+                } else {
+                    acc.push({...currentOffer});
+                }
+
+                return acc;
+            },
+            []
+        );
+
+        clientLocalStorage.setWithEvent(
+            'publication-saved-offers',
+            mergedOffers,
+            'tjek_shopping_list_update'
+        );
 
         animateShoppingListCounter();
     };
