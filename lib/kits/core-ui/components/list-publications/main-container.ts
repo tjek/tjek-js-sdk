@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
 import './main-container.styl';
+import {translate} from '../helpers/component';
 
 const defaultTemplate = `\
 <div class="sgn__publications">
@@ -18,6 +19,9 @@ const defaultTemplate = `\
                         <span>{{dateFrom}}-{{dateTill}}</span>
                     </div>
                 </div>
+                <div class="sgn-publications-list-content-status">
+                    <span>{{upcomingLabel}}</span>
+                </div>
             </div>
         </li>
         {{/publications}}
@@ -28,9 +32,18 @@ const defaultTemplate = `\
 `;
 
 const MainContainer = ({publications, template, el}) => {
+    const translations = {
+        upcoming: translate('publication_viewer_upcoming')
+    };
+
     const render = () => {
         el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
-            publications
+            publications,
+            upcomingLabel: function () {
+                return this.status === 'inactive'
+                    ? `(${translations.upcoming})`
+                    : '';
+            }
         });
     };
 
