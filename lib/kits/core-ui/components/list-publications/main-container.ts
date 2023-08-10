@@ -40,9 +40,7 @@ const MainContainer = ({publications, template, el}) => {
         el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
             publications,
             upcomingLabel: function () {
-                return this.status === 'inactive'
-                    ? `(${translations.upcoming})`
-                    : '';
+                return this.status === 'inactive' ? translations.upcoming : '';
             }
         });
     };
