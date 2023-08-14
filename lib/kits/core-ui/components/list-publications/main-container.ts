@@ -6,7 +6,7 @@ const defaultTemplate = `\
 <div class="sgn__publications">
     <ul class="sgn-publications-list-items-container">
         {{#publications}}
-        <li class="sgn-publications-li">
+        <li class="sgn-publications-li" data-status="{{status}}">
             <div class="publications__item" data-id="{{id}}">
                 <div class="sgn-publications-list-content-img">
                     <img data-id="{{id}}" src="{{images.view}}" alt="{{label}}">

@@ -15,6 +15,10 @@
 .sgn-publications-li
     position relative
 
+    &[data-status="inactive"]
+        .sgn-publications-list-content-img
+            opacity 0.5
+
 .publications__item
     box-shadow rgba(0, 0, 0, .4) 0px 0px 10px
     border-radius 10px
@@ -50,14 +54,17 @@
 
 .sgn-publications-list-content-status
     position absolute
-    top 40%
-    left 0
-    width 100%
-    background-color rgba(255, 255, 255, 0.9)
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    width 88%
+    background-color rgba(0, 0, 0, 0.6)
+    color #ffffff
     font-weight 600
     font-size 20px
-    line-height 50px
+    line-height 28px
     text-align center
+    border-radius 5px
 
 .sgn-publications-list-content-date
     font-size 12px
