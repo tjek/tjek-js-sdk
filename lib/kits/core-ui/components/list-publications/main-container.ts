@@ -10,6 +10,9 @@ const defaultTemplate = `\
             <div class="publications__item" data-id="{{id}}">
                 <div class="sgn-publications-list-content-img">
                     <img data-id="{{id}}" src="{{images.view}}" alt="{{label}}">
+                    <div class="sgn-publications-list-content-status">
+                        <span>{{upcomingLabel}}</span>
+                    </div>
                 </div>
                 <div class="sgn-publications-list-content-text">
                     <div class="sgn-publications-list-content-heading">
@@ -18,9 +21,6 @@ const defaultTemplate = `\
                     <div class="sgn-publications-list-content-date">
                         <span>{{dateFrom}}-{{dateTill}}</span>
                     </div>
-                </div>
-                <div class="sgn-publications-list-content-status">
-                    <span>{{upcomingLabel}}</span>
                 </div>
             </div>
         </li>
