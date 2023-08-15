@@ -15,6 +15,11 @@
 .sgn-publications-li
     position relative
 
+    &[data-status="inactive"]
+        .sgn-publications-list-content-img
+            > img
+                opacity 0.5
+
 .publications__item
     box-shadow rgba(0, 0, 0, .4) 0px 0px 10px
     border-radius 10px
@@ -47,6 +52,19 @@
     text-overflow ellipsis
     white-space nowrap
     overflow hidden
+
+.sgn-publications-list-content-status
+    position absolute
+    bottom 0
+    left 0
+    width 100%
+    background-color rgba(0, 0, 0, 0.6)
+    color #ffffff
+    font-weight 600
+    font-size 20px
+    line-height 28px
+    text-align center
+    border-radius 10px
 
 .sgn-publications-list-content-date
     font-size 12px

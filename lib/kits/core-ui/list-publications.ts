@@ -8,7 +8,9 @@ import {
     pushQueryParam,
     formatDate,
     transformFilter,
-    getHashFragments
+    getHashFragments,
+    getPubState,
+    parseDateStr
 } from './components/helpers/component';
 import type {Tracker} from '../events';
 
@@ -162,7 +164,13 @@ const ListPublications = (
             .map((publication) => ({
                 ...publication,
                 dateFrom: formatDate(publication?.run_from),
-                dateTill: formatDate(publication?.run_till)
+                dateTill: formatDate(publication?.run_till),
+                status: getPubState(
+                    publication?.run_from,
+                    new Date(
+                        Number(parseDateStr(publication?.run_till)) - 1000
+                    ).toISOString()
+                )
             }));
     };
 
