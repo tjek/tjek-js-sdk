@@ -315,7 +315,6 @@ const IncitoPublication = (
                 ({id}) => id == offer.basket?.productId
             );
             if (product) {
-                console.log('id:::', product.id, offer);
                 shopListOffer = {
                     id: product.id,
                     name: product.title,

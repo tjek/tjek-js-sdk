@@ -30,12 +30,21 @@ const defaultTemplate = `\
         </div>
         <ol class="sgn-shopping-list-items-container">
             {{#offers}}
-            <li class="sgn-shopping-list-item-container" data-id="{{index}}">
+            <li class="sgn-shopping-list-item-container" data-id="{{index}}" data-offer-product-id="{{id}}">
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>
+                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
                         </div>
+                        <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">-</button>
+                            <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
+                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">+</button>
+                        </div>
+                        <div class="sgn-shopping-list-content-ticker">
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" checked="true" class="sgn-shopping-list-content-ticker-box"/>
+                        </div>
+                        <div class="sgn-clearfix"></div>
                     </div>
                 </div>
             </li>
@@ -45,8 +54,17 @@ const defaultTemplate = `\
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>
+                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
                         </div>
+                        <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">-</button>
+                            <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
+                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">+</button>
+                        </div>
+                        <div class="sgn-shopping-list-content-ticker">
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" class="sgn-shopping-list-content-ticker-box"/>
+                        </div>
+                        <div class="sgn-clearfix"></div>
                     </div>
                 </div>
             </li>
@@ -135,9 +153,9 @@ const ShoppingList = ({template}) => {
 
     const addTickerListener = () => {
         container
-            ?.querySelectorAll('.sgn-shopping-list-item-container')
+            ?.querySelectorAll('.sgn-shopping-list-content-ticker-box')
             .forEach((itemEl) => {
-                itemEl.addEventListener('click', tickOffer, false);
+                itemEl.addEventListener('change', tickOffer);
             });
     };
 
@@ -145,7 +163,7 @@ const ShoppingList = ({template}) => {
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
-        const index = e.currentTarget.dataset?.id;
+        const index = e.currentTarget.value;
 
         storedPublicationOffers[index].is_ticked =
             !storedPublicationOffers[index].is_ticked;
@@ -276,6 +294,55 @@ const ShoppingList = ({template}) => {
             });
     };
 
+    const addQuantityListener = () => {
+        const productEls = document.querySelectorAll(
+            '.sgn-shopping-list-item-container'
+        );
+
+        productEls.forEach((productEl: HTMLElement) => {
+            const index = productEl.dataset.id;
+            const minusBtn = productEl.querySelector<HTMLElement>(
+                '.sgn-offer-product-quantity-minus'
+            );
+            const plusBtn = productEl.querySelector<HTMLElement>(
+                '.sgn-offer-product-quantity-plus'
+            );
+            const quantityTxt = productEl.querySelector<HTMLInputElement>(
+                '.sgn-offer-product-quantity-text'
+            );
+            const storedPublicationOffers = clientLocalStorage.get(
+                'publication-saved-offers'
+            );
+
+            let quantity = +(quantityTxt?.value ?? 1);
+
+            plusBtn?.addEventListener('click', () => {
+                if (quantityTxt && index) {
+                    quantityTxt.value = `${++quantity}`;
+
+                    storedPublicationOffers[index].quantity = quantityTxt.value;
+                    clientLocalStorage.setWithEvent(
+                        'publication-saved-offers',
+                        storedPublicationOffers,
+                        'tjek_shopping_list_update'
+                    );
+                }
+            });
+            minusBtn?.addEventListener('click', () => {
+                if (quantityTxt && quantity > 1 && index) {
+                    quantityTxt.value = `${--quantity}`;
+
+                    storedPublicationOffers[index].quantity = quantityTxt.value;
+                    clientLocalStorage.setWithEvent(
+                        'publication-saved-offers',
+                        storedPublicationOffers,
+                        'tjek_shopping_list_update'
+                    );
+                }
+            });
+        });
+    };
+
     const formatListToShare = (data, newLineDelimiter = `\n`) => {
         let offerStr = '';
 
@@ -294,6 +361,7 @@ const ShoppingList = ({template}) => {
     const addEventListeners = () => {
         document.querySelector<HTMLDivElement>('.sgn-modal-container')?.focus();
 
+        addQuantityListener();
         addTickerListener();
         addClearTickedListListener();
         addClearListListener();
