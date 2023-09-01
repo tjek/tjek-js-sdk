@@ -321,29 +321,41 @@ const PagedPublication = (
     };
 
     const addToShoppingList = (hotspot: V2Hotspot) => {
-        const storedPublicationOffers = clientLocalStorage.get(
-            'publication-saved-offers'
-        );
+        const storedPublicationOffers =
+            clientLocalStorage.get('publication-saved-offers') || [];
         const shopListOffer = {
+            id: hotspot.id,
             name: hotspot.heading,
             pricing: hotspot.offer?.pricing,
+            quantity: 1,
             is_ticked: false
         };
+        console.log('hotspot:::', hotspot);
 
-        if (!storedPublicationOffers) {
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                [shopListOffer],
-                'tjek_shopping_list_update'
-            );
-        } else {
-            storedPublicationOffers.push(shopListOffer);
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                storedPublicationOffers,
-                'tjek_shopping_list_update'
-            );
-        }
+        storedPublicationOffers.push(shopListOffer);
+
+        const mergedOffers = storedPublicationOffers.reduce(
+            (acc, currentOffer) => {
+                const existingOffer = acc.find(
+                    (offer) => offer.id === currentOffer.id
+                );
+
+                if (existingOffer) {
+                    existingOffer.quantity += currentOffer.quantity;
+                } else {
+                    acc.push({...currentOffer});
+                }
+
+                return acc;
+            },
+            []
+        );
+
+        clientLocalStorage.setWithEvent(
+            'publication-saved-offers',
+            mergedOffers,
+            'tjek_shopping_list_update'
+        );
 
         animateShoppingListCounter();
     };

@@ -37,11 +37,11 @@ const defaultTemplate = `\
                             <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
                         </div>
                         <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
-                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">-</button>
+                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">-</button>
                             <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
-                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">+</button>
+                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">+</button>
                         </div>
-                        <div class="sgn-shopping-list-content-ticker">
+                        <div class="sgn-shopping-list-content-ticker sgn-hide-print">
                             <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" checked="true" class="sgn-shopping-list-content-ticker-box"/>
                         </div>
                         <div class="sgn-clearfix"></div>
@@ -57,11 +57,11 @@ const defaultTemplate = `\
                             <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
                         </div>
                         <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
-                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">-</button>
+                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">-</button>
                             <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
-                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">+</button>
+                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">+</button>
                         </div>
-                        <div class="sgn-shopping-list-content-ticker">
+                        <div class="sgn-shopping-list-content-ticker sgn-hide-print">
                             <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" class="sgn-shopping-list-content-ticker-box"/>
                         </div>
                         <div class="sgn-clearfix"></div>
@@ -349,8 +349,8 @@ const ShoppingList = ({template}) => {
         data?.forEach((offer) => {
             if (!offer.is_ticked) {
                 offerStr += offer.price
-                    ? `${offer.price} - ${offer.name}`
-                    : `${offer.name}`;
+                    ? `${offer.price} - ${offer.name} (${offer.quantity || 1})`
+                    : `${offer.name} (${offer.quantity || 1})`;
                 offerStr += newLineDelimiter;
             }
         });
