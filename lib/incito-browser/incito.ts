@@ -247,10 +247,11 @@ function renderView(view, canLazyload: boolean) {
 
             if (isDefinedStr(view.src)) {
                 if (canLazyload) {
-                    attrs.loading = 'lazy';
+                    attrs['data-src'] = src;
+                    classNames.push('incito--lazy');
+                } else {
+                    attrs.src = src;
                 }
-
-                attrs.src = src;
             }
 
             if (isDefinedStr(view.label)) attrs['alt'] = view.label;
@@ -314,10 +315,7 @@ function renderView(view, canLazyload: boolean) {
 
             const src = String(new URL(view.src));
 
-            if ('loading' in HTMLIFrameElement.prototype) {
-                attrs.loading = 'lazy';
-                attrs.src = src;
-            } else if (canLazyload) {
+            if (canLazyload) {
                 classNames.push('incito--lazy');
                 attrs['data-src'] = src;
             } else {
@@ -899,6 +897,11 @@ export default class Incito extends MicroEvent<{
         window.addEventListener('pagehide', this.handlePageHide);
         window.addEventListener('beforeunload', this.handleBeforeUnload);
 
+        const root =
+            this.containerEl.dataset.isScrollElement === 'true'
+                ? this.containerEl
+                : null;
+
         this.sectionObserver = new IntersectionObserver(
             (entries) =>
                 entries.forEach(({target, isIntersecting: newVisibility}) => {
@@ -911,7 +914,7 @@ export default class Incito extends MicroEvent<{
                     this.sectionVisibility.set(target, newVisibility);
                     this.triggerSectionVisibility(target, newVisibility);
                 }),
-            {rootMargin: '5px 0px'}
+            {root, rootMargin: '5px 0px'}
         );
         this.lazyObserver = new IntersectionObserver(
             (entries) => {
@@ -922,7 +925,7 @@ export default class Incito extends MicroEvent<{
                     }
                 });
             },
-            {rootMargin: '500px 0px'}
+            {root, rootMargin: '500px 0px'}
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {
@@ -941,7 +944,7 @@ export default class Incito extends MicroEvent<{
                     }
                 });
             },
-            {threshold: 0.1}
+            {root, threshold: 0.1}
         );
     }
 

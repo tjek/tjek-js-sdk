@@ -15,6 +15,20 @@
             type="text/css"
         />
         <style>
+            html {
+                overflow: hidden;
+            }
+
+            .sgn__incito {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
             body {
                 margin: 0;
                 font-size: 16px;
@@ -31,7 +45,7 @@
         </style>
     </head>
     <body>
-        <div class="sgn__incito">
+        <div class="sgn__incito" data-is-scroll-element="true">
             <div class="sgn-incito__progress"></div>
         </div>
 
@@ -49,7 +63,7 @@
                 eventTracker: SGN.config.get('eventTracker')
             });
 
-            this.bootstrapper.fetch(function (error, res) {
+            bootstrapper.fetch(function (error, res) {
                 if (error) return console.error(error);
 
                 var viewer = bootstrapper.createViewer(res);
