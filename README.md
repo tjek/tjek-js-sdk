@@ -75,6 +75,23 @@ If you are to integrate your publications in other contexts such as:
 
 Currently, we support embeds for both paged and Incito publications. Here's how it works:
 
+You can integrate these following URL's:
+
+-   Incito Publication Reader: `https://js-sdk.tjek.com/embed/incito-publication-reader-v1.html`
+-   Paged Publication Reader: `https://js-sdk.tjek.com/embed/paged-publication-reader-v1.html`
+
+Both URL's expose a `window.sdk` object you can interface with via the webview.
+
+To get events back from the webview you need to expose the following:
+
+#### iOS
+
+TODO
+
+#### Android
+
+TODO
+
 ## API Reference
 
 Before embedding your publications you almost always want to use our API to fetch a list of active publications. Here's how that works:
