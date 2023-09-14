@@ -117,7 +117,35 @@ const Items = (
         // Minor mask
         putVersion(pkg.version.replace(versionRE, (_, maj) => `${maj}.x.x`)),
         // Major mask
-        putVersion(pkg.version.replace(versionRE, 'x.x.x'))
+        putVersion(pkg.version.replace(versionRE, 'x.x.x')),
+        // Embed
+        putObject({
+            key: 'embed/incito-publication-reader-legacy.html',
+            bodyPath: path.join(
+                __dirname,
+                'embed',
+                'incito-publication-reader-legacy.html'
+            ),
+            contentType: 'text/html'
+        }),
+        putObject({
+            key: 'embed/incito-publication-reader-v1.html',
+            bodyPath: path.join(
+                __dirname,
+                'embed',
+                'incito-publication-reader-v1.html'
+            ),
+            contentType: 'text/html'
+        }),
+        putObject({
+            key: 'embed/paged-publication-reader-v1.html',
+            bodyPath: path.join(
+                __dirname,
+                'embed',
+                'paged-publication-reader-v1.html'
+            ),
+            contentType: 'text/html'
+        })
     ])
 ).flat();
 

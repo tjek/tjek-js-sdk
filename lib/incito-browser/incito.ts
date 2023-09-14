@@ -770,7 +770,7 @@ export default class Incito extends MicroEvent<{
         this.el.addEventListener('click', (e) => {
             const el = closest(
                 e.target as HTMLElement,
-                '.incito__view [data-link]'
+                '.incito__view[data-link]'
             );
             const link = el ? el.dataset.link : null;
 

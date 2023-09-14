@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Paged Publication Reader</title>
+        <style>
+            html {
+                -moz-text-size-adjust: none;
+                -webkit-text-size-adjust: none;
+                text-size-adjust: none;
+            }
+
+            * {
+                -webkit-touch-callout: none;
+                -webkit-user-callout: none;
+                -webkit-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-modify: none;
+                -webkit-highlight: none;
+                user-select: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .incito__view[data-role='offer'] {
+                cursor: pointer;
+            }
+        </style>
+        <link
+            href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <script
+            src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
+            id="sgn-sdk"
+        ></script>
+    </head>
+    <body>
+        <div id="container"></div>
+
+        <script>
+            window.sdk = (function () {
+                const el = document.getElementById('container');
+                const isIosWebView = Boolean(
+                    window.webkit &&
+                        window.webkit.messageHandlers &&
+                        window.webkit.messageHandlers.iosJSInterface
+                );
+                const isAndroidWebView = Boolean(
+                    window.androidJSInterface &&
+                        window.androidJSInterface &&
+                        window.androidJSInterface.onEvent
+                );
+                const isWebview = isIosWebView || isAndroidWebView;
+                let viewer;
+                let eventTracker;
+                let bootstrapper;
+
+                function emit(eventName, payload) {
+                    const data = JSON.stringify({
+                        name: eventName,
+                        payload
+                    });
+
+                    if (isIosWebView) {
+                        window.webkit.messageHandlers.iosJSInterface.postMessage(
+                            data
+                        );
+                    } else if (isAndroidWebView) {
+                        window.androidJSInterface.onEvent(data);
+                    } else {
+                        console.log(eventName, payload);
+                    }
+                }
+
+                function publicStart(options) {
+                    if (viewer) {
+                        return;
+                    }
+
+                    const apiKey = options.apiKey;
+                    const trackId = options.trackId;
+                    const clientId = options.clientId;
+                    const publicationId = options.publicationId;
+                    const capabilities = (options.capabilities || '').split(
+                        ','
+                    );
+
+                    if (!apiKey) {
+                        throw new Error('apiKey is required');
+                    }
+
+                    if (!trackId) {
+                        throw new Error('trackId is required');
+                    }
+
+                    if (!clientId) {
+                        throw new Error('clientId is required');
+                    }
+
+                    if (!publicationId) {
+                        throw new Error('publicationId is required');
+                    }
+
+                    eventTracker = new SGN.EventsKit.Tracker({
+                        trackId: trackId,
+                        client: {
+                            id: clientId
+                        }
+                    });
+
+                    SGN.config.set({
+                        apiKey: apiKey,
+                        eventTracker: eventTracker
+                    });
+
+                    bootstrapper = new SGN.IncitoPublicationKit.Bootstrapper({
+                        el: el,
+                        eventTracker: eventTracker,
+                        id: publicationId,
+                        enableLazyLoading: true
+                    });
+
+                    bootstrapper.fetch(function (error, data) {
+                        if (error) {
+                            throw error;
+                        }
+
+                        viewer = bootstrapper.createViewer(data);
+
+                        SGN.CoreUIKit.on(
+                            el,
+                            'click',
+                            '.incito__view[data-role="offer"]',
+                            function (e) {
+                                e.preventDefault();
+
+                                emit('offerClicked', {id: this.dataset.id});
+                            }
+                        );
+
+                        if (isWebview) {
+                            window.open = function (url) {
+                                emit('linkClicked', {
+                                    link: url
+                                });
+                            };
+                        }
+
+                        viewer.start();
+                    });
+                }
+
+                function publicDestroy() {
+                    if (!viewer) {
+                        viewer.destroy();
+                    }
+                }
+
+                return {
+                    start: publicStart,
+                    destroy: publicDestroy
+                };
+            })();
+
+            const searchParams = new URLSearchParams(window.location.search);
+            const apiKey = searchParams.get('api_key');
+            const trackId = searchParams.get('track_id');
+            const clientId = searchParams.get('client_id');
+            const publicationId = searchParams.get('publication_id');
+            const capabilities = searchParams.get('capabilities');
+
+            if (apiKey && trackId && clientId && publicationId) {
+                window.sdk.start({
+                    apiKey,
+                    trackId,
+                    clientId,
+                    publicationId,
+                    capabilities
+                });
+            }
+        </script>
+    </body>
+</html>

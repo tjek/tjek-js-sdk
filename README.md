@@ -63,12 +63,36 @@ SGN.config.set({
 
 To provide your users with a viewing experience for PDF's you need to use our PagedPublicationKit. We've built an [example](https://tjek.github.io/tjek-js-sdk/examples/paged-publication.html) that shows how it can work.
 
-## More Platforms
+## Native Apps and Other Contexts
 
-To learn more about integrating the same experience on iOS and Android be sure to check out the respective SDK's:
+If you are to integrate your publications in other contexts such as:
 
--   [Tjek iOS SDK](https://github.com/tjek/tjek-swift-sdk)
--   [Tjek Android SDK](https://github.com/tjek/tjek-android-sdk)
+-   Your native iOS/Android app
+-   Your native React Native/Flutter/X iOS/Android app
+-   In an iframe on another website
+
+... then you can use our `embed` feature.
+
+Currently, we support embeds for both paged and Incito publications. Here's how it works:
+
+## API Reference
+
+Before embedding your publications you almost always want to use our API to fetch a list of active publications. Here's how that works:
+
+### Get a List of Publications
+
+#### Request
+
+-   Method: `GET`
+-   URL: `https://squid-api.tjek.com/v2/catalogs`
+-   Query parameters
+    -   `dealer_id`: Your business ID (find it in the CMS)
+-   Request headers
+    -   `x-api-key`: Your API key
+
+#### Response
+
+You'll get an array of objects in JSON back.
 
 ## Core UI
 

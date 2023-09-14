@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Paged Publication Reader</title>
+        <style>
+            html {
+                -moz-text-size-adjust: none;
+                -webkit-text-size-adjust: none;
+                text-size-adjust: none;
+            }
+
+            * {
+                -webkit-touch-callout: none;
+                -webkit-user-callout: none;
+                -webkit-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-modify: none;
+                -webkit-highlight: none;
+                user-select: none;
+            }
+
+            body {
+                margin: 0;
+            }
+        </style>
+        <link
+            href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <script
+            src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
+            id="sgn-sdk"
+        ></script>
+    </head>
+    <body>
+        <div id="container" class="sgn__pp" data-layout-fixed="true">
+            <div class="verso">
+                <div class="verso__scroller">
+                    <div class="sgn-pp__pages"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            window.sdk = (function () {
+                const el = document.getElementById('container');
+                const isIosWebView = Boolean(
+                    window.webkit &&
+                        window.webkit.messageHandlers &&
+                        window.webkit.messageHandlers.iosJSInterface
+                );
+                const isAndroidWebView = Boolean(
+                    window.androidJSInterface &&
+                        window.androidJSInterface &&
+                        window.androidJSInterface.onEvent
+                );
+                const isWebview = isIosWebView || isAndroidWebView;
+                let viewer;
+                let eventTracker;
+                let bootstrapper;
+
+                function emit(eventName, payload) {
+                    const data = JSON.stringify({
+                        name: eventName,
+                        payload
+                    });
+
+                    if (isIosWebView) {
+                        window.webkit.messageHandlers.iosJSInterface.postMessage(
+                            data
+                        );
+                    } else if (isAndroidWebView) {
+                        window.androidJSInterface.onEvent(data);
+                    } else {
+                        console.log(eventName, payload);
+                    }
+                }
+
+                function publicStart(options) {
+                    if (viewer) {
+                        return;
+                    }
+
+                    const apiKey = options.apiKey;
+                    const trackId = options.trackId;
+                    const clientId = options.clientId;
+                    const publicationId = options.publicationId;
+                    const publicationPage = options.publicationPage;
+                    const capabilities = (options.capabilities || '').split(
+                        ','
+                    );
+
+                    if (!apiKey) {
+                        throw new Error('apiKey is required');
+                    }
+
+                    if (!trackId) {
+                        throw new Error('trackId is required');
+                    }
+
+                    if (!clientId) {
+                        throw new Error('clientId is required');
+                    }
+
+                    if (!publicationId) {
+                        throw new Error('publicationId is required');
+                    }
+
+                    eventTracker = new SGN.EventsKit.Tracker({
+                        trackId: trackId,
+                        client: {
+                            id: clientId
+                        }
+                    });
+
+                    SGN.config.set({
+                        apiKey: apiKey,
+                        eventTracker: eventTracker
+                    });
+
+                    bootstrapper = new SGN.PagedPublicationKit.Bootstrapper({
+                        el: el,
+                        eventTracker: eventTracker,
+                        id: publicationId,
+                        pageId: publicationPage
+                            ? 'page' + publicationPage
+                            : undefined
+                    });
+
+                    bootstrapper.fetch(function (error, data) {
+                        if (error) {
+                            throw error;
+                        }
+
+                        viewer = bootstrapper.createViewer(data);
+
+                        viewer.bind('hotspotClicked', function (event) {
+                            emit('hotspotClicked', event);
+                        });
+                        viewer.bind('hotspotPressed', function (event) {
+                            emit('hotspotPressed', event);
+                        });
+                        viewer.bind('beforeNavigation', function (event) {
+                            emit('beforeNavigation', {
+                                currentPosition: event.verso.currentPosition,
+                                newPosition: event.verso.newPosition
+                            });
+                        });
+                        viewer.bind('afterNavigation', function (event) {
+                            emit('afterNavigation', {
+                                previousPosition: event.verso.previousPosition,
+                                newPosition: event.verso.newPosition
+                            });
+                        });
+
+                        viewer.start();
+
+                        if (capabilities.includes('hotspots')) {
+                            bootstrapper.fetchHotspots(function (
+                                error2,
+                                hotspots
+                            ) {
+                                if (!error2) {
+                                    bootstrapper.applyHotspots(
+                                        viewer,
+                                        hotspots
+                                    );
+                                }
+                            });
+                        }
+
+                        if (capabilities.includes('page_decorations')) {
+                            bootstrapper.fetchPageDecorations(function (
+                                error2,
+                                decorations
+                            ) {
+                                if (!error2) {
+                                    bootstrapper.applyPageDecorations(
+                                        viewer,
+                                        decorations
+                                    );
+                                }
+                            });
+                        }
+                    });
+                }
+
+                function publicDestroy() {
+                    if (!viewer) {
+                        viewer.destroy();
+                    }
+                }
+
+                function publicNavigateToPage(pageNumber) {
+                    if (!viewer) {
+                        return;
+                    }
+
+                    viewer.navigateToIndex(pageNumber - 1);
+                }
+
+                return {
+                    start: publicStart,
+                    destroy: publicDestroy,
+                    navigateToPage: publicNavigateToPage
+                };
+            })();
+
+            const searchParams = new URLSearchParams(window.location.search);
+            const apiKey = searchParams.get('api_key');
+            const trackId = searchParams.get('track_id');
+            const clientId = searchParams.get('client_id');
+            const publicationId = searchParams.get('publication_id');
+            const publicationPage = searchParams.get('publication_page');
+            const capabilities = searchParams.get('capabilities');
+
+            if (apiKey && trackId && clientId && publicationId) {
+                window.sdk.start({
+                    apiKey,
+                    trackId,
+                    clientId,
+                    publicationId,
+                    publicationPage,
+                    capabilities
+                });
+            }
+        </script>
+    </body>
+</html>
