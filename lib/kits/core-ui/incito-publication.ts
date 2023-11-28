@@ -14,7 +14,8 @@ import {transformScriptData} from './components/helpers/transformers';
 import {
     transformFilter,
     getHashFragments,
-    pushQueryParam
+    pushQueryParam,
+    tranformWebshopLink
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -529,6 +530,10 @@ const IncitoPublication = (
         if (!res) throw new Error();
 
         if (res.offer.id) {
+            res.offer.webshop_link = tranformWebshopLink(
+                res.offer.webshop_link
+            );
+
             eventTracker?.trackOfferOpened({
                 'of.id': res.offer.id,
                 vt: eventTracker.createViewToken(res.offer.id)
