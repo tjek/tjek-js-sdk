@@ -239,3 +239,35 @@ export const getHashFragments = (hashParam) => {
 
     return {publicationId, pageNum};
 };
+
+const updateQueryParam = (url, paramName, newValue) => {
+    const urlObject = new URL(url);
+    const queryParams = urlObject.searchParams;
+    queryParams.set(paramName, newValue);
+
+    return urlObject.toString();
+};
+
+export const tranformWebshopLink = (url) => {
+    const scriptEl = document.getElementById('sgn-sdk');
+    const dataset = scriptEl?.dataset;
+
+    if (url) {
+        if (dataset?.componentPublicationUtmSource) {
+            url = updateQueryParam(
+                url,
+                'utm_source',
+                dataset.componentPublicationUtmSource
+            );
+        }
+        if (dataset?.componentPublicationUtmMedium) {
+            url = updateQueryParam(
+                url,
+                'utm_medium',
+                dataset.componentPublicationUtmMedium
+            );
+        }
+    }
+
+    return url;
+};
