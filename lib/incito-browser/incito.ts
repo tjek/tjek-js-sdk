@@ -85,6 +85,34 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
                 );
             }
 
+            if (item.span.name === 'markdown' && item.span.style) {
+                if (item.span.style === 'bold') {
+                    return (
+                        memo +
+                        '<strong><span style="' +
+                        'font-family:inherit;color:inherit;" ' +
+                        'data-name="' +
+                        item.span.name +
+                        '">' +
+                        escapedText +
+                        '</span></strong>'
+                    );
+                }
+
+                if (item.span.style === 'italic') {
+                    return (
+                        memo +
+                        '<em><span style="' +
+                        'font-family:inherit;color:inherit;" ' +
+                        'data-name="' +
+                        item.span.name +
+                        '">' +
+                        escapedText +
+                        '</span></em>'
+                    );
+                }
+            }
+
             return (
                 memo +
                 '<span style="' +
