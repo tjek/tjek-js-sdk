@@ -76,20 +76,20 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
         if (item.span?.style === 'bold') {
             return (
                 memo +
-                '<strong><span style="' +
-                'font-family:inherit;color:inherit;">' +
+                '<span style="' +
+                'font-family:inherit;color:inherit;font-weight:bold;">' +
                 escapedText +
-                '</span></strong>'
+                '</span>'
             );
         }
 
         if (item.span?.style === 'italic') {
             return (
                 memo +
-                '<em><span style="' +
-                'font-family:inherit;color:inherit;">' +
+                '<span style="' +
+                'font-family:inherit;color:inherit;font-style:italic;">' +
                 escapedText +
-                '</span></em>'
+                '</span>'
             );
         }
 
