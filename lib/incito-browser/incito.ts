@@ -73,6 +73,26 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
     return result.reduce((memo, item) => {
         const escapedText = escapeHTML(item.text || '');
 
+        if (item.span?.style === 'bold') {
+            return (
+                memo +
+                '<span style="' +
+                'font-family:inherit;color:inherit;font-weight:bold;">' +
+                escapedText +
+                '</span>'
+            );
+        }
+
+        if (item.span?.style === 'italic') {
+            return (
+                memo +
+                '<span style="' +
+                'font-family:inherit;color:inherit;font-style:italic;">' +
+                escapedText +
+                '</span>'
+            );
+        }
+
         if (item.span?.name) {
             if (item.span.name === 'link' && item.span.url) {
                 return (

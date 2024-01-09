@@ -197,6 +197,7 @@ export interface TextView extends FallbackView {
         end?: number;
         name?: 'superscript' | 'link';
         url?: string;
+        style?: 'bold' | 'italic';
         [k: string]: unknown;
     }[];
     max_lines?: number;
