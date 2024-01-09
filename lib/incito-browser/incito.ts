@@ -73,6 +73,32 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
     return result.reduce((memo, item) => {
         const escapedText = escapeHTML(item.text || '');
 
+        if (item.span?.style === 'bold') {
+            return (
+                memo +
+                '<strong><span style="' +
+                'font-family:inherit;color:inherit;" ' +
+                'data-name="' +
+                item.span.name +
+                '">' +
+                escapedText +
+                '</span></strong>'
+            );
+        }
+
+        if (item.span?.style === 'italic') {
+            return (
+                memo +
+                '<em><span style="' +
+                'font-family:inherit;color:inherit;" ' +
+                'data-name="' +
+                item.span.name +
+                '">' +
+                escapedText +
+                '</span></em>'
+            );
+        }
+
         if (item.span?.name) {
             if (item.span.name === 'link' && item.span.url) {
                 return (
@@ -83,34 +109,6 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
                     escapedText +
                     '</a>'
                 );
-            }
-
-            if (item.span.name === 'markdown' && item.span.style) {
-                if (item.span.style === 'bold') {
-                    return (
-                        memo +
-                        '<strong><span style="' +
-                        'font-family:inherit;color:inherit;" ' +
-                        'data-name="' +
-                        item.span.name +
-                        '">' +
-                        escapedText +
-                        '</span></strong>'
-                    );
-                }
-
-                if (item.span.style === 'italic') {
-                    return (
-                        memo +
-                        '<em><span style="' +
-                        'font-family:inherit;color:inherit;" ' +
-                        'data-name="' +
-                        item.span.name +
-                        '">' +
-                        escapedText +
-                        '</span></em>'
-                    );
-                }
             }
 
             return (
