@@ -77,10 +77,7 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
             return (
                 memo +
                 '<strong><span style="' +
-                'font-family:inherit;color:inherit;" ' +
-                'data-name="' +
-                item.span.name +
-                '">' +
+                'font-family:inherit;color:inherit;">' +
                 escapedText +
                 '</span></strong>'
             );
@@ -90,10 +87,7 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
             return (
                 memo +
                 '<em><span style="' +
-                'font-family:inherit;color:inherit;" ' +
-                'data-name="' +
-                item.span.name +
-                '">' +
+                'font-family:inherit;color:inherit;">' +
                 escapedText +
                 '</span></em>'
             );
