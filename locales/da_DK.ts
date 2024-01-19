@@ -20,5 +20,7 @@ export default {
     publication_viewer_close_label: 'Tilbage',
     publication_viewer_add_to_shopping_list: 'Tilføj til indkøbsliste',
     publication_viewer_visit_webshop_link: 'Besøg webshoplink',
-    publication_viewer_upcoming: 'Kommende'
+    publication_viewer_upcoming: 'Kommende',
+    publication_viewer_no_offer_link_label:
+        'The product is not available online. For more info please visit one of our stores.'
 };
