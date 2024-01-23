@@ -20,7 +20,5 @@ export default {
     publication_viewer_close_label: 'Close',
     publication_viewer_add_to_shopping_list: 'Add to Shopping List',
     publication_viewer_visit_webshop_link: 'Visit Webshop Link',
-    publication_viewer_upcoming: 'Upcoming',
-    publication_viewer_no_offer_link_label:
-        'The product is not available online. For more info please visit one of our stores.'
+    publication_viewer_upcoming: 'Upcoming'
 };

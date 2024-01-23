@@ -20,7 +20,5 @@ export default {
     publication_viewer_close_label: 'Tillbaka',
     publication_viewer_add_to_shopping_list: 'Lägg till inköpslista',
     publication_viewer_visit_webshop_link: 'Besök webbshoplänk',
-    publication_viewer_upcoming: 'Kommende',
-    publication_viewer_no_offer_link_label:
-        'The product is not available online. For more info please visit one of our stores.'
+    publication_viewer_upcoming: 'Kommende'
 };
