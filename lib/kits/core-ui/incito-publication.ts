@@ -276,7 +276,7 @@ const IncitoPublication = (
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
         ) {
-            if (link) {
+            if (!link) {
                 displayNoLinkOverlay(viewId);
                 return;
             }
