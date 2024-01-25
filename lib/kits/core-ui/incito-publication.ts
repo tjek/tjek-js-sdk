@@ -257,7 +257,7 @@ const IncitoPublication = (
     };
 
     const clickOfferCell = async (viewId, publicationId, sgnViewer) => {
-        const {products} =
+        const {products, link} =
             sgnViewer.incito?.ids?.[viewId]?.['tjek.offer.v1'] || {};
         dispatchOfferClickEvent({fetchOffer, viewId, publicationId, products});
 
@@ -276,6 +276,11 @@ const IncitoPublication = (
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
         ) {
+            if (!link) {
+                displayNoLinkOverlay(viewId);
+                return;
+            }
+
             const newWindowRef = window.open();
             const {offer} = await fetchOffer({viewId, publicationId});
 
@@ -289,6 +294,11 @@ const IncitoPublication = (
         } else if (
             scriptEls.offerClickBehavior === 'redirect_to_webshop_link'
         ) {
+            if (!link) {
+                displayNoLinkOverlay(viewId);
+                return;
+            }
+
             const {offer} = await fetchOffer({viewId, publicationId});
 
             if (offer.webshop_link) {
@@ -297,6 +307,28 @@ const IncitoPublication = (
         } else if (shoppingBtn) {
             const {offer} = await fetchOffer({viewId, publicationId});
             addToShoppingList(offer);
+        }
+    };
+
+    const displayNoLinkOverlay = (viewId) => {
+        if (!scriptEls.noOfferLinkMessage) return;
+
+        const offerContainer = document.querySelector(`[data-id="${viewId}"]`);
+        const existingOverlayEl = offerContainer?.querySelector(
+            '.sgn-offer-link-overlay'
+        );
+
+        if (!existingOverlayEl) {
+            const overlay = document.createElement('div');
+
+            overlay.className = 'sgn-offer-link-overlay';
+            overlay.innerHTML = `<span>${scriptEls.noOfferLinkMessage}</span>`;
+
+            offerContainer?.appendChild(overlay);
+
+            setTimeout(function () {
+                offerContainer?.removeChild(overlay);
+            }, 1500);
         }
     };
 
