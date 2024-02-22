@@ -62,6 +62,7 @@
                     urlParams.get('disablePageDecorations') || false,
                 disableLazyload: urlParams.get('disableLazyload') || false,
                 requestFilter: urlParams.get('requestFilter'),
+                noOfferLinkMessage: urlParams.get('noOfferLinkMessage'),
                 clientFilter: urlParams.get('clientFilter'),
                 utmSource: urlParams.get('utmSource'),
                 utmMedium: urlParams.get('utmMedium'),
@@ -170,6 +171,10 @@
             if (data.requestFilter) {
                 scriptEl.dataset.componentListPublicationsRequestFilter =
                     data.requestFilter;
+            }
+            if (data.noOfferLinkMessage) {
+                scriptEl.dataset.componentPublicationNoOfferLinkMessage =
+                    data.noOfferLinkMessage;
             }
             if (data.clientFilter) {
                 scriptEl.dataset.componentListPublicationsClientFilter =
