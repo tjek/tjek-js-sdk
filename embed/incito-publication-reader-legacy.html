@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>Incito</title>
+        <style>
+            html {
+                -moz-text-size-adjust: none;
+                -webkit-text-size-adjust: none;
+                text-size-adjust: none;
+            }
+
+            * {
+                -webkit-touch-callout: none;
+                -webkit-user-callout: none;
+                -webkit-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-modify: none;
+                -webkit-highlight: none;
+                user-select: none;
+            }
+
+            body {
+                margin: 0;
+            }
+        </style>
+        <link
+            href="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <script
+            src="https://js-sdk.tjek.com/sgn-sdk-4.x.x.min.js"
+            id="sgn-sdk"
+        ></script>
+    </head>
+    <body>
+        <script>
+            function emit(handler, payload, payload2) {
+                var hasIosHandler = Boolean(
+                    window.webkit &&
+                        window.webkit.messageHandlers &&
+                        window.webkit.messageHandlers[handler]
+                );
+                if (hasIosHandler) {
+                    if (payload !== undefined && payload2 !== undefined) {
+                        window.webkit.messageHandlers[handler].postMessage([
+                            payload,
+                            payload2
+                        ]);
+                    } else {
+                        window.webkit.messageHandlers[handler].postMessage(
+                            payload
+                        );
+                    }
+                }
+
+                var hasAndroidHandler = Boolean(
+                    window.androidJSInterface &&
+                        window.androidJSInterface[handler]
+                );
+                if (hasAndroidHandler) {
+                    if (payload !== undefined && payload2 !== undefined) {
+                        window.androidJSInterface[handler](payload, payload2);
+                    } else if (payload !== undefined) {
+                        window.androidJSInterface[handler](payload);
+                    } else {
+                        window.androidJSInterface[handler]();
+                    }
+                }
+            }
+
+            /*
+      Manifest of handler calls and their arguments:
+
+      - incitoSectionVisible(sectionId: string; sectionPosition: number)
+      - incitoSectionHidden(sectionId: string; sectionPosition: number)
+      - incitoFinishedRendering(documentHeight: number)
+      - viewClicked(ids: string[])
+      - viewLongClicked(ids: string[])
+      - offerViewClicked(id: string)
+      - offerViewLongClicked(id: string)
+      - progress(progress: number, scrollY: number)
+      - initDone()
+       
+       Note, on iOS multiple parameters are sent in an array (as iOS callback handlers only support a single param, and android callback handlers dont support dictionaries/maps). The order of the values in this array _always_ matches the order described in this manifest.
+      */
+
+            // Creates and renders the Incito html specified by the json data passed in.
+            // [!] FUNCTION SIGNATURE MUST NOT CHANGE - Used in production
+            window.init = function (data) {
+                setTimeout(function () {
+                    var incito = new SGN.IncitoPublicationKit.Viewer.Incito(
+                        document.body,
+                        {incito: data}
+                    );
+
+                    setTimeout(function () {
+                        incito.bind('sectionVisible', function (sectionData) {
+                            emit(
+                                'incitoSectionVisible',
+                                sectionData.sectionId,
+                                sectionData.sectionPosition
+                            );
+                        });
+                        incito.bind('sectionHidden', function (sectionData) {
+                            emit(
+                                'incitoSectionHidden',
+                                sectionData.sectionId,
+                                sectionData.sectionPosition
+                            );
+                        });
+
+                        incito.start();
+                    }, 0);
+
+                    setTimeout(function () {
+                        emit(
+                            'incitoFinishedRendering',
+                            document.body.scrollHeight
+                        );
+
+                        document.addEventListener(
+                            'click',
+                            function (e) {
+                                emit(
+                                    'viewClicked',
+                                    getElementIdsAtPoint(e.clientX, e.clientY)
+                                );
+
+                                var offerEl = e.target.closest(
+                                    ".incito__view[data-role='offer'][data-id]"
+                                );
+                                if (offerEl) {
+                                    emit(
+                                        'offerViewClicked',
+                                        offerEl.dataset.id
+                                    );
+                                }
+                            },
+                            false
+                        );
+
+                        document.addEventListener(
+                            'contextmenu',
+                            function (e) {
+                                emit(
+                                    'viewLongClicked',
+                                    getElementIdsAtPoint(e.clientX, e.clientY)
+                                );
+
+                                var offerEl = e.target.closest(
+                                    ".incito__view[data-role='offer'][data-id]"
+                                );
+                                if (offerEl) {
+                                    emit(
+                                        'offerViewLongClicked',
+                                        offerEl.dataset.viewId
+                                    );
+                                }
+                            },
+                            false
+                        );
+
+                        // Listen for scroll events, and forward the progress to Android listeners.
+                        window.addEventListener('scroll', function () {
+                            var maxOffset =
+                                document.body.scrollHeight - window.innerHeight;
+                            var progress =
+                                maxOffset > 0
+                                    ? window.pageYOffset / maxOffset
+                                    : 0;
+                            emit('progress', progress, window.pageYOffset);
+                        });
+
+                        emit('initDone');
+                    }, 200);
+                }, 20);
+            };
+
+            // Function called by android java code to scroll to the element with the specified viewId
+            // [!] FUNCTION SIGNATURE MUST NOT CHANGE - Used in production
+            window.goToView = function (viewId) {
+                var element = incitoViewElementWithId(viewId);
+
+                if (element) {
+                    element.scrollIntoView();
+                }
+            };
+
+            // Function allowing access to the absolute bounds of an element defined by the element Id
+            // [!] FUNCTION SIGNATURE MUST NOT CHANGE - Used in production
+            function absoluteBoundsOfElementWithId(elId) {
+                var element = incitoViewElementWithId(elId);
+
+                if (element != null) {
+                    return absoluteBoundsOfElement(element);
+                }
+            }
+
+            // Returns array of (non-null) id strings for all the elements at the specified point
+            // [!] FUNCTION SIGNATURE MUST NOT CHANGE - Used in production
+            function getOfferElementIdsAtPoint(x, y) {
+                return document
+                    .elementsFromPoint(x, y)
+                    .filter(function (el) {
+                        return el.getAttribute('data-role') === 'offer';
+                    })
+                    .map(function (el) {
+                        return el.getAttribute('data-id');
+                    })
+                    .filter(function (el) {
+                        return el != null;
+                    });
+            }
+
+            // Returns array of (non-null) id strings for all the elements at the specified point
+            // [!] FUNCTION SIGNATURE MUST NOT CHANGE - Used in production
+            function getElementIdsAtPoint(x, y) {
+                return document
+                    .elementsFromPoint(x, y)
+                    .map(function (el) {
+                        return el.getAttribute('data-id');
+                    })
+                    .filter(function (el) {
+                        return el != null;
+                    });
+            }
+
+            //////// Private funcs ////////
+
+            // internal function to retrieve the first incito__view element with the specified viewId.
+            function incitoViewElementWithId(viewId) {
+                return document.querySelector(
+                    ".incito__view[data-id='" + viewId + "']"
+                );
+            }
+
+            // internal function to retrieve the absolute bounds (ignoring scroll offset etc) of the specified element.
+            function absoluteBoundsOfElement(element) {
+                var bounds = element.getBoundingClientRect();
+                var top = 0;
+                var left = 0;
+
+                do {
+                    top += element.offsetTop || 0;
+                    left += element.offsetLeft || 0;
+
+                    element = element.offsetParent;
+                } while (element);
+
+                return {
+                    top: top,
+                    left: left,
+                    width: bounds.width,
+                    height: bounds.height
+                };
+            }
+
+            // Polyfill for `elementsFromPoint` for older versions of ios Safari.
+            if (
+                typeof document !== 'undefined' &&
+                typeof document.elementsFromPoint === 'undefined'
+            ) {
+                document.elementsFromPoint = function (x, y) {
+                    var elements = [];
+                    var pointerEvents = [];
+                    var el;
+
+                    do {
+                        if (el !== document.elementFromPoint(x, y)) {
+                            el = document.elementFromPoint(x, y);
+                            elements.push(el);
+                            pointerEvents.push(el.style.pointerEvents);
+                            el.style.pointerEvents = 'none';
+                        } else {
+                            el = null;
+                        }
+                    } while (el);
+
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].style.pointerEvents = pointerEvents[i];
+                    }
+
+                    return elements;
+                };
+            }
+
+            // Polyfill for `Element#closest` for older versions of android chrome.
+            if (typeof Element !== 'undefined') {
+                if (!Element.prototype.matches) {
+                    Element.prototype.matches =
+                        Element.prototype.msMatchesSelector ||
+                        Element.prototype.webkitMatchesSelector;
+                }
+
+                if (!Element.prototype.closest) {
+                    Element.prototype.closest = function (s) {
+                        var el = this;
+
+                        do {
+                            if (el.matches(s)) return el;
+                            el = el.parentElement || el.parentNode;
+                        } while (el !== null && el.nodeType === 1);
+
+                        return null;
+                    };
+                }
+            }
+        </script>
+    </body>
+</html>
