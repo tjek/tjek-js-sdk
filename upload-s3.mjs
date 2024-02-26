@@ -3,7 +3,7 @@ import {
     CreateInvalidationCommand
 } from '@aws-sdk/client-cloudfront';
 import {PutObjectCommand, S3Client} from '@aws-sdk/client-s3';
-import fs from 'fs';
+import {readFile} from 'fs/promises';
 import path from 'path';
 import * as url from 'url';
 import pkg from './dist/shopgun-sdk/package.json' assert {type: 'json'};
@@ -15,13 +15,13 @@ const cfClient = new CloudFrontClient({region: 'eu-west-1'});
 const bucket = 'sgn-js-sdk';
 const distribution = 'EKE7310HEBVSP';
 
-const putObject = async ({key, bodyPath, contentType}) => {
+const putObject = async ({key, body, bodyPath, contentType}) => {
     try {
         const result = await s3Client.send(
             new PutObjectCommand({
                 Bucket: bucket,
                 Key: key,
-                Body: fs.readFileSync(bodyPath).toString(),
+                Body: body || (await readFile(bodyPath, 'utf-8')),
                 ACL: 'public-read',
                 ContentType: contentType
             })
@@ -36,7 +36,25 @@ const putObject = async ({key, bodyPath, contentType}) => {
 };
 
 const putVersion = async (version) => {
+    const publicationViewerHtml = (
+        await readFile(
+            path.join(__dirname, 'embed', 'publication-viewer.html'),
+            'utf-8'
+        )
+    ).replace('x.x.x', version);
+
     await Promise.all([
+        version === 'x.x.x' &&
+            putObject({
+                key: 'embed/publication-viewer.html',
+                body: publicationViewerHtml,
+                contentType: 'text/html; charset=utf-8'
+            }),
+        putObject({
+            key: 'embed/publication-viewer-' + version + '.html',
+            body: publicationViewerHtml,
+            contentType: 'text/html; charset=utf-8'
+        }),
         putObject({
             key: 'sgn-sdk-' + version + '.js',
             bodyPath: path.join(__dirname, 'dist', 'shopgun-sdk', 'sgn-sdk.js'),
@@ -95,6 +113,8 @@ const putVersion = async (version) => {
     ]);
 
     return [
+        '/embed/publication-viewer.html',
+        '/embed/publication-viewer-' + version + '.html',
         '/sgn-sdk-' + version + '.js',
         '/sgn-sdk-' + version + '.js.map',
         '/sgn-sdk-' + version + '.min.js',
@@ -119,7 +139,9 @@ const Items = (
         // Major mask
         putVersion(pkg.version.replace(versionRE, 'x.x.x'))
     ])
-).flat();
+)
+    .flat()
+    .filter((value, index, array) => array.indexOf(value) === index);
 
 try {
     console.log(
