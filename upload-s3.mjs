@@ -38,7 +38,7 @@ const putObject = async ({key, body, bodyPath, contentType}) => {
 const putVersion = async (version) => {
     const publicationViewerHtml = (
         await readFile(
-            path.join(__dirname, 'embed', 'publication-viewer.html'),
+            path.join(__dirname, 'embeds', 'publication-viewer.html'),
             'utf-8'
         )
     ).replace('x.x.x', version);
@@ -46,12 +46,12 @@ const putVersion = async (version) => {
     await Promise.all([
         version === 'x.x.x' &&
             putObject({
-                key: 'embed/publication-viewer.html',
+                key: 'embeds/publication-viewer.html',
                 body: publicationViewerHtml,
                 contentType: 'text/html; charset=utf-8'
             }),
         putObject({
-            key: 'embed/publication-viewer-' + version + '.html',
+            key: 'embeds/publication-viewer-' + version + '.html',
             body: publicationViewerHtml,
             contentType: 'text/html; charset=utf-8'
         }),
@@ -113,8 +113,8 @@ const putVersion = async (version) => {
     ]);
 
     return [
-        '/embed/publication-viewer.html',
-        '/embed/publication-viewer-' + version + '.html',
+        '/embeds/publication-viewer.html',
+        '/embeds/publication-viewer-' + version + '.html',
         '/sgn-sdk-' + version + '.js',
         '/sgn-sdk-' + version + '.js.map',
         '/sgn-sdk-' + version + '.min.js',
