@@ -234,6 +234,15 @@ async function publish() {
     console.clear();
     if (DRY_RUN) console.info('Dry run! 🌵');
 
+    const gitInd = ora(`Git: Checking working tree`).start();
+    if (await run('git', ['status', '--porcelain'])) {
+        gitInd.fail(
+            'Git: Working tree dirty. Please resolve any changes before publishing.'
+        );
+        return;
+    }
+    gitInd.succeed(`Git: Working tree clean`);
+
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
     }).trim();
@@ -244,9 +253,9 @@ async function publish() {
         .split('T')[0]
         .replaceAll('-', '');
 
-    const pubInd = ora(`Building ${commithash}-${shortdate}`).start();
+    const buildInd = ora(`Building ${commithash}-${shortdate}`).start();
     await run('npm', ['run', 'build']);
-    pubInd.succeed(`Built ${commithash}-${shortdate}`);
+    buildInd.succeed(`Built ${commithash}-${shortdate}`);
 
     console.info('');
 
