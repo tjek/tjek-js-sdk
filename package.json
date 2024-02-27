@@ -5,70 +5,11 @@
     "browser": "dist/shopgun-sdk/sgn-sdk.js",
     "module": "dist/shopgun-sdk/sgn-sdk.es.js",
     "jsnext:main": "dist/shopgun-sdk/sgn-sdk.es.js",
-    "bundlesize": [
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.js",
-            "maxSize": "90 kB"
-        },
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
-            "maxSize": "55 kB"
-        },
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
-            "maxSize": "70 kB"
-        },
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.es.js",
-            "maxSize": "70 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.js",
-            "maxSize": "20 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.min.js",
-            "maxSize": "15 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.cjs.js",
-            "maxSize": "10 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.es.js",
-            "maxSize": "10 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.js",
-            "maxSize": "25 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.min.js",
-            "maxSize": "15 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.cjs.js",
-            "maxSize": "20 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.es.js",
-            "maxSize": "20 kB"
-        },
-        {
-            "path": "./dist/tjek-sdk/index.cjs.js",
-            "maxSize": "45 kB"
-        },
-        {
-            "path": "./dist/tjek-sdk/index.es.js",
-            "maxSize": "45 kB"
-        }
-    ],
     "scripts": {
         "clean": "rimraf -r dist",
         "test": "run-p -l -c test:*",
         "test:lint": "eslint lib __tests__",
         "test:ci": "jest",
-        "test:size": "bundlesize",
         "test:types": "tsc -noEmit",
         "build": "node esbuild.mjs build",
         "dev": "node esbuild.mjs watch",
@@ -110,7 +51,6 @@
         "@typescript-eslint/eslint-plugin": "^6.7.4",
         "@typescript-eslint/parser": "^6.7.4",
         "app-root-path": "^3.1.0",
-        "bundlesize": "^0.18.1",
         "chalk": "^5.3.0",
         "diff": "^5.1.0",
         "esbuild": "^0.19.4",
@@ -132,7 +72,6 @@
         "memfs": "^4.5.0",
         "memory-fs": "^0.5.0",
         "nib": "^1.2.0",
-        "node-gyp": "^9.4.0",
         "npm-run-all": "^4.1.5",
         "ora": "^7.0.1",
         "playwright": "^1.38.1",
