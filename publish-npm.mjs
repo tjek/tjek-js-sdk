@@ -237,11 +237,18 @@ async function publish() {
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
     }).trim();
+
     const publishDate = new Date();
     const shortdate = publishDate
         .toISOString()
         .split('T')[0]
         .replaceAll('-', '');
+
+    const pubInd = ora(`Building ${commithash}-${shortdate}`).start();
+    await run('npm', ['run', 'build']);
+    pubInd.succeed(`Built ${commithash}-${shortdate}`);
+
+    console.info('');
 
     const {tag} = await inquirer.prompt([
         {
@@ -250,7 +257,7 @@ async function publish() {
             message: 'How would you like to publish today?',
             choices: [
                 {
-                    name: `🪄 Publish experimetal (\`0.0.0-experimental-${commithash}-${shortdate}\`)`,
+                    name: `🪄 Publish experimental (\`0.0.0-experimental-${commithash}-${shortdate}\`)`,
                     value: `experimental-${commithash}-${shortdate}`
                 },
                 {name: '🧪 Publish prerelease (`beta`)', value: 'beta'},
