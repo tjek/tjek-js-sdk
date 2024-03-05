@@ -67,7 +67,9 @@ const PageDecorations = () => {
                     {
                         pageDecoration: {
                             ...pageDecoration,
-                            hostname: getHostname(pageDecoration.website_link)
+                            hostname:
+                                pageDecoration.website_link_title ||
+                                getHostname(pageDecoration.website_link)
                         }
                     }
                 );

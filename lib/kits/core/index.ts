@@ -190,4 +190,5 @@ export interface V2PageDecoration {
     page_number: number;
     title: string | null;
     website_link: string | null;
+    website_link_title: string | null;
 }
