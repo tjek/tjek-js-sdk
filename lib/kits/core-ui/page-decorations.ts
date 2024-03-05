@@ -49,7 +49,7 @@ const PageDecorations = () => {
             ) {
                 const el = document.createElement('div');
                 const position =
-                    pageDecorations?.length <= 1
+                    filteredPageDecorations?.length <= 1
                         ? 'center'
                         : pageDecoration.page_number % 2 == 0
                         ? 'left'
