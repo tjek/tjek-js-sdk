@@ -193,11 +193,6 @@ const PagedPublication = (
 
         header.show(sgnData);
 
-        if (!scriptEls.disablePageDecorations) {
-            sgnPageDecorations = await bootstrapper.fetchPageDecorations();
-            bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
-        }
-
         sgnViewer.bind('hotspotClicked', clickHotspot);
 
         sgnViewer.start();
@@ -210,6 +205,11 @@ const PagedPublication = (
 
         const hotspots = await bootstrapper.fetchHotspots();
         bootstrapper.applyHotspots(sgnViewer, hotspots);
+
+        if (!scriptEls.disablePageDecorations) {
+            sgnPageDecorations = await bootstrapper.fetchPageDecorations();
+            bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
+        }
 
         displayUrlParams();
         addFirstLastControlListener();

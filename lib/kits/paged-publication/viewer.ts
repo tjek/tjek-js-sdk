@@ -321,6 +321,12 @@ class Viewer extends MicroEvent {
                 spread.getPages().some((page) => page.id === this._core.pageId)
         );
 
+        const versoPageSpread = this._core
+            .getVerso()
+            .pageSpreads.find((pageSpread) =>
+                pageSpread.pageIds.includes(this._core.pageId)
+            );
+
         if (currentPageSpread) {
             const currentPageDecorations = this.pageDecorations?.filter(
                 ({page_number}) =>
@@ -332,7 +338,11 @@ class Viewer extends MicroEvent {
             if (currentPageDecorations) {
                 PageDecorations().render({
                     pageDecorations: currentPageDecorations,
-                    aspectRatio: this.options?.hotspotRatio || 1
+                    aspectRatio: this.options?.hotspotRatio || 1,
+                    versoPageSpread,
+                    versoPageSpreads: this._core.getVerso().pageSpreads,
+                    pageSpread: currentPageSpread,
+                    pageSpreads: this._core.pageSpreads.collection
                 });
             }
         }
@@ -349,17 +359,24 @@ class Viewer extends MicroEvent {
 
             PageDecorations().render({
                 pageDecorations: pageDecors,
-                aspectRatio: this.options?.hotspotRatio || 1
+                aspectRatio: this.options?.hotspotRatio || 1,
+                versoPageSpread,
+                versoPageSpreads: this._core.getVerso().pageSpreads,
+                pageSpread: currentPageSpread,
+                pageSpreads: this._core.pageSpreads.collection
             });
 
             this._core.bind('resized', (e) => {
                 PageDecorations().render({
                     pageDecorations: pageDecors,
-                    aspectRatio: this.options?.hotspotRatio || 1
+                    aspectRatio: this.options?.hotspotRatio || 1,
+                    versoPageSpread,
+                    versoPageSpreads: this._core.getVerso().pageSpreads,
+                    pageSpread: currentPageSpread,
+                    pageSpreads: this._core.pageSpreads.collection
                 });
             });
         });
-
         this.bind('zoomedIn', PageDecorations().hide);
         this.bind('zoomedOut', PageDecorations().show);
         this.bind('panStart', PageDecorations().hide);

@@ -117,6 +117,58 @@ export default class Bootstrapper {
         );
 
     applyPageDecorations(viewer: Viewer, pageDecorations: V2PageDecoration[]) {
+        pageDecorations = [
+            {
+                page_number: 1,
+                title: 'Title for page 1',
+                website_link: 'https://shop.rema1000.dk/varer/304718'
+            },
+            {
+                page_number: 2,
+                title: 'Title for page 2',
+                website_link: 'https://shop.rema1000.dk/varer/304718',
+                website_link_title: 'Rema1000'
+            },
+            {
+                page_number: 3,
+                title: 'Title for page 3',
+                website_link: '',
+                website_link_title: 'Rema1000',
+                hotspots: [
+                    {
+                        x1: 0,
+                        x2: 1,
+                        y1: 0,
+                        y2: 0.47,
+                        type: 'embed',
+                        link: 'https://www.youtube.com/embed/z9Ud_-Y3iHY?si=VsN9IHfChY0cgUYs&controls=0&autoplay=1&mute=1'
+                    }
+                ]
+            },
+            {
+                page_number: 4,
+                title: 'Title for page 4',
+                website_link: 'https://shop.rema1000.dk/varer/304718',
+                website_link_title: 'Website title'
+            },
+            {
+                page_number: 5,
+                title: 'Title for page 5',
+                website_link: 'https://shop.rema1000.dk/varer/400176',
+                website_link_title: 'Website link title',
+                hotspots: [
+                    {
+                        x1: 0.425,
+                        x2: 1,
+                        y1: 0.09,
+                        y2: 0.68,
+                        type: 'link',
+                        link: 'https://shop.rema1000.dk/varer/400176'
+                    }
+                ]
+            }
+        ];
+
         viewer.applyPageDecorations(pageDecorations);
     }
 }
