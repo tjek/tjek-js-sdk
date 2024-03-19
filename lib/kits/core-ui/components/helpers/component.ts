@@ -226,7 +226,11 @@ export const pushQueryParam = (queryParams = {}) => {
     const newUrl = new URL(window.location.href);
 
     Object.entries(queryParams).forEach(([key, val]) => {
-        newUrl.searchParams[val ? 'set' : 'delete'](key, String(val));
+        if (val) {
+            newUrl.searchParams.set(key, String(val));
+        } else {
+            newUrl.searchParams.delete(key);
+        }
     });
 
     window.history.pushState({path: String(newUrl)}, '', newUrl);
