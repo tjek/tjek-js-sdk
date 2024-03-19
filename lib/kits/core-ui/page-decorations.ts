@@ -7,16 +7,18 @@ import PagedPublicationPageSpread from '../paged-publication/page-spread';
 const defaultTemplate = `\
 
 {{#pageDecoration.hotspots}}
-    {{#pageDecoration.isEmbed}}
-        <iframe src="{{link}}" height="100%" width="100%" title="Iframe Example" style="border:0;"></iframe>
-    {{/pageDecoration.isEmbed}}
-    {{^pageDecoration.isEmbed}}
-    <a href="{{link}}" rel="noreferrer noopener" target="_blank">
-        <div class="sgn-pagedecoration__content" style="width:100%;height:100%;border:1px solid black;">
-                <p class="sgn-pagedecoration-item__domain"></p>
+    {{#link_embed}}
+        <iframe src="{{link}}" height="100%" width="100%"  style="border:0;"></iframe>
+    {{/link_embed}}
+    {{^link_embed}}
+    <a href="{{link}}" class="sgn-pagedecoration-hotspot-link" rel="noreferrer noopener" target="_blank">
+        <div class="sgn-pagedecoration-hotspot-link-content" style="width:100%;height:100%;">
+                <div class="sgn-pagedecoration-hotspot-link-label">
+                    <span>{{hostname}}</span>
+                </div>
         </div>
     </a>
-    {{/pageDecoration.isEmbed}}
+    {{/link_embed}}
 {{/pageDecoration.hotspots}}
 {{^pageDecoration.hotspots}}
 {{#pageDecoration.website_link}}
@@ -76,6 +78,10 @@ const PageDecorations = () => {
                     )
                 );
                 const contentRect = versoPageSpread?.getContentRect();
+                const transformedHotspot = {
+                    ...hotspot,
+                    hostname: getHostname(hotspot.link)
+                };
 
                 const pageSpreadEl = pageSpreads
                     ?.find((spread) =>
@@ -91,16 +97,7 @@ const PageDecorations = () => {
                 const boundingRect = pageSpreadEl?.getBoundingClientRect();
 
                 const el = document.createElement('div');
-                el.classList.add('sgn-pagedecoration-container');
-                const position =
-                    filteredPageDecorations?.length <= 1
-                        ? 'center'
-                        : pageDecoration.page_number % 2 == 0
-                        ? 'left'
-                        : 'right';
-
                 el.classList.add('sgn-pagedecoration-hotspot');
-                el.classList.add(`sgn-pagedecoration-${position}`);
 
                 let x1 = hotspot.x1;
                 let x2 = hotspot.x2;
@@ -136,25 +133,23 @@ const PageDecorations = () => {
 
                 top += Math.round(contentRect?.top || 0);
                 left += Math.round(contentRect?.left || 0);
-                // top -= boundingRect?.top || 0;
                 left -= boundingRect?.left || 0;
 
                 el.style.top = `${top}px`;
                 el.style.left = `${left}px`;
                 el.style.width = `${width}px`;
                 el.style.height = `${height}px`;
+                el.style.transform = `rotate(${hotspot.rotate}deg)`;
 
                 el.innerHTML = Mustache.render(
                     pageDecorationTemplate?.innerHTML || defaultTemplate,
                     {
                         pageDecoration: {
                             ...pageDecoration,
+                            hotspots: [transformedHotspot],
                             hostname:
                                 pageDecoration.website_link_title ||
                                 getHostname(pageDecoration?.website_link || ''),
-                            isEmbed:
-                                pageDecoration?.hotspots?.[0]?.type?.toLowerCase() ===
-                                'embed',
                             width: `${width}px`,
                             height: `${height}px`
                         }
