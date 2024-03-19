@@ -5,8 +5,7 @@ import PageSpread from '../../verso-browser/page_spread';
 import PagedPublicationPageSpread from '../paged-publication/page-spread';
 
 const defaultTemplate = `\
-
-{{#pageDecoration.hotspots}}
+{{#hotspot}}
     {{#link_embed}}
         <iframe src="{{link}}" height="100%" width="100%"  style="border:0;"></iframe>
     {{/link_embed}}
@@ -19,8 +18,8 @@ const defaultTemplate = `\
         </div>
     </a>
     {{/link_embed}}
-{{/pageDecoration.hotspots}}
-{{^pageDecoration.hotspots}}
+{{/hotspot}}
+{{^hotspot}}
 {{#pageDecoration.website_link}}
 <div class="sgn-pagedecoration__content">
     <a href="{{pageDecoration.website_link}}" rel="noreferrer noopener" target="_blank">
@@ -28,7 +27,7 @@ const defaultTemplate = `\
     </a>
 </div>
 {{/pageDecoration.website_link}}
-{{/pageDecoration.hotspots}}
+{{/hotspot}}
 \
 `;
 
@@ -71,92 +70,86 @@ const PageDecorations = () => {
 
         filteredPageDecorations?.forEach((pageDecoration) => {
             if (pageDecoration && pageDecoration.hotspots?.length) {
-                const [hotspot] = pageDecoration.hotspots;
-                const versoPageSpread = versoPageSpreads?.find((pageSpread) =>
-                    pageSpread.pageIds.includes(
-                        `page${pageDecoration.page_number}`
-                    )
-                );
-                const contentRect = versoPageSpread?.getContentRect();
-                const transformedHotspot = {
-                    ...hotspot,
-                    hostname: getHostname(hotspot.link)
-                };
+                pageDecoration.hotspots?.forEach((hotspot, index) => {
+                    const el = document.createElement('div');
+                    el.classList.add('sgn-pagedecoration-hotspot');
+                    el.classList.add(`sgn-pagedecoration-hotspot-${index}`);
 
-                const pageSpreadEl = pageSpreads
-                    ?.find((spread) =>
-                        spread
-                            .getPages()
-                            .some(
-                                (page) =>
-                                    page.id ===
-                                    `page${pageDecoration.page_number}`
+                    let x1 = hotspot.x1;
+                    let x2 = hotspot.x2;
+
+                    const versoPageSpread = versoPageSpreads?.find(
+                        (pageSpread) =>
+                            pageSpread.pageIds.includes(
+                                `page${pageDecoration.page_number}`
                             )
-                    )
-                    ?.getEl();
-                const boundingRect = pageSpreadEl?.getBoundingClientRect();
+                    );
+                    const contentRect = versoPageSpread?.getContentRect();
 
-                const el = document.createElement('div');
-                el.classList.add('sgn-pagedecoration-hotspot');
-
-                let x1 = hotspot.x1;
-                let x2 = hotspot.x2;
-
-                if (versoPageSpread?.pageIds?.length == 2 && contentRect) {
-                    contentRect.width = contentRect?.width / 2;
-                    if (
-                        versoPageSpread?.pageIds?.indexOf(
-                            `page${pageDecoration.page_number}`
+                    const pageSpreadEl = pageSpreads
+                        ?.find((spread) =>
+                            spread
+                                .getPages()
+                                .some(
+                                    (page) =>
+                                        page.id ===
+                                        `page${pageDecoration.page_number}`
+                                )
                         )
-                    ) {
-                        x1 += 1;
-                        x2 += 1;
-                    }
-                }
+                        ?.getEl();
+                    const boundingRect = pageSpreadEl?.getBoundingClientRect();
 
-                let top = Math.round(
-                    ((contentRect?.height || 0) / 100) * (hotspot.y1! * 100)
-                );
-
-                let left = Math.round(
-                    ((contentRect?.width || 0) / 100) * (x1 * 100)
-                );
-
-                const width = Math.round(
-                    ((contentRect?.width || 0) / 100) * ((x2 - x1) * 100)
-                );
-
-                const height = Math.round(
-                    ((contentRect?.height || 0) / 100) *
-                        ((hotspot.y2 - hotspot.y1) * 100)
-                );
-
-                top += Math.round(contentRect?.top || 0);
-                left += Math.round(contentRect?.left || 0);
-                left -= boundingRect?.left || 0;
-
-                el.style.top = `${top}px`;
-                el.style.left = `${left}px`;
-                el.style.width = `${width}px`;
-                el.style.height = `${height}px`;
-                el.style.transform = `rotate(${hotspot.rotate}deg)`;
-
-                el.innerHTML = Mustache.render(
-                    pageDecorationTemplate?.innerHTML || defaultTemplate,
-                    {
-                        pageDecoration: {
-                            ...pageDecoration,
-                            hotspots: [transformedHotspot],
-                            hostname:
-                                pageDecoration.website_link_title ||
-                                getHostname(pageDecoration?.website_link || ''),
-                            width: `${width}px`,
-                            height: `${height}px`
+                    if (versoPageSpread?.pageIds?.length == 2 && contentRect) {
+                        contentRect.width = contentRect?.width / 2;
+                        if (
+                            versoPageSpread?.pageIds?.indexOf(
+                                `page${pageDecoration.page_number}`
+                            )
+                        ) {
+                            x1 += 1;
+                            x2 += 1;
                         }
                     }
-                );
 
-                pageDecorationsEls?.appendChild(el);
+                    let top = Math.round(
+                        ((contentRect?.height || 0) / 100) * (hotspot.y1! * 100)
+                    );
+
+                    let left = Math.round(
+                        ((contentRect?.width || 0) / 100) * (x1 * 100)
+                    );
+
+                    const width = Math.round(
+                        ((contentRect?.width || 0) / 100) * ((x2 - x1) * 100)
+                    );
+
+                    const height = Math.round(
+                        ((contentRect?.height || 0) / 100) *
+                            ((hotspot.y2 - hotspot.y1) * 100)
+                    );
+
+                    top += Math.round(contentRect?.top || 0);
+                    left += Math.round(contentRect?.left || 0);
+                    left -= boundingRect?.left || 0;
+
+                    el.style.top = `${top}px`;
+                    el.style.left = `${left}px`;
+                    el.style.width = `${width}px`;
+                    el.style.height = `${height}px`;
+                    el.style.transform = `rotate(${hotspot.rotate}deg)`;
+
+                    el.innerHTML = Mustache.render(
+                        pageDecorationTemplate?.innerHTML || defaultTemplate,
+                        {
+                            hotspot: {
+                                ...hotspot,
+                                hostname: getHostname(hotspot.link)
+                            }
+                        }
+                    );
+
+                    pageDecorationsEls?.appendChild(el);
+                });
             } else if (
                 pageDecoration &&
                 pageDecoration.website_link &&
