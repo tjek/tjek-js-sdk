@@ -197,7 +197,8 @@ export interface V2PageDecoration {
               x2: number;
               y1: number;
               y2: number;
-              type: string;
+              rotate: number;
+              link_embed: boolean;
               link: string;
           }[]
         | null;

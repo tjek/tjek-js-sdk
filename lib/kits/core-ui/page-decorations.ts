@@ -47,16 +47,12 @@ const PageDecorations = () => {
     const render = ({
         pageDecorations,
         aspectRatio,
-        versoPageSpread,
         versoPageSpreads,
-        pageSpread,
         pageSpreads
     }: {
         pageDecorations: V2PageDecoration[];
         aspectRatio: {};
-        versoPageSpread?: PageSpread;
         versoPageSpreads?: PageSpread[];
-        pageSpread?: PagedPublicationPageSpread;
         pageSpreads?: PagedPublicationPageSpread[];
     }) => {
         if (pageDecorationsContainer?.innerHTML) {
@@ -119,15 +115,12 @@ const PageDecorations = () => {
                     let top = Math.round(
                         ((contentRect?.height || 0) / 100) * (hotspot.y1! * 100)
                     );
-
                     let left = Math.round(
                         ((contentRect?.width || 0) / 100) * (x1 * 100)
                     );
-
                     const width = Math.round(
                         ((contentRect?.width || 0) / 100) * ((x2 - x1) * 100)
                     );
-
                     const height = Math.round(
                         ((contentRect?.height || 0) / 100) *
                             ((hotspot.y2 - hotspot.y1) * 100)

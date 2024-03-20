@@ -339,9 +339,7 @@ class Viewer extends MicroEvent {
                 PageDecorations().render({
                     pageDecorations: currentPageDecorations,
                     aspectRatio: this.options?.hotspotRatio || 1,
-                    versoPageSpread,
                     versoPageSpreads: this._core.getVerso().pageSpreads,
-                    pageSpread: currentPageSpread,
                     pageSpreads: this._core.pageSpreads.collection
                 });
             }
@@ -360,9 +358,7 @@ class Viewer extends MicroEvent {
             PageDecorations().render({
                 pageDecorations: pageDecors,
                 aspectRatio: this.options?.hotspotRatio || 1,
-                versoPageSpread,
                 versoPageSpreads: this._core.getVerso().pageSpreads,
-                pageSpread: currentPageSpread,
                 pageSpreads: this._core.pageSpreads.collection
             });
 
@@ -370,9 +366,7 @@ class Viewer extends MicroEvent {
                 PageDecorations().render({
                     pageDecorations: pageDecors,
                     aspectRatio: this.options?.hotspotRatio || 1,
-                    versoPageSpread,
                     versoPageSpreads: this._core.getVerso().pageSpreads,
-                    pageSpread: currentPageSpread,
                     pageSpreads: this._core.pageSpreads.collection
                 });
             });
