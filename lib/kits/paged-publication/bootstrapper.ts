@@ -44,7 +44,58 @@ export default class Bootstrapper {
         });
     }
 
-    applyHotspots(viewer: Viewer, hotspots: V2Hotspot[]) {
+    transformPageDecrationHotspots(pageDecorations: V2PageDecoration[]) {
+        const filteredPageDecorations = pageDecorations?.filter(
+            (pageDecoration) => pageDecoration.hotspots?.length
+        );
+        const pageDecorationHotspots: {
+            id: string;
+            type: string;
+            link_embed: boolean;
+            link: string;
+            rotate: number;
+            locations: any;
+        }[] = [];
+
+        filteredPageDecorations.forEach((pageDecoration) => {
+            pageDecoration.hotspots?.forEach((hotspot, index) => {
+                pageDecorationHotspots.push({
+                    id: `page${pageDecoration.page_number}-hotspot-${index}`,
+                    type: 'pagedecoration',
+                    link_embed: hotspot.link_embed,
+                    link: hotspot.link,
+                    rotate: hotspot.rotate,
+                    locations: {
+                        [pageDecoration.page_number]: [
+                            [hotspot.x1, hotspot.y1],
+                            [hotspot.x1, hotspot.y2],
+                            [hotspot.x2, hotspot.y2],
+                            [hotspot.x2, hotspot.y1]
+                        ]
+                    }
+                });
+            });
+        });
+
+        return pageDecorationHotspots;
+    }
+
+    applyHotspots(
+        viewer: Viewer,
+        hotspots: V2Hotspot[],
+        pageDecorations?: V2PageDecoration[]
+    ) {
+        let pageDecorationHotspots;
+
+        if (pageDecorations?.length) {
+            pageDecorationHotspots =
+                this.transformPageDecrationHotspots(pageDecorations);
+
+            if (pageDecorationHotspots.length) {
+                hotspots = hotspots.concat(pageDecorationHotspots);
+            }
+        }
+
         viewer.applyHotspots(
             hotspots.reduce((obj, hotspot) => {
                 obj[hotspot.id] = hotspot;

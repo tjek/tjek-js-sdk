@@ -14,7 +14,6 @@ const defaultTemplate = `\
             <div class="verso__scroller">
                 <div class="sgn-pp__pages"></div>
             </div>
-            <div class="sgn-page_decorations"></div>
         </div>
 
         {{#disableHeader}}
@@ -47,6 +46,7 @@ const defaultTemplate = `\
         >
             &raquo;
         </button>
+        <div class="sgn-page_decorations"></div>
     </div>\
 `;
 

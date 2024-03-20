@@ -59,8 +59,17 @@ export interface ViewerInit {
 }
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
-    hotspots: Record<string, {type: string; id: string; locations}> | null =
-        null;
+    hotspots: Record<
+        string,
+        {
+            type: string;
+            id: string;
+            locations;
+            link: string;
+            link_embed: boolean;
+            rotate: number;
+        }
+    > | null = null;
     hotspotQueue: {id: string; pages: Page[]}[] = [];
     popover: null | {destroy: () => void} = null;
     el: HTMLElement;
@@ -273,11 +282,19 @@ class Viewer extends MicroEvent {
             for (const hotspotId in this.hotspots) {
                 if (hotspots[hotspotId]) continue;
 
-                const {id, type, locations} = this.hotspots[hotspotId];
+                const {id, type, locations, link, link_embed, rotate} =
+                    this.hotspots[hotspotId];
                 for (let idx = 0; idx < hotspotRequest.pages.length; idx++) {
                     const {pageNumber} = hotspotRequest.pages[idx];
                     if (locations[pageNumber]) {
-                        hotspots[hotspotId] = {type, id, locations};
+                        hotspots[hotspotId] = {
+                            type,
+                            id,
+                            locations,
+                            link,
+                            link_embed,
+                            rotate
+                        };
 
                         break;
                     }
@@ -321,12 +338,6 @@ class Viewer extends MicroEvent {
                 spread.getPages().some((page) => page.id === this._core.pageId)
         );
 
-        const versoPageSpread = this._core
-            .getVerso()
-            .pageSpreads.find((pageSpread) =>
-                pageSpread.pageIds.includes(this._core.pageId)
-            );
-
         if (currentPageSpread) {
             const currentPageDecorations = this.pageDecorations?.filter(
                 ({page_number}) =>
@@ -338,9 +349,7 @@ class Viewer extends MicroEvent {
             if (currentPageDecorations) {
                 PageDecorations().render({
                     pageDecorations: currentPageDecorations,
-                    aspectRatio: this.options?.hotspotRatio || 1,
-                    versoPageSpreads: this._core.getVerso().pageSpreads,
-                    pageSpreads: this._core.pageSpreads.collection
+                    aspectRatio: this.options?.hotspotRatio || 1
                 });
             }
         }
@@ -357,20 +366,17 @@ class Viewer extends MicroEvent {
 
             PageDecorations().render({
                 pageDecorations: pageDecors,
-                aspectRatio: this.options?.hotspotRatio || 1,
-                versoPageSpreads: this._core.getVerso().pageSpreads,
-                pageSpreads: this._core.pageSpreads.collection
+                aspectRatio: this.options?.hotspotRatio || 1
             });
 
             this._core.bind('resized', (e) => {
                 PageDecorations().render({
                     pageDecorations: pageDecors,
-                    aspectRatio: this.options?.hotspotRatio || 1,
-                    versoPageSpreads: this._core.getVerso().pageSpreads,
-                    pageSpreads: this._core.pageSpreads.collection
+                    aspectRatio: this.options?.hotspotRatio || 1
                 });
             });
         });
+
         this.bind('zoomedIn', PageDecorations().hide);
         this.bind('zoomedOut', PageDecorations().show);
         this.bind('panStart', PageDecorations().hide);
