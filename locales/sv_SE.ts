@@ -20,5 +20,6 @@ export default {
     publication_viewer_close_label: 'Tillbaka',
     publication_viewer_add_to_shopping_list: 'Lägg till inköpslista',
     publication_viewer_visit_webshop_link: 'Besök webbshoplänk',
-    publication_viewer_upcoming: 'Kommende'
+    publication_viewer_upcoming: 'Kommende',
+    publication_viewer_hotspot_decoration_link: 'Läs mer'
 };
