@@ -44,7 +44,7 @@ export default class Bootstrapper {
         });
     }
 
-    transformPageDecrationHotspots(pageDecorations: V2PageDecoration[]) {
+    transformPageDecorationHotspots(pageDecorations: V2PageDecoration[]) {
         const filteredPageDecorations = pageDecorations?.filter(
             (pageDecoration) => pageDecoration.hotspots?.length
         );
@@ -89,7 +89,7 @@ export default class Bootstrapper {
 
         if (pageDecorations?.length) {
             pageDecorationHotspots =
-                this.transformPageDecrationHotspots(pageDecorations);
+                this.transformPageDecorationHotspots(pageDecorations);
 
             if (pageDecorationHotspots.length) {
                 hotspots = hotspots.concat(pageDecorationHotspots);
