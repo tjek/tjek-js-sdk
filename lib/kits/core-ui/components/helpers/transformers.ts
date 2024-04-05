@@ -44,6 +44,9 @@ export const transformScriptData = (
         enableLazyload: dataset.componentPublicationEnableLazyload === 'true',
         requestFilter: dataset.componentListPublicationsRequestFilter,
         clientFilter: dataset.componentListPublicationsClientFilter,
-        noOfferLinkMessage: dataset.componentPublicationNoOfferLinkMessage
+        noOfferLinkMessage: dataset.componentPublicationNoOfferLinkMessage,
+        disableUtm: dataset.componentPublicationDisableUtm === 'true',
+        utmSource: dataset.componentPublicationUtmSource,
+        utmMedium: dataset.componentPublicationUtmMedium
     };
 };

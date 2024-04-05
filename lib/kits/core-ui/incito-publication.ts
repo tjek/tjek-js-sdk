@@ -15,7 +15,7 @@ import {
     transformFilter,
     getHashFragments,
     pushQueryParam,
-    tranformWebshopLink
+    transformWebshopLink
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -562,7 +562,7 @@ const IncitoPublication = (
         if (!res) throw new Error();
 
         if (res.offer.id) {
-            res.offer.webshop_link = tranformWebshopLink(
+            res.offer.webshop_link = transformWebshopLink(
                 res.offer.webshop_link
             );
 
