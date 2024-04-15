@@ -252,25 +252,31 @@ const updateQueryParam = (url, paramName, newValue) => {
     return urlObject.toString();
 };
 
-export const tranformWebshopLink = (url) => {
+export const transformWebshopLink = (url) => {
     const scriptEl = document.getElementById('sgn-sdk');
     const dataset = scriptEl?.dataset;
 
     if (url) {
+        const newUrl = new URL(url);
+
         if (dataset?.componentPublicationUtmSource) {
-            url = updateQueryParam(
-                url,
+            newUrl.searchParams.set(
                 'utm_source',
                 dataset.componentPublicationUtmSource
             );
         }
         if (dataset?.componentPublicationUtmMedium) {
-            url = updateQueryParam(
-                url,
+            newUrl.searchParams.set(
                 'utm_medium',
                 dataset.componentPublicationUtmMedium
             );
         }
+        if (dataset?.componentPublicationDisableUtm === 'true') {
+            newUrl.searchParams.delete('utm_source');
+            newUrl.searchParams.delete('utm_medium');
+        }
+
+        return newUrl.toString();
     }
 
     return url;
