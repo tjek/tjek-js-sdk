@@ -72,7 +72,15 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
         el.className += ' sgn-pagedecoration-hotspot';
 
         if (hotspot.embed_link) {
-            el.innerHTML = `<iframe src="${hotspot.embed_link}" height="100%" width="100%"  style="border:0;"></iframe>`;
+            el.innerHTML = `
+                <iframe src="${hotspot.embed_link}"
+                    title="sgn-pagedecoration-embed-${hotspot.id}"
+                    height="100%"
+                    width="100%"
+                    sandbox="allow-scripts allow-same-origin"
+                    style="border:0;"
+                ></iframe>
+            `;
         } else if (hotspot.link) {
             el.innerHTML = `
             <a href="${
