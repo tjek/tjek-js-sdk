@@ -244,8 +244,9 @@ async function publish() {
             'Git: Working tree dirty. Please resolve any changes before publishing.'
         );
         return;
+    } else {
+        gitInd.succeed(`Git: Working tree clean`);
     }
-    gitInd.succeed(`Git: Working tree clean`);
 
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
@@ -257,6 +258,9 @@ async function publish() {
         .split('T')[0]
         .replaceAll('-', '');
 
+    const installInd = ora(`Installing NPM dependencies`).start();
+    await run('npm', ['i']);
+    installInd.succeed(`Installed NPM dependencies`);
     const buildInd = ora(`Building ${commithash}-${shortdate}`).start();
     await run('npm', ['run', 'build']);
     buildInd.succeed(`Built ${commithash}-${shortdate}`);
