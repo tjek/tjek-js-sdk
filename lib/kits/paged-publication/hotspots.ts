@@ -38,6 +38,8 @@ function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
     const width = maxX! - minX!;
     const height = maxY! - minY!;
 
+    ratio = hotspot.type === 'pagedecoration' ? 1 : ratio;
+
     return {
         top: (minY! / ratio) * 100,
         left: minX! * 100,
@@ -69,9 +71,9 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     if (hotspot.type === 'pagedecoration') {
         el.className += ' sgn-pagedecoration-hotspot';
 
-        if (hotspot.link_embed) {
-            el.innerHTML = `<iframe src="${hotspot.link}" height="100%" width="100%"  style="border:0;"></iframe>`;
-        } else {
+        if (hotspot.embed_link) {
+            el.innerHTML = `<iframe src="${hotspot.embed_link}" height="100%" width="100%"  style="border:0;"></iframe>`;
+        } else if (hotspot.link) {
             el.innerHTML = `
             <a href="${
                 hotspot.link

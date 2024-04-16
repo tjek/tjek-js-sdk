@@ -66,7 +66,7 @@ class Viewer extends MicroEvent {
             id: string;
             locations;
             link: string;
-            link_embed: boolean;
+            embed_link: string;
             rotate: number;
         }
     > | null = null;
@@ -282,7 +282,7 @@ class Viewer extends MicroEvent {
             for (const hotspotId in this.hotspots) {
                 if (hotspots[hotspotId]) continue;
 
-                const {id, type, locations, link, link_embed, rotate} =
+                const {id, type, locations, link, embed_link, rotate} =
                     this.hotspots[hotspotId];
                 for (let idx = 0; idx < hotspotRequest.pages.length; idx++) {
                     const {pageNumber} = hotspotRequest.pages[idx];
@@ -292,7 +292,7 @@ class Viewer extends MicroEvent {
                             id,
                             locations,
                             link,
-                            link_embed,
+                            embed_link,
                             rotate
                         };
 

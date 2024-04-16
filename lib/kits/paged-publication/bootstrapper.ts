@@ -51,7 +51,7 @@ export default class Bootstrapper {
         const pageDecorationHotspots: {
             id: string;
             type: string;
-            link_embed: boolean;
+            embed_link: string;
             link: string;
             rotate: number;
             locations: any;
@@ -62,15 +62,15 @@ export default class Bootstrapper {
                 pageDecorationHotspots.push({
                     id: `page${pageDecoration.page_number}-hotspot-${index}`,
                     type: 'pagedecoration',
-                    link_embed: hotspot.link_embed,
+                    embed_link: hotspot.embed_link,
                     link: hotspot.link,
                     rotate: hotspot.rotate,
                     locations: {
                         [pageDecoration.page_number]: [
-                            [hotspot.x1, hotspot.y1],
-                            [hotspot.x1, hotspot.y2],
-                            [hotspot.x2, hotspot.y2],
-                            [hotspot.x2, hotspot.y1]
+                            [hotspot.x1 / 100, hotspot.y1 / 100],
+                            [hotspot.x1 / 100, hotspot.y2 / 100],
+                            [hotspot.x2 / 100, hotspot.y2 / 100],
+                            [hotspot.x2 / 100, hotspot.y1 / 100]
                         ]
                     }
                 });
