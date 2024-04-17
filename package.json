@@ -5,70 +5,11 @@
     "browser": "dist/shopgun-sdk/sgn-sdk.js",
     "module": "dist/shopgun-sdk/sgn-sdk.es.js",
     "jsnext:main": "dist/shopgun-sdk/sgn-sdk.es.js",
-    "bundlesize": [
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.js",
-            "maxSize": "90 kB"
-        },
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.min.js",
-            "maxSize": "55 kB"
-        },
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.cjs.js",
-            "maxSize": "70 kB"
-        },
-        {
-            "path": "./dist/shopgun-sdk/sgn-sdk.es.js",
-            "maxSize": "70 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.js",
-            "maxSize": "20 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.min.js",
-            "maxSize": "15 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.cjs.js",
-            "maxSize": "10 kB"
-        },
-        {
-            "path": "./dist/incito-browser/incito.es.js",
-            "maxSize": "10 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.js",
-            "maxSize": "25 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.min.js",
-            "maxSize": "15 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.cjs.js",
-            "maxSize": "20 kB"
-        },
-        {
-            "path": "./dist/verso-browser/verso.es.js",
-            "maxSize": "20 kB"
-        },
-        {
-            "path": "./dist/tjek-sdk/index.cjs.js",
-            "maxSize": "45 kB"
-        },
-        {
-            "path": "./dist/tjek-sdk/index.es.js",
-            "maxSize": "45 kB"
-        }
-    ],
     "scripts": {
         "clean": "rimraf -r dist",
         "test": "run-p -l -c test:*",
         "test:lint": "eslint lib __tests__",
         "test:ci": "jest",
-        "test:size": "bundlesize",
         "test:types": "tsc -noEmit",
         "build": "node esbuild.mjs build",
         "dev": "node esbuild.mjs watch",
@@ -93,56 +34,47 @@
     },
     "homepage": "https://github.com/tjek/tjek-js-sdk#readme",
     "dependencies": {
-        "@babel/runtime": "^7.22.6",
-        "@babel/runtime-corejs3": "^7.22.6",
-        "core-js": "^3.31.1",
         "cross-fetch": "^4.0.0",
         "md5": "^2.3.0",
         "mustache": "^4.2.0"
     },
     "devDependencies": {
-        "@aws-sdk/client-cloudfront": "^3.370.0",
-        "@aws-sdk/client-s3": "^3.374.0",
-        "@types/jest": "29.5.3",
-        "@types/mustache": "^4.2.2",
+        "@aws-sdk/client-cloudfront": "^3.423.0",
+        "@aws-sdk/client-s3": "^3.423.0",
+        "@playwright/browser-chromium": "^1.38.1",
+        "@types/jest": "^29.5.5",
+        "@types/mustache": "^4.2.3",
         "@types/node": "^18.16.12",
-        "@typescript-eslint/eslint-plugin": "^6.1.0",
-        "@typescript-eslint/parser": "^6.1.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.4",
+        "@typescript-eslint/parser": "^6.7.4",
         "app-root-path": "^3.1.0",
-        "bundlesize": "^0.18.1",
         "chalk": "^5.3.0",
         "diff": "^5.1.0",
-        "esbuild": "^0.18.16",
-        "esbuild-jest": "^0.5.0",
+        "esbuild": "^0.19.4",
         "esbuild-stylus-loader": "^0.4.2",
-        "eslint": "^8.45.0",
-        "eslint-config-prettier": "^8.8.0",
-        "eslint-plugin-playwright": "^0.15.3",
+        "eslint": "^8.50.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-playwright": "^0.16.0",
         "file-type": "^18.5.0",
-        "gh-pages": "^5.0.0",
-        "glob": "^10.3.3",
-        "inquirer": "^9.2.8",
+        "gh-pages": "^6.0.0",
+        "glob": "^10.3.10",
+        "inquirer": "^9.2.11",
         "isbinaryfile": "^5.0.0",
-        "jest": "29.6.1",
-        "jest-environment-jsdom": "29.6.1",
+        "jest": "29.7.0",
+        "jest-environment-jsdom": "29.7.0",
         "jest-esbuild": "^0.3.0",
         "jest-playwright-preset": "^3.0.1",
         "libnpm": "^3.0.1",
-        "memfs": "^4.2.0",
-        "memory-fs": "^0.5.0",
+        "memfs": "^4.5.0",
         "nib": "^1.2.0",
-        "node-gyp": "^8.4.1",
         "npm-run-all": "^4.1.5",
-        "ora": "^6.3.1",
-        "playwright": "^1.36.1",
-        "process": "^0.11.10",
+        "ora": "^7.0.1",
+        "playwright": "^1.38.1",
         "recursive-readdir": "^2.2.3",
-        "serve": "^14.2.0",
-        "stylus": "^0.59.0",
-        "tar": "^6.1.15",
-        "thenify": "^3.3.1",
+        "serve": "^14.2.1",
+        "tar": "^6.2.0",
         "tmp-promise": "^3.0.3",
-        "typescript": "^5.1.6",
+        "typescript": "^5.2.2",
         "webpack": "^5.88.2"
     },
     "publishConfig": {

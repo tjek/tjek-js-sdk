@@ -122,6 +122,10 @@ async function diff(oldPath, newPath) {
                         / {2}"version": "(.+)",\n/gi,
                         ''
                     );
+                if (key === 'package.json') {
+                    oldFile.contents = oldFile.contents.trim() + '\n';
+                    newFile.contents = newFile.contents.trim() + '\n';
+                }
 
                 // Files are straight up equal.
                 if (oldFile.contents === newFile.contents) return [key, null];
@@ -234,14 +238,34 @@ async function publish() {
     console.clear();
     if (DRY_RUN) console.info('Dry run! 🌵');
 
+    const gitInd = ora(`Git: Checking working tree`).start();
+    if (await run('git', ['status', '--porcelain'])) {
+        gitInd.fail(
+            'Git: Working tree dirty. Please resolve any changes before publishing.'
+        );
+        return;
+    } else {
+        gitInd.succeed(`Git: Working tree clean`);
+    }
+
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
     }).trim();
+
     const publishDate = new Date();
     const shortdate = publishDate
         .toISOString()
         .split('T')[0]
         .replaceAll('-', '');
+
+    const installInd = ora(`Installing NPM dependencies`).start();
+    await run('npm', ['i']);
+    installInd.succeed(`Installed NPM dependencies`);
+    const buildInd = ora(`Building ${commithash}-${shortdate}`).start();
+    await run('npm', ['run', 'build']);
+    buildInd.succeed(`Built ${commithash}-${shortdate}`);
+
+    console.info('');
 
     const {tag} = await inquirer.prompt([
         {
@@ -250,7 +274,7 @@ async function publish() {
             message: 'How would you like to publish today?',
             choices: [
                 {
-                    name: `🪄 Publish experimetal (\`0.0.0-experimental-${commithash}-${shortdate}\`)`,
+                    name: `🪄 Publish experimental (\`0.0.0-experimental-${commithash}-${shortdate}\`)`,
                     value: `experimental-${commithash}-${shortdate}`
                 },
                 {name: '🧪 Publish prerelease (`beta`)', value: 'beta'},

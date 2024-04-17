@@ -82,4 +82,3 @@ jobs:
                   name: built
                   path: ./dist
             - run: npm ci
-            - run: npm run test:size

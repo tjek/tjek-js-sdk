@@ -226,7 +226,11 @@ export const pushQueryParam = (queryParams = {}) => {
     const newUrl = new URL(window.location.href);
 
     Object.entries(queryParams).forEach(([key, val]) => {
-        newUrl.searchParams[val ? 'set' : 'delete'](key, String(val));
+        if (val) {
+            newUrl.searchParams.set(key, String(val));
+        } else {
+            newUrl.searchParams.delete(key);
+        }
     });
 
     window.history.pushState({path: String(newUrl)}, '', newUrl);
@@ -238,4 +242,42 @@ export const getHashFragments = (hashParam) => {
         location.hash.match(hashReg)?.[1]?.split('/') || [];
 
     return {publicationId, pageNum};
+};
+
+const updateQueryParam = (url, paramName, newValue) => {
+    const urlObject = new URL(url);
+    const queryParams = urlObject.searchParams;
+    queryParams.set(paramName, newValue);
+
+    return urlObject.toString();
+};
+
+export const transformWebshopLink = (url) => {
+    const scriptEl = document.getElementById('sgn-sdk');
+    const dataset = scriptEl?.dataset;
+
+    if (url) {
+        const newUrl = new URL(url);
+
+        if (dataset?.componentPublicationUtmSource) {
+            newUrl.searchParams.set(
+                'utm_source',
+                dataset.componentPublicationUtmSource
+            );
+        }
+        if (dataset?.componentPublicationUtmMedium) {
+            newUrl.searchParams.set(
+                'utm_medium',
+                dataset.componentPublicationUtmMedium
+            );
+        }
+        if (dataset?.componentPublicationDisableUtm === 'true') {
+            newUrl.searchParams.delete('utm_source');
+            newUrl.searchParams.delete('utm_medium');
+        }
+
+        return newUrl.toString();
+    }
+
+    return url;
 };
