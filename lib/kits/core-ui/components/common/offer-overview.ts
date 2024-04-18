@@ -101,9 +101,13 @@ const defaultTemplateV2 = `\
                         <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" class="sgn-product-details">
                             <div class="sgn-product-heading">{{title}}</div>
                             <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
-                                <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">-</button>
+                                <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-minus-circle-fill" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M128,24A104,104,0,1,0,232,128,104.2,104.2,0,0,0,128,24Zm40,112H88a8,8,0,0,1,0-16h80a8,8,0,0,1,0,16Z"/></svg>
+                                </button>
                                 <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="1" />
-                                <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">+</button>
+                                <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/> </svg>
+                                </button>
                             </div>
                             <div class="sgn-offer-product-basket">
                                 <button id="sgn-offer-product-add-basket-{{id}}" class="sgn-offer-product-add-basket">

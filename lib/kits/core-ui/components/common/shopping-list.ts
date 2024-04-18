@@ -30,12 +30,25 @@ const defaultTemplate = `\
         </div>
         <ol class="sgn-shopping-list-items-container">
             {{#offers}}
-            <li class="sgn-shopping-list-item-container" data-id="{{index}}">
+            <li class="sgn-shopping-list-item-container" data-id="{{index}}" data-offer-product-id="{{id}}">
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>
+                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
                         </div>
+                        <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-minus-circle-fill" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M128,24A104,104,0,1,0,232,128,104.2,104.2,0,0,0,128,24Zm40,112H88a8,8,0,0,1,0-16h80a8,8,0,0,1,0,16Z"/></svg>
+                            </button>
+                            <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
+                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/> </svg>
+                            </button>
+                        </div>
+                        <div class="sgn-shopping-list-content-ticker sgn-hide-print">
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" checked="true" class="sgn-shopping-list-content-ticker-box"/>
+                        </div>
+                        <div class="sgn-clearfix"></div>
                     </div>
                 </div>
             </li>
@@ -45,8 +58,21 @@ const defaultTemplate = `\
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>
+                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
                         </div>
+                        <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                            <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-minus-circle-fill" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M128,24A104,104,0,1,0,232,128,104.2,104.2,0,0,0,128,24Zm40,112H88a8,8,0,0,1,0-16h80a8,8,0,0,1,0,16Z"/></svg>
+                            </button>
+                            <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
+                            <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/> </svg>
+                            </button>
+                        </div>
+                        <div class="sgn-shopping-list-content-ticker sgn-hide-print">
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" class="sgn-shopping-list-content-ticker-box"/>
+                        </div>
+                        <div class="sgn-clearfix"></div>
                     </div>
                 </div>
             </li>
@@ -135,9 +161,9 @@ const ShoppingList = ({template}) => {
 
     const addTickerListener = () => {
         container
-            ?.querySelectorAll('.sgn-shopping-list-item-container')
+            ?.querySelectorAll('.sgn-shopping-list-content-ticker-box')
             .forEach((itemEl) => {
-                itemEl.addEventListener('click', tickOffer, false);
+                itemEl.addEventListener('change', tickOffer);
             });
     };
 
@@ -145,7 +171,7 @@ const ShoppingList = ({template}) => {
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
-        const index = e.currentTarget.dataset?.id;
+        const index = e.currentTarget.value;
 
         storedPublicationOffers[index].is_ticked =
             !storedPublicationOffers[index].is_ticked;
@@ -276,14 +302,63 @@ const ShoppingList = ({template}) => {
             });
     };
 
+    const addQuantityListener = () => {
+        const productEls = document.querySelectorAll(
+            '.sgn-shopping-list-item-container'
+        );
+
+        productEls.forEach((productEl: HTMLElement) => {
+            const index = productEl.dataset.id;
+            const minusBtn = productEl.querySelector<HTMLElement>(
+                '.sgn-offer-product-quantity-minus'
+            );
+            const plusBtn = productEl.querySelector<HTMLElement>(
+                '.sgn-offer-product-quantity-plus'
+            );
+            const quantityTxt = productEl.querySelector<HTMLInputElement>(
+                '.sgn-offer-product-quantity-text'
+            );
+            const storedPublicationOffers = clientLocalStorage.get(
+                'publication-saved-offers'
+            );
+
+            let quantity = +(quantityTxt?.value ?? 1);
+
+            plusBtn?.addEventListener('click', () => {
+                if (quantityTxt && index) {
+                    quantityTxt.value = `${++quantity}`;
+
+                    storedPublicationOffers[index].quantity = quantityTxt.value;
+                    clientLocalStorage.setWithEvent(
+                        'publication-saved-offers',
+                        storedPublicationOffers,
+                        'tjek_shopping_list_update'
+                    );
+                }
+            });
+            minusBtn?.addEventListener('click', () => {
+                if (quantityTxt && quantity > 1 && index) {
+                    quantityTxt.value = `${--quantity}`;
+
+                    storedPublicationOffers[index].quantity = quantityTxt.value;
+                    clientLocalStorage.setWithEvent(
+                        'publication-saved-offers',
+                        storedPublicationOffers,
+                        'tjek_shopping_list_update'
+                    );
+                }
+            });
+        });
+    };
+
     const formatListToShare = (data, newLineDelimiter = `\n`) => {
         let offerStr = '';
 
         data?.forEach((offer) => {
             if (!offer.is_ticked) {
                 offerStr += offer.price
-                    ? `${offer.price} - ${offer.name}`
-                    : `${offer.name}`;
+                    ? `${offer.price} - ${offer.name} (${offer.quantity || 1})`
+                    : `${offer.name} (${offer.quantity || 1})`;
                 offerStr += newLineDelimiter;
             }
         });
@@ -294,6 +369,7 @@ const ShoppingList = ({template}) => {
     const addEventListeners = () => {
         document.querySelector<HTMLDivElement>('.sgn-modal-container')?.focus();
 
+        addQuantityListener();
         addTickerListener();
         addClearTickedListListener();
         addClearListListener();
