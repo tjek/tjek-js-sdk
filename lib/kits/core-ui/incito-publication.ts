@@ -269,9 +269,16 @@ const IncitoPublication = (
                 configs: options,
                 scriptEls,
                 sgnData,
-                offer: {fetchOffer, viewId, publicationId, products},
+                offer: {
+                    fetchOffer,
+                    fetchProducts,
+                    viewId,
+                    publicationId,
+                    products
+                },
                 type: 'incito',
-                addToShoppingList
+                addToShoppingList,
+                updateShoppingList
             }).render();
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
@@ -375,6 +382,83 @@ const IncitoPublication = (
             'publication-saved-offers',
             mergedOffers,
             'tjek_shopping_list_update'
+        );
+
+        animateShoppingListCounter();
+    };
+
+    const updateShoppingList = (offer, action = '') => {
+        const storedPublicationOffers =
+            clientLocalStorage.get('publication-saved-offers') || [];
+
+        let shopListOffer = {
+            id: offer.id,
+            name: offer.name,
+            pricing: {price: offer.price, currency: offer.currency_code},
+            quantity: 1,
+            is_ticked: false
+        };
+
+        if (offer.basket?.productId) {
+            const product = offer.products?.find(
+                ({id}) => id == offer.basket?.productId
+            );
+            if (product) {
+                shopListOffer = {
+                    id: product.id,
+                    name: product.title,
+                    pricing: {
+                        price: offer.price,
+                        currency: offer.currency_code
+                    },
+                    quantity: 1,
+                    is_ticked: false
+                };
+            }
+        }
+
+        const isOfferInList = storedPublicationOffers.some(
+            (storedOffer) => storedOffer.id === shopListOffer.id
+        );
+
+        if (!isOfferInList) {
+            storedPublicationOffers.push(shopListOffer);
+        } else {
+            const updatedOffers = storedPublicationOffers
+                .map((storedOffer) => {
+                    if (storedOffer.id === shopListOffer.id) {
+                        if (action === 'add') {
+                            storedOffer.quantity += 1;
+                        } else if (
+                            action === 'minus' &&
+                            storedOffer.quantity > 1
+                        ) {
+                            storedOffer.quantity -= 1;
+                        } else if (
+                            action === 'minus' &&
+                            storedOffer.quantity <= 1
+                        ) {
+                            return null;
+                        }
+                    }
+
+                    return storedOffer;
+                })
+                .filter(Boolean);
+
+            storedPublicationOffers.splice(0, storedPublicationOffers.length);
+            storedPublicationOffers.push(...updatedOffers);
+        }
+
+        clientLocalStorage.setWithEvent(
+            'publication-saved-offers',
+            storedPublicationOffers,
+            'tjek_shopping_list_update'
+        );
+
+        console.log(
+            `clientLocalStorage.get('publication-saved-offers')`,
+            clientLocalStorage.get('publication-saved-offers')
         );
 
         animateShoppingListCounter();
@@ -591,6 +675,23 @@ const IncitoPublication = (
                 vt: eventTracker.createViewToken(res.offer.id)
             });
         }
+
+        return res;
+    };
+
+    const fetchProducts = async (offerId: string) => {
+        const res = await request({
+            apiKey,
+            coreUrl,
+            url: '/v4/rpc/get_offer_products',
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: offerId
+            })
+        });
+
+        if (!res) throw new Error();
 
         return res;
     };

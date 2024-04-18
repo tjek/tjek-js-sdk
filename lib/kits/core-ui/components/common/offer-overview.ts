@@ -61,30 +61,9 @@ const defaultTemplate = `\
 `;
 
 const defaultTemplateV2 = `\
-    <div class="sgn-offer-overview-popup sgn-offer-overview-popup-v2" style="width:{{layoutWidth}}px;">
+    <div class="sgn-offer-overview-popup sgn-offer-overview-popup-v2">
         {{#offer}}
-        <div class="sgn-popup-header">
-            <div class="sgn-menu-popup-labels">
-                <div class="sgn-menu-label">
-                    <span>{{label}}&nbsp;</span>
-                </div>
-                <div class="sgn-menu-date">
-                    <span data-validity-state="{{status}}">{{dateRange}}&nbsp;</span>
-                </div>
-            </div>
-        </div>
         <div class="sgn-popup-content">
-            <div class="sgn-offer-texts-container">
-                <div class="sgn-offer-heading">
-                    <span>{{heading}}&nbsp;</span>
-                </div>
-                <div class="sgn-offer-description">
-                    <span>{{description}}&nbsp;</span>
-                </div>
-                <div class="sgn-offer-price">
-                    <span>{{price}}&nbsp;</span>
-                </div>
-            </div>
             <div class="sgn-popup-offer-container">
                 {{#loader}}
                 <div class="sgn-offer-img sgn-offer-img-v2">
@@ -95,28 +74,48 @@ const defaultTemplateV2 = `\
                 <div class="sgn-offer-img">
                     <img src="{{images.zoom}}" alt="{{heading}}">
                 </div>
-                <div class="sgn-products-container">
-                    <div class="sgn-products-texts-container">
-                        {{#products}}
-                        <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" class="sgn-product-details">
-                            <div class="sgn-product-heading">{{title}}</div>
-                            <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
-                                <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-minus-circle-fill" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M128,24A104,104,0,1,0,232,128,104.2,104.2,0,0,0,128,24Zm40,112H88a8,8,0,0,1,0-16h80a8,8,0,0,1,0,16Z"/></svg>
-                                </button>
-                                <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="1" />
-                                <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/> </svg>
-                                </button>
+                <div class="sgn-offer-details-container">
+                    <div class="sgn-popup-header">
+                        <div class="sgn-menu-popup-labels">
+                            <div class="sgn-menu-label">
+                                <span>{{label}}&nbsp;</span>
                             </div>
-                            <div class="sgn-offer-product-basket">
-                                <button id="sgn-offer-product-add-basket-{{id}}" class="sgn-offer-product-add-basket">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket" viewBox="0 0 16 16"> <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/> </svg>
-                                </button>
+                            <div class="sgn-menu-date">
+                                <span data-validity-state="{{status}}">{{dateRange}}&nbsp;</span>
                             </div>
-                            <div class="sgn-clearfix"></div>
                         </div>
-                        {{/products}}
+                    </div>
+                    <div class="sgn-offer-texts-container">
+                        <div class="sgn-offer-heading">
+                            <span>{{heading}}&nbsp;</span>
+                        </div>
+                        <div class="sgn-offer-description">
+                            <span>{{description}}&nbsp;</span>
+                        </div>
+                        <div class="sgn-offer-price">
+                            <span>{{price}}&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="sgn-products-container">
+                        <div class="sgn-products-texts-container">
+                            {{#products}}
+                            <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" class="sgn-product-details">
+                                <div class="sgn-product-image"><img src="{{images.zoom}}" alt="{{heading}}"></div>
+                                <div class="sgn-product-heading">{{title}}</div>
+                                <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                                    <div class="sgn-offer-product-quantity-content">
+                                        <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                        </button>
+                                        <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="1" />
+                                        <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/products}}
+                        </div>
                     </div>
                 </div>
                 {{/loader}}
@@ -133,7 +132,8 @@ const OfferOverview = ({
     sgnData,
     offer,
     type,
-    addToShoppingList
+    addToShoppingList,
+    updateShoppingList
 }) => {
     template =
         template?.innerHTML ||
@@ -185,8 +185,12 @@ const OfferOverview = ({
         addEventListeners();
     };
 
+    const transformIncitoProducts = (products) =>
+        products.map(({product}) => product);
+
     const transformIncitoOffer = async ({
         fetchOffer,
+        fetchProducts,
         viewId,
         publicationId,
         products
@@ -194,7 +198,14 @@ const OfferOverview = ({
         const {localeCode, currency} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
+        const {offer_products} = await fetchProducts(offer.id);
+        const products1 = transformIncitoProducts(offer_products);
         offer.products = products;
+
+        console.log('incitoOffer', incitoOffer);
+
+        console.log('products', products);
+        console.log('products1', products1);
 
         return {
             ...offer,
@@ -312,10 +323,32 @@ const OfferOverview = ({
 
             plusBtn?.addEventListener('click', () => {
                 if (quantityTxt) quantityTxt.value = `${++quantity}`;
+
+                updateShoppingList(
+                    {
+                        ...offer,
+                        basket: {
+                            productId,
+                            quantity
+                        }
+                    },
+                    'add'
+                );
             });
             minusBtn?.addEventListener('click', () => {
                 if (quantityTxt && quantity > 1)
                     quantityTxt.value = `${--quantity}`;
+
+                updateShoppingList(
+                    {
+                        ...offer,
+                        basket: {
+                            productId,
+                            quantity
+                        }
+                    },
+                    'minus'
+                );
             });
 
             basketBtn?.addEventListener('click', () => {
