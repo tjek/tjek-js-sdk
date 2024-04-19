@@ -190,4 +190,16 @@ export interface V2PageDecoration {
     page_number: number;
     title: string | null;
     website_link: string | null;
+    website_link_title?: string | null;
+    hotspots?:
+        | {
+              x1: number;
+              x2: number;
+              y1: number;
+              y2: number;
+              rotate: number;
+              embed_link: string;
+              link: string;
+          }[]
+        | null;
 }

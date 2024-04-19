@@ -44,7 +44,58 @@ export default class Bootstrapper {
         });
     }
 
-    applyHotspots(viewer: Viewer, hotspots: V2Hotspot[]) {
+    transformPageDecorationHotspots(pageDecorations: V2PageDecoration[]) {
+        const filteredPageDecorations = pageDecorations?.filter(
+            (pageDecoration) => pageDecoration.hotspots?.length
+        );
+        const pageDecorationHotspots: {
+            id: string;
+            type: string;
+            embed_link: string;
+            link: string;
+            rotate: number;
+            locations: any;
+        }[] = [];
+
+        filteredPageDecorations.forEach((pageDecoration) => {
+            pageDecoration.hotspots?.forEach((hotspot, index) => {
+                pageDecorationHotspots.push({
+                    id: `page${pageDecoration.page_number}-hotspot-${index}`,
+                    type: 'pagedecoration',
+                    embed_link: hotspot.embed_link,
+                    link: hotspot.link,
+                    rotate: hotspot.rotate,
+                    locations: {
+                        [pageDecoration.page_number]: [
+                            [hotspot.x1 / 100, hotspot.y1 / 100],
+                            [hotspot.x1 / 100, hotspot.y2 / 100],
+                            [hotspot.x2 / 100, hotspot.y2 / 100],
+                            [hotspot.x2 / 100, hotspot.y1 / 100]
+                        ]
+                    }
+                });
+            });
+        });
+
+        return pageDecorationHotspots;
+    }
+
+    applyHotspots(
+        viewer: Viewer,
+        hotspots: V2Hotspot[],
+        pageDecorations?: V2PageDecoration[]
+    ) {
+        let pageDecorationHotspots;
+
+        if (pageDecorations?.length) {
+            pageDecorationHotspots =
+                this.transformPageDecorationHotspots(pageDecorations);
+
+            if (pageDecorationHotspots.length) {
+                hotspots = hotspots.concat(pageDecorationHotspots);
+            }
+        }
+
         viewer.applyHotspots(
             hotspots.reduce((obj, hotspot) => {
                 obj[hotspot.id] = hotspot;

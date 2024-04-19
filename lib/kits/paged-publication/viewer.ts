@@ -59,8 +59,17 @@ export interface ViewerInit {
 }
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
-    hotspots: Record<string, {type: string; id: string; locations}> | null =
-        null;
+    hotspots: Record<
+        string,
+        {
+            type: string;
+            id: string;
+            locations;
+            link: string;
+            embed_link: string;
+            rotate: number;
+        }
+    > | null = null;
     hotspotQueue: {id: string; pages: Page[]}[] = [];
     popover: null | {destroy: () => void} = null;
     el: HTMLElement;
@@ -273,11 +282,19 @@ class Viewer extends MicroEvent {
             for (const hotspotId in this.hotspots) {
                 if (hotspots[hotspotId]) continue;
 
-                const {id, type, locations} = this.hotspots[hotspotId];
+                const {id, type, locations, link, embed_link, rotate} =
+                    this.hotspots[hotspotId];
                 for (let idx = 0; idx < hotspotRequest.pages.length; idx++) {
                     const {pageNumber} = hotspotRequest.pages[idx];
                     if (locations[pageNumber]) {
-                        hotspots[hotspotId] = {type, id, locations};
+                        hotspots[hotspotId] = {
+                            type,
+                            id,
+                            locations,
+                            link,
+                            embed_link,
+                            rotate
+                        };
 
                         break;
                     }
