@@ -10,6 +10,7 @@ import {
     parseDateStr
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
+import * as clientLocalStorage from '../../../../storage/client-local';
 import './offer-overview.styl';
 
 const defaultTemplate = `\
@@ -78,28 +79,28 @@ const defaultTemplateV2 = `\
                     <div class="sgn-popup-header">
                         <div class="sgn-menu-popup-labels">
                             <div class="sgn-menu-label">
-                                <span>{{label}}&nbsp;</span>
+                                <span>{{label}}</span>
                             </div>
                             <div class="sgn-menu-date">
-                                <span data-validity-state="{{status}}">{{dateRange}}&nbsp;</span>
+                                <span data-validity-state="{{status}}">{{dateRange}}</span>
                             </div>
                         </div>
                     </div>
                     <div class="sgn-offer-texts-container">
                         <div class="sgn-offer-heading">
-                            <span>{{heading}}&nbsp;</span>
+                            <span>{{heading}}</span>
                         </div>
                         <div class="sgn-offer-description">
-                            <span>{{description}}&nbsp;</span>
+                            <span>{{description}}</span>
                         </div>
                         <div class="sgn-offer-price">
-                            <span>{{price}}&nbsp;</span>
+                            <span>{{price}}</span>
                         </div>
                     </div>
                     <div class="sgn-products-container">
                         <div class="sgn-products-texts-container">
                             {{#products}}
-                            <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" class="sgn-product-details">
+                            <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" data-offer-product-quantity="{{quantity}}" class="sgn-product-details">
                                 <div class="sgn-product-image"><img src="{{images.zoom}}" alt="{{heading}}"></div>
                                 <div class="sgn-product-heading">{{title}}</div>
                                 <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
@@ -107,7 +108,7 @@ const defaultTemplateV2 = `\
                                         <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
                                         </button>
-                                        <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="1" />
+                                        <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" />
                                         <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
                                         </button>
@@ -188,6 +189,21 @@ const OfferOverview = ({
     const transformIncitoProducts = (products) =>
         products.map(({product}) => product);
 
+    const mapProductQuantities = (products) => {
+        const storedPublicationOffers =
+            clientLocalStorage.get('publication-saved-offers') || [];
+
+        return products?.map((product) => {
+            const matchingOffer = storedPublicationOffers.find(
+                (offer) => offer.id === product.id
+            );
+            return {
+                ...product,
+                quantity: matchingOffer ? matchingOffer.quantity : 0
+            };
+        });
+    };
+
     const transformIncitoOffer = async ({
         fetchOffer,
         fetchProducts,
@@ -200,7 +216,7 @@ const OfferOverview = ({
         offer = incitoOffer;
         const {offer_products} = await fetchProducts(offer.id);
         const products1 = transformIncitoProducts(offer_products);
-        offer.products = products;
+        offer.products = mapProductQuantities(products);
 
         console.log('incitoOffer', incitoOffer);
 
@@ -319,10 +335,12 @@ const OfferOverview = ({
                 '.sgn-offer-product-add-basket'
             );
 
-            let quantity = +(quantityTxt?.value ?? 1);
+            let quantity = +(quantityTxt?.value ?? 0);
 
             plusBtn?.addEventListener('click', () => {
                 if (quantityTxt) quantityTxt.value = `${++quantity}`;
+
+                productEl.dataset.offerProductQuantity = `${quantity}`;
 
                 updateShoppingList(
                     {
@@ -335,9 +353,12 @@ const OfferOverview = ({
                     'add'
                 );
             });
+
             minusBtn?.addEventListener('click', () => {
-                if (quantityTxt && quantity > 1)
+                if (quantityTxt && quantity >= 1)
                     quantityTxt.value = `${--quantity}`;
+
+                productEl.dataset.offerProductQuantity = `${quantity}`;
 
                 updateShoppingList(
                     {

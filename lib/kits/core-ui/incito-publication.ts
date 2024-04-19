@@ -391,6 +391,8 @@ const IncitoPublication = (
         const storedPublicationOffers =
             clientLocalStorage.get('publication-saved-offers') || [];
 
+        let isNew = false;
+
         let shopListOffer = {
             id: offer.id,
             name: offer.name,
@@ -421,8 +423,9 @@ const IncitoPublication = (
             (storedOffer) => storedOffer.id === shopListOffer.id
         );
 
-        if (!isOfferInList) {
+        if (!isOfferInList && action !== 'minus') {
             storedPublicationOffers.push(shopListOffer);
+            isNew = true;
         } else {
             const updatedOffers = storedPublicationOffers
                 .map((storedOffer) => {
@@ -461,7 +464,9 @@ const IncitoPublication = (
             clientLocalStorage.get('publication-saved-offers')
         );
 
-        animateShoppingListCounter();
+        if (isNew) {
+            animateShoppingListCounter();
+        }
     };
 
     const addSectionScrollListener = () => {
