@@ -187,7 +187,7 @@ const PagedPublication = (
 
         updateViewerTranslation({
             'paged_publication.hotspot_picker.header': translate(
-                'paged_publication_viewer_hotspot_picker_header'
+                'publication_viewer_hotspot_picker_header'
             )
         });
 
@@ -196,6 +196,11 @@ const PagedPublication = (
         if (!scriptEls.disablePageDecorations) {
             sgnPageDecorations = await bootstrapper.fetchPageDecorations();
             bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
+
+            updateViewerTranslation({
+                'paged_publication.hotspot_picker.pagedecoration.link':
+                    translate('publication_viewer_hotspot_decoration_link')
+            });
         }
 
         sgnViewer.bind('hotspotClicked', clickHotspot);
@@ -209,7 +214,7 @@ const PagedPublication = (
         }
 
         const hotspots = await bootstrapper.fetchHotspots();
-        bootstrapper.applyHotspots(sgnViewer, hotspots);
+        bootstrapper.applyHotspots(sgnViewer, hotspots, sgnPageDecorations);
 
         displayUrlParams();
         addFirstLastControlListener();

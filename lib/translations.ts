@@ -1,6 +1,7 @@
 import Mustache from 'mustache';
 const pairs = {
     'paged_publication.hotspot_picker.header': 'Which offer did you mean?',
+    'paged_publication.hotspot_picker.pagedecoration.link': 'Read more',
     'incito_publication.product_picker.header': 'Which product?'
 };
 

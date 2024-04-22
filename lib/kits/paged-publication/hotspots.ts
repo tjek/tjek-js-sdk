@@ -1,5 +1,6 @@
 import MicroEvent from '../../../vendor/microevent';
 import PageSpread from '../../verso-browser/page_spread';
+import * as translations from '../../translations';
 import {V2Hotspot} from '../core';
 import PagedPublicationPageSpread from './page-spread';
 import {Page} from './page-spreads';
@@ -37,6 +38,8 @@ function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
     const width = maxX! - minX!;
     const height = maxY! - minY!;
 
+    ratio = hotspot.type === 'pagedecoration' ? 1 : ratio;
+
     return {
         top: (minY! / ratio) * 100,
         left: minX! * 100,
@@ -64,6 +67,38 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     if (hotspot.type) el.dataset.type = hotspot.type;
 
     el.innerHTML = '';
+
+    if (hotspot.type === 'pagedecoration') {
+        el.className += ' sgn-pagedecoration-hotspot';
+
+        if (hotspot.embed_link) {
+            el.innerHTML = `
+                <iframe src="${hotspot.embed_link}"
+                    title="sgn-pagedecoration-embed-${hotspot.id}"
+                    height="100%"
+                    width="100%"
+                    sandbox="allow-scripts allow-same-origin"
+                    style="border:0;"
+                ></iframe>
+            `;
+        } else if (hotspot.link) {
+            el.innerHTML = `
+            <a href="${
+                hotspot.link
+            }" class="sgn-pagedecoration-hotspot-link" rel="noreferrer noopener" target="_blank">
+                <div class="sgn-pagedecoration-hotspot-link-content" style="width:100%;height:100%;">
+                        <div class="sgn-pagedecoration-hotspot-link-label">
+                            ${translations.t(
+                                'paged_publication.hotspot_picker.pagedecoration.link'
+                            )}
+                        </div>
+                </div>
+            </a>
+            `;
+        }
+
+        el.style.transform = `rotate(${hotspot.rotate}deg)`;
+    }
 
     el.style.top = `${top}px`;
     el.style.left = `${left}px`;
@@ -152,7 +187,7 @@ class PagedPublicationHotspots extends MicroEvent {
 
     setCache(
         pageSpreadId: string,
-        data: typeof this.cache[keyof typeof this.cache]
+        data: (typeof this.cache)[keyof typeof this.cache]
     ) {
         this.cache[pageSpreadId] = data;
 
