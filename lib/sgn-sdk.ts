@@ -56,7 +56,7 @@ if (isBrowser()) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
         const trackId = scriptEl.dataset.trackId;
         const component = scriptEl.dataset.component;
-        const isTest = scriptEl.dataset.environment === 'test';
+        const environment = scriptEl.dataset.environment;
         const scriptConfig: {
             apiKey?: string;
             eventTracker?: Tracker;
@@ -67,7 +67,7 @@ if (isBrowser()) {
 
         if (trackId) scriptConfig.eventTracker = new Tracker({trackId});
 
-        if (isTest) scriptConfig.coreUrl = coreUrlStaging;
+        if (environment === 'staging') scriptConfig.coreUrl = coreUrlStaging;
 
         config.set(scriptConfig);
 
