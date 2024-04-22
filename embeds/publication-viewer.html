@@ -33,6 +33,7 @@
                 businessId: urlParams.get('businessId'),
                 apiKey: urlParams.get('apiKey') ?? '',
                 trackId: urlParams.get('trackId') ?? '',
+                environment: urlParams.get('environment') ?? '',
                 localeCode: urlParams.get('localeCode'),
                 componentType:
                     urlParams.get('componentType') || 'list-publications',
@@ -188,6 +189,9 @@
             }
             if (data.publicationId) {
                 scriptEl.dataset.componentPublicationId = data.publicationId;
+            }
+            if (data.environment) {
+                scriptEl.dataset.environment = data.environment;
             }
             if (data.tags?.length) {
                 scriptEl.dataset.componentListPublicationsRequestFilter = `tags:${data.tags.join()};`;
