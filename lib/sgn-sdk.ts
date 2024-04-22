@@ -17,6 +17,7 @@ import {
 import * as clientLocal from './storage/client-local';
 import './stylus/sgn.styl';
 import {error, isBrowser} from './util';
+import {coreUrlStaging} from './config-defaults';
 
 export const config = new Config();
 config.bind('change', (changedAttributes) => {
@@ -55,14 +56,18 @@ if (isBrowser()) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
         const trackId = scriptEl.dataset.trackId;
         const component = scriptEl.dataset.component;
+        const env = scriptEl.dataset.environment;
         const scriptConfig: {
             apiKey?: string;
             eventTracker?: Tracker;
+            coreUrl?: string;
         } = {};
 
         if (apiKey) scriptConfig.apiKey = apiKey;
 
         if (trackId) scriptConfig.eventTracker = new Tracker({trackId});
+
+        if (env === 'test') scriptConfig.coreUrl = coreUrlStaging;
 
         config.set(scriptConfig);
 
