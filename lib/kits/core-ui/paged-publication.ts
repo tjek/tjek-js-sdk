@@ -298,7 +298,9 @@ const PagedPublication = (
     };
 
     const clickHotspot = (hotspot: V2Hotspot) => {
-        if (hotspot.type === 'pagedecoration') return;
+        if (hotspot.type === 'pagedecoration') {
+            return;
+        }
 
         const shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
 
