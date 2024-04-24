@@ -101,7 +101,7 @@ const defaultTemplateV2 = `\
                         <div class="sgn-products-texts-container">
                             {{#products}}
                             <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" data-offer-product-quantity="{{quantity}}" class="sgn-product-details">
-                                <div class="sgn-product-image"><img src="{{images.zoom}}" alt="{{heading}}"></div>
+                                <div class="sgn-product-image"><img src="{{#image}}{{image}}{{/image}}{{^image}}{{images.zoom}}{{/image}}" alt="{{heading}}"></div>
                                 <div class="sgn-product-heading">{{title}}</div>
                                 <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
                                     <div class="sgn-offer-product-quantity-content">
@@ -186,19 +186,18 @@ const OfferOverview = ({
         addEventListeners();
     };
 
-    const transformIncitoProducts = (products) =>
-        products.map(({product}) => product);
-
-    const mapProductQuantities = (products) => {
+    const transformProducts = (products, fetchedProducts) => {
         const storedPublicationOffers =
             clientLocalStorage.get('publication-saved-offers') || [];
 
-        return products?.map((product) => {
+        return products?.map((product, index) => {
             const matchingOffer = storedPublicationOffers.find(
                 (offer) => offer.id === product.id
             );
             return {
                 ...product,
+                image: fetchedProducts[index]?.product?.images?.[0]?.assets?.[0]
+                    ?.url,
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });
@@ -215,13 +214,7 @@ const OfferOverview = ({
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
         const {offer_products} = await fetchProducts(offer.id);
-        const products1 = transformIncitoProducts(offer_products);
-        offer.products = mapProductQuantities(products);
-
-        console.log('incitoOffer', incitoOffer);
-
-        console.log('products', products);
-        console.log('products1', products1);
+        offer.products = transformProducts(products, offer_products);
 
         return {
             ...offer,
