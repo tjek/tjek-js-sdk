@@ -65,7 +65,6 @@
 .sgn-shopping-list-content-container
     border-bottom 1px solid #d5d5d5
     padding 10px
-    align-items center
 
 .sgn-popup-header
     border-bottom 1px solid #eee
@@ -78,15 +77,19 @@
     line-height 1.6
     overflow hidden
     text-overflow ellipsis
+    display flex
+    flex 1
+    align-items center
 
     .sgn-shopping-list-content-heading
-        float left
-        width 75%
-        padding 6px 0
+        flex 1
 
-    .sgn-offer-product-quantity
-        float left
-        width 20%
+    .sgn-offer-product-quantity-content
+        display inline-block
+        border 1px solid rgba(0, 0, 0, 0.12)
+        border-radius 19.5px
+        overflow hidden
+        padding 2px
         
         button
             min-width 0
@@ -94,7 +97,7 @@
             background transparent
             color #4e4e4e
             border-radius 100%
-            box-shadow rgba(0, 0, 0, 0.4) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
+            border 2px solid #000000
 
             svg
                 vertical-align middle
@@ -108,10 +111,6 @@
             width 30px
             padding 8px 0
             text-align center
-    
-    .sgn-shopping-list-content-ticker
-        float left
-        width 5%
 
 .sgn-shopping-list-item-container-ticked
     .sgn-shopping-list-content-heading

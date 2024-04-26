@@ -81,17 +81,16 @@ const defaultTemplateV2 = `\
                             <div class="sgn-menu-label">
                                 <span>{{label}}</span>
                             </div>
-                            <div class="sgn-menu-date">
-                                <span data-validity-state="{{status}}">{{dateRange}}</span>
-                            </div>
                         </div>
                     </div>
                     <div class="sgn-offer-texts-container">
-                        <div class="sgn-offer-heading">
-                            <span>{{heading}}</span>
-                        </div>
-                        <div class="sgn-offer-description">
-                            <span>{{description}}</span>
+                        <div class="sgn-offer-info">
+                            <div class="sgn-offer-heading">
+                                <span>{{heading}}</span>
+                            </div>
+                            <div class="sgn-offer-description">
+                                <span>{{description}}</span>
+                            </div>
                         </div>
                         <div class="sgn-offer-price">
                             <span>{{price}}</span>
@@ -117,6 +116,10 @@ const defaultTemplateV2 = `\
                             </div>
                             {{/products}}
                         </div>
+                    </div>
+                    <div class="sgn-menu-date">
+                        <span>Tilbuddet gælder kun fra d. </span>                    
+                        <span data-validity-state="{{status}}">{{dateRange}}</span>
                     </div>
                 </div>
                 {{/loader}}
