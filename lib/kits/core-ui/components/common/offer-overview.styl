@@ -118,7 +118,7 @@
     display flex
 
     .sgn-popup-header
-        padding 10px 0
+        padding: 0.8rem 0 0.3rem 0
 
     .sgn-popup-content
         padding 0
@@ -148,7 +148,7 @@
         border-radius 10px
         max-height calc(100% - 1rem)
         overflow-y auto
-        box-shadow rgba(0, 0, 0, 0.4) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
+        box-shadow rgba(0, 0, 0, 0.3) 0px 0px 0.25rem
 
     .sgn-products-texts-container
         height 100%
@@ -160,9 +160,12 @@
             
     .sgn-offer-heading
         font-size 1.8em
+        padding-bottom .25rem
+        margin-top -.25rem
     
     .sgn-offer-description
         opacity 1
+        font-size 0.8rem
 
     .sgn-offer-price
         font-size 2.5em
@@ -224,7 +227,8 @@
         border-radius 19.5px
         overflow hidden
         padding 2px
-
+        margin-right: .1rem
+        
         button
             min-width 0
             padding 8px 9px
@@ -284,6 +288,12 @@
             flex-flow column
             gap 0
             align-items flex-start
+
+        .sgn-offer-heading
+            font-size 1.8em
+
+        .sgn-offer-price
+            font-size 2em
 
         .sgn-offer-img
             max-height 30%
