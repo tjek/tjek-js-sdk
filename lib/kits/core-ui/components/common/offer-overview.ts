@@ -141,7 +141,7 @@ const OfferOverview = ({
 }) => {
     template =
         template?.innerHTML ||
-        (scriptEls.offerModalVersion === 2 && type === 'incito'
+        (scriptEls.offerModalVersion == 2 && type === 'incito'
             ? defaultTemplateV2
             : defaultTemplate);
     let container: HTMLDivElement | null = null;

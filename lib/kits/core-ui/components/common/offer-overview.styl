@@ -148,7 +148,7 @@
         border-radius 10px
         max-height calc(100% - 1rem)
         overflow-y auto
-        border 1px solid rgba(0, 0, 0, 0.12)
+        box-shadow rgba(0, 0, 0, 0.4) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
 
     .sgn-products-texts-container
         height 100%
@@ -159,16 +159,24 @@
         flex 1 auto
             
     .sgn-offer-heading
-        font-size 1.5em
+        font-size 1.8em
     
     .sgn-offer-description
         opacity 1
+
+    .sgn-offer-price
+        font-size 2.5em
+        font-weight 500
 
     .sgn-offer-img
         padding 1.25rem
         border-radius 0
         flex 1
         width auto
+
+        >img
+            max-width 90%
+            max-height 90%
     
     .sgn-offer-details-container
         display flex
@@ -211,7 +219,7 @@
         overflow hidden
 
     .sgn-offer-product-quantity-content
-        display inline-block
+        display flex
         border 1px solid rgba(0, 0, 0, 0.12)
         border-radius 19.5px
         overflow hidden
