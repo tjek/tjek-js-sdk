@@ -77,46 +77,64 @@
     line-height 1.6
     overflow hidden
     text-overflow ellipsis
-    display flex
-    flex 1
-    align-items center
 
-    .sgn-shopping-list-content-heading
+.sgn-shopping-popup-v2
+    .sgn-shopping-list-items-container
+        height 450px
+        overflow-y scroll
+        list-style-type none
+        padding 10px
+        color #202020
+
+        > li
+            &:hover
+                cursor unset
+    
+    .sgn-shopping-list-content
+        display flex
         flex 1
+        align-items center
 
-    .sgn-offer-product-quantity-content
-        display inline-block
-        border 1px solid rgba(0, 0, 0, 0.12)
-        border-radius 19.5px
-        overflow hidden
-        padding 2px
-        
-        button
-            min-width 0
-            padding 8px 9px
-            background transparent
-            color #4e4e4e
-            border-radius 100%
-            border 2px solid #000000
+        .sgn-shopping-list-content-heading
+            flex 1
 
-            svg
-                vertical-align middle
-                width 16px
-                height 16px
-        
-        input
-            color #202020
-            border unset
-            background unset
-            width 30px
-            padding 8px 0
-            text-align center
+        .sgn-offer-product-quantity-content
+            display inline-block
+            border 1px solid rgba(0, 0, 0, 0.12)
+            border-radius 19.5px
+            overflow hidden
+            padding 2px
+            
+            button
+                min-width 0
+                padding 8px 9px
+                background transparent
+                color #4e4e4e
+                border-radius 100%
+                border 2px solid #000000
+
+                svg
+                    vertical-align middle
+                    width 16px
+                    height 16px
+            
+            input
+                color #202020
+                border unset
+                background unset
+                width 30px
+                padding 8px 0
+                text-align center
+    
+    .sgn-shopping-list-content-ticker-box
+        &:hover
+            cursor pointer
 
 .sgn-shopping-list-item-container-ticked
     .sgn-shopping-list-content-heading
         text-decoration line-through
         color rgb(139, 140, 143)
-
+            
     .sgn-offer-product-quantity
         opacity 0.5
 

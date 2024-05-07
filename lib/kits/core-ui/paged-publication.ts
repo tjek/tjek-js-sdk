@@ -129,7 +129,10 @@ const PagedPublication = (
         );
 
     const renderShoppingList = () =>
-        ShoppingList({template: customTemplates.shoppingList}).render();
+        ShoppingList({
+            template: customTemplates.shoppingList,
+            version: 1
+        }).render();
 
     const renderMenuPopup = () =>
         document
@@ -308,7 +311,8 @@ const PagedPublication = (
                 sgnData,
                 offer: hotspot,
                 type: 'paged',
-                addToShoppingList
+                addToShoppingList,
+                updateShoppingList: () => {} //todo
             }).render();
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab' &&
