@@ -76,6 +76,9 @@ const defaultTemplateV2 = `\
                     <img src="{{images.zoom}}" alt="{{heading}}">
                 </div>
                 <div class="sgn-offer-details-container">
+                    <button class="sgn-modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
+                    </button>
                     <div class="sgn-popup-header">
                         <div class="sgn-menu-popup-labels">
                             <div class="sgn-menu-label">
@@ -101,7 +104,11 @@ const defaultTemplateV2 = `\
                             {{#products}}
                             <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" data-offer-product-quantity="{{quantity}}" class="sgn-product-details">
                                 <div class="sgn-product-image"><img src="{{#image}}{{image}}{{/image}}{{^image}}{{images.zoom}}{{/image}}" alt="{{heading}}"></div>
-                                <div class="sgn-product-heading">{{title}}</div>
+                                <div class="sgn-product-heading">
+                                    <div class="sgn-product-title"><span>{{title}}</span></div>
+                                    <div class="sgn-product-description"><span>{{description}}</span></div>
+                                    <div class="sgn-product-price"><span>{{price}}</span></div>
+                                </div>
                                 <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
                                     <div class="sgn-offer-product-quantity-content">
                                         <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">
@@ -380,12 +387,21 @@ const OfferOverview = ({
         });
     };
 
+    const closeModalListener = () => {
+        container
+            ?.querySelector('.sgn-modal-close')
+            ?.addEventListener('click', () => {
+                destroyModal();
+            });
+    };
+
     const addEventListeners = () => {
         document.querySelector<HTMLDivElement>('.sgn-modal-container')?.focus();
 
         addOpenWebshopListener();
         addShoppingListListener();
         addProductListener();
+        closeModalListener();
     };
 
     return {render};
