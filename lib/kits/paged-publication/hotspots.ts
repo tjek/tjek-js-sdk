@@ -83,16 +83,8 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
             `;
         } else if (hotspot.link) {
             el.innerHTML = `
-            <a href="${
-                hotspot.link
-            }" class="sgn-pagedecoration-hotspot-link" rel="noreferrer noopener" target="_blank">
-                <div class="sgn-pagedecoration-hotspot-link-content" style="width:100%;height:100%;">
-                        <div class="sgn-pagedecoration-hotspot-link-label">
-                            ${translations.t(
-                                'paged_publication.hotspot_picker.pagedecoration.link'
-                            )}
-                        </div>
-                </div>
+            <a href="${hotspot.link}" class="sgn-pagedecoration-hotspot-link" rel="noreferrer noopener" target="_blank">
+                <div class="sgn-pagedecoration-hotspot-link-content"></div>
             </a>
             `;
         }

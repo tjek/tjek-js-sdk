@@ -196,11 +196,6 @@ const PagedPublication = (
         if (!scriptEls.disablePageDecorations) {
             sgnPageDecorations = await bootstrapper.fetchPageDecorations();
             bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
-
-            updateViewerTranslation({
-                'paged_publication.hotspot_picker.pagedecoration.link':
-                    translate('publication_viewer_hotspot_decoration_link')
-            });
         }
 
         sgnViewer.bind('hotspotClicked', clickHotspot);
