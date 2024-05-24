@@ -244,15 +244,24 @@
             font-size 1.1rem
 
         .sgn-product-description
-            white-space nowrap
             overflow hidden
             text-overflow ellipsis
             max-width 476px
             font-size 0.8rem
+            display -webkit-box
+            -webkit-line-clamp 2
+            -webkit-box-orient vertical
+        
+        .arrow-up-right-from-square
+            width 12px
+            height 12px
 
-        .sgn-product-price
-            font-weight 500
-            font-size 1.2rem
+    .sgn-product-price
+        font-weight 500
+        font-size 1.2rem
+
+    .sgn-offer-product-quantity
+        width 114px
 
     .sgn-offer-product-quantity-content
         display flex

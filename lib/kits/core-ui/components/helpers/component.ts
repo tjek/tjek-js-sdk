@@ -62,7 +62,10 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
     return new Intl.NumberFormat(localeCode.replace('_', '-'), {
         style: 'currency',
         currency
-    }).format(price);
+    })
+        .format(price)
+        .replace(currency, '')
+        .trim();
 };
 
 export const parseDateStr = (dateStr: string) => {
