@@ -95,7 +95,8 @@ const defaultTemplateV2 = `\
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span>
+                            {{#price}}<span class="sgn-shopping-list-content-price">{{price}}</span><span> - </span>{{/price}}
+                            <span>{{name}}</span>
                         </div>
                         <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
                             <div class="sgn-offer-product-quantity-content">
@@ -216,7 +217,7 @@ const ShoppingList = ({template, version}) => {
             ...offer,
             price: offer?.pricing?.price
                 ? formatPrice(
-                      offer?.pricing?.price,
+                      offer?.pricing?.price * (offer?.quantity || 1),
                       localeCode,
                       offer?.pricing?.currency || currency
                   )
@@ -376,52 +377,77 @@ const ShoppingList = ({template, version}) => {
             });
     };
 
+    const updateQuantityHandler = (
+        productEl: HTMLElement,
+        productIndex: number,
+        action: 'plus' | 'minus'
+    ) => {
+        const {localeCode} = translations;
+        const priceEl = productEl.querySelector<HTMLElement>(
+            '.sgn-shopping-list-content-price'
+        );
+        const quantityTxt = productEl.querySelector<HTMLInputElement>(
+            '.sgn-offer-product-quantity-text'
+        );
+
+        const storedPublicationOffers = clientLocalStorage.get(
+            'publication-saved-offers'
+        );
+
+        let quantity = Number(quantityTxt?.value ?? 1);
+
+        if (
+            quantityTxt &&
+            !(quantityTxt?.value === '1' && action === 'minus')
+        ) {
+            quantityTxt.value =
+                action === 'plus' ? `${++quantity}` : `${--quantity}`;
+
+            storedPublicationOffers[productIndex].quantity = quantityTxt.value;
+            clientLocalStorage.setWithEvent(
+                'publication-saved-offers',
+                storedPublicationOffers,
+                'tjek_shopping_list_update'
+            );
+
+            if (
+                priceEl &&
+                storedPublicationOffers[productIndex]?.pricing?.price &&
+                quantity
+            ) {
+                const priceNum =
+                    storedPublicationOffers[productIndex]?.pricing?.price *
+                    Number(storedPublicationOffers[productIndex].quantity || 1);
+
+                priceEl.innerHTML = formatPrice(
+                    priceNum,
+                    localeCode,
+                    storedPublicationOffers[productIndex]?.pricing?.currency
+                );
+            }
+        }
+    };
+
     const addQuantityListener = () => {
         const productEls = document.querySelectorAll(
             '.sgn-shopping-list-item-container'
         );
 
         productEls.forEach((productEl: HTMLElement) => {
-            const index = productEl.dataset.id;
+            const index = Number(productEl.dataset.id);
             const minusBtn = productEl.querySelector<HTMLElement>(
                 '.sgn-offer-product-quantity-minus'
             );
             const plusBtn = productEl.querySelector<HTMLElement>(
                 '.sgn-offer-product-quantity-plus'
             );
-            const quantityTxt = productEl.querySelector<HTMLInputElement>(
-                '.sgn-offer-product-quantity-text'
+
+            plusBtn?.addEventListener('click', () =>
+                updateQuantityHandler(productEl, index, 'plus')
             );
-            const storedPublicationOffers = clientLocalStorage.get(
-                'publication-saved-offers'
+            minusBtn?.addEventListener('click', () =>
+                updateQuantityHandler(productEl, index, 'minus')
             );
-
-            let quantity = +(quantityTxt?.value ?? 1);
-
-            plusBtn?.addEventListener('click', () => {
-                if (quantityTxt && index) {
-                    quantityTxt.value = `${++quantity}`;
-
-                    storedPublicationOffers[index].quantity = quantityTxt.value;
-                    clientLocalStorage.setWithEvent(
-                        'publication-saved-offers',
-                        storedPublicationOffers,
-                        'tjek_shopping_list_update'
-                    );
-                }
-            });
-            minusBtn?.addEventListener('click', () => {
-                if (quantityTxt && quantity > 1 && index) {
-                    quantityTxt.value = `${--quantity}`;
-
-                    storedPublicationOffers[index].quantity = quantityTxt.value;
-                    clientLocalStorage.setWithEvent(
-                        'publication-saved-offers',
-                        storedPublicationOffers,
-                        'tjek_shopping_list_update'
-                    );
-                }
-            });
         });
     };
 
