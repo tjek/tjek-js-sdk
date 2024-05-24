@@ -379,10 +379,10 @@ const ShoppingList = ({template, version}) => {
 
     const updateQuantityHandler = (
         productEl: HTMLElement,
-        productIndex: number,
         action: 'plus' | 'minus'
     ) => {
         const {localeCode} = translations;
+        const index = Number(productEl.dataset.id);
         const priceEl = productEl.querySelector<HTMLElement>(
             '.sgn-shopping-list-content-price'
         );
@@ -403,7 +403,7 @@ const ShoppingList = ({template, version}) => {
             quantityTxt.value =
                 action === 'plus' ? `${++quantity}` : `${--quantity}`;
 
-            storedPublicationOffers[productIndex].quantity = quantityTxt.value;
+            storedPublicationOffers[index].quantity = quantityTxt.value;
             clientLocalStorage.setWithEvent(
                 'publication-saved-offers',
                 storedPublicationOffers,
@@ -412,17 +412,17 @@ const ShoppingList = ({template, version}) => {
 
             if (
                 priceEl &&
-                storedPublicationOffers[productIndex]?.pricing?.price &&
+                storedPublicationOffers[index]?.pricing?.price &&
                 quantity
             ) {
                 const priceNum =
-                    storedPublicationOffers[productIndex]?.pricing?.price *
-                    Number(storedPublicationOffers[productIndex].quantity || 1);
+                    storedPublicationOffers[index]?.pricing?.price *
+                    Number(storedPublicationOffers[index].quantity || 1);
 
                 priceEl.innerHTML = formatPrice(
                     priceNum,
                     localeCode,
-                    storedPublicationOffers[productIndex]?.pricing?.currency
+                    storedPublicationOffers[index]?.pricing?.currency
                 );
             }
         }
@@ -434,7 +434,6 @@ const ShoppingList = ({template, version}) => {
         );
 
         productEls.forEach((productEl: HTMLElement) => {
-            const index = Number(productEl.dataset.id);
             const minusBtn = productEl.querySelector<HTMLElement>(
                 '.sgn-offer-product-quantity-minus'
             );
@@ -443,10 +442,10 @@ const ShoppingList = ({template, version}) => {
             );
 
             plusBtn?.addEventListener('click', () =>
-                updateQuantityHandler(productEl, index, 'plus')
+                updateQuantityHandler(productEl, 'plus')
             );
             minusBtn?.addEventListener('click', () =>
-                updateQuantityHandler(productEl, index, 'minus')
+                updateQuantityHandler(productEl, 'minus')
             );
         });
     };
