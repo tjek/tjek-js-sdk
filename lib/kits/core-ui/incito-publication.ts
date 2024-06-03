@@ -274,7 +274,6 @@ const IncitoPublication = (
                 sgnData,
                 offer: {
                     fetchOffer,
-                    fetchProducts,
                     viewId,
                     publicationId,
                     products
@@ -413,7 +412,7 @@ const IncitoPublication = (
                     id: product.id,
                     name: product.title,
                     pricing: {
-                        price: offer.price,
+                        price: product.price,
                         currency: offer.currency_code
                     },
                     quantity: 1,
@@ -683,23 +682,6 @@ const IncitoPublication = (
                 vt: eventTracker.createViewToken(res.offer.id)
             });
         }
-
-        return res;
-    };
-
-    const fetchProducts = async (offerId: string) => {
-        const res = await request({
-            apiKey,
-            coreUrl,
-            url: '/v4/rpc/get_offer_products',
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                id: offerId
-            })
-        });
-
-        if (!res) throw new Error();
 
         return res;
     };
