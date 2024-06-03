@@ -34,11 +34,7 @@ const PageDecorations = () => {
         const pageDecorationsEls = document.createElement('div');
 
         const filteredPageDecorations = pageDecorations?.filter(
-            (pageDecor, index, self) =>
-                index ===
-                self.findIndex(
-                    (pd) => pd?.website_link == pageDecor?.website_link
-                )
+            (pageDecor) => pageDecor?.website_link
         );
 
         filteredPageDecorations?.forEach((pageDecoration) => {
@@ -67,7 +63,9 @@ const PageDecorations = () => {
                     {
                         pageDecoration: {
                             ...pageDecoration,
-                            hostname: getHostname(pageDecoration.website_link)
+                            hostname:
+                                pageDecoration.website_link_title ||
+                                getHostname(pageDecoration.website_link)
                         }
                     }
                 );
