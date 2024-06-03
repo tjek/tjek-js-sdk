@@ -94,12 +94,17 @@
         display flex
         flex 1
         align-items center
+        gap 0.5rem
 
         .sgn-shopping-list-content-heading
             flex 1
 
+        .sgn-shopping-list-content-price
+            font-weight 500
+            font-size 1.2rem
+
         .sgn-offer-product-quantity-content
-            display inline-block
+            display flex
             border 1px solid rgba(0, 0, 0, 0.12)
             border-radius 19.5px
             overflow hidden
@@ -131,12 +136,11 @@
             cursor pointer
 
 .sgn-shopping-list-item-container-ticked
+    opacity 0.5
+
     .sgn-shopping-list-content-heading
         text-decoration line-through
         color rgb(139, 140, 143)
-            
-    .sgn-offer-product-quantity
-        opacity 0.5
 
 .sgn__theme-dark
     .sgn-shopping-popup
