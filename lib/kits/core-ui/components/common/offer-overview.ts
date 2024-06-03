@@ -106,14 +106,14 @@ const defaultTemplateV2 = `\
                                 <div class="sgn-product-image"><img src="{{#image}}{{image}}{{/image}}{{^image}}{{images.zoom}}{{/image}}" alt="{{heading}}"></div>
                                 <div class="sgn-product-heading">
                                     <div class="sgn-product-title">
-                                        {{#product_link}}
-                                        <a href="{{product_link}}" class="data-offer-product-link" target="_blank">
+                                        {{#link}}
+                                        <a href="{{link}}" class="data-offer-product-link" target="_blank">
                                             <span>{{title}}</span>
                                         </a>
-                                        {{/product_link}}
-                                        {{^product_link}}
+                                        {{/link}}
+                                        {{^link}}
                                         <span>{{title}}</span>
-                                        {{/product_link}}
+                                        {{/link}}
                                     </div>
                                     <div class="sgn-product-description"><span>{{description}}</span></div>
                                 </div>
@@ -205,7 +205,7 @@ const OfferOverview = ({
         addEventListeners();
     };
 
-    const transformProducts = (products, fetchedProducts) => {
+    const transformProducts = (products) => {
         const storedPublicationOffers =
             clientLocalStorage.get('publication-saved-offers') || [];
 
@@ -215,17 +215,13 @@ const OfferOverview = ({
             );
             return {
                 ...product,
-                image: fetchedProducts[index]?.product?.images?.[0]?.assets?.[0]
-                    ?.url,
-                quantity: matchingOffer ? matchingOffer.quantity : 0,
-                product_link: 'https://etilbudsavis.dk/' // dummy data
+                quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });
     };
 
     const transformIncitoOffer = async ({
         fetchOffer,
-        fetchProducts,
         viewId,
         publicationId,
         products
@@ -233,8 +229,7 @@ const OfferOverview = ({
         const {localeCode, currency} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
-        const {offer_products} = await fetchProducts(offer.id);
-        offer.products = transformProducts(products, offer_products);
+        offer.products = transformProducts(products);
 
         return {
             ...offer,
