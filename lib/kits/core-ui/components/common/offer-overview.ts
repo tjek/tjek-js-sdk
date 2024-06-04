@@ -96,6 +96,9 @@ const defaultTemplateV2 = `\
                             </div>
                         </div>
                         <div class="sgn-offer-price">
+                            {{#priceFrom}}
+                                <span class="sgn-offer-price-from">{{priceFrom}}</span>
+                            {{/priceFrom}}
                             <span>{{price}}</span>
                         </div>
                     </div>
@@ -166,7 +169,8 @@ const OfferOverview = ({
         localeCode: translate('locale_code'),
         currency: translate('publication_viewer_currency'),
         addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
-        visitWebshopLink: translate('publication_viewer_visit_webshop_link')
+        visitWebshopLink: translate('publication_viewer_visit_webshop_link'),
+        priceFrom: translate('publication_viewer_offer_price_from')
     };
 
     const render = async () => {
@@ -206,6 +210,7 @@ const OfferOverview = ({
     };
 
     const transformProducts = (products) => {
+        const {localeCode, currency} = translations;
         const storedPublicationOffers =
             clientLocalStorage.get('publication-saved-offers') || [];
 
@@ -215,6 +220,7 @@ const OfferOverview = ({
             );
             return {
                 ...product,
+                price: formatPrice(product?.price, localeCode, currency),
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });
@@ -226,14 +232,20 @@ const OfferOverview = ({
         publicationId,
         products
     }) => {
-        const {localeCode, currency} = translations;
+        const {localeCode, currency, priceFrom} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
         offer.products = transformProducts(products);
 
+        const hasPriceFrom = products.some((product, i, arr) => {
+            if (i === 0) return false;
+            return product.price !== arr[i - 1].price;
+        });
+
         return {
             ...offer,
             heading: offer.name,
+            priceFrom: hasPriceFrom ? priceFrom : '',
             price: formatPrice(
                 offer?.price,
                 localeCode,

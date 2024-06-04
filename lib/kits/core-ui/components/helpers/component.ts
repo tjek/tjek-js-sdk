@@ -65,6 +65,7 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
     })
         .format(price)
         .replace(currency, '')
+        .replace('kr.', '')
         .trim();
 };
 
