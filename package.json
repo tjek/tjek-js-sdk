@@ -1,4 +1,5 @@
 {
+    "name": "tjek-js-sdk",
     "description": "Tjek SDK for JavaScript.",
     "browserslist": "supports css-grid and supports beacon",
     "main": "dist/shopgun-sdk/sgn-sdk.cjs.js",
