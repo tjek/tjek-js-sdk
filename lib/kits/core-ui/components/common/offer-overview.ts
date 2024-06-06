@@ -131,7 +131,7 @@ const defaultTemplateV2 = `\
                                         </button>
                                     </div>
                                 </div>
-                                <div class="sgn-product-price"><span>{{price}}</span></div>
+                                <div class="sgn-product-price"><span>{{formattedPrice}}</span></div>
                             </div>
                             {{/products}}
                         </div>
@@ -220,7 +220,11 @@ const OfferOverview = ({
             );
             return {
                 ...product,
-                price: formatPrice(product?.price, localeCode, currency),
+                formattedPrice: formatPrice(
+                    product?.price,
+                    localeCode,
+                    currency
+                ),
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });

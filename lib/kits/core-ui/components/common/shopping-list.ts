@@ -83,7 +83,7 @@ const defaultTemplateV2 = `\
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-ticker sgn-hide-print">
-                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" checked="true" class="sgn-shopping-list-content-ticker-box"/>
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" class="sgn-shopping-list-content-ticker-box"/>
                         </div>
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
                             <span>{{name}}</span>
@@ -113,7 +113,7 @@ const defaultTemplateV2 = `\
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
                         <div class="sgn-shopping-list-content-ticker sgn-hide-print">
-                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" class="sgn-shopping-list-content-ticker-box"/>
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" checked="true" class="sgn-shopping-list-content-ticker-box"/>
                         </div>
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
                             <span>{{name}}</span>
@@ -138,6 +138,20 @@ const defaultTemplateV2 = `\
                 </div>
             </li>
             {{/tickedOffers}}
+            {{#totalPrice}}
+            <li class="sgn-shopping-list-item-container">
+                <div class="sgn-shopping-list-content-container sgn-shopping-list-content-container-total">
+                    <div class="sgn-shopping-list-content">
+                        <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
+                            <span>Total</span>
+                        </div>
+                        <div class="sgn-shopping-list-content-price">
+                            <span class="sgn-shopping-list-content-price-total">{{totalPrice}}</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {{/totalPrice}}
             {{#hasTicked}}
             <li class="sgn-shopping-list-item-container-crossed sgn-hide-print">
                 <button class="sgn-shopping-clear-ticked-list-btn sgn-hide-print">{{translations.deleteCrossedOutButton}}</button>
@@ -195,7 +209,8 @@ const ShoppingList = ({template, version}) => {
             hasTicked:
                 transformSavedOffers(storedPublicationOffers)?.filter(
                     (offer) => offer.is_ticked
-                ).length > 0
+                ).length > 0,
+            totalPrice: getTotalPrice()
         });
 
         createModal(container, destroyModal);
@@ -265,7 +280,8 @@ const ShoppingList = ({template, version}) => {
                 hasTicked:
                     transformSavedOffers(storedPublicationOffers)?.filter(
                         (offer) => offer.is_ticked
-                    ).length > 0
+                    ).length > 0,
+                totalPrice: getTotalPrice()
             });
 
         addEventListeners();
@@ -313,7 +329,8 @@ const ShoppingList = ({template, version}) => {
             if (container)
                 container.innerHTML = Mustache.render(template, {
                     translations,
-                    offers: transformSavedOffers(validOffers)
+                    offers: transformSavedOffers(validOffers),
+                    totalPrice: getTotalPrice()
                 });
 
             addEventListeners();
@@ -374,6 +391,19 @@ const ShoppingList = ({template, version}) => {
             });
     };
 
+    const getTotalPrice = () => {
+        const {localeCode, currency} = translations;
+        const storedPublicationOffers = clientLocalStorage.get(
+            'publication-saved-offers'
+        );
+
+        const totalPrice = storedPublicationOffers.reduce((acc, product) => {
+            return acc + product.pricing.price * product.quantity;
+        }, 0);
+
+        return totalPrice ? formatPrice(totalPrice, localeCode, currency) : '';
+    };
+
     const updateQuantityHandler = (
         productEl: HTMLElement,
         action: 'plus' | 'minus'
@@ -385,6 +415,12 @@ const ShoppingList = ({template, version}) => {
         );
         const quantityTxt = productEl.querySelector<HTMLInputElement>(
             '.sgn-offer-product-quantity-text'
+        );
+        const totalPriceContainer = container?.querySelector<HTMLDivElement>(
+            '.sgn-shopping-list-content-container-total'
+        );
+        const totalPriceEL = container?.querySelector<HTMLInputElement>(
+            '.sgn-shopping-list-content-price-total'
         );
 
         let storedPublicationOffers = clientLocalStorage.get(
@@ -438,6 +474,12 @@ const ShoppingList = ({template, version}) => {
                 storedPublicationOffers,
                 'tjek_shopping_list_update'
             );
+
+            if (totalPriceEL && getTotalPrice()) {
+                totalPriceEL.innerHTML = getTotalPrice();
+            } else {
+                totalPriceContainer?.remove();
+            }
         }
     };
 
