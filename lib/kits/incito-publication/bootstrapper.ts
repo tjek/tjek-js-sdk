@@ -185,7 +185,8 @@ export default class Bootstrapper {
         const viewer = new Viewer(this.options.el, {
             details,
             incito,
-            eventTracker: this.options.eventTracker
+            eventTracker: this.options.eventTracker,
+            enableLazyLoading: this.enableLazyLoading
         });
         const controls = new Controls(viewer);
 

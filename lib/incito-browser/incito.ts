@@ -155,7 +155,7 @@ const flexDirectionModes = ['row', 'column'];
 const backgroundTileModes = ['repeat_x', 'repeat_y', 'repeat'];
 const strokeStyles = ['solid', 'dotted', 'dashed'];
 
-function renderView(view, canLazyload: boolean) {
+function renderView(view, canLazyload: boolean, enableLazyLoading: boolean) {
     let tagName = 'div';
     let contents: string | undefined;
     const classNames = ['incito__view'];
@@ -266,7 +266,7 @@ function renderView(view, canLazyload: boolean) {
             const src = String(new URL(view.src));
 
             if (isDefinedStr(view.src)) {
-                if (canLazyload) {
+                if (canLazyload && !enableLazyLoading) {
                     attrs.loading = 'lazy';
                 }
 
@@ -705,9 +705,14 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
+    enableLazyLoading: boolean;
     constructor(
         containerEl: HTMLElement,
-        {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean}
+        {
+            incito,
+            canLazyload,
+            enableLazyLoading
+        }: {incito: IIncito; canLazyload?: boolean; enableLazyLoading?: boolean}
     ) {
         super();
 
@@ -720,6 +725,8 @@ export default class Incito extends MicroEvent<{
             canLazyload !== undefined
                 ? canLazyload
                 : 'IntersectionObserver' in window;
+        this.enableLazyLoading =
+            enableLazyLoading !== undefined ? enableLazyLoading : false;
         this.render();
     }
 
@@ -971,7 +978,8 @@ export default class Incito extends MicroEvent<{
         try {
             const {tagName, contents, attrs} = renderView(
                 view,
-                this.canLazyload
+                this.canLazyload,
+                this.enableLazyLoading
             );
             const {id, child_views, meta, role} = view;
 
