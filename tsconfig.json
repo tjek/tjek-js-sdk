@@ -13,7 +13,6 @@
         "lib/**/*.ts",
         "lib/**/*.js",
         "esbuild.mjs",
-        "publish-npm.mjs",
         "global.d.ts"
     ],
     "exclude": ["node_modules", "dist"]
