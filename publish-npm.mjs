@@ -244,9 +244,8 @@ async function publish() {
             'Git: Working tree dirty. Please resolve any changes before publishing.'
         );
         return;
-    } else {
-        gitInd.succeed(`Git: Working tree clean`);
     }
+    gitInd.succeed(`Git: Working tree clean`);
 
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
