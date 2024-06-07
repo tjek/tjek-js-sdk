@@ -115,25 +115,3 @@ export const off = (
 ) =>
     //@ts-expect-error
     Gator(el).off(events, selector, callback);
-
-export function getScrollParent(element: HTMLElement) {
-    const style = getComputedStyle(element);
-    const excludeStaticParent = style.position === 'absolute';
-
-    if (style.position === 'fixed') return document.body;
-
-    let parent = element.parentElement;
-    while (parent) {
-        const {position, overflow, overflowX, overflowY} =
-            getComputedStyle(parent);
-        if (excludeStaticParent && position === 'static') {
-            continue;
-        }
-        if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
-            return parent;
-        }
-        parent = parent.parentElement;
-    }
-
-    return document.body;
-}
