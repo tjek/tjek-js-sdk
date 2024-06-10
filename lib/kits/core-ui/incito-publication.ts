@@ -247,6 +247,18 @@ const IncitoPublication = (
         );
     };
 
+    const dispatchProductClickEvent = (detail) => {
+        const mainContainerEl = document.querySelector(
+            scriptEls.listPublicationsContainer || scriptEls.mainContainer
+        );
+
+        mainContainerEl?.dispatchEvent(
+            new CustomEvent('publication:product_clicked', {
+                detail
+            })
+        );
+    };
+
     const dispatchPublicationData = () => {
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
@@ -428,21 +440,20 @@ const IncitoPublication = (
         if (!isOfferInList && action !== 'minus') {
             storedPublicationOffers.push(shopListOffer);
             isNew = true;
+            dispatchProductClickEvent({product: shopListOffer});
         } else {
             const updatedOffers = storedPublicationOffers
                 .map((storedOffer) => {
                     if (storedOffer.id === shopListOffer.id) {
                         if (action === 'add') {
                             storedOffer.quantity += 1;
-                        } else if (
-                            action === 'minus' &&
-                            storedOffer.quantity > 1
-                        ) {
+                        } else if (action === 'minus') {
                             storedOffer.quantity -= 1;
-                        } else if (
-                            action === 'minus' &&
-                            storedOffer.quantity <= 1
-                        ) {
+                        }
+
+                        dispatchProductClickEvent({product: storedOffer});
+
+                        if (storedOffer.quantity <= 0) {
                             return null;
                         }
                     }
@@ -459,11 +470,6 @@ const IncitoPublication = (
             'publication-saved-offers',
             storedPublicationOffers,
             'tjek_shopping_list_update'
-        );
-
-        console.log(
-            `clientLocalStorage.get('publication-saved-offers')`,
-            clientLocalStorage.get('publication-saved-offers')
         );
 
         if (isNew) {
