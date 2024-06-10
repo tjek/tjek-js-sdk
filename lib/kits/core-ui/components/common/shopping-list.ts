@@ -165,7 +165,7 @@ const defaultTemplateV2 = `\
     </div>\
 `;
 
-const ShoppingList = ({template, version}) => {
+const ShoppingList = ({template, version, updateShoppingList}) => {
     template =
         template?.innerHTML ||
         (version === 2 ? defaultTemplateV2 : defaultTemplate);
@@ -423,56 +423,43 @@ const ShoppingList = ({template, version}) => {
             '.sgn-shopping-list-content-price-total'
         );
 
-        let storedPublicationOffers = clientLocalStorage.get(
+        const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
 
         let quantity = Number(quantityTxt?.value ?? 1);
 
+        const product = storedPublicationOffers.find(
+            (product) => product.id === productId
+        );
+
         if (quantityTxt) {
-            if (quantityTxt?.value === '1' && action === 'minus') {
-                storedPublicationOffers = storedPublicationOffers.filter(
-                    (product) => product.id !== productId
-                );
+            quantityTxt.value =
+                action === 'plus' ? `${++quantity}` : `${--quantity}`;
+
+            if (quantityTxt?.value === '0' && action === 'minus') {
                 productEl.remove();
-            } else {
-                storedPublicationOffers = storedPublicationOffers.map(
-                    (product) => {
-                        if (product.id === productId) {
-                            quantityTxt.value =
-                                action === 'plus'
-                                    ? `${++quantity}`
-                                    : `${--quantity}`;
+            }
 
-                            if (
-                                priceEl &&
-                                product?.pricing?.price &&
-                                quantity
-                            ) {
-                                const priceNum =
-                                    product?.pricing?.price * (quantity || 1);
+            if (priceEl && product?.pricing?.price && quantity) {
+                const priceNum = product?.pricing?.price * (quantity || 1);
 
-                                priceEl.innerHTML = formatPrice(
-                                    priceNum,
-                                    localeCode,
-                                    product?.pricing?.currency
-                                );
-                            }
-
-                            return {
-                                ...product,
-                                quantity: quantityTxt.value
-                            };
-                        }
-                        return product;
-                    }
+                priceEl.innerHTML = formatPrice(
+                    priceNum,
+                    localeCode,
+                    product?.pricing?.currency
                 );
             }
 
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                storedPublicationOffers,
-                'tjek_shopping_list_update'
+            updateShoppingList(
+                {
+                    ...product,
+                    basket: {
+                        productId,
+                        quantity
+                    }
+                },
+                action
             );
 
             if (totalPriceEL && getTotalPrice()) {

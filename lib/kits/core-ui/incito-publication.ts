@@ -141,7 +141,8 @@ const IncitoPublication = (
     const renderShoppingList = () =>
         ShoppingList({
             template: customTemplates.shoppingList,
-            version: scriptEls.offerModalVersion
+            version: scriptEls.offerModalVersion,
+            updateShoppingList
         }).render();
 
     const renderSectionList = async () =>
@@ -401,7 +402,7 @@ const IncitoPublication = (
         animateShoppingListCounter();
     };
 
-    const updateShoppingList = (offer, action = '') => {
+    const updateShoppingList = (offer, action: 'plus' | 'minus') => {
         const storedPublicationOffers =
             clientLocalStorage.get('publication-saved-offers') || [];
 
@@ -445,7 +446,7 @@ const IncitoPublication = (
             const updatedOffers = storedPublicationOffers
                 .map((storedOffer) => {
                     if (storedOffer.id === shopListOffer.id) {
-                        if (action === 'add') {
+                        if (action === 'plus') {
                             storedOffer.quantity += 1;
                         } else if (action === 'minus') {
                             storedOffer.quantity -= 1;

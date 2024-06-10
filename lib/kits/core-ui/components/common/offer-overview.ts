@@ -374,7 +374,7 @@ const OfferOverview = ({
                             quantity
                         }
                     },
-                    'add'
+                    'plus'
                 );
             });
 

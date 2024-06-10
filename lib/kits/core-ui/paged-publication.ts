@@ -131,7 +131,8 @@ const PagedPublication = (
     const renderShoppingList = () =>
         ShoppingList({
             template: customTemplates.shoppingList,
-            version: 1
+            version: 1,
+            updateShoppingList: ()=>{} // todo
         }).render();
 
     const renderMenuPopup = () =>
