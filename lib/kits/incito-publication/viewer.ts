@@ -17,11 +17,11 @@ class Viewer extends MicroEvent {
     options: ViewerInit;
     incito: Incito;
     _eventTracking: EventTracking;
-    scrollableContainer: string | null;
+    scrollableContainer: string | undefined;
     constructor(
         el: HTMLElement,
         options: ViewerInit,
-        scrollableContainer: string | null
+        scrollableContainer: string | undefined
     ) {
         super();
 
