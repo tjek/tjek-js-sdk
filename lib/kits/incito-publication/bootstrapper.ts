@@ -68,7 +68,7 @@ export default class Bootstrapper {
     featureLabels = this.getFeatureLabels();
     versionsSupported = ['1.0.0'];
     enableLazyLoading = false;
-    scrollableContainer: string | undefined;
+    scrollableContainer: string;
     options: BootstrapperInit;
     maxWidth: number;
     // @ts-expect-error

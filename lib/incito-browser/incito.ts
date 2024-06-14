@@ -695,7 +695,7 @@ export default class Incito extends MicroEvent<{
     sectionHidden: [{sectionId: string; sectionPosition: number}];
 }> {
     containerEl: HTMLElement;
-    scrollableContainer: string | undefined;
+    scrollableContainer: string;
     incito: IIncito;
     el: HTMLDivElement;
     ids: Record<string, unknown>;
@@ -709,12 +709,12 @@ export default class Incito extends MicroEvent<{
     constructor(
         containerEl: HTMLElement,
         {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean},
-        scrollableContainer: string | undefined
+        scrollableContainer: string
     ) {
         super();
 
         this.containerEl = containerEl;
-        this.scrollableContainer = scrollableContainer || undefined;
+        this.scrollableContainer = scrollableContainer;
         this.incito = incito;
         this.el = document.createElement('div');
         this.ids = {};

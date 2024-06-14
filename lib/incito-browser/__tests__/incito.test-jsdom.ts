@@ -10,7 +10,7 @@ describe('Incito', () => {
 
         // @ts-expect-error can't treat the json import as const 🤷‍♀️
         const incito: IIncito = data;
-        const incitoViewer = new Incito(main, {incito});
+        const incitoViewer = new Incito(main, {incito}, '');
 
         expect(() => incitoViewer.start()).not.toThrow();
 
