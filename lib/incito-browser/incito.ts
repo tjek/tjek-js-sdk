@@ -866,7 +866,6 @@ export default class Incito extends MicroEvent<{
                     if (res.status === 200) return res.json();
                 })
                 .then((res) => {
-                    this.canLazyload = false;
                     el.innerHTML = this.renderHtml(res);
 
                     this.observeElements(el);
