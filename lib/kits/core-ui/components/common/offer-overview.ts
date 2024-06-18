@@ -209,19 +209,27 @@ const OfferOverview = ({
         addEventListeners();
     };
 
-    const transformProducts = (products) => {
+    const transformProducts = (offer, products) => {
         const {localeCode, currency} = translations;
         const storedPublicationOffers =
             clientLocalStorage.get('publication-saved-offers') || [];
+
+        const allPricesAreTheSame = products?.every(
+            (product, index, array) => product.price === array[0].price
+        );
+
+        const useOfferPrice =
+            allPricesAreTheSame && offer.price !== products[0].price;
 
         return products?.map((product, index) => {
             const matchingOffer = storedPublicationOffers.find(
                 (offer) => offer.id === product.id
             );
+
             return {
                 ...product,
                 formattedPrice: formatPrice(
-                    product?.price,
+                    useOfferPrice ? offer.price : product?.price,
                     localeCode,
                     currency
                 ),
@@ -239,7 +247,7 @@ const OfferOverview = ({
         const {localeCode, currency, priceFrom} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
-        offer.products = transformProducts(products);
+        offer.products = transformProducts(offer, products);
 
         const hasPriceFrom = products.some((product, i, arr) => {
             if (i === 0) return false;
