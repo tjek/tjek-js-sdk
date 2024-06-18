@@ -155,7 +155,7 @@ const flexDirectionModes = ['row', 'column'];
 const backgroundTileModes = ['repeat_x', 'repeat_y', 'repeat'];
 const strokeStyles = ['solid', 'dotted', 'dashed'];
 
-function renderView(view, canLazyload: boolean) {
+function renderView(view, canLazyload: boolean, isIncitoLazyloaded: boolean) {
     let tagName = 'div';
     let contents: string | undefined;
     const classNames = ['incito__view'];
@@ -266,7 +266,7 @@ function renderView(view, canLazyload: boolean) {
             const src = String(new URL(view.src));
 
             if (isDefinedStr(view.src)) {
-                if (canLazyload) {
+                if (canLazyload && !isIncitoLazyloaded) {
                     attrs.loading = 'lazy';
                 }
 
@@ -705,6 +705,7 @@ export default class Incito extends MicroEvent<{
     videoObserver: IntersectionObserver;
     sectionObserver: IntersectionObserver;
     sectionVisibility: Map<HTMLElement, boolean>;
+    isIncitoLazyloaded: boolean;
     constructor(
         containerEl: HTMLElement,
         {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean}
@@ -720,6 +721,7 @@ export default class Incito extends MicroEvent<{
             canLazyload !== undefined
                 ? canLazyload
                 : 'IntersectionObserver' in window;
+        this.isIncitoLazyloaded = false;
         this.render();
     }
 
@@ -866,7 +868,7 @@ export default class Incito extends MicroEvent<{
                     if (res.status === 200) return res.json();
                 })
                 .then((res) => {
-                    this.canLazyload = false;
+                    this.isIncitoLazyloaded = true;
                     el.innerHTML = this.renderHtml(res);
 
                     this.observeElements(el);
@@ -972,7 +974,8 @@ export default class Incito extends MicroEvent<{
         try {
             const {tagName, contents, attrs} = renderView(
                 view,
-                this.canLazyload
+                this.canLazyload,
+                this.isIncitoLazyloaded
             );
             const {id, child_views, meta, role} = view;
 
