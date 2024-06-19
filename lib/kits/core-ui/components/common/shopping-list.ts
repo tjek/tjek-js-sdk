@@ -1,6 +1,11 @@
 import Mustache from 'mustache';
 import * as clientLocalStorage from '../../../../storage/client-local';
-import {createModal, formatPrice, translate} from '../helpers/component';
+import {
+    createModal,
+    formatPrice,
+    translate,
+    updateShoppingList
+} from '../helpers/component';
 import './shopping-list.styl';
 
 const defaultTemplate = `\
@@ -165,7 +170,7 @@ const defaultTemplateV2 = `\
     </div>\
 `;
 
-const ShoppingList = ({template, version, updateShoppingList}) => {
+const ShoppingList = ({template, version}) => {
     template =
         template?.innerHTML ||
         (version === 2 ? defaultTemplateV2 : defaultTemplate);

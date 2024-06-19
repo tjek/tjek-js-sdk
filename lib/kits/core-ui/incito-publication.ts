@@ -141,8 +141,7 @@ const IncitoPublication = (
     const renderShoppingList = () =>
         ShoppingList({
             template: customTemplates.shoppingList,
-            version: scriptEls.offerModalVersion,
-            updateShoppingList
+            version: scriptEls.offerModalVersion
         }).render();
 
     const renderSectionList = async () =>
@@ -248,18 +247,6 @@ const IncitoPublication = (
         );
     };
 
-    const dispatchProductClickEvent = (detail) => {
-        const mainContainerEl = document.querySelector(
-            scriptEls.listPublicationsContainer || scriptEls.mainContainer
-        );
-
-        mainContainerEl?.dispatchEvent(
-            new CustomEvent('publication:product_clicked', {
-                detail
-            })
-        );
-    };
-
     const dispatchPublicationData = () => {
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
@@ -292,8 +279,7 @@ const IncitoPublication = (
                     products
                 },
                 type: 'incito',
-                addToShoppingList,
-                updateShoppingList
+                addToShoppingList
             }).render();
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
@@ -400,82 +386,6 @@ const IncitoPublication = (
         );
 
         animateShoppingListCounter();
-    };
-
-    const updateShoppingList = (offer, action: 'plus' | 'minus') => {
-        const storedPublicationOffers =
-            clientLocalStorage.get('publication-saved-offers') || [];
-
-        let isNew = false;
-
-        let shopListOffer = {
-            id: offer.id,
-            name: offer.name,
-            pricing: {price: offer.price, currency: offer.currency_code},
-            quantity: 1,
-            is_ticked: false
-        };
-
-        if (offer.basket?.productId) {
-            const product = offer.products?.find(
-                ({id}) => id == offer.basket?.productId
-            );
-            if (product) {
-                shopListOffer = {
-                    id: product.id,
-                    name: product.title,
-                    pricing: {
-                        price: product.price,
-                        currency: offer.currency_code
-                    },
-                    quantity: 1,
-                    is_ticked: false
-                };
-            }
-        }
-
-        const isOfferInList = storedPublicationOffers.some(
-            (storedOffer) => storedOffer.id === shopListOffer.id
-        );
-
-        if (!isOfferInList && action !== 'minus') {
-            storedPublicationOffers.push(shopListOffer);
-            isNew = true;
-            dispatchProductClickEvent({product: shopListOffer});
-        } else {
-            const updatedOffers = storedPublicationOffers
-                .map((storedOffer) => {
-                    if (storedOffer.id === shopListOffer.id) {
-                        if (action === 'plus') {
-                            storedOffer.quantity += 1;
-                        } else if (action === 'minus') {
-                            storedOffer.quantity -= 1;
-                        }
-
-                        dispatchProductClickEvent({product: storedOffer});
-
-                        if (storedOffer.quantity <= 0) {
-                            return null;
-                        }
-                    }
-
-                    return storedOffer;
-                })
-                .filter(Boolean);
-
-            storedPublicationOffers.splice(0, storedPublicationOffers.length);
-            storedPublicationOffers.push(...updatedOffers);
-        }
-
-        clientLocalStorage.setWithEvent(
-            'publication-saved-offers',
-            storedPublicationOffers,
-            'tjek_shopping_list_update'
-        );
-
-        if (isNew) {
-            animateShoppingListCounter();
-        }
     };
 
     const addSectionScrollListener = () => {

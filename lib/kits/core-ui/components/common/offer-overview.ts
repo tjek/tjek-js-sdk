@@ -7,7 +7,8 @@ import {
     getDateRange,
     getPubState,
     getPubStateMessage,
-    parseDateStr
+    parseDateStr,
+    updateShoppingList
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
@@ -155,8 +156,7 @@ const OfferOverview = ({
     sgnData,
     offer,
     type,
-    addToShoppingList,
-    updateShoppingList
+    addToShoppingList
 }) => {
     template =
         template?.innerHTML ||

@@ -131,8 +131,7 @@ const PagedPublication = (
     const renderShoppingList = () =>
         ShoppingList({
             template: customTemplates.shoppingList,
-            version: 1,
-            updateShoppingList: ()=>{} // todo
+            version: scriptEls.offerModalVersion
         }).render();
 
     const renderMenuPopup = () =>
@@ -312,8 +311,7 @@ const PagedPublication = (
                 sgnData,
                 offer: hotspot,
                 type: 'paged',
-                addToShoppingList,
-                updateShoppingList: () => {} //todo
+                addToShoppingList
             }).render();
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab' &&
@@ -340,7 +338,6 @@ const PagedPublication = (
             quantity: 1,
             is_ticked: false
         };
-        console.log('hotspot:::', hotspot);
 
         storedPublicationOffers.push(shopListOffer);
 
@@ -363,7 +360,9 @@ const PagedPublication = (
 
         clientLocalStorage.setWithEvent(
             'publication-saved-offers',
-            mergedOffers,
+            scriptEls.offerModalVersion === 2
+                ? mergedOffers
+                : storedPublicationOffers,
             'tjek_shopping_list_update'
         );
 
