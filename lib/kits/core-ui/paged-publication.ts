@@ -14,7 +14,8 @@ import {
     getHashFragments,
     pushQueryParam,
     transformFilter,
-    translate
+    translate,
+    animateShoppingListCounter
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
@@ -148,15 +149,6 @@ const PagedPublication = (
                     scriptEls
                 }).render();
             });
-
-    const animateShoppingListCounter = () => {
-        const shoppingListCounter = document.querySelector(
-            '.sgn__offer-shopping-list-counter'
-        );
-
-        shoppingListCounter?.classList.remove('sgn-animate-bounce');
-        shoppingListCounter?.classList.add('sgn-animate-bounce');
-    };
 
     const setOptions = async (opts?: any) => {
         options = {

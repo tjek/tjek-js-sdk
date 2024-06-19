@@ -15,7 +15,8 @@ import {
     transformFilter,
     getHashFragments,
     pushQueryParam,
-    transformWebshopLink
+    transformWebshopLink,
+    animateShoppingListCounter
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -166,15 +167,6 @@ const IncitoPublication = (
                     scriptEls
                 }).render();
             });
-
-    const animateShoppingListCounter = () => {
-        const shoppingListCounter = document.querySelector(
-            '.sgn__offer-shopping-list-counter'
-        );
-
-        shoppingListCounter?.classList.remove('sgn-animate-bounce');
-        shoppingListCounter?.classList.add('sgn-animate-bounce');
-    };
 
     const setOptions = async (opts?: any) => {
         options = {
