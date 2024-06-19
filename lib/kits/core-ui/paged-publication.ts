@@ -15,7 +15,8 @@ import {
     pushQueryParam,
     transformFilter,
     translate,
-    animateShoppingListCounter
+    animateShoppingListCounter,
+    dispatchProductClickEvent
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
@@ -358,6 +359,7 @@ const PagedPublication = (
             'tjek_shopping_list_update'
         );
 
+        dispatchProductClickEvent({product: shopListOffer});
         animateShoppingListCounter();
     };
 

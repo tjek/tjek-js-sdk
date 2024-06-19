@@ -287,7 +287,7 @@ export const transformWebshopLink = (url) => {
     return url;
 };
 
-const dispatchProductClickEvent = (detail) => {
+export const dispatchProductClickEvent = (detail) => {
     const scriptEl = document.getElementById('sgn-sdk');
     const dataset = scriptEl?.dataset;
     const mainContainer =

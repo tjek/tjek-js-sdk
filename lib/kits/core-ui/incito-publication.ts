@@ -16,7 +16,8 @@ import {
     getHashFragments,
     pushQueryParam,
     transformWebshopLink,
-    animateShoppingListCounter
+    animateShoppingListCounter,
+    dispatchProductClickEvent
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -377,6 +378,7 @@ const IncitoPublication = (
             'tjek_shopping_list_update'
         );
 
+        dispatchProductClickEvent({product: shopListOffer});
         animateShoppingListCounter();
     };
 
