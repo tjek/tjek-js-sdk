@@ -336,23 +336,28 @@
         max-width 92vw
         max-height 92vh
         margin-top 4vh
+        overflow-y scroll
         
         .sgn-popup-offer-container
             flex-flow column
+            height auto
         
         .sgn-offer-texts-container
             flex-flow column
             gap 0
             align-items flex-start
+            overflow visible
 
         .sgn-offer-heading
             font-size 0.833rem
+            overflow visible
 
         .sgn-offer-price
             display: none
 
         .sgn-offer-img
             max-height 30%
+            min-height 10rem
 
         .sgn-offer-details-container
             padding 0 1.25rem
@@ -360,6 +365,9 @@
         
         .sgn-products-container
             max-height calc(100% - 16rem)
+
+        .sgn-products-texts-container
+            overlow visible
         
         .sgn-product-title
             font-size 0.933rem
