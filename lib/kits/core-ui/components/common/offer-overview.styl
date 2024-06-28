@@ -167,7 +167,6 @@
         border-radius 10px
     
     .sgn-products-container
-        border-radius 10px
         max-height calc(100% - 14rem)
         overflow-y auto
 
@@ -177,6 +176,9 @@
         overflow-x hidden
         border-radius 10px
         border 1px solid rgba(0, 0, 0, 0.1)
+
+        &:last-child
+            border-bottom none
 
     .sgn-offer-info
         flex 1 auto
@@ -190,6 +192,7 @@
     .sgn-offer-description
         opacity 1
         font-size 0.833rem
+        font-weight 300
 
     .sgn-offer-price
         font-size 2.488rem
@@ -265,6 +268,7 @@
             text-overflow ellipsis
             max-width 476px
             font-size 0.833rem
+            font-weight 200
             display -webkit-box
             -webkit-line-clamp 2
             -webkit-box-orient vertical
@@ -301,7 +305,7 @@
             background transparent
             color #4e4e4e
             border-radius 100%
-            border 2px solid #000000
+            border 1px solid #7b7b7b
 
             svg
                 vertical-align middle
@@ -395,14 +399,12 @@
 
                             .sgn-product-title
                                 font-size 0.833rem
-                                text-transform uppercase
                                 padding-bottom 0.2rem
                                 white-space normal
                                 overflow visible
 
                             .sgn-product-description
                                 font-size 0.833rem
-                                font-weight 200
                                 white-space normal
                                 overflow visible
 
@@ -415,7 +417,6 @@
                             margin-top .833rem
 
                         .sgn-product-price
-                            color #1d2b5b
                             flex 1
                             font-size 1.2rem
                             margin-top 1rem
@@ -423,8 +424,8 @@
                         .sgn-offer-product-quantity-content
                             button
                                 padding 8px 10px
-                                border 0.5px solid #7b7b7b
                                 cursor pointer
+                                border 0.5px solid #7b7b7b
 
                                 svg
                                     width 10px
