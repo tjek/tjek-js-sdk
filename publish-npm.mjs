@@ -123,8 +123,12 @@ async function diff(oldPath, newPath) {
                         ''
                     );
                 if (key === 'package.json') {
-                    oldFile.contents = oldFile.contents.trim() + '\n';
-                    newFile.contents = newFile.contents.trim() + '\n';
+                    oldFile.contents = oldFile.contents
+                        ? oldFile.contents.trim() + '\n'
+                        : '';
+                    newFile.contents = newFile.contents
+                        ? newFile.contents.trim() + '\n'
+                        : '';
                 }
 
                 // Files are straight up equal.
