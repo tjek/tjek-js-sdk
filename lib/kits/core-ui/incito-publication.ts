@@ -141,10 +141,7 @@ const IncitoPublication = (
     };
 
     const renderShoppingList = () =>
-        ShoppingList({
-            template: customTemplates.shoppingList,
-            version: scriptEls.offerModalVersion
-        }).render();
+        ShoppingList({template: customTemplates.shoppingList}).render();
 
     const renderSectionList = async () =>
         document.querySelector('.sgn__sidebar-content-container')?.appendChild(
@@ -370,7 +367,7 @@ const IncitoPublication = (
                     (offer) => offer.id === currentOffer.id
                 );
 
-                if (existingOffer && scriptEls.offerModalVersion == 2) {
+                if (existingOffer) {
                     existingOffer.quantity += currentOffer.quantity;
                 } else {
                     acc.push({...currentOffer});

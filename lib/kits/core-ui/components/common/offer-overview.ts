@@ -162,9 +162,7 @@ const OfferOverview = ({
 }) => {
     template =
         template?.innerHTML ||
-        (scriptEls.offerModalVersion == 2 && type === 'incito'
-            ? defaultTemplateV2
-            : defaultTemplate);
+        (type === 'incito' ? defaultTemplateV2 : defaultTemplate);
     let container: HTMLDivElement | null = null;
 
     const translations = {
@@ -229,6 +227,7 @@ const OfferOverview = ({
 
             return {
                 ...product,
+                link: product.link || offer.webshop_link,
                 formattedPrice: formatPrice(
                     useOfferPrice ? offer.price : product?.price,
                     localeCode,

@@ -131,10 +131,7 @@ const PagedPublication = (
         );
 
     const renderShoppingList = () =>
-        ShoppingList({
-            template: customTemplates.shoppingList,
-            version: scriptEls.offerModalVersion
-        }).render();
+        ShoppingList({template: customTemplates.shoppingList}).render();
 
     const renderMenuPopup = () =>
         document
@@ -352,9 +349,7 @@ const PagedPublication = (
 
         clientLocalStorage.setWithEvent(
             'publication-saved-offers',
-            scriptEls.offerModalVersion === 2
-                ? mergedOffers
-                : storedPublicationOffers,
+            mergedOffers,
             'tjek_shopping_list_update'
         );
 
