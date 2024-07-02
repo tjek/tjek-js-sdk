@@ -192,11 +192,6 @@ const PagedPublication = (
         if (!scriptEls.disablePageDecorations) {
             sgnPageDecorations = await bootstrapper.fetchPageDecorations();
             bootstrapper.applyPageDecorations(sgnViewer, sgnPageDecorations);
-
-            updateViewerTranslation({
-                'paged_publication.hotspot_picker.pagedecoration.link':
-                    translate('publication_viewer_hotspot_decoration_link')
-            });
         }
 
         sgnViewer.bind('hotspotClicked', clickHotspot);
@@ -294,6 +289,10 @@ const PagedPublication = (
     };
 
     const clickHotspot = (hotspot: V2Hotspot) => {
+        if (hotspot.type === 'pagedecoration') {
+            return;
+        }
+
         const shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
 
         if (scriptEls.offerClickBehavior === 'overview_modal') {

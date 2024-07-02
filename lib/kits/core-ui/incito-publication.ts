@@ -277,25 +277,34 @@ const IncitoPublication = (
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
         ) {
-            const {offer} = await fetchOffer({viewId, publicationId});
-
-            if (!offer.webshop_link) {
+            if (!link) {
                 displayNoLinkOverlay(viewId);
                 return;
             }
 
-            window.open(offer.webshop_link);
+            const newWindowRef = window.open();
+            const {offer} = await fetchOffer({viewId, publicationId});
+
+            if (newWindowRef) {
+                if (offer.webshop_link) {
+                    newWindowRef.location = offer.webshop_link;
+                } else {
+                    newWindowRef.close();
+                }
+            }
         } else if (
             scriptEls.offerClickBehavior === 'redirect_to_webshop_link'
         ) {
-            const {offer} = await fetchOffer({viewId, publicationId});
-
-            if (!offer.webshop_link) {
+            if (!link) {
                 displayNoLinkOverlay(viewId);
                 return;
             }
 
-            location.href = offer.webshop_link;
+            const {offer} = await fetchOffer({viewId, publicationId});
+
+            if (offer.webshop_link) {
+                location.href = offer.webshop_link;
+            }
         } else if (shoppingBtn) {
             const {offer} = await fetchOffer({viewId, publicationId});
             addToShoppingList(offer);
