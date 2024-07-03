@@ -80,9 +80,12 @@ export default class Bootstrapper {
     }
 
     getFeatureLabels() {
-        const featureLabels = clientLocalStorage.get('incito-feature-labels');
+        const regex = new RegExp(/audience=[^#&+]+/);
+        const match = regex.exec(location.href) || [];
 
-        return Array.isArray(featureLabels) ? featureLabels : [];
+        return match[0] !== undefined
+            ? match[0].replace('audience=', '').split(',')
+            : [];
     }
 
     anonymizeFeatureLabels() {
