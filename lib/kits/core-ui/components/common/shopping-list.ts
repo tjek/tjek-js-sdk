@@ -330,7 +330,7 @@ const ShoppingList = ({template}) => {
             'publication-saved-offers'
         );
 
-        const totalPrice = storedPublicationOffers.reduce((acc, product) => {
+        const totalPrice = storedPublicationOffers?.reduce((acc, product) => {
             return acc + product.pricing.price * product.quantity;
         }, 0);
 

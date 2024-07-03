@@ -113,7 +113,7 @@
     width 100%
     max-height 80vh
     height 100%
-    background rgba(246, 246, 246, 0.97)
+    background #ffffff
     color #2f2f2f
     padding 0
     display flex
@@ -160,15 +160,14 @@
 
     .sgn-menu-date
         font-size 1rem
-        margin 1em auto
+        margin 0 0 0.3rem 0
         width calc(100% - 2rem)
-        padding 0.5rem 1rem
+        padding 0.75rem 0
         line-height 1.8;
         border-radius 10px
     
     .sgn-products-container
         max-height calc(100% - 14rem)
-        overflow-y auto
 
     .sgn-products-texts-container
         height 100%
@@ -176,9 +175,6 @@
         overflow-x hidden
         border-radius 10px
         border 1px solid rgba(0, 0, 0, 0.1)
-
-        &:last-child
-            border-bottom none
 
     .sgn-offer-info
         flex 1 auto
@@ -205,7 +201,7 @@
             font-size 1.25rem
 
     .sgn-offer-img
-        background rgba(237, 237, 237, 0.97)
+        background #ffffff
         padding 1.25rem
         border-radius 0
         flex 1
@@ -228,6 +224,9 @@
         padding .75rem
         align-items center
         gap: .5rem
+
+        &:last-child
+            border-bottom none
 
         &[data-offer-product-quantity="0"]
             .sgn-offer-product-quantity-content
@@ -257,7 +256,7 @@
             overflow hidden
             text-overflow ellipsis
             max-width 476px
-            font-weight 500
+            font-weight 600
             font-size 1.2rem
 
             > a
@@ -278,8 +277,8 @@
             height 12px
 
     .sgn-product-price-container
-        display: flex;
-        flex-direction: row;
+        display flex
+        flex-direction row
         justify-content center
         align-items center
 
@@ -297,7 +296,7 @@
         border-radius 19.5px
         overflow hidden
         padding 2px
-        margin-right: .1rem
+        margin-right .1rem
         
         button
             min-width 0
@@ -357,7 +356,7 @@
 
             .sgn-offer-img
                 max-height 30%
-                min-height 10rem
+                min-height 18rem
 
             .sgn-offer-details-container
                 padding 0 1.25rem
@@ -378,7 +377,7 @@
                         overflow visible
 
                     .sgn-offer-price
-                        display: none
+                        display none
 
                 .sgn-products-container
                     max-height calc(100% - 16rem)
