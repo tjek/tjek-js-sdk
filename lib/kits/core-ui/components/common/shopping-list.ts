@@ -341,7 +341,7 @@ const ShoppingList = ({template}) => {
         productEl: HTMLElement,
         action: 'plus' | 'minus'
     ) => {
-        const {localeCode} = translations;
+        const {localeCode, currency} = translations;
         const productId = productEl.dataset.offerProductId;
         const priceEl = productEl.querySelector<HTMLElement>(
             '.sgn-shopping-list-content-price'
@@ -377,11 +377,7 @@ const ShoppingList = ({template}) => {
             if (priceEl && product?.pricing?.price && quantity) {
                 const priceNum = product?.pricing?.price * (quantity || 1);
 
-                priceEl.innerHTML = formatPrice(
-                    priceNum,
-                    localeCode,
-                    product?.pricing?.currency
-                );
+                priceEl.innerHTML = formatPrice(priceNum, localeCode, currency);
             }
 
             updateShoppingList(

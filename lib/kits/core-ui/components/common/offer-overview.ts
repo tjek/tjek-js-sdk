@@ -14,54 +14,6 @@ import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
 import './offer-overview.styl';
 
-const defaultTemplate = `\
-    <div class="sgn-offer-overview-popup">
-        {{#offer}}
-        <div class="sgn-popup-header">
-            <div class="sgn-menu-popup-labels">
-                <div class="sgn-menu-label">
-                    <span>{{label}}&nbsp;</span>
-                </div>
-                <div class="sgn-menu-date">
-                    <span data-validity-state="{{status}}">{{dateRange}}&nbsp;</span>
-                </div>
-            </div>
-        </div>
-        <div class="sgn-popup-content">
-            <div class="sgn-popup-offer-container">
-                <div class="sgn-offer-img">
-                    {{#loader}}
-                    <div class="sgn_modal_loader"></div>
-                    {{/loader}}
-                    {{^loader}}
-                    <img src="{{images.zoom}}" alt="{{heading}}">
-                    {{/loader}}
-                </div>
-                <div class="sgn-offer-texts-container">
-                    <div class="sgn-offer-heading">
-                        <span>{{heading}}&nbsp;</span>
-                    </div>
-                    <div class="sgn-offer-description">
-                        <span>{{description}}&nbsp;</span>
-                    </div>
-                    <div class="sgn-offer-price">
-                        <span>{{price}}&nbsp;</span>
-                    </div>
-                </div>  
-                <div class="sgn-offer-buttons-container">
-                    {{^disableShoppingList}}
-                    <button class="sgn-shopping-add-to-list-btn">{{translations.addToShoppingList}}</button>
-                    {{/disableShoppingList}}
-                    {{#webshop_link}}
-                    <button class="sgn-shopping-open-webshop-btn">{{translations.visitWebshopLink}}</button>
-                    {{/webshop_link}}
-                </div>
-            </div>
-        </div>
-        {{/offer}} 
-    </div>\
-`;
-
 const defaultTemplateV2 = `\
     <div class="sgn-offer-overview-popup sgn-offer-overview-popup-v2">
         {{#offer}}
@@ -162,9 +114,7 @@ const OfferOverview = ({
     type,
     addToShoppingList
 }) => {
-    template =
-        template?.innerHTML ||
-        (type === 'incito' ? defaultTemplateV2 : defaultTemplate);
+    template = template?.innerHTML || defaultTemplateV2;
     let container: HTMLDivElement | null = null;
 
     const translations = {
@@ -222,7 +172,7 @@ const OfferOverview = ({
         const useOfferPrice =
             allPricesAreTheSame && offer.price !== products[0].price;
 
-        return products?.map((product, index) => {
+        const transformedProducts = products?.map((product, index) => {
             const matchingOffer = storedPublicationOffers.find(
                 (offer) => offer.id === product.id
             );
@@ -231,13 +181,17 @@ const OfferOverview = ({
                 ...product,
                 link: product.link || offer.webshop_link,
                 formattedPrice: formatPrice(
-                    useOfferPrice ? offer.price : product?.price,
+                    useOfferPrice
+                        ? offer.price || offer.pricing.price
+                        : product?.price,
                     localeCode,
                     currency
                 ),
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });
+
+        return transformedProducts;
     };
 
     const transformIncitoOffer = async ({
@@ -309,11 +263,30 @@ const OfferOverview = ({
 
     const fetchOffer = async (id: string) => {
         const {localeCode, currency} = translations;
-        const offer = await request<V2Offer>({
+        const offerData = await request<V2Offer>({
             apiKey: configs.apiKey,
             coreUrl: configs.coreUrl,
             url: `/v2/offers/${id}`
         });
+
+        offer = offerData;
+
+        const rawProducts = await fetchProducts(id);
+
+        if (rawProducts.offer_products?.length) {
+            const dirtyProducts = rawProducts.offer_products.map((product) => ({
+                id: product.product.id,
+                title: product.name,
+                description: null,
+                image: product.product.images?.[0]?.assets?.[0]?.url,
+                price: offer.pricing.price,
+                link: offer.links.webshop
+            }));
+
+            const products = transformProducts(offer, dirtyProducts);
+
+            offer.products = products;
+        }
 
         if (offer.id && configs.eventTracker) {
             configs.eventTracker?.trackOfferOpened({
@@ -324,6 +297,7 @@ const OfferOverview = ({
 
         return {
             ...offer,
+            // products: products,
             price: formatPrice(
                 offer?.pricing?.price,
                 localeCode,
@@ -416,6 +390,56 @@ const OfferOverview = ({
                 });
             });
         });
+    };
+
+    const fetchProducts = async (offerId: string) => {
+        const res = await request<{
+            offer_products: {
+                product: {
+                    __typename: string;
+                    id: string;
+                    gtin: null | string;
+                    images: {
+                        assets: {
+                            width: number;
+                            url: string;
+                        }[];
+                    }[];
+                    country_code: string;
+                    brand: {
+                        __typename: string;
+                        id: string;
+                        slug: string;
+                        name: string;
+                        description: null | string;
+                        positive_logotype: null | string;
+                        negative_logotype: null | string;
+                        positive_logomark: null | string;
+                        negative_logomark: null | string;
+                        is_active: boolean;
+                        country_code: string;
+                        locale_code: string;
+                        website_link: null | string;
+                        business: null | string;
+                    };
+                };
+                name: string;
+                external_id: string;
+            }[];
+        }>({
+            apiKey: configs.apiKey,
+            coreUrl: configs.coreUrl,
+            url: '/v4/rpc/get_offer_products',
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: offerId
+            })
+        });
+
+        if (!res) throw new Error();
+
+        return res;
     };
 
     const closeModalListener = () => {
