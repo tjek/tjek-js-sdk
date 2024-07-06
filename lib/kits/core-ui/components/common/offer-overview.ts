@@ -286,6 +286,18 @@ const OfferOverview = ({
             const products = transformProducts(offer, dirtyProducts);
 
             offer.products = products;
+        } else {
+            const products = transformProducts(offer, [
+                {
+                    id: offer.id,
+                    title: offer.heading,
+                    description: null,
+                    image: offer.images?.thumb || offer.images?.zoom,
+                    price: offer.pricing.price,
+                    link: offer.links.webshop
+                }
+            ]);
+            offer.products = products;
         }
 
         if (offer.id && configs.eventTracker) {
