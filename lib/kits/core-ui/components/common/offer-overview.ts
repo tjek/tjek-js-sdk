@@ -42,6 +42,7 @@ const defaultTemplateV2 = `\
                     </div>
                     {{/label}}
                     <div class="sgn-offer-texts-container">
+                        {{^hideOfferDetails}}
                         <div class="sgn-offer-info">
                             <div class="sgn-offer-heading">
                                 <span>{{heading}}</span>
@@ -50,18 +51,15 @@ const defaultTemplateV2 = `\
                                 <span>{{description}}</span>
                             </div>
                         </div>
-                        <div class="sgn-offer-price">
-                            {{#priceFrom}}
-                                <span class="sgn-offer-price-from">{{priceFrom}}</span>
-                            {{/priceFrom}}
-                            <span>{{price}}</span>
-                        </div>
+                        {{/hideOfferDetails}}
                     </div>
                     <div class="sgn-products-container">
                         <div class="sgn-products-texts-container">
                             {{#products}}
                             <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" data-offer-product-quantity="{{quantity}}" class="sgn-product-details">
+                                {{^hideOfferDetails}}
                                 <div class="sgn-product-image"><img src="{{#image}}{{image}}{{/image}}{{^image}}{{images.zoom}}{{/image}}" alt="{{heading}}"></div>
+                                {{/hideOfferDetails}}
                                 <div class="sgn-product-heading">
                                     <div class="sgn-product-title">
                                         {{#link}}
@@ -291,13 +289,14 @@ const OfferOverview = ({
                 {
                     id: offer.id,
                     title: offer.heading,
-                    description: null,
-                    image: offer.images?.thumb || offer.images?.zoom,
+                    description: offer.description,
                     price: offer.pricing.price,
                     link: offer.links.webshop
                 }
             ]);
+
             offer.products = products;
+            offer.hideOfferDetails = true;
         }
 
         if (offer.id && configs.eventTracker) {
