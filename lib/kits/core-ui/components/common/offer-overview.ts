@@ -14,10 +14,10 @@ import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
 import './offer-overview.styl';
 
-const defaultTemplateV2 = `\
-    <div class="sgn-offer-overview-popup sgn-offer-overview-popup-v2">
+const defaultTemplate = `\
+    <div class="sgn-offer-overview-popup">
         {{#offer}}
-        <div class="sgn-popup-content">
+        <div class="sgn-popup-content" data-hide-offer-details="{{hideOfferDetails}}">
             <div class="sgn-popup-offer-container">
                 {{#loader}}
                 <div class="sgn-offer-img sgn-offer-img-v2">
@@ -42,7 +42,6 @@ const defaultTemplateV2 = `\
                     </div>
                     {{/label}}
                     <div class="sgn-offer-texts-container">
-                        {{^hideOfferDetails}}
                         <div class="sgn-offer-info">
                             <div class="sgn-offer-heading">
                                 <span>{{heading}}</span>
@@ -51,15 +50,12 @@ const defaultTemplateV2 = `\
                                 <span>{{description}}</span>
                             </div>
                         </div>
-                        {{/hideOfferDetails}}
                     </div>
                     <div class="sgn-products-container">
                         <div class="sgn-products-texts-container">
                             {{#products}}
                             <div id="sgn-offer-product-{{id}}" data-offer-product-id="{{id}}" data-offer-product-quantity="{{quantity}}" class="sgn-product-details">
-                                {{^hideOfferDetails}}
                                 <div class="sgn-product-image"><img src="{{#image}}{{image}}{{/image}}{{^image}}{{images.zoom}}{{/image}}" alt="{{heading}}"></div>
-                                {{/hideOfferDetails}}
                                 <div class="sgn-product-heading">
                                     <div class="sgn-product-title">
                                         {{#link}}
@@ -112,7 +108,7 @@ const OfferOverview = ({
     type,
     addToShoppingList
 }) => {
-    template = template?.innerHTML || defaultTemplateV2;
+    template = template?.innerHTML || defaultTemplate;
     let container: HTMLDivElement | null = null;
 
     const translations = {
@@ -202,6 +198,23 @@ const OfferOverview = ({
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
         offer.products = transformProducts(offer, products);
+
+        if (products?.length > 1) {
+            offer.products = transformProducts(offer, products);
+        } else {
+            const products = transformProducts(offer, [
+                {
+                    id: offer.id,
+                    title: offer.name,
+                    description: offer.description,
+                    price: offer.price,
+                    link: offer.webshop_link
+                }
+            ]);
+
+            offer.products = products;
+            offer.hideOfferDetails = true;
+        }
 
         const hasPriceFrom = products.some((product, i, arr) => {
             if (i === 0) return false;
