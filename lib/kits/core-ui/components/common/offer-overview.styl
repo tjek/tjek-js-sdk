@@ -197,12 +197,18 @@
 
     .sgn-product-image
         flex 0 0 80px
+        text-align center
 
         img
             width 80px
             height 80px
             object-fit contain
             object-position center center
+        
+        .no-product-image-icon
+            width 60px
+            height 80px
+            opacity 0.2
     
     .sgn-product-heading
         flex 1 1 auto
@@ -215,6 +221,7 @@
             max-width 476px
             font-weight 600
             font-size 1.2rem
+            padding-bottom 0.2rem
 
             > a
                 color inherit
@@ -355,7 +362,6 @@
 
                             .sgn-product-title
                                 font-size 0.833rem
-                                padding-bottom 0.2rem
                                 white-space normal
                                 overflow visible
 
