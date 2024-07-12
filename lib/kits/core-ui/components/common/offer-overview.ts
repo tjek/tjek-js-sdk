@@ -95,7 +95,7 @@ const defaultTemplate = `\
                         </div>
                     </div>
                     <div class="sgn-menu-date">
-                        <span>Tilbuddet gælder kun fra d. </span>                    
+                        <span>{{translations.validFrom}}</span>
                         <span data-validity-state="{{status}}">{{dateRange}}</span>
                     </div>
                 </div>
@@ -123,7 +123,8 @@ const OfferOverview = ({
         currency: translate('publication_viewer_currency'),
         addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
         visitWebshopLink: translate('publication_viewer_visit_webshop_link'),
-        priceFrom: translate('publication_viewer_offer_price_from')
+        priceFrom: translate('publication_viewer_offer_price_from'),
+        validFrom: translate('publication_viewer_offer_valid_from')
     };
 
     const render = async () => {

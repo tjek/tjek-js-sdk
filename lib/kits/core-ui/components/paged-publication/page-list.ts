@@ -1,7 +1,7 @@
 import Mustache from 'mustache';
 import {request, V2Page} from '../../../core';
 import {Viewer} from '../../../paged-publication';
-import {destroyModal, pushQueryParam} from '../helpers/component';
+import {destroyModal, pushQueryParam, closeSidebar} from '../helpers/component';
 import {transformScriptData} from '../helpers/transformers';
 import './page-list.styl';
 
@@ -77,6 +77,7 @@ const PageList = ({
         const {pageId, pageNum} = e.currentTarget.dataset;
 
         destroyModal();
+        closeSidebar();
         sgnViewer?.navigateToPageId(pageId);
 
         if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {

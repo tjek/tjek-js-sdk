@@ -22,5 +22,6 @@ export default {
     publication_viewer_add_to_shopping_list: 'Legg til handleliste',
     publication_viewer_visit_webshop_link: 'Besøk nettbutikklink',
     publication_viewer_upcoming: 'Påkommende',
-    publication_viewer_offer_price_from: 'Fra'
+    publication_viewer_offer_price_from: 'Fra',
+    publication_viewer_offer_valid_from: 'Gjelder kun fra '
 };

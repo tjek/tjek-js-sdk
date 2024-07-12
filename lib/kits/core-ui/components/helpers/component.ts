@@ -387,3 +387,17 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
         animateShoppingListCounter();
     }
 };
+
+export const closeSidebar = () => {
+    const sidebarControl = document?.querySelector<HTMLDivElement>(
+        '.sgn__sidebar-control'
+    );
+
+    if (sidebarControl) {
+        const matchedMedia = window.matchMedia('(max-width: 1200px)');
+
+        if (matchedMedia.matches) {
+            sidebarControl?.click();
+        }
+    }
+};
