@@ -16,7 +16,7 @@ class Viewer extends MicroEvent {
     static Incito = Incito;
     el: any;
     options: ViewerInit;
-    incito: Incito;
+    incito: Incito | IncitoV2;
     _eventTracking: EventTracking;
     constructor(el: HTMLElement, options: ViewerInit) {
         super();

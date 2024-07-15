@@ -30,7 +30,7 @@ export interface IIncito {
     /**
      * The Incito specification version
      */
-    version: '1.0.0';
+    version: '1.0.0' | '2.0.0';
     /**
      * The locale that defines the contents in `root_view` the best.
      */
