@@ -69,6 +69,8 @@ if (isBrowser()) {
 
         if (environment === 'staging') scriptConfig.coreUrl = coreUrlStaging;
 
+        scriptConfig.coreUrl = 'http://localhost:4000';
+
         config.set(scriptConfig);
 
         if (component === 'paged-publication-viewer') {

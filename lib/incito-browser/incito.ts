@@ -690,7 +690,6 @@ function renderView(view, canLazyload: boolean) {
 export default class Incito extends MicroEvent<{
     started: [];
     destroyed: [];
-    incitoEmbedLoaded: [{el: HTMLElement}];
     sectionVisible: [{sectionId: string; sectionPosition: number}];
     sectionHidden: [{sectionId: string; sectionPosition: number}];
 }> {
@@ -869,7 +868,6 @@ export default class Incito extends MicroEvent<{
                     el.innerHTML = this.renderHtml(res);
 
                     this.observeElements(el);
-                    this.trigger('incitoEmbedLoaded', {el});
                 })
                 .catch(() => {
                     el.innerHTML = this.renderHtml({});

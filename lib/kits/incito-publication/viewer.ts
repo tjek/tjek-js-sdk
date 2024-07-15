@@ -1,5 +1,6 @@
 import MicroEvent from '../../../vendor/microevent';
 import Incito from '../../incito-browser/incito';
+import IncitoV2 from '../../incito-browser/incito-v2';
 import {IIncito} from '../../incito-browser/types';
 import {V2Catalog} from '../core';
 import {Tracker} from '../events';
@@ -22,9 +23,12 @@ class Viewer extends MicroEvent {
 
         this.el = el;
         this.options = options;
-        this.incito = new Incito(this.el, {
-            incito: this.options.incito
-        });
+        this.incito =
+            this.options.incito.version === '2.0.0'
+                ? new IncitoV2(this.el, options.details.id)
+                : new Incito(this.el, {
+                      incito: this.options.incito
+                  });
         this._eventTracking = new EventTracking(
             this.options.eventTracker,
             this.options.details
