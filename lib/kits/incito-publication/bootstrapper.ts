@@ -88,15 +88,15 @@ export default class Bootstrapper {
             feature =
                 match[0] !== undefined
                     ? match[0].replace('audience=', '').split(',')
-                    : [];
+                    : ['none'];
         } else if (localStorage.getItem('audience') !== null) {
-            feature = localStorage.getItem('audience')?.split(',') || [];
+            feature = localStorage.getItem('audience')?.split(',') || ['none'];
         } else {
             const cookie = regex.exec(document.cookie) || [];
             feature =
                 cookie[0] !== undefined
                     ? cookie[0].replace('audience=', '').split(',')
-                    : [];
+                    : ['none'];
         }
 
         return feature;
