@@ -80,9 +80,26 @@ export default class Bootstrapper {
     }
 
     getFeatureLabels() {
-        const featureLabels = clientLocalStorage.get('incito-feature-labels');
+        const regex = new RegExp(/audience=[^#&;+]+/);
+        const match = regex.exec(location.href) || [];
+        let feature;
 
-        return Array.isArray(featureLabels) ? featureLabels : [];
+        if (match.length > 0) {
+            feature =
+                match[0] !== undefined
+                    ? match[0].replace('audience=', '').split(',')
+                    : [];
+        } else if (localStorage.getItem('audience') !== null) {
+            feature = localStorage.getItem('audience')?.split(',') || [];
+        } else {
+            const cookie = regex.exec(document.cookie) || [];
+            feature =
+                cookie[0] !== undefined
+                    ? cookie[0].replace('audience=', '').split(',')
+                    : [];
+        }
+
+        return feature;
     }
 
     anonymizeFeatureLabels() {
