@@ -80,23 +80,25 @@ export default class Bootstrapper {
     }
 
     getFeatureLabels() {
-        const regex = new RegExp(/audience=[^#&;+]+/);
+        const regex = new RegExp(/tjek-audience=[^#&;+]+/);
         const match = regex.exec(location.href) || [];
         let feature;
 
         if (match.length > 0) {
             feature =
                 match[0] !== undefined
-                    ? match[0].replace('audience=', '').split(',')
-                    : [];
-        } else if (localStorage.getItem('audience') !== null) {
-            feature = localStorage.getItem('audience')?.split(',') || [];
+                    ? match[0].replace('tjek-audience=', '').split(',')
+                    : ['none'];
+        } else if (localStorage.getItem('tjek-audience') !== null) {
+            feature = localStorage.getItem('tjek-audience')?.split(',') || [
+                'none'
+            ];
         } else {
             const cookie = regex.exec(document.cookie) || [];
             feature =
                 cookie[0] !== undefined
-                    ? cookie[0].replace('audience=', '').split(',')
-                    : [];
+                    ? cookie[0].replace('tjek-audience=', '').split(',')
+                    : ['none'];
         }
 
         return feature;
