@@ -326,6 +326,13 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
         is_ticked: false
     };
 
+    const allPricesAreTheSame = offer.products?.every(
+        (product, index, array) => product.price === array[0].price
+    );
+
+    const useOfferPrice =
+        allPricesAreTheSame && offer.price !== offer.products[0].price;
+
     if (offer.basket?.productId) {
         const product = offer.products?.find(
             ({id}) => id == offer.basket?.productId
@@ -335,7 +342,9 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
                 id: product.id,
                 name: product.title,
                 pricing: {
-                    price: product.price,
+                    price: useOfferPrice
+                        ? offer.price || offer.pricing.price
+                        : product?.price,
                     currency: offer.currency_code
                 },
                 quantity: 1,
