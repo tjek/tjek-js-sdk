@@ -32,22 +32,24 @@ const defaultTemplate = `\
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
                             <span>{{name}}</span>
                         </div>
-                        <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
-                            <div class="sgn-offer-product-quantity-content">
-                                <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
-                                </button>
-                                <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" disabled/>
-                                <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                                </button>
+                        <div class="sgn-product-price-container">
+                            <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                                <div class="sgn-offer-product-quantity-content">
+                                    <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                    </button>
+                                    <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" disabled/>
+                                    <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                    </button>
+                                </div>
                             </div>
+                            {{#price}}
+                            <div class="sgn-shopping-list-content-price">
+                                <span>{{price}}</span>
+                            </div>
+                            {{/price}}
                         </div>
-                        {{#price}}
-                        <div class="sgn-shopping-list-content-price">
-                            <span>{{price}}</span>
-                        </div>
-                        {{/price}}
                     </div>
                 </div>
             </li>
@@ -62,22 +64,24 @@ const defaultTemplate = `\
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
                             <span>{{name}}</span>
                         </div>
-                        <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
-                            <div class="sgn-offer-product-quantity-content">
-                                <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print" disabled>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
-                                </button>
-                                <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" disabled/>
-                                <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print" disabled>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                                </button>
+                        <div class="sgn-product-price-container">
+                            <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                                <div class="sgn-offer-product-quantity-content">
+                                    <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                    </button>
+                                    <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" disabled/>
+                                    <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                    </button>
+                                </div>
                             </div>
+                            {{#price}}
+                            <div class="sgn-shopping-list-content-price">
+                                <span>{{price}}</span>
+                            </div>
+                            {{/price}}
                         </div>
-                        {{#price}}
-                        <div class="sgn-shopping-list-content-price">
-                            <span>{{price}}</span>
-                        </div>
-                        {{/price}}
                     </div>
                 </div>
             </li>
