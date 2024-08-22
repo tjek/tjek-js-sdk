@@ -22,6 +22,45 @@ const defaultTemplate = `\
 
 const SectionList = ({sgnData, template, scriptEls}) => {
     let container: HTMLDivElement | null = null;
+    const regex = new RegExp(/tjek_audience=[^#&;+]+/);
+    const match = regex.exec(location.href) || [];
+    let sectionList: {title: string; view_id: string}[] = [];
+    let feature;
+
+    if (match.length > 0) {
+        feature =
+            match[0] !== undefined
+                ? match[0].replace('tjek_audience=', '').split(',')
+                : ['none'];
+    } else if (localStorage.getItem('tjek_audience') !== null) {
+        feature = localStorage.getItem('tjek_audience')?.split(',') || ['none'];
+    } else {
+        const cookie = regex.exec(document.cookie) || [];
+        feature =
+            cookie[0] !== undefined
+                ? cookie[0].replace('tjek_audience=', '').split(',')
+                : ['none'];
+    }
+
+    if (feature.includes('all'))
+        sectionList = sgnData?.incito?.table_of_contents;
+    else
+        sgnData?.incito?.table_of_contents.forEach((section) => {
+            if (feature.includes('none')) {
+                if (
+                    !section.feature_labels.includes(feature) &&
+                    section.feature_labels.length === 0
+                )
+                    sectionList.push(section);
+            } else if (
+                feature.some(
+                    (element) =>
+                        section.feature_labels.includes(element) ||
+                        section.feature_labels.length === 0
+                )
+            )
+                sectionList.push(section);
+        });
 
     template = template?.innerHTML || defaultTemplate;
 
@@ -29,7 +68,7 @@ const SectionList = ({sgnData, template, scriptEls}) => {
         container = document.createElement('div');
         container.className = 'sgn-sections-container';
         container.innerHTML = Mustache.render(template, {
-            sections: sgnData?.incito?.table_of_contents
+            sections: sectionList
         });
 
         addSectionClickListener();
