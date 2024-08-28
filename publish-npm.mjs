@@ -453,12 +453,38 @@ async function publish() {
         ]);
         const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
         if (!DRY_RUN) {
-            await run('npm', [
-                'publish',
-                '--access',
-                'public',
-                `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
-            ]);
+            async function publish(otpCode) {
+                try {
+                    await run('npm', [
+                        'publish',
+                        '--access',
+                        'public',
+                        `--tag=${
+                            tag.startsWith('experimental')
+                                ? 'experimental'
+                                : tag
+                        }`,
+                        otpCode ? `--otp=${otpCode}` : ''
+                    ]);
+                } catch (error) {
+                    if (error.includes('code EOTP')) {
+                        pubInd.stop();
+                        const {otp} = await inquirer.prompt([
+                            {
+                                type: 'input',
+                                name: 'otp',
+                                message:
+                                    'Enter NPM OTP code from your authenticator'
+                            }
+                        ]);
+                        pubInd.start();
+                        await publish(otp);
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+            await publish();
         }
         pubInd.succeed(
             `Published ${name}@${
