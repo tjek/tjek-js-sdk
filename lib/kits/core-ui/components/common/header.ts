@@ -256,8 +256,12 @@ const Header = ({
             const toggleClasslist = ({matches}) => {
                 if (matches) {
                     sgnContainer?.classList.add('sgn__sidebar--close');
+                    sidebarControl?.classList.remove(
+                        'sgn__sidebar-control-open'
+                    );
                 } else {
                     sgnContainer?.classList.remove('sgn__sidebar--close');
+                    sgnContainer?.classList.remove('sgn__sidebar--open');
                 }
             };
             toggleClasslist(matchedMedia);

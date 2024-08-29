@@ -285,6 +285,10 @@
 
 
 @media (max-width 1200px)
+    .sgn-animate-sidebar-controls
+        visibility visible !important
+        opacity 1 !important
+        animation fadeIn 0.3s
 
     .sgn__sidebar--open
 
@@ -351,11 +355,6 @@
     animation-name sgn-animate-sidebar-right
     animation-timing-function ease
     transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
-
-.sgn-animate-sidebar-controls
-    visibility visible !important
-    opacity 1 !important
-    animation fadeIn 0.3s
 
 @keyframes sgn-animate-sidebar-left
     0%
