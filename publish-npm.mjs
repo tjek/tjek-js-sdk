@@ -442,6 +442,7 @@ async function publish() {
     );
     const cwd = process.cwd();
     const publishLog = ['# Packages'];
+    let otpCode;
     for (const [packageJsonPath, version] of targetVersions) {
         process.chdir(packageJsonPath.replace('/package.json', ''));
 
@@ -453,7 +454,6 @@ async function publish() {
         ]);
         const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
         if (!DRY_RUN) {
-            let otpCode;
             async function publish() {
                 try {
                     await run('npm', [
