@@ -277,21 +277,23 @@ const Header = ({
     };
 
     const setNavColor = (color) => {
-        const sgnNav = container?.querySelector<HTMLDivElement>('.sgn__nav');
-
-        if (sgnNav) {
-            sgnNav.style.backgroundColor = color || 'transparent';
-            sgnNav.style.color =
-                getColorBrightness(color) === 'dark' ? '#ffffff' : '#000000';
-        }
-
         if (scriptEls.enableSidebar) {
-            const sidebar = container?.querySelector<HTMLDivElement>(
-                '.sgn__sidebar-content-container'
-            );
+            const sidebar =
+                container?.querySelector<HTMLDivElement>('.sgn__sidebar');
             if (sidebar) {
                 sidebar.style.backgroundColor = color || 'transparent';
                 sidebar.style.color =
+                    getColorBrightness(color) === 'dark'
+                        ? '#ffffff'
+                        : '#000000';
+            }
+        } else {
+            const sgnNav =
+                container?.querySelector<HTMLDivElement>('.sgn__nav');
+
+            if (sgnNav) {
+                sgnNav.style.backgroundColor = color || 'transparent';
+                sgnNav.style.color =
                     getColorBrightness(color) === 'dark'
                         ? '#ffffff'
                         : '#000000';
