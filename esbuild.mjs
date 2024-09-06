@@ -1,8 +1,10 @@
 import {build, context} from 'esbuild';
 import {stylusLoader} from 'esbuild-stylus-loader';
+import {readFileSync} from 'fs';
 import {writeFile} from 'fs/promises';
 import nib from 'nib';
 import path from 'path';
+import ts from 'typescript';
 import * as url from 'url';
 import packageJson from './package.json' assert {type: 'json'};
 
@@ -105,7 +107,13 @@ switch (process.argv[2]) {
     case 'build': {
         const buildResults = await Promise.all(
             bundles
-                .map(({name, input, output}) => [
+                .map(({name, input, output, pkg}) => [
+                    name &&
+                        emitDeclaration({
+                            inFile: path.join(libDir, input),
+                            outFile: path.join(distDir, output + '.d.ts'),
+                            pkg
+                        }),
                     name &&
                         build({
                             ...commonOptions,
@@ -149,13 +157,14 @@ switch (process.argv[2]) {
         const modulePackageJsons = {};
 
         for (const {warnings, errors, metafile} of buildResults) {
-            if (warnings.length) {
+            if (warnings?.length) {
                 for (const warning of warnings) console.warn(warning);
             }
-            if (errors.length) {
+            if (errors?.length) {
                 for (const error of errors) console.error(error);
                 break;
             }
+            if (!metafile) continue;
             for (const [path, output] of Object.entries(metafile.outputs)) {
                 if (!output.entryPoint) continue;
                 const moduleDir = path.match(/dist\/(.+)\//)[1];
@@ -170,10 +179,14 @@ switch (process.argv[2]) {
                 const moduleJson = modulePackageJsons[moduleDir];
 
                 const fileName = path.match(/dist\/(.+)\/(.+)/)[2];
-                if (fileName.endsWith('.cjs.js')) moduleJson.main = fileName;
+                if (fileName.endsWith('.cjs.js')) {
+                    moduleJson.main = fileName;
+                    moduleJson.types = fileName.replace('.cjs.js', '.d.ts');
+                }
                 if (fileName.endsWith('.es.js')) {
                     moduleJson.module = fileName;
                     moduleJson['jsnext:main'] = fileName;
+                    moduleJson.types = fileName.replace('.es.js', '.d.ts');
                 }
 
                 const externalsSet = new Set();
@@ -196,4 +209,28 @@ switch (process.argv[2]) {
         }
         break;
     }
+}
+
+function emitDeclaration({inFile, outFile, pkg}) {
+    const options = {
+        ...readFileSync(path.join(__dirname, 'tsconfig.json'), 'utf-8'),
+        declaration: true,
+        emitDeclarationOnly: true,
+        outFile
+    };
+
+    const host = ts.createCompilerHost(options);
+    const writeFile = host.writeFile.bind(host);
+    host.writeFile = (path, code) =>
+        writeFile(
+            path,
+            code.replace(
+                `declare module "${inFile
+                    .replace(__dirname, '')
+                    .replace('.ts', '')}" {`,
+                `declare module "${pkg.name}" {`
+            )
+        );
+
+    ts.createProgram([inFile], options, host).emit();
 }
