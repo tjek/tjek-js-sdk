@@ -1,6 +1,11 @@
 import Mustache from 'mustache';
 import * as clientLocalStorage from '../../../../storage/client-local';
-import {createModal, formatPrice, translate} from '../helpers/component';
+import {
+    createModal,
+    formatPrice,
+    translate,
+    updateShoppingList
+} from '../helpers/component';
 import './shopping-list.styl';
 
 const defaultTemplate = `\
@@ -11,30 +16,39 @@ const defaultTemplate = `\
             </div>            
             <div class="sgn-menu-share">
                 <button class="sgn-shopping-share-list-btn sgn-hide-print">
-                    <svg 
-                        aria-hidden="true"
-                        class="sgn-share-icon-svg"
-                        role="img"
-                        viewBox="0 0 640 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path 
-                            fill="currentColor" 
-                            d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"
-                        >
-                        </path>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="sgn-share-icon-svg" viewBox="0 0 576 512"><path d="M352 224H305.5c-45 0-81.5 36.5-81.5 81.5c0 22.3 10.3 34.3 19.2 40.5c6.8 4.7 12.8 12 12.8 20.3c0 9.8-8 17.8-17.8 17.8h-2.5c-2.4 0-4.8-.4-7.1-1.4C210.8 374.8 128 333.4 128 240c0-79.5 64.5-144 144-144h80V34.7C352 15.5 367.5 0 386.7 0c8.6 0 16.8 3.2 23.2 8.9L548.1 133.3c7.6 6.8 11.9 16.5 11.9 26.7s-4.3 19.9-11.9 26.7l-139 125.1c-5.9 5.3-13.5 8.2-21.4 8.2H384c-17.7 0-32-14.3-32-32V224zM80 96c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16H400c8.8 0 16-7.2 16-16V384c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 44.2-35.8 80-80 80H80c-44.2 0-80-35.8-80-80V112C0 67.8 35.8 32 80 32h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H80z"/></svg>
                 </button>
             </div>
             <div class="sgn-clearfix"></div>
         </div>
         <ol class="sgn-shopping-list-items-container">
             {{#offers}}
-            <li class="sgn-shopping-list-item-container" data-id="{{index}}">
+            <li class="sgn-shopping-list-item-container" data-id="{{index}}" data-offer-product-id="{{id}}">
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
+                        <div class="sgn-shopping-list-content-ticker sgn-hide-print">
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" class="sgn-shopping-list-content-ticker-box"/>
+                        </div>
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>
+                            <span>{{name}}</span>
+                        </div>
+                        <div class="sgn-product-price-container">
+                            <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                                <div class="sgn-offer-product-quantity-content">
+                                    <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                    </button>
+                                    <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" disabled/>
+                                    <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            {{#price}}
+                            <div class="sgn-shopping-list-content-price">
+                                <span>{{price}}</span>
+                            </div>
+                            {{/price}}
                         </div>
                     </div>
                 </div>
@@ -44,13 +58,48 @@ const defaultTemplate = `\
             <li class="sgn-shopping-list-item-container sgn-shopping-list-item-container-ticked" data-id="{{index}}">
                 <div class="sgn-shopping-list-content-container">
                     <div class="sgn-shopping-list-content">
+                        <div class="sgn-shopping-list-content-ticker sgn-hide-print">
+                            <input type="checkbox" id="sgn-offer-product-id-{{id}}" name="sgn-offer-product-id-{{id}}" value="{{index}}" checked="true" class="sgn-shopping-list-content-ticker-box"/>
+                        </div>
                         <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
-                            <span>{{#price}}{{price}} - {{/price}}{{name}}</span><br/>
+                            <span>{{name}}</span>
+                        </div>
+                        <div class="sgn-product-price-container">
+                            <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
+                                <div class="sgn-offer-product-quantity-content">
+                                    <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus sgn-hide-print" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-minus-circle-fill" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                    </button>
+                                    <input type="text" id="sgn-offer-product-quantity-text-{{id}}" class="sgn-offer-product-quantity-text" value="{{quantity}}" disabled/>
+                                    <button id="sgn-offer-product-quantity-plus-{{id}}" class="sgn-offer-product-quantity-plus sgn-hide-print" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-plus-circle-fill" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            {{#price}}
+                            <div class="sgn-shopping-list-content-price">
+                                <span>{{price}}</span>
+                            </div>
+                            {{/price}}
                         </div>
                     </div>
                 </div>
             </li>
             {{/tickedOffers}}
+            {{#totalPrice}}
+            <li class="sgn-shopping-list-item-container">
+                <div class="sgn-shopping-list-content-container sgn-shopping-list-content-container-total">
+                    <div class="sgn-shopping-list-content">
+                        <div class="sgn-shopping-list-content-heading sgn-truncate-elipsis">
+                            <span>Total</span>
+                        </div>
+                        <div class="sgn-shopping-list-content-price">
+                            <span class="sgn-shopping-list-content-price-total">{{totalPrice}}</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {{/totalPrice}}
             {{#hasTicked}}
             <li class="sgn-shopping-list-item-container-crossed sgn-hide-print">
                 <button class="sgn-shopping-clear-ticked-list-btn sgn-hide-print">{{translations.deleteCrossedOutButton}}</button>
@@ -106,7 +155,8 @@ const ShoppingList = ({template}) => {
             hasTicked:
                 transformSavedOffers(storedPublicationOffers)?.filter(
                     (offer) => offer.is_ticked
-                ).length > 0
+                ).length > 0,
+            totalPrice: getTotalPrice()
         });
 
         createModal(container, destroyModal);
@@ -125,7 +175,7 @@ const ShoppingList = ({template}) => {
             ...offer,
             price: offer?.pricing?.price
                 ? formatPrice(
-                      offer?.pricing?.price,
+                      offer?.pricing?.price * (offer?.quantity || 1),
                       localeCode,
                       offer?.pricing?.currency || currency
                   )
@@ -135,9 +185,9 @@ const ShoppingList = ({template}) => {
 
     const addTickerListener = () => {
         container
-            ?.querySelectorAll('.sgn-shopping-list-item-container')
+            ?.querySelectorAll('.sgn-shopping-list-content-ticker-box')
             .forEach((itemEl) => {
-                itemEl.addEventListener('click', tickOffer, false);
+                itemEl.addEventListener('change', tickOffer);
             });
     };
 
@@ -145,7 +195,7 @@ const ShoppingList = ({template}) => {
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
-        const index = e.currentTarget.dataset?.id;
+        const index = e.currentTarget.value;
 
         storedPublicationOffers[index].is_ticked =
             !storedPublicationOffers[index].is_ticked;
@@ -167,7 +217,8 @@ const ShoppingList = ({template}) => {
                 hasTicked:
                     transformSavedOffers(storedPublicationOffers)?.filter(
                         (offer) => offer.is_ticked
-                    ).length > 0
+                    ).length > 0,
+                totalPrice: getTotalPrice()
             });
 
         addEventListeners();
@@ -215,7 +266,8 @@ const ShoppingList = ({template}) => {
             if (container)
                 container.innerHTML = Mustache.render(template, {
                     translations,
-                    offers: transformSavedOffers(validOffers)
+                    offers: transformSavedOffers(validOffers),
+                    totalPrice: getTotalPrice()
                 });
 
             addEventListeners();
@@ -276,14 +328,111 @@ const ShoppingList = ({template}) => {
             });
     };
 
+    const getTotalPrice = () => {
+        const {localeCode, currency} = translations;
+        const storedPublicationOffers = clientLocalStorage.get(
+            'publication-saved-offers'
+        );
+
+        const totalPrice = storedPublicationOffers?.reduce((acc, product) => {
+            return acc + product.pricing.price * product.quantity;
+        }, 0);
+
+        return totalPrice ? formatPrice(totalPrice, localeCode, currency) : '';
+    };
+
+    const updateQuantityHandler = (
+        productEl: HTMLElement,
+        action: 'plus' | 'minus'
+    ) => {
+        const {localeCode, currency} = translations;
+        const productId = productEl.dataset.offerProductId;
+        const priceEl = productEl.querySelector<HTMLElement>(
+            '.sgn-shopping-list-content-price'
+        );
+        const quantityTxt = productEl.querySelector<HTMLInputElement>(
+            '.sgn-offer-product-quantity-text'
+        );
+        const totalPriceContainer = container?.querySelector<HTMLDivElement>(
+            '.sgn-shopping-list-content-container-total'
+        );
+        const totalPriceEL = container?.querySelector<HTMLInputElement>(
+            '.sgn-shopping-list-content-price-total'
+        );
+
+        const storedPublicationOffers = clientLocalStorage.get(
+            'publication-saved-offers'
+        );
+
+        let quantity = Number(quantityTxt?.value ?? 1);
+
+        const product = storedPublicationOffers.find(
+            (product) => product.id === productId
+        );
+
+        if (quantityTxt) {
+            quantityTxt.value =
+                action === 'plus' ? `${++quantity}` : `${--quantity}`;
+
+            if (quantityTxt?.value === '0' && action === 'minus') {
+                productEl.remove();
+            }
+
+            if (priceEl && product?.pricing?.price && quantity) {
+                const priceNum = product?.pricing?.price * (quantity || 1);
+
+                priceEl.innerHTML = formatPrice(priceNum, localeCode, currency);
+            }
+
+            updateShoppingList(
+                {
+                    ...product,
+                    basket: {
+                        productId,
+                        quantity
+                    }
+                },
+                action
+            );
+
+            if (totalPriceEL && getTotalPrice()) {
+                totalPriceEL.innerHTML = getTotalPrice();
+            } else {
+                totalPriceContainer?.remove();
+            }
+        }
+    };
+
+    const addQuantityListener = () => {
+        const productEls = document.querySelectorAll(
+            '.sgn-shopping-list-item-container'
+        );
+
+        productEls.forEach((productEl: HTMLElement) => {
+            const minusBtn = productEl.querySelector<HTMLElement>(
+                '.sgn-offer-product-quantity-minus'
+            );
+            const plusBtn = productEl.querySelector<HTMLElement>(
+                '.sgn-offer-product-quantity-plus'
+            );
+
+            plusBtn?.addEventListener('click', () =>
+                updateQuantityHandler(productEl, 'plus')
+            );
+            minusBtn?.addEventListener('click', () =>
+                updateQuantityHandler(productEl, 'minus')
+            );
+        });
+    };
+
     const formatListToShare = (data, newLineDelimiter = `\n`) => {
         let offerStr = '';
 
         data?.forEach((offer) => {
             if (!offer.is_ticked) {
                 offerStr += offer.price
-                    ? `${offer.price} - ${offer.name}`
-                    : `${offer.name}`;
+                    ? `${offer.price} - ${offer.name} (${offer.quantity || 1})`
+                    : `${offer.name} (${offer.quantity || 1})`;
                 offerStr += newLineDelimiter;
             }
         });
@@ -299,6 +448,7 @@ const ShoppingList = ({template}) => {
         addClearListListener();
         addPrintListener();
         addShareListener();
+        addQuantityListener();
     };
 
     return {render};

@@ -15,7 +15,9 @@ import {
     transformFilter,
     getHashFragments,
     pushQueryParam,
-    transformWebshopLink
+    transformWebshopLink,
+    animateShoppingListCounter,
+    dispatchProductClickEvent
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -164,15 +166,6 @@ const IncitoPublication = (
                 }).render();
             });
 
-    const animateShoppingListCounter = () => {
-        const shoppingListCounter = document.querySelector(
-            '.sgn__offer-shopping-list-counter'
-        );
-
-        shoppingListCounter?.classList.remove('sgn-animate-bounce');
-        shoppingListCounter?.classList.add('sgn-animate-bounce');
-    };
-
     const setOptions = async (opts?: any) => {
         options = {
             el: document.querySelector<HTMLDivElement>('.sgn__incito'),
@@ -269,7 +262,12 @@ const IncitoPublication = (
                 configs: options,
                 scriptEls,
                 sgnData,
-                offer: {fetchOffer, viewId, publicationId, products},
+                offer: {
+                    fetchOffer,
+                    viewId,
+                    publicationId,
+                    products
+                },
                 type: 'incito',
                 addToShoppingList
             }).render();
@@ -333,30 +331,60 @@ const IncitoPublication = (
     };
 
     const addToShoppingList = (offer) => {
-        const storedPublicationOffers = clientLocalStorage.get(
-            'publication-saved-offers'
-        );
-        const shopListOffer = {
+        const storedPublicationOffers =
+            clientLocalStorage.get('publication-saved-offers') || [];
+        let shopListOffer = {
+            id: offer.id,
             name: offer.name,
             pricing: {price: offer.price, currency: offer.currency_code},
+            quantity: 1,
             is_ticked: false
         };
 
-        if (!storedPublicationOffers) {
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                [shopListOffer],
-                'tjek_shopping_list_update'
+        if (offer.basket?.productId) {
+            const product = offer.products?.find(
+                ({id}) => id == offer.basket?.productId
             );
-        } else {
-            storedPublicationOffers.push(shopListOffer);
-            clientLocalStorage.setWithEvent(
-                'publication-saved-offers',
-                storedPublicationOffers,
-                'tjek_shopping_list_update'
-            );
+            if (product) {
+                shopListOffer = {
+                    id: product.id,
+                    name: product.title,
+                    pricing: {
+                        price: offer.price,
+                        currency: offer.currency_code
+                    },
+                    quantity: offer.basket?.quantity || 1,
+                    is_ticked: false
+                };
+            }
         }
 
+        storedPublicationOffers.push(shopListOffer);
+
+        const mergedOffers = storedPublicationOffers.reduce(
+            (acc, currentOffer) => {
+                const existingOffer = acc.find(
+                    (offer) => offer.id === currentOffer.id
+                );
+
+                if (existingOffer) {
+                    existingOffer.quantity += currentOffer.quantity;
+                } else {
+                    acc.push({...currentOffer});
+                }
+
+                return acc;
+            },
+            []
+        );
+
+        clientLocalStorage.setWithEvent(
+            'publication-saved-offers',
+            mergedOffers,
+            'tjek_shopping_list_update'
+        );
+
+        dispatchProductClickEvent({product: shopListOffer});
         animateShoppingListCounter();
     };
 

@@ -20,5 +20,7 @@ export default {
     publication_viewer_close_label: 'Close',
     publication_viewer_add_to_shopping_list: 'Add to Shopping List',
     publication_viewer_visit_webshop_link: 'Visit Webshop Link',
-    publication_viewer_upcoming: 'Upcoming'
+    publication_viewer_upcoming: 'Upcoming',
+    publication_viewer_offer_price_from: 'From',
+    publication_viewer_offer_valid_from: 'Valid from '
 };

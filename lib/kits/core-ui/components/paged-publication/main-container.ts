@@ -68,7 +68,7 @@ const MainContainer = ({
     const render = () => {
         // @ts-expect-error
         el.innerHTML = Mustache.render(template?.innerHTML || defaultTemplate, {
-            disableHeader: scriptEls.disableHeader || scriptEls.enableSidebar,
+            disableHeader: scriptEls.disableHeader,
             enableSidebar: scriptEls.enableSidebar,
             sidebarPosition: scriptEls.sidebarPosition
         });

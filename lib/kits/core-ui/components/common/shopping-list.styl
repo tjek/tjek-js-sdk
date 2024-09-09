@@ -1,6 +1,6 @@
 .sgn-shopping-popup
     position relative
-    background #F3F3F9
+    background #ffffff
     color #202020
     border-radius 12px
     padding 10px
@@ -12,10 +12,10 @@
     text-align left
 
     button
-        background-color #d3d3d3
-        padding 4px 10px
+        background-color #f1f1f1
+        padding 10px
         font-size 12px
-        border-radius 6px
+        border-radius 10px
         border 0
         min-width 70px
         transition .2s
@@ -41,22 +41,12 @@
         > svg
             width 25px
 
-.sgn-shopping-dd
-    display block
-    z-index 9
-    position absolute
-    background #F3F3F9
-
 .sgn-shopping-list-items-container
     height 450px
-    overflow-y scroll
+    overflow-y auto
     list-style-type none
-    padding 10px
+    padding 0
     color #202020
-
-    > li
-        &:hover
-            cursor pointer
 
     .sgn-shopping-list-item-container-crossed
         text-align center
@@ -65,7 +55,9 @@
 .sgn-shopping-list-content-container
     border-bottom 1px solid #d5d5d5
     padding 10px
-    align-items center
+
+.sgn-shopping-list-content-container-total
+    border-bottom unset !important
 
 .sgn-popup-header
     border-bottom 1px solid #eee
@@ -74,13 +66,72 @@
     font-size 18px
 
 .sgn-shopping-list-content
+    display flex
+    flex 1
+    align-items center
+    gap 0.5rem
     font-size 16px
     line-height 1.6
     overflow hidden
     text-overflow ellipsis
 
+    .sgn-shopping-list-content-heading
+        flex 1
+
+    .sgn-product-price-container
+        display flex
+        flex-direction row
+        justify-content center
+        align-items center
+
+    .sgn-shopping-list-content-price
+        font-weight 500
+        font-size 1.2rem
+        margin-left 0.3rem
+
+    .sgn-offer-product-quantity
+        width 110px
+
+    .sgn-offer-product-quantity-content
+        display flex
+        border 1px solid rgba(0, 0, 0, 0.12)
+        border-radius 19.5px
+        overflow hidden
+        padding 2px
+        margin-right .1rem
+        
+        button
+            min-width 0
+            padding 0
+            background transparent
+            color #4e4e4e
+            border-radius 100%
+            border 1px solid #7b7b7b
+            text-align center
+            width 36px
+            height 36px
+
+            svg
+                vertical-align middle
+                width 16px
+                height 16px
+
+        input
+            color #202020
+            border unset
+            background unset
+            width 30px
+            padding 8px 0
+            text-align center
+
+    .sgn-shopping-list-content-ticker-box
+        &:hover
+            cursor pointer
+
 .sgn-shopping-list-item-container-ticked
-    .sgn-shopping-list-content
+    opacity 0.5
+
+    .sgn-shopping-list-content-heading
         text-decoration line-through
         color rgb(139, 140, 143)
 
@@ -106,6 +157,38 @@
 @media (max-height 790px)
     .sgn-shopping-list-items-container
         height 400px
+
+@media (max-width 840px)
+    .sgn-shopping-popup
+        .sgn-product-price-container
+            flex-direction column-reverse
+            align-items flex-end
+
+        .sgn-offer-product-quantity
+            width auto
+            margin-top .833rem
+
+        .sgn-product-price
+            flex 1
+            font-size 1.2rem
+            margin-top 1rem
+
+        .sgn-offer-product-quantity-content
+            button
+                cursor pointer
+                border 0.5px solid #7b7b7b
+
+                svg
+                    width 10px
+                    height 10px
+
+            input
+                color #202020
+                border unset
+                background unset
+                width 30px
+                padding 8px 0
+                text-align center
 
 @media print
     .sgn__header
@@ -163,3 +246,10 @@
         .sgn-shopping-list-content
             width 100%
             white-space normal
+            display flex
+
+            .sgn-shopping-list-content-heading
+                flex 1
+
+            .sgn-product-price-container
+                flex-direction row

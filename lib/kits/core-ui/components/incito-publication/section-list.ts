@@ -1,5 +1,5 @@
 import Mustache from 'mustache';
-import {destroyModal} from '../helpers/component';
+import {destroyModal, closeSidebar} from '../helpers/component';
 import './section-list.styl';
 
 const defaultTemplate = `\
@@ -81,6 +81,7 @@ const SectionList = ({sgnData, template, scriptEls}) => {
         const sectionOffset = sectionCell.offsetTop - headerOffset || 0;
 
         destroyModal();
+        closeSidebar();
 
         incitoEl?.scrollTo({top: sectionOffset, behavior: 'smooth'});
     };

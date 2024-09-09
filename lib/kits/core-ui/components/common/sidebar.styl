@@ -63,6 +63,7 @@
                 height 2px
                 background #ffffff
                 margin-bottom 8px
+                border-radius 1px
 
             .sgn__sidebar-control-bars
                 list-style none
@@ -70,6 +71,9 @@
                 width 25px
                 background rgba(0, 0, 0, 0.4)
                 padding 10px 10px 2px
+                border-radius 6px
+                opacity 0
+                visibility hidden
             
                 & .sgn__sidebar-control-bar1 
                     -webkit-transition all 0.3s ease-in-out
@@ -122,16 +126,15 @@
     position absolute
     display none
     z-index 99
-    height 80px
+    height 100vh
     margin auto
     width 100%
     text-align center
     animation-iteration-count 1
     animation-name sgn-animate-sidebar
     animation-timing-function ease
+    box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
 
-    .sgn__sidebar-content-container
-        box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
 
     > .sgn__nav
         position relative !important
@@ -141,7 +144,7 @@
         color inherit
         -webkit-transform none !important
         transform none !important
-        box-shadow rgba(0, 0, 0,  0.4) 0px 2px 4px, rgba(0, 0, 0, 0.2) 0px 0px 1px
+        box-shadow rgba(0, 0, 0, 0.4) 2px 0px 4px
 
         .sgn__nav-content
             padding 8px 8px 2px
@@ -273,20 +276,28 @@
             width unset !important
             margin-left unset!important
 
-.sgn-animate-sidebar-left
-    display block
-    animation-name sgn-animate-sidebar-left
-    animation-timing-function ease
-    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
+.sgn__nav-content-mobile
+    display none
 
-.sgn-animate-sidebar-right
-    display block
-    animation-name sgn-animate-sidebar-right
-    animation-timing-function ease
-    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
+    .sgn__close-publication
+        visibility hidden
+        opacity 0
 
-@media (max-width 840px)
+
+@media (max-width 1200px)
+    .sgn-animate-sidebar-controls
+        visibility visible !important
+        opacity 1 !important
+        animation fadeIn 0.3s
+
     .sgn__sidebar--open
+
+        .sgn__nav-content-mobile
+            display none
+
+        .sgn__nav-content
+            .sgn__close-publication
+                display none !important
 
         .sgn-sections-list-items-container, .sgn-pages-list-items-container, .sgn-page-decoration-list-items-container
             text-align center
@@ -300,6 +311,50 @@
             .sgn-menu-popup-container, .sgn-shopping-list-container, .sgn-offer-overview-container
                 width unset !important
                 margin-left unset!important
+
+    .sgn__nav-content-mobile
+        display block
+
+        .sgn-animate-home-close
+            visibility visible
+            animation halfFadeIn 0.3s
+
+        > .sgn__close-publication
+            opacity 0.5
+            position absolute
+            top 0
+            left 0
+            margin 18px 10px
+            z-index 99
+            color inherit
+            vertical-align middle
+            padding 8px
+            border 0
+            cursor pointer
+            width 50px
+            background rgba(0, 0, 0, 0.4)
+            border-radius 6px
+            color #ffffff
+
+            > svg
+                width 25px
+                height 25px
+
+            &:hover,
+            &:active
+                opacity 1
+
+.sgn-animate-sidebar-left
+    display block
+    animation-name sgn-animate-sidebar-left
+    animation-timing-function ease
+    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
+
+.sgn-animate-sidebar-right
+    display block
+    animation-name sgn-animate-sidebar-right
+    animation-timing-function ease
+    transition transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0) !important
 
 @keyframes sgn-animate-sidebar-left
     0%
@@ -324,3 +379,15 @@
         transform translateX(0)
     100%
         transform translateX(-290px)
+
+@keyframes halfFadeIn 
+  0%
+    opacity 0
+  100%
+    opacity 0.5
+
+@keyframes fadeOut
+  0%
+    opacity 0.5
+  100%
+    opacity 0

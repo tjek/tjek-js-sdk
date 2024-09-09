@@ -1,6 +1,7 @@
 import Mustache from 'mustache';
 import * as locales from '../../../../../locales';
 import {ESC as EscKey} from '../../../../key-codes';
+import * as clientLocalStorage from '../../../../storage/client-local';
 
 export const insertAfter = (referenceNode, newNode) => {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -62,7 +63,11 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
     return new Intl.NumberFormat(localeCode.replace('_', '-'), {
         style: 'currency',
         currency
-    }).format(price);
+    })
+        .format(price)
+        .replace(currency, '')
+        .replace('kr.', '')
+        .trim();
 };
 
 export const parseDateStr = (dateStr: string) => {
@@ -280,4 +285,128 @@ export const transformWebshopLink = (url) => {
     }
 
     return url;
+};
+
+export const dispatchProductClickEvent = (detail) => {
+    const scriptEl = document.getElementById('sgn-sdk');
+    const dataset = scriptEl?.dataset;
+    const mainContainer =
+        dataset?.componentListPublicationsContainer ||
+        dataset?.componentPublicationContainer ||
+        '';
+    const mainContainerEl = document.querySelector(mainContainer);
+
+    mainContainerEl?.dispatchEvent(
+        new CustomEvent('publication:product_clicked', {
+            detail
+        })
+    );
+};
+
+export const animateShoppingListCounter = () => {
+    const shoppingListCounter = document.querySelector(
+        '.sgn__offer-shopping-list-counter'
+    );
+
+    shoppingListCounter?.classList.remove('sgn-animate-bounce');
+    shoppingListCounter?.classList.add('sgn-animate-bounce');
+};
+
+export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
+    const storedPublicationOffers =
+        clientLocalStorage.get('publication-saved-offers') || [];
+
+    let isNew = false;
+
+    let shopListOffer = {
+        id: offer.id,
+        name: offer.name,
+        pricing: {price: offer.price, currency: offer.currency_code},
+        quantity: 1,
+        is_ticked: false
+    };
+
+    const allPricesAreTheSame = offer.products?.every(
+        (product, index, array) => product.price === array[0].price
+    );
+
+    const useOfferPrice =
+        allPricesAreTheSame && offer.price !== offer.products[0].price;
+
+    if (offer.basket?.productId) {
+        const product = offer.products?.find(
+            ({id}) => id == offer.basket?.productId
+        );
+        if (product) {
+            shopListOffer = {
+                id: product.id,
+                name: product.title,
+                pricing: {
+                    price: useOfferPrice
+                        ? offer.price || offer.pricing.price
+                        : product?.price,
+                    currency: offer.currency_code
+                },
+                quantity: 1,
+                is_ticked: false
+            };
+        }
+    }
+
+    const isOfferInList = storedPublicationOffers.some(
+        (storedOffer) => storedOffer.id === shopListOffer.id
+    );
+
+    if (!isOfferInList && action !== 'minus') {
+        storedPublicationOffers.push(shopListOffer);
+        isNew = true;
+        dispatchProductClickEvent({product: shopListOffer});
+    } else {
+        const updatedOffers = storedPublicationOffers
+            .map((storedOffer) => {
+                if (storedOffer.id === shopListOffer.id) {
+                    if (action === 'plus') {
+                        storedOffer.quantity += 1;
+                    } else if (action === 'minus') {
+                        storedOffer.quantity -= 1;
+                    }
+
+                    dispatchProductClickEvent({product: storedOffer});
+
+                    if (storedOffer.quantity <= 0) {
+                        return null;
+                    }
+                }
+
+                return storedOffer;
+            })
+            .filter(Boolean);
+
+        storedPublicationOffers.splice(0, storedPublicationOffers.length);
+        storedPublicationOffers.push(...updatedOffers);
+    }
+
+    clientLocalStorage.setWithEvent(
+        'publication-saved-offers',
+        storedPublicationOffers,
+        'tjek_shopping_list_update'
+    );
+
+    if (isNew) {
+        animateShoppingListCounter();
+    }
+};
+
+export const closeSidebar = () => {
+    const sidebarControl = document?.querySelector<HTMLDivElement>(
+        '.sgn__sidebar-control'
+    );
+
+    if (sidebarControl) {
+        const matchedMedia = window.matchMedia('(max-width: 1200px)');
+
+        if (matchedMedia.matches) {
+            sidebarControl?.click();
+        }
+    }
 };

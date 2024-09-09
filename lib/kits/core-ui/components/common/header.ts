@@ -21,14 +21,14 @@ const defaultTemplate = `\
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg sgn-header-icon-svg-close"
-                        role="img" viewBox="0 0 320 512"
+                        role="img"
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 576 512"
                     >
                         <path
                             fill="currentColor"
-                            d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"
-                        >
-                        </path>
+                            d="M272.5 5.7c9-7.6 22.1-7.6 31.1 0l264 224c10.1 8.6 11.4 23.7 2.8 33.8s-23.7 11.3-33.8 2.8L512 245.5V432c0 44.2-35.8 80-80 80H144c-44.2 0-80-35.8-80-80V245.5L39.5 266.3c-10.1 8.6-25.3 7.3-33.8-2.8s-7.3-25.3 2.8-33.8l264-224zM288 55.5L112 204.8V432c0 17.7 14.3 32 32 32h48V312c0-22.1 17.9-40 40-40H344c22.1 0 40 17.9 40 40V464h48c17.7 0 32-14.3 32-32V204.8L288 55.5zM240 464h96V320H240V464z"
+                        />
                     </svg>
                     <div class="sgn__nav-label">
                         <span>{{translations.close}}</span>
@@ -60,16 +60,15 @@ const defaultTemplate = `\
                 <button class="sgn__nav-menu-btn">
                     <svg
                         aria-hidden="true"
-                        class="sgn-header-icon-svg"
+                        class="sgn-header-icon-svg sgn-header-icon-svg-close"
                         role="img"
-                        viewBox="0 0 512 512"
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
                     >
                         <path
                             fill="currentColor"
-                            d="M304 256c0 26.5-21.5 48-48 48s-48-21.5-48-48 21.5-48 48-48 48 21.5 48 48zm120-48c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm-336 0c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"
-                        >
-                        </path>
+                            d="M368 208A160 160 0 1 0 48 208a160 160 0 1 0 320 0zM337.1 371.1C301.7 399.2 256.8 416 208 416C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208c0 48.8-16.8 93.7-44.9 129.1L505 471c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L337.1 371.1z"
+                        />
                     </svg>
                     <div class="sgn__nav-label">
                         <span>{{translations.overview}}</span>
@@ -96,6 +95,26 @@ const defaultTemplate = `\
 
 const sidebarTemplate = `\
 {{#enableSidebar}}
+    {{^disableHeader}}
+    {{^disableClose}}
+    <div class="sgn__nav-content-mobile" data-show-labels="{{showHeaderLabels}}">
+        <button class="sgn__close-publication">
+            <svg
+                aria-hidden="true"
+                class="sgn-header-icon-svg sgn-header-icon-svg-close"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 576 512"
+            >
+                <path
+                    fill="currentColor"
+                    d="M272.5 5.7c9-7.6 22.1-7.6 31.1 0l264 224c10.1 8.6 11.4 23.7 2.8 33.8s-23.7 11.3-33.8 2.8L512 245.5V432c0 44.2-35.8 80-80 80H144c-44.2 0-80-35.8-80-80V245.5L39.5 266.3c-10.1 8.6-25.3 7.3-33.8-2.8s-7.3-25.3 2.8-33.8l264-224zM288 55.5L112 204.8V432c0 17.7 14.3 32 32 32h48V312c0-22.1 17.9-40 40-40H344c22.1 0 40 17.9 40 40V464h48c17.7 0 32-14.3 32-32V204.8L288 55.5zM240 464h96V320H240V464z"
+                />
+            </svg>
+        </button>
+    </div>
+    {{/disableClose}}
+    {{/disableHeader}}
     <div class="sgn__sidebar sgn__sidebar--open">
         {{^disableHeader}}
         <div class="sgn__nav">
@@ -105,14 +124,14 @@ const sidebarTemplate = `\
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg sgn-header-icon-svg-close"
-                        role="img" viewBox="0 0 320 512"
+                        role="img"
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 576 512"
                     >
                         <path
                             fill="currentColor"
-                            d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"
-                        >
-                        </path>
+                            d="M272.5 5.7c9-7.6 22.1-7.6 31.1 0l264 224c10.1 8.6 11.4 23.7 2.8 33.8s-23.7 11.3-33.8 2.8L512 245.5V432c0 44.2-35.8 80-80 80H144c-44.2 0-80-35.8-80-80V245.5L39.5 266.3c-10.1 8.6-25.3 7.3-33.8-2.8s-7.3-25.3 2.8-33.8l264-224zM288 55.5L112 204.8V432c0 17.7 14.3 32 32 32h48V312c0-22.1 17.9-40 40-40H344c22.1 0 40 17.9 40 40V464h48c17.7 0 32-14.3 32-32V204.8L288 55.5zM240 464h96V320H240V464z"
+                        />
                     </svg>
                     <div class="sgn__nav-label">
                         <span>{{translations.close}}</span>
@@ -144,16 +163,15 @@ const sidebarTemplate = `\
                 <button class="sgn__nav-menu-btn">
                     <svg
                         aria-hidden="true"
-                        class="sgn-header-icon-svg"
+                        class="sgn-header-icon-svg sgn-header-icon-svg-close"
                         role="img"
-                        viewBox="0 0 512 512"
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
                     >
                         <path
                             fill="currentColor"
-                            d="M304 256c0 26.5-21.5 48-48 48s-48-21.5-48-48 21.5-48 48-48 48 21.5 48 48zm120-48c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm-336 0c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"
-                        >
-                        </path>
+                            d="M368 208A160 160 0 1 0 48 208a160 160 0 1 0 320 0zM337.1 371.1C301.7 399.2 256.8 416 208 416C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208c0 48.8-16.8 93.7-44.9 129.1L505 471c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L337.1 371.1z"
+                        />
                     </svg>
                     <div class="sgn__nav-label">
                         <span>{{translations.overview}}</span>
@@ -233,13 +251,17 @@ const Header = ({
                 publicationType === 'incito'
                     ? el?.querySelector('.sgn__incito')
                     : el?.querySelector('.sgn__pp');
-            const matchedMedia = window.matchMedia('(max-width: 840px)');
+            const matchedMedia = window.matchMedia('(max-width: 1200px)');
 
             const toggleClasslist = ({matches}) => {
                 if (matches) {
                     sgnContainer?.classList.add('sgn__sidebar--close');
+                    sidebarControl?.classList.remove(
+                        'sgn__sidebar-control-open'
+                    );
                 } else {
                     sgnContainer?.classList.remove('sgn__sidebar--close');
+                    sgnContainer?.classList.remove('sgn__sidebar--open');
                 }
             };
             toggleClasslist(matchedMedia);
@@ -259,21 +281,23 @@ const Header = ({
     };
 
     const setNavColor = (color) => {
-        const sgnNav = container?.querySelector<HTMLDivElement>('.sgn__nav');
-
-        if (sgnNav) {
-            sgnNav.style.backgroundColor = color || 'transparent';
-            sgnNav.style.color =
-                getColorBrightness(color) === 'dark' ? '#ffffff' : '#000000';
-        }
-
         if (scriptEls.enableSidebar) {
-            const sidebar = container?.querySelector<HTMLDivElement>(
-                '.sgn__sidebar-content-container'
-            );
+            const sidebar =
+                container?.querySelector<HTMLDivElement>('.sgn__sidebar');
             if (sidebar) {
                 sidebar.style.backgroundColor = color || 'transparent';
                 sidebar.style.color =
+                    getColorBrightness(color) === 'dark'
+                        ? '#ffffff'
+                        : '#000000';
+            }
+        } else {
+            const sgnNav =
+                container?.querySelector<HTMLDivElement>('.sgn__nav');
+
+            if (sgnNav) {
+                sgnNav.style.backgroundColor = color || 'transparent';
+                sgnNav.style.color =
                     getColorBrightness(color) === 'dark'
                         ? '#ffffff'
                         : '#000000';
@@ -290,6 +314,14 @@ const Header = ({
                 ?.classList.add(
                     `sgn-animate-sidebar-${scriptEls.sidebarPosition}`
                 );
+
+            container
+                ?.querySelector('.sgn__close-publication')
+                ?.classList.add(`sgn-animate-home-close`);
+
+            container
+                ?.querySelector('.sgn__sidebar-control-bars')
+                ?.classList.add(`sgn-animate-sidebar-controls`);
         } else {
             container
                 ?.querySelector('.sgn__header')
@@ -302,17 +334,21 @@ const Header = ({
             publicationType === 'incito'
                 ? el?.querySelector('.sgn__incito')
                 : el?.querySelector('.sgn__pp');
-        const closeBtn = container?.querySelector('.sgn__close-publication');
+        const closeBtns = container?.querySelectorAll(
+            '.sgn__close-publication'
+        );
 
-        closeBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            destroyPublication(sgnContainer);
+        closeBtns?.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                destroyPublication(sgnContainer);
+            });
         });
 
         sgnContainer?.addEventListener(
             'keyup',
             (e: KeyboardEvent) => {
-                if (e.keyCode === EscKey && closeBtn) {
+                if (e.keyCode === EscKey && closeBtns?.length) {
                     destroyPublication(sgnContainer);
                 }
             },

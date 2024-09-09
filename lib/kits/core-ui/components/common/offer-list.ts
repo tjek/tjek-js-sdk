@@ -5,7 +5,8 @@ import {
     destroyModal,
     formatPrice,
     pushQueryParam,
-    translate
+    translate,
+    closeSidebar
 } from '../helpers/component';
 import {transformScriptData} from '../helpers/transformers';
 import './offer-list.styl';
@@ -192,6 +193,7 @@ const OfferList = ({
         const {pageId, pageNum} = e.currentTarget.dataset;
 
         destroyModal();
+        closeSidebar();
         sgnViewer?.navigateToPageId(pageId);
 
         if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
@@ -211,6 +213,7 @@ const OfferList = ({
         );
 
         destroyModal();
+        closeSidebar();
         offerCell?.scrollIntoView();
     };
 
