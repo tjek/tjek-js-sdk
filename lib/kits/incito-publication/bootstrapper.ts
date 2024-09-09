@@ -56,7 +56,7 @@ interface BootstrapperInit {
     id?: string;
     apiKey?: string;
     coreUrl?: string;
-    eventTracker: Tracker;
+    eventTracker?: Tracker;
 }
 export default class Bootstrapper {
     deviceCategory = getDeviceCategory();
