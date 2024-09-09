@@ -53,9 +53,9 @@ function getLocale() {
 
 interface BootstrapperInit {
     el: HTMLElement;
-    id: string;
-    apiKey: string;
-    coreUrl: string;
+    id?: string;
+    apiKey?: string;
+    coreUrl?: string;
     eventTracker: Tracker;
 }
 export default class Bootstrapper {
@@ -82,7 +82,7 @@ export default class Bootstrapper {
     getFeatureLabels() {
         const regex = new RegExp(/tjek_audience=[^#&;+]+/);
         const match = regex.exec(location.href) || [];
-        let feature;
+        let feature: string[];
 
         if (match.length > 0) {
             feature =
@@ -127,6 +127,12 @@ export default class Bootstrapper {
         ) => void
     ) {
         try {
+            if (!this.options.id) {
+                throw new Error(
+                    'You need to supply a valid id to use Bootstrapper#fetch'
+                );
+            }
+
             const {0: details, 1: incito} = await Promise.all([
                 this.fetchDetails(this.options.id),
                 this.fetchIncito(this.options.id)
@@ -190,7 +196,7 @@ export default class Bootstrapper {
             callback
         );
 
-    createViewer({details, incito}) {
+    createViewer({details, incito}: {details?: V2Catalog; incito: IIncito}) {
         const self = this;
 
         if (!incito) {

@@ -8,8 +8,8 @@ import './viewer.styl';
 
 interface ViewerInit {
     incito: IIncito;
-    eventTracker: Tracker;
-    details: V2Catalog;
+    eventTracker?: Tracker;
+    details?: V2Catalog;
 }
 class Viewer extends MicroEvent {
     static Incito = Incito;
