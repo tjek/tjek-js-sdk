@@ -697,7 +697,7 @@ export default class Incito extends MicroEvent<{
     containerEl: HTMLElement;
     incito: IIncito;
     el: HTMLDivElement;
-    ids: Record<string, unknown>;
+    ids: Record<string, Record<string, unknown>>;
     sections: unknown[];
     canLazyload: boolean;
     styleEl: HTMLStyleElement;

@@ -112,3 +112,5 @@ export const IncitoPublicationKit = {
     },
     Viewer: IncitoViewer
 };
+
+export type * from './kits/core/index';
