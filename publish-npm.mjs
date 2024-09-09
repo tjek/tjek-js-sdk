@@ -283,50 +283,45 @@ async function publish() {
             ]
         }
     ]);
+    const packageJsonPaths = globSync('./dist/*/package.json');
 
-    if (!tag.startsWith('experimental-')) {
-        const packageJsonPaths = globSync('./dist/*/package.json');
-        const packageDiffs = {};
-        for (const packageJsonPath of packageJsonPaths) {
-            const pkg = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
-            let npmPkg;
-            try {
-                npmPkg = await libnpm.manifest(`${pkg.name}@${tag}`);
-            } catch {}
-            const diffObj = await npmDiff(packageJsonPath, tag);
+    const packageDiffs = {};
+    for (const packageJsonPath of packageJsonPaths) {
+        const pkg = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
+        let npmPkg;
+        try {
+            npmPkg = await libnpm.manifest(`${pkg.name}@${tag}`);
+        } catch {}
+        const diffObj = await npmDiff(packageJsonPath, tag);
 
-            packageDiffs[packageJsonPath] = [
-                npmPkg || {...pkg, version: undefined},
-                diffObj,
-                Object.values(diffObj).reduce(
-                    (memo, diff) => {
-                        if (diff) {
-                            memo.changeCount++;
-                            const [
-                                {
-                                    hunks: [hunk]
-                                }
-                            ] = parsePatch(diff);
-                            if (hunk) {
-                                memo.addCount = memo.addCount + hunk.newLines;
-                                memo.removeCount =
-                                    memo.removeCount + hunk.oldLines;
+        packageDiffs[packageJsonPath] = [
+            npmPkg || {...pkg, version: undefined},
+            diffObj,
+            Object.values(diffObj).reduce(
+                (memo, diff) => {
+                    if (diff) {
+                        memo.changeCount++;
+                        const [
+                            {
+                                hunks: [hunk]
                             }
+                        ] = parsePatch(diff);
+                        if (hunk) {
+                            memo.addCount = memo.addCount + hunk.newLines;
+                            memo.removeCount = memo.removeCount + hunk.oldLines;
                         }
-                        return memo;
-                    },
-                    {addCount: 0, removeCount: 0, changeCount: 0}
-                )
-            ];
-        }
-        if (
-            !Object.values(packageDiffs).find(
-                ([, , {changeCount}]) => changeCount
+                    }
+                    return memo;
+                },
+                {addCount: 0, removeCount: 0, changeCount: 0}
             )
-        ) {
-            ora().info(`There are no changes to be published`);
-            process.exit();
-        }
+        ];
+    }
+    if (
+        !Object.values(packageDiffs).find(([, , {changeCount}]) => changeCount)
+    ) {
+        ora().info(`There are no changes to be published`);
+        process.exit();
     }
 
     const answers = await inquirer.prompt({
