@@ -41,6 +41,8 @@ export const transformScriptData = (
             dataset.componentPublicationSidebarPosition === 'left'
                 ? 'left'
                 : 'right',
+        showQuantityButtons:
+            dataset.componentPublicationShowQuantityButtons === 'true',
         enableLazyload: dataset.componentPublicationEnableLazyload === 'true',
         requestFilter: dataset.componentListPublicationsRequestFilter,
         clientFilter: dataset.componentListPublicationsClientFilter,

@@ -77,6 +77,7 @@ const defaultTemplate = `\
                                     <div class="sgn-product-description"><span>{{description}}</span></div>
                                 </div>
                                 <div class="sgn-product-price-container">
+                                    {{#showQuantityButtons}}
                                     <div id="sgn-offer-product-quantity-{{id}}" class="sgn-offer-product-quantity">
                                         <div class="sgn-offer-product-quantity-content">
                                             <button id="sgn-offer-product-quantity-minus-{{id}}" class="sgn-offer-product-quantity-minus">
@@ -88,6 +89,7 @@ const defaultTemplate = `\
                                             </button>
                                         </div>
                                     </div>
+                                    {{/showQuantityButtons}}
                                     <div class="sgn-product-price"><span>{{formattedPrice}}</span></div>
                                 </div>
                             </div>
@@ -149,13 +151,19 @@ const OfferOverview = ({
                 ? await fetchOffer(offer.id)
                 : await transformIncitoOffer(offer);
 
+        const disableShoppingList = document.querySelector(
+            '.sgn__offer-shopping'
+        )
+            ? false
+            : true;
+
         container.innerHTML = Mustache.render(template, {
             translations,
             label: sgnData?.details?.label,
-            disableShoppingList: document.querySelector('.sgn__offer-shopping')
-                ? false
-                : true,
+            disableShoppingList,
             offer: transformedOffer,
+            showQuantityButtons:
+                !disableShoppingList || scriptEls.showQuantityButtons,
             layoutWidth: sgnData?.incito?.root_view?.layout_width
         });
 
