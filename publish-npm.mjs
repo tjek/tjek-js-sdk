@@ -442,6 +442,7 @@ async function publish() {
     );
     const cwd = process.cwd();
     const publishLog = ['# Packages'];
+    let otpCode;
     for (const [packageJsonPath, version] of targetVersions) {
         process.chdir(packageJsonPath.replace('/package.json', ''));
 
@@ -453,12 +454,40 @@ async function publish() {
         ]);
         const pubInd = ora(`Publishing ${name}@${tag} ${nextVersion}`).start();
         if (!DRY_RUN) {
-            await run('npm', [
-                'publish',
-                '--access',
-                'public',
-                `--tag=${tag.startsWith('experimental') ? 'experimental' : tag}`
-            ]);
+            async function publish() {
+                try {
+                    await run('npm', [
+                        'publish',
+                        '--access',
+                        'public',
+                        `--tag=${
+                            tag.startsWith('experimental')
+                                ? 'experimental'
+                                : tag
+                        }`,
+                        otpCode ? `--otp=${otpCode}` : ''
+                    ]);
+                } catch (error) {
+                    if (error.includes('code EOTP')) {
+                        pubInd.stop();
+                        otpCode = (
+                            await inquirer.prompt([
+                                {
+                                    type: 'input',
+                                    name: 'otp',
+                                    message:
+                                        'Enter NPM OTP code from your authenticator'
+                                }
+                            ])
+                        ).otp;
+                        pubInd.start();
+                        await publish();
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+            await publish();
         }
         pubInd.succeed(
             `Published ${name}@${

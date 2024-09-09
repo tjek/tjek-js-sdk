@@ -93,6 +93,9 @@ export function debounce<A extends unknown[]>(
 export function chunk<I extends any>(arr: I[], size: number) {
     const results: I[][] = [];
 
+    if (!arr.length) return results;
+    if (size <= 0) return results;
+
     while (arr.length) results.push(arr.splice(0, size));
 
     return results;
