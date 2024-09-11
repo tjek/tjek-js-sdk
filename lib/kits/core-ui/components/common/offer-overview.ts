@@ -8,7 +8,8 @@ import {
     getPubState,
     getPubStateMessage,
     parseDateStr,
-    updateShoppingList
+    updateShoppingList,
+    displayOfferMessage
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
@@ -146,29 +147,33 @@ const OfferOverview = ({
             layoutWidth: sgnData?.incito?.root_view?.layout_width
         });
 
-        const transformedOffer =
-            type === 'paged'
-                ? await fetchOffer(offer.id)
-                : await transformIncitoOffer(offer);
+        try {
+            const transformedOffer =
+                type === 'paged'
+                    ? await fetchOffer(offer.id)
+                    : await transformIncitoOffer(offer);
+            const disableShoppingList = document.querySelector(
+                '.sgn__offer-shopping'
+            )
+                ? false
+                : true;
 
-        const disableShoppingList = document.querySelector(
-            '.sgn__offer-shopping'
-        )
-            ? false
-            : true;
+            container.innerHTML = Mustache.render(template, {
+                translations,
+                label: sgnData?.details?.label,
+                disableShoppingList,
+                offer: transformedOffer,
+                showQuantityButtons:
+                    !disableShoppingList || scriptEls.showQuantityButtons,
+                layoutWidth: sgnData?.incito?.root_view?.layout_width
+            });
 
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            label: sgnData?.details?.label,
-            disableShoppingList,
-            offer: transformedOffer,
-            showQuantityButtons:
-                !disableShoppingList || scriptEls.showQuantityButtons,
-            layoutWidth: sgnData?.incito?.root_view?.layout_width
-        });
-
-        dispatchOfferClickEvent(transformedOffer);
-        addEventListeners();
+            dispatchOfferClickEvent(transformedOffer);
+            addEventListeners();
+        } catch (error) {
+            destroyModal();
+            displayOfferMessage(offer.viewId, "Couldn't fetch offer data");
+        }
     };
     const transformProducts = (offer, products) => {
         const {localeCode, currency} = translations;

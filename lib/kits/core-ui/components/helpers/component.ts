@@ -410,3 +410,25 @@ export const closeSidebar = () => {
         }
     }
 };
+
+export const displayOfferMessage = (viewId, message) => {
+    if (!message) return;
+
+    const offerContainer = document.querySelector(`[data-id="${viewId}"]`);
+    const existingOverlayEl = offerContainer?.querySelector(
+        '.sgn-offer-link-overlay'
+    );
+
+    if (!existingOverlayEl) {
+        const overlay = document.createElement('div');
+
+        overlay.className = 'sgn-offer-link-overlay';
+        overlay.innerHTML = `<span>${message}</span>`;
+
+        offerContainer?.appendChild(overlay);
+
+        setTimeout(function () {
+            offerContainer?.removeChild(overlay);
+        }, 1500);
+    }
+};
