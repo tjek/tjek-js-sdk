@@ -15,8 +15,8 @@
     overflow-y auto
     box-shadow rgba(0, 0, 0, 0.7) 0px 20px 55px, rgba(0, 0, 0, 0.3) 0px 0px 1px
     text-align left
-    max-width 80vw
-    width 100%
+    max-width 1450px
+    width 96%
     max-height 80vh
     height 650px
     background #ffffff
@@ -214,13 +214,15 @@
         overflow hidden
 
         .sgn-product-title
-            white-space nowrap
             overflow hidden
             text-overflow ellipsis
             max-width 476px
             font-weight 600
             font-size 1.2rem
             padding-bottom 0.2rem
+            display -webkit-box
+            -webkit-box-orient vertical
+            -webkit-line-clamp 2
 
             > a
                 color inherit

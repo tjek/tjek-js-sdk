@@ -131,22 +131,6 @@ const OfferOverview = ({
     };
 
     const render = async () => {
-        container = document.createElement('div');
-        container.className = 'sgn-offer-overview-container';
-
-        createModal(container);
-
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            label: '',
-            disableShoppingList: document.querySelector('.sgn__offer-shopping')
-                ? false
-                : true,
-            offer: {},
-            loader: true,
-            layoutWidth: sgnData?.incito?.root_view?.layout_width
-        });
-
         try {
             const transformedOffer =
                 type === 'paged'
@@ -157,6 +141,11 @@ const OfferOverview = ({
             )
                 ? false
                 : true;
+
+            container = document.createElement('div');
+            container.className = 'sgn-offer-overview-container';
+
+            createModal(container);
 
             container.innerHTML = Mustache.render(template, {
                 translations,
@@ -171,10 +160,13 @@ const OfferOverview = ({
             dispatchOfferClickEvent(transformedOffer);
             addEventListeners();
         } catch (error) {
-            destroyModal();
-            displayOfferMessage(offer.viewId, "Couldn't fetch offer data");
+            displayOfferMessage(
+                offer.viewId,
+                translate('publication_viewer_no_product_message')
+            );
         }
     };
+
     const transformProducts = (offer, products) => {
         const {localeCode, currency} = translations;
         const storedPublicationOffers =

@@ -22,5 +22,6 @@ export default {
     publication_viewer_visit_webshop_link: 'Besøg webshoplink',
     publication_viewer_upcoming: 'Kommende',
     publication_viewer_offer_price_from: 'Fra',
-    publication_viewer_offer_valid_from: 'Gælder kun fra d. '
+    publication_viewer_offer_valid_from: 'Gælder kun fra d. ',
+    publication_viewer_no_product_message: 'Ingen produkt detaljer'
 };

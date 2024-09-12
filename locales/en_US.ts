@@ -22,5 +22,6 @@ export default {
     publication_viewer_visit_webshop_link: 'Visit Webshop Link',
     publication_viewer_upcoming: 'Upcoming',
     publication_viewer_offer_price_from: 'From',
-    publication_viewer_offer_valid_from: 'Valid from '
+    publication_viewer_offer_valid_from: 'Valid from ',
+    publication_viewer_no_product_message: 'No product details'
 };
