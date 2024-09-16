@@ -4,6 +4,7 @@ import {readFileSync} from 'fs';
 import {writeFile} from 'fs/promises';
 import nib from 'nib';
 import path from 'path';
+import stylus from 'stylus';
 import ts from 'typescript';
 import * as url from 'url';
 import packageJson from './package.json' assert {type: 'json'};
@@ -73,8 +74,11 @@ const commonOptions = {
     loader: {'.styl': 'empty'},
     metafile: true
 };
-const stylus = stylusLoader({
-    stylusOptions: {import: [nib.path + '/nib/index.styl']}
+const stylusPlugin = stylusLoader({
+    stylusOptions: {
+        import: [nib.path + '/nib/index.styl'],
+        define: [['flex-version', [new stylus.nodes.Ident('flex')]]]
+    }
 });
 
 switch (process.argv[2]) {
@@ -86,7 +90,7 @@ switch (process.argv[2]) {
             outfile: path.join(distDir, output + '.js'),
             platform: 'browser',
             globalName: name && `self[${JSON.stringify(name)}]`,
-            plugins: [stylus],
+            plugins: [stylusPlugin],
             metafile: true,
             banner: {
                 js: "new EventSource('/esbuild').addEventListener('change', () => location.reload());"
@@ -121,7 +125,7 @@ switch (process.argv[2]) {
                             outfile: path.join(distDir, output + '.js'),
                             platform: 'browser',
                             globalName: `self[${JSON.stringify(name)}]`,
-                            plugins: [stylus]
+                            plugins: [stylusPlugin]
                         }),
                     name &&
                         build({
@@ -131,7 +135,7 @@ switch (process.argv[2]) {
                             outfile: path.join(distDir, output + '.min.js'),
                             platform: 'browser',
                             globalName: `self[${JSON.stringify(name)}]`,
-                            plugins: [stylus]
+                            plugins: [stylusPlugin]
                         }),
                     build({
                         ...commonOptions,
