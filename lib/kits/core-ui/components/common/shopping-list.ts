@@ -333,12 +333,16 @@ const ShoppingList = ({template}) => {
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
+        const priceCurrency =
+            storedPublicationOffers?.[0]?.pricing?.currency || currency;
 
         const totalPrice = storedPublicationOffers?.reduce((acc, product) => {
             return acc + product.pricing.price * product.quantity;
         }, 0);
 
-        return totalPrice ? formatPrice(totalPrice, localeCode, currency) : '';
+        return totalPrice
+            ? formatPrice(totalPrice, localeCode, priceCurrency)
+            : '';
     };
 
     const updateQuantityHandler = (
@@ -370,6 +374,8 @@ const ShoppingList = ({template}) => {
             (product) => product.id === productId
         );
 
+        const priceCurrency = product?.pricing?.currency || currency;
+
         if (quantityTxt) {
             quantityTxt.value =
                 action === 'plus' ? `${++quantity}` : `${--quantity}`;
@@ -381,7 +387,11 @@ const ShoppingList = ({template}) => {
             if (priceEl && product?.pricing?.price && quantity) {
                 const priceNum = product?.pricing?.price * (quantity || 1);
 
-                priceEl.innerHTML = formatPrice(priceNum, localeCode, currency);
+                priceEl.innerHTML = formatPrice(
+                    priceNum,
+                    localeCode,
+                    priceCurrency
+                );
             }
 
             updateShoppingList(

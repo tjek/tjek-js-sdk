@@ -136,6 +136,7 @@ const OfferOverview = ({
                 type === 'paged'
                     ? await fetchOffer(offer.id)
                     : await transformIncitoOffer(offer);
+
             const disableShoppingList = document.querySelector(
                 '.sgn__offer-shopping'
             )
@@ -184,6 +185,9 @@ const OfferOverview = ({
                 (offer) => offer.id === product.id
             );
 
+            const priceCurrency =
+                offer.currency_code || offer.pricing?.currency || currency;
+
             return {
                 ...product,
                 link: product.link || offer.webshop_link,
@@ -192,8 +196,9 @@ const OfferOverview = ({
                         ? offer.price || offer.pricing.price
                         : product?.price,
                     localeCode,
-                    currency
+                    priceCurrency
                 ),
+                currency: priceCurrency,
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });
