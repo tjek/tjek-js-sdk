@@ -67,6 +67,7 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
         .format(price)
         .replace(currency, '')
         .replace('kr.', '')
+        .replace('kr', '')
         .trim();
 };
 
@@ -436,4 +437,15 @@ export const displayOfferMessage = (viewId, message) => {
             offerContainer?.removeChild(overlay);
         }, 1500);
     }
+};
+
+export const getLocaleCode = (countryId: string): string => {
+    const countryLocaleMap: {[key: string]: string} = {
+        US: 'en_US',
+        DK: 'da_DK',
+        SE: 'sv_SE',
+        NO: 'nb_NO'
+    };
+
+    return countryLocaleMap[countryId] || '';
 };

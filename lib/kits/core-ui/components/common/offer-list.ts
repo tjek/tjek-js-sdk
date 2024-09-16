@@ -6,7 +6,8 @@ import {
     formatPrice,
     pushQueryParam,
     translate,
-    closeSidebar
+    closeSidebar,
+    getLocaleCode
 } from '../helpers/component';
 import {transformScriptData} from '../helpers/transformers';
 import './offer-list.styl';
@@ -46,6 +47,7 @@ const OfferList = ({
     scriptEls,
     publicationType,
     configs,
+    sgnData,
     sgnViewer,
     template
 }: {
@@ -57,6 +59,7 @@ const OfferList = ({
         id?: string;
         businessId?: string;
     };
+    sgnData: any;
     sgnViewer?: Viewer;
     template?: Element | null;
 }) => {
@@ -72,7 +75,9 @@ const OfferList = ({
     let searchKey = '';
 
     const translations = {
-        localeCode: translate('locale_code'),
+        localeCode: scriptEls.localeCode
+            ? translate('locale_code')
+            : getLocaleCode(sgnData?.details?.dealer?.country?.id),
         currency: translate('publication_viewer_currency'),
         searchText: translate('publication_viewer_search_text')
     };

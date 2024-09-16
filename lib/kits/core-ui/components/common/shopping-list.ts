@@ -4,7 +4,8 @@ import {
     createModal,
     formatPrice,
     translate,
-    updateShoppingList
+    updateShoppingList,
+    getLocaleCode
 } from '../helpers/component';
 import './shopping-list.styl';
 
@@ -113,13 +114,15 @@ const defaultTemplate = `\
     </div>\
 `;
 
-const ShoppingList = ({template}) => {
+const ShoppingList = ({template, scriptEls, sgnData}) => {
     template = template?.innerHTML || defaultTemplate;
     const shoppingListBtn = document.querySelector('.sgn__offer-shopping');
     let container: HTMLDivElement | null = null;
 
     const translations = {
-        localeCode: translate('locale_code'),
+        localeCode: scriptEls.localeCode
+            ? translate('locale_code')
+            : getLocaleCode(sgnData?.details?.dealer?.country?.id),
         shoppingListLabel: translate('publication_viewer_shopping_list_label'),
         currency: translate('publication_viewer_currency'),
         deleteCrossedOutButton: translate(

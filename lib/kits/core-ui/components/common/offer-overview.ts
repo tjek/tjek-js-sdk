@@ -9,7 +9,8 @@ import {
     getPubStateMessage,
     parseDateStr,
     updateShoppingList,
-    displayOfferMessage
+    displayOfferMessage,
+    getLocaleCode
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
@@ -122,7 +123,9 @@ const OfferOverview = ({
     let container: HTMLDivElement | null = null;
 
     const translations = {
-        localeCode: translate('locale_code'),
+        localeCode: scriptEls.localeCode
+            ? translate('locale_code')
+            : getLocaleCode(sgnData?.details?.dealer?.country?.id),
         currency: translate('publication_viewer_currency'),
         addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
         visitWebshopLink: translate('publication_viewer_visit_webshop_link'),
@@ -185,19 +188,18 @@ const OfferOverview = ({
                 (offer) => offer.id === product.id
             );
 
+            const price = useOfferPrice
+                ? offer.price || offer.pricing.price
+                : product?.price;
+
             const priceCurrency =
                 offer.currency_code || offer.pricing?.currency || currency;
 
             return {
                 ...product,
                 link: product.link || offer.webshop_link,
-                formattedPrice: formatPrice(
-                    useOfferPrice
-                        ? offer.price || offer.pricing.price
-                        : product?.price,
-                    localeCode,
-                    priceCurrency
-                ),
+                price,
+                formattedPrice: formatPrice(price, localeCode, priceCurrency),
                 currency: priceCurrency,
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
@@ -339,7 +341,6 @@ const OfferOverview = ({
 
         return {
             ...offer,
-            // products: products,
             price: formatPrice(
                 offer?.pricing?.price,
                 localeCode,

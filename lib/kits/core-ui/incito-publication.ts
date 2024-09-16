@@ -142,7 +142,11 @@ const IncitoPublication = (
     };
 
     const renderShoppingList = () =>
-        ShoppingList({template: customTemplates.shoppingList}).render();
+        ShoppingList({
+            template: customTemplates.shoppingList,
+            scriptEls,
+            sgnData
+        }).render();
 
     const renderSectionList = async () =>
         document.querySelector('.sgn__sidebar-content-container')?.appendChild(
