@@ -238,16 +238,18 @@ const printDiffPackage = (diffObj) =>
 
 async function publish() {
     console.clear();
-    if (DRY_RUN) console.info('Dry run! 🌵');
-
-    const gitInd = ora(`Git: Checking working tree`).start();
-    if (await run('git', ['status', '--porcelain'])) {
-        gitInd.fail(
-            'Git: Working tree dirty. Please resolve any changes before publishing.'
-        );
-        return;
+    if (DRY_RUN) {
+        console.info('Dry run! 🌵');
+    } else {
+        const gitInd = ora(`Git: Checking working tree`).start();
+        if (await run('git', ['status', '--porcelain'])) {
+            gitInd.fail(
+                'Git: Working tree dirty. Please resolve any changes before publishing.'
+            );
+            return;
+        }
+        gitInd.succeed(`Git: Working tree clean`);
     }
-    gitInd.succeed(`Git: Working tree clean`);
 
     const commithash = execSync('git rev-parse --short HEAD', {
         encoding: 'utf8'
@@ -301,6 +303,9 @@ async function publish() {
                 (memo, diff) => {
                     if (diff) {
                         memo.changeCount++;
+                        if (diff.includes('Binary files differ')) {
+                            return memo;
+                        }
                         const [
                             {
                                 hunks: [hunk]
