@@ -116,7 +116,7 @@ interface OfferOpenedEvent {
     // View token unique for this event data
     vt: string;
 }
-interface ClientSessionOpenedEvent {}
+type ClientSessionOpenedEvent = object;
 interface SearchedEvent {
     // Search Query
     'sea.q': string;
@@ -241,7 +241,7 @@ export type WolfEvent = WolfEventTypeMap[keyof WolfEventTypeMap];
 const locationSources = ['gps', 'geoip', 'manual', 'fallback'] as const;
 interface TrackerLocation {
     geohash: string | null;
-    source: typeof locationSources[number] | null;
+    source: (typeof locationSources)[number] | null;
     time: number | null;
     country: string | null;
 }

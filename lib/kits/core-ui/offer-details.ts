@@ -25,10 +25,8 @@ export default class OfferDetails {
         this.position();
     }
 
-    appendTo(el) {
+    appendTo(el: Element) {
         el.appendChild(this.el);
-
-        this.el.offsetWidth;
 
         this.show();
 

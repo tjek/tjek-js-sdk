@@ -48,7 +48,7 @@ export function getQueryParam(field, url?: string) {
 export function throttle<A extends unknown[]>(
     fn: (...args: A) => unknown,
     threshold = 250,
-    scope?: Object
+    scope?: object
 ): (...args: A) => void {
     let last: number | undefined;
     let deferTimer: NodeJS.Timeout;
@@ -76,7 +76,7 @@ export function throttle<A extends unknown[]>(
 export function debounce<A extends unknown[]>(
     fn: (...args: A) => unknown,
     threshold = 250,
-    scope?: Object
+    scope?: object
 ): (...args: A) => void {
     let deferTimer: NodeJS.Timeout;
 
