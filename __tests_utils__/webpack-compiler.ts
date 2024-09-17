@@ -63,11 +63,12 @@ export default async function compile(
     });
 
     //direct webpack to use memoryfs
+    // @ts-expect-error - it's not that serious
     compiler.inputFileSystem = compiler.outputFileSystem = memFs;
 
     const errors = (
         await new Promise<Stats>((y, n) =>
-            compiler.run((e, r) => (e || !r ? n(e) : y(r)))
+            compiler.run((e, r) => (e ? n(e) : y(r!)))
         )
     ).compilation.errors;
 

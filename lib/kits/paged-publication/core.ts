@@ -18,7 +18,17 @@ function getColorBrightness(color: string) {
     return sum <= 381 ? 'dark' : 'light';
 }
 
-interface PagedPublicationCoreInit {}
+interface PagedPublicationCoreInit {
+    id: string;
+    pageId?: string;
+    pages?: unknown[];
+    pageSpreadWidth?: number;
+    pageSpreadMaxZoomScale?: number;
+    idleDelay?: number;
+    resizeDelay?: number;
+    color?: string;
+}
+
 class PagedPublicationCore extends MicroEvent {
     defaults = {
         pages: [],
@@ -37,9 +47,9 @@ class PagedPublicationCore extends MicroEvent {
     idleTimeout: NodeJS.Timeout | undefined;
     pageSpreads: PageSpreads;
     resizeListener: () => void;
-    constructor(el: HTMLElement, options: PagedPublicationCoreInit = {}) {
+    constructor(el: HTMLElement, options: PagedPublicationCoreInit) {
         super();
-        this.options = this.makeOptions(options, this.defaults);
+        this.options = this.makeOptions(options ?? {}, this.defaults);
         this.pageId = this.getOption('pageId');
         this.rootEl = el;
         this.pagesEl = el.querySelector('.sgn-pp__pages');
@@ -113,12 +123,12 @@ class PagedPublicationCore extends MicroEvent {
     makeOptions(
         options: Partial<PagedPublicationCoreInit>,
         defaults: typeof this.defaults
-    ): Partial<PagedPublicationCoreInit> & typeof this.defaults {
+    ) {
         const opts = {};
 
         for (const key in options) opts[key] = options[key] ?? defaults[key];
 
-        return opts as Partial<PagedPublicationCoreInit> & typeof this.defaults;
+        return opts as PagedPublicationCoreInit;
     }
 
     getOption(key: string) {

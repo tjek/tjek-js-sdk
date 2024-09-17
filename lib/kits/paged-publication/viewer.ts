@@ -54,7 +54,7 @@ export interface ViewerInit {
     color?: string;
     eventTracker: Tracker;
     keyboard: 'disabled' | 'enabled' | 'global';
-    hotspotRatio: unknown;
+    hotspotRatio?: number;
     pickHotspot?: typeof defaultPickHotspot;
 }
 class Viewer extends MicroEvent {

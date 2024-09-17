@@ -10,7 +10,7 @@ class Config extends MicroEvent<{change: [Record<string, any>]}> {
 
         for (let key in config) {
             if (key === 'appKey') key = 'apiKey';
-            if (this.keys.includes(key as typeof this.keys[number])) {
+            if (this.keys.includes(key as (typeof this.keys)[number])) {
                 this._attrs[key] = config[key];
                 changedAttributes[key] = config[key];
             }
@@ -24,9 +24,9 @@ class Config extends MicroEvent<{change: [Record<string, any>]}> {
         return this._attrs[option];
     }
 
-    shadow<T extends Record<string, any> = {}>(
+    shadow<T extends Record<string, any> = Record<string, any>>(
         optionsObject?: T
-    ): T & Record<typeof this.keys[number], string> {
+    ): T & Record<(typeof this.keys)[number], string> {
         const optionsWithConfig = {...optionsObject};
         this.keys.forEach((key) => {
             const get = () => optionsObject?.[key] || this.get(key);
@@ -34,7 +34,7 @@ class Config extends MicroEvent<{change: [Record<string, any>]}> {
         });
 
         return optionsWithConfig as T &
-            Record<typeof this.keys[number], string>;
+            Record<(typeof this.keys)[number], string>;
     }
 }
 

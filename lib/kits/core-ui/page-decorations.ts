@@ -25,7 +25,7 @@ const PageDecorations = () => {
         aspectRatio
     }: {
         pageDecorations: V2PageDecoration[];
-        aspectRatio: {};
+        aspectRatio: number;
     }) => {
         if (pageDecorationsContainer?.innerHTML) {
             pageDecorationsContainer.innerHTML = '';
@@ -108,7 +108,7 @@ const PageDecorations = () => {
         }
     };
 
-    const getPubImageDimension = (aspectRatio, pageCount) => {
+    const getPubImageDimension = (aspectRatio: number, pageCount: number) => {
         const versoPageSpreadEl =
             document.querySelector<HTMLElement>('.verso__scroller');
         const pageElWidth = (versoPageSpreadEl?.offsetWidth || 0) / pageCount;

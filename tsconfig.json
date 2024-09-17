@@ -6,7 +6,10 @@
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "moduleResolution": "node",
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        // We never emit with TSC. Quells "would overwrite input file" errors.
+        "outDir": "/dev/null"
     },
     "include": [
         "__tests__/**/*.ts",

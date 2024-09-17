@@ -38,7 +38,10 @@ const PagedPublication = (
     }
 ) => {
     let options;
-    let sgnData: {details: V2Catalog; pages: V2Page[]} | undefined | {} = {};
+    let sgnData:
+        | {details: V2Catalog; pages: V2Page[]}
+        | undefined
+        | Record<string, never> = {};
     let sgnViewer: Viewer;
     let sgnPageDecorations: V2PageDecoration[];
     const scriptEls = transformScriptData(scriptEl, mainContainer);
@@ -229,25 +232,33 @@ const PagedPublication = (
                 if (mutation.type === 'attributes') {
                     const element = mutation.target as HTMLButtonElement;
                     if (element.dataset.direction === 'prev') {
-                        element.classList.contains('sgn-pp--hidden')
-                            ? firstControl.classList.add('sgn-pp--hidden')
-                            : firstControl.classList.remove('sgn-pp--hidden');
+                        if (element.classList.contains('sgn-pp--hidden')) {
+                            firstControl.classList.add('sgn-pp--hidden');
+                        } else {
+                            firstControl.classList.remove('sgn-pp--hidden');
+                        }
                     }
                     if (element.dataset.direction === 'next') {
-                        element.classList.contains('sgn-pp--hidden')
-                            ? lastControl.classList.add('sgn-pp--hidden')
-                            : lastControl.classList.remove('sgn-pp--hidden');
+                        if (element.classList.contains('sgn-pp--hidden')) {
+                            lastControl.classList.add('sgn-pp--hidden');
+                        } else {
+                            lastControl.classList.remove('sgn-pp--hidden');
+                        }
                     }
                 }
             });
         });
 
-        prevBtn?.classList.contains('sgn-pp--hidden')
-            ? firstControl.classList.add('sgn-pp--hidden')
-            : firstControl.classList.remove('sgn-pp--hidden');
-        nextBtn?.classList.contains('sgn-pp--hidden')
-            ? lastControl.classList.add('sgn-pp--hidden')
-            : lastControl.classList.remove('sgn-pp--hidden');
+        if (prevBtn?.classList.contains('sgn-pp--hidden')) {
+            firstControl.classList.add('sgn-pp--hidden');
+        } else {
+            firstControl.classList.remove('sgn-pp--hidden');
+        }
+        if (nextBtn?.classList.contains('sgn-pp--hidden')) {
+            lastControl.classList.add('sgn-pp--hidden');
+        } else {
+            lastControl.classList.remove('sgn-pp--hidden');
+        }
 
         firstControl?.addEventListener('click', () => {
             sgnViewer?.first();
@@ -275,12 +286,14 @@ const PagedPublication = (
                     ?.split(' ')?.[0]
                     ?.split('-')?.[0];
 
-                scriptEls.displayUrlParams?.toLowerCase() === 'query'
-                    ? pushQueryParam({
-                          [scriptEls.publicationIdParam]: options.id,
-                          [scriptEls.pageIdParam]: pageNum
-                      })
-                    : (location.hash = `${scriptEls.publicationHash}/${options.id}/${pageNum}`);
+                if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                    pushQueryParam({
+                        [scriptEls.publicationIdParam]: options.id,
+                        [scriptEls.pageIdParam]: pageNum
+                    });
+                } else {
+                    location.hash = `${scriptEls.publicationHash}/${options.id}/${pageNum}`;
+                }
             });
         }
     };
