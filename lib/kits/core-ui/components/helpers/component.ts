@@ -67,6 +67,7 @@ export const formatPrice = (price, localeCode = 'en_US', currency = 'USD') => {
         .format(price)
         .replace(currency, '')
         .replace('kr.', '')
+        .replace('kr', '')
         .trim();
 };
 
@@ -318,10 +319,15 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
 
     let isNew = false;
 
+    const currency = offer.currency_code || offer.pricing.currency;
+
     let shopListOffer = {
         id: offer.id,
         name: offer.name,
-        pricing: {price: offer.price, currency: offer.currency_code},
+        pricing: {
+            price: offer.price,
+            currency
+        },
         quantity: 1,
         is_ticked: false
     };
@@ -345,7 +351,7 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
                     price: useOfferPrice
                         ? offer.price || offer.pricing.price
                         : product?.price,
-                    currency: offer.currency_code
+                    currency
                 },
                 quantity: 1,
                 is_ticked: false
@@ -409,4 +415,41 @@ export const closeSidebar = () => {
             sidebarControl?.click();
         }
     }
+};
+
+export const displayOfferMessage = (viewId, message) => {
+    if (!message) return;
+
+    const offerContainer = document.querySelector(`[data-id="${viewId}"]`);
+    const existingOverlayEl = offerContainer?.querySelector(
+        '.sgn-offer-link-overlay'
+    );
+
+    if (!existingOverlayEl) {
+        const overlay = document.createElement('div');
+
+        overlay.className = 'sgn-offer-link-overlay';
+        overlay.innerHTML = `<span>${message}</span>`;
+
+        offerContainer?.appendChild(overlay);
+
+        setTimeout(function () {
+            offerContainer?.removeChild(overlay);
+        }, 1500);
+    }
+};
+
+export const getLocaleCode = (countryId: string): string => {
+    if (!countryId) {
+        return '';
+    }
+
+    const countryLocaleMap: {[key: string]: string} = {
+        US: 'en_US',
+        DK: 'da_DK',
+        SE: 'sv_SE',
+        NO: 'nb_NO'
+    };
+
+    return countryLocaleMap[countryId] || '';
 };

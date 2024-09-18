@@ -22,5 +22,6 @@ export default {
     publication_viewer_visit_webshop_link: 'Besök webbshoplänk',
     publication_viewer_upcoming: 'Kommende',
     publication_viewer_offer_price_from: 'Från',
-    publication_viewer_offer_valid_from: 'Gäller endast fr.o.m '
+    publication_viewer_offer_valid_from: 'Gäller endast fr.o.m ',
+    publication_viewer_no_product_message: 'Inga produktdetaljer'
 };

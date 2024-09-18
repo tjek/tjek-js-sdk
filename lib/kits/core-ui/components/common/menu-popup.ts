@@ -227,6 +227,7 @@ const MenuPopup = ({
                 scriptEls,
                 publicationType,
                 configs,
+                sgnData,
                 sgnViewer,
                 template: templates.offerList
             }).render()

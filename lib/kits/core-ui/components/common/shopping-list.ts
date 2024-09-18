@@ -1,10 +1,14 @@
 import Mustache from 'mustache';
 import * as clientLocalStorage from '../../../../storage/client-local';
+import type {IIncito} from '../../../../incito-browser/types';
+import type {V2Catalog, V2Page} from '../../../core';
+import {transformScriptData} from '../helpers/transformers';
 import {
     createModal,
     formatPrice,
     translate,
-    updateShoppingList
+    updateShoppingList,
+    getLocaleCode
 } from '../helpers/component';
 import './shopping-list.styl';
 
@@ -113,13 +117,24 @@ const defaultTemplate = `\
     </div>\
 `;
 
-const ShoppingList = ({template}) => {
-    template = template?.innerHTML || defaultTemplate;
+const ShoppingList = ({
+    template,
+    scriptEls,
+    sgnData
+}: {
+    template: Element | null;
+    scriptEls: ReturnType<typeof transformScriptData>;
+    sgnData?: {details?: V2Catalog; incito?: IIncito; pages?: V2Page[]};
+}) => {
+    const templateStr = template?.innerHTML || defaultTemplate;
+
     const shoppingListBtn = document.querySelector('.sgn__offer-shopping');
     let container: HTMLDivElement | null = null;
 
     const translations = {
-        localeCode: translate('locale_code'),
+        localeCode: scriptEls.localeCode
+            ? translate('locale_code')
+            : getLocaleCode(sgnData?.details?.dealer?.country?.id || ''),
         shoppingListLabel: translate('publication_viewer_shopping_list_label'),
         currency: translate('publication_viewer_currency'),
         deleteCrossedOutButton: translate(
@@ -144,7 +159,7 @@ const ShoppingList = ({template}) => {
         container = document.createElement('div');
         container.className = 'sgn-shopping-list-container';
 
-        container.innerHTML = Mustache.render(template, {
+        container.innerHTML = Mustache.render(templateStr, {
             translations,
             offers: transformSavedOffers(storedPublicationOffers)?.filter(
                 (offer) => !offer.is_ticked
@@ -206,7 +221,7 @@ const ShoppingList = ({template}) => {
             'tjek_shopping_list_update'
         );
         if (container)
-            container.innerHTML = Mustache.render(template, {
+            container.innerHTML = Mustache.render(templateStr, {
                 translations,
                 offers: transformSavedOffers(storedPublicationOffers)?.filter(
                     (offer) => !offer.is_ticked
@@ -236,7 +251,7 @@ const ShoppingList = ({template}) => {
                     'tjek_shopping_list_update'
                 );
                 if (container)
-                    container.innerHTML = Mustache.render(template, {
+                    container.innerHTML = Mustache.render(templateStr, {
                         translations,
                         offers: []
                     });
@@ -264,7 +279,7 @@ const ShoppingList = ({template}) => {
                 'tjek_shopping_list_update'
             );
             if (container)
-                container.innerHTML = Mustache.render(template, {
+                container.innerHTML = Mustache.render(templateStr, {
                     translations,
                     offers: transformSavedOffers(validOffers),
                     totalPrice: getTotalPrice()
@@ -333,12 +348,16 @@ const ShoppingList = ({template}) => {
         const storedPublicationOffers = clientLocalStorage.get(
             'publication-saved-offers'
         );
+        const priceCurrency =
+            storedPublicationOffers?.[0]?.pricing?.currency || currency;
 
         const totalPrice = storedPublicationOffers?.reduce((acc, product) => {
             return acc + product.pricing.price * product.quantity;
         }, 0);
 
-        return totalPrice ? formatPrice(totalPrice, localeCode, currency) : '';
+        return totalPrice
+            ? formatPrice(totalPrice, localeCode, priceCurrency)
+            : '';
     };
 
     const updateQuantityHandler = (
@@ -370,6 +389,8 @@ const ShoppingList = ({template}) => {
             (product) => product.id === productId
         );
 
+        const priceCurrency = product?.pricing?.currency || currency;
+
         if (quantityTxt) {
             quantityTxt.value =
                 action === 'plus' ? `${++quantity}` : `${--quantity}`;
@@ -381,7 +402,11 @@ const ShoppingList = ({template}) => {
             if (priceEl && product?.pricing?.price && quantity) {
                 const priceNum = product?.pricing?.price * (quantity || 1);
 
-                priceEl.innerHTML = formatPrice(priceNum, localeCode, currency);
+                priceEl.innerHTML = formatPrice(
+                    priceNum,
+                    localeCode,
+                    priceCurrency
+                );
             }
 
             updateShoppingList(

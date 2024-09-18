@@ -1,12 +1,15 @@
 import Mustache from 'mustache';
 import {request, V2Offer} from '../../../core';
+import type {IIncito} from '../../../../incito-browser/types';
+import type {V2Catalog, V2Page} from '../../../core';
 import {Viewer} from '../../../paged-publication';
 import {
     destroyModal,
     formatPrice,
     pushQueryParam,
     translate,
-    closeSidebar
+    closeSidebar,
+    getLocaleCode
 } from '../helpers/component';
 import {transformScriptData} from '../helpers/transformers';
 import './offer-list.styl';
@@ -46,6 +49,7 @@ const OfferList = ({
     scriptEls,
     publicationType,
     configs,
+    sgnData,
     sgnViewer,
     template
 }: {
@@ -57,6 +61,7 @@ const OfferList = ({
         id?: string;
         businessId?: string;
     };
+    sgnData?: {details?: V2Catalog; incito?: IIncito; pages?: V2Page[]};
     sgnViewer?: Viewer;
     template?: Element | null;
 }) => {
@@ -72,7 +77,9 @@ const OfferList = ({
     let searchKey = '';
 
     const translations = {
-        localeCode: translate('locale_code'),
+        localeCode: scriptEls.localeCode
+            ? translate('locale_code')
+            : getLocaleCode(sgnData?.details?.dealer?.country?.id || ''),
         currency: translate('publication_viewer_currency'),
         searchText: translate('publication_viewer_search_text')
     };

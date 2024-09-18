@@ -8,7 +8,9 @@ import {
     getPubState,
     getPubStateMessage,
     parseDateStr,
-    updateShoppingList
+    updateShoppingList,
+    displayOfferMessage,
+    getLocaleCode
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
@@ -121,7 +123,9 @@ const OfferOverview = ({
     let container: HTMLDivElement | null = null;
 
     const translations = {
-        localeCode: translate('locale_code'),
+        localeCode: scriptEls.localeCode
+            ? translate('locale_code')
+            : getLocaleCode(sgnData?.details?.dealer?.country?.id),
         currency: translate('publication_viewer_currency'),
         addToShoppingList: translate('publication_viewer_add_to_shopping_list'),
         visitWebshopLink: translate('publication_viewer_visit_webshop_link'),
@@ -130,46 +134,43 @@ const OfferOverview = ({
     };
 
     const render = async () => {
-        container = document.createElement('div');
-        container.className = 'sgn-offer-overview-container';
+        try {
+            const transformedOffer =
+                type === 'paged'
+                    ? await fetchOffer(offer.id)
+                    : await transformIncitoOffer(offer);
 
-        createModal(container);
-
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            label: '',
-            disableShoppingList: document.querySelector('.sgn__offer-shopping')
+            const disableShoppingList = document.querySelector(
+                '.sgn__offer-shopping'
+            )
                 ? false
-                : true,
-            offer: {},
-            loader: true,
-            layoutWidth: sgnData?.incito?.root_view?.layout_width
-        });
+                : true;
 
-        const transformedOffer =
-            type === 'paged'
-                ? await fetchOffer(offer.id)
-                : await transformIncitoOffer(offer);
+            container = document.createElement('div');
+            container.className = 'sgn-offer-overview-container';
 
-        const disableShoppingList = document.querySelector(
-            '.sgn__offer-shopping'
-        )
-            ? false
-            : true;
+            createModal(container);
 
-        container.innerHTML = Mustache.render(template, {
-            translations,
-            label: sgnData?.details?.label,
-            disableShoppingList,
-            offer: transformedOffer,
-            showQuantityButtons:
-                !disableShoppingList || scriptEls.showQuantityButtons,
-            layoutWidth: sgnData?.incito?.root_view?.layout_width
-        });
+            container.innerHTML = Mustache.render(template, {
+                translations,
+                label: sgnData?.details?.label,
+                disableShoppingList,
+                offer: transformedOffer,
+                showQuantityButtons:
+                    !disableShoppingList || scriptEls.showQuantityButtons,
+                layoutWidth: sgnData?.incito?.root_view?.layout_width
+            });
 
-        dispatchOfferClickEvent(transformedOffer);
-        addEventListeners();
+            dispatchOfferClickEvent(transformedOffer);
+            addEventListeners();
+        } catch (error) {
+            displayOfferMessage(
+                offer.viewId,
+                translate('publication_viewer_no_product_message')
+            );
+        }
     };
+
     const transformProducts = (offer, products) => {
         const {localeCode, currency} = translations;
         const storedPublicationOffers =
@@ -187,16 +188,19 @@ const OfferOverview = ({
                 (offer) => offer.id === product.id
             );
 
+            const price = useOfferPrice
+                ? offer.price || offer.pricing.price
+                : product?.price;
+
+            const priceCurrency =
+                offer.currency_code || offer.pricing?.currency || currency;
+
             return {
                 ...product,
                 link: product.link || offer.webshop_link,
-                formattedPrice: formatPrice(
-                    useOfferPrice
-                        ? offer.price || offer.pricing.price
-                        : product?.price,
-                    localeCode,
-                    currency
-                ),
+                price,
+                formattedPrice: formatPrice(price, localeCode, priceCurrency),
+                currency: priceCurrency,
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
         });
@@ -337,7 +341,6 @@ const OfferOverview = ({
 
         return {
             ...offer,
-            // products: products,
             price: formatPrice(
                 offer?.pricing?.price,
                 localeCode,

@@ -17,7 +17,8 @@ import {
     pushQueryParam,
     transformWebshopLink,
     animateShoppingListCounter,
-    dispatchProductClickEvent
+    dispatchProductClickEvent,
+    displayOfferMessage
 } from './components/helpers/component';
 import MainContainer from './components/incito-publication/main-container';
 import SectionList from './components/incito-publication/section-list';
@@ -141,7 +142,11 @@ const IncitoPublication = (
     };
 
     const renderShoppingList = () =>
-        ShoppingList({template: customTemplates.shoppingList}).render();
+        ShoppingList({
+            template: customTemplates.shoppingList,
+            scriptEls,
+            sgnData
+        }).render();
 
     const renderSectionList = async () =>
         document.querySelector('.sgn__sidebar-content-container')?.appendChild(
@@ -275,7 +280,7 @@ const IncitoPublication = (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
         ) {
             if (!link) {
-                displayNoLinkOverlay(viewId);
+                displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
                 return;
             }
 
@@ -293,7 +298,7 @@ const IncitoPublication = (
             scriptEls.offerClickBehavior === 'redirect_to_webshop_link'
         ) {
             if (!link) {
-                displayNoLinkOverlay(viewId);
+                displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
                 return;
             }
 
@@ -305,28 +310,6 @@ const IncitoPublication = (
         } else if (shoppingBtn) {
             const {offer} = await fetchOffer({viewId, publicationId});
             addToShoppingList(offer);
-        }
-    };
-
-    const displayNoLinkOverlay = (viewId) => {
-        if (!scriptEls.noOfferLinkMessage) return;
-
-        const offerContainer = document.querySelector(`[data-id="${viewId}"]`);
-        const existingOverlayEl = offerContainer?.querySelector(
-            '.sgn-offer-link-overlay'
-        );
-
-        if (!existingOverlayEl) {
-            const overlay = document.createElement('div');
-
-            overlay.className = 'sgn-offer-link-overlay';
-            overlay.innerHTML = `<span>${scriptEls.noOfferLinkMessage}</span>`;
-
-            offerContainer?.appendChild(overlay);
-
-            setTimeout(function () {
-                offerContainer?.removeChild(overlay);
-            }, 1500);
         }
     };
 

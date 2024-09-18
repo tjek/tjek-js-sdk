@@ -134,7 +134,11 @@ const PagedPublication = (
         );
 
     const renderShoppingList = () =>
-        ShoppingList({template: customTemplates.shoppingList}).render();
+        ShoppingList({
+            template: customTemplates.shoppingList,
+            scriptEls,
+            sgnData
+        }).render();
 
     const renderMenuPopup = () =>
         document
