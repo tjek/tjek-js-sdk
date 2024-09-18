@@ -440,6 +440,10 @@ export const displayOfferMessage = (viewId, message) => {
 };
 
 export const getLocaleCode = (countryId: string): string => {
+    if (!countryId) {
+        return '';
+    }
+
     const countryLocaleMap: {[key: string]: string} = {
         US: 'en_US',
         DK: 'da_DK',
