@@ -63,12 +63,17 @@ if (isBrowser()) {
             coreUrl?: string;
         } = {};
 
-        if (apiKey) scriptConfig.apiKey = apiKey;
+        if (apiKey) {
+            scriptConfig.apiKey = apiKey;
+        }
 
-        if (isStaging) scriptConfig.coreUrl = coreUrlStaging;
+        if (isStaging) {
+            scriptConfig.coreUrl = coreUrlStaging;
+        }
 
-        if (trackId && !isStaging)
+        if (trackId && !isStaging) {
             scriptConfig.eventTracker = new Tracker({trackId});
+        }
 
         config.set(scriptConfig);
 
