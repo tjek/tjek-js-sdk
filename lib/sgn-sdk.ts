@@ -56,18 +56,24 @@ if (isBrowser()) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
         const trackId = scriptEl.dataset.trackId;
         const component = scriptEl.dataset.component;
-        const environment = scriptEl.dataset.environment;
+        const isStaging = scriptEl.dataset.environment === 'staging';
         const scriptConfig: {
             apiKey?: string;
             eventTracker?: Tracker;
             coreUrl?: string;
         } = {};
 
-        if (apiKey) scriptConfig.apiKey = apiKey;
+        if (apiKey) {
+            scriptConfig.apiKey = apiKey;
+        }
 
-        if (trackId) scriptConfig.eventTracker = new Tracker({trackId});
+        if (isStaging) {
+            scriptConfig.coreUrl = coreUrlStaging;
+        }
 
-        if (environment === 'staging') scriptConfig.coreUrl = coreUrlStaging;
+        if (trackId && !isStaging) {
+            scriptConfig.eventTracker = new Tracker({trackId});
+        }
 
         config.set(scriptConfig);
 
