@@ -17,7 +17,7 @@ import {
 import * as clientLocal from './storage/client-local';
 import './stylus/sgn.styl';
 import {error, isBrowser} from './util';
-import {coreUrlStaging, eventsTrackUrlStaging} from './config-defaults';
+import {coreUrlStaging} from './config-defaults';
 
 export const config = new Config();
 config.bind('change', (changedAttributes) => {
@@ -56,7 +56,7 @@ if (isBrowser()) {
         const apiKey = scriptEl.dataset.apiKey || scriptEl.dataset.appKey;
         const trackId = scriptEl.dataset.trackId;
         const component = scriptEl.dataset.component;
-        const environment = scriptEl.dataset.environment;
+        const isStaging = scriptEl.dataset.environment === 'staging';
         const scriptConfig: {
             apiKey?: string;
             eventTracker?: Tracker;
@@ -65,15 +65,10 @@ if (isBrowser()) {
 
         if (apiKey) scriptConfig.apiKey = apiKey;
 
-        if (trackId) scriptConfig.eventTracker = new Tracker({trackId});
+        if (trackId && !isStaging)
+            scriptConfig.eventTracker = new Tracker({trackId});
 
-        if (environment === 'staging') {
-            scriptConfig.coreUrl = coreUrlStaging;
-            scriptConfig.eventTracker = new Tracker({
-                trackId,
-                eventsTrackUrl: eventsTrackUrlStaging
-            });
-        }
+        if (isStaging) scriptConfig.coreUrl = coreUrlStaging;
 
         config.set(scriptConfig);
 
