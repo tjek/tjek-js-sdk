@@ -17,7 +17,7 @@ import {
 import * as clientLocal from './storage/client-local';
 import './stylus/sgn.styl';
 import {error, isBrowser} from './util';
-import {coreUrlStaging} from './config-defaults';
+import {coreUrlStaging, eventsTrackUrlStaging} from './config-defaults';
 
 export const config = new Config();
 config.bind('change', (changedAttributes) => {
@@ -71,8 +71,11 @@ if (isBrowser()) {
             scriptConfig.coreUrl = coreUrlStaging;
         }
 
-        if (trackId && !isStaging) {
-            scriptConfig.eventTracker = new Tracker({trackId});
+        if (trackId) {
+            scriptConfig.eventTracker = new Tracker({
+                trackId,
+                ...(isStaging && {eventsTrackUrl: eventsTrackUrlStaging})
+            });
         }
 
         config.set(scriptConfig);
