@@ -70,13 +70,7 @@
                 publicationId: urlParams.get('publicationId'),
                 offerClickBehavior:
                     urlParams.get('offerClickBehavior') || 'overview_modal',
-                tags: (() => {
-                    try {
-                        return JSON.parse(urlParams.get('tags'));
-                    } catch (e) {
-                        return null;
-                    }
-                })()
+                tags: urlParams.get('tags')
             };
 
             var scriptEl = document.createElement('script');
@@ -193,8 +187,8 @@
             if (data.environment) {
                 scriptEl.dataset.environment = data.environment;
             }
-            if (data.tags?.length) {
-                scriptEl.dataset.componentListPublicationsRequestFilter = `tags:${data.tags.join()};`;
+            if (data.tags) {
+                scriptEl.dataset.componentListPublicationsRequestFilter = `tags:${data.tags};`;
             }
             scriptEl.defer = true;
 
