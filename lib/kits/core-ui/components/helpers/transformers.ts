@@ -29,7 +29,11 @@ export const transformScriptData = (
         disableClose: dataset.componentPublicationDisableClose === 'true',
         disableMenu: dataset.componentPublicationDisableMenu === 'true',
         disableDownload: dataset.componentPublicationDisableDownload === 'true',
-        disableHeader: dataset.componentPublicationDisableHeader === 'true',
+        disableHeader:
+            dataset.componentPublicationDisableHeader === 'true' ||
+            (dataset.componentPublicationDisableShoppingList === 'true' &&
+                dataset.componentPublicationDisableMenu === 'true' &&
+                dataset.componentPublicationDisableClose === 'true'),
         disableGlobalScrollbar:
             dataset.componentPublicationDisableGlobalScrollbar === 'true',
         disablePageDecorations:
