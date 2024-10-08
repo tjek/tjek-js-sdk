@@ -695,6 +695,7 @@ export default class Incito extends MicroEvent<{
     sectionHidden: [{sectionId: string; sectionPosition: number}];
 }> {
     containerEl: HTMLElement;
+    scrollableContainer: string;
     incito: IIncito;
     el: HTMLDivElement;
     ids: Record<string, Record<string, unknown>>;
@@ -707,11 +708,13 @@ export default class Incito extends MicroEvent<{
     sectionVisibility: Map<HTMLElement, boolean>;
     constructor(
         containerEl: HTMLElement,
-        {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean}
+        {incito, canLazyload}: {incito: IIncito; canLazyload?: boolean},
+        scrollableContainer: string
     ) {
         super();
 
         this.containerEl = containerEl;
+        this.scrollableContainer = scrollableContainer;
         this.incito = incito;
         this.el = document.createElement('div');
         this.ids = {};
@@ -919,6 +922,10 @@ export default class Incito extends MicroEvent<{
         window.addEventListener('pagehide', this.handlePageHide);
         window.addEventListener('beforeunload', this.handleBeforeUnload);
 
+        const scrollableContainerEl = this.scrollableContainer
+            ? document.querySelector(this.scrollableContainer)
+            : null;
+
         this.sectionObserver = new IntersectionObserver(
             (entries) =>
                 entries.forEach(({target, isIntersecting: newVisibility}) => {
@@ -931,7 +938,7 @@ export default class Incito extends MicroEvent<{
                     this.sectionVisibility.set(target, newVisibility);
                     this.triggerSectionVisibility(target, newVisibility);
                 }),
-            {rootMargin: '5px 0px'}
+            {rootMargin: '5px 0px', root: scrollableContainerEl}
         );
         this.lazyObserver = new IntersectionObserver(
             (entries) => {
@@ -942,7 +949,7 @@ export default class Incito extends MicroEvent<{
                     }
                 });
             },
-            {rootMargin: '500px 0px'}
+            {rootMargin: '500px 0px', root: scrollableContainerEl}
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {

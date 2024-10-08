@@ -68,6 +68,7 @@ export default class Bootstrapper {
     featureLabels = this.getFeatureLabels();
     versionsSupported = ['1.0.0'];
     enableLazyLoading = false;
+    scrollableContainer: string;
     options: BootstrapperInit;
     maxWidth: number;
     // @ts-expect-error
@@ -207,11 +208,15 @@ export default class Bootstrapper {
             );
         }
 
-        const viewer = new Viewer(this.options.el, {
-            details,
-            incito,
-            eventTracker: this.options.eventTracker
-        });
+        const viewer = new Viewer(
+            this.options.el,
+            {
+                details,
+                incito,
+                eventTracker: this.options.eventTracker
+            },
+            this.scrollableContainer
+        );
         const controls = new Controls(viewer);
 
         viewer.incito.bind('destroyed', controls.destroy);

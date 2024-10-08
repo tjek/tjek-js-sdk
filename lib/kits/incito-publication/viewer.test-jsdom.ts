@@ -16,11 +16,18 @@ describe('SGN.IncitoPublicationKit.Viewer', () => {
 
         const mountPoint = document.createElement('div');
 
-        const viewer = new Viewer(mountPoint, {
-            details: {id: 'incito-id', types: ['paged', 'incito']} as V2Catalog,
-            incito: dummyIncito,
-            eventTracker: fakeEventTracker as any
-        });
+        const viewer = new Viewer(
+            mountPoint,
+            {
+                details: {
+                    id: 'incito-id',
+                    types: ['paged', 'incito']
+                } as V2Catalog,
+                incito: dummyIncito,
+                eventTracker: fakeEventTracker as any
+            },
+            ''
+        );
 
         viewer.start();
 
