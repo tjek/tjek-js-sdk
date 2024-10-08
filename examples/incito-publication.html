@@ -31,9 +31,13 @@
         </style>
     </head>
     <body>
-        <div class="sgn__incito">
-            <div class="sgn-incito__progress"></div>
+        earlier content
+        <div style="max-height: 90vh; overflow: auto">
+            <div class="sgn__incito">
+                <div class="sgn-incito__progress"></div>
+            </div>
         </div>
+        later content
 
         <script
             src="../dist/shopgun-sdk/sgn-sdk.js"
@@ -48,6 +52,7 @@
                 id: SGN.util.getQueryParam('id'),
                 eventTracker: SGN.config.get('eventTracker')
             });
+            bootstrapper.enableLazyLoading = true;
 
             this.bootstrapper.fetch(function (error, res) {
                 if (error) return console.error(error);

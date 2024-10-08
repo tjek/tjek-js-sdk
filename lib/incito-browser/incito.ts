@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch';
 import MicroEvent from '../../vendor/microevent';
+import {getScrollContainer} from '../util';
 import './incito.styl';
 import {IIncito, TextView} from './types';
 
@@ -695,6 +696,7 @@ export default class Incito extends MicroEvent<{
     sectionHidden: [{sectionId: string; sectionPosition: number}];
 }> {
     containerEl: HTMLElement;
+    scrollContainerEl: HTMLElement;
     incito: IIncito;
     el: HTMLDivElement;
     ids: Record<string, Record<string, unknown>>;
@@ -712,6 +714,7 @@ export default class Incito extends MicroEvent<{
         super();
 
         this.containerEl = containerEl;
+        this.scrollContainerEl = getScrollContainer(containerEl);
         this.incito = incito;
         this.el = document.createElement('div');
         this.ids = {};
@@ -931,7 +934,7 @@ export default class Incito extends MicroEvent<{
                     this.sectionVisibility.set(target, newVisibility);
                     this.triggerSectionVisibility(target, newVisibility);
                 }),
-            {rootMargin: '5px 0px'}
+            {rootMargin: '5px 0px', root: this.scrollContainerEl}
         );
         this.lazyObserver = new IntersectionObserver(
             (entries) => {
@@ -942,7 +945,7 @@ export default class Incito extends MicroEvent<{
                     }
                 });
             },
-            {rootMargin: '500px 0px'}
+            {rootMargin: '500px 0px', root: this.scrollContainerEl}
         );
         this.videoObserver = new IntersectionObserver(
             (entries) => {
@@ -961,7 +964,7 @@ export default class Incito extends MicroEvent<{
                     }
                 });
             },
-            {threshold: 0.1}
+            {threshold: 0.1, root: this.scrollContainerEl}
         );
     }
 

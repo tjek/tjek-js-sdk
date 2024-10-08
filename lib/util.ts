@@ -118,3 +118,18 @@ export const off = (
 ) =>
     //@ts-expect-error
     Gator(el).off(events, selector, callback);
+
+const overflowRE = /auto|scroll/;
+export function getScrollContainer(target: HTMLElement) {
+    let element: HTMLElement | null = target;
+    while (element) {
+        const {overflow, overflowY, overflowX} = getComputedStyle(element);
+        if (overflowRE.test(overflow + overflowY + overflowX)) {
+            return element;
+        }
+
+        element = element.parentElement;
+    }
+
+    return document.body;
+}

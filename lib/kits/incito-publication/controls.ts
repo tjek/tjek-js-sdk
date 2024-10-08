@@ -1,26 +1,41 @@
+import {getScrollContainer} from '../../util';
 import Viewer from './viewer';
 
 export default class Controls {
     viewer: Viewer;
     progressEl: HTMLElement | null;
+    scrollContainerEl: HTMLElement | null;
     constructor(viewer: Viewer) {
         this.viewer = viewer;
         this.progressEl = this.viewer.el.querySelector('.sgn-incito__progress');
 
         if (this.progressEl) {
+            this.scrollContainerEl = getScrollContainer(this.viewer.el);
+
             this.scroll();
-            window.addEventListener('scroll', this.scroll, false);
+            this.scrollContainerEl?.addEventListener(
+                'scroll',
+                this.scroll,
+                false
+            );
         }
     }
 
     destroy = () => {
-        window.removeEventListener('scroll', this.scroll, false);
+        this.scrollContainerEl?.removeEventListener(
+            'scroll',
+            this.scroll,
+            false
+        );
     };
 
     scroll = () => {
+        if (!this.scrollContainerEl) return;
+
         const progress = Math.round(
-            (window.pageYOffset /
-                (document.body.scrollHeight - window.innerHeight)) *
+            (this.scrollContainerEl.scrollTop /
+                (this.scrollContainerEl.scrollHeight -
+                    this.scrollContainerEl.clientHeight)) *
                 100
         );
 
