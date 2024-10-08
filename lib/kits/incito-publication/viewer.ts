@@ -44,6 +44,14 @@ class Viewer extends MicroEvent {
         return this;
     }
 
+    pause() {
+        this.incito.pause();
+    }
+
+    unpause() {
+        this.incito.unpause();
+    }
+
     destroy() {
         this.incito.destroy();
     }
