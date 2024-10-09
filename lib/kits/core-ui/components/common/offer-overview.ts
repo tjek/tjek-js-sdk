@@ -188,9 +188,14 @@ const OfferOverview = ({
                 (offer) => offer.id === product.id
             );
 
-            const price = useOfferPrice
+            let price = useOfferPrice
                 ? offer.price || offer.pricing.price
                 : product?.price;
+
+            if (offer.piece_count?.from > 1 && offer.savings > 0) {
+                console.log('offer', offer);
+                price = (price + offer.savings) / offer.piece_count.from;
+            }
 
             const priceCurrency =
                 offer.currency_code || offer.pricing?.currency || currency;

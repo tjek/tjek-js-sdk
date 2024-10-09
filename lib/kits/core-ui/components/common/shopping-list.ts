@@ -182,20 +182,64 @@ const ShoppingList = ({
         document.body.classList.remove('sgn-body-print');
     };
 
+    const calculateTotalPrice = (offer, totalQuantityByOffer = 1) => {
+        let totalPrice = 0;
+        const offerPrice = offer.pricing.price; // Individual price per piece
+
+        for (let i = offer?.quantity || 1; i >= 1; i--) {
+            if (offer.pieceCount?.from > 1 && offer.savings > 0) {
+                if (i % offer.pieceCount?.from === 0) {
+                    totalPrice += offerPrice;
+                    i -= offer.pieceCount.from - 1;
+                } else if (
+                    totalQuantityByOffer % offer.pieceCount?.from ===
+                    0
+                ) {
+                    totalPrice += offerPrice / offer.pieceCount.from;
+                } else {
+                    totalPrice +=
+                        (offerPrice + offer.savings) / offer.pieceCount.from;
+                }
+            } else {
+                totalPrice += offerPrice;
+            }
+        }
+
+        return totalPrice;
+    };
+
+    const getTotalQuantityByOffer = (savedOffers, offerId) => {
+        return (savedOffers || []).reduce((totalQuantity, offer) => {
+            if (offer.offerId === offerId) {
+                totalQuantity += offer.quantity || 1;
+            }
+            return totalQuantity;
+        }, 0);
+    };
+
     const transformSavedOffers = (savedOffers) => {
         const {localeCode, currency} = translations;
 
-        return (savedOffers || []).map((offer, index) => ({
-            index,
-            ...offer,
-            price: offer?.pricing?.price
-                ? formatPrice(
-                      offer?.pricing?.price * (offer?.quantity || 1),
-                      localeCode,
-                      offer?.pricing?.currency || currency
-                  )
-                : null
-        }));
+        return (savedOffers || []).map((offer, index) => {
+            const totalQuantityByOffer = getTotalQuantityByOffer(
+                savedOffers,
+                offer.offerId
+            );
+            const totalPrice = calculateTotalPrice(offer, totalQuantityByOffer);
+
+            return {
+                index,
+                ...offer,
+                totalQuantityByOffer,
+                price: totalPrice
+                    ? formatPrice(
+                          totalPrice,
+                          localeCode,
+                          offer?.pricing?.currency || currency
+                      )
+                    : null
+            };
+        });
     };
 
     const addTickerListener = () => {
@@ -400,7 +444,10 @@ const ShoppingList = ({
             }
 
             if (priceEl && product?.pricing?.price && quantity) {
-                const priceNum = product?.pricing?.price * (quantity || 1);
+                const priceNum = calculateTotalPrice({
+                    ...product,
+                    quantity
+                });
 
                 priceEl.innerHTML = formatPrice(
                     priceNum,

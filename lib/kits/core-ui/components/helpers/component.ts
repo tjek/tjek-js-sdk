@@ -322,8 +322,11 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
     const currency = offer.currency_code || offer.pricing.currency;
 
     let shopListOffer = {
+        offerId: offer.id,
         id: offer.id,
         name: offer.name,
+        pieceCount: offer.piece_count,
+        savings: offer.savings,
         pricing: {
             price: offer.price,
             currency
@@ -345,8 +348,11 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
         );
         if (product) {
             shopListOffer = {
+                offerId: offer.id,
                 id: product.id,
                 name: product.title,
+                pieceCount: offer.piece_count,
+                savings: offer.savings,
                 pricing: {
                     price: useOfferPrice
                         ? offer.price || offer.pricing.price
