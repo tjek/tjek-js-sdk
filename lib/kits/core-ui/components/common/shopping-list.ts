@@ -8,7 +8,9 @@ import {
     formatPrice,
     translate,
     updateShoppingList,
-    getLocaleCode
+    getLocaleCode,
+    calculateProductPrice,
+    getTotalQuantityByOffer
 } from '../helpers/component';
 import './shopping-list.styl';
 
@@ -180,41 +182,6 @@ const ShoppingList = ({
 
     const destroyModal = () => {
         document.body.classList.remove('sgn-body-print');
-    };
-
-    const calculateProductPrice = (offer, totalQuantityByOffer = 1) => {
-        let productPrice = 0;
-        const offerPrice = offer.pricing.price; // Individual price per piece
-
-        for (let i = offer?.quantity || 1; i >= 1; i--) {
-            if (offer.pieceCount?.from > 1 && offer.savings > 0) {
-                if (i % offer.pieceCount?.from === 0) {
-                    productPrice += offerPrice;
-                    i -= offer.pieceCount.from - 1;
-                } else if (
-                    totalQuantityByOffer % offer.pieceCount?.from ===
-                    0
-                ) {
-                    productPrice += offerPrice / offer.pieceCount.from;
-                } else {
-                    productPrice +=
-                        (offerPrice + offer.savings) / offer.pieceCount.from;
-                }
-            } else {
-                productPrice += offerPrice;
-            }
-        }
-
-        return productPrice;
-    };
-
-    const getTotalQuantityByOffer = (savedOffers, offerId) => {
-        return (savedOffers || []).reduce((totalQuantity, offer) => {
-            if (offer.offerId === offerId) {
-                totalQuantity += offer.quantity || 1;
-            }
-            return totalQuantity;
-        }, 0);
     };
 
     const transformSavedOffers = (savedOffers) => {
