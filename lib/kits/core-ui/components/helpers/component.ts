@@ -322,8 +322,11 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
     const currency = offer.currency_code || offer.pricing.currency;
 
     let shopListOffer = {
+        offerId: offer.id,
         id: offer.id,
         name: offer.name,
+        pieceCount: offer.piece_count,
+        savings: offer.savings,
         pricing: {
             price: offer.price,
             currency
@@ -345,8 +348,11 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
         );
         if (product) {
             shopListOffer = {
+                offerId: offer.id,
                 id: product.id,
                 name: product.title,
+                pieceCount: offer.piece_count,
+                savings: offer.savings,
                 pricing: {
                     price: useOfferPrice
                         ? offer.price || offer.pricing.price
@@ -452,4 +458,36 @@ export const getLocaleCode = (countryId: string): string => {
     };
 
     return countryLocaleMap[countryId] || '';
+};
+
+export const calculateProductPrice = (offer, totalQuantityByOffer = 1) => {
+    let productPrice = 0;
+    const offerPrice = offer.pricing.price; // Individual price per piece
+
+    for (let i = offer?.quantity || 1; i >= 1; i--) {
+        if (offer.pieceCount?.from > 1) {
+            if (i % offer.pieceCount?.from === 0) {
+                productPrice += offerPrice;
+                i -= offer.pieceCount.from - 1;
+            } else if (totalQuantityByOffer % offer.pieceCount?.from === 0) {
+                productPrice += offerPrice / offer.pieceCount.from;
+            } else {
+                productPrice +=
+                    (offerPrice + offer.savings) / offer.pieceCount.from;
+            }
+        } else {
+            productPrice += offerPrice;
+        }
+    }
+
+    return productPrice;
+};
+
+export const getTotalQuantityByOffer = (savedOffers, offerId) => {
+    return (savedOffers || []).reduce((totalQuantity, offer) => {
+        if (offer.offerId === offerId) {
+            totalQuantity += offer.quantity || 1;
+        }
+        return totalQuantity;
+    }, 0);
 };

@@ -1,7 +1,7 @@
 export default {
     locale_code: 'sv_SE',
     publication_viewer_shopping_list_label: 'Inköpslista',
-    publication_viewer_shopping_list_clear_button: 'Tydlig lista',
+    publication_viewer_shopping_list_clear_button: 'Rensa lista',
     publication_viewer_delete_crossed_out_button: 'Ta bort överstrukna objekt',
     publication_viewer_print_button: 'Skriva ut',
     publication_viewer_download_button: 'Ladda ner',

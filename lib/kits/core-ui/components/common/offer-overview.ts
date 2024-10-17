@@ -10,7 +10,9 @@ import {
     parseDateStr,
     updateShoppingList,
     displayOfferMessage,
-    getLocaleCode
+    getLocaleCode,
+    calculateProductPrice,
+    getTotalQuantityByOffer
 } from '../helpers/component';
 import {request, V2Offer} from '../../../core';
 import * as clientLocalStorage from '../../../../storage/client-local';
@@ -121,6 +123,7 @@ const OfferOverview = ({
 }) => {
     template = template?.innerHTML || defaultTemplate;
     let container: HTMLDivElement | null = null;
+    let transformedOffer;
 
     const translations = {
         localeCode: scriptEls.localeCode
@@ -135,7 +138,7 @@ const OfferOverview = ({
 
     const render = async () => {
         try {
-            const transformedOffer =
+            transformedOffer =
                 type === 'paged'
                     ? await fetchOffer(offer.id)
                     : await transformIncitoOffer(offer);
@@ -188,9 +191,13 @@ const OfferOverview = ({
                 (offer) => offer.id === product.id
             );
 
-            const price = useOfferPrice
+            let price = useOfferPrice
                 ? offer.price || offer.pricing.price
                 : product?.price;
+
+            if (offer.piece_count?.from > 1) {
+                price = (price + (offer.savings || 0)) / offer.piece_count.from;
+            }
 
             const priceCurrency =
                 offer.currency_code || offer.pricing?.currency || currency;
@@ -493,6 +500,59 @@ const OfferOverview = ({
             });
     };
 
+    const addLocalStorageListener = () => {
+        window.addEventListener('tjek_shopping_list_update', () => {
+            const {localeCode, currency} = translations;
+            const productEls = container?.querySelectorAll(
+                '.sgn-product-details'
+            );
+            let priceCurrency = currency;
+            const storedPublicationOffers = clientLocalStorage.get(
+                'publication-saved-offers'
+            );
+
+            productEls?.forEach((productEl: HTMLElement) => {
+                const priceEl =
+                    productEl.querySelector<HTMLElement>('.sgn-product-price');
+                const productId = productEl.dataset.offerProductId;
+                const product = storedPublicationOffers.find(
+                    (product) => product.id === productId
+                );
+                priceCurrency = product?.pricing?.currency || currency;
+
+                if (priceEl && !product) {
+                    const offerProduct = transformedOffer.products.find(
+                        (product) => product.id === productId
+                    );
+
+                    priceEl.innerHTML = formatPrice(
+                        offerProduct.price,
+                        localeCode,
+                        priceCurrency
+                    );
+                    return;
+                }
+
+                if (priceEl && product?.pricing?.price) {
+                    const totalQuantityByOffer = getTotalQuantityByOffer(
+                        storedPublicationOffers,
+                        product.offerId
+                    );
+                    const priceNum = calculateProductPrice(
+                        product,
+                        totalQuantityByOffer
+                    );
+
+                    priceEl.innerHTML = formatPrice(
+                        priceNum,
+                        localeCode,
+                        priceCurrency
+                    );
+                }
+            });
+        });
+    };
+
     const addEventListeners = () => {
         document.querySelector<HTMLDivElement>('.sgn-modal-container')?.focus();
 
@@ -500,6 +560,7 @@ const OfferOverview = ({
         addShoppingListListener();
         addProductListener();
         closeModalListener();
+        addLocalStorageListener();
     };
 
     return {render};

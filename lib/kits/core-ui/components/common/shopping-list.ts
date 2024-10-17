@@ -8,7 +8,9 @@ import {
     formatPrice,
     translate,
     updateShoppingList,
-    getLocaleCode
+    getLocaleCode,
+    calculateProductPrice,
+    getTotalQuantityByOffer
 } from '../helpers/component';
 import './shopping-list.styl';
 
@@ -185,17 +187,29 @@ const ShoppingList = ({
     const transformSavedOffers = (savedOffers) => {
         const {localeCode, currency} = translations;
 
-        return (savedOffers || []).map((offer, index) => ({
-            index,
-            ...offer,
-            price: offer?.pricing?.price
-                ? formatPrice(
-                      offer?.pricing?.price * (offer?.quantity || 1),
-                      localeCode,
-                      offer?.pricing?.currency || currency
-                  )
-                : null
-        }));
+        return (savedOffers || []).map((offer, index) => {
+            const totalQuantityByOffer = getTotalQuantityByOffer(
+                savedOffers,
+                offer.offerId
+            );
+            const productPrice = calculateProductPrice(
+                offer,
+                totalQuantityByOffer
+            );
+
+            return {
+                index,
+                ...offer,
+                totalQuantityByOffer,
+                price: productPrice
+                    ? formatPrice(
+                          productPrice,
+                          localeCode,
+                          offer?.pricing?.currency || currency
+                      )
+                    : null
+            };
+        });
     };
 
     const addTickerListener = () => {
@@ -350,10 +364,20 @@ const ShoppingList = ({
         );
         const priceCurrency =
             storedPublicationOffers?.[0]?.pricing?.currency || currency;
+        let totalPrice = 0;
 
-        const totalPrice = storedPublicationOffers?.reduce((acc, product) => {
-            return acc + product.pricing.price * product.quantity;
-        }, 0);
+        storedPublicationOffers?.forEach((product) => {
+            const totalQuantityByOffer = getTotalQuantityByOffer(
+                storedPublicationOffers,
+                product.offerId
+            );
+            const priceNum = calculateProductPrice(
+                product,
+                totalQuantityByOffer
+            );
+
+            totalPrice += priceNum;
+        });
 
         return totalPrice
             ? formatPrice(totalPrice, localeCode, priceCurrency)
@@ -389,24 +413,12 @@ const ShoppingList = ({
             (product) => product.id === productId
         );
 
-        const priceCurrency = product?.pricing?.currency || currency;
-
         if (quantityTxt) {
             quantityTxt.value =
                 action === 'plus' ? `${++quantity}` : `${--quantity}`;
 
             if (quantityTxt?.value === '0' && action === 'minus') {
                 productEl.remove();
-            }
-
-            if (priceEl && product?.pricing?.price && quantity) {
-                const priceNum = product?.pricing?.price * (quantity || 1);
-
-                priceEl.innerHTML = formatPrice(
-                    priceNum,
-                    localeCode,
-                    priceCurrency
-                );
             }
 
             updateShoppingList(
@@ -419,12 +431,6 @@ const ShoppingList = ({
                 },
                 action
             );
-
-            if (totalPriceEL && getTotalPrice()) {
-                totalPriceEL.innerHTML = getTotalPrice();
-            } else {
-                totalPriceContainer?.remove();
-            }
         }
     };
 
@@ -447,6 +453,68 @@ const ShoppingList = ({
             minusBtn?.addEventListener('click', () =>
                 updateQuantityHandler(productEl, 'minus')
             );
+        });
+    };
+
+    const addLocalStorageListener = () => {
+        window.addEventListener('tjek_shopping_list_update', () => {
+            const {localeCode, currency} = translations;
+            const productEls = document.querySelectorAll(
+                '.sgn-shopping-list-item-container'
+            );
+            let priceCurrency = currency;
+            let totalPrice = 0;
+
+            const totalPriceEL = container?.querySelector<HTMLInputElement>(
+                '.sgn-shopping-list-content-price-total'
+            );
+            const totalPriceContainer =
+                container?.querySelector<HTMLDivElement>(
+                    '.sgn-shopping-list-content-container-total'
+                );
+            const storedPublicationOffers = clientLocalStorage.get(
+                'publication-saved-offers'
+            );
+
+            productEls.forEach((productEl: HTMLElement) => {
+                const priceEl = productEl.querySelector<HTMLElement>(
+                    '.sgn-shopping-list-content-price'
+                );
+                const productId = productEl.dataset.offerProductId;
+                const product = storedPublicationOffers.find(
+                    (product) => product.id === productId
+                );
+                priceCurrency = product?.pricing?.currency || currency;
+
+                if (priceEl && product?.pricing?.price) {
+                    const totalQuantityByOffer = getTotalQuantityByOffer(
+                        storedPublicationOffers,
+                        product.offerId
+                    );
+                    const priceNum = calculateProductPrice(
+                        product,
+                        totalQuantityByOffer
+                    );
+
+                    totalPrice += priceNum;
+
+                    priceEl.innerHTML = formatPrice(
+                        priceNum,
+                        localeCode,
+                        priceCurrency
+                    );
+                }
+            });
+
+            if (totalPriceEL && totalPrice) {
+                totalPriceEL.innerHTML = formatPrice(
+                    totalPrice,
+                    localeCode,
+                    priceCurrency
+                );
+            } else {
+                totalPriceContainer?.remove();
+            }
         });
     };
 
@@ -474,6 +542,7 @@ const ShoppingList = ({
         addPrintListener();
         addShareListener();
         addQuantityListener();
+        addLocalStorageListener();
     };
 
     return {render};
