@@ -295,13 +295,21 @@ class Viewer extends MicroEvent {
 
         this.hotspotQueue = this.hotspotQueue.filter((hotspotRequest) => {
             const hotspots: typeof this.hotspots = {};
-            for (const hotspotId in this.hotspots) {
-                if (hotspots[hotspotId]) continue;
 
-                const {id, type, locations, link, embed_link, rotate, offer} =
-                    this.hotspots[hotspotId];
-                for (let idx = 0; idx < hotspotRequest.pages.length; idx++) {
-                    const {pageNumber} = hotspotRequest.pages[idx];
+            hotspotRequest.pages.forEach(({pageNumber}) => {
+                for (const hotspotId in this.hotspots) {
+                    if (hotspots[hotspotId]) continue;
+
+                    const {
+                        id,
+                        type,
+                        locations,
+                        link,
+                        embed_link,
+                        rotate,
+                        offer
+                    } = this.hotspots[hotspotId];
+
                     if (locations[pageNumber]) {
                         hotspots[hotspotId] = {
                             type,
@@ -312,17 +320,16 @@ class Viewer extends MicroEvent {
                             rotate,
                             offer
                         };
-
-                        break;
                     }
                 }
-            }
+            });
 
             const versoPageSpread = this._core
                 .getVerso()
                 .pageSpreads.find(
                     (pageSpread) => pageSpread.getId() === hotspotRequest.id
                 );
+
             this._hotspots.trigger('hotspotsReceived', {
                 pageSpread: this._core.pageSpreads.get(hotspotRequest.id),
                 versoPageSpread,
