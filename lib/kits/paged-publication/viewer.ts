@@ -238,24 +238,28 @@ class Viewer extends MicroEvent {
     }
 
     first = (options?: Parameters<Verso['first']>[0]) => {
+        this.el.focus();
         this._core.getVerso().first(options);
 
         return this;
     };
 
     prev = (options: Parameters<Verso['prev']>[0]) => {
+        this.el.focus();
         this._core.getVerso().prev(options);
 
         return this;
     };
 
     next = (options: Parameters<Verso['next']>[0]) => {
+        this.el.focus();
         this._core.getVerso().next(options);
 
         return this;
     };
 
     last = (options?: Parameters<Verso['last']>[0]) => {
+        this.el.focus();
         this._core.getVerso().last(options);
 
         return this;
