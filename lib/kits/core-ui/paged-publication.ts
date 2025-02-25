@@ -16,7 +16,8 @@ import {
     transformFilter,
     translate,
     animateShoppingListCounter,
-    dispatchProductClickEvent
+    dispatchProductClickEvent,
+    formatDateForReader
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
@@ -220,23 +221,22 @@ const PagedPublication = (
     const addScreenReaderText = () => {
         const container = options.el;
 
-        const formatDate = (date) => {
-            const dateFormat = new Date(date);
-
-            return new Intl.DateTimeFormat('en-US', {
-                month: 'long',
-                day: 'numeric'
-            }).format(dateFormat);
+        const translations = {
+            validFrom: translate('publication_viewer_offer_valid_from'),
+            till: translate('publication_viewer_until_label')
         };
+
+        const {branding, label, page_count, run_from, run_till} =
+            sgnData?.details || {};
 
         container.setAttribute(
             'aria-label',
-            `${sgnData?.details?.branding?.name};
-            ${sgnData?.details?.label};
-            ${sgnData?.details?.page_count} pages;
-            Valid from ${formatDate(
-                sgnData?.details?.run_from
-            )} to ${formatDate(sgnData?.details?.run_till)}
+            `${branding?.name};
+            ${label};
+            ${page_count} pages;
+            ${translations.validFrom} ${formatDateForReader(run_from)} ${
+                translations.till
+            } ${formatDateForReader(run_till)}
             `
         );
     };

@@ -10,7 +10,8 @@ import {
     transformFilter,
     getHashFragments,
     getPubState,
-    parseDateStr
+    parseDateStr,
+    formatDateForReader
 } from './components/helpers/component';
 import type {Tracker} from '../events';
 
@@ -123,6 +124,11 @@ const ListPublications = (
     const addPublicationListener = () =>
         document.querySelectorAll('.publications__item').forEach((itemEl) => {
             itemEl.addEventListener('click', clickPublicationItem, false);
+            itemEl.addEventListener('keydown', (event: KeyboardEvent) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    clickPublicationItem(event);
+                }
+            });
         });
 
     const dispatchPublicationClickEvent = (detail) => {
@@ -165,6 +171,8 @@ const ListPublications = (
                 ...publication,
                 dateFrom: formatDate(publication?.run_from),
                 dateTill: formatDate(publication?.run_till),
+                dateReaderFrom: formatDateForReader(publication?.run_from),
+                dateReaderTill: formatDateForReader(publication?.run_till),
                 status: getPubState(
                     publication?.run_from,
                     new Date(
