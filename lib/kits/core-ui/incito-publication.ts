@@ -255,8 +255,9 @@ const IncitoPublication = (
     };
 
     const clickOfferCell = async (viewId, publicationId, sgnViewer) => {
-        const {products, link} =
+        const {products} =
             sgnViewer.incito?.ids?.[viewId]?.['tjek.offer.v1'] || {};
+
         dispatchOfferClickEvent({fetchOffer, viewId, publicationId, products});
 
         const shoppingBtn = options.el?.querySelector('.sgn__offer-shopping');
@@ -279,11 +280,6 @@ const IncitoPublication = (
         } else if (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
         ) {
-            if (!link) {
-                displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
-                return;
-            }
-
             const newWindowRef = window.open();
             const {offer} = await fetchOffer({viewId, publicationId});
 
@@ -292,20 +288,18 @@ const IncitoPublication = (
                     newWindowRef.location = offer.webshop_link;
                 } else {
                     newWindowRef.close();
+                    displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
                 }
             }
         } else if (
             scriptEls.offerClickBehavior === 'redirect_to_webshop_link'
         ) {
-            if (!link) {
-                displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
-                return;
-            }
-
             const {offer} = await fetchOffer({viewId, publicationId});
 
             if (offer.webshop_link) {
                 location.href = offer.webshop_link;
+            } else {
+                displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
             }
         } else if (shoppingBtn) {
             const {offer} = await fetchOffer({viewId, publicationId});

@@ -202,11 +202,25 @@ const OfferOverview = ({
             const priceCurrency =
                 offer.currency_code || offer.pricing?.currency || currency;
 
+            const totalQuantityByOffer = getTotalQuantityByOffer(
+                storedPublicationOffers,
+                product.id
+            );
+
+            console.log('offer product:', offer, product);
+
+            const productPrice = calculateProductPrice(
+                matchingOffer || product,
+                totalQuantityByOffer
+            );
+
             return {
                 ...product,
                 link: product.link || offer.webshop_link,
                 price,
-                formattedPrice: formatPrice(price, localeCode, priceCurrency),
+                formattedPrice: productPrice
+                    ? formatPrice(productPrice, localeCode, priceCurrency)
+                    : null,
                 currency: priceCurrency,
                 quantity: matchingOffer ? matchingOffer.quantity : 0
             };
@@ -224,7 +238,6 @@ const OfferOverview = ({
         const {localeCode, currency, priceFrom} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
-        offer.products = transformProducts(offer, products);
 
         if (products?.length > 1) {
             offer.products = transformProducts(offer, products);
@@ -243,7 +256,7 @@ const OfferOverview = ({
             offer.hideOfferDetails = true;
         }
 
-        const hasPriceFrom = products.some((product, i, arr) => {
+        const hasPriceFrom = products?.some((product, i, arr) => {
             if (i === 0) return false;
             return product.price !== arr[i - 1].price;
         });
