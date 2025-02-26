@@ -207,8 +207,6 @@ const OfferOverview = ({
                 product.id
             );
 
-            console.log('offer product:', offer, product);
-
             const productPrice = calculateProductPrice(
                 matchingOffer || product,
                 totalQuantityByOffer
