@@ -302,7 +302,9 @@ class Viewer extends MicroEvent {
 
             hotspotRequest.pages.forEach(({pageNumber}) => {
                 for (const hotspotId in this.hotspots) {
-                    if (hotspots[hotspotId]) continue;
+                    if (hotspots[hotspotId]) {
+                        continue;
+                    }
 
                     const {
                         id,
