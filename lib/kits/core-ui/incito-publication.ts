@@ -215,7 +215,7 @@ const IncitoPublication = (
                     const viewId = this.dataset.id;
                     const publicationId = options.id;
 
-                    clickOfferCell(viewId, publicationId, sgnViewer);
+                    clickOfferCell(e, viewId, publicationId, sgnViewer);
                 }
             );
 
@@ -254,7 +254,7 @@ const IncitoPublication = (
         );
     };
 
-    const clickOfferCell = async (viewId, publicationId, sgnViewer) => {
+    const clickOfferCell = async (e, viewId, publicationId, sgnViewer) => {
         const {products} =
             sgnViewer.incito?.ids?.[viewId]?.['tjek.offer.v1'] || {};
 
@@ -288,7 +288,7 @@ const IncitoPublication = (
                     newWindowRef.location = offer.webshop_link;
                 } else {
                     newWindowRef.close();
-                    displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
+                    displayOfferMessage(e.target, scriptEls.noOfferLinkMessage);
                 }
             }
         } else if (
@@ -299,7 +299,7 @@ const IncitoPublication = (
             if (offer.webshop_link) {
                 location.href = offer.webshop_link;
             } else {
-                displayOfferMessage(viewId, scriptEls.noOfferLinkMessage);
+                displayOfferMessage(e.target, scriptEls.noOfferLinkMessage);
             }
         } else if (shoppingBtn) {
             const {offer} = await fetchOffer({viewId, publicationId});

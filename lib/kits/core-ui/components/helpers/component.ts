@@ -423,12 +423,10 @@ export const closeSidebar = () => {
     }
 };
 
-export const displayOfferMessage = (viewId, message) => {
+export const displayOfferMessage = (clickedEl, message) => {
     if (!message) return;
 
-    const offerContainer = document.querySelector(
-        `[data-id="${viewId}"][data-role="offer"][style]:not([style=""])`
-    );
+    const offerContainer = clickedEl.closest('[data-role="offer"][data-id]');
     const existingOverlayEl = offerContainer?.querySelector(
         '.sgn-offer-link-overlay'
     );
