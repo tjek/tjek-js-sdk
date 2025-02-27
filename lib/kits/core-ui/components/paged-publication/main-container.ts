@@ -4,17 +4,48 @@ import './main-container.styl';
 
 const defaultTemplate = `\
     <div class="sgn__pp" data-layout-fixed="true" data-component-template="true" data-component-template-disable-header="{{disableHeader}}" data-component-template-enable-sidebar="{{enableSidebar}}" data-component-template-sidebar-position="{{sidebarPosition}}">
-        <div class="sgn__header-container"></div>
         
-        {{#enableSidebar}}
-        <div class="sgn__menu-sidebar-container"></div>
-        {{/enableSidebar}}
-
         <div class="verso">
             <div class="verso__scroller">
                 <div class="sgn-pp__pages"></div>
             </div>
         </div>
+        
+        
+        <button
+            class="sgn-pp__control"
+            data-direction="next"
+            aria-label="Next page"
+        >
+            &rsaquo;
+        </button>
+        <button
+            class="sgn-pp__control sgn-pp--hidden"
+            data-direction="last"
+            aria-label="Last page"
+        >
+            &raquo;
+        </button>   
+        <button
+            class="sgn-pp__control"
+            data-direction="prev"
+            aria-label="Previous page"
+        >
+            &lsaquo;
+        </button>
+        <button
+            class="sgn-pp__control sgn-pp--hidden"
+            data-direction="first"
+            aria-label="First page"
+        >
+            &laquo;
+        </button>
+        <div class="sgn-page_decorations"></div>
+        <div class="sgn__header-container"></div>
+        
+        {{#enableSidebar}}
+        <div class="sgn__menu-sidebar-container"></div>
+        {{/enableSidebar}}
 
         {{#disableHeader}}
             <div class="sgn-pp__progress">
@@ -22,31 +53,6 @@ const defaultTemplate = `\
             </div>
             <div class="sgn-pp__progress-label"></div>
         {{/disableHeader}}
-        <button
-            class="sgn-pp__control"
-            data-direction="prev"
-        >
-            &lsaquo;
-        </button>
-        <button
-            class="sgn-pp__control"
-            data-direction="next"
-        >
-            &rsaquo;
-        </button>
-        <button
-            class="sgn-pp__control sgn-pp--hidden"
-            data-direction="first"
-        >
-            &laquo;
-        </button>
-        <button
-            class="sgn-pp__control sgn-pp--hidden"
-            data-direction="last"
-        >
-            &raquo;
-        </button>
-        <div class="sgn-page_decorations"></div>
     </div>\
 `;
 

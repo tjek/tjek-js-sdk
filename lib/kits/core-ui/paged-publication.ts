@@ -16,7 +16,8 @@ import {
     transformFilter,
     translate,
     animateShoppingListCounter,
-    dispatchProductClickEvent
+    dispatchProductClickEvent,
+    formatDateForReader
 } from './components/helpers/component';
 import {transformScriptData} from './components/helpers/transformers';
 import MainContainer from './components/paged-publication/main-container';
@@ -191,6 +192,8 @@ const PagedPublication = (
             )
         });
 
+        addScreenReaderText();
+
         header.show(sgnData);
 
         if (!scriptEls.disablePageDecorations) {
@@ -213,6 +216,29 @@ const PagedPublication = (
 
         displayUrlParams();
         addFirstLastControlListener();
+    };
+
+    const addScreenReaderText = () => {
+        const container = options.el;
+
+        const translations = {
+            validFrom: translate('publication_viewer_offer_valid_from'),
+            till: translate('publication_viewer_until_label')
+        };
+
+        const {branding, label, page_count, run_from, run_till} =
+            sgnData?.details || {};
+
+        container.setAttribute(
+            'aria-label',
+            `${branding?.name};
+            ${label};
+            ${page_count} pages;
+            ${translations.validFrom} ${formatDateForReader(run_from)} ${
+                translations.till
+            } ${formatDateForReader(run_till)}
+            `
+        );
     };
 
     const addFirstLastControlListener = () => {

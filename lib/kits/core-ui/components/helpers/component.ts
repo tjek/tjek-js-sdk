@@ -491,3 +491,12 @@ export const getTotalQuantityByOffer = (savedOffers, offerId) => {
         return totalQuantity;
     }, 0);
 };
+
+export const formatDateForReader = (date) => {
+    const dateFormat = new Date(date);
+
+    return new Intl.DateTimeFormat(navigator.language || 'en-US', {
+        month: 'long',
+        day: 'numeric'
+    }).format(dateFormat);
+};

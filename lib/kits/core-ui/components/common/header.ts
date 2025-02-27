@@ -17,7 +17,7 @@ const defaultTemplate = `\
         <div class="sgn__nav">
             <div class="sgn__nav-content" data-show-labels="{{showHeaderLabels}}">
             {{^disableClose}}
-                <button class="sgn__close-publication">
+                <button class="sgn__close-publication" aria-label="{{translations.close}}">
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg sgn-header-icon-svg-close"
@@ -36,7 +36,7 @@ const defaultTemplate = `\
                 </button>
             {{/disableClose}}
             {{^disableShoppingList}}
-                <button class="sgn__offer-shopping">
+                <button class="sgn__offer-shopping" aria-label="{{translations.shoppingList}}">
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg"
@@ -57,7 +57,7 @@ const defaultTemplate = `\
                 </button>
             {{/disableShoppingList}}
             {{^disableMenu}}
-                <button class="sgn__nav-menu-btn">
+                <button class="sgn__nav-menu-btn" aria-label="{{translations.overview}}">
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg sgn-header-icon-svg-close"
@@ -120,7 +120,7 @@ const sidebarTemplate = `\
         <div class="sgn__nav">
             <div class="sgn__nav-content" data-show-labels="{{showHeaderLabels}}">
             {{^disableClose}}
-                <button class="sgn__close-publication">
+                <button class="sgn__close-publication" aria-label="{{translations.close}}">
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg sgn-header-icon-svg-close"
@@ -139,7 +139,7 @@ const sidebarTemplate = `\
                 </button>
             {{/disableClose}}
             {{^disableShoppingList}}
-                <button class="sgn__offer-shopping">
+                <button class="sgn__offer-shopping" aria-label="{{translations.shoppingList}}">
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg"
@@ -160,7 +160,7 @@ const sidebarTemplate = `\
                 </button>
             {{/disableShoppingList}}
             {{^disableMenu}}
-                <button class="sgn__nav-menu-btn">
+                <button class="sgn__nav-menu-btn" aria-label="{{translations.overview}}">
                     <svg
                         aria-hidden="true"
                         class="sgn-header-icon-svg sgn-header-icon-svg-close"
