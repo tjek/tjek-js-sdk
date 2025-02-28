@@ -423,10 +423,10 @@ export const closeSidebar = () => {
     }
 };
 
-export const displayOfferMessage = (viewId, message) => {
+export const displayOfferMessage = (clickedEl, message) => {
     if (!message) return;
 
-    const offerContainer = document.querySelector(`[data-id="${viewId}"]`);
+    const offerContainer = clickedEl.closest('[data-role="offer"][data-id]');
     const existingOverlayEl = offerContainer?.querySelector(
         '.sgn-offer-link-overlay'
     );
@@ -462,7 +462,7 @@ export const getLocaleCode = (countryId: string): string => {
 
 export const calculateProductPrice = (offer, totalQuantityByOffer = 1) => {
     let productPrice = 0;
-    const offerPrice = offer.pricing.price; // Individual price per piece
+    const offerPrice = offer?.pricing?.price || offer?.price; // Individual price per piece
 
     for (let i = offer?.quantity || 1; i >= 1; i--) {
         if (offer.pieceCount?.from > 1) {
