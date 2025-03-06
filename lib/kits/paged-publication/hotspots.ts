@@ -97,23 +97,25 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     el.style.width = `${width}px`;
     el.style.height = `${height}px`;
 
-    el.setAttribute('tabindex', '-1');
-    el.setAttribute(
-        'aria-label',
-        `${hotspot.offer.heading}; ${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency};`
-    );
+    if (hotspot.type === 'offer') {
+        el.setAttribute('tabindex', '-1');
+        el.setAttribute(
+            'aria-label',
+            `${hotspot.offer.heading}; ${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency};`
+        );
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.setAttribute('tabindex', '0');
-            } else {
-                entry.target.setAttribute('tabindex', '-1');
-            }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.setAttribute('tabindex', '0');
+                } else {
+                    entry.target.setAttribute('tabindex', '-1');
+                }
+            });
         });
-    });
 
-    observer.observe(el);
+        observer.observe(el);
+    }
 
     return el;
 }

@@ -11,6 +11,7 @@ const defaultTemplate = `\
             </div>
         </div>
         
+        <div class="sgn-page_decorations"></div>
         
         <button
             class="sgn-pp__control"
@@ -40,7 +41,6 @@ const defaultTemplate = `\
         >
             &laquo;
         </button>
-        <div class="sgn-page_decorations"></div>
         <div class="sgn__header-container"></div>
         
         {{#enableSidebar}}
