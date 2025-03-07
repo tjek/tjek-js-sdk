@@ -23,6 +23,7 @@ export default {
     publication_viewer_visit_webshop_link: 'Besøk nettbutikklink',
     publication_viewer_upcoming: 'Påkommende',
     publication_viewer_offer_price_from: 'Fra',
+    publication_viewer_offer_price_for: 'for',
     publication_viewer_offer_valid_from: 'Gjelder kun fra ',
     publication_viewer_no_product_message: 'Ingen produktdetalje'
 };

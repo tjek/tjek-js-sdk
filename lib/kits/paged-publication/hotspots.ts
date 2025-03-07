@@ -1,9 +1,9 @@
 import MicroEvent from '../../../vendor/microevent';
 import PageSpread from '../../verso-browser/page_spread';
-import * as translations from '../../translations';
 import {V2Hotspot} from '../core';
 import PagedPublicationPageSpread from './page-spread';
 import {Page} from './page-spreads';
+import {translate} from '../core-ui/components/helpers/component';
 
 function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
     let minX: number | null = null;
@@ -98,10 +98,18 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     el.style.height = `${height}px`;
 
     if (hotspot.type === 'offer') {
+        const translations = {
+            for: translate('publication_viewer_offer_price_for')
+        };
+        const pieceCountFor =
+            hotspot.offer.quantity.pieces.from > 1
+                ? `${hotspot.offer.quantity.pieces.from} ${translations.for} `
+                : '';
+
         el.setAttribute('tabindex', '-1');
         el.setAttribute(
             'aria-label',
-            `${hotspot.offer.heading}; ${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency};`
+            `${hotspot.offer.heading}; ${pieceCountFor}${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency};`
         );
 
         const observer = new IntersectionObserver((entries) => {
