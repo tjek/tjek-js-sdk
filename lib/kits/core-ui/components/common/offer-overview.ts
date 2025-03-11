@@ -167,10 +167,7 @@ const OfferOverview = ({
             dispatchOfferClickEvent(transformedOffer);
             addEventListeners();
         } catch (error) {
-            displayOfferMessage(
-                offer.viewId,
-                translate('publication_viewer_no_product_message')
-            );
+            displayOfferMessage(offer.clickedEl, scriptEls.noOfferLinkMessage);
         }
     };
 

@@ -255,8 +255,9 @@ const IncitoPublication = (
     };
 
     const clickOfferCell = async (e, viewId, publicationId, sgnViewer) => {
-        const {products} =
+        const offerMeta =
             sgnViewer.incito?.ids?.[viewId]?.['tjek.offer.v1'] || {};
+        const {products} = offerMeta;
 
         dispatchOfferClickEvent({fetchOffer, viewId, publicationId, products});
 
@@ -272,7 +273,8 @@ const IncitoPublication = (
                     fetchOffer,
                     viewId,
                     publicationId,
-                    products
+                    products,
+                    clickedEl: e.target
                 },
                 type: 'incito',
                 addToShoppingList
@@ -281,25 +283,48 @@ const IncitoPublication = (
             scriptEls.offerClickBehavior === 'open_webshop_link_in_tab'
         ) {
             const newWindowRef = window.open();
-            const {offer} = await fetchOffer({viewId, publicationId});
-
             if (newWindowRef) {
-                if (offer.webshop_link) {
-                    newWindowRef.location = offer.webshop_link;
-                } else {
-                    newWindowRef.close();
-                    displayOfferMessage(e.target, scriptEls.noOfferLinkMessage);
+                try {
+                    const {offer} = await fetchOffer({viewId, publicationId});
+
+                    if (offer?.webshop_link) {
+                        newWindowRef.location = offer.webshop_link;
+                    } else {
+                        newWindowRef.close();
+                        displayOfferMessage(
+                            e.target,
+                            scriptEls.noOfferLinkMessage
+                        );
+                    }
+                } catch (error) {
+                    if (offerMeta?.link) {
+                        newWindowRef.location = offerMeta.link;
+                    } else {
+                        newWindowRef.close();
+                        displayOfferMessage(
+                            e.target,
+                            scriptEls.noOfferLinkMessage
+                        );
+                    }
                 }
             }
         } else if (
             scriptEls.offerClickBehavior === 'redirect_to_webshop_link'
         ) {
-            const {offer} = await fetchOffer({viewId, publicationId});
+            try {
+                const {offer} = await fetchOffer({viewId, publicationId});
 
-            if (offer.webshop_link) {
-                location.href = offer.webshop_link;
-            } else {
-                displayOfferMessage(e.target, scriptEls.noOfferLinkMessage);
+                if (offer.webshop_link) {
+                    location.href = offer.webshop_link;
+                } else {
+                    displayOfferMessage(e.target, scriptEls.noOfferLinkMessage);
+                }
+            } catch (error) {
+                if (offerMeta?.link) {
+                    location.href = offerMeta.link;
+                } else {
+                    displayOfferMessage(e.target, scriptEls.noOfferLinkMessage);
+                }
             }
         } else if (shoppingBtn) {
             const {offer} = await fetchOffer({viewId, publicationId});
@@ -564,7 +589,9 @@ const IncitoPublication = (
             })
         });
 
-        if (!res) throw new Error();
+        if (!res) {
+            throw new Error();
+        }
 
         if (res.offer.id) {
             res.offer.webshop_link = transformWebshopLink(
