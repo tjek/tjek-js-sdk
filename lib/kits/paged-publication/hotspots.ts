@@ -55,6 +55,11 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     const width = Math.round((contentRect.width / 100) * position.width);
     const height = Math.round((contentRect.height / 100) * position.height);
 
+    console.log('hotspot_old:', hotspot);
+    console.log('hotspot_calculated:', {top, left, width, height});
+    console.log('hotspot_position:', position);
+    console.log('hostpot_position_converted:', {});
+
     top += Math.round(contentRect.top);
     left += Math.round(contentRect.left);
     top -= boundingRect.top;

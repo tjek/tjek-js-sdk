@@ -1,7 +1,7 @@
 import MicroEvent from '../../../vendor/microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
-import {V2Hotspot, V2PageDecoration} from '../core';
+import {V2Hotspot, V2PageDecoration, request} from '../core';
 import PageDecorations from '../core-ui/page-decorations';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
@@ -42,6 +42,34 @@ function defaultPickHotspot(
 
     return popover.destroy;
 }
+
+export interface V3Hotspot {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    link: string | undefined;
+    offer:
+        | {
+              id: string;
+              name: string;
+          }
+        | undefined;
+    rotate: number | undefined;
+}
+
+export interface V2PageDecoration {
+    title: string | null;
+    link: string;
+    link_title: string;
+    hotspots: V3Hotspot[];
+}
+
+export interface PageHotspotsAndDecorations {
+    hotspots: V3Hotspot[];
+    pageDecorations: V2PageDecoration[];
+}
+
 export interface ViewerInit {
     id: string;
     ownedBy: unknown;
@@ -56,6 +84,7 @@ export interface ViewerInit {
     keyboard: 'disabled' | 'enabled' | 'global';
     hotspotRatio?: number;
     pickHotspot?: typeof defaultPickHotspot;
+    fetchPageHotspots: any;
 }
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
@@ -116,6 +145,8 @@ class Viewer extends MicroEvent {
             this.options.eventTracker,
             this.options.id
         );
+
+        console.log('this.options', this.options);
 
         this._controls.bind('prev', this.prev);
         this._controls.bind('next', this.next);
@@ -179,7 +210,20 @@ class Viewer extends MicroEvent {
             this._eventTracking.trigger('zoomedOut', e);
             this.trigger('zoomedOut', e);
         });
-        this._core.bind('pageLoaded', (e) => {
+        this._core.bind('pageLoaded', async (e) => {
+            const hotspots = await this.options.fetchPageHotspots(
+                e.page.pageNumber
+            );
+
+            const transformedHotspots =
+                this.transformPageHotspotsAndDecorations(
+                    hotspots,
+                    e.page.pageNumber
+                );
+
+            console.log('page hotspots:', hotspots);
+            console.log('page transformed hotspots:', transformedHotspots);
+
             this._eventTracking.trigger('pageLoaded', e);
             this.trigger('pageLoaded', e);
         });
@@ -442,6 +486,57 @@ class Viewer extends MicroEvent {
         this.pickHotspot(e, (hotspot) => {
             this.trigger('hotspotPressed', hotspot);
         });
+    };
+
+    transformPageHotspotsAndDecorations = (
+        pageHotspotsAndDecorations: PageHotspotsAndDecorations,
+        pageNumber: number
+    ) => {
+        const {hotspots, pageDecorations} = pageHotspotsAndDecorations;
+
+        // Transform V3Hotspots to V2Hotspots
+        const transformedHotspots: V2Hotspot[] = hotspots.map((hotspot) => ({
+            id: hotspot.offer?.id || '',
+            type: 'offer',
+            locations: {
+                [pageNumber]: [
+                    [hotspot.x1 / 100, hotspot.y1 / 57.288],
+                    [hotspot.x1 / 100, hotspot.y2 / 57.3],
+                    [hotspot.x2 / 100, hotspot.y2 / 57.3],
+                    [hotspot.x2 / 100, hotspot.y1 / 57.3]
+                ]
+                // [pageNumber]: [
+                //     [hotspot.x1 / 100, hotspot.y1 * 0.017457],
+                //     [hotspot.x1 / 100, hotspot.y2 * 0.017457],
+                //     [hotspot.x2 / 100, hotspot.y2 * 0.017457],
+                //     [hotspot.x2 / 100, hotspot.y1 * 0.017457]
+                // ]
+            },
+            link: hotspot.link || '',
+            embed_link: '',
+            rotate: hotspot.rotate || 0,
+            offer: {
+                id: hotspot.offer?.id || '',
+                ern: '',
+                heading: hotspot.offer?.name || '',
+                pricing: {
+                    currency: '',
+                    price: 0
+                },
+                quantity: {
+                    amount: 0,
+                    unit: ''
+                },
+                run_from: '',
+                run_till: '',
+                publish: ''
+            }
+        }));
+
+        return {
+            hotspots: transformedHotspots,
+            pageDecorations
+        };
     };
 }
 

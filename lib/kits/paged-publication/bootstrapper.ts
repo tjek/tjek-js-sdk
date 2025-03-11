@@ -30,6 +30,7 @@ export default class Bootstrapper {
             keyboard: this.options.keyboard ?? 'enabled',
             pageId: this.options.pageId,
             eventTracker: this.options.eventTracker,
+            fetchPageHotspots: this.fetchPageHotspots,
             pages: data.pages.map(({view, zoom}, i) => {
                 const pageNumber = i + 1;
 
@@ -170,4 +171,14 @@ export default class Bootstrapper {
     applyPageDecorations(viewer: Viewer, pageDecorations: V2PageDecoration[]) {
         viewer.applyPageDecorations(pageDecorations);
     }
+
+    fetchPageHotspots = (pageId: number) => {
+        return request({
+            apiKey: this.options.apiKey,
+            coreUrl: 'https://publication-viewer.tjek.com/',
+            url: `/api/paged-publications/${this.options.id}/${pageId}`
+        });
+
+        // this.applyHotspots(hotspots);
+    };
 }
