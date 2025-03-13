@@ -99,17 +99,21 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
 
     if (hotspot.type === 'offer') {
         const translations = {
-            for: translate('publication_viewer_offer_price_for')
+            for: translate('publication_viewer_offer_price_for'),
+            description: translate('publication_viewer_offer_description')
         };
         const pieceCountFor =
             hotspot.offer.quantity.pieces.from > 1
                 ? `${hotspot.offer.quantity.pieces.from} ${translations.for} `
                 : '';
+        const description = hotspot.offer.description
+            ? `${translations.description}${hotspot.offer.description}`
+            : '';
 
         el.setAttribute('tabindex', '-1');
         el.setAttribute(
             'aria-label',
-            `${hotspot.offer.heading}; ${pieceCountFor}${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency};`
+            `${hotspot.offer.heading}; ${pieceCountFor}${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency}; ${description};`
         );
 
         const observer = new IntersectionObserver((entries) => {

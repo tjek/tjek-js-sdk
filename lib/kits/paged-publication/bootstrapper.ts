@@ -9,6 +9,7 @@ interface BootstrapperInit {
     eventTracker: Tracker;
     apiKey: string;
     coreUrl: string;
+    viewerUrl: string | undefined;
     keyboard: 'disabled' | 'enabled' | 'global';
 }
 export default class Bootstrapper {
@@ -174,11 +175,15 @@ export default class Bootstrapper {
     }
 
     fetchPageHotspotsAndDecorations = (pageId: number) => {
-        return request({
-            apiKey: this.options.apiKey,
-            coreUrl: 'https://publication-viewer.tjek.com/',
-            url: `/api/paged-publications/${this.options.id}/${pageId}`
-        });
+        if (this.options.viewerUrl) {
+            return request({
+                apiKey: this.options.apiKey,
+                coreUrl: this.options.viewerUrl,
+                url: `/api/paged-publications/${this.options.id}/${pageId}`
+            });
+        }
+
+        return false;
 
         // this.applyHotspots(hotspots);
     };

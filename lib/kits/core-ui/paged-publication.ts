@@ -30,12 +30,14 @@ const PagedPublication = (
         mainContainer = '',
         apiKey,
         coreUrl,
-        eventTracker
+        eventTracker,
+        viewerUrl
     }: {
         mainContainer: string;
         apiKey: string;
         coreUrl: string;
         eventTracker: Tracker;
+        viewerUrl: string | undefined;
     }
 ) => {
     let options;
@@ -161,6 +163,7 @@ const PagedPublication = (
             el: document.querySelector<HTMLDivElement>('.sgn__pp'),
             apiKey,
             coreUrl,
+            viewerUrl,
             eventTracker,
             pageId:
                 opts?.pageId ||

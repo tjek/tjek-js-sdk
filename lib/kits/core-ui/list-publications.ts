@@ -21,12 +21,14 @@ const ListPublications = (
         mainContainer = '',
         apiKey,
         coreUrl,
-        eventTracker
+        eventTracker,
+        viewerUrl
     }: {
         mainContainer: string;
         apiKey: string;
         coreUrl: string;
         eventTracker: Tracker;
+        viewerUrl: string | undefined;
     }
 ) => {
     const scriptEls = {
@@ -112,7 +114,8 @@ const ListPublications = (
                     mainContainer: '#sgn-publication-viewer-container',
                     apiKey,
                     coreUrl,
-                    eventTracker
+                    eventTracker,
+                    viewerUrl
                 });
 
                 pagedPublication.setOptions({id});

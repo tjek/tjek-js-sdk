@@ -53,6 +53,7 @@ export interface V3Hotspot {
         | {
               id: string;
               name: string;
+              description: string | undefined;
           }
         | undefined;
     rotate: number | undefined;
@@ -507,6 +508,7 @@ class Viewer extends MicroEvent {
                 id: hotspot.offer?.id || '',
                 ern: '',
                 heading: hotspot.offer?.name || '',
+                description: hotspot.offer?.description || '',
                 pricing: {
                     currency: '',
                     price: 0
@@ -542,6 +544,10 @@ class Viewer extends MicroEvent {
         const hotspots = await this.options.fetchPageHotspotsAndDecorations(
             pageNumber
         );
+
+        if (!hotspots) {
+            return;
+        }
 
         const transformedHotspots = this.transformPageHotspotsAndDecorations(
             hotspots,

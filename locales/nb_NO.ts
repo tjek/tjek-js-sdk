@@ -25,5 +25,6 @@ export default {
     publication_viewer_offer_price_from: 'Fra',
     publication_viewer_offer_price_for: 'for',
     publication_viewer_offer_valid_from: 'Gjelder kun fra ',
+    publication_viewer_offer_description: 'Beskrivelse ',
     publication_viewer_no_product_message: 'Ingen produktdetalje'
 };

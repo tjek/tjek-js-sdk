@@ -24,5 +24,6 @@ export default {
     publication_viewer_offer_price_from: 'From',
     publication_viewer_offer_price_for: 'for',
     publication_viewer_offer_valid_from: 'Valid from ',
+    publication_viewer_offer_description: 'Description ',
     publication_viewer_no_product_message: 'No product details'
 };
