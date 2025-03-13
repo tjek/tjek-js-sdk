@@ -211,10 +211,6 @@ const PagedPublication = (
                 ?.classList.add('sgn-paged-publication--open');
         }
 
-        // const hotspots = await bootstrapper.fetchHotspots();
-        // console.log('hotspots:', hotspots);
-        // bootstrapper.applyHotspots(sgnViewer, hotspots, sgnPageDecorations);
-
         displayUrlParams();
         addFirstLastControlListener();
     };
@@ -312,20 +308,38 @@ const PagedPublication = (
                 '.sgn-pp__progress-label'
             );
 
-            progressLabel?.addEventListener('DOMSubtreeModified', (e) => {
-                const pageNum = e.target.innerHTML
-                    ?.split(' ')?.[0]
-                    ?.split('-')?.[0];
+            if (progressLabel) {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (
+                            mutation.type === 'childList' ||
+                            mutation.type === 'characterData'
+                        ) {
+                            const pageNum = mutation.target.textContent
+                                ?.split(' ')?.[0]
+                                ?.split('-')?.[0];
 
-                if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                    pushQueryParam({
-                        [scriptEls.publicationIdParam]: options.id,
-                        [scriptEls.pageIdParam]: pageNum
+                            if (
+                                scriptEls.displayUrlParams?.toLowerCase() ===
+                                'query'
+                            ) {
+                                pushQueryParam({
+                                    [scriptEls.publicationIdParam]: options.id,
+                                    [scriptEls.pageIdParam]: pageNum
+                                });
+                            } else {
+                                location.hash = `${scriptEls.publicationHash}/${options.id}/${pageNum}`;
+                            }
+                        }
                     });
-                } else {
-                    location.hash = `${scriptEls.publicationHash}/${options.id}/${pageNum}`;
-                }
-            });
+                });
+
+                observer.observe(progressLabel, {
+                    childList: true,
+                    characterData: true,
+                    subtree: true
+                });
+            }
         }
     };
 
