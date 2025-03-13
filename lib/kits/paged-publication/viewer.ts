@@ -58,13 +58,6 @@ export interface V3Hotspot {
     rotate: number | undefined;
 }
 
-export interface V2PageDecoration {
-    title: string | null;
-    link: string;
-    link_title: string;
-    hotspots: V3Hotspot[];
-}
-
 export interface PageHotspotsAndDecorations {
     hotspots: V3Hotspot[];
     pageDecorations: V2PageDecoration[];
@@ -84,7 +77,7 @@ export interface ViewerInit {
     keyboard: 'disabled' | 'enabled' | 'global';
     hotspotRatio?: number;
     pickHotspot?: typeof defaultPickHotspot;
-    fetchPageHotspots: any;
+    fetchPageHotspotsAndDecorations: any;
 }
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
@@ -146,15 +139,12 @@ class Viewer extends MicroEvent {
             this.options.id
         );
 
-        console.log('this.options', this.options);
-
         this._controls.bind('prev', this.prev);
         this._controls.bind('next', this.next);
         this._controls.bind('first', this.first);
         this._controls.bind('last', this.last);
         this._controls.bind('close', this.destroy);
         this._hotspots.bind('hotspotsRequested', (e) => {
-            console.log('hotspotsRequested', e);
             this.trigger('hotspotsRequested', e);
         });
 
@@ -185,7 +175,6 @@ class Viewer extends MicroEvent {
             this.trigger('pointerdown', e);
         });
         this._core.bind('clicked', (e) => {
-            console.log('clicked', e);
             this._eventTracking.trigger('clicked', e);
             this.trigger('clicked', e);
         });
@@ -213,12 +202,13 @@ class Viewer extends MicroEvent {
             this.trigger('zoomedOut', e);
         });
         this._core.bind('pageLoaded', async (e) => {
-            // this.processPageHotspotsAndDecorations(e.page.pageNumber);
-
             this._eventTracking.trigger('pageLoaded', e);
             this.trigger('pageLoaded', e);
         });
-        this._core.bind('pagesLoaded', (e) => {
+        this._core.bind('pagesLoaded', async (e) => {
+            for (const page of e.pages) {
+                await this.processPageHotspotsAndDecorations(page.pageNumber);
+            }
             this._hotspots.trigger('pagesLoaded', e);
             this.trigger('pagesLoaded', e);
         });
@@ -303,11 +293,6 @@ class Viewer extends MicroEvent {
     getPointerEventHotspots(e): V2Hotspot[] {
         const hotspots = this.hotspots;
         if (!hotspots) return [];
-        console.log('getPointerEventHotspots:', e);
-        console.log('getPointerEventHotspots hotspots', hotspots);
-        e.verso.overlayEls.forEach((el) => {
-            console.log('el:', el.dataset.id);
-        });
 
         return e.verso.overlayEls.map((el) => hotspots[el.dataset.id]);
     }
@@ -319,7 +304,6 @@ class Viewer extends MicroEvent {
         }
 
         const hotspots = this.getPointerEventHotspots(e);
-        console.log('hotspots:', hotspots);
 
         if (hotspots.length === 1) {
             callback(hotspots[0]);
@@ -389,14 +373,8 @@ class Viewer extends MicroEvent {
         });
     }
 
-    hotspotsRequested = (e) => {
-        console.log('hotspotsRequested:', e);
-
+    hotspotsRequested = async (e) => {
         this.hotspotQueue.push(e);
-        e.pages.forEach((page) => {
-            this.processPageHotspotsAndDecorations(page.pageNumber);
-        });
-
         this.processHotspotQueue();
     };
 
@@ -470,7 +448,6 @@ class Viewer extends MicroEvent {
 
     clicked = (e) => {
         this.pickHotspot(e, (hotspot) => {
-            console.log('hotspot clicked:', hotspot);
             this.trigger('hotspotClicked', hotspot);
         });
     };
@@ -498,147 +475,53 @@ class Viewer extends MicroEvent {
     ) => {
         const {hotspots, pageDecorations} = pageHotspotsAndDecorations;
 
-        // {
-        //     type: string;
-        //     id: string;
-        //     locations;
-        //     link: string;
-        //     embed_link: string;
-        //     rotate: number;
-        //     offer: {
-        //         id: string;
-        //         ern: string;
-        //         heading: string;
-        //         pricing: {
-        //             currency: string;
-        //             price: number;
-        //         };
-        //         quantity: {
-        //             amount: number;
-        //             unit: string;
-        //         };
-        //         run_from: string;
-        //         run_till: string;
-        //         publish: string;
-        //     };
-        // }
-
-        // const transformedHotspots: typeof this.hotspots = hotspots.reduce(
-        //     (obj, hotspot) => {
-        //         obj[hotspot?.offer?.id] = {
-        //             heading: hotspot.offer?.name || '',
-        //             id: hotspot.offer?.id || '',
-        //             type: 'offer',
-        //             locations: {
-        //                 [pageNumber]: [
-        //                     [
-        //                         hotspot.x1 / 100,
-        //                         (hotspot.y1 *
-        //                             (this.options?.hotspotRatio || 1)) /
-        //                             100
-        //                     ],
-        //                     [
-        //                         hotspot.x1 / 100,
-        //                         (hotspot.y2 *
-        //                             (this.options?.hotspotRatio || 1)) /
-        //                             100
-        //                     ],
-        //                     [
-        //                         hotspot.x2 / 100,
-        //                         (hotspot.y2 *
-        //                             (this.options?.hotspotRatio || 1)) /
-        //                             100
-        //                     ],
-        //                     [
-        //                         hotspot.x2 / 100,
-        //                         (hotspot.y1 *
-        //                             (this.options?.hotspotRatio || 1)) /
-        //                             100
-        //                     ]
-        //                 ]
-        //             },
-        //             link: hotspot.link || '',
-        //             embed_link: null,
-        //             rotate: hotspot.rotate || 0,
-        //             offer: {
-        //                 id: hotspot.offer?.id || '',
-        //                 ern: '',
-        //                 heading: hotspot.offer?.name || '',
-        //                 pricing: {
-        //                     currency: '',
-        //                     price: 0
-        //                 },
-        //                 quantity: {
-        //                     pieces: {
-        //                         from: 1,
-        //                         to: 1
-        //                     }
-        //                 },
-        //                 run_from: '',
-        //                 run_till: '',
-        //                 publish: ''
-        //             }
-        //         };
-
-        //         return obj;
-        //     },
-        //     {} as typeof this.hotspots
-        // );
-
-        // Transform V3Hotspots to V2Hotspots
-        const transformedToV2Hotspots: V2Hotspot[] = hotspots.map(
-            (hotspot) => ({
-                heading: hotspot.offer?.name || '',
-                id: hotspot.offer?.id || '',
-                type: 'offer',
-                locations: {
-                    [pageNumber]: [
-                        [
-                            hotspot.x1 / 100,
-                            (hotspot.y1 * (this.options?.hotspotRatio || 1)) /
-                                100
-                        ],
-                        [
-                            hotspot.x1 / 100,
-                            (hotspot.y2 * (this.options?.hotspotRatio || 1)) /
-                                100
-                        ],
-                        [
-                            hotspot.x2 / 100,
-                            (hotspot.y2 * (this.options?.hotspotRatio || 1)) /
-                                100
-                        ],
-                        [
-                            hotspot.x2 / 100,
-                            (hotspot.y1 * (this.options?.hotspotRatio || 1)) /
-                                100
-                        ]
+        const transformedToV2Hotspots = hotspots.map((hotspot) => ({
+            heading: hotspot.offer?.name || '',
+            id: hotspot.offer?.id || '',
+            type: 'offer',
+            locations: {
+                [pageNumber]: [
+                    [
+                        hotspot.x1 / 100,
+                        (hotspot.y1 * (this.options?.hotspotRatio || 1)) / 100
+                    ],
+                    [
+                        hotspot.x1 / 100,
+                        (hotspot.y2 * (this.options?.hotspotRatio || 1)) / 100
+                    ],
+                    [
+                        hotspot.x2 / 100,
+                        (hotspot.y2 * (this.options?.hotspotRatio || 1)) / 100
+                    ],
+                    [
+                        hotspot.x2 / 100,
+                        (hotspot.y1 * (this.options?.hotspotRatio || 1)) / 100
                     ]
+                ]
+            },
+            link: hotspot.link || '',
+            embed_link: null,
+            rotate: hotspot.rotate || 0,
+            webshop: null,
+            offer: {
+                id: hotspot.offer?.id || '',
+                ern: '',
+                heading: hotspot.offer?.name || '',
+                pricing: {
+                    currency: '',
+                    price: 0
                 },
-                link: hotspot.link || '',
-                embed_link: null,
-                rotate: hotspot.rotate || 0,
-                webshop: null,
-                offer: {
-                    id: hotspot.offer?.id || '',
-                    ern: '',
-                    heading: hotspot.offer?.name || '',
-                    pricing: {
-                        currency: '',
-                        price: 0
-                    },
-                    quantity: {
-                        pieces: {
-                            from: 1,
-                            to: 1
-                        }
-                    },
-                    run_from: '',
-                    run_till: '',
-                    publish: ''
-                }
-            })
-        );
+                quantity: {
+                    pieces: {
+                        from: 1,
+                        to: 1
+                    }
+                },
+                run_from: '',
+                run_till: '',
+                publish: ''
+            }
+        }));
 
         const transformedHotspots = transformedToV2Hotspots.reduce(
             (obj, hotspot) => {
@@ -656,24 +539,24 @@ class Viewer extends MicroEvent {
     };
 
     processPageHotspotsAndDecorations = async (pageNumber: number) => {
-        const hotspots = await this.options.fetchPageHotspots(pageNumber);
+        const hotspots = await this.options.fetchPageHotspotsAndDecorations(
+            pageNumber
+        );
 
         const transformedHotspots = this.transformPageHotspotsAndDecorations(
             hotspots,
             pageNumber
         );
 
-        console.log('page hotspots:', hotspots);
-        console.log('page transformed hotspots:', transformedHotspots);
-        // this.applyHotspots(transformedHotspots.hotspots);
-        if (Array.isArray(this.hotspots) && this.hotspots.length) {
-            this.hotspots.push(
-                ...(transformedHotspots.hotspots as typeof this.hotspots)
-            );
+        if (this.hotspots) {
+            for (const id in transformedHotspots.hotspots) {
+                if (!this.hotspots[id]) {
+                    this.hotspots[id] = transformedHotspots.hotspots[id];
+                }
+            }
         } else {
             this.hotspots = transformedHotspots.hotspots;
         }
-        this.processHotspotQueue();
     };
 }
 
