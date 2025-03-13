@@ -107,7 +107,7 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
                 ? `${hotspot.offer.quantity.pieces.from} ${translations.for} `
                 : '';
         const description = hotspot.offer.description
-            ? `${translations.description}${hotspot.offer.description}`
+            ? `${translations.description}: ${hotspot.offer.description}`
             : '';
 
         el.setAttribute('tabindex', '-1');
