@@ -211,8 +211,9 @@ const PagedPublication = (
                 ?.classList.add('sgn-paged-publication--open');
         }
 
-        const hotspots = await bootstrapper.fetchHotspots();
-        bootstrapper.applyHotspots(sgnViewer, hotspots, sgnPageDecorations);
+        // const hotspots = await bootstrapper.fetchHotspots();
+        // console.log('hotspots:', hotspots);
+        // bootstrapper.applyHotspots(sgnViewer, hotspots, sgnPageDecorations);
 
         displayUrlParams();
         addFirstLastControlListener();

@@ -6,6 +6,7 @@ import PagedPublicationPageSpread from './page-spread';
 import {Page} from './page-spreads';
 
 function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
+    console.log('ratio:', ratio);
     let minX: number | null = null;
     let minY: number | null = null;
     let maxX: number | null = null;
@@ -58,7 +59,6 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     console.log('hotspot_old:', hotspot);
     console.log('hotspot_calculated:', {top, left, width, height});
     console.log('hotspot_position:', position);
-    console.log('hostpot_position_converted:', {});
 
     top += Math.round(contentRect.top);
     left += Math.round(contentRect.left);
@@ -101,6 +101,8 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     el.style.left = `${left}px`;
     el.style.width = `${width}px`;
     el.style.height = `${height}px`;
+
+    console.log('hotspot hotspot:', hotspot);
 
     if (hotspot.type === 'offer') {
         el.setAttribute('tabindex', '-1');
