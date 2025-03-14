@@ -30,6 +30,7 @@ export default class Bootstrapper {
             keyboard: this.options.keyboard ?? 'enabled',
             pageId: this.options.pageId,
             eventTracker: this.options.eventTracker,
+            fetchOffers: this.fetchOffers,
             pages: data.pages.map(({view, zoom}, i) => {
                 const pageNumber = i + 1;
 
@@ -170,4 +171,22 @@ export default class Bootstrapper {
     applyPageDecorations(viewer: Viewer, pageDecorations: V2PageDecoration[]) {
         viewer.applyPageDecorations(pageDecorations);
     }
+
+    fetchOffers = (offerIds: string[]) => {
+        // if (this.options.viewerUrl) {
+        //     return request({
+        //         apiKey: this.options.apiKey,
+        //         coreUrl: this.options.viewerUrl,
+        //         url: `/api/paged-publications/${this.options.id}/${pageId}`
+        //     });
+        // }
+
+        return request({
+            apiKey: this.options.apiKey,
+            coreUrl: this.options.coreUrl,
+            url: `/v2/offers?offer_ids=${offerIds?.join(',')}`
+        });
+
+        return false;
+    };
 }

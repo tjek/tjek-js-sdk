@@ -1,7 +1,7 @@
 import MicroEvent from '../../../vendor/microevent';
 import * as translations from '../../translations';
 import Verso from '../../verso-browser/verso';
-import {V2Hotspot, V2PageDecoration} from '../core';
+import {V2Hotspot, V2PageDecoration, V2Offer} from '../core';
 import PageDecorations from '../core-ui/page-decorations';
 import singleChoicePopover from '../core-ui/single-choice-popover';
 import {Tracker} from '../events';
@@ -56,6 +56,7 @@ export interface ViewerInit {
     keyboard: 'disabled' | 'enabled' | 'global';
     hotspotRatio?: number;
     pickHotspot?: typeof defaultPickHotspot;
+    fetchOffers: any;
 }
 class Viewer extends MicroEvent {
     _hotspots = new Hotspots();
@@ -94,6 +95,8 @@ class Viewer extends MicroEvent {
     _eventTracking: EventTracking;
     pageDecorations: V2PageDecoration[];
     options: ViewerInit;
+    offersCache: V2Offer[] = [];
+    pagesCache: number[] = [];
     // @ts-expect-error
     constructor(el: HTMLElement, options: ViewerInit = {}) {
         super();
@@ -183,9 +186,10 @@ class Viewer extends MicroEvent {
             this._eventTracking.trigger('pageLoaded', e);
             this.trigger('pageLoaded', e);
         });
-        this._core.bind('pagesLoaded', (e) => {
+        this._core.bind('pagesLoaded', async (e) => {
             this._hotspots.trigger('pagesLoaded', e);
             this.trigger('pagesLoaded', e);
+            await this.processOffers(e);
         });
         this._core.bind('resized', (e) => {
             this._hotspots.trigger('resized');
@@ -336,6 +340,8 @@ class Viewer extends MicroEvent {
                     (pageSpread) => pageSpread.getId() === hotspotRequest.id
                 );
 
+            console.log('hotspots:::', hotspots);
+
             this._hotspots.trigger('hotspotsReceived', {
                 pageSpread: this._core.pageSpreads.get(hotspotRequest.id),
                 versoPageSpread,
@@ -349,6 +355,7 @@ class Viewer extends MicroEvent {
     }
 
     hotspotsRequested = (e) => {
+        console.log('hjotspotsRequested:::', e);
         this.hotspotQueue.push(e);
         this.processHotspotQueue();
     };
@@ -442,6 +449,47 @@ class Viewer extends MicroEvent {
         this.pickHotspot(e, (hotspot) => {
             this.trigger('hotspotPressed', hotspot);
         });
+    };
+
+    // getHotspotsByPageNumber(pageNumber: number):  {
+    //     if (!this.hotspots) return [];
+
+    //     return Object.values(this.hotspots).filter(hotspot =>
+    //         hotspot.locations.hasOwnProperty(pageNumber)
+    //     );
+    // }
+
+    getHotspotIdsByPageNumber = (pageNumber: number): string[] => {
+        if (!this.hotspots) {
+            return [];
+        }
+
+        return Object.values(this.hotspots)
+            .filter((hotspot) => hotspot.locations.hasOwnProperty(pageNumber))
+            .map((hotspot) => hotspot.id);
+    };
+
+    processOffers = async (e) => {
+        for (const {pageNumber} of e.pages) {
+            if (!this.pagesCache.includes(pageNumber)) {
+                const hotspotIds = this.getHotspotIdsByPageNumber(pageNumber);
+                console.log('hotspotIds', hotspotIds);
+                if (hotspotIds.length) {
+                    const offers = await this.options.fetchOffers(hotspotIds);
+                    if (offers) {
+                        this.pagesCache.push(pageNumber);
+                        this.offersCache.push(...offers);
+
+                        console.log('saved!', pageNumber);
+                        console.log('offers', offers);
+                    }
+                }
+            }
+        }
+
+        console.log('pagesCache', this.pagesCache);
+        console.log('offersCache', this.offersCache);
+        // offers: V2Offer[]
     };
 }
 
