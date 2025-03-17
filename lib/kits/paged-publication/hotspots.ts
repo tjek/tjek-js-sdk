@@ -49,7 +49,7 @@ function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
 }
 
 function renderHotspot(hotspot, position, contentRect, boundingRect) {
-    const el = document.createElement('div');
+    const el = document.createElement('buttoniv');
     let top = Math.round((contentRect.height / 100) * position.top);
     let left = Math.round((contentRect.width / 100) * position.left);
     const width = Math.round((contentRect.width / 100) * position.width);
@@ -109,7 +109,14 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
         el.setAttribute('tabindex', '-1');
         el.setAttribute(
             'aria-label',
-            `${hotspot.offer.heading}; ${pieceCountFor}${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency};`
+            `${hotspot.offer.heading}; ${pieceCountFor}${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency}; Description: ${hotspot.offer.description}`
+        );
+
+        console.log('hotspot offer:::', hotspot.offer);
+
+        console.log(
+            'ARIA-LABEL',
+            `${hotspot.offer.heading}; ${pieceCountFor}${hotspot.offer.pricing.price} ${hotspot.offer.pricing.currency}; Description: ${hotspot.offer.description}`
         );
 
         const observer = new IntersectionObserver((entries) => {

@@ -153,7 +153,7 @@ export default class Bootstrapper {
             {
                 apiKey: this.options.apiKey,
                 coreUrl: this.options.coreUrl,
-                url: `/v2/catalogs/${this.options.id}/hotspots`
+                url: `/v2/catalogs/${this.options.id}/hotspots?light=true`
             },
             callback
         );

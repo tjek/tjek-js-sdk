@@ -69,22 +69,24 @@ class Viewer extends MicroEvent {
             link: string;
             embed_link: string;
             rotate: number;
-            offer: {
-                id: string;
-                ern: string;
-                heading: string;
-                pricing: {
-                    currency: string;
-                    price: number;
-                };
-                quantity: {
-                    amount: number;
-                    unit: string;
-                };
-                run_from: string;
-                run_till: string;
-                publish: string;
-            };
+            offer:
+                | {
+                      id: string;
+                      ern: string;
+                      heading: string;
+                      pricing: {
+                          currency: string;
+                          price: number;
+                      };
+                      quantity: {
+                          amount: number;
+                          unit: string;
+                      };
+                      run_from: string;
+                      run_till: string;
+                      publish: string;
+                  }
+                | V2Offer;
         }
     > | null = null;
     hotspotQueue: {id: string; pages: Page[]}[] = [];
@@ -187,9 +189,9 @@ class Viewer extends MicroEvent {
             this.trigger('pageLoaded', e);
         });
         this._core.bind('pagesLoaded', async (e) => {
+            await this.processOffers(e);
             this._hotspots.trigger('pagesLoaded', e);
             this.trigger('pagesLoaded', e);
-            await this.processOffers(e);
         });
         this._core.bind('resized', (e) => {
             this._hotspots.trigger('resized');
@@ -303,6 +305,7 @@ class Viewer extends MicroEvent {
 
         this.hotspotQueue = this.hotspotQueue.filter((hotspotRequest) => {
             const hotspots: typeof this.hotspots = {};
+            this.processOffers({pages: hotspotRequest.pages});
 
             hotspotRequest.pages.forEach(({pageNumber}) => {
                 for (const hotspotId in this.hotspots) {
@@ -334,13 +337,13 @@ class Viewer extends MicroEvent {
                 }
             });
 
+            console.log('current hotspots:::', hotspots);
+
             const versoPageSpread = this._core
                 .getVerso()
                 .pageSpreads.find(
                     (pageSpread) => pageSpread.getId() === hotspotRequest.id
                 );
-
-            console.log('hotspots:::', hotspots);
 
             this._hotspots.trigger('hotspotsReceived', {
                 pageSpread: this._core.pageSpreads.get(hotspotRequest.id),
@@ -355,13 +358,14 @@ class Viewer extends MicroEvent {
     }
 
     hotspotsRequested = (e) => {
-        console.log('hjotspotsRequested:::', e);
         this.hotspotQueue.push(e);
         this.processHotspotQueue();
     };
 
     applyHotspots(hotspots) {
         this.hotspots = hotspots;
+
+        console.log('this.hotspots', this.hotspots);
 
         this.processHotspotQueue();
     }
@@ -430,6 +434,7 @@ class Viewer extends MicroEvent {
 
     clicked = (e) => {
         this.pickHotspot(e, (hotspot) => {
+            console.log('clicked hotspot', hotspot);
             this.trigger('hotspotClicked', hotspot);
         });
     };
@@ -451,21 +456,18 @@ class Viewer extends MicroEvent {
         });
     };
 
-    // getHotspotsByPageNumber(pageNumber: number):  {
-    //     if (!this.hotspots) return [];
-
-    //     return Object.values(this.hotspots).filter(hotspot =>
-    //         hotspot.locations.hasOwnProperty(pageNumber)
-    //     );
-    // }
-
     getHotspotIdsByPageNumber = (pageNumber: number): string[] => {
         if (!this.hotspots) {
             return [];
         }
 
         return Object.values(this.hotspots)
-            .filter((hotspot) => hotspot.locations.hasOwnProperty(pageNumber))
+            .filter((hotspot) =>
+                Object.prototype.hasOwnProperty.call(
+                    hotspot.locations,
+                    pageNumber
+                )
+            )
             .map((hotspot) => hotspot.id);
     };
 
@@ -484,12 +486,28 @@ class Viewer extends MicroEvent {
                         console.log('offers', offers);
                     }
                 }
+
+                this.applyOffers();
             }
         }
 
         console.log('pagesCache', this.pagesCache);
         console.log('offersCache', this.offersCache);
         // offers: V2Offer[]
+    };
+
+    applyOffers = () => {
+        if (!this.hotspots || !this.offersCache.length) return;
+
+        this.offersCache.forEach((offer) => {
+            for (const hotspotId in this.hotspots) {
+                if (this.hotspots[hotspotId].id === offer.id) {
+                    this.hotspots[hotspotId].offer = offer;
+                }
+            }
+        });
+
+        console.log('Updated hotspots with offers:', this.hotspots);
     };
 }
 
