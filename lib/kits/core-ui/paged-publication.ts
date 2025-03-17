@@ -333,6 +333,8 @@ const PagedPublication = (
             return;
         }
 
+        console.log('clicked hotspot in paged publication:', hotspot);
+
         const shoppingBtn = options.el.querySelector('.sgn__offer-shopping');
 
         if (scriptEls.offerClickBehavior === 'overview_modal') {

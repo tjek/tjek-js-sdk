@@ -140,7 +140,7 @@ const OfferOverview = ({
         try {
             transformedOffer =
                 type === 'paged'
-                    ? await fetchOffer(offer.id)
+                    ? await fetchOffer(offer.offer)
                     : await transformIncitoOffer(offer);
 
             const disableShoppingList = document.querySelector(
@@ -310,17 +310,17 @@ const OfferOverview = ({
             });
     };
 
-    const fetchOffer = async (id: string) => {
+    const fetchOffer = async (offer: V2Offer) => {
         const {localeCode, currency} = translations;
-        const offerData = await request<V2Offer>({
-            apiKey: configs.apiKey,
-            coreUrl: configs.coreUrl,
-            url: `/v2/offers/${id}`
-        });
+        // const offerData = await request<V2Offer>({
+        //     apiKey: configs.apiKey,
+        //     coreUrl: configs.coreUrl,
+        //     url: `/v2/offers/${id}`
+        // });
 
-        offer = offerData;
+        // offer = offerData;
 
-        const rawProducts = await fetchProducts(id);
+        const rawProducts = await fetchProducts(offer.id);
 
         if (rawProducts.offer_products?.length) {
             const dirtyProducts = rawProducts.offer_products.map((product) => ({
