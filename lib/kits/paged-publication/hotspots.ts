@@ -61,6 +61,7 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     left -= boundingRect.left;
 
     el.className = 'sgn-pp__hotspot verso__overlay';
+    el.setAttribute('role', 'button');
 
     if (hotspot.id) el.dataset.id = hotspot.id;
 
