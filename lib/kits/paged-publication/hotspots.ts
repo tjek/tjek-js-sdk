@@ -49,7 +49,7 @@ function getPosition(pages: Page[], ratio: number, hotspot: V2Hotspot) {
 }
 
 function renderHotspot(hotspot, position, contentRect, boundingRect) {
-    const el = document.createElement('div');
+    const el = document.createElement('button');
     let top = Math.round((contentRect.height / 100) * position.top);
     let left = Math.round((contentRect.width / 100) * position.left);
     const width = Math.round((contentRect.width / 100) * position.width);
@@ -61,7 +61,6 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     left -= boundingRect.left;
 
     el.className = 'sgn-pp__hotspot verso__overlay';
-    el.setAttribute('role', 'button');
 
     if (hotspot.id) el.dataset.id = hotspot.id;
 
