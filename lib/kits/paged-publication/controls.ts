@@ -152,7 +152,19 @@ class PagedPublicationControls extends MicroEvent {
             this.trigger('first', {duration: 0});
         } else if (keyCodes.ENTER === e.key) {
             const focusedElement = document.activeElement as HTMLElement;
-            if (focusedElement) {
+            if (
+                focusedElement &&
+                focusedElement.classList.contains('sgn-pp__control') &&
+                focusedElement.getAttribute('data-direction') === 'next'
+            ) {
+                this.trigger('next', {duration: 0});
+            } else if (
+                focusedElement &&
+                focusedElement.classList.contains('sgn-pp__control') &&
+                focusedElement.getAttribute('data-direction') === 'prev'
+            ) {
+                this.trigger('prev', {duration: 0});
+            } else {
                 this.trigger('enterKeyPressed', focusedElement);
             }
         }
