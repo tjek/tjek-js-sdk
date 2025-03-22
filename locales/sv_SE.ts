@@ -24,5 +24,7 @@ export default {
     publication_viewer_offer_price_from: 'Från',
     publication_viewer_offer_price_for: 'för',
     publication_viewer_offer_valid_from: 'Gäller endast fr.o.m ',
-    publication_viewer_no_product_message: 'Inga produktdetaljer'
+    publication_viewer_no_product_message: 'Inga produktdetaljer',
+    publication_viewer_offer_increase_quantity: 'Öka antal',
+    publication_viewer_offer_decrease_quantity: 'Minska antal'
 };
