@@ -122,6 +122,7 @@ class Viewer extends MicroEvent {
         this._controls.bind('first', this.first);
         this._controls.bind('last', this.last);
         this._controls.bind('close', this.destroy);
+        this._controls.bind('enterKeyPressed', this.enterKeyPressed);
         this._hotspots.bind('hotspotsRequested', (e) => {
             this.trigger('hotspotsRequested', e);
         });
@@ -442,6 +443,19 @@ class Viewer extends MicroEvent {
         this.pickHotspot(e, (hotspot) => {
             this.trigger('hotspotPressed', hotspot);
         });
+    };
+
+    enterKeyPressed = (el) => {
+        const hotspots = this.hotspots;
+        if (!hotspots) {
+            return;
+        }
+
+        const hotspot = hotspots[el?.dataset?.id];
+
+        if (hotspot) {
+            this.trigger('hotspotClicked', hotspot);
+        }
     };
 }
 

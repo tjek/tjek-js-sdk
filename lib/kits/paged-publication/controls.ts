@@ -33,6 +33,7 @@ class PagedPublicationControls extends MicroEvent {
         this.close = el.querySelector('.sgn-pp--close');
 
         this.keyDownHandler = throttle(this.keyDown, 150, this);
+
         if (this.options.keyboard === 'enabled') {
             this.root.addEventListener('keydown', this.keyDownHandler, false);
         } else if (this.options.keyboard === 'global') {
@@ -149,6 +150,23 @@ class PagedPublicationControls extends MicroEvent {
             this.trigger('next', {duration: 0});
         } else if (keyCodes.NUMBER_ONE === keyCode) {
             this.trigger('first', {duration: 0});
+        } else if (keyCodes.ENTER === e.key) {
+            const focusedElement = document.activeElement as HTMLElement;
+            if (
+                focusedElement &&
+                focusedElement.classList.contains('sgn-pp__control') &&
+                focusedElement.getAttribute('data-direction') === 'next'
+            ) {
+                this.trigger('next', {duration: 0});
+            } else if (
+                focusedElement &&
+                focusedElement.classList.contains('sgn-pp__control') &&
+                focusedElement.getAttribute('data-direction') === 'prev'
+            ) {
+                this.trigger('prev', {duration: 0});
+            } else {
+                this.trigger('enterKeyPressed', focusedElement);
+            }
         }
     };
 }

@@ -45,6 +45,9 @@ const PagedPublication = (
         | Record<string, never> = {};
     let sgnViewer: Viewer;
     let sgnPageDecorations: V2PageDecoration[];
+    let controlDirectionObserver: MutationObserver | null = null;
+    let urlParamObserver: MutationObserver | null = null;
+
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -83,6 +86,13 @@ const PagedPublication = (
         scriptEls
     }).render();
 
+    const destroy = () => {
+        controlDirectionObserver?.disconnect();
+        urlParamObserver?.disconnect();
+        controlDirectionObserver = null;
+        urlParamObserver = null;
+    };
+
     const header = Header({
         publicationType: 'paged',
         template: scriptEls.enableSidebar
@@ -90,7 +100,8 @@ const PagedPublication = (
             : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
-        scriptEls
+        scriptEls,
+        destroy: destroy
     });
     document
         .querySelector('.sgn__header-container')
@@ -257,7 +268,7 @@ const PagedPublication = (
             '.sgn-pp__control[data-direction=next]'
         );
 
-        const controlDirectionObserver = new MutationObserver((mutations) => {
+        controlDirectionObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes') {
                     const element = mutation.target as HTMLButtonElement;
@@ -311,20 +322,38 @@ const PagedPublication = (
                 '.sgn-pp__progress-label'
             );
 
-            progressLabel?.addEventListener('DOMSubtreeModified', (e) => {
-                const pageNum = e.target.innerHTML
-                    ?.split(' ')?.[0]
-                    ?.split('-')?.[0];
+            if (progressLabel) {
+                urlParamObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (
+                            mutation.type === 'childList' ||
+                            mutation.type === 'characterData'
+                        ) {
+                            const pageNum = mutation.target.textContent
+                                ?.split(' ')?.[0]
+                                ?.split('-')?.[0];
 
-                if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                    pushQueryParam({
-                        [scriptEls.publicationIdParam]: options.id,
-                        [scriptEls.pageIdParam]: pageNum
+                            if (
+                                scriptEls.displayUrlParams?.toLowerCase() ===
+                                'query'
+                            ) {
+                                pushQueryParam({
+                                    [scriptEls.publicationIdParam]: options.id,
+                                    [scriptEls.pageIdParam]: pageNum
+                                });
+                            } else {
+                                location.hash = `${scriptEls.publicationHash}/${options.id}/${pageNum}`;
+                            }
+                        }
                     });
-                } else {
-                    location.hash = `${scriptEls.publicationHash}/${options.id}/${pageNum}`;
-                }
-            });
+                });
+
+                urlParamObserver.observe(progressLabel, {
+                    childList: true,
+                    characterData: true,
+                    subtree: true
+                });
+            }
         }
     };
 
