@@ -207,13 +207,15 @@ const Header = ({
     template,
     shoppingListCounterTemplate,
     el,
-    scriptEls
+    scriptEls,
+    destroy
 }: {
     publicationType?: 'incito' | 'paged';
     template?: Element | null;
     shoppingListCounterTemplate?: Element | null;
     el: Element | null;
     scriptEls: ReturnType<typeof transformScriptData>;
+    destroy?: () => void;
 }) => {
     let container: HTMLDivElement | null = null;
     publicationType = publicationType || 'paged';
@@ -366,6 +368,10 @@ const Header = ({
             [scriptEls.sectionIdParam]: null
         });
         location.hash = '';
+
+        if (destroy) {
+            destroy();
+        }
     };
 
     const removeHtmlClass = () => {

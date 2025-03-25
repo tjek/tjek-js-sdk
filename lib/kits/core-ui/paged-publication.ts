@@ -45,6 +45,9 @@ const PagedPublication = (
         | Record<string, never> = {};
     let sgnViewer: Viewer;
     let sgnPageDecorations: V2PageDecoration[];
+    let controlDirectionObserver: MutationObserver | null = null;
+    let urlParamObserver: MutationObserver | null = null;
+
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -83,6 +86,13 @@ const PagedPublication = (
         scriptEls
     }).render();
 
+    const destroy = () => {
+        controlDirectionObserver?.disconnect();
+        urlParamObserver?.disconnect();
+        controlDirectionObserver = null;
+        urlParamObserver = null;
+    };
+
     const header = Header({
         publicationType: 'paged',
         template: scriptEls.enableSidebar
@@ -90,7 +100,8 @@ const PagedPublication = (
             : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
-        scriptEls
+        scriptEls,
+        destroy: destroy
     });
     document
         .querySelector('.sgn__header-container')
@@ -257,7 +268,7 @@ const PagedPublication = (
             '.sgn-pp__control[data-direction=next]'
         );
 
-        const controlDirectionObserver = new MutationObserver((mutations) => {
+        controlDirectionObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes') {
                     const element = mutation.target as HTMLButtonElement;
@@ -312,7 +323,7 @@ const PagedPublication = (
             );
 
             if (progressLabel) {
-                const observer = new MutationObserver((mutations) => {
+                const urlParamObserver = new MutationObserver((mutations) => {
                     mutations.forEach((mutation) => {
                         if (
                             mutation.type === 'childList' ||
@@ -337,7 +348,7 @@ const PagedPublication = (
                     });
                 });
 
-                observer.observe(progressLabel, {
+                urlParamObserver.observe(progressLabel, {
                     childList: true,
                     characterData: true,
                     subtree: true
