@@ -323,7 +323,7 @@ const PagedPublication = (
             );
 
             if (progressLabel) {
-                const urlParamObserver = new MutationObserver((mutations) => {
+                urlParamObserver = new MutationObserver((mutations) => {
                     mutations.forEach((mutation) => {
                         if (
                             mutation.type === 'childList' ||
