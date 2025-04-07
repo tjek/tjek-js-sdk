@@ -370,21 +370,22 @@ const IncitoPublication = (
         const scrollContainer = document.querySelector(
             `${scriptEls.enableSidebar ? '.incito' : '.sgn__incito'}`
         );
-
-        if (!scrollContainer || !toc) {
-            return;
-        }
-
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
         );
 
-        let visibleSection;
+        if (!scrollContainer) {
+            return;
+        }
+
+        let currentSection;
         let scrollTimeout: number | undefined;
 
         const handleScroll = () => {
             const viewportHeight =
                 window.innerHeight || document.documentElement.clientHeight;
+
+            let visibleSection;
 
             toc?.forEach((section) => {
                 const sectionEl = document.querySelector(
@@ -398,31 +399,34 @@ const IncitoPublication = (
                 const rect = sectionEl.getBoundingClientRect();
 
                 if (
-                    (rect?.top || 0) <= viewportHeight / 2 &&
-                    (rect?.bottom || 0) >= viewportHeight / 2 &&
-                    visibleSection?.view_id !== section.view_id
+                    rect.top < viewportHeight / 2 &&
+                    rect.bottom > viewportHeight / 2
                 ) {
                     visibleSection = section;
-
-                    mainContainerEl?.dispatchEvent(
-                        new CustomEvent('section:show', {
-                            detail: visibleSection
-                        })
-                    );
-
-                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                        pushQueryParam({
-                            [scriptEls.sectionIdParam]: visibleSection.view_id
-                        });
-                    } else if (
-                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
-                    ) {
-                        location.hash = `${scriptEls.publicationHash}/${
-                            sgnData?.details?.id
-                        }/${encodeURIComponent(visibleSection.view_id)}`;
-                    }
                 }
             });
+
+            if (visibleSection && currentSection !== visibleSection.view_id) {
+                currentSection = visibleSection.view_id;
+
+                mainContainerEl?.dispatchEvent(
+                    new CustomEvent('section:show', {
+                        detail: visibleSection
+                    })
+                );
+
+                if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                    pushQueryParam({
+                        [scriptEls.sectionIdParam]: visibleSection.view_id
+                    });
+                } else if (
+                    scriptEls.displayUrlParams?.toLowerCase() === 'hash'
+                ) {
+                    location.hash = `${scriptEls.publicationHash}/${
+                        sgnData?.details?.id
+                    }/${encodeURIComponent(visibleSection.view_id)}`;
+                }
+            }
         };
 
         scrollContainer.addEventListener('scroll', () => {
