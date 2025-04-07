@@ -373,51 +373,62 @@ const IncitoPublication = (
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
         );
-        let currentSection;
+
+        if (!scrollContainer || !toc) {
+            return;
+        }
 
         let scrollTimeout: number | undefined;
 
-        const handleSectionScroll = (section) => {
-            currentSection = section.view_id;
+        const handleScroll = () => {
+            const viewportHeight =
+                window.innerHeight || document.documentElement.clientHeight;
 
-            mainContainerEl?.dispatchEvent(
-                new CustomEvent('section:show', {
-                    detail: section
-                })
-            );
+            let visibleSection;
 
-            if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                pushQueryParam({
-                    [scriptEls.sectionIdParam]: section.view_id
-                });
-            } else if (scriptEls.displayUrlParams?.toLowerCase() === 'hash') {
-                location.hash = `${scriptEls.publicationHash}/${
-                    sgnData?.details?.id
-                }/${encodeURIComponent(section.view_id)}`;
-            }
-        };
-
-        toc?.forEach((section) => {
-            scrollContainer?.addEventListener('scroll', () => {
+            toc?.forEach((section) => {
                 const sectionEl = document.querySelector(
                     `[data-id="${section.view_id}"][data-role="section"]`
                 );
 
-                const rect = sectionEl?.getBoundingClientRect();
-                const viewportHeight =
-                    window.innerHeight || document.documentElement.clientHeight;
+                if (!sectionEl) {
+                    return;
+                }
+
+                const rect = sectionEl.getBoundingClientRect();
 
                 if (
                     (rect?.top || 0) <= viewportHeight / 2 &&
                     (rect?.bottom || 0) >= viewportHeight / 2 &&
-                    currentSection !== section.view_id
+                    visibleSection !== section.view_id
                 ) {
-                    clearTimeout(scrollTimeout);
-                    scrollTimeout = window.setTimeout(() => {
-                        handleSectionScroll(section);
-                    }, 100);
+                    visibleSection = section;
+                    mainContainerEl?.dispatchEvent(
+                        new CustomEvent('section:show', {
+                            detail: visibleSection
+                        })
+                    );
+
+                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                        pushQueryParam({
+                            [scriptEls.sectionIdParam]: visibleSection.view_id
+                        });
+                    } else if (
+                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
+                    ) {
+                        location.hash = `${scriptEls.publicationHash}/${
+                            sgnData?.details?.id
+                        }/${encodeURIComponent(visibleSection.view_id)}`;
+                    }
                 }
             });
+        };
+
+        scrollContainer.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = window.setTimeout(() => {
+                handleScroll();
+            }, 100);
         });
     };
 
