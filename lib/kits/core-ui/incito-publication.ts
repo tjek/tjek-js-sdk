@@ -375,6 +375,28 @@ const IncitoPublication = (
         );
         let currentSection;
 
+        let scrollTimeout: number | undefined;
+
+        const handleSectionScroll = (section) => {
+            currentSection = section.view_id;
+
+            mainContainerEl?.dispatchEvent(
+                new CustomEvent('section:show', {
+                    detail: section
+                })
+            );
+
+            if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
+                pushQueryParam({
+                    [scriptEls.sectionIdParam]: section.view_id
+                });
+            } else if (scriptEls.displayUrlParams?.toLowerCase() === 'hash') {
+                location.hash = `${scriptEls.publicationHash}/${
+                    sgnData?.details?.id
+                }/${encodeURIComponent(section.view_id)}`;
+            }
+        };
+
         toc?.forEach((section) => {
             scrollContainer?.addEventListener('scroll', () => {
                 const sectionEl = document.querySelector(
@@ -390,25 +412,10 @@ const IncitoPublication = (
                     (rect?.bottom || 0) >= viewportHeight / 2 &&
                     currentSection !== section.view_id
                 ) {
-                    currentSection = section.view_id;
-
-                    mainContainerEl?.dispatchEvent(
-                        new CustomEvent('section:show', {
-                            detail: section
-                        })
-                    );
-
-                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                        pushQueryParam({
-                            [scriptEls.sectionIdParam]: section.view_id
-                        });
-                    } else if (
-                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
-                    ) {
-                        location.hash = `${scriptEls.publicationHash}/${
-                            sgnData?.details?.id
-                        }/${encodeURIComponent(section.view_id)}`;
-                    }
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = window.setTimeout(() => {
+                        handleSectionScroll(section);
+                    }, 100);
                 }
             });
         });
