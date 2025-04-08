@@ -379,66 +379,67 @@ const IncitoPublication = (
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
         );
+        const rootEl = document.querySelector(
+            scriptEls.enableSidebar ? '.incito' : '.sgn__incito'
+        );
 
-        if (!toc || !mainContainerEl) {
+        if (!toc || !mainContainerEl || !rootEl) {
             return;
-        }
-
-        if (sectionIntersectionObserver) {
-            sectionIntersectionObserver.disconnect();
         }
 
         let currentSection;
 
-        sectionIntersectionObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const sectionId = entry.target.getAttribute('data-id');
-                        if (sectionId && currentSection !== sectionId) {
-                            currentSection = sectionId;
+        if (!sectionIntersectionObserver) {
+            sectionIntersectionObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const sectionId =
+                                entry.target.getAttribute('data-id');
+                            if (sectionId && currentSection !== sectionId) {
+                                currentSection = sectionId;
 
-                            const section = toc.find(
-                                (item) => item.view_id === sectionId
-                            );
-
-                            if (section) {
-                                mainContainerEl.dispatchEvent(
-                                    new CustomEvent('section:show', {
-                                        detail: section
-                                    })
+                                const section = toc.find(
+                                    (item) => item.view_id === sectionId
                                 );
 
-                                if (
-                                    scriptEls.displayUrlParams?.toLowerCase() ===
-                                    'query'
-                                ) {
-                                    pushQueryParam({
-                                        [scriptEls.sectionIdParam]: sectionId
-                                    });
-                                } else if (
-                                    scriptEls.displayUrlParams?.toLowerCase() ===
-                                    'hash'
-                                ) {
-                                    location.hash = `${
-                                        scriptEls.publicationHash
-                                    }/${
-                                        sgnData?.details?.id
-                                    }/${encodeURIComponent(sectionId)}`;
+                                if (section) {
+                                    mainContainerEl.dispatchEvent(
+                                        new CustomEvent('section:show', {
+                                            detail: section
+                                        })
+                                    );
+
+                                    if (
+                                        scriptEls.displayUrlParams?.toLowerCase() ===
+                                        'query'
+                                    ) {
+                                        pushQueryParam({
+                                            [scriptEls.sectionIdParam]:
+                                                sectionId
+                                        });
+                                    } else if (
+                                        scriptEls.displayUrlParams?.toLowerCase() ===
+                                        'hash'
+                                    ) {
+                                        location.hash = `${
+                                            scriptEls.publicationHash
+                                        }/${
+                                            sgnData?.details?.id
+                                        }/${encodeURIComponent(sectionId)}`;
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-            },
-            {
-                root: document.querySelector(
-                    scriptEls.enableSidebar ? '.incito' : '.sgn__incito'
-                ),
-                rootMargin: '0px 0px -50% 0px',
-                threshold: 0.1
-            }
-        );
+                    });
+                },
+                {
+                    root: rootEl,
+                    rootMargin: '0px 0px -50% 0px',
+                    threshold: 0.1
+                }
+            );
+        }
 
         toc.forEach((section) => {
             const sectionEl = document.querySelector(
