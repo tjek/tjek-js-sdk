@@ -111,7 +111,7 @@ const IncitoPublication = (
         renderMenuPopup();
         dispatchPublicationData();
         renderSectionList();
-        addSectionScrollListener();
+        addSectionIntersectionObserver();
 
         return sgnData;
     };
@@ -365,52 +365,76 @@ const IncitoPublication = (
         animateShoppingListCounter();
     };
 
-    const addSectionScrollListener = () => {
+    const addSectionIntersectionObserver = () => {
         const toc = sgnData?.incito?.table_of_contents;
-        const scrollContainer = document.querySelector(
-            `${scriptEls.enableSidebar ? '.incito' : '.sgn__incito'}`
-        );
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
         );
+
+        if (!toc || !mainContainerEl) {
+            return;
+        }
+
         let currentSection;
 
-        toc?.forEach((section) => {
-            scrollContainer?.addEventListener('scroll', () => {
-                const sectionEl = document.querySelector(
-                    `[data-id="${section.view_id}"][data-role="section"]`
-                );
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const sectionId = entry.target.getAttribute('data-id');
+                        if (sectionId && currentSection !== sectionId) {
+                            currentSection = sectionId;
 
-                const rect = sectionEl?.getBoundingClientRect();
-                const viewportHeight =
-                    window.innerHeight || document.documentElement.clientHeight;
+                            const section = toc.find(
+                                (item) => item.view_id === sectionId
+                            );
 
-                if (
-                    (rect?.top || 0) <= viewportHeight / 2 &&
-                    (rect?.bottom || 0) >= viewportHeight / 2 &&
-                    currentSection !== section.view_id
-                ) {
-                    currentSection = section.view_id;
+                            if (section) {
+                                mainContainerEl.dispatchEvent(
+                                    new CustomEvent('section:show', {
+                                        detail: section
+                                    })
+                                );
 
-                    mainContainerEl?.dispatchEvent(
-                        new CustomEvent('section:show', {
-                            detail: section
-                        })
-                    );
-
-                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                        pushQueryParam({
-                            [scriptEls.sectionIdParam]: section.view_id
-                        });
-                    } else if (
-                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
-                    ) {
-                        location.hash = `${scriptEls.publicationHash}/${
-                            sgnData?.details?.id
-                        }/${encodeURIComponent(section.view_id)}`;
+                                if (
+                                    scriptEls.displayUrlParams?.toLowerCase() ===
+                                    'query'
+                                ) {
+                                    pushQueryParam({
+                                        [scriptEls.sectionIdParam]: sectionId
+                                    });
+                                } else if (
+                                    scriptEls.displayUrlParams?.toLowerCase() ===
+                                    'hash'
+                                ) {
+                                    location.hash = `${
+                                        scriptEls.publicationHash
+                                    }/${
+                                        sgnData?.details?.id
+                                    }/${encodeURIComponent(sectionId)}`;
+                                }
+                            }
+                        }
                     }
-                }
-            });
+                });
+            },
+            {
+                root: document.querySelector(
+                    scriptEls.enableSidebar ? '.incito' : '.sgn__incito'
+                ),
+                rootMargin: '0px 0px -50% 0px',
+                threshold: 0.1
+            }
+        );
+
+        toc.forEach((section) => {
+            const sectionEl = document.querySelector(
+                `[data-id="${section.view_id}"][data-role="section"]`
+            );
+
+            if (sectionEl) {
+                observer.observe(sectionEl);
+            }
         });
     };
 
