@@ -92,9 +92,6 @@ const IncitoPublication = (
     const destroy = () => {
         if (sectionIntersectionObserver) {
             sectionIntersectionObserver.disconnect();
-            console.log(
-                'sgn-sdk: incito publication - section observer destroyed'
-            );
         }
     };
 
