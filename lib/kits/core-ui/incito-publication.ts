@@ -49,6 +49,8 @@ const IncitoPublication = (
     let sgnData: {details?: V2Catalog; incito?: IIncito} | undefined;
     let sgnViewer: Viewer | undefined;
     let bootstrapper: Bootstrapper | undefined;
+    let sectionIntersectionObserver: IntersectionObserver | undefined;
+
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -87,6 +89,12 @@ const IncitoPublication = (
         scriptEls
     }).render();
 
+    const destroy = () => {
+        if (sectionIntersectionObserver) {
+            sectionIntersectionObserver.disconnect();
+        }
+    };
+
     const header = Header({
         publicationType: 'incito',
         template: scriptEls.enableSidebar
@@ -94,7 +102,8 @@ const IncitoPublication = (
             : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
-        scriptEls
+        scriptEls,
+        destroy
     });
     document
         .querySelector('.sgn__header-container')
@@ -111,7 +120,7 @@ const IncitoPublication = (
         renderMenuPopup();
         dispatchPublicationData();
         renderSectionList();
-        addSectionScrollListener();
+        addSectionIntersectionObserver();
 
         return sgnData;
     };
@@ -365,52 +374,81 @@ const IncitoPublication = (
         animateShoppingListCounter();
     };
 
-    const addSectionScrollListener = () => {
+    const addSectionIntersectionObserver = () => {
         const toc = sgnData?.incito?.table_of_contents;
-        const scrollContainer = document.querySelector(
-            `${scriptEls.enableSidebar ? '.incito' : '.sgn__incito'}`
-        );
         const mainContainerEl = document.querySelector(
             scriptEls.listPublicationsContainer || scriptEls.mainContainer
         );
+        const rootEl = document.querySelector(
+            scriptEls.enableSidebar ? '.incito' : '.sgn__incito'
+        );
+
+        if (!toc || !mainContainerEl || !rootEl) {
+            return;
+        }
+
         let currentSection;
 
-        toc?.forEach((section) => {
-            scrollContainer?.addEventListener('scroll', () => {
-                const sectionEl = document.querySelector(
-                    `[data-id="${section.view_id}"][data-role="section"]`
-                );
+        if (!sectionIntersectionObserver) {
+            sectionIntersectionObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const sectionId =
+                                entry.target.getAttribute('data-id');
+                            if (sectionId && currentSection !== sectionId) {
+                                currentSection = sectionId;
 
-                const rect = sectionEl?.getBoundingClientRect();
-                const viewportHeight =
-                    window.innerHeight || document.documentElement.clientHeight;
+                                const section = toc.find(
+                                    (item) => item.view_id === sectionId
+                                );
 
-                if (
-                    (rect?.top || 0) <= viewportHeight / 2 &&
-                    (rect?.bottom || 0) >= viewportHeight / 2 &&
-                    currentSection !== section.view_id
-                ) {
-                    currentSection = section.view_id;
+                                if (section) {
+                                    mainContainerEl.dispatchEvent(
+                                        new CustomEvent('section:show', {
+                                            detail: section
+                                        })
+                                    );
 
-                    mainContainerEl?.dispatchEvent(
-                        new CustomEvent('section:show', {
-                            detail: section
-                        })
-                    );
-
-                    if (scriptEls.displayUrlParams?.toLowerCase() === 'query') {
-                        pushQueryParam({
-                            [scriptEls.sectionIdParam]: section.view_id
-                        });
-                    } else if (
-                        scriptEls.displayUrlParams?.toLowerCase() === 'hash'
-                    ) {
-                        location.hash = `${scriptEls.publicationHash}/${
-                            sgnData?.details?.id
-                        }/${encodeURIComponent(section.view_id)}`;
-                    }
+                                    if (
+                                        scriptEls.displayUrlParams?.toLowerCase() ===
+                                        'query'
+                                    ) {
+                                        pushQueryParam({
+                                            [scriptEls.sectionIdParam]:
+                                                sectionId
+                                        });
+                                    } else if (
+                                        scriptEls.displayUrlParams?.toLowerCase() ===
+                                        'hash'
+                                    ) {
+                                        location.hash = `${
+                                            scriptEls.publicationHash
+                                        }/${
+                                            sgnData?.details?.id
+                                        }/${encodeURIComponent(sectionId)}`;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                {
+                    root: rootEl,
+                    rootMargin: '0px 0px -50% 0px',
+                    threshold: 0.1
                 }
-            });
+            );
+        }
+
+        toc.forEach((section) => {
+            const sectionEl = document.querySelector(
+                `[data-id="${section.view_id}"][data-role="section"]`
+            );
+
+            if (sectionEl && sectionIntersectionObserver) {
+                sectionIntersectionObserver.observe(sectionEl);
+            }
         });
     };
 
