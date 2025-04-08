@@ -435,6 +435,8 @@ const IncitoPublication = (
                                             }/${encodeURIComponent(sectionId)}`;
                                         }
                                     }
+
+                                    debounceTimer = null;
                                 }, 100);
                             }
                         }
