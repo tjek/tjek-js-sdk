@@ -49,6 +49,8 @@ const IncitoPublication = (
     let sgnData: {details?: V2Catalog; incito?: IIncito} | undefined;
     let sgnViewer: Viewer | undefined;
     let bootstrapper: Bootstrapper | undefined;
+    let sectionIntersectionObserver: IntersectionObserver | undefined;
+
     const scriptEls = transformScriptData(scriptEl, mainContainer);
 
     const customTemplates = {
@@ -87,6 +89,12 @@ const IncitoPublication = (
         scriptEls
     }).render();
 
+    const destroy = () => {
+        if (sectionIntersectionObserver) {
+            sectionIntersectionObserver.disconnect();
+        }
+    };
+
     const header = Header({
         publicationType: 'incito',
         template: scriptEls.enableSidebar
@@ -94,7 +102,8 @@ const IncitoPublication = (
             : customTemplates.headerContainer,
         shoppingListCounterTemplate: customTemplates.shoppingListCounter,
         el: document.querySelector(scriptEls.mainContainer),
-        scriptEls
+        scriptEls,
+        destroy
     });
     document
         .querySelector('.sgn__header-container')
@@ -377,7 +386,7 @@ const IncitoPublication = (
 
         let currentSection;
 
-        const observer = new IntersectionObserver(
+        sectionIntersectionObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
@@ -432,8 +441,8 @@ const IncitoPublication = (
                 `[data-id="${section.view_id}"][data-role="section"]`
             );
 
-            if (sectionEl) {
-                observer.observe(sectionEl);
+            if (sectionEl && sectionIntersectionObserver) {
+                sectionIntersectionObserver.observe(sectionEl);
             }
         });
     };
