@@ -388,6 +388,7 @@ const IncitoPublication = (
         }
 
         let currentSection;
+        let debounceTimer;
 
         if (!sectionIntersectionObserver) {
             sectionIntersectionObserver = new IntersectionObserver(
@@ -399,36 +400,44 @@ const IncitoPublication = (
                             if (sectionId && currentSection !== sectionId) {
                                 currentSection = sectionId;
 
-                                const section = toc.find(
-                                    (item) => item.view_id === sectionId
-                                );
+                                if (debounceTimer) {
+                                    clearTimeout(debounceTimer);
+                                }
 
-                                if (section) {
-                                    mainContainerEl.dispatchEvent(
-                                        new CustomEvent('section:show', {
-                                            detail: section
-                                        })
+                                debounceTimer = setTimeout(() => {
+                                    const section = toc.find(
+                                        (item) => item.view_id === sectionId
                                     );
 
-                                    if (
-                                        scriptEls.displayUrlParams?.toLowerCase() ===
-                                        'query'
-                                    ) {
-                                        pushQueryParam({
-                                            [scriptEls.sectionIdParam]:
-                                                sectionId
-                                        });
-                                    } else if (
-                                        scriptEls.displayUrlParams?.toLowerCase() ===
-                                        'hash'
-                                    ) {
-                                        location.hash = `${
-                                            scriptEls.publicationHash
-                                        }/${
-                                            sgnData?.details?.id
-                                        }/${encodeURIComponent(sectionId)}`;
+                                    if (section) {
+                                        mainContainerEl.dispatchEvent(
+                                            new CustomEvent('section:show', {
+                                                detail: section
+                                            })
+                                        );
+
+                                        if (
+                                            scriptEls.displayUrlParams?.toLowerCase() ===
+                                            'query'
+                                        ) {
+                                            pushQueryParam({
+                                                [scriptEls.sectionIdParam]:
+                                                    sectionId
+                                            });
+                                        } else if (
+                                            scriptEls.displayUrlParams?.toLowerCase() ===
+                                            'hash'
+                                        ) {
+                                            location.hash = `${
+                                                scriptEls.publicationHash
+                                            }/${
+                                                sgnData?.details?.id
+                                            }/${encodeURIComponent(sectionId)}`;
+                                        }
                                     }
-                                }
+
+                                    debounceTimer = null;
+                                }, 100);
                             }
                         }
                     });
