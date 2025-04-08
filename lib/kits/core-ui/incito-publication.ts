@@ -92,6 +92,9 @@ const IncitoPublication = (
     const destroy = () => {
         if (sectionIntersectionObserver) {
             sectionIntersectionObserver.disconnect();
+            console.log(
+                'sgn-sdk: incito publication - section observer destroyed'
+            );
         }
     };
 
@@ -382,6 +385,10 @@ const IncitoPublication = (
 
         if (!toc || !mainContainerEl) {
             return;
+        }
+
+        if (sectionIntersectionObserver) {
+            sectionIntersectionObserver.disconnect();
         }
 
         let currentSection;
