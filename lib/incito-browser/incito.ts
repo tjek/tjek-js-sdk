@@ -300,11 +300,11 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
             }
 
             if (canLazyload && shouldLazyload) {
-                attrs['data-src'] = `${src}#t=0.1`;
+                attrs['data-src'] = src;
                 attrs['data-mime'] = view.mime;
                 classNames.push('incito--lazy');
             } else {
-                attrs.src = `${src}#t=0.1`;
+                attrs.src = src;
             }
 
             break;
@@ -906,9 +906,6 @@ export default class Incito extends MicroEvent<{
             if (el.dataset.mime) sourceEl.setAttribute('type', el.dataset.mime);
 
             el.appendChild(sourceEl);
-
-            // Check if media isn't already being loaded.
-            if (el.networkState !== 2) el.load();
         } else if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', headers, body} = el.dataset;
 
@@ -1013,13 +1010,10 @@ export default class Incito extends MicroEvent<{
                 entries.forEach(async (entry) => {
                     if (entry.target instanceof HTMLVideoElement) {
                         if (entry.isIntersecting) {
-                            entry.target.play();
-                        } else {
-                            // If loading is ongoing, we _have to_ wait for play() to be ready before pausing.
-                            if (entry.target.networkState === 2) {
-                                await entry.target.play();
+                            if (entry.target.paused) {
+                                entry.target.play().catch(() => {});
                             }
-
+                        } else if (!entry.target.paused) {
                             entry.target.pause();
                         }
                     }
