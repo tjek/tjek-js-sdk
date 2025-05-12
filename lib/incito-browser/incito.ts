@@ -283,7 +283,7 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
 
             attrs.muted = '';
             attrs.playsinline = '';
-            attrs.preload = 'auto';
+            attrs.preload = 'metadata';
 
             const src = String(new URL(view.src));
 
@@ -300,11 +300,11 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
             }
 
             if (canLazyload && shouldLazyload) {
-                attrs['data-src'] = src;
+                attrs['data-src'] = `${src}#t=0.1`;
                 attrs['data-mime'] = view.mime;
                 classNames.push('incito--lazy');
             } else {
-                attrs.src = src;
+                attrs.src = `${src}#t=0.1`;
             }
 
             break;
@@ -906,6 +906,8 @@ export default class Incito extends MicroEvent<{
             if (el.dataset.mime) sourceEl.setAttribute('type', el.dataset.mime);
 
             el.appendChild(sourceEl);
+
+            el.load();
         } else if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', headers, body} = el.dataset;
 
