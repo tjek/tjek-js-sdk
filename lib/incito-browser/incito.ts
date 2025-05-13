@@ -281,11 +281,11 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
             tagName = 'video';
             classNames.push('incito__video-view');
 
+            const src = String(new URL(view.src));
+
             attrs.muted = '';
             attrs.playsinline = '';
-            attrs.preload = 'metadata';
-
-            const src = String(new URL(view.src));
+            attrs['data-src'] = src;
 
             if (view.autoplay === true) {
                 attrs['data-autoplay'] = true;
@@ -297,14 +297,6 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
 
             if (view.loop === true) {
                 attrs['loop'] = '';
-            }
-
-            if (canLazyload && shouldLazyload) {
-                attrs['data-src'] = `${src}#t=0.1`;
-                attrs['data-mime'] = view.mime;
-                classNames.push('incito--lazy');
-            } else {
-                attrs.src = `${src}#t=0.1`;
             }
 
             break;
@@ -891,24 +883,17 @@ export default class Incito extends MicroEvent<{
         el.querySelectorAll('.incito--lazy').forEach((el) => {
             this.lazyObserver.observe(el);
         });
-        el.querySelectorAll('.incito__video-view[data-autoplay=true]').forEach(
-            (el) => {
-                this.videoObserver.observe(el);
-            }
-        );
+        el.querySelectorAll('.incito__video-view').forEach((el) => {
+            this.videoObserver.observe(el);
+        });
     }
 
     loadEl(el) {
         if (el instanceof HTMLMediaElement) {
-            const sourceEl = document.createElement('source');
+            return;
+        }
 
-            if (el.dataset.src) sourceEl.setAttribute('src', el.dataset.src);
-            if (el.dataset.mime) sourceEl.setAttribute('type', el.dataset.mime);
-
-            el.appendChild(sourceEl);
-
-            el.load();
-        } else if (el.classList.contains('incito__incito-embed-view')) {
+        if (el.classList.contains('incito__incito-embed-view')) {
             const {src: url, method = 'get', headers, body} = el.dataset;
 
             fetchWithTimeout(url, {
@@ -1011,17 +996,24 @@ export default class Incito extends MicroEvent<{
             (entries) => {
                 entries.forEach(async (entry) => {
                     if (entry.target instanceof HTMLVideoElement) {
-                        if (entry.isIntersecting) {
+                        if (entry.isIntersecting && entry.target.dataset.src) {
                             if (entry.target.paused) {
-                                entry.target.play().catch(() => {});
+                                entry.target.src = entry.target.dataset.src;
+                                entry.target.load();
+
+                                if (entry.target.dataset.autoplay === 'true') {
+                                    entry.target.play().catch(() => {});
+                                }
                             }
-                        } else if (!entry.target.paused) {
+                        } else {
                             entry.target.pause();
+                            entry.target.src = '';
+                            entry.target.load();
                         }
                     }
                 });
             },
-            {threshold: 0.1}
+            {threshold: 0, rootMargin: '200px 0px'}
         );
     }
 
