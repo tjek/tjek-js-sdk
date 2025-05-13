@@ -996,9 +996,9 @@ export default class Incito extends MicroEvent<{
             (entries) => {
                 entries.forEach(async (entry) => {
                     if (entry.target instanceof HTMLVideoElement) {
-                        if (entry.isIntersecting && entry.target.dataset.src) {
+                        if (entry.isIntersecting) {
                             if (entry.target.paused) {
-                                entry.target.src = entry.target.dataset.src;
+                                entry.target.src = entry.target.dataset.src!;
                                 entry.target.load();
 
                                 if (entry.target.dataset.autoplay === 'true') {
