@@ -244,6 +244,7 @@ const OfferOverview = ({
         const {localeCode, currency, priceFrom} = translations;
         const {offer: incitoOffer} = await fetchOffer({viewId, publicationId});
         offer = incitoOffer;
+        offer.viewId = viewId;
 
         if (products?.length > 1) {
             offer.products = transformProducts(offer, products);

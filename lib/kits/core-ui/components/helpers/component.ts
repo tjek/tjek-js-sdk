@@ -324,6 +324,7 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
     let shopListOffer = {
         offerId: offer.id,
         id: offer.id,
+        viewId: offer.viewId,
         name: offer.name,
         pieceCount: offer.piece_count,
         savings: offer.savings,
@@ -350,6 +351,7 @@ export const updateShoppingList = (offer, action: 'plus' | 'minus') => {
             shopListOffer = {
                 offerId: offer.id,
                 id: product.id,
+                viewId: offer.viewId,
                 name: product.title,
                 pieceCount: offer.piece_count,
                 savings: offer.savings,
