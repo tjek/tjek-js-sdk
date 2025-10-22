@@ -23,7 +23,7 @@ class IncitoPublicationEventTracking extends MicroEvent {
 
         return this;
     }
-    trackIncitoPublicationOpenedMinimumMosMs = 300;
+    trackIncitoPublicationOpenedMinimumMosMs = 200;
     sectionVisibility: Map<string, number> = new Map();
     onSectionVisible = ({
         sectionId,
@@ -46,7 +46,7 @@ class IncitoPublicationEventTracking extends MicroEvent {
         if (!visibleFrom) return;
 
         const mos = Date.now() - visibleFrom;
-        if (mos <= this.trackIncitoPublicationOpenedMinimumMosMs) return;
+        if (mos < this.trackIncitoPublicationOpenedMinimumMosMs) return;
 
         this.eventTracker.trackIncitoPublicationSectionOpened({
             'ip.id': this.details.id,
