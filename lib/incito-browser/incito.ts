@@ -803,7 +803,7 @@ export default class Incito extends MicroEvent<{
             );
             const link = linkEl ? linkEl.dataset.link : null;
 
-            if (isDefinedStr(link)) {
+            if (isDefinedStr(link) && /^https?:\/\//i.test(link!)) {
                 e.stopPropagation();
 
                 window.open(link!, '_blank');
@@ -1037,7 +1037,7 @@ export default class Incito extends MicroEvent<{
             html += '<' + tagName;
 
             for (const key in attrs)
-                html += ' ' + key + '="' + attrs[key] + '"';
+                html += ' ' + key + '="' + escapeAttrValue(attrs[key]) + '"';
 
             html += '>';
 
