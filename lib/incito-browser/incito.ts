@@ -402,15 +402,15 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
     }
 
     if (isDefinedStr(view.id)) {
-        attrs['data-id'] = escapeAttrValue(view.id);
+        attrs['data-id'] = view.id;
     }
 
     if (isDefinedStr(view.role)) {
-        attrs['data-role'] = escapeAttrValue(view.role);
+        attrs['data-role'] = view.role;
     }
 
     if (isDefinedStr(view.accessibility_label)) {
-        attrs['aria-label'] = escapeAttrValue(view.accessibility_label);
+        attrs['aria-label'] = view.accessibility_label;
     }
 
     if (view.accessibility_hidden === true) {
@@ -428,7 +428,7 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
     }
 
     if (isDefinedStr(view.title)) {
-        attrs['title'] = escapeAttrValue(view.title);
+        attrs['title'] = view.title;
     }
 
     if (view.gravity) {
@@ -803,10 +803,13 @@ export default class Incito extends MicroEvent<{
             );
             const link = linkEl ? linkEl.dataset.link : null;
 
-            if (isDefinedStr(link) && /^https?:\/\//i.test(link!)) {
+            if (
+                isDefinedStr(link) &&
+                (link.startsWith('https://') || link.startsWith('http://'))
+            ) {
                 e.stopPropagation();
 
-                window.open(link!, '_blank');
+                window.open(link, '_blank');
             }
 
             if (carouselEl) {
