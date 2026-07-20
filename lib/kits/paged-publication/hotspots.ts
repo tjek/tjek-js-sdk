@@ -71,22 +71,38 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     if (hotspot.type === 'pagedecoration') {
         el.className += ' sgn-pagedecoration-hotspot';
 
-        if (hotspot.embed_link) {
-            el.innerHTML = `
-                <iframe src="${hotspot.embed_link}"
-                    title="sgn-pagedecoration-embed-${hotspot.id}"
-                    height="100%"
-                    width="100%"
-                    sandbox="allow-scripts allow-same-origin allow-forms"
-                    style="border:0;"
-                ></iframe>
-            `;
-        } else if (hotspot.link) {
-            el.innerHTML = `
-            <a href="${hotspot.link}" class="sgn-pagedecoration-hotspot-link" rel="noreferrer noopener" target="_blank">
-                <div class="sgn-pagedecoration-hotspot-link-content"></div>
-            </a>
-            `;
+        const isHttpUrl = (url) =>
+            typeof url === 'string' &&
+            (url.startsWith('https://') || url.startsWith('http://'));
+
+        if (isHttpUrl(hotspot.embed_link)) {
+            const iframeEl = document.createElement('iframe');
+
+            iframeEl.src = hotspot.embed_link;
+            iframeEl.title = `sgn-pagedecoration-embed-${hotspot.id}`;
+            iframeEl.setAttribute('height', '100%');
+            iframeEl.setAttribute('width', '100%');
+            iframeEl.setAttribute(
+                'sandbox',
+                'allow-scripts allow-same-origin allow-forms'
+            );
+            iframeEl.style.border = '0';
+
+            el.appendChild(iframeEl);
+        } else if (isHttpUrl(hotspot.link)) {
+            const linkEl = document.createElement('a');
+
+            linkEl.href = hotspot.link;
+            linkEl.className = 'sgn-pagedecoration-hotspot-link';
+            linkEl.rel = 'noreferrer noopener';
+            linkEl.target = '_blank';
+
+            const contentEl = document.createElement('div');
+
+            contentEl.className = 'sgn-pagedecoration-hotspot-link-content';
+            linkEl.appendChild(contentEl);
+
+            el.appendChild(linkEl);
         }
 
         el.style.transform = `rotate(${hotspot.rotate}deg)`;
