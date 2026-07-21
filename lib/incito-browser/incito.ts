@@ -466,7 +466,10 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
         attrs['data-gravity'] = view.gravity;
     }
 
-    if (isDefinedStr(view.link)) {
+    if (
+        isDefinedStr(view.link) &&
+        (view.link.startsWith('https://') || view.link.startsWith('http://'))
+    ) {
         attrs['data-link'] = view.link;
     }
 

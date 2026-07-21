@@ -71,11 +71,11 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
     if (hotspot.type === 'pagedecoration') {
         el.className += ' sgn-pagedecoration-hotspot';
 
-        const isHttpUrl = (url) =>
-            typeof url === 'string' &&
-            (url.startsWith('https://') || url.startsWith('http://'));
-
-        if (isHttpUrl(hotspot.embed_link)) {
+        if (
+            hotspot.embed_link &&
+            (hotspot.embed_link.startsWith('https://') ||
+                hotspot.embed_link.startsWith('http://'))
+        ) {
             const iframeEl = document.createElement('iframe');
 
             iframeEl.src = hotspot.embed_link;
@@ -89,7 +89,11 @@ function renderHotspot(hotspot, position, contentRect, boundingRect) {
             iframeEl.style.border = '0';
 
             el.appendChild(iframeEl);
-        } else if (isHttpUrl(hotspot.link)) {
+        } else if (
+            hotspot.link &&
+            (hotspot.link.startsWith('https://') ||
+                hotspot.link.startsWith('http://'))
+        ) {
             const linkEl = document.createElement('a');
 
             linkEl.href = hotspot.link;
