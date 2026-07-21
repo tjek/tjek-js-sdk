@@ -29,14 +29,14 @@ function isDefinedStr(value: unknown): value is string {
 }
 
 function escapeHTML(unsafe) {
-    return typeof unsafe === 'string'
+    return unsafe
         ? unsafe
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
               .replace(/"/g, '&quot;')
               .replace(/'/g, '&#039;')
-        : (unsafe ?? '');
+        : '';
 }
 
 function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
@@ -90,11 +90,16 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
         }
 
         if (item.span?.name) {
-            if (item.span.name === 'link' && item.span.url) {
+            if (
+                item.span.name === 'link' &&
+                item.span.url &&
+                (item.span.url.startsWith('https://') ||
+                    item.span.url.startsWith('http://'))
+            ) {
                 return (
                     memo +
                     '<a href="' +
-                    encodeURI(item.span.url) +
+                    escapeHTML(item.span.url) +
                     '" rel="external" target="_blank">' +
                     escapedText +
                     '</a>'
@@ -106,7 +111,7 @@ function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
                 '<span style="' +
                 'font-family:inherit;color:inherit;" ' +
                 'data-name="' +
-                item.span.name +
+                escapeHTML(item.span.name) +
                 '">' +
                 escapedText +
                 '</span>'
@@ -254,34 +259,48 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
             break;
         }
         case 'ImageView': {
+            if (
+                !isDefinedStr(view.src) ||
+                (!view.src.startsWith('https://') &&
+                    !view.src.startsWith('http://'))
+            ) {
+                break;
+            }
+
             tagName = 'img';
             classNames.push('incito__image-view');
 
             attrs.onerror = `this.style.display='none'`;
+            attrs.src = view.src;
 
-            const src = String(new URL(view.src));
-
-            if (isDefinedStr(view.src)) {
-                if (canLazyload && shouldLazyload) {
-                    attrs.loading = 'lazy';
-                }
-
-                attrs.src = src;
+            if (canLazyload && shouldLazyload) {
+                attrs.loading = 'lazy';
             }
 
-            if (isDefinedStr(view.label)) attrs['alt'] = view.label;
+            if (isDefinedStr(view.label)) {
+                attrs['alt'] = view.label;
+            }
 
             break;
         }
         case 'VideoView': {
+            if (
+                !isDefinedStr(view.src) ||
+                (!view.src.startsWith('https://') &&
+                    !view.src.startsWith('http://'))
+            ) {
+                break;
+            }
+
             tagName = 'video';
             classNames.push('incito__video-view');
 
-            const src = String(new URL(view.src));
-
-            attrs.muted = '';
             attrs.playsinline = '';
-            attrs['data-src'] = src;
+            attrs['data-src'] = view.src;
+
+            if (view.muted !== false) {
+                attrs.muted = '';
+            }
 
             if (view.autoplay === true) {
                 attrs['data-autoplay'] = true;
@@ -313,33 +332,49 @@ function renderView(view, canLazyload: boolean, shouldLazyload: boolean) {
         }
         case 'VideoEmbedView':
         case 'HTMLEmbedView': {
+            if (
+                !isDefinedStr(view.src) ||
+                (!view.src.startsWith('https://') &&
+                    !view.src.startsWith('http://'))
+            ) {
+                break;
+            }
+
             tagName = 'iframe';
             classNames.push('incito__html-embed-view');
 
-            attrs.sandbox = 'allow-scripts allow-same-origin allow-forms';
+            attrs.sandbox = 'allow-scripts allow-forms allow-same-origin';
+            attrs.referrerpolicy = 'strict-origin-when-cross-origin';
             attrs.allowfullscreen = '';
-
-            const src = String(new URL(view.src));
 
             if (shouldLazyload && 'loading' in HTMLIFrameElement.prototype) {
                 attrs.loading = 'lazy';
-                attrs.src = src;
+                attrs.src = view.src;
             } else if (canLazyload && shouldLazyload) {
                 classNames.push('incito--lazy');
-                attrs['data-src'] = src;
+                attrs['data-src'] = view.src;
             } else {
-                attrs.src = src;
+                attrs.src = view.src;
             }
 
             break;
         }
         case 'IncitoEmbedView': {
+            if (
+                !isDefinedStr(view.src) ||
+                (!view.src.startsWith('https://') &&
+                    !view.src.startsWith('http://') &&
+                    (!view.src.startsWith('/') || view.src.startsWith('//')))
+            ) {
+                break;
+            }
+
             classNames.push('incito__incito-embed-view');
 
             if (canLazyload) {
                 classNames.push('incito--lazy');
 
-                attrs['data-src'] = String(new URL(view.src));
+                attrs['data-src'] = view.src;
 
                 if (view.method === 'get' || view.method === 'post') {
                     attrs['data-method'] = view.method;
@@ -1036,7 +1071,7 @@ export default class Incito extends MicroEvent<{
             html += '<' + tagName;
 
             for (const key in attrs)
-                html += ' ' + key + '="' + escapeHTML(attrs[key]) + '"';
+                html += ' ' + key + '="' + escapeHTML(String(attrs[key])) + '"';
 
             html += '>';
 
