@@ -24,23 +24,19 @@ function formatUnit(unit) {
     return 0;
 }
 
-function escapeAttrValue(value) {
-    return typeof value === 'string' ? value.replace(/"/g, '&quot;') : value;
-}
-
 function isDefinedStr(value: unknown): value is string {
     return typeof value === 'string' && value.length > 0;
 }
 
 function escapeHTML(unsafe) {
-    return unsafe
+    return typeof unsafe === 'string'
         ? unsafe
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
               .replace(/"/g, '&quot;')
               .replace(/'/g, '&#039;')
-        : '';
+        : (unsafe ?? '');
 }
 
 function formatSpans(text: string, spans: NonNullable<TextView['spans']>) {
@@ -1040,7 +1036,7 @@ export default class Incito extends MicroEvent<{
             html += '<' + tagName;
 
             for (const key in attrs)
-                html += ' ' + key + '="' + escapeAttrValue(attrs[key]) + '"';
+                html += ' ' + key + '="' + escapeHTML(attrs[key]) + '"';
 
             html += '>';
 
